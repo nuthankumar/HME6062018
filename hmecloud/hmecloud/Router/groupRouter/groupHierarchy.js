@@ -85,13 +85,15 @@ router.get('/list', (req, res) => {
  */
 router.post('/create', (req, res) => {
     if (req.body.name) {
+        const input = {
+            id: req.body.groupId,
+            name: req.body.name,
+            description: req.body.description,
+            groups: req.body.groups,
+            stores: req.body.stores
+        }
         if (!req.body.groupId) {
-            const input = {
-                name: req.body.name,
-                description: req.body.description,
-                groups: req.body.groups,
-                stores: req.body.stores
-            }
+            
             groupController.create(input, ((response) => {
 
                 if (response.status === true) {
@@ -103,6 +105,14 @@ router.post('/create', (req, res) => {
 
         } else {
             //TODO: Edit update
+            groupController.update(input, ((response) => {
+
+                if (response.status === true) {
+                    res.status(200).send(response)
+                } else {
+                    res.status(400).send(response)
+                }
+            }));
         }
     } else {
         res.status(400).send({

@@ -5,14 +5,13 @@
 
 // config the model
 let Sequelize = require('sequelize');
- Sequelize = new Sequelize('test', 'admin', 'digitalpwd', {
-    host: 'localhost',
-    dialect: 'mysql',
-    operatorsAliases: false,
-    port: 23306
+Sequelize = new Sequelize('hmeCloud', 'sa', 'nous@123', {
+    host: 'NIBC1329',
+    dialect: 'mssql',
+    operatorsAliases: false
 });
-const group = require('../../Model/groupModel/groupTabel')
-const groupDetails = require('../../Model/groupModel/groupdetails')
+const group = require('../../Model/groupModel/Group')
+const groupDetails = require('../../Model/groupModel/GroupStore')
 // Config messages
 const messages = require('../../common/message')
 
@@ -23,8 +22,8 @@ const messages = require('../../common/message')
 const list = (input, callback) => {
     const condition = {
         where: {
-            accountId: input.accountId,
-            createdBy: input.createdBy
+            AccountId: input.accountId,
+            CreatedBy: input.createdBy
         }
     }
     group.findAll(condition)
@@ -52,32 +51,32 @@ const list = (input, callback) => {
 
 const create = (input, callback) => {
     const output = {};
-    const Query = "SELECT COUNT(*) as count FROM `group` WHERE groupName='" + input.name + "' AND accountId=" + 0 // toDO: input.accountId update this
     const condition = {
         where: {
-            groupName: input.name,
-            accountId: 0  // toDO: input.accountId update this
-         }
+            GroupName: input.name,
+            AccountId: 0  // toDO: input.accountId update this
+        }
     }
 
     group.findAndCountAll(condition).then(count => {
-       if (count.count === 0) {
+        if (count.count === 0) {
             group.create({
-                groupName: input.name,
-                description: input.description,
-                accountId: input.accountId,
-                createdBy: 1000,
-                updatedBy: 1000,
-                createdDateTime: new Date().now,
-                updatedDateTime: new Date().now
+                GroupName: input.name,
+                Description: input.description,
+                AccountId: 0, //input.accountId,
+                CreatedBy: 'swathikumary@nousinfo.com',
+                UpdatedBy: 'swathikumary@nousinfo.com'
+                //CreatedDateTime: Date().now,
+                //UpdatedDateTime: Date().now
             }).then(result => {
                 if (input.groups.length > 0 || input.stores.length > 0) {
                     let maxSize = (input.groups.length > input.stores.length) ? input.groups.length : input.stores.length;
+                    console.log("The newly inserted record==" + result.toJSON().Id);
                     for (var i = 0; i < maxSize; i++) {
                         const grpDetailOut = groupDetails.create({
-                            groupId: result.toJSON().id,
-                            childGroupId: (input.groups[i] != undefined) ? input.groups[i] : null,
-                            storeId: (input.stores[i] != undefined) ? input.stores[i] : null
+                            GroupId: result.Id,
+                            ChildGroupId: (input.groups[i] != undefined) ? input.groups[i] : null,
+                            StoreId: (input.stores[i] != undefined) ? input.stores[i] : null
                         }).then(result1 => {
                             output.data = messages.CREATEGROUP.groupSuccess1 + input.name + messages.CREATEGROUP.groupSuccess2,
                                 output.status = true
@@ -97,10 +96,10 @@ const create = (input, callback) => {
                 callback(output)
             });
         } else {
-           output.data = input.name+messages.CREATEGROUP.groupAlreadyExist,
-          output.status = false
+            output.data = input.name + messages.CREATEGROUP.groupAlreadyExist,
+                output.status = false
 
-          callback(output)
+            callback(output)
         }
 
     }).catch(error1 => {
@@ -110,16 +109,34 @@ const create = (input, callback) => {
         callback(output)
     });
 
-   
-}
+
+};
+
+/*const update = (input, callback) => {
+
+    const output = {};
+    const condition = {
+        where: {
+            id: input.id,
+            accountId: 0  // toDO: input.accountId update this
+        }
+    }
+    group.findOne(condition).then(data => {
+        if (data) {
+
+        }
+
+    }).catch(error => {
+        console.log("error occurred while updating..");
+    }); */
 
 const getgroupDetails = (input, callback) => {
     let output = {};
 
     const condition = {
         where: {
-            id: input.groupId,
-            createdBy: input.userName
+            Id: input.groupId,
+            CreatedBy: input.userName
         }
     }
     group.findOne(condition).then(result => {
@@ -127,7 +144,8 @@ const getgroupDetails = (input, callback) => {
         if (result) {
 
             // Getting the child Group and Store details
-            const Query = "SELECT g.Id, g.groupName,'group' AS type FROM `group` g INNER JOIN groupdetails gd ON g.id = gd.childGroupId WHERE gd.groupId =" + input.groupId + " AND g.createdBy = '" + input.userName + "'";
+            const Query = "SELECT g.Id, g.GroupName,'group' AS type FROM[dbo].[Group] as g INNER JOIN GroupStore gd ON g.Id = gd.ChildGroupId WHERE gd.GroupId =" + input.groupId + " AND g.CreatedBy = '" + input.userName + "'";
+             //9 AND g.CreatedBy = 'swathikumary@nousinfo.com';
             Sequelize.query(Query, { type: Sequelize.QueryTypes.SELECT }).then(result1 => {
                 if (result1) {
                     output.data = ({ group: result, details: result1 });
@@ -166,12 +184,12 @@ Deletes Group and its sub groups from table
 */
 const deleteGroupById = (input, callBack) => {
     const updateChildGroupId = {
-        childGroupId: null
+        ChildGroupId: null
     };
 
     groupDetails
         .update(updateChildGroupId, {
-            where: { childGroupId: input.groupId }
+            where: { ChildGroupId: input.groupId }
         })
         .then(updatedRows => {
             console.log(updatedRows);
@@ -180,8 +198,8 @@ const deleteGroupById = (input, callBack) => {
     group
         .destroy({
             where: {
-                accountId: input.accountId,
-                id: input.groupId
+                AccountId: input.accountId,
+                Id: input.groupId
             }
         })
         .then((result) => {
