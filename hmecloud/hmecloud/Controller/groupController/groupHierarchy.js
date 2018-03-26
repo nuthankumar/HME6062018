@@ -54,7 +54,7 @@ const create = (input, callback) => {
     const condition = {
         where: {
             GroupName: input.name,
-            AccountId: 0  // toDO: input.accountId update this
+            AccountId: 0  // toDO: input.accountId update this //TODO: To be updated
         }
     }
 
@@ -63,17 +63,14 @@ const create = (input, callback) => {
             group.create({
                 GroupName: input.name,
                 Description: input.description,
-                AccountId: 0, //input.accountId,
-                CreatedBy: 'swathikumary@nousinfo.com',
-                UpdatedBy: 'swathikumary@nousinfo.com'
-                //CreatedDateTime: Date().now,
-                //UpdatedDateTime: Date().now
+                AccountId: 0, //input.accountId,  // TODO: To be updated
+                CreatedBy: 'swathikumary@nousinfo.com', //TODO: To be updated
+                UpdatedBy: 'swathikumary@nousinfo.com' //TODO: To be updated
             }).then(result => {
                 if (input.groups.length > 0 || input.stores.length > 0) {
                     let maxSize = (input.groups.length > input.stores.length) ? input.groups.length : input.stores.length;
-                    console.log("The newly inserted record==" + result.toJSON().Id);
                     for (var i = 0; i < maxSize; i++) {
-                        const grpDetailOut = groupDetails.create({
+                        groupDetails.create({
                             GroupId: result.Id,
                             ChildGroupId: (input.groups[i] != undefined) ? input.groups[i] : null,
                             StoreId: (input.stores[i] != undefined) ? input.stores[i] : null
@@ -112,23 +109,84 @@ const create = (input, callback) => {
 
 };
 
-/*const update = (input, callback) => {
+const update = (input, callback) => {
 
     const output = {};
     const condition = {
         where: {
-            id: input.id,
-            accountId: 0  // toDO: input.accountId update this
+            Id: input.id,
+            AccountId: 0  // toDO: input.accountId update this //TODO: To be updated
         }
     }
     group.findOne(condition).then(data => {
         if (data) {
+            group.update(
+                {
+                    Description: input.description,
+                    UpdatedBy: 'jaffer@nousinfo.com',  //TODO: To be updated
+                    UpdatedDateTime: Date().now
+                },
+                { where: { Id: data.Id } }
+            ).then(result1 => {
+                const condition = {
+                    where: {
+                        GroupId: data.Id
+                    }
+                }
+                groupDetails.destroy(condition).then(result2 => {
+                    if (input.groups.length > 0 || input.stores.length > 0) {
+                            let maxSize = (input.groups.length > input.stores.length) ? input.groups.length : input.stores.length;
+                            for (let i = 0; i < maxSize; i++) {
+                                groupDetails.create({
+                                    GroupId: data.Id,
+                                    ChildGroupId: (input.groups[i] != undefined) ? input.groups[i] : null,
+                                    StoreId: (input.stores[i] != undefined) ? input.stores[i] : null
+                                }).then(result3 => {
+                                    output.data = messages.CREATEGROUP.groupSuccess1 + input.name + messages.CREATEGROUP.groupUpdatesSuccess,
+                                    output.status = true
+                                    callback(output);
 
-        }
+                                }).catch(error3 => {
+                                    output.data = error3,
+                                        output.status = false
+
+                                    callback(output)
+                                });
+                            }
+                    }
+                    output.data = messages.CREATEGROUP.groupSuccess1 + input.name + messages.CREATEGROUP.groupUpdatesSuccess,
+                    output.status = true
+                    callback(output);
+                    
+                }).catch(error2 => {
+                    output.data = error2,
+                    output.status = false
+
+                    callback(output)
+                });
+            }).catch(error1 => {
+                output.data = error1,
+                output.status = false
+
+                callback(output)
+            });
+        } else {
+            // No data found for given group Id
+            output.data = messages.CREATEGROUP.noDataForGivenId + input.id,
+            output.status = true
+            callback(output);
+        } 
 
     }).catch(error => {
-        console.log("error occurred while updating..");
-    }); */
+        console.log("error occurred while updating.." + error);
+        output.data = error,
+            output.status = false
+
+        callback(output)
+    });
+};
+
+
 
 const getgroupDetails = (input, callback) => {
     let output = {};
@@ -190,33 +248,33 @@ const deleteGroupById = (input, callBack) => {
     groupDetails
         .update(updateChildGroupId, {
             where: { ChildGroupId: input.groupId }
-        })
-        .then(updatedRows => {
-            console.log(updatedRows);
+        }).then(updatedRows => {
+           group
+                .destroy({
+                    where: {
+                        AccountId: input.accountId,
+                        Id: input.groupId
+                    }
+                })
+                .then((result) => {
+
+                    const output = {
+                        data: result,
+                        status: true
+                    };
+                    return callBack(output);
+                })
+                .catch((error) => {
+                    const output = {
+                        data: error,
+                        status: false
+                    };
+                    return callBack(output);
+                });
         });
 
-    group
-        .destroy({
-            where: {
-                AccountId: input.accountId,
-                Id: input.groupId
-            }
-        })
-        .then((result) => {
-            const output = {
-                data: result,
-                status: true
-            };
-            return callBack(output);
-        })
-        .catch((error) => {
-            const output = {
-                data: error,
-                status: false
-            };
-            return callBack(output);
-        });
-    //return output;
+
+
 };
 
 
@@ -225,5 +283,6 @@ module.exports = {
     list,
     create,
     getgroupDetails,
-    deleteGroupById
+    deleteGroupById,
+    update
 }

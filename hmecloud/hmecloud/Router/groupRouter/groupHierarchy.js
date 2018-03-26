@@ -86,14 +86,15 @@ router.get('/list', (req, res) => {
 router.post('/create', (req, res) => {
     if (req.body.name) {
         const input = {
-            id: req.body.groupId,
+            id: req.body.id,
             name: req.body.name,
             description: req.body.description,
             groups: req.body.groups,
             stores: req.body.stores
         }
-        if (!req.body.groupId) {
-            
+
+        if (!req.body.id) {
+            // Create Group
             groupController.create(input, ((response) => {
 
                 if (response.status === true) {
@@ -104,7 +105,7 @@ router.post('/create', (req, res) => {
             }));
 
         } else {
-            //TODO: Edit update
+            //Update Group
             groupController.update(input, ((response) => {
 
                 if (response.status === true) {
@@ -166,48 +167,51 @@ router.get('/edit', (req, res) => {
  */
 
 router.delete("/deletegroup", (req, res) => {
-   
 
-    const input = {
-        groupId: req.query.groupId,
-        accountId: req.query.accountId
-    };
-    
+    if (req.query.groupId && req.query.accountId) {
+        const input = {
+            groupId: req.query.groupId,
+            accountId: req.query.accountId
+        }
 
-    if ((input.groupId || input.accountId || null === input.groupId) || (input.groupId === "")) {
-       
-        res
-            .status(400)
-            .send({ error: messages.DELETEGROUP.invalidParameters, status: false });
-    } else if ((input.accountId === null) | (input.accountId === "")) {
-        res
-            .status(400)
-            .send({ error: messages.DELETEGROUP.invalidaccountId, status: false });
-    } else if (!validate.isNumeric(input.groupId)) {
-        res
-            .status(400)
-            .send({ error: messages.DELETEGROUP.groupIdNotANumber, status: false });
-    } else if (!validate.isNumeric(input.accountId)) {
-        res
-            .status(400)
-            .send({ error: messages.DELETEGROUP.accountIdNotANumber, status: false });
-    } else {
 
-        groupController.deleteGroupById(input, response => {
-            if (response.data === 0) {
-                res.status(200).send(messages.DELETEGROUP.noRecordsFound);
-            } else if (response.data !== null && response.status) {
-               
-                if (response.data === 1) {
-                    res.status(200).send(messages.DELETEGROUP.RecordDeleted);
+        const groupId = validate.isNumeric(input.groupId)
+        const accountId = validate.isNumeric(input.accountId)
+
+        if (!groupId) {
+
+            res
+                .status(400)
+                .send({ error: messages.CREATEGROUP.groupId, status: false });
+        } else if (!accountId) {
+            res
+                .status(400)
+                .send({ error: messages.LISTGROUP.accountId, status: false });
+        }
+
+
+        if (groupId && accountId) {
+            groupController.deleteGroupById(input, response => {
+                if (response === 0) {
+                    res.status(200).send(messages.CREATEGROUP.noRecordsFound);
+                } else if (response.data !== null && response.status) {
+
+                    if (response === 1) {
+                        res.status(200).send(messages.CREATEGROUP.RecordDeleted);
+                    } else {
+                        res.status(200).send(messages.CREATEGROUP.RecordsDeleted);
+                    }
                 } else {
-                    res.status(200).send(messages.DELETEGROUP.RecordsDeleted);
+
+                    res.status(500).send(response.data);
                 }
-            } else {
-               
-                res.status(500).send(response.data);
-            }
-        });
+            });
+        }
+
+    } else {
+        res
+            .status(400)
+            .send({ error: messages.CREATEGROUP.invalidInput, status: false });
     }
 });
 
