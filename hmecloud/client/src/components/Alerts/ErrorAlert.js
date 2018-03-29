@@ -10,7 +10,6 @@ export default class ErrorAlert extends React.Component {
 
       return(
         <div className="alert alert-danger">
-          <a href="#" className="close" data-dismiss="alert">&times;</a>
           {this.props.errorMessage}
         </div>
       );

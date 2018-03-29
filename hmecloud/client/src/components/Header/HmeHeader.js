@@ -28,7 +28,7 @@ export default class HmeHeader extends React.Component {
                     <div className="menuItems"><a href="./?pg=SettingsStores">Settings</a></div>
                 </div>
                 <div className="cogWheel">
-                    cog
+                   
                </div>
             </nav>
         </div>);

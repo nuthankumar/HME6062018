@@ -1,36 +1,105 @@
 import React from "react"
-import CheckBoxList from "./CheckBoxList"
-import { Router } from 'react-router'
+import CheckBoxList from './CheckBoxList'
 import App from '../../App'
-// import c from "../../routes";
-import { BrowserRouter, Route, Link } from 'react-router-dom'
 import ReportGroupHierarchy from './ReportGroupHierarchy'
 import SuccessAlert from "../Alerts/SuccessAlert"
 import ErrorAlert from "../Alerts/ErrorAlert"
 import fetch from 'isomorphic-fetch'
+import { confirmAlert } from 'react-confirm-alert'
 import './ReportGroup.css'
 import HmeHeader from '../Header/HmeHeader'
+import { BrowserRouter as Router, Route , Link  } from 'react-router-dom'
+import 'react-confirm-alert/src/react-confirm-alert.css'
 //import createHistory from 'history/createBrowserHistory'
 //import {body} from 'body-parser';
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+
+const downArrow = require('../../images/downArrow.PNG')
+const sideArrow = require('../../images/sideArrow.PNG')
+const groupToggleIcon = require('../../images/groupToggleIcon.png')
 
 var body = require('body-parser');
 var _ = require('underscore');
 
 
 export default class ReportGroup extends React.Component {
-    constructor() {
-        super(); this.state = {
-            available: [
-                { id: 102, name: "Group3", selected: false, type: "group" },
-                { id: 103, name: "Group4", selected: true, type: "group" },
-                { id: 200, name: "Store1", selected: false, type: "store" },
-                { id: 201, name: "Store2", selected: false, type: "store" }],
+    constructor(props) {
+        super(props);
+        this.state = {
+            available: [],
             assigned: [],
             counter: 0,
             successMessage: "",
-            errorMessage: ""
-        }
+            errorMessage: "",
+            editGroup : false,
+            accountId:null,
+            groupId:null
+        };
+        //this.populateGroupDetails();
+        this.getAvailableGroupStoreList();
+    }
+
+    componentDidMount(){
+      this.populateGroupDetails();
+    }
+
+    getAvailableGroupStoreList(){
+      this.state.available = [];
+      this.setState(this.state);
+      let url = "http://localhost:7071/api/group/availabledetails?accountId=100&userName=swathikumary@nousinfo.com";
+      fetch(url)
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data.data);
+              this.state.available = data.data;
+              this.setState(this.state);
+          })
+          .catch((error) => {
+            this.state.successMessage = "";
+            this.state.errorMessage = error.message;
+            this.setState(this.state);
+          });
+
+    }
+
+    populateGroupDetails(){
+      this.state.editGroup = this.props.history.location.state.editGroup;
+      this.state.groupId = this.props.history.location.state.groupId;
+      this.setState(this.state);
+      console.log(this.state.assigned);
+      if(this.props.history.location.state.editGroup){
+        //let groupId = this.props.history.location.state.groupId;
+        let url = 'http://localhost:7071/api/group/edit?groupId='+this.state.groupId+'&userName=swathikumary@nousinfo.com';
+
+        fetch(url)
+            .then((response) => response.json())
+            .then((data) => {
+                if(data.status == false){
+                  this.state.successMessage = data.data;
+                  this.state.errorMessage = "";
+                  this.state.assigned = [];
+                  this.setState(this.state);
+                }else{
+                  this.state.accountId = data.data.group.AccountId;
+                  this.refs.groupName.value = data.data.group.GroupName;
+                  this.refs.groupDescription.value = data.data.group.Description;
+                  this.state.assigned = data.data.details;
+                  this.setState(this.state);
+                }
+
+            })
+            .catch((error) => {
+              this.state.successMessage = "";
+              this.state.errorMessage = error.message;
+              this.setState(this.state);
+            });
+
+      }else{
+        this.refs.groupName.value = "";
+        this.refs.groupDescription.value = "";
+      }
+
+
     }
 
     move(source, target) {
@@ -67,38 +136,65 @@ export default class ReportGroup extends React.Component {
 
 
     saveAssigned(items) {
+        this.state.editGroup = this.props.history.location.state.editGroup;
+        this.setState(this.state);
         let groupStoreObject = this.getGroupandStore(items);
         let url = "http://localhost:7071/api/group/create";
 
-        let data = {
-            id: null,
-            name: this.refs.groupName.value,
-            description: this.refs.groupDescription.value,
-            groups: groupStoreObject.group,
-            stores: groupStoreObject.store
-        };
+        if(this.refs.groupName.value === "" || this.refs.groupName.value === undefined){
+          this.state.errorMessage = "Group name may not be blank";
+          this.state.successMessage = "";
+          this.setState(this.state);
+        } else{
+          let data = {
+              id: null,
+              name: "",
+              description: "",
+              groups: [],
+              stores: []
+          };
+          if(this.state.editGroup){
+            data = {
+                id: this.props.history.location.state.groupId,
+                name: this.refs.groupName.value,
+                description: this.refs.groupDescription.value,
+                groups: groupStoreObject.group,
+                stores: groupStoreObject.store
+            };
+          }else{
+            data = {
+                id: null,
+                name: this.refs.groupName.value,
+                description: this.refs.groupDescription.value,
+                groups: groupStoreObject.group,
+                stores: groupStoreObject.store
+            };
+          }
+          fetch(url, {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+                  'Accept': 'application/json',
+                  'Cache-Control': 'no-cache',
+                  'Pragma': 'no-cache'
+              },
+              body: JSON.stringify(data)
+          })
+              .then((response) => response.json())
+              .then((data) => {
+                  this.state.successMessage = data.data;
+                  this.state.errorMessage = "";
+                  this.setState(this.state);
+                  this.getAvailableGroupStoreList();
+              })
+              .catch((error) => {
+                  this.state.successMessage = "";
+                  this.state.errorMessage = error.message;
+                  this.setState(this.state);
+              });
 
-        fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                'Accept': 'application/json',
-                'Cache-Control': 'no-cache',
-                'Pragma': 'no-cache'
-            },
-            body: JSON.stringify(data)
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                this.state.successMessage = data.data;
-                this.state.errorMessage = "";
-                this.setState(this.state);
-            })
-            .catch((error) => {
-                this.state.successMessage = "";
-                this.state.errorMessage = error.message;
-                this.setState(this.state);
-            });
+        }
+
           //history.push('/grouphierarchy');
     }
 
@@ -110,9 +206,9 @@ export default class ReportGroup extends React.Component {
         };
         _.each(items, function (item) {
             if (item.type == "group") {
-                groupStore.group.push(item.id);
+                groupStore.group.push(item.Id);
             } else if (item.type == "store") {
-                groupStore.store.push(item.id);
+                groupStore.store.push(item.Id);
             }
         });
 
@@ -120,76 +216,121 @@ export default class ReportGroup extends React.Component {
     }
 
     deleteGroup() {
-        let url = 'http://localhost/api/group/deletegroup?groupId=101&userName=swathikumary@nousinfo.com';
-        fetch(url, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-                'Accept': 'application/json',
-                'Cache-Control': 'no-cache',
-                'Pragma': 'no-cache'
+
+        confirmAlert({
+          title: 'Confirm to Delete',
+          message: 'Are you sure you want to remove this user?',
+          buttons: [
+            {
+              label: 'Yes',
+              onClick: () => {
+                this.confirmDelete();
+              }
+            },
+            {
+              label: 'No',
+              onClick: () => {
+
+              }
             }
+          ]
         })
-            .then((response) => response.json())
+
+        /*let url = 'http://localhost:7071/api/group/delete?groupId=12&accountId=0';
+        fetch(url, {
+            method: "DELETE"
+        })
             .then((data) => {
-                this.state.successMessage = data.data;
-                this.state.errorMessage = "";
-                this.setState(this.state);
+                if(data.status == 200){
+                  this.state.successMessage = "Group Deleted Successfully";
+                  this.state.errorMessage = "";
+                  this.setState(this.state);
+                }else{
+                  this.state.errorMessage = "Unable to delete group data";
+                  this.state.successMessage = "";
+                  this.setState(this.state);
+                }
+
+                //this.props.history.push('/grouphierarchy');
             })
             .catch((error) => {
                 this.state.errorMessage = error.message;
                 this.state.successMessage = "";
                 this.setState(this.state);
-            });
+            }); */
     }
 
-    navigateToManageGroup() {
+    confirmDelete(){
+      //let url = 'http://localhost:7071/api/group/delete?groupId=12&accountId=0';
+      let url = 'http://localhost:7071/api/group/delete?groupId='+this.state.groupId+'&accountId='+this.state.accountId;
+      fetch(url, {
+          method: "DELETE"
+      })
+      .then((data) => {
+          if(data.status == 200){
+            this.state.successMessage = "Group Deleted Successfully";
+            this.state.errorMessage = "";
+            this.setState(this.state);
+          }else{
+            this.state.errorMessage = "Unable to delete group data";
+            this.state.successMessage = "";
+            this.setState(this.state);
+          }
 
+          //this.props.history.push('/grouphierarchy');
+      })
+      .catch((error) => {
+          this.state.errorMessage = error.message;
+          this.state.successMessage = "";
+          this.setState(this.state);
+      });
     }
+
     render() {
         let assigned = this.state.assigned;
         let unAssigned = this.state.available;
         return (<section className="groupDetailsPage"><HmeHeader />
             <section className="reportContainer">
-                <div>
-                    <h1>Reporting Group Details</h1>
-                </div>
-                <div className="row">
-                    <div className="form-group">
-                        <label htmlFor="groupName" className="control-label col-xs-3 groupNameLabel">Group Name : <span>*</span></label>
-                        <div className="col-xs-6">
-                            <input type="text" ref="groupName" className="form-control" />
-                        </div>
-                    </div>
-                </div>
+              <SuccessAlert successMessage={this.state.successMessage} />
+              <ErrorAlert errorMessage={this.state.errorMessage} />
+              <div>
+                  <h1>Reporting Group Details</h1>
+              </div>
+              <div className="row reportGroupName">
+                  <div className="form-group">
+                      <label htmlFor="groupName" className="control-label col-xs-3 groupNameLabel">Group Name : <span>*</span></label>
+                      <div className="col-xs-6">
+                          <input type="text" ref="groupName" className="form-control" maxLength="50"/>
+                      </div>
+                  </div>
+              </div>
 
-                <div className="row reportDescription">
-                    <div className="form-group">
-                        <label htmlFor="groupName" className="control-label col-xs-3 groupLabelDescription">Group Description : </label>
-                        <div className="col-xs-6">
-                            <textarea rows="4" ref="groupDescription" cols="53" className="form-control"></textarea>
-                        </div>
-                    </div>
-                </div>
+              <div className="row reportDescription">
+                  <div className="form-group">
+                      <label htmlFor="groupName" className="control-label col-xs-3 groupLabelDescription">Group Description : </label>
+                      <div className="col-xs-6">
+                          <textarea rows="4" ref="groupDescription" cols="53" className="form-control" maxLength="200"></textarea>
+                      </div>
+                  </div>
+              </div>
 
-                <div className="row groupSeperation">
-                    <CheckBoxList title="Available Groups/Stores" items={this.state.available} selectAll={(e, items) => this.selectAll(e, items)} toggle={(item) => this.toggle(item)} />
-                    <div className="col-xs-2 moveGroupStore">
-                        <div className="moveToHierarchy pull-center"><button className="btn btn-default" onClick={this.add.bind(this)} >&gt;</button></div>
-                        <div className="removeFromToHierarchy pull-center"><button className="btn btn-default" onClick={this.remove.bind(this)}>&lt; </button></div>
-                    </div>
-                    <CheckBoxList title="Groups/Stores in Group" items={this.state.assigned} selectAll={(e, items) => this.selectAll(e, items)} toggle={(item) => this.toggle(item)} />
-                </div>
+              <div className="row groupSeperation">
+                  <CheckBoxList title="Available Groups/Stores" items={this.state.available} selectAll={(e, items) => this.selectAll(e, items)} toggle={(item) => this.toggle(item)} />
+                  <div className="col-xs-2 moveGroupStore">
+                      <div className="moveToHierarchy pull-center"><button className="btn btn-default" onClick={this.add.bind(this)} >&gt;</button></div>
+                      <div className="removeFromToHierarchy pull-center"><button className="btn btn-default" onClick={this.remove.bind(this)}>&lt; </button></div>
+                  </div>
+                  <CheckBoxList title="Groups/Stores in Group" items={this.state.assigned} selectAll={(e, items) => this.selectAll(e, items)} toggle={(item) => this.toggle(item)} />
+              </div>
 
-                <div className="row reportGroupButtons">
-                    <div className="col-xs-12">
-                        <button type="button" className="btn btn-primary  col-xs-2 reportGroupSave" onClick={this.saveAssigned.bind(this, assigned)}>Save</button>
-                        <button type="button" className="btn btn-danger reportGroupDelete col-xs-2" onClick={this.deleteGroup.bind(this)} >Delete</button>
-                        <button type="button" className="btn btn-default reportGroupCancel  col-xs-2"><Link to="/grouphierarchy">Cancel</Link></button>
-                    </div>
-                </div>
-                <SuccessAlert successMessage={this.state.successMessage} />
-                <ErrorAlert errorMessage={this.state.errorMessage} />
+              <div className="row reportGroupButtons">
+                  <div className="col-xs-12">
+                      <button type="button" className="btn btn-primary  col-xs-2 reportGroupSave" onClick={this.saveAssigned.bind(this, assigned)}>Save</button>
+                      <button type="button" className={"btn btn-danger reportGroupDelete col-xs-2 "+(this.state.editGroup ? 'show' : 'hidden')} onClick={this.deleteGroup.bind(this)} >Delete</button>
+                      <Link to="/grouphierarchy"><button type="button" className="btn btn-default reportGroupCancel  col-xs-2">Cancel</button></Link>
+                  </div>
+              </div>
+
             </section>
         </section>);
     }

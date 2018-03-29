@@ -83,18 +83,23 @@
     padding: 10px 0px;
     margin: 10px 0px;
     border: 1px solid #dad9d9;
+    overflow-y: auto;
+    height: 150px;
 }
 
 .reportsPageHeader {
     background-color: white;
     height: 58px;
     display: block;
-    padding-top: 26px;
     width: 100%;
     min-width: 600px;
+    display: -ms-flexbox;
     display: flex;
+    -ms-flex-align: center;
     align-items: center;
+    -ms-flex-pack: justify;
     justify-content: space-between;
+    margin: 10px 0px;
 }
 
 .reportsNavigationHeader {

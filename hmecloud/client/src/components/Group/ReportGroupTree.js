@@ -7,7 +7,6 @@ import fetch from 'isomorphic-fetch'
 import Tree, { TreeNode } from 'rc-tree'
 import 'rc-tree/assets/index.css'
 import HmeHeader from '../Header/HmeHeader'
-import './ReportGroup.css'
 //import {body} from 'body-parser';
 var body = require('body-parser');
 var _ = require('underscore');

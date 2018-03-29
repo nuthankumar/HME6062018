@@ -6,10 +6,10 @@ export default class CheckBoxList extends React.Component {
         super();
     }
     render() {
-        
+
             debugger;
             let items=this.props.items;
-        
+
         return (
             <div className="col-xs-4">{this.props.title}
                   <div className="selectAllGroups">
@@ -19,9 +19,9 @@ export default class CheckBoxList extends React.Component {
                     <ul className="unLinkedGroupList">
                         {
                             this.props.items.map(item =>
-                                <li className="" key={item.id}>
+                                <li className="" key={item.Id}>
                                     <label><input type='checkbox' name="availableItem" checked={item.selected} onChange={(e) => this.props.toggle(item)} />
-                                    </label> {item.name} </li>)
+                                    </label> {item.GroupName} </li>)
                         }
                     </ul>
                 </div>

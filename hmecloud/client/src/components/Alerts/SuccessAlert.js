@@ -10,7 +10,6 @@ export default class SuccessAlert extends React.Component {
 
       return(
         <div className="alert alert-success alert-dismissible" role="alert">
-          <a href="#" className="close" data-dismiss="alert">&times;</a>
           {this.props.successMessage}
         </div>
       );
