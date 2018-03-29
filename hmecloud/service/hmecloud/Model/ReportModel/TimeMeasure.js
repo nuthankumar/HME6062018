@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize')
 const db = require('../DataBaseConnection/configDb')
 
-const groupdetails = db.define(
-  'GroupStore',
+const TimeMeasure = db.define(
+  'TimeMeasure',
   {
     Id: {
       type: Sequelize.INTEGER,
@@ -10,13 +10,7 @@ const groupdetails = db.define(
       primaryKey: true
     },
     GroupId: {
-      type: Sequelize.INTEGER
-    },
-    ChildGroupId: {
-      type: Sequelize.INTEGER
-    },
-    StoreId: {
-      type: Sequelize.INTEGER
+      type: Sequelize.STRING
     }
   },
   {
@@ -26,8 +20,4 @@ const groupdetails = db.define(
   }
 )
 
-groupdetails.associate = models => {
-  models.groupdetails.belongsTo(models.Group)
-}
-
-module.exports = groupdetails
+module.exports = TimeMeasure

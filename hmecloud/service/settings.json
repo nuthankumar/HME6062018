@@ -1,0 +1,13 @@
+{
+    "standard.validate": [
+	"javascript",
+	"javascriptreact",
+	"html"
+],
+"standard.options": {
+	"plugins": ["html"]
+},
+"files.associations": {
+	"*.vue": "html"
+},
+}

@@ -1,47 +1,55 @@
 const Sequelize = require('sequelize')
-const db = require('../db/configDb')
+const db = require('../DataBaseConnection/configDb')
 
-const group = db.define('Group', {
+const group = db.define(
+  'Group',
+  {
     Id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
+      type: Sequelize.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
     },
     ParentGroup: {
-        type: Sequelize.INTEGER,
+      type: Sequelize.INTEGER
     },
     GroupName: {
-        type: Sequelize.STRING
+      type: Sequelize.STRING
     },
     Description: {
-        type: Sequelize.STRING,
+      type: Sequelize.STRING
     },
     AccountId: {
-        type: Sequelize.INTEGER,
+      type: Sequelize.INTEGER
     },
     CreatedBy: {
-        type: Sequelize.STRING,
+      type: Sequelize.STRING
     },
     UpdatedBy: {
-        type: Sequelize.STRING,
+      type: Sequelize.STRING
     },
     CreatedDateTime: {
-        type: Sequelize.DATEONLY,
-        defaultValue: Sequelize.NOW
+      type: Sequelize.DATEONLY,
+      defaultValue: Sequelize.NOW
     },
     UpdatedDateTime: {
-        type: Sequelize.DATEONLY,
-        defaultValue: Sequelize.NOW
-    },
+      type: Sequelize.DATEONLY,
+      defaultValue: Sequelize.NOW
+    }
+  },
+  {
+    tableName: 'Group',
+    timestamps: false,
+    freezeTableName: true
+  }
+)
 
-}, {
-        tableName: 'Group',
-        timestamps: false,
-        freezeTableName: true
-    });
-
-group.associate = (models) => {
-    models.group.hasMany(models.groupdetails, { onSave: 'cascade', onDelete: 'cascade', hooks: true, constraints: true });
+group.associate = models => {
+  models.group.hasMany(models.groupdetails, {
+    onSave: 'cascade',
+    onDelete: 'cascade',
+    hooks: true,
+    constraints: true
+  })
 }
 
-module.exports=group
+module.exports = group
