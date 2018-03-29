@@ -16,8 +16,8 @@ const templatecontroller = require('../../Controllers/ReportTemplateController/R
 router.get('/list', (req, res) => {
   if (req.query.accountId && req.query.createdBy) {
     const input = {
-      AccountId: req.query.accountId,
-      CreatedBy: req.query.createdBy
+      AccountId: req.query.AccountId,
+      CreatedBy: req.query.CreatedBy
     }
     const AccountId = validate.isNumeric(input.AccountId)
     const CreatedBy = validate.isNumeric(input.CreatedBy)
@@ -33,7 +33,7 @@ router.get('/list', (req, res) => {
         status: false
       })
     }
-    if (AccountId && CreatedBy) {
+    if (AccountId ) {
         templatecontroller.getReportTemplates(input, response => {
         if (response.status === true) {
           res.send(response)

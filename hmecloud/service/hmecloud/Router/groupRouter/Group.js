@@ -23,11 +23,11 @@ router.get('/getname', (req, res) => {
  * Service to provide list of all groups
  * using accountId, username
  */
-router.get('/list', (req, res) => {
-  if (req.query.accountId && req.query.userName) {
+router.get('/list', (request, res) => {
+  if (request.query.accountId && request.query.userName) {
     const input = {
-      accountId: req.query.accountId,
-      createdBy: req.query.userName
+      accountId: request.query.accountId,
+      createdBy: request.query.userName
     };
     const accountId = validate.isNumeric(input.accountId);
     const createdBy = validate.isEmail(input.createdBy);
@@ -52,12 +52,12 @@ router.get('/list', (req, res) => {
         }
       });
     }
-  } else if (!req.query.accountId && req.query.userName) {
+  } else if (!request.query.accountId && request.query.userName) {
     res.status(400).send({
       error: messages.LISTGROUP.accountId,
       status: false
     });
-  } else if (req.query.accountId && !req.query.userName) {
+  } else if (request.query.accountId && !request.query.userName) {
     res.status(400).send({
       error: messages.LISTGROUP.createdBy,
       status: false
@@ -78,17 +78,17 @@ router.get('/list', (req, res) => {
  * Service for creating a new group
  * using name,desc,group,stores
  */
-router.post('/create', (req, res) => {
-  if (req.body.name) {
+router.post('/create', (request, res) => {
+  if (request.body.name) {
     const input = {
-      id: req.body.id,
-      name: req.body.name,
-      description: req.body.description,
-      groups: req.body.groups,
-      stores: req.body.stores
+      id: request.body.id,
+      name: request.body.name,
+      description: request.body.description,
+      groups: request.body.groups,
+      stores: request.body.stores
     };
 
-    if (!req.body.id) {
+    if (!request.body.id) {
       // Create Group
       groupController.create(input, response => {
         if (response.status === true) {
@@ -119,12 +119,12 @@ router.post('/create', (req, res) => {
  * This Service is used to get the Group details to edit the group
  */
 
-router.get('/edit', (req, res) => {
+router.get('/edit', (request, res) => {
   console.log('The edit service is invoked');
-  if (req.query.groupId && req.query.userName) {
+  if (request.query.groupId && request.query.userName) {
     const input = {
-      groupId: req.query.groupId,
-      userName: req.query.userName
+      groupId: request.query.groupId,
+      userName: request.query.userName
     };
     groupController.getgroupDetails(input, response => {
       if (response.status === true) {
@@ -133,12 +133,12 @@ router.get('/edit', (req, res) => {
         res.status(400).send(response);
       }
     });
-  } else if (!req.query.groupId && req.query.userName) {
+  } else if (!request.query.groupId && request.query.userName) {
     res.status(400).send({
       error: messages.CREATEGROUP.groupId,
       status: false
     });
-  } else if (req.query.groupId && !req.query.userName) {
+  } else if (request.query.groupId && !request.query.userName) {
     res.status(400).send({
       error: messages.LISTGROUP.createdBy,
       status: false
@@ -153,15 +153,15 @@ router.get('/edit', (req, res) => {
 
 /**
  * This Service is used to Delete the Group details to from group and its child groups
- * @param request
+ * @param requestuest
  * @param response
  */
 
-router.delete('/delete', (req, res) => {
-  if (req.query.groupId && req.query.accountId) {
+router.delete('/delete', (request, res) => {
+  if (request.query.groupId && request.query.accountId) {
     const input = {
-      groupId: req.query.groupId,
-      accountId: req.query.accountId
+      groupId: request.query.groupId,
+      accountId: request.query.accountId
     };
 
     const groupId = validate.isNumeric(input.groupId);
@@ -203,13 +203,13 @@ router.delete('/delete', (req, res) => {
  * Service to provide list of all groups with child group hierarchy
  * using accountId, username
  */
-router.get('/listgrouphierarchy', (req, res) => {
-    console.log("the group hierarchy executed" + req.query.accountId + " " + req.query.userName);
-    if (req.query.accountId && req.query.userName) {
+router.get('/listgrouphierarchy', (request, res) => {
+    console.log("the group hierarchy executed" + request.query.accountId + " " + request.query.userName);
+    if (request.query.accountId && request.query.userName) {
         console.log("the condition success");
     const input = {
-      AccountId: req.query.accountId,
-      CreatedBy: req.query.userName
+      AccountId: request.query.accountId,
+      CreatedBy: request.query.userName
     };
     const accountId = validate.isNumeric(input.AccountId);
         const createdBy = validate.isEmail(input.CreatedBy);
@@ -237,12 +237,12 @@ router.get('/listgrouphierarchy', (req, res) => {
         }
       });
     //}
-  } else if (!req.query.accountId && req.query.userName) {
+  } else if (!request.query.accountId && request.query.userName) {
     res.status(400).send({
       error: messages.LISTGROUP.accountId,
       status: false
     });
-  } else if (req.query.accountId && !req.query.userName) {
+  } else if (request.query.accountId && !request.query.userName) {
     res.status(400).send({
       error: messages.LISTGROUP.createdBy,
       status: false
@@ -259,11 +259,11 @@ router.get('/listgrouphierarchy', (req, res) => {
  * end
  */
 
-router.get('/availabledetails', (req, res) => {
-  if (req.query.accountId && req.query.userName) {
+router.get('/availabledetails', (request, res) => {
+  if (request.query.accountId && request.query.userName) {
     const input = {
-      accountId: req.query.accountId,
-      createdBy: req.query.userName
+      accountId: request.query.accountId,
+      createdBy: request.query.userName
     };
     const accountId = validate.isNumeric(input.accountId);
     const createdBy = validate.isEmail(input.createdBy);
@@ -288,12 +288,12 @@ router.get('/availabledetails', (req, res) => {
         }
       });
     }
-  } else if (!req.query.accountId && req.query.userName) {
+  } else if (!request.query.accountId && request.query.userName) {
     res.status(400).send({
       error: errors.LISTGROUP.accountId,
       status: false
     });
-  } else if (req.query.accountId && !req.query.userName) {
+  } else if (request.query.accountId && !request.query.userName) {
     res.status(400).send({
       error: errors.LISTGROUP.createdBy,
       status: false
@@ -305,4 +305,46 @@ router.get('/availabledetails', (req, res) => {
     });
   }
 });
+
+router.get('/getAll',(request,response)=>{
+
+  if (request.query.accountId) {
+    const input = {
+      accountId: request.query.accountId
+    }
+    const accountId = validate.isNumeric(input.accountId);
+    if (!accountId) {
+      response.status(400).send({
+        error: messages.LISTGROUP.accountId,
+        status: false
+      })
+    }
+
+    if (accountId) {
+      groupController.getAll(input, result => {
+        if (result.status === true) {
+          response.status(200).send(result)
+        }
+        else {
+          response.status(400).send(result)
+        }
+      });
+    }
+  } else if (!request.query.accountId) {
+    response.status(400).send({
+      error: messages.LISTGROUP.accountId,
+      status: false
+    });
+  } else {
+    response.status(400).send({
+      error: messages.LISTGROUP,
+      status: false
+    });
+  }
+
+
+})
+
+
+
 module.exports = router;

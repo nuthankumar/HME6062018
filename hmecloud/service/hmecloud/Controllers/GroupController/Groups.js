@@ -321,11 +321,7 @@ const getgroupDetails = (input, callback) => {
     });
 };
 
-/*
-Deletes Group and its sub groups from table
-@param   inputs [groupId and accountId ]
-@param callBack
-*/
+
 const deleteGroupById = (input, callBack) => {
     const updateParentGroup = {
         ParentGroup: null
@@ -411,6 +407,32 @@ const listGroupHierarchy = (input, callback) => {
     });
 }
 
+const getAll =(input,callback)=>{
+
+    const Query = "SELECT Id,GroupName FROM [Group] WHERE AccountId=100 AND ParentGroup IS NULL"
+   Sequelize.query(Query, { type: Sequelize.QueryTypes.SELECT }).then(result => {
+    const output = {}
+    console.log("RESULT",result);
+    if (result) {
+        output.data = result
+        output.status = true
+    } else {
+        output.data = 'notfound'
+        output.status = false
+    }
+    callback(output)
+}).catch(error => {
+    const output = {
+        data: error,
+        status: false
+    }
+    callback(output)
+});
+
+}
+
+
+
 module.exports = {
     list,
     create,
@@ -418,5 +440,6 @@ module.exports = {
     deleteGroupById,
     update,
     avaliabledGroups,
-    listGroupHierarchy
+    listGroupHierarchy,
+    getAll
 }

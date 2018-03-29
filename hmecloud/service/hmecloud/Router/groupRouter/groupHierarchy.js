@@ -74,7 +74,7 @@ router.get('/list', (req, res) => {
 
 })
 
-/** 
+/**
  * end
  */
 
@@ -125,11 +125,10 @@ router.post('/create', (req, res) => {
 
 
 /**
- * This Service is used to get the Group details to edit the group 
+ * This Service is used to get the Group details to edit the group
  */
 
 router.get('/edit', (req, res) => {
-    console.log("The edit service is invoked");
     if (req.query.groupId && req.query.userName) {
         const input = {
             groupId: req.query.groupId,
