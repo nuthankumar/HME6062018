@@ -34,7 +34,8 @@ export default class ReportGroup extends React.Component {
             editGroup : false,
             accountId:null,
             groupId:null,
-            saveSuccess : false
+            saveSuccess : false,
+            deleteSuccess : false
         };
         //this.populateGroupDetails();
         this.getAvailableGroupStoreList();
@@ -219,7 +220,6 @@ export default class ReportGroup extends React.Component {
     }
 
     deleteGroup() {
-
         confirmAlert({
           title: 'Confirm to Delete',
           message: 'Are you sure you want to remove this user?',
@@ -238,29 +238,6 @@ export default class ReportGroup extends React.Component {
             }
           ]
         })
-
-        /*let url = 'http://localhost:7071/api/group/delete?groupId=12&accountId=0';
-        fetch(url, {
-            method: "DELETE"
-        })
-            .then((data) => {
-                if(data.status == 200){
-                  this.state.successMessage = "Group Deleted Successfully";
-                  this.state.errorMessage = "";
-                  this.setState(this.state);
-                }else{
-                  this.state.errorMessage = "Unable to delete group data";
-                  this.state.successMessage = "";
-                  this.setState(this.state);
-                }
-
-                //this.props.history.push('/grouphierarchy');
-            })
-            .catch((error) => {
-                this.state.errorMessage = error.message;
-                this.state.successMessage = "";
-                this.setState(this.state);
-            }); */
     }
 
     confirmDelete(){
@@ -273,7 +250,9 @@ export default class ReportGroup extends React.Component {
           if(data.status == 200){
             this.state.successMessage = "Group Deleted Successfully";
             this.state.errorMessage = "";
+            this.state.deleteSuccess = true;
             this.setState(this.state);
+
           }else{
             this.state.errorMessage = "Unable to delete group data";
             this.state.successMessage = "";
@@ -294,10 +273,10 @@ export default class ReportGroup extends React.Component {
         let unAssigned = this.state.available;
         return (<section className="groupDetailsPage"><HmeHeader />
           <div className="statusMessages">
-            <SuccessAlert successMessage={this.state.successMessage} />
+            <SuccessAlert successMessage={this.state.successMessage}/>
             <ErrorAlert errorMessage={this.state.errorMessage} />
           </div>
-            <section className={"reportContainer "+(this.state.saveSuccess ? "hide" : "show")}>
+            <section className={"reportContainer "+(this.state.saveSuccess || this.state.deleteSuccess ? "hide" : "show")}>
               <div>
                   <h1>Reporting Group Details</h1>
               </div>
