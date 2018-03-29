@@ -33,7 +33,8 @@ export default class ReportGroup extends React.Component {
             errorMessage: "",
             editGroup : false,
             accountId:null,
-            groupId:null
+            groupId:null,
+            saveSuccess : false
         };
         //this.populateGroupDetails();
         this.getAvailableGroupStoreList();
@@ -182,8 +183,10 @@ export default class ReportGroup extends React.Component {
           })
               .then((response) => response.json())
               .then((data) => {
+
                   this.state.successMessage = data.data;
                   this.state.errorMessage = "";
+                  this.state.saveSuccess = true;
                   this.setState(this.state);
                   this.getAvailableGroupStoreList();
               })
@@ -290,9 +293,11 @@ export default class ReportGroup extends React.Component {
         let assigned = this.state.assigned;
         let unAssigned = this.state.available;
         return (<section className="groupDetailsPage"><HmeHeader />
-            <section className="reportContainer">
-              <SuccessAlert successMessage={this.state.successMessage} />
-              <ErrorAlert errorMessage={this.state.errorMessage} />
+          <div className="statusMessages">
+            <SuccessAlert successMessage={this.state.successMessage} />
+            <ErrorAlert errorMessage={this.state.errorMessage} />
+          </div>
+            <section className={"reportContainer "+(this.state.saveSuccess ? "hide" : "show")}>
               <div>
                   <h1>Reporting Group Details</h1>
               </div>

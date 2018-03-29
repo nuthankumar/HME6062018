@@ -22,68 +22,16 @@ export default class ReportGroupHierarchy extends React.Component {
         super();
         this.state = {
           treeData : [
-            {
-           id: 1,
-           name : "Group1",
-           children : [
-             {
-               id: 11,
-               name : "Group2",
-               children : [
-                 {
-                   id:111,
-                   name : "store1"
-                 },{
-                   id:112,
-                   name : "store2"
-                 }
-               ]
-             },
-             {
-               id:12,
-               name : "store3",
-               children : []
-             }
-           ]
-         },{
-           id: 91,
-           name : "Group3",
-           children : [
-             {
-               id : 21,
-               name : "store4",
-               children : []
-             }
-           ]
-         },{
-           id: 93,
-           name : "group4",
-           children : [
-             {
-               id:31,
-               name : "group5",
-               children : [
-                 {
-                   id:311,
-                   name : "store6",
-                   children:[]
-                 },{
-                   id:312,
-                   name : "store7",
-                   children:[]
-                 }
-               ]
-             }
-           ]
-         }
           ],
           editGroup : false,
           groupId : null
         };
+        this.getTreeHierarchy();
     }
 
     getTreeHierarchy(){
-      let url = "http://localhost:7071/api/group/list?accountId=100&userName=swathikumary@nousinfo.com";
+    //  let url = "http://localhost:7071/api/group/list?accountId=100&userName=swathikumary@nousinfo.com";
+    let url = "http://localhost:7071/api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com";
       fetch(url)
           .then((response) => response.json())
           .then((data) => {
@@ -111,10 +59,11 @@ export default class ReportGroupHierarchy extends React.Component {
     render() {
       const loop = data => {
         return data.map((item) => {
+          item.children = [];
           if (item.children && item.children.length) {
-            return <TreeNode className="treeNode" title={item.name} key={item.id}>{loop(item.children)}</TreeNode>;
+            return <TreeNode className="treeNode" title={item.GroupName} key={item.Id}>{loop(item.children)}</TreeNode>;
           }
-          return <TreeNode className="treeNode" title={item.name} key={item.id} />;
+          return <TreeNode className="treeNode" title={item.GroupName} key={item.Id} />;
         });
       };
         return (<section className="groupManagementSection"><HmeHeader />
@@ -128,7 +77,7 @@ export default class ReportGroupHierarchy extends React.Component {
                 </div>
               </div>
 
-              <div className="row groupHierarchyTree">
+              <div className="row groupHierarchyTree jumbotron">
                 <div className="col-xs-4">
                   <Tree
                       className="hierarchyTree"
