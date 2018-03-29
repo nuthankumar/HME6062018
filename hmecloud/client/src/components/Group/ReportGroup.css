@@ -1,0 +1,62 @@
+.reportContainer,.groupHierarchyTreeSection {
+    margin: 45px 20%;
+  }
+  .reportDescription{
+    margin-top : 20px;
+  }
+  .groupSeperation{
+    margin-top : 40px;
+  }
+
+  .newGroups,.existingGroups{
+    border:1px solid grey;
+    height: 300px;
+    box-shadow: 5px 5px 3px grey;
+  }
+
+  .reportGroupButtons{
+    margin-top : 40px;
+  }
+  .reportGroupDelete{
+    background: #d41b3e !important;
+  }
+  .reportGroupDelete,.reportGroupCancel{
+    margin-left : 5px;
+  }
+
+  .unLinkedGroupList,.linkedGroupList{
+    list-style:none;
+    padding-left:0px;
+    padding-top: 10px;
+  }
+
+  .selectAllGroups{
+    padding-top:10px;
+  }
+  .groupNameLabel, .groupLabelDescription{
+    font-weight : 100;
+  }
+  .reportGroupSave,.reportGroupDelete,.reportGroupCancel{
+    border-radius : 0 !important;
+  }
+  .moveGroupStore{
+    text-align:center;
+        top: 150px;
+  }
+
+  .reportGroupButtons{
+      margin-bottom: 10px;
+  }
+
+  .reportHierarchyContainer{
+    width : 850px !important;
+  }
+  .groupHierarchyTree{
+    margin-top : 20px;
+  }
+
+.rc-tree li span.rc-tree-checkbox , .rc-tree-iconEle.rc-tree-icon__close, .rc-tree li span.rc-tree-iconEle{
+  /*display : none !important;*/
+}
+
+

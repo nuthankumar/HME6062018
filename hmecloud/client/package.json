@@ -1,0 +1,30 @@
+{
+  "name": "hmecloud",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "bootstrap": "3.3.6",
+    "crypto-js": "^3.1.9-1",
+    "fetch": "^1.1.0",
+    "jsonwebtoken": "^8.2.0",
+    "jwt-decode": "^2.2.0",
+    "rc-time-picker": "^3.3.1",
+    "rc-tree": "^1.7.11",
+    "react": "^16.2.0",
+    "react-bootstrap-date-picker": "^5.1.0",
+    "react-bootstrap-date-time-picker": "0.0.3",
+    "react-datetime": "^2.14.0",
+    "react-router-dom": "^4.2.2",
+    "react-dom": "^16.2.0",
+    "react-router": "^4.2.0",
+    "react-scripts": "1.1.1",
+    "underscore": "^1.8.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
