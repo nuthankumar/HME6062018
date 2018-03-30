@@ -158,6 +158,24 @@ class Login extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.Auth = new AuthService();
+    this.getTreeHierarchy();
+  }
+  getTreeHierarchy() {
+    //  let url = "http://localhost:7071/api/group/list?accountId=100&userName=swathikumary@nousinfo.com";
+    let url =
+      "http://localhost:7071/api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com";
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data.data);
+        this.state.treeData = data.data;
+        this.setState(this.state);
+      })
+      .catch(error => {
+        this.state.successMessage = "";
+        this.state.errorMessage = error.message;
+        this.setState(this.state);
+      });
   }
 
   componentWillMount() {
@@ -210,14 +228,14 @@ class Login extends Component {
 
     const loop = data => {
       return data.map(item => {
-        if (item.children && item.children.length) {
+        if (item.Children && item.Children.length) {
           return (
-            <TreeNode title={item.name} key={item.id} type={item.type}>
-              {loop(item.children)}
+            <TreeNode title={item.Name} key={item.Id} type={item.Type}>
+              {loop(item.Children)}
             </TreeNode>
           );
         }
-        return <TreeNode title={item.name} key={item.id} type={item.type} />;
+        return <TreeNode title={item.Name} key={item.Id} type={item.Type} />;
       });
     };
 
