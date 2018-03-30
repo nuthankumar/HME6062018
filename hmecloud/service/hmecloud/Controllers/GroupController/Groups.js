@@ -70,10 +70,14 @@ const create = (input, callback) => {
                 if (input.groups.length > 0 || input.stores.length > 0) {
                     let maxSize = input.groups.length
                     for (var i = 0; i < maxSize; i++) {
-                        group.update(
-                            { ParentGroup: result.Id },
-                            { returning: true, where: { id: (input.groups[i] !== undefined) ? input.groups[i] : null } }
-                        )
+                        group.update({
+                                ParentGroup: result.Id
+                            }, {
+                                returning: true,
+                                where: {
+                                    id: (input.groups[i] !== undefined) ? input.groups[i] : null
+                                }
+                            })
                             .then(results1 => {
 
                             }).catch(error1 => {
@@ -201,54 +205,31 @@ const updateGroupData = (input, callback) => {
         UpdatedBy: 'jaffer@nousinfo.com', // TODO: To be updated
         UpdatedDateTime: Date().now
     }, {
+        where: {
+            Id: input.id
+        }
+    }).then(result1 => {
+        console.log('the result printed=====****' + result1)
+        console.log('check the code itself', result1)
+        const condition = {
             where: {
-                Id: input.id
+                GroupId: input.id
             }
-        }).then(result1 => {
-            console.log('the result printed=====****' + result1)
-            console.log('check the code itself', result1)
-            const condition = {
-                where: {
-                    GroupId: input.id
-                }
-            }
-            groupDetails.destroy(condition).then(result2 => {
-                console.log('The records deleted')
-                if (input.groups.length > 0 || input.stores.length > 0) {
-                    let maxSize = input.groups.length
-                    for (var i = 0; i < maxSize; i++) {
-                        group.update(
-                            { ParentGroup: null },
-                            { returning: true, where: { ParentGroup: (input.id) } }
-                        )
-                            .then(results1 => {
-
-                            }).catch(error1 => {
-                                output.data = error1
-                                output.status = false
-
-                                callback(output)
-                            })
-                        group.update(
-                            { ParentGroup: input.id },
-                            { returning: true, where: { Id: (input.groups[i]) } }
-                        )
-                            .then(results1 => {
-
-                            }).catch(error1 => {
-                                output.data = error1
-                                output.status = false
-
-                                callback(output)
-                            })
-                    }
-
-                    let maxSizes = input.stores.length
-                    for (var j = 0; j < maxSizes; j++) {
-                        groupDetails.create({
-                            GroupId: input.id,
-                            StoreId: input.stores[j]
-                        }).then(result1 => {
+        }
+        groupDetails.destroy(condition).then(result2 => {
+            console.log('The records deleted')
+            if (input.groups.length > 0 || input.stores.length > 0) {
+                let maxSize = input.groups.length
+                for (var i = 0; i < maxSize; i++) {
+                    group.update({
+                            ParentGroup: null
+                        }, {
+                            returning: true,
+                            where: {
+                                ParentGroup: (input.id)
+                            }
+                        })
+                        .then(results1 => {
 
                         }).catch(error1 => {
                             output.data = error1
@@ -256,23 +237,54 @@ const updateGroupData = (input, callback) => {
 
                             callback(output)
                         })
-                    }
-                }
-                output.data = messages.CREATEGROUP.groupSuccess1 + input.name + messages.CREATEGROUP.groupUpdatesSuccess
-                output.status = true
-                callback(output)
-            }).catch(error2 => {
-                output.data = error2
-                output.status = false
+                    group.update({
+                            ParentGroup: input.id
+                        }, {
+                            returning: true,
+                            where: {
+                                Id: (input.groups[i])
+                            }
+                        })
+                        .then(results1 => {
 
-                callback(output)
-            })
-        }).catch(error1 => {
-            output.data = error1
+                        }).catch(error1 => {
+                            output.data = error1
+                            output.status = false
+
+                            callback(output)
+                        })
+                }
+
+                let maxSizes = input.stores.length
+                for (var j = 0; j < maxSizes; j++) {
+                    groupDetails.create({
+                        GroupId: input.id,
+                        StoreId: input.stores[j]
+                    }).then(result1 => {
+
+                    }).catch(error1 => {
+                        output.data = error1
+                        output.status = false
+
+                        callback(output)
+                    })
+                }
+            }
+            output.data = messages.CREATEGROUP.groupSuccess1 + input.name + messages.CREATEGROUP.groupUpdatesSuccess
+            output.status = true
+            callback(output)
+        }).catch(error2 => {
+            output.data = error2
             output.status = false
 
             callback(output)
         })
+    }).catch(error1 => {
+        output.data = error1
+        output.status = false
+
+        callback(output)
+    })
 }
 
 const getgroupDetails = (input, callback) => {
@@ -289,9 +301,14 @@ const getgroupDetails = (input, callback) => {
 
             // Getting the child Group and Store details
             const Query = "SELECT g.Id, g.GroupName,'group' AS type FROM [dbo].[Group] as g where g.ParentGroup =" + input.groupId + " and g.CreatedBy='" + input.userName + "' union select s.Id, s.StoreName, 'store' AS type from Stores as s INNER JOIN GroupStore gd on s.Id = gd.StoreId INNER JOIN[dbo].[Group] as g on g.Id = gd.GroupId where gd.GroupId = " + input.groupId + " and g.CreatedBy ='" + input.userName + "'"
-            Sequelize.query(Query, { type: Sequelize.QueryTypes.SELECT }).then(result1 => {
+            Sequelize.query(Query, {
+                type: Sequelize.QueryTypes.SELECT
+            }).then(result1 => {
                 if (result1) {
-                    output.data = ({ group: result, details: result1 });
+                    output.data = ({
+                        group: result,
+                        details: result1
+                    });
                     output.status = true;
 
                     callback(output)
@@ -329,9 +346,11 @@ const deleteGroupById = (input, callBack) => {
 
     groupDetails
         .update(updateParentGroup, {
-            where: { ParentGroup: input.groupId }
+            where: {
+                ParentGroup: input.groupId
+            }
         }).then(updatedRows => {
-           group
+            group
                 .destroy({
                     where: {
                         AccountId: input.accountId,
@@ -359,26 +378,28 @@ const deleteGroupById = (input, callBack) => {
 
 };
 
-const avaliabledGroups = (input,callback)=>{
+const avaliabledGroups = (input, callback) => {
 
     const Query = "SELECT DISTINCT(g.Id), g.GroupName,'group' AS type FROM [dbo].[Group] as g where g.ParentGroup is null and g.AccountId = " + input.accountId + " and g.CreatedBy='" + input.createdBy + "' union select distinct s.Id, s.StoreName, 'store' AS type from Stores as s, GroupStore AS gd WHERE s.Id NOT IN(SELECT StoreId FROM GroupStore WHERE StoreId IS NOT NULL) and s.AccountId =" + input.accountId + " and s.CreatedBy='" + input.createdBy + "'";
-    Sequelize.query(Query, { type: Sequelize.QueryTypes.SELECT}).then(result => {
-     const output = {}
-     if (result.length >0) {
-         output.data = result
-         output.status = true
-     }else{
-         output.data = 'notfound'
-         output.status = false
-     }
-     callback(output)
- }).catch(error => {
-     const output = {
-         data: error,
-         status: false
-     }
-     callback(output)
- })
+    Sequelize.query(Query, {
+        type: Sequelize.QueryTypes.SELECT
+    }).then(result => {
+        const output = {}
+        if (result.length > 0) {
+            output.data = result
+            output.status = true
+        } else {
+            output.data = 'notfound'
+            output.status = false
+        }
+        callback(output)
+    }).catch(error => {
+        const output = {
+            data: error,
+            status: false
+        }
+        callback(output)
+    })
 
 }
 
@@ -387,7 +408,9 @@ const listGroupHierarchy = (input, callback) => {
     const Query =
         "exec [dbo].[GetGroupHierarchy]  @Account_Id=" + input.AccountId;
 
-    Sequelize.query(Query, { type: Sequelize.QueryTypes.SELECT }).then(result => {
+    Sequelize.query(Query, {
+        type: Sequelize.QueryTypes.SELECT
+    }).then(result => {
         console.log("The results===" + JSON.stringify(result));
         const output = {}
         if (result.length > 0) {
@@ -408,7 +431,7 @@ const listGroupHierarchy = (input, callback) => {
 }
 
 
-const addToHierarchy = (hierarchy, inputItem) => {
+let addToHierarchy = (hierarchy, inputItem) => {
     if (inputItem.ParentGroupId === null) {
 
         hierarchy.push({
@@ -419,51 +442,72 @@ const addToHierarchy = (hierarchy, inputItem) => {
         })
         return;
     }
-    hierarchy.forEach(item => {
-        if (item.Id === inputItem.ParentGroupId) {
-            item.Children.push({
+    for (let i = 0; i < hierarchy.length; i++) {
+        if (hierarchy[i].Id === inputItem.ParentGroupId) {
+            hierarchy[i].Children.push({
                 Id: inputItem.Id,
                 Name: inputItem.Name,
                 Type: inputItem.Type,
                 Children: []
             })
             return true;
-
         } else {
-            // if (item.children && item.children.length) {
-            //     if (addGroupToHierarchy(item.children, inputItem)) {
-            //         return;
-            //     }
-            // }
+            if (hierarchy[i].Children && hierarchy[i].Children.length > 0) {
+                // return addGroupToHierarchy(hierarchy[i].Children, inputItem)
+
+
+            }
         }
-    })
+        // hierarchy.forEach(item => {
+        //     if (item.Id === inputItem.ParentGroupId) {
+        //         item.Children.push({
+        //             Id: inputItem.Id,
+        //             Name: inputItem.Name,
+        //             Type: inputItem.Type,
+        //             Children: []
+        //         })
+        //         return true;
+
+        //     }else {
+        // if (item.children && item.children.length) {
+        //     if (addGroupToHierarchy(item.children, inputItem)) {
+        //         return;
+        //     }
+        // }
+        // }
+        // })
+    }
+   // return false;
 }
 
-const getAll =(input,callback)=>{
+
+const getAll = (input, callback) => {
 
     const Query = "exec [dbo].[GetGroupHierarchy]  @Account_Id=100"
-   Sequelize.query(Query, { type: Sequelize.QueryTypes.SELECT }).then(result => {
-    const output = {}
-    console.log("RESULT",result);
-    if (result) {
-        let hierarchy = []
-        result.forEach((item)=>{
-            addToHierarchy(hierarchy,item)
-        })
-        output.data = hierarchy
-        output.status = true
-    } else {
-        output.data = 'notfound'
-        output.status = false
-    }
-    callback(output)
-}).catch(error => {
-    const output = {
-        data: error,
-        status: false
-    }
-    callback(output)
-});
+    Sequelize.query(Query, {
+        type: Sequelize.QueryTypes.SELECT
+    }).then(result => {
+        const output = {}
+        console.log("RESULT", result);
+        if (result) {
+            let hierarchy = []
+            result.forEach((item) => {
+                addToHierarchy(hierarchy, item)
+            })
+            output.data = hierarchy
+            output.status = true
+        } else {
+            output.data = 'notfound'
+            output.status = false
+        }
+        callback(output)
+    }).catch(error => {
+        const output = {
+            data: error,
+            status: false
+        }
+        callback(output)
+    });
 
 }
 
