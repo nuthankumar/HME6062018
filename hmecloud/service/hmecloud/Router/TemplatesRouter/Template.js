@@ -16,8 +16,8 @@ const templatecontroller = require('../../Controllers/ReportTemplateController/R
 router.get('/list', (req, res) => {
   if (req.query.accountId && req.query.createdBy) {
     const input = {
-      AccountId: req.query.AccountId,
-      CreatedBy: req.query.CreatedBy
+      AccountId: req.query.accountId,
+      CreatedBy: req.query.createdBy
     }
     const AccountId = validate.isNumeric(input.AccountId)
     const CreatedBy = validate.isNumeric(input.CreatedBy)

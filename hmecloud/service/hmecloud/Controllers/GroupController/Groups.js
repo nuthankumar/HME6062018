@@ -407,14 +407,50 @@ const listGroupHierarchy = (input, callback) => {
     });
 }
 
+
+const addToHierarchy = (hierarchy, inputItem) => {
+    if (inputItem.ParentGroupId === null) {
+
+        hierarchy.push({
+            Id: inputItem.Id,
+            Name: inputItem.Name,
+            Type: inputItem.Type,
+            Children: []
+        })
+        return;
+    }
+    hierarchy.forEach(item => {
+        if (item.Id === inputItem.ParentGroupId) {
+            item.Children.push({
+                Id: inputItem.Id,
+                Name: inputItem.Name,
+                Type: inputItem.Type,
+                Children: []
+            })
+            return true;
+
+        } else {
+            // if (item.children && item.children.length) {
+            //     if (addGroupToHierarchy(item.children, inputItem)) {
+            //         return;
+            //     }
+            // }
+        }
+    })
+}
+
 const getAll =(input,callback)=>{
 
-    const Query = "SELECT Id,GroupName FROM [Group] WHERE AccountId=100 AND ParentGroup IS NULL"
+    const Query = "exec [dbo].[GetGroupHierarchy]  @Account_Id=100"
    Sequelize.query(Query, { type: Sequelize.QueryTypes.SELECT }).then(result => {
     const output = {}
     console.log("RESULT",result);
     if (result) {
-        output.data = result
+        let hierarchy = []
+        result.forEach((item)=>{
+            addToHierarchy(hierarchy,item)
+        })
+        output.data = hierarchy
         output.status = true
     } else {
         output.data = 'notfound'
