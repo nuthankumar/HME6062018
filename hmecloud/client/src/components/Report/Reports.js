@@ -185,7 +185,7 @@ class Login extends Component {
     this.state.selectedList = checkedKeys;
     this.state.defaultCheckedKeys = checkedKeys;
     this.state.stores = _.pluck(
-      _.where(_.pluck(node.checkedNodes, "props"), { type: "store" }),
+      _.where(_.pluck(node.checkedNodes, "props"), { Type: "store" }),
       "title"
     );
     this.setState(this.state);
@@ -720,11 +720,12 @@ class Login extends Component {
     let selectedItems = [];
     let findStore = function(items) {
       items.map(item => {
-        if (item.children && item.children.length) {
-          findStore(item.children);
+        if (item.Children && item.Children.length) {
+          findStore(item.Children);
         }
-        if (keys.indexOf(item.id.toString()) > -1) {
-          selectedItems.push(item.name);
+        if (keys(item)) {
+          // if ( item.Type === 'store' && keys.indexOf(item.Id.toString()) > -1) {
+          selectedItems.push(item.Name);
         }
       });
     };
@@ -775,7 +776,12 @@ class Login extends Component {
         this.setState({ toDate: toDate });
         this.setState({ defaultCheckedKeys: template.selectedList });
         this.setState({
-          stores: this.findMatch(this.state.treeData, template.selectedList)
+          stores: this.findMatch(this.state.treeData, item => {
+            return (
+              item.Type === "store" &&
+              template.selectedList.indexOf(item.Id.toString()) > -1
+            );
+          })
         });
         if (_.contains(template.include, "1")) {
           document.getElementById("longestTime").checked = true;
@@ -1017,7 +1023,10 @@ class Login extends Component {
   selectAll(e) {
     if (!this.state.selectAll) {
       this.setState({
-        defaultCheckedKeys: _.pluck(this.state.treeData, "id").map(String)
+        defaultCheckedKeys: _.pluck(this.state.treeData, "Id").map(String),
+        stores: this.findMatch(this.state.treeData, item => {
+          return item.Type === "store";
+        })
       });
     } else {
       this.setState({ defaultCheckedKeys: [] });
