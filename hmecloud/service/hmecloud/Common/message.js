@@ -31,3 +31,4 @@ exports.REPORTSUMMARY = {
   invalidTemplateName: 'Invalid template Name',
   DeletedSaveTemplate: 'Saved Template has been deleted successfully'
 }
+ 
