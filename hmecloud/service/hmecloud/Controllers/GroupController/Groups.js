@@ -6,7 +6,7 @@
 // config the model
 let Sequelize = require('sequelize');
 Sequelize = new Sequelize('hmeCloud', 'sa', 'nous@123', {
-    host: 'NIBC1329',
+    host: '192.168.27.87',
     dialect: 'mssql',
     operatorsAliases: false
 });
@@ -429,9 +429,28 @@ const listGroupHierarchy = (input, callback) => {
         callback(output)
     });
 }
+const getParent = (hierarchy, id) => {
 
+    var found = false;
+    for (var index = 0; index < hierarchy.length && !found; index++) {
+        var item = hierarchy[index];
+        if (item.Id === id) {
+            found = true;
+            return item
+        } else {
+            if (item.Children && item.Children.length) {
+                var result = getParent(item.Children, id)
+                if (result) {
+                    found = true;
+                    return result;
+                }
+            }
+        }
+    }
+}
 
-let addToHierarchy = (hierarchy, inputItem) => {
+const addToHierarchy = (hierarchy, inputItem) => {
+
     if (inputItem.ParentGroupId === null) {
 
         hierarchy.push({
@@ -441,43 +460,19 @@ let addToHierarchy = (hierarchy, inputItem) => {
             Children: []
         })
         return;
-    }
-    for (let i = 0; i < hierarchy.length; i++) {
-        if (hierarchy[i].Id === inputItem.ParentGroupId) {
-            hierarchy[i].Children.push({
+    } else {
+        var parent = getParent(hierarchy, inputItem.ParentGroupId)
+        console.log("id :" + inputItem.ParentGroupId + " Parent :", parent);
+
+        if (parent) {
+            parent.Children.push({
                 Id: inputItem.Id,
                 Name: inputItem.Name,
                 Type: inputItem.Type,
                 Children: []
             })
-            return true;
-        } else {
-            if (hierarchy[i].Children && hierarchy[i].Children.length > 0) {
-                // return addGroupToHierarchy(hierarchy[i].Children, inputItem)
-
-
-            }
         }
-        // hierarchy.forEach(item => {
-        //     if (item.Id === inputItem.ParentGroupId) {
-        //         item.Children.push({
-        //             Id: inputItem.Id,
-        //             Name: inputItem.Name,
-        //             Type: inputItem.Type,
-        //             Children: []
-        //         })
-        //         return true;
-
-        //     }else {
-        // if (item.children && item.children.length) {
-        //     if (addGroupToHierarchy(item.children, inputItem)) {
-        //         return;
-        //     }
-        // }
-        // }
-        // })
     }
-   // return false;
 }
 
 
