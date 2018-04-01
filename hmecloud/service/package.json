@@ -8,6 +8,7 @@
     "body-parser": "^1.18.2",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
+    "hashmap": "^2.3.0",
     "i18n": "^0.8.3",
     "jsonexport": "^2.0.11",
     "jsonwebtoken": "^8.2.0",

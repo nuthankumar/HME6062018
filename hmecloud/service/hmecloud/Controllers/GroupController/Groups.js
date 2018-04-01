@@ -14,6 +14,7 @@ const group = require('../../Model/groupModel/Group')
 const groupDetails = require('../../Model/groupModel/GroupStore')
 // Config messages
 const messages = require('../../common/message')
+var HashMap = require('hashmap');
 
 
 
@@ -197,7 +198,6 @@ const update = (input, callback) => {
 };
 
 const updateGroupData = (input, callback) => {
-    console.log('Update group invoked********')
     const output = {}
     group.update({
         GroupName: input.name,
@@ -209,15 +209,12 @@ const updateGroupData = (input, callback) => {
             Id: input.id
         }
     }).then(result1 => {
-        console.log('the result printed=====****' + result1)
-        console.log('check the code itself', result1)
         const condition = {
             where: {
                 GroupId: input.id
             }
         }
         groupDetails.destroy(condition).then(result2 => {
-            console.log('The records deleted')
             if (input.groups.length > 0 || input.stores.length > 0) {
                 let maxSize = input.groups.length
                 for (var i = 0; i < maxSize; i++) {
@@ -404,23 +401,82 @@ const avaliabledGroups = (input, callback) => {
 }
 
 const listGroupHierarchy = (input, callback) => {
-    console.log("the controller invoked" + input.AccountId);
     const Query =
         "exec [dbo].[GetGroupHierarchy]  @Account_Id=" + input.AccountId;
 
     Sequelize.query(Query, {
         type: Sequelize.QueryTypes.SELECT
     }).then(result => {
-        console.log("The results===" + JSON.stringify(result));
         const output = {}
-        if (result.length > 0) {
-            output.data = result
-            output.status = true
+        const len = result.length;
+        let parentMap = new HashMap();
+        let childGroupArray = [];
+        if (len > 0) {
+            for (let i = 0; i < len; i++) {
+                let parentGroupId = result[i].ParentGroupId;
+
+                    if (!parentMap.has(parentGroupId)) {
+                        var parentGrpsList = result.filter(function (obj) {
+                            return obj.ParentGroupId == parentGroupId;
+                        });
+
+                        for (let j = 0; j < parentGrpsList.length; j++) {
+                            const childGrpObj = parentGrpsList[j];
+                            const childGroupObject = {};
+                            if (childGrpObj.Type === 'group') {
+
+                                childGroupObject.id = childGrpObj.Id,
+                                    childGroupObject.name = childGrpObj.Name,
+                                    childGroupObject.type = childGrpObj.Type,
+                                    childGroupObject.parentId = childGrpObj.ParentGroupId
+                                childGroupArray.push(childGroupObject);
+                            } else if (childGrpObj.Type === 'store') {
+
+                                childGroupObject.id = childGrpObj.Id,
+                                    childGroupObject.name = childGrpObj.Name,
+                                    childGroupObject.type = childGrpObj.Type,
+                                    childGroupObject.parentId = childGrpObj.ParentGroupId
+                                childGroupArray.push(childGroupObject);
+                            }
+                        }
+                        parentMap.set(parentGroupId, parentGroupId);
+                        
+
+                    }
+            }
         } else {
             output.data = 'notfound'
             output.status = false
+            callback(output);
         }
-        callback(output)
+
+       data1 = childGroupArray.reduce(function (r, a) {
+                function getParent(s, b) {
+                    return a.parentId === b.id ? b : (b.childrens && b.childrens.reduce(getParent, s));
+                }
+                var index = 0, node;
+                if ('parentId' in a) {
+                    node = r.reduce(getParent, {});
+                }
+                if (node && Object.keys(node).length) {
+                    node.childrens = node.childrens || [];
+                    node.childrens.push(a);
+                } else {
+                    while (index < r.length) {
+                        if (r[index].parentId === a.id) {
+                            a.childrens = (a.childrens || []).concat(r.splice(index, 1));
+                        } else {
+                            index++;
+                        }
+                    }
+                    r.push(a);
+                }
+                return r;
+            }, []); 
+        output.data = data1,
+        output.status = true
+        callback(output);
+
     }).catch(error => {
         const output = {
             data: error,
@@ -432,6 +488,7 @@ const listGroupHierarchy = (input, callback) => {
 
 
 let addToHierarchy = (hierarchy, inputItem) => {
+
     if (inputItem.ParentGroupId === null) {
 
         hierarchy.push({
@@ -453,7 +510,7 @@ let addToHierarchy = (hierarchy, inputItem) => {
             return true;
         } else {
             if (hierarchy[i].Children && hierarchy[i].Children.length > 0) {
-                // return addGroupToHierarchy(hierarchy[i].Children, inputItem)
+                return addGroupToHierarchy(hierarchy[i].Children, inputItem)
 
 
             }
@@ -488,7 +545,6 @@ const getAll = (input, callback) => {
         type: Sequelize.QueryTypes.SELECT
     }).then(result => {
         const output = {}
-        console.log("RESULT", result);
         if (result) {
             let hierarchy = []
             result.forEach((item) => {

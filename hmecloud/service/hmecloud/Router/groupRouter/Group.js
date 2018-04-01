@@ -204,16 +204,13 @@ router.delete('/delete', (request, res) => {
  * using accountId, username
  */
 router.get('/listgrouphierarchy', (request, res) => {
-    console.log("the group hierarchy executed" + request.query.accountId + " " + request.query.userName);
     if (request.query.accountId && request.query.userName) {
-        console.log("the condition success");
     const input = {
       AccountId: request.query.accountId,
       CreatedBy: request.query.userName
     };
     const accountId = validate.isNumeric(input.AccountId);
         const createdBy = validate.isEmail(input.CreatedBy);
-        console.log("the validation is done" + accountId + " " + createdBy);
     if (!accountId) {
       res.status(400).send({
         error: messages.LISTGROUP.accountId,
@@ -226,9 +223,7 @@ router.get('/listgrouphierarchy', (request, res) => {
         status: false
       });
         }
-        console.log("Before controller invoke");
       //if (accountId && input.createdBy) {
-          console.log("the controller is invoking");
       groupController.listGroupHierarchy(input, response => {
         if (response.status === true) {
           res.status(200).send(response);
