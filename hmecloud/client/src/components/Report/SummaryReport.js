@@ -5,8 +5,12 @@ import ErrorAlert from "../Alerts/ErrorAlert"
 import fetch from 'isomorphic-fetch'
 import HmeHeader from '../Header/HmeHeader'
 import { BrowserRouter as Router, Route , Link  } from 'react-router-dom'
-import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
+import './SummaryReport.css'
 
+
+const hmeLogo = require('../../images/HMELogo.png')
+const zoomLogo = require('../../images/ZoomLogo.PNG')
 var body = require('body-parser');
 var _ = require('underscore');
 
@@ -66,34 +70,83 @@ export default class SummaryReport extends Component {
 
     }
 
-    /*renderStores() {
-        let reportData =   this.state.reportData.data;
-            let renderStores = reportData.map(function (item, index) {
-                return (
-                    <div key={index}>{item}</div>
-                )
-            });
-            return renderStores;
-    } */
-
     render() {
         let reportData = this.state.reportData.data;
         return (<section className="reportSummaryPage">
              <HmeHeader />
             <section className="reportSummaryContainer">
-              <div>
-                  <h1>Summary Report</h1>
+              <div className="row downloadBtnSection">
+                  <button className="btn btn-default downloadSummaryReportBtn">Download</button>
+              </div>
+              <div className="row">
+                <div className="col-xs-9 summaryHeader">
+                  <div className="summaryHeaderText">Summarized Report</div>
+                </div>
+                <div className="col-xs-3">
+                  <img src = {hmeLogo} />
+                  <img src = {zoomLogo} />
+                </div>
               </div>
 
               <div className="row">
-                  <div className="summaryDataContainer">
-                    <pre>
-                    <code>
-                    {this.state.reportData.data}
-                    </code>
-                    </pre>
-                  });
+                <div className="col-xs-6">
+                  <div className="col-xs-6">
+                    <h2 className="reportStartTimeHeader">
+                      <span className="reportStartTime">Start Time:</span>
+                      <span className ="reportStartTimeValue">MAR 31,2018 OPEN</span>
+                    </h2>
                   </div>
+                  <div className="col-xs-6">
+                    <h2 className="reportEndTimeHeader">
+                      <span className="reportEndTime">End Time:</span>
+                      <span className="reportEndTimeValue">MAR 31,2018 OPEN</span>
+                    </h2>
+                  </div>
+                </div>
+                <div className = "col-xs-6">
+                  <div className="col-xs-6">
+                    <h2 className="reportPrintTimeHeader">
+                      <span className="reportPrintTime"> Report Print Time</span>
+                      <span className="reportPrintTimeValue"> APR2, 2019 4:08 AM</span>
+                    </h2>
+                  </div>
+                  <div className="col-xs-6">
+                    <span> Pagination</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="row">
+
+              </div>
+
+              <div className="row summaryReportTableSection">
+                <div className="col-xs-12">
+                  <table className="summaryReportTable">
+                    <tbody>
+                      <tr>
+                        <th className="blankHeader"></th>
+                        <th className="tableHeading" colSpan="4">
+                          <span>AVERAGE TIME</span><span>(min:sec)</span>
+                        </th>
+                      </tr>
+                      <tr>
+                        <th className="groupsColHeader"><span>Groups</span></th>
+                        <th className="storesColHeader"><span>Stores</span></th>
+                        <th className="reportTableAttributesHeading"><span>Menu</span></th>
+                        <th className="reportTableAttributesHeading"><span>Greet</span></th>
+                        <th className="reportTableAttributesHeading"><span>Service</span></th>
+                        <th className="reportTableAttributesHeading"><span>Lane Queue</span></th>
+                        <th className="reportTableAttributesHeading"><span>Lane Total</span></th>
+                        <th className="reportTableAttributesHeading"><span>Total Cars</span></th>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
 
             </section>
