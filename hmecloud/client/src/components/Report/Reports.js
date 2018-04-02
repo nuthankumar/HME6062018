@@ -161,9 +161,9 @@ class Login extends Component {
     this.getTreeHierarchy();
   }
   getTreeHierarchy() {
-    //  let url = "http://localhost:7071/api/group/list?accountId=100&userName=swathikumary@nousinfo.com";
-    let url =
-      "http://localhost:7071/api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com";
+    let url = "http://localhost:7071/api/group/listgrouphierarchy?accountId=100&userName=swathikumary@nousinfo.com";
+   // let url =
+     // "http://localhost:7071/api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com";
     fetch(url)
       .then(response => response.json())
       .then(data => {
@@ -185,7 +185,7 @@ class Login extends Component {
     this.state.selectedList = checkedKeys;
     this.state.defaultCheckedKeys = checkedKeys;
     this.state.stores = _.pluck(
-      _.where(_.pluck(node.checkedNodes, "props"), { Type: "store" }),
+      _.where(_.pluck(node.checkedNodes, "props"), { type: "store" }),
       "title"
     );
     this.setState(this.state);
@@ -228,14 +228,14 @@ class Login extends Component {
 
     const loop = data => {
       return data.map(item => {
-        if (item.Children && item.Children.length) {
+        if (item.childrens && item.childrens.length) {
           return (
-            <TreeNode title={item.Name} key={item.Id} type={item.Type}>
-              {loop(item.Children)}
+            <TreeNode title={item.name} key={item.id} type={item.type}>
+              {loop(item.childrens)}
             </TreeNode>
           );
         }
-        return <TreeNode title={item.Name} key={item.Id} type={item.Type} />;
+        return <TreeNode title={item.name} key={item.id} type={item.type} />;
       });
     };
 
@@ -720,12 +720,12 @@ class Login extends Component {
     let selectedItems = [];
     let findStore = function(items) {
       items.map(item => {
-        if (item.Children && item.Children.length) {
-          findStore(item.Children);
+        if (item.childrens && item.childrens.length) {
+          findStore(item.childrens);
         }
         if (keys(item)) {
           // if ( item.Type === 'store' && keys.indexOf(item.Id.toString()) > -1) {
-          selectedItems.push(item.Name);
+          selectedItems.push(item.name);
         }
       });
     };
@@ -778,8 +778,8 @@ class Login extends Component {
         this.setState({
           stores: this.findMatch(this.state.treeData, item => {
             return (
-              item.Type === "store" &&
-              template.selectedList.indexOf(item.Id.toString()) > -1
+              item.type === "store" &&
+              template.selectedList.indexOf(item.id.toString()) > -1
             );
           })
         });
@@ -1023,9 +1023,9 @@ class Login extends Component {
   selectAll(e) {
     if (!this.state.selectAll) {
       this.setState({
-        defaultCheckedKeys: _.pluck(this.state.treeData, "Id").map(String),
+        defaultCheckedKeys: _.pluck(this.state.treeData, "id").map(String),
         stores: this.findMatch(this.state.treeData, item => {
-          return item.Type === "store";
+          return item.type === "store";
         })
       });
     } else {
