@@ -75,9 +75,26 @@ export default class SummaryReport extends Component {
         }
 
         this.populateSummaryReportDetails();
+        this.displaySummarizedData = this.displaySummarizedData.bind(this);
     }
 
-    componentDidMount(){
+    displaySummarizedData(reportData){
+      if(reportData.length > 0){
+        return reportData.map((reportItem) => {
+          return  (<tr>
+                <td>{reportItem.groupId}</td>
+                <td>{reportItem.storeId}</td>
+                <td>{reportItem.menu}</td>
+                <td>{reportItem.greet}</td>
+                <td>{reportItem.service}</td>
+                <td>{reportItem.laneQueue}</td>
+                <td>{reportItem.laneTotal}</td>
+                <td>{reportItem.totalCars}</td>
+              </tr>);
+          })
+      }else{
+        return <div>No records found</div>
+      }
 
     }
 
@@ -188,20 +205,7 @@ export default class SummaryReport extends Component {
                         <th className="reportTableAttributesHeading"><span>Lane Total</span></th>
                         <th className="reportTableAttributesHeading"><span>Total Cars</span></th>
                       </tr>
-                      {this.state.reportData.week.all.map((report) => {
-                      return  (<tr>
-                            <td>{report.groupId}</td>
-                            <td>{report.storeId}</td>
-                            <td>{report.menu}</td>
-                            <td>{report.greet}</td>
-                            <td>{report.service}</td>
-                            <td>{report.laneQueue}</td>
-                            <td>{report.laneTotal}</td>
-                            <td>{report.totalCars}</td>
-                          </tr>);
-                      })
-                      }
-
+                      {this.displaySummarizedData(this.state.reportData.week.all)}
                     </tbody>
                   </table>
                 </div>

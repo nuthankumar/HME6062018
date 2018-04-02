@@ -40,7 +40,6 @@ class RawCarReport extends Component {
       }
     };
     this.displayRecords = this.displayRecords.bind(this);
-    this.displayResults = this.displayResults.bind(this);
   }
   timeChange(name) {
     return moment(name).format("ll");
@@ -69,6 +68,7 @@ class RawCarReport extends Component {
             <h2 className="rawCarh2">{this.state.displayData.dayPart}</h2>
           </div>
           <table className="displayRecords tableLayout">
+            <tbody>
             <tr>
               <th>Departure Time</th>
               <th>Event Name</th>
@@ -90,7 +90,7 @@ class RawCarReport extends Component {
               </th>
             </tr>
             {this.displayResults(this.state.displayData.rawCartData)}
-            <tbody />
+            </tbody>
           </table>
         </div>
       );
@@ -111,10 +111,6 @@ class RawCarReport extends Component {
           <table className="head-labelsRaw clear">
             <tbody>
               <tr>
-                <th className="thinHead">
-                  <span>Group Name</span>:
-                </th>
-                <td className="thinHead">HME Group</td>
                 <th className="thinHead">
                   <span>Store</span>:
                 </th>

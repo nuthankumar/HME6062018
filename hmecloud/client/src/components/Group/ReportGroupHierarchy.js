@@ -91,7 +91,7 @@ export default class ReportGroupHierarchy extends React.Component {
                       onSelect={this.onSelect}
                       onCheck={(value,node) => this.onCheck(value,node)}
                   >
-
+                  
                   {loop(this.state.treeData)}
 
                   </Tree>
