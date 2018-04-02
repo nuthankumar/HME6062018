@@ -30,8 +30,8 @@ export default class ReportGroupHierarchy extends React.Component {
     }
 
     getTreeHierarchy(){
-    //  let url = "http://localhost:7071/api/group/list?accountId=100&userName=swathikumary@nousinfo.com";
-    let url = "http://localhost:7071/api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com";
+    let url = "http://localhost:7071/api/group/listgrouphierarchy?accountId=100&userName=swathikumary@nousinfo.com";
+   // let url = "http://localhost:7071/api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com";
       fetch(url)
           .then((response) => response.json())
           .then((data) => {
@@ -60,11 +60,11 @@ export default class ReportGroupHierarchy extends React.Component {
       const loop = data => {
         return data.map((item) => {
           //item.Children = [];
-          if (item.Children && item.Children.length) {
-            return <TreeNode className="treeNode" title={item.Name}
-             key={item.Id}>{loop(item.Children)}</TreeNode>;
+          if (item.childrens && item.childrens.length) {
+            return <TreeNode className="treeNode" title={item.name}
+             key={item.id}>{loop(item.childrens)}</TreeNode>;
           }
-          return <TreeNode className="treeNode" title={item.Name} key={item.Id} />;
+          return <TreeNode className="treeNode" title={item.name} key={item.id} />;
         });
       };
         return (<section className="groupManagementSection"><HmeHeader />
