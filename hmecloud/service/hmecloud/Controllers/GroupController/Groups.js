@@ -486,8 +486,27 @@ const listGroupHierarchy = (input, callback) => {
     });
 }
 
+const getParent = (hierarchy, id) => {
 
-let addToHierarchy = (hierarchy, inputItem) => {
+    var found = false;
+    for (var index = 0; index < hierarchy.length && !found; index++) {
+        var item = hierarchy[index];
+        if (item.Id === id) {
+            found = true;
+            return item
+        } else {
+            if (item.Children && item.Children.length) {
+                var result = getParent(item.Children, id)
+                if (result) {
+                    found = true;
+                    return result;
+                }
+            }
+        }
+    }
+}
+
+const addToHierarchy = (hierarchy, inputItem) => {
 
     if (inputItem.ParentGroupId === null) {
 
@@ -498,49 +517,24 @@ let addToHierarchy = (hierarchy, inputItem) => {
             Children: []
         })
         return;
-    }
-    for (let i = 0; i < hierarchy.length; i++) {
-        if (hierarchy[i].Id === inputItem.ParentGroupId) {
-            hierarchy[i].Children.push({
+    } else {
+        var parent = getParent(hierarchy, inputItem.ParentGroupId)
+        console.log("id :" + inputItem.ParentGroupId + " Parent :", parent);
+
+        if (parent) {
+            parent.Children.push({
                 Id: inputItem.Id,
                 Name: inputItem.Name,
                 Type: inputItem.Type,
                 Children: []
             })
-            return true;
-        } else {
-            if (hierarchy[i].Children && hierarchy[i].Children.length > 0) {
-                return addGroupToHierarchy(hierarchy[i].Children, inputItem)
-
-
-            }
         }
-        // hierarchy.forEach(item => {
-        //     if (item.Id === inputItem.ParentGroupId) {
-        //         item.Children.push({
-        //             Id: inputItem.Id,
-        //             Name: inputItem.Name,
-        //             Type: inputItem.Type,
-        //             Children: []
-        //         })
-        //         return true;
-
-        //     }else {
-        // if (item.children && item.children.length) {
-        //     if (addGroupToHierarchy(item.children, inputItem)) {
-        //         return;
-        //     }
-        // }
-        // }
-        // })
     }
-    // return false;
 }
-
 
 const getAll = (input, callback) => {
 
-    const Query = "exec [dbo].[GetGroupHierarchy]  @Account_Id=100"
+    const Query = "exec [dbo].[usp_GetGroupHierarchy]  @AccountId=" + input.accountId;
     Sequelize.query(Query, {
         type: Sequelize.QueryTypes.SELECT
     }).then(result => {
