@@ -20,9 +20,57 @@ export default class SummaryReport extends Component {
         super();
         this.state = {
           reportData : {
-              data : [
-
-              ]
+              week : {
+                all : [
+                  {groupId :"G001", storeId:"Mcdonalds 112001", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G002", storeId:"Mcdonalds 112002", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G003", storeId:"Mcdonalds 112003", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G004", storeId:"Mcdonalds 112004", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G005", storeId:"Mcdonalds 112005", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5}
+                ],
+                page : [
+                  {groupId :"G001", storeId:"Mcdonalds 112001", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G002", storeId:"Mcdonalds 112002", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G003", storeId:"Mcdonalds 112003", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G004", storeId:"Mcdonalds 112004", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G005", storeId:"Mcdonalds 112005", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5}
+                ]
+              },
+              day:{
+                all : [
+                  {groupId :"G001", storeId:"Mcdonalds 112001", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G002", storeId:"Mcdonalds 112002", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G003", storeId:"Mcdonalds 112003", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G004", storeId:"Mcdonalds 112004", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G005", storeId:"Mcdonalds 112005", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5}
+                ],
+                page : [
+                  {groupId :"G001", storeId:"Mcdonalds 112001", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G002", storeId:"Mcdonalds 112002", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G003", storeId:"Mcdonalds 112003", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G004", storeId:"Mcdonalds 112004", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G005", storeId:"Mcdonalds 112005", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5}
+                ]
+              },
+              dayPart:{
+                all : [
+                  {groupId :"G001", storeId:"Mcdonalds 112001", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G002", storeId:"Mcdonalds 112002", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G003", storeId:"Mcdonalds 112003", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G004", storeId:"Mcdonalds 112004", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G005", storeId:"Mcdonalds 112005", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5}
+                ],
+                page : [
+                  {groupId :"G001", storeId:"Mcdonalds 112001", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G002", storeId:"Mcdonalds 112002", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G003", storeId:"Mcdonalds 112003", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G004", storeId:"Mcdonalds 112004", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5},
+                  {groupId :"G005", storeId:"Mcdonalds 112005", menu:0.30,greet:1.00,service:1.30,laneQueue:2.00,laneTotal:5.00,totalCars:5}
+                ]
+              },
+              weeklyData : false,
+              dailyData : false,
+              dayPartData : false
            }
         }
 
@@ -140,10 +188,20 @@ export default class SummaryReport extends Component {
                         <th className="reportTableAttributesHeading"><span>Lane Total</span></th>
                         <th className="reportTableAttributesHeading"><span>Total Cars</span></th>
                       </tr>
-                      <tr>
-                        <td></td>
-                        <td></td>
-                      </tr>
+                      {this.state.reportData.week.all.map((report) => {
+                      return  (<tr>
+                            <td>{report.groupId}</td>
+                            <td>{report.storeId}</td>
+                            <td>{report.menu}</td>
+                            <td>{report.greet}</td>
+                            <td>{report.service}</td>
+                            <td>{report.laneQueue}</td>
+                            <td>{report.laneTotal}</td>
+                            <td>{report.totalCars}</td>
+                          </tr>);
+                      })
+                      }
+
                     </tbody>
                   </table>
                 </div>
