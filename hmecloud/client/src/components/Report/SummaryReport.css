@@ -121,6 +121,8 @@ h2 .reportStartTimeValue,h2 .reportEndTimeValue{
 }
 .fromToDetail{
   color:#008898;
+  margin-bottom: 5px;
+  font-size: 12px;
 }
 .showAllPaginationToggle{
   text-align : right;
@@ -131,6 +133,7 @@ h2 .reportStartTimeValue,h2 .reportEndTimeValue{
 
 #pageNavigations{
   color: #D41B3E;
+  margin-top:12px;
 }
 .pageNavs{
   display : inline-block;
@@ -138,9 +141,39 @@ h2 .reportStartTimeValue,h2 .reportEndTimeValue{
 }
 .previousLinks, .nextLinks{
   float: left;
+  border: 1px solid white;
+  background-color: red;
+  width: 20px;
+  height: 20px;
   display : inline-block;
+  cursor : pointer;
 }
-
+.previousPage{
+  position: absolute;
+  font-size: 18px !important;
+  color: white;
+  left: 78px;
+  top:12px;
+}
+.nextPage{
+  position: absolute;
+  font-size: 18px !important;
+  color: white;
+  left: 99px;
+  top:12px;
+}
+.reportDataUnit{
+  margin-top:20px;
+}
+.linkActive{
+  color: rgb(0, 136, 152);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.linkInactive{
+  cursor: pointer;
+  color: #D41B3E;
+}
 /* Raw Car Data CSS*/
 
 .clear:after {

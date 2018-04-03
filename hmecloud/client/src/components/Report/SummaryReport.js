@@ -24,22 +24,34 @@ export default class SummaryReport extends Component {
           all: [ {
                   startTime:'MAR 9',
                   endTime:'MAR 10',
-                  data:[{groupId: 'G001', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+                  data:[{groupId: 'G001', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+                        {groupId: 'G002', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+                        {groupId: 'G003', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+                        {groupId: 'G004', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
                 },
                 {
                   startTime:'MAR 9',
                   endTime:'MAR 10',
-                  data:[{groupId: 'G002', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+                  data:[{groupId: 'G001', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+                        {groupId: 'G002', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+                        {groupId: 'G003', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+                        {groupId: 'G004', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
                 },
                 {
                   startTime:'MAR 9',
                   endTime:'MAR 10',
-                  data:[{groupId: 'G003', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+                  data:[{groupId: 'G001', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+                        {groupId: 'G002', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+                        {groupId: 'G003', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+                        {groupId: 'G004', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
                 },
                 {
                   startTime:'MAR 9',
                   endTime:'MAR 10',
-                  data:[{groupId: 'G004', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+                  data:[{groupId: 'G001', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+                        {groupId: 'G002', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+                        {groupId: 'G003', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+                        {groupId: 'G004', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
                 }
               ],
             pages : [
@@ -113,39 +125,33 @@ export default class SummaryReport extends Component {
                   }
               ]
             },
-        weeklyData: false,
+        weeklyData: true,
         dailyData: false,
         dayPartData: false,
         rawCarData : false,
-        all:false,
+        allTab:false,
         currentPage : null
       }
     }
-
+    //this.getCurrentTimeMeasure()
     this.populateSummaryReportDetails()
-    //this.displaySummarizedData = this.displaySummarizedData.bind(this)
+    this.handleDrillDown = this.handleDrillDown.bind(this)
+    this.toggleAllPagination = this.toggleAllPagination.bind(this);
   }
 
-/*  displaySummarizedData (reportData) {
-    if (reportData.length > 0) {
-      return reportData.map((reportItem) => {
-        return (
-          <tr>
-          <td>{reportItem.groupId != null ? 'check' : 'NA'}</td>
-          <td>{reportItem.storeId}</td>
-          <td>{reportItem.menu}</td>
-          <td>{reportItem.greet}</td>
-          <td>{reportItem.service}</td>
-          <td>{reportItem.laneQueue}</td>
-          <td>{reportItem.laneTotal}</td>
-          <td>{reportItem.totalCars}</td>
-        </tr>
-      )
-      })
-    } else {
-      return <div>No records found</div>
+  handleDrillDown(){
+    //appi call for getting the next drilldown
+      console.log("Coming");
+    if(this.props.weeklyData){
+      console.log("Coming");
+    }else if(this.props.dailyData){
+
+    }else if(this.props.dayPartData){
+
+    }else if(this.props.rawCarData){
+
     }
-  } */
+  }
 
   populateSummaryReportDetails () {
     let url = 'http://localhost:7071/api/report/generatereport'
@@ -181,6 +187,18 @@ export default class SummaryReport extends Component {
       })
       .catch((error) => {
       })
+  }
+
+  toggleAllPagination(pageAll){
+    if(pageAll == 'all'){
+      this.setState({
+        allTab : true
+      });
+    }else{
+      this.setState({
+        allTab : false
+      });
+    }
   }
 
   render () {
@@ -223,25 +241,24 @@ export default class SummaryReport extends Component {
                 <span className='reportPrintTimeValue'> APR2, 2019 4:08 AM</span>
               </h2>
             </div>
-            <div className='col-xs-2 leftpadding'>
-            <div id="pageNavigations">
-              <div className="pageNavs">
-                Page <span className="pgStarts">1</span> <span translate="" className="ReportsOf">of </span> 1</div>
-                <div className="previousLinks"><i className="fa fa-angle-left"></i></div>
-                <div className="nextLinks"><i className="fa fa-angle-right"></i></div>
+            <div className='col-xs-2 leftpadding '>
+            <div id='pageNavigations'>
+              <div className='pageNavs'>
+                Page <span className="pgStarts">1</span> <span translate='' className='ReportsOf'>of </span> 1</div>
+                <div className="previousLinks"><i className='fa fa-angle-left previousPage'></i></div>
+                <div className="nextLinks"><i className='fa fa-angle-right nextPage'></i></div>
               </div>
             </div>
 
         </div>
 
         <div className='row'>
-          <div className='col-xs-12 showAllPaginationToggle'>Show: <span>All /</span><span>Pages</span></div>
+          <div className='col-xs-12 showAllPaginationToggle'>Show: <span className={(this.state.allTab) ? 'linkActive' : 'linkInactive'} >All /</span><span className = {(this.state.allTab) ? 'linkInactive' : 'linkActive'}>Pages</span></div>
         </div>
 
         <div className='row summaryReportTableSection'>
-            <SummaryReportDataComponent reportData = {this.state.reportData.week.all}/>
+            <SummaryReportDataComponent handleDrillDown = {this.handleDrillDown} reportData = {this.state.reportData.week.all}/>
         </div>
-
       </section>
     </section>)
   }
