@@ -145,8 +145,8 @@ router.get('/gettemplate', (req, res) => {
         }
         templatecontroller.getReportTemplate(input, response => {
             if (response.status === true) {
-                const Stores = response.data.Stores.split(',', 2)
-                const Include = response.data.Include.split(',', 2)
+                const Stores = response.data.Stores.split(",")
+                const Include = response.data.Include.split(",")
                 output.data.accountId = response.data.AccountId
                 output.data.selectedList = Stores
                 output.data.timeMeasure = response.data.TimeMeasure
