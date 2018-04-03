@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 
 i18n.configure({
   locales: ['en', 'de'],
-  directory: __dirname +'/locales'
+  directory: __dirname + '/locales'
 })
 
 // Router config
@@ -13,6 +13,9 @@ i18n.configure({
 const groupHierarchy = require('./Router/groupRouter/Group')
 const reportsTemplate = require('./Router/TemplatesRouter/Template')
 const summaryreport = require('./Router/storeRouter/Store')
+
+// JWT - Auth config
+const authentication = require('./Router/AuthenticationRouter')
 
 const app = express()
 // parse application/x-www-form-urlencoded
@@ -32,9 +35,7 @@ app.use('/api/report', summaryreport)
 // Report Templates
 app.use('/api/reportTemplate', reportsTemplate)
 
-// app.get('/api/sendmail', (req, res) => {
-
-// })
+app.use('/api/auth', authentication)
 /**
  * end
  */
