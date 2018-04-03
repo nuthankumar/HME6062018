@@ -28,7 +28,7 @@ router.post('/verifyJWT', authVerfiy, (request, response, next) => {
   if (authVerfiy) {
     console.log('UserID', request.userId)
   }
-  response.send(authVerfiy)
+  // response.send(Actual functionality )
 })
 
 module.exports = router
