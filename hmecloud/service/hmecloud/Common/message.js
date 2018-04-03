@@ -29,6 +29,9 @@ exports.REPORTSUMMARY = {
   saveTempplateSuccess: 'Template has been saved successfully',
   failedSaveTemplate: 'Failed to Save template',
   invalidTemplateName: 'Invalid template Name',
-  DeletedSaveTemplate: 'Saved Template has been deleted successfully'
+    DeletedSaveTemplate: 'Saved Template has been deleted successfully',
+    InvalidStoreId: 'Please select a valid Store',
+    DateCannotbeEmpty: 'Please select a date',
+    DateRangeInvalid: 'Date range invalid. For Raw Data Reports select a single day.'
 }
  

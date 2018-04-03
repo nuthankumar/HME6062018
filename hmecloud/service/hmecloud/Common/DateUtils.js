@@ -18,10 +18,10 @@ const msFormat = (avgTime, formatFlag) => {
 const dayPartTime = (dayPartId, totalRecordCount, deviceStartTime, deviceEndTime) => {
     let dayPartTime;
     if (dayPartId && dayPartId === 1) {
-        dayPartTime = " OPEN"
+        dayPartTime = " OPEN-11:59"
         // TODO: GET Time from Start date
     } else {
-        dayPartTime = "CLOSE"
+        dayPartTime = "CLOSE-23:59"
         // TODO: GET Time from End date
     }
     return dayPartTime
