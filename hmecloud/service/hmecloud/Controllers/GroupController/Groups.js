@@ -571,5 +571,6 @@ module.exports = {
     update,
     avaliabledGroups,
     listGroupHierarchy,
+    addToHierarchy,
     getAll
 }

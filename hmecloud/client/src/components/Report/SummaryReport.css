@@ -108,15 +108,37 @@ h2 .reportStartTimeValue,h2 .reportEndTimeValue{
   margin-top:0px;
 }
 .reportPrintTimeHeader{
-    font-size: 14px;
     color: #959595;
-    line-height: 20px;
     margin-top : 0px;
 }
 
 .reportPrintTime, .reportPrintTimeValue{
   font-weight: 100;
   text-transform: uppercase;
+  text-transform: uppercase;
+  font-size: 14px;
+  line-height: 20px;
+}
+.fromToDetail{
+  color:#008898;
+}
+.showAllPaginationToggle{
+  text-align : right;
+}
+.leftpadding{
+  padding-left : 0px;
+}
+
+#pageNavigations{
+  color: #D41B3E;
+}
+.pageNavs{
+  display : inline-block;
+  float:left;
+}
+.previousLinks, .nextLinks{
+  float: left;
+  display : inline-block;
 }
 
 /* Raw Car Data CSS*/
