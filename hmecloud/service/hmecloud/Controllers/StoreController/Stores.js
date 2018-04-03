@@ -2,6 +2,8 @@ const csvFile = require('../../common/csvUtils')
 var jsonexport = require('jsonexport')
 const db = require('../../Model/DataBaseConnection/configDb')
 const mail = require('../../common/emailUtil')
+const dateUtils = require('../../common/DateUtils')
+const HashMap = require('hashmap')
 
 const generateSummaryReport = (input, callback) => {
   console.log('Enter generateSummaryReport')
@@ -88,8 +90,76 @@ console.log("CSV",csv)
   });
 }
 
+const getRawCarDataReport = (input, callback) => {
+    const rawCarDataList = [];
+    const output = {}
+    const rawCarData = {};
+    const departTimeStampMap = new HashMap();
+    const Query =
+        "exec usp_HME_Cloud_Get_Report_Raw_Data1 " + input.ReportTemplate_StoreId + " ,'" + input.ReportTemplate_From_Date + "', '" + input.ReportTemplate_To_Date + "',NULL, NULL,'" + input.ReportTemplate_Type+"'";
+
+    db.query(Query, {
+        type: db.QueryTypes.SELECT
+    }).then(result => {
+        const len = result.length;
+        const storeData = result[len - 2];
+        const dayPartData = result[len - 1];
+        rawCarData.store = storeData.Store_Name,
+            rawCarData.description = storeData.Brand_Name,
+            rawCarData.startTime = input.ReportTemplate_From_Date,
+            rawCarData.stopTime = input.ReportTemplate_To_Date,
+            result.forEach(item => {
+            let departTimeStamp = item.DepartTimeStamp;
+            if (departTimeStamp && !departTimeStampMap.has(departTimeStamp)) {
+                var departTimeStampList = result.filter(function (obj) {
+                    return obj.DepartTimeStamp == departTimeStamp;
+                });
+            
+            let tempRawCarData = departTimeStampList[0];
+            const rawCarDataObj = {};
+            rawCarDataObj.departureTime = tempRawCarData.DepartTimeStamp,
+                rawCarDataObj.eventName = tempRawCarData.CarRecordDataType_Name,
+                    rawCarDataObj.carsInQueue = tempRawCarData.CarsInQueue
+                rawCarData.dayPart = "DP" + tempRawCarData.Daypart_ID + dateUtils.dayPartTime(tempRawCarData.Daypart_ID, len, dayPartData.StartTime, dayPartData.EndTime)
+
+            for (let i = 0; i < departTimeStampList.length; i++) {
+                let tempEventDetails = departTimeStampList[i];
+
+                if (tempEventDetails.EventType_Name.includes("Menu Board")) {
+                    rawCarDataObj.menu = tempEventDetails.DetectorTime
+                } else if (tempEventDetails.EventType_Name.includes("Lane Queue")) {
+                    rawCarDataObj.laneQueue = dateUtils.msFormat(tempEventDetails.DetectorTime, input.ReportTemplate_Type)
+                } else if (tempEventDetails.EventType_Name.includes("Lane Total")) {
+                    rawCarDataObj.laneTotal = dateUtils.msFormat(tempEventDetails.DetectorTime, input.ReportTemplate_Type)
+                } else if (tempEventDetails.EventType_Name.includes("Service")) {
+                    rawCarDataObj.service = dateUtils.msFormat(tempEventDetails.DetectorTime, input.ReportTemplate_Type)
+                } else if (tempEventDetails.EventType_Name.includes("Greet")) {
+                    rawCarDataObj.greet = dateUtils.msFormat(tempEventDetails.DetectorTime, input.ReportTemplate_Type)
+                }
+
+            }
+            rawCarDataList.push(rawCarDataObj);
+            departTimeStampMap.set(departTimeStamp, departTimeStamp);
+        }
+        });
+        rawCarData.rawCarData = rawCarDataList;
+
+        output.data = rawCarData
+        output.status = true
+        callback(output)
+
+    }).catch(error => {
+        const output = {
+            data: error,
+            status: false
+        }
+        callback(output)
+    });
+}
+
 module.exports = {
   generateSummaryReport,
   timeMeasure,
-  generateCSV
+    generateCSV,
+    getRawCarDataReport
 }
