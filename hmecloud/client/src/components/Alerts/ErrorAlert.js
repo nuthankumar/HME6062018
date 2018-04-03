@@ -1,22 +1,21 @@
-import React from "react";
+import React from 'react'
 
 export default class ErrorAlert extends React.Component {
-  constructor() {
-      super();
+  constructor () {
+    super()
   }
 
-  render(){
-    if(this.props.errorMessage != "" && this.props.errorMessage != undefined){
-
-      return(
-        <div className="alert alert-danger">
+  render () {
+    if (this.props.errorMessage != '' && this.props.errorMessage != undefined) {
+      return (
+        <div className='alert alert-danger'>
           {this.props.errorMessage}
         </div>
-      );
-    }else{
-      return(
-        <div></div>
-      );
+      )
+    } else {
+      return (
+        <div />
+      )
     }
   }
 }
