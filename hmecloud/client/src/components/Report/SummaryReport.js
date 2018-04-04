@@ -24,7 +24,7 @@ export default class SummaryReport extends Component {
           all: [ {
                   startTime:'MAR 9',
                   endTime:'MAR 10',
-                  data:[{groupId: 'G001', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+                  data:[{groupId: null, storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
                         {groupId: 'G002', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
                         {groupId: 'G003', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
                         {groupId: 'G004', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
@@ -139,6 +139,10 @@ export default class SummaryReport extends Component {
     this.toggleAllPagination = this.toggleAllPagination.bind(this);
   }
 
+  componentDidMount(){
+
+  }
+
   handleDrillDown(){
     //appi call for getting the next drilldown
       console.log("Coming");
@@ -245,7 +249,7 @@ export default class SummaryReport extends Component {
             <div id='pageNavigations'>
               <div className='pageNavs'>
                 Page <span className="pgStarts">1</span> <span translate='' className='ReportsOf'>of </span> 1</div>
-                <div className="previousLinks"><i className='fa fa-angle-left previousPage'></i></div>
+                <div className="previousLinks" ><i className='fa fa-angle-left previousPage'></i></div>
                 <div className="nextLinks"><i className='fa fa-angle-right nextPage'></i></div>
               </div>
             </div>
@@ -253,7 +257,7 @@ export default class SummaryReport extends Component {
         </div>
 
         <div className='row'>
-          <div className='col-xs-12 showAllPaginationToggle'>Show: <span className={(this.state.allTab) ? 'linkActive' : 'linkInactive'} >All /</span><span className = {(this.state.allTab) ? 'linkInactive' : 'linkActive'}>Pages</span></div>
+          <div className='col-xs-12 showAllPaginationToggle'>Show: <span className={(this.state.allTab) ? 'linkActive' : 'linkInactive'} onClick={() => this.setState({allTab : true})}>All /</span><span className = {(this.state.allTab) ? 'linkInactive' : 'linkActive'} onClick={() => this.setState({allTab : false})}>Pages</span></div>
         </div>
 
         <div className='row summaryReportTableSection'>

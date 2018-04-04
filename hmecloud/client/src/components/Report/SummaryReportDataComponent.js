@@ -63,7 +63,7 @@ export default class SummaryReportDataComponent extends Component {
       return reportRowData.map((reportItem) => {
         return (
           <tr key={reportItem.groupId}>
-          <td>{reportItem.groupId != null ? 'check' : 'NA'}</td>
+          <td>{reportItem.groupId != null ? reportItem.groupId : 'NA'}</td>
           <td  onClick={this.props.handleDrillDown}>{reportItem.storeId}</td>
           <td>{reportItem.menu}</td>
           <td>{reportItem.greet}</td>
