@@ -17,7 +17,7 @@ var _ = require('underscore')
 
 export default class SummaryReport extends Component {
   constructor (props) {
-    super()
+    super(props)
     this.state = {
       reportData: {
         week: {
@@ -98,30 +98,30 @@ export default class SummaryReport extends Component {
             },
             dayPart: {
               all: [ {
-                      TimeMeasure:'mar 9 - mar 10th',
-                      data:[{groupId: 'G001', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+                      startTime:'MAR 9',
+                      endTime:'MAR 10',
+                      data:[{groupId: 'G001', storeId: 12345, daypart : "03-09 Daypart 1", menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
                     },
                     {
-                      TimeMeasure:'mar 9 - mar 10th',
-                      data:[{groupId: 'G001', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+                      startTime:'MAR 9',
+                      endTime:'MAR 10',
+                      data:[{groupId: 'G001', storeId: 12345, daypart : "03-09 Daypart 2", menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
                     },
-                    {
-                      TimeMeasure:'mar 9 - mar 10th',
-                      data:[{groupId: 'G001', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-                    },
-                    {
-                      TimeMeasure:'mar 9 - mar 10th',
-                      data:[{groupId: 'G001', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-                    }
+                  /* single  {
+                      startTime:'MAR 9',
+                      endTime:'MAR 10',
+                      data:[{groupId: 'G001', storeId: '123456', daypart : "03-09 Daypart 1", menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+                            {groupId: 'G002', storeId: '1234567', daypart : "03-09 Daypart 2", menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+                    } */
                   ],
                 pages : [
                   {
                       TimeMeasure:'mar 9 - mar 10th',
-                      data:[{groupId: 'G001', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+                      data:[{groupId: 'G001', storeId: '12345', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
                   },
                   {
                       TimeMeasure:'mar 9 - mar 10th',
-                      data:[{groupId: 'G001', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+                      data:[{groupId: 'G001', storeId: '12345', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
                   }
               ]
             },
@@ -130,20 +130,36 @@ export default class SummaryReport extends Component {
         dayPartData: false,
         rawCarData : false,
         allTab:false,
-        currentPage : null
+        currentPage : null,
+        groupStoreColumns : false,
+        dayPartColumn:false
       }
     }
     //this.getCurrentTimeMeasure()
     this.populateSummaryReportDetails()
     this.handleDrillDown = this.handleDrillDown.bind(this)
-    this.toggleAllPagination = this.toggleAllPagination.bind(this);
   }
 
-  componentDidMount(){
+  componentWillMount(){
     console.log(this.props.history.location.state);
+    this.generateSummaryReport(this.props.history.location.state);
   }
 
-  handleDrillDown(){
+  generateSummaryReport (templateData) {
+    if(templateData[0].timeMeasure == "2"){
+      //this.state.dayPartData = true;
+      if(templateData[0].selectedList.length == 1){
+        this.state.reportData.dayPartColumn = true;
+        this.state.reportData.groupStoreColumns = false;
+      }else{
+        this.state.reportData.dayPartColumn = false;
+        this.state.reportData.groupStoreColumns = true;
+      }
+      this.setState(this.state);
+    }
+  }
+
+  handleDrillDown () {
     //appi call for getting the next drilldown
       console.log("Coming");
     if(this.props.weeklyData){
@@ -191,18 +207,6 @@ export default class SummaryReport extends Component {
       })
       .catch((error) => {
       })
-  }
-
-  toggleAllPagination(pageAll){
-    if(pageAll == 'all'){
-      this.setState({
-        allTab : true
-      });
-    }else{
-      this.setState({
-        allTab : false
-      });
-    }
   }
 
   render () {
@@ -261,7 +265,7 @@ export default class SummaryReport extends Component {
         </div>
 
         <div className='row summaryReportTableSection'>
-            <SummaryReportDataComponent handleDrillDown = {this.handleDrillDown} reportData = {this.state.reportData.week.all}/>
+            <SummaryReportDataComponent handleDrillDown = {this.handleDrillDown} reportData = {this.state.reportData}/>
         </div>
       </section>
     </section>)
