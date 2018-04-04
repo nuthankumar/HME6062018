@@ -24,11 +24,11 @@ export default class SummaryReportDataComponent extends Component {
   }
 
   displaySummarizedData (reportData) {
-    if (reportData.length > 0) {
-      return reportData.map((reportItem) => {
+    if (reportData.dayPart.all.length > 0) {
+      return reportData.dayPart.all.map((reportItem) => {
         return (
           <div className='col-xs-12 reportDataUnit'>
-          <div className='col-xs-12 fromToDetail'><span>{reportItem.startTime}</span> <span>OPEN - </span> <span>{reportItem.endTime}</span> <span>CLOSE</span></div>
+          <div className={'col-xs-12 fromToDetail '+(this.props.reportData.dayPartColumn ? 'hide' : 'show')}><span>{reportItem.startTime}</span> <span>OPEN - </span> <span>{reportItem.endTime}</span> <span>CLOSE</span></div>
             <table className='summaryReportTable'>
               <tbody>
                 <tr>
@@ -38,8 +38,9 @@ export default class SummaryReportDataComponent extends Component {
                   </th>
                 </tr>
                 <tr>
-                  <th className='groupsColHeader'><span>Groups</span></th>
-                  <th className='storesColHeader'><span>Stores</span></th>
+                  <th className={'groupsColHeader '+(this.props.reportData.groupStoreColumns ? 'showTableCell' : 'hideTableCell')}><span>Groups</span></th>
+                  <th className={'storesColHeader '+(this.props.reportData.groupStoreColumns ? 'showTableCell' : 'hideTableCell')}><span>Stores</span></th>
+                  <th className={'reportTableAttributesHeading '+(this.props.reportData.dayPartColumn ? 'showTableCell' : 'hideTableCell')}><span>DayPart</span></th>
                   <th className='reportTableAttributesHeading'><span>Menu</span></th>
                   <th className='reportTableAttributesHeading'><span>Greet</span></th>
                   <th className='reportTableAttributesHeading'><span>Service</span></th>
@@ -62,9 +63,10 @@ export default class SummaryReportDataComponent extends Component {
     if (reportRowData.length > 0) {
       return reportRowData.map((reportItem) => {
         return (
-          <tr key={reportItem.groupId}>
-          <td>{reportItem.groupId != null ? reportItem.groupId : 'NA'}</td>
-          <td  onClick={this.props.handleDrillDown}>{reportItem.storeId}</td>
+          <tr>
+          <td className={(this.props.reportData.groupStoreColumns ? 'showTableCell' : 'hideTableCell')}>{reportItem.groupId != null ? reportItem.groupId : 'NA'}</td>
+          <td className={(this.props.reportData.groupStoreColumns ? 'showTableCell' : 'hideTableCell')} onClick={this.props.reportData.handleDrillDown}>{reportItem.storeId}</td>
+          <td className={(this.props.reportData.dayPartColumn ? 'showTableCell' : 'hideTableCell')}><span>{reportItem.daypart}</span></td>
           <td>{reportItem.menu}</td>
           <td>{reportItem.greet}</td>
           <td>{reportItem.service}</td>

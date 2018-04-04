@@ -4,6 +4,7 @@ const db = require('../../Model/DataBaseConnection/configDb')
 const mail = require('../../common/emailUtil')
 const dateUtils = require('../../common/DateUtils')
 const HashMap = require('hashmap')
+const dateFormat = require('dateformat');
 
 const generateSummaryReport = (input, callback) => {
   console.log('Enter generateSummaryReport')
@@ -108,6 +109,8 @@ const getRawCarDataReport = (input, callback) => {
             rawCarData.description = storeData.Brand_Name,
             rawCarData.startTime = input.ReportTemplate_From_Date,
             rawCarData.stopTime = input.ReportTemplate_To_Date
+            rawCarData.printDate = dateFormat(new Date(), "isoDate")
+            rawCarData.printTime = dateFormat(new Date(), "shortTime")
             result.forEach(item => {
             let rawCarTempId = item.RawDataID;
                 if (rawCarTempId && !departTimeStampMap.has(rawCarTempId)) {

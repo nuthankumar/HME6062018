@@ -1,3 +1,9 @@
+.showTableCell{
+  display : table-cell;
+}
+.hideTableCell{
+  display : none;
+}
 .reportSummaryContainer{
   margin : 20px 68px 0px 68px;
 }
