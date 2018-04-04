@@ -2,7 +2,8 @@ const express = require('express')
 const router = express.Router()
 var VerifyToken = require('../../Controllers/AuthenticationController/Authentication')
 const messages = require('../../common/message')
-const groupController = require('../../Controllers/StoreController/Stores')
+const stores = require('../../Controllers/StoreController/Stores')
+const validate = require('validator');
 
 /**
  * This Service is used to Generate the Summary reports details for
@@ -27,7 +28,7 @@ router.post('/generatereport', (req, res) => {
   console.log(input)
 
   if (input !== null) {
-    groupController.generateSummaryReport(input, response => {
+      stores.generateSummaryReport(input, response => {
       if (response.status === true) {
         res.status(200).send(response)
       } else {
@@ -44,12 +45,60 @@ router.post('/generatereport', (req, res) => {
   }
 })
 
+/*
+ * This service is used to get the Raw Car Data details 
+ */
+router.post('/getRawCarDataReport', (request, res) => {
+    const input = {
+        ReportTemplate_StoreId: request.body.reportTemplateStoreId,
+        ReportTemplate_Advanced_Op: request.body.reportTemplateAdvancedOp,
+        ReportTemplate_Time_Measure: request.body.reportTemplateTimeMeasure,
+        ReportTemplate_From_Date: request.body.reportTemplateFromDate,
+        ReportTemplate_To_Date: request.body.reportTemplateToDate,
+        ReportTemplate_Open: request.body.reportTemplateOpen,
+        ReportTemplate_Close: request.body.reportTemplateClose,
+        ReportTemplate_Type: request.body.reportTemplateType,
+        ReportTemplate_Include_Longs: request.body.reportTemplateIncludeLongs,
+        ReportTemplate_Format: request.body.reportTemplateFormat
+    };
+    if (input.ReportTemplate_StoreId && validate.isNumeric(input.ReportTemplate_StoreId)) {
+        if (input.ReportTemplate_From_Date && input.ReportTemplate_To_Date) {
+            if (input.ReportTemplate_From_Date === input.ReportTemplate_To_Date) {
+                stores.getRawCarDataReport(input, response => {
+                    if (response.status === true) {
+                        res.status(200).send(response)
+                    } else {
+                        res.status(400).send(response)
+                    }
+                })
+            } else {
+                res.status(400).send({
+                    error: messages.REPORTSUMMARY.DateRangeInvalid,
+                    status: false
+                });
+            }
+
+        } else {
+            res.status(400).send({
+                error: messages.REPORTSUMMARY.DateCannotbeEmpty,
+                status: false
+            });
+        }
+
+    } else {
+        res.status(400).send({
+            error: messages.REPORTSUMMARY.InvalidStoreId,
+            status: false
+        });
+    }
+});
+
 /**
  * Time Measure
  * get method with no input
  */
 router.get('/timemeasure', (req, res) => {
-  groupController.timeMeasure((response) => {
+    stores.timeMeasure((response) => {
     if (response.status === true) {
       res.status(200).send(response)
     } else {
@@ -63,7 +112,7 @@ router.post('/generatecsv', VerifyToken, (req, res) => {
     type: 'Day',
     AccountId: 0
   }
-  groupController.generateCSV(input, response => {
+    stores.generateCSV(input, response => {
     if (response.status === true) {
       res.status(200).send(response)
     } else {

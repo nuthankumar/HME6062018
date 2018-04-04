@@ -81,77 +81,8 @@ class Login extends Component {
       ErrorMessage: null,
       timeMeasure: 1,
       checkStores: false,
-      treeData: [
-        {
-          id: 1,
-          name: "group1",
-          type: "group",
-          children: [
-            {
-              id: 11,
-              name: "Group2",
-              type: "group",
-              children: [
-                {
-                  id: 111,
-                  type: "store",
-                  name: "store1"
-                },
-                {
-                  id: 112,
-                  type: "store",
-                  name: "store2"
-                }
-              ]
-            },
-            {
-              id: 12,
-              name: "store3",
-              type: "store",
-              children: []
-            }
-          ]
-        },
-        {
-          id: 2,
-          name: "group3",
-          type: "group",
-          children: [
-            {
-              id: 21,
-              name: "store4",
-              type: "store",
-              children: []
-            }
-          ]
-        },
-        {
-          id: 3,
-          name: "group4",
-          type: "group",
-          children: [
-            {
-              id: 31,
-              name: "group5",
-              type: "group",
-              children: [
-                {
-                  id: 311,
-                  name: "store6",
-                  type: "store",
-                  children: []
-                },
-                {
-                  id: 312,
-                  name: "store7",
-                  type: "store",
-                  children: []
-                }
-              ]
-            }
-          ]
-        }
-      ]
+      treeData: []
+      
     };
 
     this.getSavedReports();
@@ -161,9 +92,8 @@ class Login extends Component {
     this.getTreeHierarchy();
   }
   getTreeHierarchy() {
-    let url = "http://localhost:7071/api/group/listgrouphierarchy?accountId=100&userName=swathikumary@nousinfo.com";
-   // let url =
-     // "http://localhost:7071/api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com";
+   // let url = "http://localhost:7071/api/group/listgrouphierarchy?accountId=100&userName=swathikumary@nousinfo.com";
+    let url =  "http://localhost:7071/api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com";
     fetch(url)
       .then(response => response.json())
       .then(data => {
@@ -184,10 +114,11 @@ class Login extends Component {
   onCheck(checkedKeys, node) {
     this.state.selectedList = checkedKeys;
     this.state.defaultCheckedKeys = checkedKeys;
+    
     this.state.stores = _.pluck(
       _.where(_.pluck(node.checkedNodes, "props"), { type: "store" }),
       "title"
-    );
+        );
     this.setState(this.state);
   }
 
@@ -228,14 +159,14 @@ class Login extends Component {
 
     const loop = data => {
       return data.map(item => {
-        if (item.childrens && item.childrens.length) {
+        if (item.Children && item.Children.length) {
           return (
-            <TreeNode title={item.name} key={item.id} type={item.type}>
-              {loop(item.childrens)}
+            <TreeNode title={item.Name} key={item.Id} type={item.Type}>
+              {loop(item.Children)}
             </TreeNode>
           );
         }
-        return <TreeNode title={item.name} key={item.id} type={item.type} />;
+        return <TreeNode title={item.Name} key={item.Id} type={item.Type} />;
       });
     };
 
@@ -525,7 +456,7 @@ class Login extends Component {
                 <div className="container criteria">
                   <div className="col-md-12">
                     {" "}
-                    Stores :{" "}
+                    Stores :
                     {this.state.stores.length ? this.renderStores() : ""}{" "}
                   </div>
                   <div className="col-md-6"> From: {this.state.fromDate} </div>
@@ -544,7 +475,7 @@ class Login extends Component {
                   </div>
                   <div className="col-md-12">
                     {" "}
-                    Include:{" "}
+                    Include:
                     {this.state.include.length ? this.renderInclude() : "None"}
                   </div>
                   <div className="col-md-12">
@@ -636,6 +567,8 @@ class Login extends Component {
     if (!showAdvancedOptions) {
       this.setState({ include: [] });
     }
+    document.getElementById("longestTime").checked = false;
+    document.getElementById("systemStatistics").checked = false;
     this.setState({
       showAdvancedOptions: !showAdvancedOptions
     });
@@ -718,19 +651,44 @@ class Login extends Component {
 
   findMatch(list, keys) {
     let selectedItems = [];
+    let selectedList = [];
     let findStore = function(items) {
       items.map(item => {
-        if (item.childrens && item.childrens.length) {
-          findStore(item.childrens);
+        if (item.Children && item.Children.length) {
+          findStore(item.Children);
         }
         if (keys(item)) {
           // if ( item.Type === 'store' && keys.indexOf(item.Id.toString()) > -1) {
-          selectedItems.push(item.name);
+          selectedItems.push(item.Name);
+          selectedList.push(item.Id);
         }
       });
     };
+
+
     findStore(list);
+    this.setState({
+      selectedList: selectedList
+    });
     return selectedItems;
+  }
+
+  findMatchedIds(list, keys) {
+    let selectedList = [];
+    let findStore = function(items) {
+      items.map(item => {
+        if (item.Children && item.Children.length) {
+          findStore(item.Children);
+        }
+        if (keys(item)) {
+          selectedList.push(item.Id);
+        }
+      });
+    };
+
+    
+    findStore(list);
+    return selectedList;
   }
 
   apply(e) {
@@ -778,8 +736,8 @@ class Login extends Component {
         this.setState({
           stores: this.findMatch(this.state.treeData, item => {
             return (
-              item.type === "store" &&
-              template.selectedList.indexOf(item.id.toString()) > -1
+              item.Type === "store" &&
+              template.selectedList.indexOf(item.Id.toString()) > -1
             );
           })
         });
@@ -799,7 +757,6 @@ class Login extends Component {
           this.state.closeTime = moment(template.closeTime, "HH:mm a");
           this.setState(this.state);
         }
-        console.log("TEMP STORE *****", this.state.tempStore);
       })
       .catch(error => {});
   }
@@ -1023,13 +980,19 @@ class Login extends Component {
   selectAll(e) {
     if (!this.state.selectAll) {
       this.setState({
-        defaultCheckedKeys: _.pluck(this.state.treeData, "id").map(String),
+        defaultCheckedKeys: _.pluck(this.state.treeData, "Id").map(String),
         stores: this.findMatch(this.state.treeData, item => {
-          return item.type === "store";
+          return item.Type === "store";
+        }),
+        selectedList: this.findMatchedIds(this.state.treeData, item => {
+          return true;
         })
       });
-    } else {
-      this.setState({ defaultCheckedKeys: [] });
+     } else {
+      this.setState({ defaultCheckedKeys: [],
+                      selectedList:[],
+                      stores:[]
+       });
     }
     this.setState({
       selectAll: !this.state.selectAll

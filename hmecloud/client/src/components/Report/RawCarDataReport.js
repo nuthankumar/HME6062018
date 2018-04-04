@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import moment from 'moment'
 import Header from '../Header/HmeHeader'
 import './SummaryReport.css'
-
+import fetch from 'isomorphic-fetch'
 class RawCarReport extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      rawData: false,
       displayData: {
         store: 'McDonalds 202000',
         description: 'Description of the Store',
@@ -40,63 +41,114 @@ class RawCarReport extends Component {
       }
     }
     this.displayRecords = this.displayRecords.bind(this)
+    this.displayItems = this.displayItems.bind(this)
+    this.getRawCarData = this.getRawCarData.bind(this)
   }
+  componentDidMount () {
+    this.getRawCarData()
+  }
+
+  getRawCarData () {
+    let data = {
+      'reportTemplateStoreId': '3', // String Only
+      'reportTemplateAdvancedOp': 0,
+      'reportTemplateTimeMeasure': 'Raw Data Report',
+      'reportTemplateFromDate': '2018-03-29',
+      'reportTemplateToDate': '2018-03-29',
+      'reportTemplateOpen': 1,
+      'reportTemplateClose': 1,
+      'reportTemplateType': 1,
+      'reportTemplateIncludeLongs': 'on',
+      'ReportTemplate_Include_Stats': '',
+      'reportTemplateFormat': 1
+    }
+    let url = 'http://localhost:7071/api/report/getRawCarDataReport'
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
+      },
+      body: JSON.stringify(data)
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('called first')
+        this.state.displayData = data.data
+        this.state.rawData = true
+        this.setState(this.state)
+      })
+      .catch((error) => {
+        this.state.successMessage = ''
+        this.state.errorMessage = error.message
+        this.setState(this.state)
+      })
+  }
+
   timeChange (name) {
     return moment(name).format('ll')
   }
-  displayResults (name) {
-    return name.map((items) => {
+
+  displayRecords () {
+    console.log('called second')
+    if (this.state.rawData) {
+      if (this.state.displayData) {
+        return (
+          <div>
+            <div className='rawcarHeader'>
+              <h2 className='rawCarh2'>{this.state.displayData.dayPart}</h2>
+            </div>
+            <table className='displayRecords tableLayout'>
+              <tbody>
+                <tr>
+                  <th>Departure Time</th>
+                  <th>Event Name</th>
+                  <th>Cars In Queue</th>
+                  <th>
+                    <span>Menu</span>
+                  </th>
+                  <th>
+                    <span>Greet</span>
+                  </th>
+                  <th>
+                    <span>Service</span>
+                  </th>
+                  <th>
+                    <span>Lane Queue</span>
+                  </th>
+                  <th>
+                    <span>Lane Total</span>
+                  </th>
+                </tr>
+                {this.displayItems()}
+              </tbody>
+            </table>
+          </div>
+        )
+      } else {
+        return <p>No Records Found</p>
+      }
+    } else {
+      return <p>Loading....</p>
+    }
+  }
+  displayItems () {
+    return this.state.displayData.rawCarData.map((items) => {
       return (
         <tr className='displayResult'>
-          <td>{items.departureTime}</td>
-          <td>{items.eventName}</td>
-          <td>{items.carsInQueue}</td>
-          <td> {items.menu}</td>
-          <td> {items.greet}</td>
-          <td> {items.service}</td>
-          <td> {items.laneQueue}</td>
-          <td> {items.laneTotal}</td>
+          <td>{items.departureTime ? items.departureTime : 'N/A'}</td>
+          <td>{items.eventName ? items.eventName : 'N/A'}</td>
+          <td>{items.carsInQueue ? items.carsInQueue : 'N/A'}</td>
+          <td> {items.menu ? items.menu : 'N/A'}</td>
+          <td> {items.greet ? items.greet : 'N/A'}</td>
+          <td> {items.service ? items.service : 'N/A'}</td>
+          <td> {items.laneQueue ? items.laneQueue : 'N/A'}</td>
+          <td> {items.laneTotal ? items.laneTotal : 'N/A'}</td>
         </tr>
       )
     })
-  }
-  displayRecords () {
-    if (this.state.displayData.rawCartData.length > 0) {
-      return (
-        <div>
-          <div className='rawcarHeader'>
-            <h2 className='rawCarh2'>{this.state.displayData.dayPart}</h2>
-          </div>
-          <table className='displayRecords tableLayout'>
-            <tbody>
-              <tr>
-                <th>Departure Time</th>
-                <th>Event Name</th>
-                <th>Cars In Queue</th>
-                <th>
-                  <span>Menu</span>
-                </th>
-                <th>
-                  <span>Greet</span>
-                </th>
-                <th>
-                  <span>Service</span>
-                </th>
-                <th>
-                  <span>Lane Queue</span>
-                </th>
-                <th>
-                  <span>Lane Total</span>
-                </th>
-              </tr>
-              {this.displayResults(this.state.displayData.rawCartData)}
-            </tbody>
-          </table>
-        </div>
-      )
-    } else {
-      return <p>No Records Found</p>
-    }
   }
   render () {
     return (
