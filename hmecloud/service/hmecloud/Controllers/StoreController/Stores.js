@@ -96,7 +96,7 @@ const getRawCarDataReport = (input, callback) => {
     const rawCarData = {};
     const departTimeStampMap = new HashMap();
     const Query =
-        "exec usp_HME_Cloud_Get_Report_Raw_Data1 " + input.ReportTemplate_StoreId + " ,'" + input.ReportTemplate_From_Date + "', '" + input.ReportTemplate_To_Date + "',NULL, NULL,'" + input.ReportTemplate_Type+"'";
+        "exec usp_HME_Cloud_Get_Report_Raw_Data_Details " + input.ReportTemplate_StoreId + " ,'" + input.ReportTemplate_From_Date + "', '" + input.ReportTemplate_To_Date + "',NULL, NULL,'" + input.ReportTemplate_Type+"'";
 
     db.query(Query, {
         type: db.QueryTypes.SELECT
@@ -107,14 +107,13 @@ const getRawCarDataReport = (input, callback) => {
         rawCarData.store = storeData.Store_Name,
             rawCarData.description = storeData.Brand_Name,
             rawCarData.startTime = input.ReportTemplate_From_Date,
-            rawCarData.stopTime = input.ReportTemplate_To_Date,
+            rawCarData.stopTime = input.ReportTemplate_To_Date
             result.forEach(item => {
-            let departTimeStamp = item.DepartTimeStamp;
-            if (departTimeStamp && !departTimeStampMap.has(departTimeStamp)) {
-                var departTimeStampList = result.filter(function (obj) {
-                    return obj.DepartTimeStamp == departTimeStamp;
+            let rawCarTempId = item.RawDataID;
+                if (rawCarTempId && !departTimeStampMap.has(rawCarTempId)) {
+                let departTimeStampList = result.filter(function (obj) {
+                    return obj.RawDataID == rawCarTempId;
                 });
-            
             let tempRawCarData = departTimeStampList[0];
             const rawCarDataObj = {};
             rawCarDataObj.departureTime = tempRawCarData.DepartTimeStamp,
@@ -124,22 +123,21 @@ const getRawCarDataReport = (input, callback) => {
 
             for (let i = 0; i < departTimeStampList.length; i++) {
                 let tempEventDetails = departTimeStampList[i];
-
                 if (tempEventDetails.EventType_Name.includes("Menu Board")) {
-                    rawCarDataObj.menu = tempEventDetails.DetectorTime
+                    rawCarDataObj.menu = dateUtils.msFormat(tempEventDetails.DetectorTime, input.ReportTemplate_Format)
                 } else if (tempEventDetails.EventType_Name.includes("Lane Queue")) {
-                    rawCarDataObj.laneQueue = dateUtils.msFormat(tempEventDetails.DetectorTime, input.ReportTemplate_Type)
+                    rawCarDataObj.laneQueue = dateUtils.msFormat(tempEventDetails.DetectorTime, input.ReportTemplate_Format)
                 } else if (tempEventDetails.EventType_Name.includes("Lane Total")) {
-                    rawCarDataObj.laneTotal = dateUtils.msFormat(tempEventDetails.DetectorTime, input.ReportTemplate_Type)
+                    rawCarDataObj.laneTotal = dateUtils.msFormat(tempEventDetails.DetectorTime, input.ReportTemplate_Format)
                 } else if (tempEventDetails.EventType_Name.includes("Service")) {
-                    rawCarDataObj.service = dateUtils.msFormat(tempEventDetails.DetectorTime, input.ReportTemplate_Type)
+                    rawCarDataObj.service = dateUtils.msFormat(tempEventDetails.DetectorTime, input.ReportTemplate_Format)
                 } else if (tempEventDetails.EventType_Name.includes("Greet")) {
-                    rawCarDataObj.greet = dateUtils.msFormat(tempEventDetails.DetectorTime, input.ReportTemplate_Type)
+                    rawCarDataObj.greet = dateUtils.msFormat(tempEventDetails.DetectorTime, input.ReportTemplate_Format)
                 }
 
             }
             rawCarDataList.push(rawCarDataObj);
-            departTimeStampMap.set(departTimeStamp, departTimeStamp);
+            departTimeStampMap.set(rawCarTempId, rawCarTempId);
         }
         });
         rawCarData.rawCarData = rawCarDataList;

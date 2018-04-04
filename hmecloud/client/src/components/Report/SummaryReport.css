@@ -121,6 +121,8 @@ h2 .reportStartTimeValue,h2 .reportEndTimeValue{
 }
 .fromToDetail{
   color:#008898;
+  margin-bottom: 5px;
+  font-size: 12px;
 }
 .showAllPaginationToggle{
   text-align : right;
@@ -131,6 +133,7 @@ h2 .reportStartTimeValue,h2 .reportEndTimeValue{
 
 #pageNavigations{
   color: #D41B3E;
+  margin-top:12px;
 }
 .pageNavs{
   display : inline-block;
@@ -138,9 +141,39 @@ h2 .reportStartTimeValue,h2 .reportEndTimeValue{
 }
 .previousLinks, .nextLinks{
   float: left;
+  border: 1px solid white;
+  background-color: red;
+  width: 20px;
+  height: 20px;
   display : inline-block;
+  cursor : pointer;
 }
-
+.previousPage{
+  position: absolute;
+  font-size: 18px !important;
+  color: white;
+  left: 78px;
+  top:12px;
+}
+.nextPage{
+  position: absolute;
+  font-size: 18px !important;
+  color: white;
+  left: 99px;
+  top:12px;
+}
+.reportDataUnit{
+  margin-top:20px;
+}
+.linkActive{
+  color: rgb(0, 136, 152);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.linkInactive{
+  cursor: pointer;
+  color: #D41B3E;
+}
 /* Raw Car Data CSS*/
 
 .clear:after {
@@ -234,4 +267,56 @@ h2 .reportStartTimeValue,h2 .reportEndTimeValue{
 }
 .displayRecords  tr:nth-child(even){
     background-color: #ededed;;
+}
+
+
+
+/* systemStatiscs CSS */
+.lane1 {
+  text-align: left;
+  padding-left: 15px;
+}
+
+.table-layout-System th {
+  background-color: #0087a1;
+  border-top: 1px solid #FFFFFF;
+  border-left: 1px solid #FFFFFF;
+  color: white;
+  height: 36px;
+  vertical-align: middle;
+}
+.colWidthSS5 {
+  width: 300px;
+}
+h2.rep_head {
+  margin-bottom: 3px;
+}
+
+#page-container h2 {
+  color: #008898;
+  font-size: 17px;
+  line-height: 20px;
+  font-weight: 800;
+}
+
+#sscolwidth {
+  height: 21px;
+}
+.table-layout-System.ssBord td {
+  border-left: 0px solid white;
+  padding-left: 25px;
+  text-align: left;
+}
+.rnshade {
+  background-color: #ffffff;
+}
+#sscolwidthSM {
+  padding-right: 35px;
+}
+.rshade {
+  background-color: #ededed;
+}
+#page-container table {
+  border-collapse: separate;
+  border-bottom: 1px solid #aeaeae;
 }

@@ -81,8 +81,9 @@ class Login extends Component {
       ErrorMessage: null,
       timeMeasure: 1,
       checkStores: false,
-      treeData: []
-      
+      treeData: [],
+      templateData : []
+
     };
 
     this.getSavedReports();
@@ -114,7 +115,7 @@ class Login extends Component {
   onCheck(checkedKeys, node) {
     this.state.selectedList = checkedKeys;
     this.state.defaultCheckedKeys = checkedKeys;
-    
+
     this.state.stores = _.pluck(
       _.where(_.pluck(node.checkedNodes, "props"), { type: "store" }),
       "title"
@@ -686,7 +687,7 @@ class Login extends Component {
       });
     };
 
-    
+
     findStore(list);
     return selectedList;
   }
@@ -807,7 +808,8 @@ class Login extends Component {
       include: this.state.include,
       format: this.state.format
     });
-
+    this.state.templateData = template;
+    this.setState(this.state);
     console.log(JSON.stringify(template[0]));
 
     //validations
@@ -911,7 +913,7 @@ class Login extends Component {
       }
     }
     if (!isError) {
-      this.props.history.push("/summaryreport");
+      this.props.history.push("/summaryreport",this.state.templateData);
     }
   }
 

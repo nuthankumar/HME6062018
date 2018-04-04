@@ -27,7 +27,7 @@ export default class SummaryReportDataComponent extends Component {
     if (reportData.length > 0) {
       return reportData.map((reportItem) => {
         return (
-          <div className='col-xs-12'>
+          <div className='col-xs-12 reportDataUnit'>
           <div className='col-xs-12 fromToDetail'><span>{reportItem.startTime}</span> <span>OPEN - </span> <span>{reportItem.endTime}</span> <span>CLOSE</span></div>
             <table className='summaryReportTable'>
               <tbody>
@@ -58,14 +58,13 @@ export default class SummaryReportDataComponent extends Component {
     }
   }
 
-
   displaySummarizedRowData (reportRowData) {
     if (reportRowData.length > 0) {
       return reportRowData.map((reportItem) => {
         return (
           <tr key={reportItem.groupId}>
-          <td>{reportItem.groupId != null ? 'check' : 'NA'}</td>
-          <td>{reportItem.storeId}</td>
+          <td>{reportItem.groupId != null ? reportItem.groupId : 'NA'}</td>
+          <td  onClick={this.props.handleDrillDown}>{reportItem.storeId}</td>
           <td>{reportItem.menu}</td>
           <td>{reportItem.greet}</td>
           <td>{reportItem.service}</td>
@@ -83,6 +82,7 @@ export default class SummaryReportDataComponent extends Component {
 
   render () {
     let reportData = this.props.reportData;
+
     return (<div>{this.displaySummarizedData(reportData)}</div>);
   }
 }
