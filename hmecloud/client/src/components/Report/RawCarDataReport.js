@@ -50,7 +50,7 @@ class RawCarReport extends Component {
 
   getRawCarData () {
     let data = {
-      'reportTemplateStoreId': 3,
+      'reportTemplateStoreId': '3', // String Only
       'reportTemplateAdvancedOp': 0,
       'reportTemplateTimeMeasure': 'Raw Data Report',
       'reportTemplateFromDate': '2018-03-29',
