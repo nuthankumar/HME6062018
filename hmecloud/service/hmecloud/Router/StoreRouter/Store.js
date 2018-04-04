@@ -49,6 +49,7 @@ router.post('/generatereport', (req, res) => {
  * This service is used to get the Raw Car Data details 
  */
 router.post('/getRawCarDataReport', (request, res) => {
+    console.log("The query param===" + request.query.reportType)
     const input = {
         ReportTemplate_StoreId: request.body.reportTemplateStoreId,
         ReportTemplate_Advanced_Op: request.body.reportTemplateAdvancedOp,
@@ -64,13 +65,28 @@ router.post('/getRawCarDataReport', (request, res) => {
     if (input.ReportTemplate_StoreId && validate.isNumeric(input.ReportTemplate_StoreId)) {
         if (input.ReportTemplate_From_Date && input.ReportTemplate_To_Date) {
             if (input.ReportTemplate_From_Date === input.ReportTemplate_To_Date) {
-                stores.getRawCarDataReport(input, response => {
-                    if (response.status === true) {
-                        res.status(200).send(response)
-                    } else {
-                        res.status(400).send(response)
-                    }
-                })
+                if (request.query.reportType === 'rr1' || request.query.reportType === 'rrcsv1') {
+                    stores.getRawCarDataReport(input, response => {
+                        if (response.status === true) {
+                            if (request.query.reportType === 'rr1') {
+                                res.status(200).send(response)
+                            } else if (request.query.reportType === 'rrcsv1') {
+                                // TODO: Call the CSV file generation function to generate and send an email
+                            }
+                        } else {
+                            const output = {
+                                data: error,
+                                status: false
+                            }
+                            res.status(400).send(response)
+                        }
+                    })
+                } else {
+                    res.status(400).send({
+                        error: messages.REPORTSUMMARY.InvalidReportType,
+                        status: false
+                    });
+                }
             } else {
                 res.status(400).send({
                     error: messages.REPORTSUMMARY.DateRangeInvalid,

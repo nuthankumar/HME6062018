@@ -32,6 +32,7 @@ exports.REPORTSUMMARY = {
     DeletedSaveTemplate: 'Saved Template has been deleted successfully',
     InvalidStoreId: 'Please select a valid Store',
     DateCannotbeEmpty: 'Please select a date',
-    DateRangeInvalid: 'Date range invalid. For Raw Data Reports select a single day.'
+    DateRangeInvalid: 'Date range invalid. For Raw Data Reports select a single day.',
+    InvalidReportType : 'Invalid Report Type param'
 }
  
