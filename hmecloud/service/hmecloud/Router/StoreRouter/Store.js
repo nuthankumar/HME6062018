@@ -49,7 +49,6 @@ router.post('/generatereport', (req, res) => {
  * This service is used to get the Raw Car Data details 
  */
 router.post('/getRawCarDataReport', (request, res) => {
-    console.log("The query param===" + request.query.reportType)
     const input = {
         ReportTemplate_StoreId: request.body.reportTemplateStoreId,
         ReportTemplate_Advanced_Op: request.body.reportTemplateAdvancedOp,
