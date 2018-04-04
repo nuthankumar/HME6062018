@@ -235,3 +235,55 @@ h2 .reportStartTimeValue,h2 .reportEndTimeValue{
 .displayRecords  tr:nth-child(even){
     background-color: #ededed;;
 }
+
+
+
+/* systemStatiscs CSS */
+.lane1 {
+  text-align: left;
+  padding-left: 15px;
+}
+
+.table-layout-System th {
+  background-color: #0087a1;
+  border-top: 1px solid #FFFFFF;
+  border-left: 1px solid #FFFFFF;
+  color: white;
+  height: 36px;
+  vertical-align: middle;
+}
+.colWidthSS5 {
+  width: 300px;
+}
+h2.rep_head {
+  margin-bottom: 3px;
+}
+
+#page-container h2 {
+  color: #008898;
+  font-size: 17px;
+  line-height: 20px;
+  font-weight: 800;
+}
+
+#sscolwidth {
+  height: 21px;
+}
+.table-layout-System.ssBord td {
+  border-left: 0px solid white;
+  padding-left: 25px;
+  text-align: left;
+}
+.rnshade {
+  background-color: #ffffff;
+}
+#sscolwidthSM {
+  padding-right: 35px;
+}
+.rshade {
+  background-color: #ededed;
+}
+#page-container table {
+  border-collapse: separate;
+  border-bottom: 1px solid #aeaeae;
+}
