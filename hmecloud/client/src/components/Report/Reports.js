@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { I18n, Trans } from 'react-i18next';
-
 import "../Security/Login.css";
 import AuthService from "../Security/AuthenticationService";
 import PropTypes from "prop-types";
@@ -84,8 +83,8 @@ class Report extends Component {
       timeMeasure: 1,
       checkStores: false,
       treeData: [],
-      templateData : []
-
+      templateData : [],
+      selectedStoreIds : []
     };
 
     this.getSavedReports();
@@ -122,6 +121,10 @@ class Report extends Component {
       _.where(_.pluck(node.checkedNodes, "props"), { type: "store" }),
       "title"
         );
+      this.state.selectedStoreIds = _.pluck(
+        _.where(_.pluck(node.checkedNodes, "props"), { type: "store" }),
+        "value"
+          );
     this.setState(this.state);
   }
 
@@ -164,12 +167,12 @@ class Report extends Component {
       return data.map(item => {
         if (item.Children && item.Children.length) {
           return (
-            <TreeNode title={item.Name} key={item.Id} type={item.Type}>
+            <TreeNode title={item.Name} key={item.Id} value={item.Id} type={item.Type}>
               {loop(item.Children)}
             </TreeNode>
           );
         }
-        return <TreeNode title={item.Name} key={item.Id} type={item.Type} />;
+        return <TreeNode title={item.Name} key={item.Id} value={item.Id} type={item.Type} />;
       });
     };
 
@@ -185,6 +188,7 @@ class Report extends Component {
           <header className="reportsHeader">{t('title')}</header>
           {/* <Trans i18nKey="title">
           </Trans> */}
+          <header className="reportsHeader">Summary Reports</header>
           <form onSubmit={this.handleSubmit}>
             <section className="reportsPaneSection">
               <div className="reportsPane">
@@ -525,7 +529,7 @@ class Report extends Component {
           </form>
         </div>
       </section>
-      )
+     )
     }
     </I18n>
     );
@@ -744,14 +748,21 @@ class Report extends Component {
         let toDate = moment(template.toDate).format("DD/MM/YYYY");
         this.setState({ toDate: toDate });
         this.setState({ defaultCheckedKeys: template.selectedList });
+        let selectedStoreIds = []
         this.setState({
           stores: this.findMatch(this.state.treeData, item => {
+            if(item.Type === "store" && template.selectedList.indexOf(item.Id.toString()) > -1){
+              selectedStoreIds.push(item.Id);
+            }
             return (
               item.Type === "store" &&
               template.selectedList.indexOf(item.Id.toString()) > -1
             );
           })
         });
+        this.setState({
+          selectedStoreIds : selectedStoreIds
+        })
         if (_.contains(template.include, "1")) {
           document.getElementById("longestTime").checked = true;
         }
@@ -816,7 +827,8 @@ class Report extends Component {
       close: this.state.close,
       type: this.state.type,
       include: this.state.include,
-      format: this.state.format
+      format: this.state.format,
+      selectedStoreIds: this.state.selectedStoreIds
     });
     this.state.templateData = template;
     this.setState(this.state);
@@ -998,6 +1010,9 @@ class Report extends Component {
         }),
         selectedList: this.findMatchedIds(this.state.treeData, item => {
           return true;
+        }),
+        selectedStoreIds: this.findMatchedIds(this.state.treeData, item => {
+          return item.Type === "store";
         })
       });
      } else {

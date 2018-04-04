@@ -28,7 +28,7 @@ export default class SummaryReportDataComponent extends Component {
       return reportData.dayPart.all.map((reportItem) => {
         return (
           <div className='col-xs-12 reportDataUnit'>
-          <div className={'col-xs-12 fromToDetail '+(this.props.reportData.dayPartColumn ? 'hide' : 'show')}><span>{reportItem.startTime}</span> <span>OPEN - </span> <span>{reportItem.endTime}</span> <span>CLOSE</span></div>
+          <div className={'col-xs-12 fromToDetail '+(this.props.reportData.dayColumn || this.props.reportData.dayPartColumn || this.props.reportData.weekColumn ? 'hide' : 'show')}><span>{reportItem.startTime}</span> <span>OPEN - </span> <span>{reportItem.endTime}</span> <span>CLOSE</span></div>
             <table className='summaryReportTable'>
               <tbody>
                 <tr>
@@ -40,7 +40,9 @@ export default class SummaryReportDataComponent extends Component {
                 <tr>
                   <th className={'groupsColHeader '+(this.props.reportData.groupStoreColumns ? 'showTableCell' : 'hideTableCell')}><span>Groups</span></th>
                   <th className={'storesColHeader '+(this.props.reportData.groupStoreColumns ? 'showTableCell' : 'hideTableCell')}><span>Stores</span></th>
+                  <th className={'reportTableAttributesHeading '+(this.props.reportData.dayColumn ? 'showTableCell' : 'hideTableCell')}><span>Day</span></th>
                   <th className={'reportTableAttributesHeading '+(this.props.reportData.dayPartColumn ? 'showTableCell' : 'hideTableCell')}><span>DayPart</span></th>
+                  <th className={'reportTableAttributesHeading '+(this.props.reportData.weekColumn ? 'showTableCell' : 'hideTableCell')}><span>DayPart</span></th>
                   <th className='reportTableAttributesHeading'><span>Menu</span></th>
                   <th className='reportTableAttributesHeading'><span>Greet</span></th>
                   <th className='reportTableAttributesHeading'><span>Service</span></th>
@@ -49,6 +51,7 @@ export default class SummaryReportDataComponent extends Component {
                   <th className='reportTableAttributesHeading'><span>Total Cars</span></th>
                 </tr>
                 {this.displaySummarizedRowData(reportItem.data)}
+                <div> Goal statistics</div>
               </tbody>
             </table>
             </div>
@@ -66,7 +69,9 @@ export default class SummaryReportDataComponent extends Component {
           <tr>
           <td className={(this.props.reportData.groupStoreColumns ? 'showTableCell' : 'hideTableCell')}>{reportItem.groupId != null ? reportItem.groupId : 'NA'}</td>
           <td className={(this.props.reportData.groupStoreColumns ? 'showTableCell' : 'hideTableCell')} onClick={this.props.reportData.handleDrillDown}>{reportItem.storeId}</td>
+          <td className={(this.props.reportData.dayColumn ? 'showTableCell' : 'hideTableCell')}><span>{reportItem.day}</span></td>
           <td className={(this.props.reportData.dayPartColumn ? 'showTableCell' : 'hideTableCell')}><span>{reportItem.daypart}</span></td>
+          <td className={(this.props.reportData.weekColumn ? 'showTableCell' : 'hideTableCell')}><span>{reportItem.week}</span></td>
           <td>{reportItem.menu}</td>
           <td>{reportItem.greet}</td>
           <td>{reportItem.service}</td>
