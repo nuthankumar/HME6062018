@@ -50,19 +50,19 @@ class RawCarReport extends Component {
 
   getRawCarData () {
     let data = {
-      'reportTemplateStoreId': '3', // String Only
+      'reportTemplateStoreId': '4', // String
       'reportTemplateAdvancedOp': 0,
       'reportTemplateTimeMeasure': 'Raw Data Report',
-      'reportTemplateFromDate': '2018-03-29',
-      'reportTemplateToDate': '2018-03-29',
+      'reportTemplateFromDate': '2018-03-24',
+      'reportTemplateToDate': '2018-03-24',
       'reportTemplateOpen': 1,
       'reportTemplateClose': 1,
-      'reportTemplateType': 1,
+      'reportTemplateType': 11,
       'reportTemplateIncludeLongs': 'on',
       'ReportTemplate_Include_Stats': '',
       'reportTemplateFormat': 1
     }
-    let url = 'http://localhost:7071/api/report/getRawCarDataReport'
+    let url = 'http://localhost:7071/api/report/getRawCarDataReport?reportType=rr1'
     fetch(url, {
       method: 'POST',
       headers: {
@@ -75,7 +75,6 @@ class RawCarReport extends Component {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('called first')
         this.state.displayData = data.data
         this.state.rawData = true
         this.setState(this.state)
@@ -92,39 +91,84 @@ class RawCarReport extends Component {
   }
 
   displayRecords () {
-    console.log('called second')
     if (this.state.rawData) {
       if (this.state.displayData) {
         return (
           <div>
-            <div className='rawcarHeader'>
-              <h2 className='rawCarh2'>{this.state.displayData.dayPart}</h2>
+            <div className='clear tableDetails'>
+              <div className='rawcarHeader'>
+                <h1 className='rawCarH1'>
+                  <span>Raw Car Data Report</span>
+                </h1>
+              </div>
+              <table className='head-labelsRaw clear'>
+                <tbody>
+                  <tr>
+                    <th className='thinHead'>
+                      <span>Store</span>:
+                    </th>
+                    <td className='thinHead'>{this.state.displayData.store ? this.state.displayData.store : 'N/A' }</td>
+                    <th>
+                      <span>Start Time:</span>
+                    </th>
+
+                    <td>
+                      {this.state.displayData.startTime ? this.state.displayData.startTime : 'N/A'}&nbsp;
+                    </td>
+                    <th>
+                      <span>Print Date:</span>
+                    </th>
+                    <td> {this.state.displayData.printDate ? this.state.displayData.printDate : 'N/A'} </td>
+                  </tr>
+                  <tr>
+                    <th>
+                      <span>Description:</span>
+                    </th>
+                    <td>{this.state.displayData.description ? this.state.displayData.description : 'N/A'}</td>
+                    <th>
+                      <span>Stop Time:</span>
+                    </th>
+                    <td>
+                      {this.state.displayData.stopTime ? this.state.displayData.stopTime : 'N/A' }&nbsp;
+                    </td>
+                    <th>
+                      <span>Print Time: </span>
+                    </th>
+                    <td>{this.state.displayData.printTime ? this.state.displayData.printTime : 'N/A' }</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            <table className='displayRecords tableLayout'>
-              <tbody>
-                <tr>
-                  <th>Departure Time</th>
-                  <th>Event Name</th>
-                  <th>Cars In Queue</th>
-                  <th>
-                    <span>Menu</span>
-                  </th>
-                  <th>
-                    <span>Greet</span>
-                  </th>
-                  <th>
-                    <span>Service</span>
-                  </th>
-                  <th>
-                    <span>Lane Queue</span>
-                  </th>
-                  <th>
-                    <span>Lane Total</span>
-                  </th>
-                </tr>
-                {this.displayItems()}
-              </tbody>
-            </table>
+            <div>
+              <div className='rawcarHeader'>
+                <h2 className='rawCarh2'>{this.state.displayData.dayPart}</h2>
+              </div>
+              <table className='displayRecords tableLayout'>
+                <tbody>
+                  <tr>
+                    <th>Departure Time</th>
+                    <th>Event Name</th>
+                    <th>Cars In Queue</th>
+                    <th>
+                      <span>Menu</span>
+                    </th>
+                    <th>
+                      <span>Greet</span>
+                    </th>
+                    <th>
+                      <span>Service</span>
+                    </th>
+                    <th>
+                      <span>Lane Queue</span>
+                    </th>
+                    <th>
+                      <span>Lane Total</span>
+                    </th>
+                  </tr>
+                  {this.displayItems()}
+                </tbody>
+              </table>
+            </div>
           </div>
         )
       } else {
@@ -154,50 +198,6 @@ class RawCarReport extends Component {
     return (
       <div>
         <Header />
-        <div className='clear tableDetails'>
-          <div className='rawcarHeader'>
-            <h1 className='rawCarH1'>
-              <span>Raw Car Data Report</span>
-            </h1>
-          </div>
-          <table className='head-labelsRaw clear'>
-            <tbody>
-              <tr>
-                <th className='thinHead'>
-                  <span>Store</span>:
-                </th>
-                <td className='thinHead'>{this.state.displayData.store}</td>
-                <th>
-                  <span>Start Time:</span>
-                </th>
-
-                <td>
-                  {this.timeChange(this.state.displayData.startTime)}&nbsp;
-                </td>
-                <th>
-                  <span>Print Date:</span>
-                </th>
-                <td>{this.timeChange(this.state.displayData.printDate)}</td>
-              </tr>
-              <tr>
-                <th>
-                  <span>Description:</span>
-                </th>
-                <td>{this.state.displayData.description}</td>
-                <th>
-                  <span>Stop Time:</span>
-                </th>
-                <td>
-                  {this.timeChange(this.state.displayData.stopTime)}&nbsp;
-                </td>
-                <th>
-                  <span>Print Time: </span>
-                </th>
-                <td>{this.state.displayData.printTime}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
         {this.displayRecords()}
       </div>
     )
