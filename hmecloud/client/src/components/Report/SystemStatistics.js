@@ -2,10 +2,18 @@ import React, { Component } from 'react'
 import moment from 'moment'
 import './SummaryReport.css'
 
+import t from '../Language/language'; 
+import * as languageSettings from '../Language/languageSettings';
+//setTranslations({pt})
+//setDefaultLanguage('pt')
+
+
 class SystemStatistics extends Component {
   constructor (props) {
-    super(props)
+    super(props);
+   // languageSettings.setCurrentLanguage ('fr');
     this.state = {
+      currentLanguage:languageSettings.getCurrentLanguage(),
       displayData: {
         Lane: '1',
         AverageCarsInLane: '3',
@@ -18,49 +26,56 @@ class SystemStatistics extends Component {
     }
     }
    // this.displayRecords = this.displayRecords.bind(this)
-  }
+
+   //console.log(languageSettings.getCurrentLanguage ());
+}
 
  
   render () {
+      const language  = this.state.currentLanguage;
     return (
       <div>
           <div className="systemSec" id='page-container'>
-				<h2 className="rep_head"><span translate="" key="systemstats">System Statistics</span></h2>
+				<h2 className="rep_head"><span>{t[language].systemstats}</span></h2>
 				<table cellspacing="0" className="table-layout-System ssBord colWidthSS5">
 					<tbody><tr>
-						<th className="lane1" colspan="2"><span translate="" key="ReportsLane">Lane</span> {this.state.displayData.Lane}</th>
+						<th className="lane1" colspan="2"><span>{t[language].ReportsLane}</span> {this.state.displayData.Lane}</th>
 					</tr>
 					<tr>
-						<td id="sscolwidth" className="rnshade"><span translate="" key="ReportsAverageCarsInLane">Average Cars in Lane</span></td>
+						<td id="sscolwidth" className="rnshade"><span>{t[language].ReportsAverageCarsInLane}</span></td>
 						<td id="sscolwidthSM" className="rnshade"><strong>{this.state.displayData.AverageCarsInLane}</strong></td>
 					</tr>
 					<tr>
-						<td id="sscolwidth" className="rshade"><span translate="" key="ReportsTotalPullouts">Total Pullouts</span></td>
+						<td id="sscolwidth" className="rshade"><span>{t[language].ReportsTotalPullouts}</span></td>
 						<td className="rshade">{this.state.displayData.TotalPullouts}</td>
 					</tr>
 					<tr>
-						<td id="sscolwidth" className="rnshade"><span translate="" key="ReportsTotalPullins">Total Pullins</span></td>
+						<td id="sscolwidth" className="rnshade"><span>{t[language].ReportsTotalPullins}</span></td>
 						<td className="rnshade">{this.state.displayData.TotalPullins}</td>
 					</tr>
 					<tr>
-						<td id="sscolwidth" className="rshade"><span translate="" key="ReportsDeleteOverMax">Delete Over Maximum</span></td>
+						<td id="sscolwidth" className="rshade"><span>{t[language].ReportsDeleteOverMax}</span></td>
 						<td className="rshade">{this.state.displayData.DeleteOverMaximum}</td>
 					</tr>
 					<tr>
-						<td id="sscolwidth" className="rnshade"><span translate="" key="ReportsPowerFails">Power Fails</span></td>
+						<td id="sscolwidth" className="rnshade"><span>{t[language].ReportsPowerFails}</span></td>
 						<td className="rnshade">{this.state.displayData.PowerFails}</td>
 					</tr>
 					<tr>
-						<td id="sscolwidth" className="rshade"><span translate="" key="ReportsSystemResets">System Resets</span></td>
+						<td id="sscolwidth" className="rshade"><span> {t[language].ReportsSystemResets}</span></td>
 						<td className="rshade">{this.state.displayData.SystemResets}</td>
 					</tr>
 					<tr>
-						<td id="sscolwidth" className="rnshade"><span translate="" key="ReportsVBDResets">VBD Resets</span></td>
+						<td id="sscolwidth" className="rnshade"><span>{t[language].ReportsVBDResets}</span></td>
 						<td className="rnshade">{this.state.displayData.VBDResets}</td>
 					</tr>
 				</tbody>
                 </table>
 			</div>
+
+             <div>
+             {t[language].username}
+      </div>
       </div>
     )
   }
