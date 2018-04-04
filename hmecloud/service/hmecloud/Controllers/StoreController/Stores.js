@@ -5,6 +5,8 @@ const mail = require('../../common/emailUtil')
 const dateUtils = require('../../common/DateUtils')
 const HashMap = require('hashmap')
 const dateFormat = require('dateformat');
+const defaultFromTime = "00:00:00"
+const defaultEndTime = "23:59:59"
 
 const generateSummaryReport = (input, callback) => {
   console.log('Enter generateSummaryReport')
@@ -96,8 +98,21 @@ const getRawCarDataReport = (input, callback) => {
     const output = {}
     const rawCarData = {};
     const departTimeStampMap = new HashMap();
+    let fromDateTime
+    let toDateTime
+    if (input.ReportTemplate_From_Time) {
+        fromDateTime = input.ReportTemplate_From_Date + " " + input.ReportTemplate_From_Time
+    } else {
+        fromDateTime = input.ReportTemplate_From_Date + " " + defaultFromTime
+    }
+
+    if (input.ReportTemplate_To_Time) {
+        toDateTime = input.ReportTemplate_To_Date + " " + input.ReportTemplate_To_Time
+    } else {
+        toDateTime = input.ReportTemplate_To_Date + " " + defaultEndTime
+    }
     const Query =
-        "exec usp_HME_Cloud_Get_Report_Raw_Data_Details " + input.ReportTemplate_StoreId + " ,'" + input.ReportTemplate_From_Date + "', '" + input.ReportTemplate_To_Date + "',NULL, NULL,'" + input.ReportTemplate_Type+"'";
+        "exec usp_HME_Cloud_Get_Report_Raw_Data_Details " + input.ReportTemplate_StoreId + " ,'" + input.ReportTemplate_From_Date + "', '" + input.ReportTemplate_To_Date + "','"+fromDateTime+"','" +toDateTime+"','" + input.ReportTemplate_Type+"'";
 
     db.query(Query, {
         type: db.QueryTypes.SELECT

@@ -55,6 +55,8 @@ router.post('/getRawCarDataReport', (request, res) => {
         ReportTemplate_Time_Measure: request.body.reportTemplateTimeMeasure,
         ReportTemplate_From_Date: request.body.reportTemplateFromDate,
         ReportTemplate_To_Date: request.body.reportTemplateToDate,
+        ReportTemplate_From_Time: request.body.reportTemplateFromTime,
+        ReportTemplate_To_Time: request.body.reportTemplateToTime,
         ReportTemplate_Open: request.body.reportTemplateOpen,
         ReportTemplate_Close: request.body.reportTemplateClose,
         ReportTemplate_Type: request.body.reportTemplateType,
