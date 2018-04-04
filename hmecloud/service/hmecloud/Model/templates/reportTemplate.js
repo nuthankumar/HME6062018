@@ -11,18 +11,18 @@ const ReportTemplates = db.define(
     },
     AccountId: {
       type: Sequelize.INTEGER
-      },
-     Stores: {
-      type: Sequelize.STRING
-      },
-      TimeMeasure: {
-          type: Sequelize.INTEGER
-      },
-      FromDate: {
-          type: Sequelize.DATE
     },
-      ToDate: {
-          type: Sequelize.DATE
+    Stores: {
+      type: Sequelize.STRING
+    },
+    TimeMeasure: {
+      type: Sequelize.INTEGER
+    },
+    FromDate: {
+      type: Sequelize.DATE
+    },
+    ToDate: {
+      type: Sequelize.DATE
     },
     OpenTime: {
       type: Sequelize.STRING
@@ -33,15 +33,15 @@ const ReportTemplates = db.define(
     },
     Type: {
       type: Sequelize.INTEGER
-      },
-      Open: {
-          type: Sequelize.BOOLEAN
-      },
-      Close: {
-          type: Sequelize.BOOLEAN
-      },
-     Include: {
-          type: Sequelize.STRING
+    },
+    Open: {
+      type: Sequelize.BOOLEAN
+    },
+    Close: {
+      type: Sequelize.BOOLEAN
+    },
+    Include: {
+      type: Sequelize.STRING
     },
     Format: {
       type: Sequelize.INTEGER

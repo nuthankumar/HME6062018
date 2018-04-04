@@ -11,7 +11,7 @@ function verifyToken (request, response, next) {
       message: 'No token provided.'
     })
   }
-  let encodeToken = new Buffer(jwtToken,'base64')
+  let encodeToken = new Buffer(jwtToken, 'base64')
   let token = encodeToken.toString('ascii')
 
   // verifies secret and checks exp

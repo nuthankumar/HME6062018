@@ -7,7 +7,7 @@ import authenticate from './components/Security/Authentication'
 const authenticationService = new AuthenticationService()
 
 class App extends Component {
-  render() {
+  render () {
     return (
       <div className='App'>
         <div className='App-header'>
@@ -22,7 +22,7 @@ class App extends Component {
       </div>
     )
   }
-  handleLogout() {
+  handleLogout () {
     authenticationService.logout()
     this.props.history.replace('/login')
   }

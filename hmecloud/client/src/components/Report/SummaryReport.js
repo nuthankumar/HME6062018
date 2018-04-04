@@ -8,7 +8,7 @@ import SummaryReportDataComponent from './SummaryReportDataComponent'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './SummaryReport.css'
-import '../../../node_modules/font-awesome/css/font-awesome.min.css';
+import '../../../node_modules/font-awesome/css/font-awesome.min.css'
 
 const hmeLogo = require('../../images/HMELogo.png')
 const zoomLogo = require('../../images/ZoomLogo.PNG')
@@ -22,189 +22,188 @@ export default class SummaryReport extends Component {
       reportData: {
         week: {
           all: [ {
-                  startTime:'MAR 9',
-                  endTime:'MAR 10',
-                  data:[{groupId: null, storeId: 12345, week:'04/04/2018', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-                        {groupId: 'G002', storeId: 12345, week:'04/04/2018', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-                        {groupId: 'G003', storeId: 12345, week:'04/04/2018', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-                        {groupId: 'G004', storeId: 12345, week:'04/04/2018', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-                },
-                {
-                  startTime:'MAR 9',
-                  endTime:'MAR 10',
-                  data:[{groupId: 'G001', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-                        {groupId: 'G002', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-                        {groupId: 'G003', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-                        {groupId: 'G004', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-                },
-                {
-                  startTime:'MAR 9',
-                  endTime:'MAR 10',
-                  data:[{groupId: 'G001', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-                        {groupId: 'G002', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-                        {groupId: 'G003', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-                        {groupId: 'G004', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-                },
-                {
-                  startTime:'MAR 9',
-                  endTime:'MAR 10',
-                  data:[{groupId: 'G001', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-                        {groupId: 'G002', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-                        {groupId: 'G003', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-                        {groupId: 'G004', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-                }
-              ],
-            pages : [
-              {
-                  startTime:'MAR 9',
-                  endTime:'MAR 10',
-                  data:[{groupId: 'G005', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-              },
-              {
-                  startTime:'MAR 9',
-                  endTime:'MAR 10',
-                  data:[{groupId: 'G006', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-              }
-            ]
+            startTime: 'MAR 9',
+            endTime: 'MAR 10',
+            data: [{groupId: null, storeId: 12345, week: '04/04/2018', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+              {groupId: 'G002', storeId: 12345, week: '04/04/2018', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+              {groupId: 'G003', storeId: 12345, week: '04/04/2018', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+              {groupId: 'G004', storeId: 12345, week: '04/04/2018', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
           },
-          day: {
-            all: [ {
-                    TimeMeasure:'mar 9 - mar 10th',
-                    data:[{groupId: 'G001', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-                  },
-                  {
-                    TimeMeasure:'mar 9 - mar 10th',
-                    data:[{groupId: 'G001', storeId: null, day: '04/04/2018', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-                  },
-                  {
-                    TimeMeasure:'mar 9 - mar 10th',
-                    data:[{groupId: 'G001', storeId: null, day: '05/04/2018',  menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-                  },
-                  {
-                    TimeMeasure:'mar 9 - mar 10th',
-                    data:[{groupId: 'G001', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-                  }
-                ],
-              pages : [
-                {
-                    TimeMeasure:'mar 9 - mar 10th',
-                    data:[{groupId: 'G001', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-                },
-                {
-                    TimeMeasure:'mar 9 - mar 10th',
-                    data:[{groupId: 'G001', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-                }
-            ]
+          {
+            startTime: 'MAR 9',
+            endTime: 'MAR 10',
+            data: [{groupId: 'G001', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+              {groupId: 'G002', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+              {groupId: 'G003', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+              {groupId: 'G004', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+          },
+          {
+            startTime: 'MAR 9',
+            endTime: 'MAR 10',
+            data: [{groupId: 'G001', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+              {groupId: 'G002', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+              {groupId: 'G003', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+              {groupId: 'G004', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+          },
+          {
+            startTime: 'MAR 9',
+            endTime: 'MAR 10',
+            data: [{groupId: 'G001', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+              {groupId: 'G002', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+              {groupId: 'G003', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+              {groupId: 'G004', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+          }
+          ],
+          pages: [
+            {
+              startTime: 'MAR 9',
+              endTime: 'MAR 10',
+              data: [{groupId: 'G005', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
             },
-            dayPart: {
-              all: [ {
-                      startTime:'MAR 9',
-                      endTime:'MAR 10',
-                      data:[{groupId: 'G001', storeId: 12345,  menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-                    },
-                    {
-                      startTime:'MAR 9',
-                      endTime:'MAR 10',
-                      data:[{groupId: 'G001', storeId: 12345,  menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-                    }
-                    /* {
+            {
+              startTime: 'MAR 9',
+              endTime: 'MAR 10',
+              data: [{groupId: 'G006', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+            }
+          ]
+        },
+        day: {
+          all: [ {
+            TimeMeasure: 'mar 9 - mar 10th',
+            data: [{groupId: 'G001', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+          },
+          {
+            TimeMeasure: 'mar 9 - mar 10th',
+            data: [{groupId: 'G001', storeId: null, day: '04/04/2018', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+          },
+          {
+            TimeMeasure: 'mar 9 - mar 10th',
+            data: [{groupId: 'G001', storeId: null, day: '05/04/2018', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+          },
+          {
+            TimeMeasure: 'mar 9 - mar 10th',
+            data: [{groupId: 'G001', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+          }
+          ],
+          pages: [
+            {
+              TimeMeasure: 'mar 9 - mar 10th',
+              data: [{groupId: 'G001', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+            },
+            {
+              TimeMeasure: 'mar 9 - mar 10th',
+              data: [{groupId: 'G001', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+            }
+          ]
+        },
+        dayPart: {
+          all: [ {
+            startTime: 'MAR 9',
+            endTime: 'MAR 10',
+            data: [{groupId: 'G001', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+          },
+          {
+            startTime: 'MAR 9',
+            endTime: 'MAR 10',
+            data: [{groupId: 'G001', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+          }
+            /* {
                       startTime:'MAR 9',
                       endTime:'MAR 10',
                       data:[{groupId: 'G001', storeId: '123456', daypart : "03-09 Daypart 1", menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
                             {groupId: 'G002', storeId: '1234567', daypart : "03-09 Daypart 2", menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
                     } */
-                  ],
-                pages : [
-                  {
-                      TimeMeasure:'mar 9 - mar 10th',
-                      data:[{groupId: 'G001', storeId: '12345', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-                  },
-                  {
-                      TimeMeasure:'mar 9 - mar 10th',
-                      data:[{groupId: 'G001', storeId: '12345', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-                  }
-              ]
+          ],
+          pages: [
+            {
+              TimeMeasure: 'mar 9 - mar 10th',
+              data: [{groupId: 'G001', storeId: '12345', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
             },
-        weeklyData : true,
-        dailyData : false,
-        dayPartData : false,
-        rawCarData : false,
-        allTab : false,
-        currentPage : null,
-        groupStoreColumns : false,
-        dayColumn : false,
-        dayPartColumn : false,
-        weekColumn : false
+            {
+              TimeMeasure: 'mar 9 - mar 10th',
+              data: [{groupId: 'G001', storeId: '12345', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+            }
+          ]
+        },
+        weeklyData: true,
+        dailyData: false,
+        dayPartData: false,
+        rawCarData: false,
+        allTab: false,
+        currentPage: null,
+        groupStoreColumns: false,
+        dayColumn: false,
+        dayPartColumn: false,
+        weekColumn: false
       }
     }
-    //this.getCurrentTimeMeasure()
-    this.populateSummaryReportDetails ()
+    // this.getCurrentTimeMeasure()
+    this.populateSummaryReportDetails()
     this.handleDrillDown = this.handleDrillDown.bind(this)
   }
 
   componentWillMount () {
-    this.setTimeMeasures (this.props.history.location.state);
+    this.setTimeMeasures(this.props.history.location.state)
   }
 
   setTimeMeasures (templateData) {
-
-    switch(templateData[0].timeMeasure){
-      case "1" :  this.state.dailyData = true;
-        if(templateData[0].selectedList.length == 1){
-          this.state.reportData.dayColumn = true;
-          this.state.reportData.groupStoreColumns = false;
-        }else{
-          this.state.reportData.dayColumn = false;
-          this.state.reportData.groupStoreColumns = true;
+    switch (templateData[0].timeMeasure) {
+      case '1' : this.state.dailyData = true
+        if (templateData[0].selectedList.length == 1) {
+          this.state.reportData.dayColumn = true
+          this.state.reportData.groupStoreColumns = false
+        } else {
+          this.state.reportData.dayColumn = false
+          this.state.reportData.groupStoreColumns = true
         }
-        this.setState(this.state);
-        break;
+        this.setState(this.state)
+        break
 
-      case "2" :  this.state.dayPartData = true;
-        if(templateData[0].selectedList.length == 1){
-          this.state.reportData.dayPartColumn = true;
-          this.state.reportData.groupStoreColumns = false;
-        }else{
-          this.state.reportData.dayPartColumn = false;
-          this.state.reportData.groupStoreColumns = true;
+      case '2' : this.state.dayPartData = true
+        if (templateData[0].selectedList.length == 1) {
+          this.state.reportData.dayPartColumn = true
+          this.state.reportData.groupStoreColumns = false
+        } else {
+          this.state.reportData.dayPartColumn = false
+          this.state.reportData.groupStoreColumns = true
         }
-        this.setState(this.state);
-        break;
+        this.setState(this.state)
+        break
 
-        case "3" :  this.state.weeklyData = true;
-          if(templateData[0].selectedList.length == 1){
-            this.state.reportData.weekColumn = true;
-            this.state.reportData.groupStoreColumns = false;
-          }else{
-            this.state.reportData.weekColumn = false;
-            this.state.reportData.groupStoreColumns = true;
-          }
-          this.setState(this.state);
-          break;
+      case '3' : this.state.weeklyData = true
+        if (templateData[0].selectedList.length == 1) {
+          this.state.reportData.weekColumn = true
+          this.state.reportData.groupStoreColumns = false
+        } else {
+          this.state.reportData.weekColumn = false
+          this.state.reportData.groupStoreColumns = true
+        }
+        this.setState(this.state)
+        break
 
-          case "4" :  this.state.rawCarData = true;
-            if(templateData[0].selectedList.length == 1){
-              this.state.reportData.dayPartColumn = true;
-              this.state.reportData.groupStoreColumns = false;
-            }else{
-              this.state.reportData.dayPartColumn = false;
-              this.state.reportData.groupStoreColumns = true;
-            }
-            this.setState(this.state);
-            break;
+      case '4' : this.state.rawCarData = true
+        if (templateData[0].selectedList.length == 1) {
+          this.state.reportData.dayPartColumn = true
+          this.state.reportData.groupStoreColumns = false
+        } else {
+          this.state.reportData.dayPartColumn = false
+          this.state.reportData.groupStoreColumns = true
+        }
+        this.setState(this.state)
+        break
     }
   }
 
   handleDrillDown () {
-    //api call for getting the next drilldown
-    if(this.props.weeklyData){
-      console.log("weekly data");
-    }else if(this.props.dailyData){
-      console.log("daily data");
-    }else if(this.props.dayPartData){
-      console.log("day data");
-    }else if(this.props.rawCarData){
-      console.log("raw car data");
+    // api call for getting the next drilldown
+    if (this.props.weeklyData) {
+      console.log('weekly data')
+    } else if (this.props.dailyData) {
+      console.log('daily data')
+    } else if (this.props.dayPartData) {
+      console.log('day data')
+    } else if (this.props.rawCarData) {
+      console.log('raw car data')
     }
   }
 
@@ -264,43 +263,42 @@ export default class SummaryReport extends Component {
 
         <div className='row'>
 
-            <div className='col-xs-3 leftpadding'>
-              <h2 className='reportStartTimeHeader'>
-                <span className='reportStartTime'>Start Time:</span>
-                <span className='reportStartTimeValue'>MAR 31,2018 OPEN</span>
-              </h2>
-            </div>
-            <div className='col-xs-3 leftpadding'>
-              <h2 className='reportEndTimeHeader'>
-                <span className='reportEndTime'>End Time:</span>
-                <span className='reportEndTimeValue'>MAR 31,2018 OPEN</span>
-              </h2>
-            </div>
+          <div className='col-xs-3 leftpadding'>
+            <h2 className='reportStartTimeHeader'>
+              <span className='reportStartTime'>Start Time:</span>
+              <span className='reportStartTimeValue'>MAR 31,2018 OPEN</span>
+            </h2>
+          </div>
+          <div className='col-xs-3 leftpadding'>
+            <h2 className='reportEndTimeHeader'>
+              <span className='reportEndTime'>End Time:</span>
+              <span className='reportEndTimeValue'>MAR 31,2018 OPEN</span>
+            </h2>
+          </div>
 
-
-            <div className='col-xs-4 leftpadding'>
-              <h2 className='reportPrintTimeHeader'>
-                <span className='reportPrintTime'> Report Print Time</span>
-                <span className='reportPrintTimeValue'> APR2, 2019 4:08 AM</span>
-              </h2>
-            </div>
-            <div className='col-xs-2 leftpadding '>
+          <div className='col-xs-4 leftpadding'>
+            <h2 className='reportPrintTimeHeader'>
+              <span className='reportPrintTime'> Report Print Time</span>
+              <span className='reportPrintTimeValue'> APR2, 2019 4:08 AM</span>
+            </h2>
+          </div>
+          <div className='col-xs-2 leftpadding '>
             <div id='pageNavigations'>
               <div className='pageNavs'>
-                Page <span className="pgStarts">1</span> <span translate='' className='ReportsOf'>of </span> 1</div>
-                <div className="previousLinks" ><i className='fa fa-angle-left previousPage'></i></div>
-                <div className="nextLinks"><i className='fa fa-angle-right nextPage'></i></div>
-              </div>
+                Page <span className='pgStarts'>1</span> <span translate='' className='ReportsOf'>of </span> 1</div>
+              <div className='previousLinks' ><i className='fa fa-angle-left previousPage' /></div>
+              <div className='nextLinks'><i className='fa fa-angle-right nextPage' /></div>
             </div>
+          </div>
 
         </div>
 
         <div className='row'>
-          <div className='col-xs-12 showAllPaginationToggle'>Show: <span className={(this.state.allTab) ? 'linkActive' : 'linkInactive'} onClick={() => this.setState({allTab : true})}>All /</span><span className = {(this.state.allTab) ? 'linkInactive' : 'linkActive'} onClick={() => this.setState({allTab : false})}>Pages</span></div>
+          <div className='col-xs-12 showAllPaginationToggle'>Show: <span className={(this.state.allTab) ? 'linkActive' : 'linkInactive'} onClick={() => this.setState({allTab: true})}>All /</span><span className={(this.state.allTab) ? 'linkInactive' : 'linkActive'} onClick={() => this.setState({allTab: false})}>Pages</span></div>
         </div>
 
         <div className='row summaryReportTableSection'>
-            <SummaryReportDataComponent handleDrillDown = {this.handleDrillDown} reportData = {this.state.reportData}/>
+          <SummaryReportDataComponent handleDrillDown={this.handleDrillDown} reportData={this.state.reportData} />
         </div>
       </section>
     </section>)
