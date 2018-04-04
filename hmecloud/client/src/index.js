@@ -9,6 +9,7 @@ import SummaryReport from './components/Report/SummaryReport'
 import RawCarDataReport from './components/Report/RawCarDataReport'
 import SystemStatistics from './components/Report/SystemStatistics'
 import registerServiceWorker from './registerServiceWorker'
+import './i18n';
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 // import { Router, Route } from 'react-router-dom'
 // import history from '../history';

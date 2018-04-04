@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { I18n, Trans } from 'react-i18next';
+
 import "../Security/Login.css";
 import AuthService from "../Security/AuthenticationService";
 import PropTypes from "prop-types";
@@ -27,7 +29,7 @@ const Calendar = require("../../images/mini-cal.jpg");
 const Delete = require("../../images/redEx.png");
 const _ = require("underscore");
 
-class Login extends Component {
+class Report extends Component {
   state = {
     selectedTime: moment()
   };
@@ -172,12 +174,17 @@ class Login extends Component {
     };
 
     return (
+      <I18n ns="translations">
+    {
+      (t, { i18n }) => (
       <section className="reportsPage">
         <HmeHeader />
         <div className="reports">
           <SuccessAlert successMessage={this.state.successMessage} />
           <ErrorAlert errorMessage={this.state.errorMessage} />
-          <header className="reportsHeader">Summary Reports</header>
+          <header className="reportsHeader">{t('title')}</header>
+          {/* <Trans i18nKey="title">
+          </Trans> */}
           <form onSubmit={this.handleSubmit}>
             <section className="reportsPaneSection">
               <div className="reportsPane">
@@ -518,6 +525,9 @@ class Login extends Component {
           </form>
         </div>
       </section>
+      )
+    }
+    </I18n>
     );
   }
 
@@ -1002,4 +1012,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default Report;
