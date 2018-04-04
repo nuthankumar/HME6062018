@@ -3,6 +3,7 @@ const router = express.Router()
 var VerifyToken = require('../../Controllers/AuthenticationController/Authentication')
 const messages = require('../../common/message')
 const stores = require('../../Controllers/StoreController/Stores')
+const validate = require('validator');
 
 /**
  * This Service is used to Generate the Summary reports details for
@@ -60,15 +61,36 @@ router.post('/getRawCarDataReport', (request, res) => {
         ReportTemplate_Include_Longs: request.body.reportTemplateIncludeLongs,
         ReportTemplate_Format: request.body.reportTemplateFormat
     };
+    if (input.ReportTemplate_StoreId && validate.isNumeric(input.ReportTemplate_StoreId)) {
+        if (input.ReportTemplate_From_Date && input.ReportTemplate_To_Date) {
+            if (input.ReportTemplate_From_Date === input.ReportTemplate_To_Date) {
+                stores.getRawCarDataReport(input, response => {
+                    if (response.status === true) {
+                        res.status(200).send(response)
+                    } else {
+                        res.status(400).send(response)
+                    }
+                })
+            } else {
+                res.status(400).send({
+                    error: messages.REPORTSUMMARY.DateRangeInvalid,
+                    status: false
+                });
+            }
 
-    stores.getRawCarDataReport(input, response => {
-        if (response.status === true) {
-            res.status(200).send(response)
         } else {
-            res.status(400).send(response)
+            res.status(400).send({
+                error: messages.REPORTSUMMARY.DateCannotbeEmpty,
+                status: false
+            });
         }
-    })
 
+    } else {
+        res.status(400).send({
+            error: messages.REPORTSUMMARY.InvalidStoreId,
+            status: false
+        });
+    }
 });
 
 /**
