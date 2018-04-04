@@ -140,7 +140,7 @@ export default class SummaryReport extends Component {
   }
 
   componentDidMount(){
-
+    console.log(this.props.history.location.state);
   }
 
   handleDrillDown(){
