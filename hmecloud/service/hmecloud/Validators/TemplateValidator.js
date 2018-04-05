@@ -2,6 +2,23 @@ const validate = require('validator')
 const messages = require('../Common/Message')
 const templateController = require('../Controllers/ReportTemplateController')
 
+const createTemplate = (input, callback) => {
+  templateController.createReportTemplate(input, (result) => {
+    callback(result)
+  })
+}
+
+const getTemplate = (input, callback) => {
+  let output = {}
+  if (!input.templetId) {
+    output.error = messages.REPORTSUMMARY.invalidTemplateId
+    output.status = false
+  }
+  templateController.getReportTemplate(input, (result) => {
+    callback(result)
+  })
+}
+
 const getalltemplate = (input, callback) => {
   let output = {}
   let values = {}
@@ -34,10 +51,22 @@ const getalltemplate = (input, callback) => {
   } else {
     output.error = messages.LISTGROUP
     output.status = false
-    callback(output)
   }
 }
-
+const deleteTemplate = (input, callback) => {
+  let output = {}
+  const templateId = validate.isNumeric(input.Id)
+  if (!templateId) {
+    output.error = messages.REPORTSUMMARY.invalidTemplateId
+    output.status = false
+  }
+  templateController.getReportTemplate(input, (result) => {
+    callback(result)
+  })
+}
 module.exports = {
-  getalltemplate
+  createTemplate,
+  getTemplate,
+  getalltemplate,
+  deleteTemplate
 }

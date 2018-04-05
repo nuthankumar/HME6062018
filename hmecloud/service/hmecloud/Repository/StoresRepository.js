@@ -5,65 +5,30 @@ const defaultEndTime = '23:59:59'
 
 const generateSummaryReport = (input, callback) => {
   const Query = `exec usp_HME_Cloud_Get_Report_By_Daypart 
-    @Device_IDs= '${input.deviceUIDs.toString()}' 
-   ,@StoreStartDate= '${input.fromDate}'
-   ,@StoreEndDate= '${input.toDate}'
-   ,@StartDateTime= '${input.openTime}'
-   ,@EndDateTime= '${input.closeTime}'
+    @Device_IDs= '${input.ReportTemplate_StoreIds.toString()}' 
+   ,@StoreStartDate= '${input.ReportTemplate_From_Date}'
+   ,@StoreEndDate= '${input.ReportTemplate_To_Date}'
+   ,@StartDateTime= '${input.ReportTemplate_From_Time}'
+   ,@EndDateTime= '${input.ReportTemplate_Close}'
    ,@CarDataRecordType_ID= 11
-   ,@ReportType= ${input.ReportType} 
+   ,@ReportType= ${input.ReportTemplate_Type} 
    ,@LaneConfig_ID= 1`
+
   db
     .query(Query, {
       type: db.QueryTypes.RAW
     })
     .spread(result => {
       if (result) {
-        const output = {
-          data: result,
-          status: true
-        }
-        callback(output)
+        callback(result)
       }
     })
     .catch(error => {
-      const output = {
-        data: error,
-        status: true
-      }
-
-      callback(output)
-    })
-}
-
-const timeMeasure = (callback) => {
-  const Query =
-    'select Id,Type from [dbo].[TimeMeasure] '
-  db
-    .query(Query, {
-      type: db.QueryTypes.RAW
-    })
-    .spread(result => {
-      if (result) {
-        const output = {
-          data: result,
-          status: true
-        }
-        callback(output)
-      }
-    })
-    .catch(error => {
-      const output = {
-        data: error,
-        status: true
-      }
-
-      callback(output)
+      callback(error)
     })
 }
 
 const getRawCarDataReport = (input, callback) => {
-  const output = {}
   let fromDateTime
   let toDateTime
   if (input.ReportTemplate_From_Time) {
@@ -95,6 +60,5 @@ const getRawCarDataReport = (input, callback) => {
 
 module.exports = {
   generateSummaryReport,
-  timeMeasure,
   getRawCarDataReport
 }

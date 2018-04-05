@@ -1,109 +1,34 @@
-/**
- * Sample CURD application in report templets Page in summary report
- */
 
-const reportTemplates = require('../Model/ReportTemplate')
+const repository = require('./Repository')
 const dataBase = require('../DataBaseConnection/Configuration')
 const sqlQuery = require('../Common/DataBaseQueries')
 
-// List all templates
-
-const getAllReportTemplates = (input, callback) => {
-  dataBase
-    .query(sqlQuery.ReportTemplates.getAllReportsTemplates, {
-      replacements: { AccountId: input.AccountId, CreatedBy: input.CreatedBy },
-      type: dataBase.QueryTypes.SELECT
-    })
-    .then(result => {
-      callback(result)
-    })
-    .catch(error => {
-      callback(error)
-    })
+const create = (reportTemplate, callback) => {
+  repository.execute(sqlQuery.ReportTemplates.createReportTemplate, {
+    replacements: reportTemplate,
+    type: dataBase.QueryTypes.SELECT
+  }, result => callback(result))
 }
-
-const createReportTemplate = (input, callback) => {
-  reportTemplates
-    .create(input)
-    .then(result => {
-      const output = {}
-      if (result) {
-        output.data = messages.REPORTSUMMARY.saveTempplateSuccess
-        output.status = true
-      } else {
-        output.data = messages.REPORTSUMMARY.failedSaveTemplate
-        output.status = false
-      }
-
-      callback(output)
-    })
-    .catch(error => {
-      const output = {
-        data: error,
-        status: false
-      }
-      callback(output)
-    })
+const get = (reportTemplateId, callback) => {
+  repository.execute(sqlQuery.ReportTemplates.getReportsTemplate, {
+    replacements: { id: reportTemplateId },
+    type: dataBase.QueryTypes.SELECT
+  }, result => callback(result[0]))
 }
-
-const deleteReportTemplate = (input, callback) => {
-  const condition = {
-    where: {
-      AccountId: input.AccountId,
-      Id: input.Id
-    }
-  }
-  reportTemplates
-    .destroy(condition)
-    .then(result => {
-      const output = {}
-      if (result) {
-        output.data = messages.REPORTSUMMARY.DeletedSaveTemplate
-        output.status = true
-      } else {
-        output.data = 'notfound'
-        output.status = false
-      }
-
-      callback(output)
-    })
-    .catch(error => {
-      const output = {
-        data: error,
-        status: false
-      }
-      callback(output)
-    })
+const getAll = (accountId, createdById, callback) => {
+  repository.execute(sqlQuery.ReportTemplates.getAllReportsTemplates, {
+    replacements: { AccountId: accountId, CreatedBy: createdById }
+  }, callback)
 }
-
-const getReportTemplate = (input, callback) => {
-  const output = {}
-  const condition = {
-    where: {
-      AccountId: input.AccountId,
-      Id: input.Id
-    }
-  }
-  reportTemplates
-    .findOne(condition)
-    .then(result => {
-      if (result) {
-        output.data = result
-        output.status = true
-      } else {
-        output.data = 'notfound'
-        output.status = false
-      }
-      callback(output)
-    })
-    .catch(error => {
-      output.data = error
-    })
+const deleteById = (reportTemplateId, callback) => {
+  repository.execute(sqlQuery.ReportTemplates.deleteTemplate, {
+    replacements: { id: reportTemplateId },
+    type: dataBase.QueryTypes.SELECT
+  }, callback)
 }
-
 module.exports = {
-  createReportTemplate,
-  deleteReportTemplate,
-  getReportTemplate,
-  getAllReportTemplates
+  create,
+  deleteById,
+  get,
+  getAll
 }

@@ -10,7 +10,6 @@ const stores = require('../Controllers/StoreController')
  * @param response
  *
  */
-
 router.post('/generatereport', (request, response) => {
   stores.generateReport(request, result => {
     if (result.status === true) {
@@ -41,30 +40,16 @@ router.post('/getRawCarDataReport', (request, response) => {
 })
 
 /**
- * Time Measure
- * get method with no input
- * @param request
- * @param response
- */
-router.get('/timemeasure', (request, response) => {
-  stores.timeMeasure((response) => {
-    if (response.status === true) {
-      response.status(200).send(response)
-    } else {
-      response.status(400).send(response)
-    }
-  })
-})
-
-/**
- * Generates Csv for the given input
+ * Generates Csv for the given input details .
+ * Expects email, subject and csv data
  * @param request
  * @param response
  */
 router.post('/generatecsv', VerifyToken, (request, response) => {
   const input = {
-    type: 'Day',
-    AccountId: 0
+    email: request.email,
+    subject: request.subject,
+    attachment: request.attachment
   }
   stores.generateCsv(input, result => {
     if (result.status === true) {

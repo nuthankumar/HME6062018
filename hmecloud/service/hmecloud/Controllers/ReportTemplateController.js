@@ -1,19 +1,27 @@
-/**
- * Sample CURD application in report templets Page in summary report
- */
 
-const reportTemplates = require('../Model/ReportTemplate')
-// Config messages
 const messages = require('../Common/Message')
-const dataBase = require('../DataBaseConnection/Configuration')
-const templateRepository = require('../Repository/ReportTemplateRepository')
-const sqlQuery = require('../Common/DataBaseQueries')
+const repository = require('../Repository/ReportTemplateRepository')
 
-// List all templates
-
-const getAllReportTemplates = (input, callback) => {
+const createReportTemplate = (reportTemplate, callback) => {
   let output = {}
-  templateRepository.getAllReportTemplates(input, (result) => {
+  const values = {
+    AccountId: reportTemplate.AccountId,
+    Stores: (reportTemplate.selectedList).toString(),
+    TimeMeasure: reportTemplate.timeMeasure,
+    FromDate: reportTemplate.fromDate,
+    ToDate: reportTemplate.toDate,
+    OpenTime: reportTemplate.openTime,
+    CloseTime: reportTemplate.closeTime,
+    Type: reportTemplate.type,
+    Open: reportTemplate.open,
+    Close: reportTemplate.close,
+    Include: (reportTemplate.include).toString(),
+    Format: reportTemplate.format,
+    TemplateName: reportTemplate.templateName,
+    CreatedBy: reportTemplate.CreatedBy,
+    UpdatedBy: reportTemplate.Updatedby
+  }
+  repository.create(values, (result) => {
     if (result.length > 0) {
       output.data = result
       output.status = true
@@ -25,84 +33,62 @@ const getAllReportTemplates = (input, callback) => {
     }
   })
 }
-
-const createReportTemplate = (input, callback) => {
-  reportTemplates
-    .create(input)
-    .then(result => {
-      const output = {}
-      if (result) {
-        output.data = messages.REPORTSUMMARY.saveTempplateSuccess
-        output.status = true
-      } else {
-        output.data = messages.REPORTSUMMARY.failedSaveTemplate
-        output.status = false
-      }
-
+const getReportTemplate = (reportTemplate, callback) => {
+  let output = {}
+  repository.getReportTemplate(reportTemplate, (result) => {
+    if (result) {
+      const Stores = result.Stores.split(',')
+      const Include = result.Include.split(',')
+      output.data.accountId = result.AccountId
+      output.data.selectedList = Stores
+      output.data.timeMeasure = result.TimeMeasure
+      output.data.fromDate = result.FromDate
+      output.data.toDate = result.ToDate
+      output.data.openTime = result.OpenTime
+      output.data.closeTime = result.CloseTime
+      output.data.templateName = result.TemplateName
+      output.data.open = result.Open
+      output.data.close = result.Close
+      output.data.type = result.Type
+      output.data.include = Include
+      output.data.format = result.Format
+      output.status = true
       callback(output)
-    })
-    .catch(error => {
-      const output = {
-        data: error,
-        status: false
-      }
+    } else {
+      output.error = messages.LISTGROUP.notfound
+      output.status = false
       callback(output)
-    })
+    }
+  })
 }
-
+const getAllReportTemplates = (input, callback) => {
+  let output = {}
+  console.log("INPUT",input)
+  repository.getAll(input, (result) => {
+    if (result.length > 0) {
+      output.data = result
+      output.status = true
+      callback(output)
+    } else {
+      output.error = messages.LISTGROUP.notfound
+      output.status = false
+      callback(output)
+    }
+  })
+}
 const deleteReportTemplate = (input, callback) => {
-  const condition = {
-    where: {
-      AccountId: input.AccountId,
-      Id: input.Id
+  let output = {}
+  repository.deleteById(input, (result) => {
+    if (result) {
+      output.data = result
+      output.status = true
+      callback(output)
+    } else {
+      output.error = messages.LISTGROUP.notfound
+      output.status = false
+      callback(output)
     }
-  }
-  reportTemplates
-    .destroy(condition)
-    .then(result => {
-      const output = {}
-      if (result) {
-        output.data = messages.REPORTSUMMARY.DeletedSaveTemplate
-        output.status = true
-      } else {
-        output.data = 'notfound'
-        output.status = false
-      }
-
-      callback(output)
-    })
-    .catch(error => {
-      const output = {
-        data: error,
-        status: false
-      }
-      callback(output)
-    })
-}
-
-const getReportTemplate = (input, callback) => {
-  const output = {}
-  const condition = {
-    where: {
-      AccountId: input.AccountId,
-      Id: input.Id
-    }
-  }
-  reportTemplates
-    .findOne(condition)
-    .then(result => {
-      if (result) {
-        output.data = result
-        output.status = true
-      } else {
-        output.data = 'notfound'
-        output.status = false
-      }
-      callback(output)
-    })
-    .catch(error => {
-      output.data = error
-    })
+  })
 }
 
 module.exports = {
