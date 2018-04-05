@@ -10,7 +10,6 @@ const stores = require('../Controllers/StoreController')
  * @param response
  *
  */
-
 router.post('/generatereport', (request, response) => {
   stores.generateReport(request, result => {
     if (result.status === true) {

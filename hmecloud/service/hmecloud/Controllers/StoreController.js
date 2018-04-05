@@ -91,7 +91,7 @@ const getRawCarDataReport = (request, callBack) => {
                 rawCarDataObj.eventName = tempRawCarData.CarRecordDataType_Name
                 rawCarDataObj.carsInQueue = tempRawCarData.CarsInQueue
                 rawCarData.dayPart = 'DP' + tempRawCarData.Daypart_ID + dateUtils.dayPartTime(tempRawCarData.Daypart_ID, len, dayPartData.StartTime, dayPartData.EndTime)
-        
+
                 for (let i = 0; i < departTimeStampList.length; i++) {
                   let tempEventDetails = departTimeStampList[i]
                   if (tempEventDetails.EventType_Name.includes('Menu Board')) {
@@ -111,7 +111,7 @@ const getRawCarDataReport = (request, callBack) => {
               }
             })
             rawCarData.rawCarData = rawCarDataList
-        
+
             if (result.status === true) {
               if (request.query.reportType === 'rr1') {
                 callBack(result)
@@ -149,7 +149,7 @@ const getRawCarDataReport = (request, callBack) => {
 }
 
 const generateCsv = (input, response) => {
-   stores.generateCSV(input, result => {
+  stores.generateCSV(input, result => {
     if (result.status === true) {
       response.status(200).send(result)
     } else {

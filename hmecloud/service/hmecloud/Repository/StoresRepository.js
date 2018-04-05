@@ -5,13 +5,14 @@ const defaultEndTime = '23:59:59'
 
 const generateSummaryReport = (input, callback) => {
   const Query = `exec usp_HME_Cloud_Get_Report_By_Daypart 
-    @Device_IDs= '${input.deviceUIDs.toString()}' 
-   ,@StoreStartDate= '${input.fromDate}'
-   ,@StoreEndDate= '${input.toDate}'
-   ,@StartDateTime= '${input.openTime}'
-   ,@EndDateTime= '${input.closeTime}'
+    @Device_IDs= '${input.ReportTemplate_StoreIds.toString()}' 
+   ,@StoreStartDate= '${input.ReportTemplate_From_Date}'
+   ,@StoreEndDate= '${input.ReportTemplate_To_Date}'
+   ,@StartDateTime= '${input.ReportTemplate_From_Time}'
+    ReportTemplate_To_Time: request.body.reportTemplateToTime,
+    ,@EndDateTime= '${input.closeTime}'
    ,@CarDataRecordType_ID= 11
-   ,@ReportType= ${input.ReportType} 
+   ,@ReportType= ${input.ReportTemplate_Type} 
    ,@LaneConfig_ID= 1`
   db
     .query(Query, {
