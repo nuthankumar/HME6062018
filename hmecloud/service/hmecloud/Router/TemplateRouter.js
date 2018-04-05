@@ -3,7 +3,7 @@ const router = express.Router()
 const templatValidator = require('../Validators/TemplateValidator')
 
 router.get('/getall', (request, response) => {
-  templatValidator.getalltemplate(request, (result) => {
+  templatValidator.getalltemplate(request.query, (result) => {
     response.status(200).send(result)
   })
 })
