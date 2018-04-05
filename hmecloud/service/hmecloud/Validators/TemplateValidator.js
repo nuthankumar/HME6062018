@@ -34,6 +34,7 @@ const getalltemplate = (input, callback) => {
   } else {
     output.error = messages.LISTGROUP
     output.status = false
+    callback(output)
   }
 }
 
