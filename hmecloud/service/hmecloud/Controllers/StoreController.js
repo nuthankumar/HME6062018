@@ -65,7 +65,6 @@ const getRawCarDataReport = (request, callBack) => {
           request.query.reportType === 'rrcsv1'
         ) {
           stores.getRawCarDataReport(input, response => {
-            console.log(request.body)
             if (response.status === true) {
               if (request.query.reportType === 'rr1') {
                 callBack(response)
@@ -116,14 +115,8 @@ const generateCsv = (req, res) => {
   })
 }
 
-const timeMeasure = (callback) => {
-  
-}
-// module.exports = router
-
 module.exports = {
   generateReport,
   generateCsv,
-  getRawCarDataReport,
-  timeMeasure
+  getRawCarDataReport
 }

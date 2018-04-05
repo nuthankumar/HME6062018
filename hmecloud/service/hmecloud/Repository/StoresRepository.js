@@ -7,12 +7,15 @@ const defaultFromTime = '00:00:00'
 const defaultEndTime = '23:59:59'
 
 const generateSummaryReport = (input, callback) => {
-  console.log('Enter generateSummaryReport')
-  console.log('input.stores')
-  console.log(input.stores.toString())
-
-  const Query =
-    "exec [dbo].generateSumamrizereport  @storeIds=' " + input.stores.toString() + "';"
+  const Query = `exec usp_HME_Cloud_Get_Report_By_Daypart 
+    @Device_IDs= '${input.deviceUIDs.toString()}' 
+   ,@StoreStartDate= '${input.fromDate}'
+   ,@StoreEndDate= '${input.toDate}'
+   ,@StartDateTime= '${input.openTime}'
+   ,@EndDateTime= '${input.closeTime}'
+   ,@CarDataRecordType_ID= 11
+   ,@ReportType= ${input.ReportType} 
+   ,@LaneConfig_ID= 1`
   db
     .query(Query, {
       type: db.QueryTypes.RAW
@@ -27,7 +30,6 @@ const generateSummaryReport = (input, callback) => {
       }
     })
     .catch(error => {
-      console.log(error)
       const output = {
         data: error,
         status: true
@@ -54,7 +56,6 @@ const timeMeasure = (callback) => {
       }
     })
     .catch(error => {
-      console.log(error)
       const output = {
         data: error,
         status: true
@@ -62,27 +63,6 @@ const timeMeasure = (callback) => {
 
       callback(output)
     })
-}
-
-const generateCSV = (input, callback) => {
-// const csv = csvFile.DAYREPORT
-  //  jsonexport(csv, function (err, csv) {
-  //   console.log('CSV', csv)
-  //   const loggedInUser = 'jaffersr@nousinfo.com'
-  //   var attachment = [{
-  //     filename: 'package.csv',
-  //     content: csv,
-  //     encoding: 'utf16le'
-  //   }]
-
-  //   mail.send(loggedInUser, attachment, isMailSent => {
-  //     if (isMailSent) {
-  //       callback('success')
-  //     } else {
-  //       callback('failure')
-  //     }
-  //   })
-  // })
 }
 
 const getRawCarDataReport = (input, callback) => {
@@ -166,6 +146,5 @@ const getRawCarDataReport = (input, callback) => {
 module.exports = {
   generateSummaryReport,
   timeMeasure,
-  generateCSV,
   getRawCarDataReport
 }
