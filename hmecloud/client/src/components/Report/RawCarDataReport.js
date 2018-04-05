@@ -4,12 +4,14 @@ import Header from '../Header/HmeHeader'
 import './SummaryReport.css'
 import fetch from 'isomorphic-fetch'
 import {config} from '../../config'
+import PageHeader from '../Header/PageHeader'
 
 class RawCarReport extends Component {
   constructor (props) {
     super(props)
     this.state = {
       rawData: false,
+      pageHeading: 'Raw Car Data Report',
       displayData: {
         store: 'McDonalds 202000',
         description: 'Description of the Store',
@@ -17,29 +19,7 @@ class RawCarReport extends Component {
         stopTime: '2018-03-15',
         printDate: '2018-04-02',
         printTime: '2:59 AM',
-        dayPart: 'DP OPEN-11:59',
-        rawCartData: [
-          {
-            departureTime: '2018-03-15 09:28:41 AM',
-            eventName: 'Car_Departure',
-            carsInQueue: 3,
-            menu: '0:21',
-            greet: '0:21',
-            service: '0:40',
-            laneQueue: '0:39',
-            laneTotal: '1:40'
-          },
-          {
-            departureTime: '2018-03-15 09:28:42 AM',
-            eventName: 'Car_Departure',
-            carsInQueue: 3,
-            menu: '0:13',
-            greet: '0:13',
-            service: '0:49',
-            laneQueue: '0:44',
-            laneTotal: '1:46'
-          }
-        ]
+        dayPart: 'DP OPEN-11:59'
       }
     }
     this.displayRecords = this.displayRecords.bind(this)
@@ -64,7 +44,7 @@ class RawCarReport extends Component {
       'ReportTemplate_Include_Stats': '',
       'reportTemplateFormat': 1
     }
-    let url = config.url+'api/report/getRawCarDataReport?reportType=rr1'
+    let url = config.url + 'api/report/getRawCarDataReport?reportType=rr1'
     fetch(url, {
       method: 'POST',
       headers: {
@@ -95,14 +75,10 @@ class RawCarReport extends Component {
   displayRecords () {
     if (this.state.rawData) {
       if (this.state.displayData) {
-        return (
-          <div>
+        return (<section className='rawcar-data-page'>
+          <section className='rawcar-data-section'>
             <div className='clear rawcar-table-details'>
-              <div className='rawcar-header'>
-                <h1 className='rawcar-h1'>
-                  <span>Raw Car Data Report</span>
-                </h1>
-              </div>
+              <PageHeader pageHeading={this.state.pageHeading} />
               <table className='rawcar-header-labels clear'>
                 <tbody>
                   <tr>
@@ -171,8 +147,8 @@ class RawCarReport extends Component {
                 </tbody>
               </table>
             </div>
-          </div>
-        )
+          </section>
+        </section>)
       } else {
         return <p>No Records Found</p>
       }

@@ -180,6 +180,10 @@ h2 .report-start-time-value,h2 .report-end-time-value{
 }
 /* Raw Car Data CSS*/
 
+.rawcar-data-section{
+  margin: 20px 68px 0px 68px;
+}
+
 .clear:after {
   clear: both;
   content: ".";

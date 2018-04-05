@@ -1,12 +1,7 @@
 import React from 'react'
 
 export default class CheckBoxList extends React.Component {
-  constructor () {
-    super()
-  }
   render () {
-    let items = this.props.items
-
     return (
       <div className='col-xs-4'>{this.props.title}
         <div className='select-all-groups'>

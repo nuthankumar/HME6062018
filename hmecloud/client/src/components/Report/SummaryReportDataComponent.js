@@ -1,23 +1,20 @@
 import React, { Component } from 'react'
-import App from '../../App'
-import SuccessAlert from '../Alerts/SuccessAlert'
-import ErrorAlert from '../Alerts/ErrorAlert'
-import fetch from 'isomorphic-fetch'
-import HmeHeader from '../Header/HmeHeader'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+// import fetch from 'isomorphic-fetch'
+// import { BrowserRouter } from 'react-router-dom'
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './SummaryReport.css'
 import '../../../node_modules/font-awesome/css/font-awesome.min.css'
-
-const hmeLogo = require('../../images/HMELogo.png')
-const zoomLogo = require('../../images/ZoomLogo.PNG')
-var body = require('body-parser')
-var _ = require('underscore')
-
 export default class SummaryReportDataComponent extends Component {
   constructor (props) {
-    super()
+    super(props)
     this.state = {
+    }
+    this.dynamicColumnData = {
+      showFromToTime: (this.props.reportData.dayColumn || this.props.reportData.dayPartColumn || this.props.reportData.weekColumn ? 'hide' : 'show'),
+      showGroupsStores: (this.props.reportData.groupStoreColumns ? 'show-table-cell' : 'hide-table-cell'),
+      showWeekColumn: (this.props.reportData.weekColumn ? 'show-table-cell' : 'hide-table-cell'),
+      showDayColumn: (this.props.reportData.dayColumn ? 'show-table-cell' : 'hide-table-cell'),
+      showDayPartColumn: (this.props.reportData.dayPartColumn ? 'show-table-cell' : 'hide-table-cell')
     }
     this.displaySummarizedData = this.displaySummarizedData.bind(this)
     this.displaySummarizedRowData = this.displaySummarizedRowData.bind(this)
@@ -28,7 +25,7 @@ export default class SummaryReportDataComponent extends Component {
       return reportData.dayPart.all.map((reportItem) => {
         return (
           <div className='col-xs-12 report-data-unit'>
-            <div className={'col-xs-12 from-to-detail ' + (this.props.reportData.dayColumn || this.props.reportData.dayPartColumn || this.props.reportData.weekColumn ? 'hide' : 'show')}><span>{reportItem.startTime}</span> <span>OPEN - </span> <span>{reportItem.endTime}</span> <span>CLOSE</span></div>
+            <div className={'col-xs-12 from-to-detail ' + this.dynamicColumnData.showFromToTime}><span>{reportItem.startTime}</span> <span>OPEN - </span> <span>{reportItem.endTime}</span> <span>CLOSE</span></div>
             <table className='summaryreport-table'>
               <tbody>
                 <tr>
@@ -38,11 +35,11 @@ export default class SummaryReportDataComponent extends Component {
                   </th>
                 </tr>
                 <tr>
-                  <th className={'groupsColHeader ' + (this.props.reportData.groupStoreColumns ? 'show-table-cell' : 'hide-table-cell')}><span>Groups</span></th>
-                  <th className={'storesColHeader ' + (this.props.reportData.groupStoreColumns ? 'show-table-cell' : 'hide-table-cell')}><span>Stores</span></th>
-                  <th className={'reportTableAttributesHeading ' + (this.props.reportData.dayColumn ? 'show-table-cell' : 'hide-table-cell')}><span>Day</span></th>
-                  <th className={'reportTableAttributesHeading ' + (this.props.reportData.dayPartColumn ? 'show-table-cell' : 'hide-table-cell')}><span>DayPart</span></th>
-                  <th className={'reportTableAttributesHeading ' + (this.props.reportData.weekColumn ? 'show-table-cell' : 'hide-table-cell')}><span>DayPart</span></th>
+                  <th className={'groupsColHeader ' + this.dynamicColumnData.showGroupsStores}><span>Groups</span></th>
+                  <th className={'storesColHeader ' + this.dynamicColumnData.showGroupsStores}><span>Stores</span></th>
+                  <th className={'reportTableAttributesHeading ' + this.dynamicColumnData.showDayColumn}><span>Day</span></th>
+                  <th className={'reportTableAttributesHeading ' + this.dynamicColumnData.showDayPartColumn}><span>DayPart</span></th>
+                  <th className={'reportTableAttributesHeading ' + this.dynamicColumnData.showWeekColumn}><span>DayPart</span></th>
                   <th className='reportTableAttributesHeading'><span>Menu</span></th>
                   <th className='reportTableAttributesHeading'><span>Greet</span></th>
                   <th className='reportTableAttributesHeading'><span>Service</span></th>
@@ -66,11 +63,11 @@ export default class SummaryReportDataComponent extends Component {
       return reportRowData.map((reportItem) => {
         return (
           <tr>
-            <td className={(this.props.reportData.groupStoreColumns ? 'show-table-cell' : 'hide-table-cell')}>{reportItem.groupId != null ? reportItem.groupId : 'NA'}</td>
-            <td className={(this.props.reportData.groupStoreColumns ? 'show-table-cell' : 'hide-table-cell')} onClick={this.props.reportData.handleDrillDown}>{reportItem.storeId}</td>
-            <td className={(this.props.reportData.dayColumn ? 'show-table-cell' : 'hide-table-cell')}><span>{reportItem.day}</span></td>
-            <td className={(this.props.reportData.dayPartColumn ? 'show-table-cell' : 'hide-table-cell')}><span>{reportItem.daypart}</span></td>
-            <td className={(this.props.reportData.weekColumn ? 'show-table-cell' : 'hide-table-cell')}><span>{reportItem.week}</span></td>
+            <td className={this.dynamicColumnData.showGroupsStores}>{reportItem.groupId != null ? reportItem.groupId : 'NA'}</td>
+            <td className={this.dynamicColumnData.showGroupsStores} onClick={this.props.reportData.handleDrillDown}>{reportItem.storeId}</td>
+            <td className={this.dynamicColumnData.showDayColumn}><span>{reportItem.day}</span></td>
+            <td className={this.dynamicColumnData.showDayPartColumn}><span>{reportItem.daypart}</span></td>
+            <td className={this.dynamicColumnData.showWeekColumn}><span>{reportItem.week}</span></td>
             <td>{reportItem.menu}</td>
             <td>{reportItem.greet}</td>
             <td>{reportItem.service}</td>

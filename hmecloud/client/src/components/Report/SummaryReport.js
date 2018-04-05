@@ -1,25 +1,20 @@
 import React, { Component } from 'react'
-import App from '../../App'
-import SuccessAlert from '../Alerts/SuccessAlert'
-import ErrorAlert from '../Alerts/ErrorAlert'
-import fetch from 'isomorphic-fetch'
+// import fetch from 'isomorphic-fetch'
 import HmeHeader from '../Header/HmeHeader'
 import SummaryReportDataComponent from './SummaryReportDataComponent'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import PageHeader from '../Header/PageHeader'
+// import { BrowserRouter } from 'react-router-dom'
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './SummaryReport.css'
 import '../../../node_modules/font-awesome/css/font-awesome.min.css'
-import {config} from '../../config'
+// import {config} from '../../config'
 
-const hmeLogo = require('../../images/HMELogo.png')
-const zoomLogo = require('../../images/ZoomLogo.PNG')
-var body = require('body-parser')
-var _ = require('underscore')
 
 export default class SummaryReport extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      pageHeading : 'Summarized Report',
       reportData: {
         week: {
           all: [ {
@@ -148,9 +143,13 @@ export default class SummaryReport extends Component {
   }
 
   setTimeMeasures (templateData) {
+    /******
+    checking for time measure selected after filling template and generating report.
+    Mapping day, daypart week and raw car data as 1, 2,3 and 4 respectively
+    */
     switch (templateData[0].timeMeasure) {
       case '1' : this.state.dailyData = true
-        if (templateData[0].selectedList.length == 1) {
+        if (templateData[0].selectedList.length === 1) {
           this.state.reportData.dayColumn = true
           this.state.reportData.groupStoreColumns = false
         } else {
@@ -161,7 +160,7 @@ export default class SummaryReport extends Component {
         break
 
       case '2' : this.state.dayPartData = true
-        if (templateData[0].selectedList.length == 1) {
+        if (templateData[0].selectedList.length === 1) {
           this.state.reportData.dayPartColumn = true
           this.state.reportData.groupStoreColumns = false
         } else {
@@ -172,7 +171,7 @@ export default class SummaryReport extends Component {
         break
 
       case '3' : this.state.weeklyData = true
-        if (templateData[0].selectedList.length == 1) {
+        if (templateData[0].selectedList.length === 1) {
           this.state.reportData.weekColumn = true
           this.state.reportData.groupStoreColumns = false
         } else {
@@ -183,7 +182,7 @@ export default class SummaryReport extends Component {
         break
 
       case '4' : this.state.rawCarData = true
-        if (templateData[0].selectedList.length == 1) {
+        if (templateData[0].selectedList.length === 1) {
           this.state.reportData.dayPartColumn = true
           this.state.reportData.groupStoreColumns = false
         } else {
@@ -209,7 +208,7 @@ export default class SummaryReport extends Component {
   }
 
   populateSummaryReportDetails () {
-    let url = config.url+'api/report/generatereport'
+    /* let url = config.url + 'api/report/generatereport'
     let data = {
       'stores': [
         3,
@@ -241,27 +240,19 @@ export default class SummaryReport extends Component {
         this.setState(this.state)
       })
       .catch((error) => {
-      })
+
+      }) */
   }
 
   render () {
-    let reportData = this.state.reportData.data
-    return (<section className='reportSummaryPage'>
+    // let reportData = this.state.reportData.data
+    return (<section className='report-summary-page'>
       <HmeHeader />
       <section className='reportsummary-container'>
         <div className='row download-btn-section'>
           <button className='btn btn-default download-summaryreport-btn'>Download</button>
         </div>
-        <div className='row'>
-          <div className='col-xs-9 summary-header'>
-            <div className='summary-header-text'>Summarized Report</div>
-          </div>
-          <div className='col-xs-3'>
-            <img src={hmeLogo} />
-            <img src={zoomLogo} />
-          </div>
-        </div>
-
+        <PageHeader pageHeading={this.state.pageHeading} />
         <div className='row'>
 
           <div className='col-xs-3 left-padding-none'>
@@ -283,7 +274,7 @@ export default class SummaryReport extends Component {
               <span className='report-print-time-value'> APR2, 2019 4:08 AM</span>
             </h2>
           </div>
-          <div className='col-xs-2 left-padding-none'>
+          <div className={'col-xs-2 left-padding-none ' + (this.state.allTab ? 'hide' : 'show')}>
             <div id='page-navigations'>
               <div className='page-navs'>
                 Page <span className='pgStarts'>1</span> <span translate='' className='ReportsOf'>of </span> 1</div>

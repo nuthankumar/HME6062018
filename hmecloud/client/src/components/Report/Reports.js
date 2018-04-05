@@ -30,9 +30,10 @@ const Delete = require("../../images/redEx.png");
 const _ = require("underscore");
 
 class Report extends Component {
-  state = {
-    selectedTime: moment()
-  };
+  // ToDo: Need to be checked with Nandish
+  //  state = {
+  //   selectedTime: moment()
+  // };
   handleValueChange = selectedTime => {
     console.log(selectedTime && selectedTime.format("HH:mm:ss"));
     this.setState({ selectedTime });
@@ -96,7 +97,7 @@ class Report extends Component {
   }
   getTreeHierarchy() {
    // let url = "http://localhost:7071/api/group/listgrouphierarchy?accountId=100&userName=swathikumary@nousinfo.com";
-    let url =  config.url+"api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com";
+    let url =  config.url + "api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com";
     fetch(url)
       .then(response => response.json())
       .then(data => {
@@ -189,7 +190,6 @@ class Report extends Component {
           <header className="reports-header">{t('title')}</header>
           {/* <Trans i18nKey="title">
           </Trans> */}
-          <header className="reports-header">Summary Reports</header>
           <form onSubmit={this.handleSubmit}>
             <section className="reports-pane-section">
               <div className="reports-pane">
@@ -574,7 +574,7 @@ class Report extends Component {
         this.props.history.replace(url);
       })
       .catch(err => {
-        alert(err);
+        console.log(err);
       });
   }
 
@@ -787,7 +787,7 @@ class Report extends Component {
   delete(e) {
     // console.log(e.target.id);
     let url =
-      "http://localhost:7071/api/reportTemplate/delete?templetId=" +
+      config.url + "api/reportTemplate/delete?templetId=" +
       e.target.id;
     fetch(url, {
       method: "DELETE",

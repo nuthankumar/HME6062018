@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import AuthenticationService from './AuthenticationService'
+import {config} from '../../config'
 
 export default function authenticate (AuthenticationComponent) {
   // Code here now

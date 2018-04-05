@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import moment from 'moment'
 import './SummaryReport.css'
 
 import t from '../Language/language'
@@ -36,37 +35,38 @@ class SystemStatistics extends Component {
         <div className='systemSec' id='page-container'>
           <h2 className='rep-head'><span>{t[language].systemstats}</span></h2>
           <table cellspacing='0' className='table-layout-System ssBord col-width-ss5'>
-            <tbody><tr>
-              <th className='lane1' colspan='2'><span>{t[language].ReportsLane}</span> {this.state.displayData.Lane}</th>
-            </tr>
+            <tbody>
               <tr>
-              <td id='ss-col-width' className='rnshade'><span>{t[language].ReportsAverageCarsInLane}</span></td>
-              <td id='ss-col-width-sm' className='rnshade'><strong>{this.state.displayData.AverageCarsInLane}</strong></td>
-            </tr>
+                <th className='lane1' colspan='2'><span>{t[language].ReportsLane}</span> {this.state.displayData.Lane}</th>
+              </tr>
               <tr>
-              <td id='ss-col-width' className='rshade'><span>{t[language].ReportsTotalPullouts}</span></td>
-              <td className='rshade'>{this.state.displayData.TotalPullouts}</td>
-            </tr>
+                <td id='ss-col-width' className='rnshade'><span>{t[language].ReportsAverageCarsInLane}</span></td>
+                <td id='ss-col-width-sm' className='rnshade'><strong>{this.state.displayData.AverageCarsInLane}</strong></td>
+              </tr>
               <tr>
-              <td id='ss-col-width' className='rnshade'><span>{t[language].ReportsTotalPullins}</span></td>
-              <td className='rnshade'>{this.state.displayData.TotalPullins}</td>
-            </tr>
-            <tr>
+                <td id='ss-col-width' className='rshade'><span>{t[language].ReportsTotalPullouts}</span></td>
+                <td className='rshade'>{this.state.displayData.TotalPullouts}</td>
+              </tr>
+              <tr>
+                <td id='ss-col-width' className='rnshade'><span>{t[language].ReportsTotalPullins}</span></td>
+                <td className='rnshade'>{this.state.displayData.TotalPullins}</td>
+              </tr>
+              <tr>
                 <td id='ss-col-width' className='rshade'><span>{t[language].ReportsDeleteOverMax}</span></td>
                 <td className='rshade'>{this.state.displayData.DeleteOverMaximum}</td>
               </tr>
-            <tr>
+              <tr>
                 <td id='ss-col-width' className='rnshade'><span>{t[language].ReportsPowerFails}</span></td>
                 <td className='rnshade'>{this.state.displayData.PowerFails}</td>
               </tr>
               <tr>
-              <td id='ss-col-width' className='rshade'><span> {t[language].ReportsSystemResets}</span></td>
-              <td className='rshade'>{this.state.displayData.SystemResets}</td>
-            </tr>
+                <td id='ss-col-width' className='rshade'><span> {t[language].ReportsSystemResets}</span></td>
+                <td className='rshade'>{this.state.displayData.SystemResets}</td>
+              </tr>
               <tr>
-              <td id='ss-col-width' className='rnshade'><span>{t[language].ReportsVBDResets}</span></td>
-              <td className='rnshade'>{this.state.displayData.VBDResets}</td>
-            </tr>
+                <td id='ss-col-width' className='rnshade'><span>{t[language].ReportsVBDResets}</span></td>
+                <td className='rnshade'>{this.state.displayData.VBDResets}</td>
+              </tr>
             </tbody>
           </table>
         </div>

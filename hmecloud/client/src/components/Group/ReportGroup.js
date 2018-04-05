@@ -1,25 +1,18 @@
 import React from 'react'
 import CheckBoxList from './CheckBoxList'
-import App from '../../App'
-import ReportGroupHierarchy from './ReportGroupHierarchy'
 import SuccessAlert from '../Alerts/SuccessAlert'
 import ErrorAlert from '../Alerts/ErrorAlert'
 import fetch from 'isomorphic-fetch'
 import { confirmAlert } from 'react-confirm-alert'
 import HmeHeader from '../Header/HmeHeader'
 import {config} from '../../config'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import './ReportGroup.css'
 import 'react-confirm-alert/src/react-confirm-alert.css'
 // import createHistory from 'history/createBrowserHistory'
 // import {body} from 'body-parser';
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 
-const downArrow = require('../../images/downArrow.PNG')
-const sideArrow = require('../../images/sideArrow.PNG')
-const groupToggleIcon = require('../../images/groupToggleIcon.png')
-
-var body = require('body-parser')
 var _ = require('underscore')
 
 export default class ReportGroup extends React.Component {
@@ -48,7 +41,7 @@ export default class ReportGroup extends React.Component {
   getAvailableGroupStoreList () {
     this.state.available = []
     this.setState(this.state)
-    let url = config.url+'api/group/availabledetails?accountId=100&userName=swathikumary@nousinfo.com'
+    let url = config.url + 'api/group/availabledetails?accountId=100&userName=swathikumary@nousinfo.com'
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
@@ -70,12 +63,12 @@ export default class ReportGroup extends React.Component {
     console.log(this.state.assigned)
     if (this.props.history.location.state.editGroup) {
       // let groupId = this.props.history.location.state.groupId;
-      let url = config.url+'api/group/edit?groupId=' + this.state.groupId + '&userName=swathikumary@nousinfo.com'
+      let url = config.url + 'api/group/edit?groupId=' + this.state.groupId + '&userName=swathikumary@nousinfo.com'
 
       fetch(url)
         .then((response) => response.json())
         .then((data) => {
-          if (data.status == false) {
+          if (data.status === false) {
             this.state.successMessage = data.data
             this.state.errorMessage = ''
             this.state.assigned = []
@@ -118,7 +111,7 @@ export default class ReportGroup extends React.Component {
   }
 
   selectAll (event, list) {
-    list.map((item, index) => item.selected = event.target.checked)
+    list.map((item, index) => {item.selected = event.target.checked})
     this.setState(this.state)
   }
   add () {
@@ -134,7 +127,7 @@ export default class ReportGroup extends React.Component {
     this.state.editGroup = this.props.history.location.state.editGroup
     this.setState(this.state)
     let groupStoreObject = this.getGroupandStore(items)
-    let url = config.url+'api/group/create'
+    let url = config.url + 'api/group/create'
 
     if (this.refs.groupName.value === '' || this.refs.groupName.value === undefined) {
       this.state.errorMessage = 'Group name may not be blank'
@@ -199,9 +192,9 @@ export default class ReportGroup extends React.Component {
       store: []
     }
     _.each(items, function (item) {
-      if (item.type == 'group') {
+      if (item.type === 'group') {
         groupStore.group.push(item.Id)
-      } else if (item.type == 'store') {
+      } else if (item.type === 'store') {
         groupStore.store.push(item.Id)
       }
     })
@@ -232,12 +225,12 @@ export default class ReportGroup extends React.Component {
 
   confirmDelete () {
     // let url = 'http://localhost:7071/api/group/delete?groupId=12&accountId=0';
-    let url = config.url+'api/group/delete?groupId=' + this.state.groupId + '&accountId=' + this.state.accountId
+    let url = config.url + 'api/group/delete?groupId=' + this.state.groupId + '&accountId=' + this.state.accountId
     fetch(url, {
       method: 'DELETE'
     })
       .then((data) => {
-        if (data.status == 200) {
+        if (data.status === 200) {
           this.state.successMessage = 'Group Deleted Successfully'
           this.state.errorMessage = ''
           this.state.deleteSuccess = true
@@ -298,8 +291,8 @@ export default class ReportGroup extends React.Component {
         <div className='row reportgroup-buttons'>
           <div className='col-xs-12'>
             <button type='button' className='btn btn-primary  col-xs-2 save-group-btn' onClick={this.saveAssigned.bind(this, assigned)}>Save</button>
-            <button type='button' className={'btn btn-danger reportgroup-delete col-xs-2 ' + (this.state.editGroup ? 'show' : 'hidden')} onClick={this.deleteGroup.bind(this)} >Delete</button>
-            <Link to='/grouphierarchy'><button type='button' className='btn btn-default report-group-cancel  col-xs-2'>Cancel</button></Link>
+            <button type='button' className={'btn btn-danger reportgroup-delete col-xs-2 ' + (this.state.editGroup ? 'show' : 'hidden')} onClick={this.deleteGroup.bind(this)} >Delete</button>
+            <Link to='/grouphierarchy'><button type='button' className='btn btn-default report-group-cancel col-xs-2'>Cancel</button></Link>
           </div>
         </div>
 

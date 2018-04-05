@@ -1,13 +1,16 @@
 import decode from 'jwt-decode'
 import jwt from 'jsonwebtoken'
 import {config} from '../../config'
+import fetch from 'isomorphic-fetch'
+import btoa from 'btoa'
 // import crypto from 'crypto-js';
 // import * as crypto from 'crypto-js';
 
-const crypto = require('crypto')
+// const crypto = require('crypto')
 
 export default class AuthenticationService {
-  // Initializing important variables
+  // Initializing important variablescls
+  
   constructor (domain) {
     this.domain = domain || config.authUrl // API server domain
     this.fetch = this.fetch.bind(this) // React binding stuff
@@ -26,7 +29,7 @@ export default class AuthenticationService {
     console.log(encodedString)
     this.setToken(encodedString)
     // encodedString= crypto.createCipher("aes-256-ctr",'super').update(token,"utf-8","hex");
-    var encodedString = btoa(encodedString)
+    encodedString = btoa(encodedString)
     return Promise.resolve(encodedString)
 
     // Get a token from api server using the fetch api

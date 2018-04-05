@@ -2,12 +2,8 @@ import React from 'react'
 
 const ProductLogo = require('../../images/ProductLogo-1.png')
 const HMELogo = require('../../images/HMELogo.png')
-const Calendar = require('../../images/mini-cal.jpg')
 
 export default class HmeHeader extends React.Component {
-  constructor () {
-    super()
-  }
   render () {
     return (<div >
       <header className='reports-page-header'>

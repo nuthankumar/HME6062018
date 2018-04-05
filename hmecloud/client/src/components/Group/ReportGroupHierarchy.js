@@ -1,19 +1,13 @@
 import React from 'react'
-import CheckBoxList from './CheckBoxList'
-import SuccessAlert from '../Alerts/SuccessAlert'
-import ErrorAlert from '../Alerts/ErrorAlert'
 import fetch from 'isomorphic-fetch'
 import HmeHeader from '../Header/HmeHeader'
 import Tree, { TreeNode } from 'rc-tree'
-import ReportGroupTree from './ReportGroupTree'
-import {config} from '../../config'
+import { config } from '../../config'
 import 'rc-tree/assets/index.css'
 import './ReportGroup.css'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+// import { BrowserRouter } from 'react-router-dom'
 
 // import {body} from 'body-parser';
-var body = require('body-parser')
-var _ = require('underscore')
 
 export default class ReportGroupHierarchy extends React.Component {
   constructor () {
@@ -28,7 +22,7 @@ export default class ReportGroupHierarchy extends React.Component {
   }
 
   getTreeHierarchy () {
-    let url = config.url+'api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com'
+    let url = config.url + 'api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com'
     // let url = "http://localhost:7071/api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com";
     fetch(url)
       .then((response) => response.json())

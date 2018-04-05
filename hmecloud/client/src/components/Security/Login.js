@@ -65,7 +65,7 @@ class Login extends Component {
         this.props.history.replace(url)
       })
       .catch(err => {
-        alert(err)
+        console.log(err)
       })
   }
 }
