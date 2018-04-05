@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const db = require('../DataBaseConnection/configDb')
+const db = require('../DataBaseConnection/ConfigDb')
 
 const TimeMeasure = db.define(
   'TimeMeasure',
