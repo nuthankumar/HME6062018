@@ -10,9 +10,9 @@ i18n.configure({
 
 // Router config
 
-const groupRouter = require('./Router/GroupRouter/Group')
-const reportsTemplate = require('./Router/TemplatesRouter/Template')
-const summaryReport = require('./Router/StoreRouter/Store')
+const groupRouter = require('./Router/GroupRouter')
+const reportsTemplate = require('./Router/TemplateRouter')
+const summaryReport = require('./Router/StoreRouter')
 
 // JWT - Auth config
 const authentication = require('./Router/AuthenticationRouter')
