@@ -41,23 +41,8 @@ router.post('/getRawCarDataReport', (request, response) => {
 })
 
 /**
- * Time Measure
- * get method with no input
- * @param request
- * @param response
- */
-router.get('/timemeasure', (request, response) => {
-  stores.timeMeasure((response) => {
-    if (response.status === true) {
-      response.status(200).send(response)
-    } else {
-      response.status(400).send(response)
-    }
-  })
-})
-
-/**
- * Generates Csv for the given input
+ * Generates Csv for the given input details .
+ * Expects to Address, subject and csv data
  * @param request
  * @param response
  */
