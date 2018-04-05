@@ -4,7 +4,7 @@
  */
 
 // config the model
-let Sequelize = require('sequelize')
+/*let Sequelize = require('sequelize')
 Sequelize = new Sequelize('hmeCloud', 'sa', 'nous@123', {
   host: '192.168.27.87',
   dialect: 'mssql',
@@ -546,3 +546,4 @@ module.exports = {
   addToHierarchy,
   getAll
 }
+*/

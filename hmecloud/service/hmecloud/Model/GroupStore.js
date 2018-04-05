@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const db = require('../DataBaseConnection/ConfigDb')
+const db = require('../DataBaseConnection/Configuration')
 
 const groupdetails = db.define(
   'GroupStore',
