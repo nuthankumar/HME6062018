@@ -9,31 +9,22 @@ const generateSummaryReport = (input, callback) => {
    ,@StoreStartDate= '${input.ReportTemplate_From_Date}'
    ,@StoreEndDate= '${input.ReportTemplate_To_Date}'
    ,@StartDateTime= '${input.ReportTemplate_From_Time}'
-    ReportTemplate_To_Time: request.body.reportTemplateToTime,
-    ,@EndDateTime= '${input.closeTime}'
+   ,@EndDateTime= '${input.ReportTemplate_Close}'
    ,@CarDataRecordType_ID= 11
    ,@ReportType= ${input.ReportTemplate_Type} 
    ,@LaneConfig_ID= 1`
+
   db
     .query(Query, {
       type: db.QueryTypes.RAW
     })
     .spread(result => {
       if (result) {
-        const output = {
-          data: result,
-          status: true
-        }
-        callback(output)
+        callback(result)
       }
     })
     .catch(error => {
-      const output = {
-        data: error,
-        status: true
-      }
-
-      callback(output)
+      callback(error)
     })
 }
 
