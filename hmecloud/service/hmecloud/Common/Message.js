@@ -5,8 +5,9 @@
 //     Group Hierarchy
 
 exports.LISTGROUP = {
-  createdBy: 'createdBy email is  required',
-  accountId: 'accountId number is  required'
+  createdBy: 'createdBy number is  required',
+  accountId: 'accountId number is  required',
+  notfound: 'No Records found'
 }
 
 exports.CREATEGROUP = {

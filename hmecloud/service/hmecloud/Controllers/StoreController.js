@@ -10,41 +10,36 @@ const validate = require('validator')
  *
  */
 
-const generateReport = (req, res) => { 
+const generateReport = (request, callBack) => {
   const input = {
-    stores: req.body.stores,
-    fromDate: req.body.fromDate,
-    toDate: req.body.toDate,
-    openTime: req.body.openTime,
-    type: req.body.type,
-    advanceType: req.body.advanceType,
-    include: req.body.include,
-    format: req.body.format,
-    templateName: req.body.templateName
+    stores: request.body.stores,
+    fromDate: request.body.fromDate,
+    toDate: request.body.toDate,
+    openTime: request.body.openTime,
+    type: request.body.type,
+    advanceType: request.body.advanceType,
+    include: request.body.include,
+    format: request.body.format,
+    templateName: request.body.templateName
   }
 
   if (input !== null) {
-    stores.generateSummaryReport(input, response => {
-      if (response.status === true) {
-        res.status(200).send(response)
+    stores.generateSummaryReport(input, result => {
+      if (result.status === true) {
+        callBack(result)
       } else {
-        res.status(400).send(response)
+        callBack(result)
       }
     })
   } else {
-    res
-      .status(400)
-      .send({
-        error: messages.CREATEGROUP.invalidRequestBody,
-        status: false
-      })
+    callBack(messages.CREATEGROUP.invalidRequestBody)
   }
 }
 
 /*
  * This service is used to get the Raw Car Data details
  */
-const getRawCarDataReport = (request, res) => {
+const getRawCarDataReport = (request, callBack) => {
   const input = {
     ReportTemplate_StoreId: request.body.reportTemplateStoreId,
     ReportTemplate_Advanced_Op: request.body.reportTemplateAdvancedOp,
@@ -59,45 +54,48 @@ const getRawCarDataReport = (request, res) => {
     ReportTemplate_Include_Longs: request.body.reportTemplateIncludeLongs,
     ReportTemplate_Format: request.body.reportTemplateFormat
   }
-  if (input.ReportTemplate_StoreId && validate.isNumeric(input.ReportTemplate_StoreId)) {
+  if (
+    input.ReportTemplate_StoreId &&
+    validate.isNumeric(input.ReportTemplate_StoreId)
+  ) {
     if (input.ReportTemplate_From_Date && input.ReportTemplate_To_Date) {
       if (input.ReportTemplate_From_Date === input.ReportTemplate_To_Date) {
-        if (request.query.reportType === 'rr1' || request.query.reportType === 'rrcsv1') {
+        if (
+          request.query.reportType === 'rr1' ||
+          request.query.reportType === 'rrcsv1'
+        ) {
           stores.getRawCarDataReport(input, response => {
+            console.log(request.body)
             if (response.status === true) {
               if (request.query.reportType === 'rr1') {
-                res.status(200).send(response)
+                callBack(response)
               } else if (request.query.reportType === 'rrcsv1') {
                 // TODO: Call the CSV file generation function to generate and send an email
               }
             } else {
-              // const output = {
-              //   data: error,
-              //   status: false
-              // }
-              res.status(400).send(response)
+              callBack(response)
             }
           })
         } else {
-          res.status(400).send({
+          callBack({
             error: messages.REPORTSUMMARY.InvalidReportType,
             status: false
           })
         }
       } else {
-        res.status(400).send({
+        callBack({
           error: messages.REPORTSUMMARY.DateRangeInvalid,
           status: false
         })
       }
     } else {
-      res.status(400).send({
+      callBack({
         error: messages.REPORTSUMMARY.DateCannotbeEmpty,
         status: false
       })
     }
   } else {
-    res.status(400).send({
+    callBack({
       error: messages.REPORTSUMMARY.InvalidStoreId,
       status: false
     })
@@ -118,10 +116,14 @@ const generateCsv = (req, res) => {
   })
 }
 
+const timeMeasure = (callback) => {
+  
+}
 // module.exports = router
 
 module.exports = {
   generateReport,
   generateCsv,
-  getRawCarDataReport
+  getRawCarDataReport,
+  timeMeasure
 }

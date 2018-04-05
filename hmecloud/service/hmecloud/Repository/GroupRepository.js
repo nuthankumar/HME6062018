@@ -4,51 +4,17 @@
  */
 
 // config the model
-/*let Sequelize = require('sequelize')
-Sequelize = new Sequelize('hmeCloud', 'sa', 'nous@123', {
-  host: '192.168.27.87',
-  dialect: 'mssql',
-  operatorsAliases: false
-})
-const group = require('../../Model/GroupModel/Group')
-const groupDetails = require('../../Model/GroupModel/GroupStore')
+//let Sequelize = require('sequelize')
+const db = require('../DataBaseConnection/Configuration')
+const group = require('../Model/Group')
+const groupDetails = require('../Model/GroupStore')
 // Config messages
-const messages = require('../../Common/Message')
+const messages = require('../Common/Message')
 var HashMap = require('hashmap')
 
 // get functions using accountid & name  - for the List
 
-const list = (input, callback) => {
-  const condition = {
-    where: {
-      AccountId: input.accountId,
-      CreatedBy: input.createdBy
-    }
-  }
-  group.findAll(condition)
-    .then(result => {
-      const output = {}
-      if (result.length > 0) {
-        output.data = result
-        output.status = true
-      } else {
-        output.data = 'notfound'
-        output.status = false
-      }
-
-      callback(output)
-    }).catch(error => {
-      const output = {
-        data: error,
-        status: false
-      }
-      callback(output)
-    })
-}
-
-// create function
-
-const create = (input, callback) => {
+const createGroup = (input, callback) => {
   const output = {}
   const condition = {
     where: {
@@ -125,7 +91,7 @@ const create = (input, callback) => {
   })
 }
 
-const update = (input, callback) => {
+const updateGroup = (input, callback) => {
   const output = {}
   const condition = {
     where: {
@@ -295,8 +261,8 @@ const getgroupDetails = (input, callback) => {
     if (result) {
       // Getting the child Group and Store details
       const Query = "SELECT g.Id, g.GroupName,'group' AS type FROM [dbo].[Group] as g where g.ParentGroup =" + input.groupId + " and g.CreatedBy='" + input.userName + "' union select s.Id, s.StoreName, 'store' AS type from Stores as s INNER JOIN GroupStore gd on s.Id = gd.StoreId INNER JOIN[dbo].[Group] as g on g.Id = gd.GroupId where gd.GroupId = " + input.groupId + " and g.CreatedBy ='" + input.userName + "'"
-      Sequelize.query(Query, {
-        type: Sequelize.QueryTypes.SELECT
+      db.query(Query, {
+        type: db.QueryTypes.SELECT
       }).then(result1 => {
         if (result1) {
           output.data = ({
@@ -363,8 +329,8 @@ const deleteGroupById = (input, callBack) => {
 
 const avaliabledGroups = (input, callback) => {
   const Query = "SELECT DISTINCT(g.Id), g.GroupName,'group' AS type FROM [dbo].[Group] as g where g.ParentGroup is null and g.AccountId = " + input.accountId + " and g.CreatedBy='" + input.createdBy + "' union select distinct s.Id, s.StoreName, 'store' AS type from Stores as s, GroupStore AS gd WHERE s.Id NOT IN(SELECT StoreId FROM GroupStore WHERE StoreId IS NOT NULL) and s.AccountId =" + input.accountId + " and s.CreatedBy='" + input.createdBy + "'"
-  Sequelize.query(Query, {
-    type: Sequelize.QueryTypes.SELECT
+  db.query(Query, {
+    type: db.QueryTypes.SELECT
   }).then(result => {
     const output = {}
     if (result.length > 0) {
@@ -388,8 +354,8 @@ const listGroupHierarchy = (input, callback) => {
   const Query =
         'exec [dbo].[GetGroupHierarchy]  @Account_Id=' + input.AccountId
 
-  Sequelize.query(Query, {
-    type: Sequelize.QueryTypes.SELECT
+  db.query(Query, {
+    type: db.QueryTypes.SELECT
   }).then(result => {
     const output = {}
     const len = result.length
@@ -510,8 +476,8 @@ const addToHierarchy = (hierarchy, inputItem) => {
 
 const getAll = (input, callback) => {
   const Query = 'exec [dbo].[usp_GetGroupHierarchy]  @AccountId=' + input.accountId
-  Sequelize.query(Query, {
-    type: Sequelize.QueryTypes.SELECT
+  db.query(Query, {
+    type: db.QueryTypes.SELECT
   }).then(result => {
     const output = {}
     if (result) {
@@ -536,14 +502,12 @@ const getAll = (input, callback) => {
 }
 
 module.exports = {
-  list,
-  create,
+    createGroup,
   getgroupDetails,
   deleteGroupById,
-  update,
+    updateGroup,
   avaliabledGroups,
   listGroupHierarchy,
   addToHierarchy,
   getAll
 }
-*/

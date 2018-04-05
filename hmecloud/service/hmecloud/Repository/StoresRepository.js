@@ -17,9 +17,8 @@ const generateSummaryReport = (input, callback) => {
     .query(Query, {
       type: db.QueryTypes.RAW
     })
-    .spread(result => { 
-      if (result) {    
-
+    .spread(result => {
+      if (result) {
         const output = {
           data: result,
           status: true
