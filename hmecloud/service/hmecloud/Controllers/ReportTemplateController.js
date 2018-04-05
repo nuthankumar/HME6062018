@@ -63,8 +63,7 @@ const getReportTemplate = (reportTemplate, callback) => {
 }
 const getAllReportTemplates = (input, callback) => {
   let output = {}
-  console.log("INPUT",input)
-  repository.getAll(input, (result) => {
+  repository.getAll(input.AccountId, input.CreatedBy, (result) => {
     if (result.length > 0) {
       output.data = result
       output.status = true
