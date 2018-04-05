@@ -20,65 +20,10 @@ router.get('/getname', (req, res) => {
 })
 
 /**
- * Service to provide list of all groups
- * using accountId, username
- */
-router.get('/list', (request, res) => {
-  if (request.query.accountId && request.query.userName) {
-    const input = {
-      accountId: request.query.accountId,
-      createdBy: request.query.userName
-    }
-    const accountId = validate.isNumeric(input.accountId)
-    const createdBy = validate.isEmail(input.createdBy)
-    if (!accountId) {
-      res.status(400).send({
-        error: messages.LISTGROUP.accountId,
-        status: false
-      })
-    }
-    if (!createdBy) {
-      res.status(400).send({
-        error: messages.LISTGROUP.createdBy,
-        status: false
-      })
-    }
-    if (accountId && input.createdBy) {
-      groupController.list(input, response => {
-        if (response.status === true) {
-          res.status(200).send(response)
-        } else {
-          res.status(400).send(response)
-        }
-      })
-    }
-  } else if (!request.query.accountId && request.query.userName) {
-    res.status(400).send({
-      error: messages.LISTGROUP.accountId,
-      status: false
-    })
-  } else if (request.query.accountId && !request.query.userName) {
-    res.status(400).send({
-      error: messages.LISTGROUP.createdBy,
-      status: false
-    })
-  } else {
-    res.status(400).send({
-      error: messages.LISTGROUP,
-      status: false
-    })
-  }
-})
-
-/**
- * end
- */
-
-/**
  * Service for creating a new group
  * using name,desc,group,stores
  */
-router.post('/create', (request, res) => {
+router.post('/creategroup', (request, response) => {
   if (request.body.name) {
     const input = {
       id: request.body.id,
