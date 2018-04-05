@@ -10,9 +10,9 @@ i18n.configure({
 
 // Router config
 
-const groupHierarchy = require('./Router/groupRouter/Group')
+const groupRouter = require('./Router/GroupRouter/Group')
 const reportsTemplate = require('./Router/TemplatesRouter/Template')
-const summaryreport = require('./Router/storeRouter/Store')
+const summaryReport = require('./Router/StoreRouter/Store')
 
 // JWT - Auth config
 const authentication = require('./Router/AuthenticationRouter')
@@ -27,10 +27,10 @@ app.use(bodyParser.json())
 /**
  * start  Group hierarchy - Routing files
  */
-app.use('/api/group', groupHierarchy)
+app.use('/api/group', groupRouter)
 
 // summary Report
-app.use('/api/report', summaryreport)
+app.use('/api/report', summaryReport)
 
 // Report Templates
 app.use('/api/reportTemplate', reportsTemplate)
