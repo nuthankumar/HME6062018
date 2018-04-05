@@ -42,14 +42,15 @@ router.post('/getRawCarDataReport', (request, response) => {
 
 /**
  * Generates Csv for the given input details .
- * Expects to Address, subject and csv data
+ * Expects email, subject and csv data
  * @param request
  * @param response
  */
 router.post('/generatecsv', VerifyToken, (request, response) => {
   const input = {
-    type: 'Day',
-    AccountId: 0
+    email: request.email,
+    subject: request.subject,
+    attachment: request.attachment
   }
   stores.generateCsv(input, result => {
     if (result.status === true) {

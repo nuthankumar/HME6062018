@@ -148,16 +148,12 @@ const getRawCarDataReport = (request, callBack) => {
   }
 }
 
-const generateCsv = (req, res) => {
-  const input = {
-    type: 'Day',
-    AccountId: 0
-  }
-  stores.generateCSV(input, response => {
-    if (response.status === true) {
-      res.status(200).send(response)
+const generateCsv = (input, response) => {
+   stores.generateCSV(input, result => {
+    if (result.status === true) {
+      response.status(200).send(result)
     } else {
-      res.status(400).send(response)
+      response.status(400).send(result)
     }
   })
 }
