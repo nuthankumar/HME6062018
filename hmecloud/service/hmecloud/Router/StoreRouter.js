@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const VerifyToken = require('../Controllers/AuthenticationController')
-const stores = require('../Controllers/StoreController')
-
+const storeValidator = require('../Validators/StoreValidator')
+const authValidator = require('../Controllers/AuthenticationController')
 /**
  * This Service is used to Generate the Summary reports details for
  *provided details
@@ -10,8 +10,8 @@ const stores = require('../Controllers/StoreController')
  * @param response
  *
  */
-router.post('/generatereport', (request, response) => {
-  stores.generateReport(request, result => {
+router.post('/generatereport', authValidator, (request, response) => { 
+  storeValidator.reportValidator(request, result => {
     if (result.status === true) {
       response.status(200).send(result.data)
     } else {
@@ -25,12 +25,13 @@ router.post('/generatereport', (request, response) => {
  * @param request
  * @param response
  */
-router.post('/getRawCarDataReport', (request, response) => {
-  stores.getRawCarDataReport(request, result => {
+router.post('/getRawCarDataReport', authValidator, (request, response, next) => {
+   
+  storeValidator.reportValidator(request, result => {
     if (result.status === true) {
-      if (request.query.reportType === 'rr1') {
+      if (result.reportType === 'rr1') {
         response.status(200).send(result)
-      } else if (request.query.reportType === 'rrcsv1') {
+      } else if (result.reportType === 'rrcsv1') {
         // TODO: Call the CSV file generation function to generate and send an email
       }
     } else {
@@ -45,13 +46,8 @@ router.post('/getRawCarDataReport', (request, response) => {
  * @param request
  * @param response
  */
-router.post('/generatecsv', VerifyToken, (request, response) => {
-  const input = {
-    email: request.email,
-    subject: request.subject,
-    attachment: request.attachment
-  }
-  stores.generateCsv(input, result => {
+router.post('/generatecsv', authValidator, VerifyToken, (request, response) => {
+  storeValidator.csvValidator(request.body, result => {
     if (result.status === true) {
       response.status(200).send(result)
     } else {
