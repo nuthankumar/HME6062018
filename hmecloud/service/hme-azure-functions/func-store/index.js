@@ -30,7 +30,7 @@ module.exports = function (context, req) {
         context.done();
     }
 
-    //to-do: return promise within same folder
+    //to-do: return promise within same folder ? include mapper
     repo.getRawCarDataReport(obj, response => {
         if (response.status) {
             context.res = {
