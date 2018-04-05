@@ -1,7 +1,4 @@
 {
-  "home": {
-    "title": "Hello World!"
-  },
   "LISTGROUP": {
     "accountId": "accountId number is  required",
     "notfound": "No Records found",
