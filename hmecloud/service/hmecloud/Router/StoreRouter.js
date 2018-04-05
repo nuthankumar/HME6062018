@@ -2,19 +2,17 @@ const express = require('express')
 const router = express.Router()
 const VerifyToken = require('../Controllers/AuthenticationController')
 const stores = require('../Controllers/StoreController')
-const validate = require('validator')
 
 /**
  * This Service is used to Generate the Summary reports details for
  *provided details
- * @param requestuest
+ * @param request
  * @param response
  *
  */
 
 router.post('/generatereport', (request, response) => {
   stores.generateReport(request, result => {
-    console.log(result.status)
     if (result.status === true) {
       response.status(200).send(result.data)
     } else {
@@ -23,8 +21,10 @@ router.post('/generatereport', (request, response) => {
   })
 })
 
-/*
+/**
  * This service is used to get the Raw Car Data details
+ * @param request
+ * @param response
  */
 router.post('/getRawCarDataReport', (request, response) => {
   stores.getRawCarDataReport(request, result => {
@@ -43,6 +43,8 @@ router.post('/getRawCarDataReport', (request, response) => {
 /**
  * Time Measure
  * get method with no input
+ * @param request
+ * @param response
  */
 router.get('/timemeasure', (request, response) => {
   stores.timeMeasure((response) => {
@@ -54,6 +56,11 @@ router.get('/timemeasure', (request, response) => {
   })
 })
 
+/**
+ * Generates Csv for the given input
+ * @param request
+ * @param response
+ */
 router.post('/generatecsv', VerifyToken, (request, response) => {
   const input = {
     type: 'Day',
