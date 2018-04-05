@@ -1,9 +1,5 @@
 const validate = require('validator')
 const groupController = require('../Controllers/GroupController')
-/**
- * Service to provide list of all groups
- * Rules : check accountId &
- */
 
 const createGroup = (request, callback) => {
     if (request.body.name) {
@@ -33,9 +29,7 @@ const createGroup = (request, callback) => {
         output.status = false
         callback(output)
     }
-
 }
-
 const getgroupDetails = (request, callback) => {
     let output = {}
      if (request.query.groupId && request.query.userName) {
@@ -46,26 +40,20 @@ const getgroupDetails = (request, callback) => {
         groupController.getgroupDetails(input, result => {
             callback(result)
         })
-
      } else if (!request.query.groupId && request.query.userName) {
          output.error = request.t('CREATEGROUP.groupId')
          output.status = false
          callback(output)
-
-        
      } else if (request.query.groupId && !request.query.userName) {
          output.error = request.t('LISTGROUP.createdBy')
          output.status = false
          callback(output)
-
-        
      } else {
          output.error = request.t('CREATEGROUP.invalidInput')
          output.status = false
          callback(output)
     }
 }
-
 const deleteGroupById = (request, callback) => {
     let output = {}
         if (request.query.groupId && request.query.accountId) {
@@ -79,14 +67,11 @@ const deleteGroupById = (request, callback) => {
                 output.error = request.t('CREATEGROUP.groupId')
                 output.status = false
                 callback(output)
-
-            
             } else if (!accountId) {
                 output.error = request.t('LISTGROUP.accountId')
                 output.status = false
                 callback(output)
         }
-
         if(groupId && accountId) {
             groupController.deleteGroupById(input, result => {
                 callback(result)
@@ -96,12 +81,10 @@ const deleteGroupById = (request, callback) => {
             output.error = request.t('CREATEGROUP.invalidInput')
             output.status = false
             callback(output)
-        
-    }
+     }
 }
 
 const avaliabledGroups = (request, callback) => {
-
     if (request.query.accountId && request.query.userName) {
         const input = {
             accountId: request.query.accountId,
@@ -144,10 +127,8 @@ const avaliabledGroups = (request, callback) => {
         output.error = request.t('LISTGROUP')
         output.status = false
         callback(output)
-
     }
 }
-
 const getAll = (request, callback) => {
     let output = {}
     if (request.query.accountId) {
@@ -169,13 +150,11 @@ const getAll = (request, callback) => {
         output.error = request.t('LISTGROUP.accountId')
         output.status = false
         callback(output)
-        
-    } else {
+     } else {
         output.error = request.t('LISTGROUP')
         output.status = false
         callback(output)
     }
-
 }
 module.exports = {
     createGroup,

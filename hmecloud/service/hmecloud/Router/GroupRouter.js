@@ -10,7 +10,6 @@ const authValidator = require('../Controllers/AuthenticationController')
  * using name,desc,group,stores
  */
 router.post('/creategroup', authValidator, (request, response, next) => {
-    console.log("THe accountId====" + request.AccountId)
     groupValidator.createGroup(request, result => {
         if (result.status === true) {
             response.status(201).send(result)
@@ -44,7 +43,7 @@ router.delete('/deletegroup', authValidator, (request, response) => {
 
     groupValidator.deleteGroupById(request, result => {
         if (result === true) {
-            response.status(200).send(messages.CREATEGROUP.noRecordsFound)
+            response.status(200).send(result)
         } else {
             response.status(400).send(result)
         } 

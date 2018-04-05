@@ -272,39 +272,25 @@ const getgroupDetails = (input, callback) => {
       })
 } 
 
-const deleteGroupById = (input, callBack) => {
-  const updateParentGroup = {
-    ParentGroup: null
-  }
-
-  groupDetails
-    .update(updateParentGroup, {
-      where: {
-        ParentGroup: input.groupId
-      }
-    }).then(updatedRows => {
-      group
-        .destroy({
-          where: {
-            AccountId: input.accountId,
-            Id: input.groupId
-          }
+const deleteGroupById = (input, callback) => {
+    const output = {}
+    db.query(sqlQuery.GroupHierarchy.deleteGroupByGroupId, {
+        replacements: { groupId: input.groupId },
+        type: db.QueryTypes.SELECT
+    }).then(result => {
+        if (result[0].deletedRecords > 0) {
+            output.data = messages.CREATEGROUP.groupIdNo+input.groupId + messages.CREATEGROUP.RecordDeleted
+            output.status = true
+        } else {
+            output.data = messages.CREATEGROUP.noDataForGivenId + input.groupId
+            output.status = false
+        }
+        callback(output)
+    }).catch(error => {
+        output.data = error,
+            output.status = false
+        callback(output)
         })
-        .then((result) => {
-          const output = {
-            data: result,
-            status: true
-          }
-          return callBack(output)
-        })
-        .catch((error) => {
-          const output = {
-            data: error,
-            status: false
-          }
-          return callBack(output)
-        })
-    })
 }
 
 const avaliabledGroups = (input, callback) => {
@@ -382,7 +368,7 @@ const getAll = (input, callback) => {
       output.data = hierarchy
       output.status = true
     } else {
-      output.data = 'notfound'
+        output.data = messages.CREATEGROUP.noDataForGivenId
       output.status = false
     }
     callback(output)
