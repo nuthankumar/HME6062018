@@ -1,6 +1,6 @@
 const validate = require('validator')
 const groupController = require('../Controllers/GroupController')
-const messages = require('../Common/Message')
+// const messages = require('../Common/Message')
 
 /**
  * Service to provide list of all groups
@@ -30,7 +30,7 @@ const createGroup = (request, callback) => {
         }
     } else {
         let output = {}
-        output.error = messages.CREATEGROUP.groupNameEmpty
+        output.error = request.t('CREATEGROUP.groupNameEmpty')
         output.status = false
         callback(output)
     }
@@ -49,19 +49,19 @@ const getgroupDetails = (request, callback) => {
         })
 
      } else if (!request.query.groupId && request.query.userName) {
-         output.error = messages.CREATEGROUP.groupId
+         output.error = request.t('CREATEGROUP.groupId')
          output.status = false
          callback(output)
 
         
      } else if (request.query.groupId && !request.query.userName) {
-         output.error = messages.LISTGROUP.createdBy
+         output.error = request.t('LISTGROUP.createdBy')
          output.status = false
          callback(output)
 
         
      } else {
-         output.error = messages.CREATEGROUP.invalidInput
+         output.error = request.t('CREATEGROUP.invalidInput')
          output.status = false
          callback(output)
     }
@@ -77,13 +77,13 @@ const deleteGroupById = (request, callback) => {
         const groupId = validate.isNumeric(input.groupId)
         const accountId = validate.isNumeric(input.accountId)
             if (!groupId) {
-                output.error = messages.CREATEGROUP.groupId
+                output.error = request.t('CREATEGROUP.groupId')
                 output.status = false
                 callback(output)
 
             
             } else if (!accountId) {
-                output.error = messages.LISTGROUP.accountId
+                output.error = request.t('LISTGROUP.accountId')
                 output.status = false
                 callback(output)
         }
@@ -94,7 +94,7 @@ const deleteGroupById = (request, callback) => {
             })
         }
         } else {
-            output.error = messages.CREATEGROUP.invalidInput
+            output.error = request.t('CREATEGROUP.invalidInput')
             output.status = false
             callback(output)
         
@@ -112,13 +112,13 @@ const avaliabledGroups = (request, callback) => {
         const createdBy = validate.isEmail(input.createdBy)
         if (!accountId) {
             let output = {}
-            output.error = messages.LISTGROUP.accountId
+            output.error = request.t('LISTGROUP.accountId')
             output.status = false
             callback(output)
         }
         if (!createdBy) {
             let output = {}
-            output.error = messages.LISTGROUP.createdBy
+            output.error = request.t('LISTGROUP.createdBy')
             output.status = false
             callback(output)
 
@@ -130,19 +130,19 @@ const avaliabledGroups = (request, callback) => {
         }
     } else if (!request.query.accountId && request.query.userName) {
         let output = {}
-        output.error = messages.LISTGROUP.accountId
+        output.error = request.t('LISTGROUP.accountId')
         output.status = false
         callback(output)
        
     } else if (request.query.accountId && !request.query.userName) {
         let output = {}
-        output.error = messages.LISTGROUP.createdBy
+        output.error = request.t('LISTGROUP.createdBy')
         output.status = false
         callback(output)
         
     } else {
         let output = {}
-        output.error = messages.LISTGROUP
+        output.error = request.t('LISTGROUP')
         output.status = false
         callback(output)
 
@@ -157,7 +157,7 @@ const getAll = (request, callback) => {
         }
         const accountId = validate.isNumeric(input.accountId)
         if (!accountId) {
-            output.error = messages.LISTGROUP.accountId
+            output.error = request.t('LISTGROUP.accountId')
             output.status = false
             callback(output)
         }
@@ -167,13 +167,12 @@ const getAll = (request, callback) => {
             })
         }
     } else if (!request.query.accountId) {
-        output.error = messages.LISTGROUP.accountId
+        output.error = request.t('LISTGROUP.accountId')
         output.status = false
         callback(output)
-
         
     } else {
-        output.error = messages.LISTGROUP
+        output.error = request.t('LISTGROUP')
         output.status = false
         callback(output)
     }
