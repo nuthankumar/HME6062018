@@ -12,8 +12,7 @@ const createGroup = (request, callback) => {
             userName: request.UserName,
             accountId: request.AccountId
         }
-
-        if (!request.body.id) {
+         if (!request.body.id) {
             groupController.createGroup(input, result => {
                 callback(result)
             })

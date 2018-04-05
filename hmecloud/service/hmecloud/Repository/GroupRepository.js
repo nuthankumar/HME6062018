@@ -3,6 +3,7 @@
  * Operation : Basic CURD App
  */
 const db = require('../DataBaseConnection/Configuration')
+const repository = require('./Repository')
 const group = require('../Model/Group')
 const groupDetails = require('../Model/GroupStore')
 const sqlQuery = require('../Common/DataBaseQueries')
@@ -157,7 +158,6 @@ const updateGroup = (input, callback) => {
 }
 
 const updateGroupData = (input, callback) => {
-  const output = {}
   group.update({
     GroupName: input.name,
     Description: input.description,
@@ -243,143 +243,37 @@ const updateGroupData = (input, callback) => {
   })
 }
 
-const getgroupDetails = (input, callback) => {
-    let output = {}
-     db.query(sqlQuery.GroupHierarchy.getgroupDetails, {
-        replacements: { groupId: input.groupId},
+
+const getgroupDetails = (groupId, callback) => {
+    repository.execute(sqlQuery.GroupHierarchy.getgroupDetails, {
+        replacements: { groupId: groupId },
         type: db.QueryTypes.SELECT
-    }).then(result => {
-        if (result.length > 0) {
-            const groupData = []
-            for (let i = 1; i < result.length; i++) {
-                groupData.push(result[i])
-            }
-            output.data = ({
-                group: result[0],
-                details: groupData
-            })
-            output.status = true
-            callback(output)
-        } else {
-            output.data = messages.CREATEGROUP.noDataForGivenId
-            output.status = false
-            callback(output)
-        }
-      }).catch(error => {
-        output.data = error
-        output.status = false
-        callback(output)
-      })
+    }, result => callback(result))
 } 
 
-const deleteGroupById = (input, callback) => {
-    const output = {}
-    db.query(sqlQuery.GroupHierarchy.deleteGroupByGroupId, {
-        replacements: { groupId: input.groupId },
+const deleteGroupById = (groupId, callback) => {
+    repository.execute(sqlQuery.GroupHierarchy.deleteGroupByGroupId, {
+        replacements: { groupId: groupId },
         type: db.QueryTypes.SELECT
-    }).then(result => {
-        if (result[0].deletedRecords > 0) {
-            output.data = messages.CREATEGROUP.groupIdNo+input.groupId + messages.CREATEGROUP.RecordDeleted
-            output.status = true
-        } else {
-            output.data = messages.CREATEGROUP.noDataForGivenId + input.groupId
-            output.status = false
-        }
-        callback(output)
-    }).catch(error => {
-        output.data = error,
-            output.status = false
-        callback(output)
-        })
+    }, result => callback(result))
 }
 
-const avaliabledGroups = (input, callback) => {
-    const output = {}
-    db.query(sqlQuery.GroupHierarchy.getAllAvailableGroupsAndStores, {
-        replacements: { accountId: input.accountId },
+const avaliabledGroups = (accountId, callback) => {
+    repository.execute(sqlQuery.GroupHierarchy.getAllAvailableGroupsAndStores, {
+        replacements: { accountId: accountId },
         type: db.QueryTypes.SELECT
-    }).then(result => {
-    if (result.length > 0) {
-      output.data = result
-      output.status = true
-    } else {
-      output.data = messages.CREATEGROUP.noDataForGivenId
-      output.status = false
-    }
-    callback(output)
-  }).catch(error => {
-    output.data= error,
-    output.status= false
-    callback(output)
-  })
+    }, result => callback(result))
 }
 
-const getParent = (hierarchy, id) => {
-  var found = false
-  for (var index = 0; index < hierarchy.length && !found; index++) {
-    var item = hierarchy[index]
-    if (item.Id === id) {
-      found = true
-      return item
-    } else {
-      if (item.Children && item.Children.length) {
-        var result = getParent(item.Children, id)
-        if (result) {
-          found = true
-          return result
-        }
-      }
-    }
-  }
-}
 
-const addToHierarchy = (hierarchy, inputItem) => {
-  if (inputItem.ParentGroupId === null) {
-    hierarchy.push({
-      Id: inputItem.Id,
-      Name: inputItem.Name,
-      Type: inputItem.Type,
-      Children: []
-    })
-  } else {
-    var parent = getParent(hierarchy, inputItem.ParentGroupId)
-    if (parent) {
-      parent.Children.push({
-        Id: inputItem.Id,
-        Name: inputItem.Name,
-        Type: inputItem.Type,
-        Children: []
-      })
-    }
-  }
-}
 
-const getAll = (input, callback) => {
-    db.query(sqlQuery.GroupHierarchy.getGroupHierarchy, {
-        replacements: { accountId: input.accountId },
+const getAll = (accountId, callback) => {
+    repository.execute(sqlQuery.GroupHierarchy.getGroupHierarchy, {
+        replacements: { accountId: accountId },
         type: db.QueryTypes.SELECT
-    }).then(result => {
-    const output = {}
-    if (result) {
-      let hierarchy = []
-      result.forEach((item) => {
-        addToHierarchy(hierarchy, item)
-      })
-      output.data = hierarchy
-      output.status = true
-    } else {
-        output.data = messages.CREATEGROUP.noDataForGivenId
-      output.status = false
-    }
-    callback(output)
-  }).catch(error => {
-    const output = {
-      data: error,
-      status: false
-    }
-    callback(output)
-  })
+    }, result => callback(result))
 }
+
 
 module.exports = {
     createGroup,
@@ -387,6 +281,5 @@ module.exports = {
   deleteGroupById,
     updateGroup,
   avaliabledGroups,
-  addToHierarchy,
   getAll
 }
