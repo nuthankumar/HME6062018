@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 var VerifyToken = require('../../Controllers/AuthenticationController/Authentication')
-const messages = require('../../common/message')
+const messages = require('../../Common/Message')
 const stores = require('../../Controllers/StoreController/Stores')
 const validate = require('validator')
 

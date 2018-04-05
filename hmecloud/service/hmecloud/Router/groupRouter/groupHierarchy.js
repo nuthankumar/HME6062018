@@ -5,10 +5,10 @@ const i18n = require('i18n')
 
 // controller config
 // Config error messages
-const messages = require('../../common/message')
+const messages = require('../../Common/Message')
 // Router config
 
-const groupController = require('../../Controller/groupController/groupHierarchy')
+const groupController = require('../../Controller/GroupController/GroupHierarchy')
 
 // Checking testing
 router.get('/getname', (req, res) => {

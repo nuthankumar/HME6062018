@@ -4,7 +4,7 @@ const router = express.Router()
 
 //   controller config
 //   Config error messages
-const messages = require('../../common/message')
+const messages = require('../../Common/Message')
 
 const templatecontroller = require('../../Controllers/ReportTemplateController/ReportTemplates')
 
