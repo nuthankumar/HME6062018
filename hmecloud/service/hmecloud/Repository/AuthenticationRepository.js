@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const config = require('../../Common/AuthKey')
+const config = require('../Common/AuthKey')
 
 function verifyToken (request, response, next) {
   // check header or url parameters or post parameters for token
@@ -11,7 +11,7 @@ function verifyToken (request, response, next) {
       message: 'No token provided.'
     })
   }
-  let encodeToken = new Buffer(jwtToken, 'base64')
+  let encodeToken = Buffer.from(jwtToken, 'base64')
   let token = encodeToken.toString('ascii')
 
   // verifies secret and checks exp

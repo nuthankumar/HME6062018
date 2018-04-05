@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const config = require('../Common/AuthKey')
 const express = require('express')
-const authVerfiy = require('../Controllers/AuthenticationController/Authentication')
+const authVerfiy = require('../Controllers/AuthenticationController')
 const router = express.Router()
 // JWT token creation
 router.get('/login', (request, response) => {
@@ -15,7 +15,7 @@ router.get('/login', (request, response) => {
   let jwtToken = jwt.sign(userDetails, config.secret, {
     expiresIn: (5 * 60000) // expires in 5 mins
   })
-  let encodeToken = new Buffer(jwtToken)
+  let encodeToken = Buffer.from(jwtToken)
   let token = encodeToken.toString('base64')
   const output = {
     token: token,
