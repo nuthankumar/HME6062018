@@ -27,8 +27,8 @@ function verifyToken (request, response, next) {
     request.userId = decoded.userId
     request.UserEmail = decoded.UserEmail
     request.UserName = decoded.UserName
-      request.Role = decoded.Role
-      request.AccountId = decoded.AccountId
+    request.Role = decoded.Role
+    request.AccountId = decoded.AccountId
     next()
   })
 }
