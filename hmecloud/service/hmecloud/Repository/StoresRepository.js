@@ -37,34 +37,7 @@ const generateSummaryReport = (input, callback) => {
     })
 }
 
-const timeMeasure = (callback) => {
-  const Query =
-    'select Id,Type from [dbo].[TimeMeasure] '
-  db
-    .query(Query, {
-      type: db.QueryTypes.RAW
-    })
-    .spread(result => {
-      if (result) {
-        const output = {
-          data: result,
-          status: true
-        }
-        callback(output)
-      }
-    })
-    .catch(error => {
-      const output = {
-        data: error,
-        status: true
-      }
-
-      callback(output)
-    })
-}
-
 const getRawCarDataReport = (input, callback) => {
-  const output = {}
   let fromDateTime
   let toDateTime
   if (input.ReportTemplate_From_Time) {
@@ -96,6 +69,5 @@ const getRawCarDataReport = (input, callback) => {
 
 module.exports = {
   generateSummaryReport,
-  timeMeasure,
   getRawCarDataReport
 }
