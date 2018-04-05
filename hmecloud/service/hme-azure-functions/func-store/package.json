@@ -1,0 +1,14 @@
+{
+  "name": "func-store",
+  "version": "1.0.0",
+  "description": "azure function for store-reports",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Manoj V S <manojvelayudhan@nousinfo.com>",
+  "license": "ISC",
+  "dependencies": {
+    "joi": "^13.1.2"
+  }
+}
