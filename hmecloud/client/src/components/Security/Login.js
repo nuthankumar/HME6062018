@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './Login.css'
 import AuthenticationService from './AuthenticationService'
+import {config} from '../../config'
 
 class Login extends Component {
   constructor () {
@@ -58,7 +59,7 @@ class Login extends Component {
           {
             token: token
           })
-        const url = 'http://localhost:3002/' + token
+        const url = config.jwtUrl + token
         // window.location.href('url');
         window.location.assign(url)
         this.props.history.replace(url)

@@ -3,6 +3,8 @@ import moment from 'moment'
 import Header from '../Header/HmeHeader'
 import './SummaryReport.css'
 import fetch from 'isomorphic-fetch'
+import {config} from '../../config'
+
 class RawCarReport extends Component {
   constructor (props) {
     super(props)
@@ -62,7 +64,7 @@ class RawCarReport extends Component {
       'ReportTemplate_Include_Stats': '',
       'reportTemplateFormat': 1
     }
-    let url = 'http://localhost:7071/api/report/getRawCarDataReport?reportType=rr1'
+    let url = config.url+'api/report/getRawCarDataReport?reportType=rr1'
     fetch(url, {
       method: 'POST',
       headers: {
@@ -95,19 +97,19 @@ class RawCarReport extends Component {
       if (this.state.displayData) {
         return (
           <div>
-            <div className='clear tableDetails'>
-              <div className='rawcarHeader'>
-                <h1 className='rawCarH1'>
+            <div className='clear rawcar-table-details'>
+              <div className='rawcar-header'>
+                <h1 className='rawcar-h1'>
                   <span>Raw Car Data Report</span>
                 </h1>
               </div>
-              <table className='head-labelsRaw clear'>
+              <table className='rawcar-header-labels clear'>
                 <tbody>
                   <tr>
-                    <th className='thinHead'>
+                    <th className='thin-header'>
                       <span>Store</span>:
                     </th>
-                    <td className='thinHead'>{this.state.displayData.store ? this.state.displayData.store : 'N/A' }</td>
+                    <td className='thin-header'>{this.state.displayData.store ? this.state.displayData.store : 'N/A' }</td>
                     <th>
                       <span>Start Time:</span>
                     </th>
@@ -140,10 +142,10 @@ class RawCarReport extends Component {
               </table>
             </div>
             <div>
-              <div className='rawcarHeader'>
-                <h2 className='rawCarh2'>{this.state.displayData.dayPart}</h2>
+              <div className='rawcar-header'>
+                <h2 className='rawcar-h2'>{this.state.displayData.dayPart}</h2>
               </div>
-              <table className='displayRecords tableLayout'>
+              <table className='display-records table-layout'>
                 <tbody>
                   <tr>
                     <th>Departure Time</th>
@@ -181,7 +183,7 @@ class RawCarReport extends Component {
   displayItems () {
     return this.state.displayData.rawCarData.map((items) => {
       return (
-        <tr className='displayResult'>
+        <tr className='display-result'>
           <td>{items.departureTime ? items.departureTime : 'N/A'}</td>
           <td>{items.eventName ? items.eventName : 'N/A'}</td>
           <td>{items.carsInQueue ? items.carsInQueue : 'N/A'}</td>

@@ -3,7 +3,7 @@ import AuthenticationService from './AuthenticationService'
 
 export default function authenticate (AuthenticationComponent) {
   // Code here now
-  const authenticationService = new AuthenticationService('http://localhost:8080')
+  const authenticationService = new AuthenticationService(config.authUrl)
 
   return class AuthWrapped extends Component {
     constructor () {

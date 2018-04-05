@@ -56,20 +56,20 @@
     margin: 45px 20%;
 }
 
-.reportsPaneSection {
+.reports-pane-section {
     display: flex;
     width: 100%;
     color: #696969;
 }
 
-.reportsHeader {
+.reports-header {
     background-color: #F5F5F5;
     padding: 20px;
     font-size: 18px;
     border: 1px solid #d5d1d1;
 }
 
-.reportsPane {
+.reports-pane {
     background-color: #EBEBEB;
     width: 100%;
     border: 1px solid #d5d1d1;
@@ -77,7 +77,7 @@
     padding: 20px 25px;
 }
 
-.savedReports {
+.saved-reports {
     background-color: white;
     min-height: 100px;
     padding: 10px 0px;
@@ -85,9 +85,10 @@
     border: 1px solid #dad9d9;
     overflow-y: auto;
     height: 150px;
+    cursor: pointer;
 }
 
-.reportsPageHeader {
+.reports-page-header {
     background-color: white;
     height: 58px;
     display: block;
@@ -102,7 +103,7 @@
     margin: 10px 0px;
 }
 
-.reportsNavigationHeader {
+.reports-navigation-header {
     font-size: 14px;
     height: 56px;
     padding: 0px 10%;
@@ -115,11 +116,11 @@
     background: #06b1cb;
 }
 
-    .reportsNavigationHeader .navItems {
-        display: flex;
-    }
+      .reports-navigation-header .nav-items {
+          display: flex;
+      }
 
-.menuItems {
+.menu-items {
     text-transform: uppercase;
     text-decoration: none;
     padding: 0px 30px 0px 0px;
@@ -127,18 +128,18 @@
     align-items: center;
 }
 
-    .menuItems a {
+    .menu-items a {
         text-decoration: none;
         color: #88dde8;
     }
 
-.saveTemplate {
+.save-template {
     width: 100%;
     height: 29px;
     margin: 20px 0px;
 }
 
-.generateReports {
+.generate-reports {
     padding: 15px;
     color: white;
     background-color: #d41b3e;
@@ -155,13 +156,13 @@
     background-color: #f5f5f5;
 }
 
-.timeMeasures {
+.time-measures {
     width: 100%;
     height: 35px;
     margin: 10px 0px;
 }
 
-.checkboxSections {
+.checkbox-sections {
     display: flex;
     background: white;
     justify-content: space-around;
@@ -171,7 +172,7 @@
     font-size: 12px;
 }
 
-.checkboxSectionsAdvanced {
+.checkbox-sections-advanced {
     display: -ms-flexbox;
     display: flex;
     -ms-flex-pack: distribute;
@@ -181,7 +182,7 @@
     font-size: 12px;
 }
 
-.userInfoSection {
+.user-info-section {
     display: flex;
     align-items: center;
 }
@@ -197,20 +198,20 @@
     margin: 0px 10px;
 }
 
-.calendarSection {
+.calendar-section {
     display: flex;
     padding: 15px 0px;
 }
 
-.dateFrom {
+.date-from {
     width: 100%;
 }
 
-.dateTo {
+.date-to {
     width: 100%;
 }
 
-.dateTime input {
+.date-time input {
     width: 100%;
     height: 30px;
 }
@@ -219,7 +220,7 @@
     display: flex;
 }
 
-.calendarIcon {
+.calendar-icon {
     display: flex;
     align-items: center;
     margin: 0px 5px;
@@ -264,12 +265,12 @@ span.tip {
     user-select: none;
 }
 
-.spanHeading {
+.span-heading {
     display: flex;
     align-items: center;
 }
 
-.TypeSubSection {
+.type-sub-section {
     display: flex;
     align-items: center;
 }
@@ -288,7 +289,7 @@ span.tip {
     display: block;
 }
 
-.advancedOptionSection {
+.advanced-option-section {
     border: 1px solid #cac7c7;
     margin: 0px -10px;
     padding: 10px;
@@ -300,12 +301,7 @@ span.tip {
     overflow-x: hidden;
 }
 
-.savedReports {
-    cursor: pointer;
-}
-
-
-.deleteIcon {
+.delete-icon {
     display: flex;
     align-items: center;
     justify-content: center;

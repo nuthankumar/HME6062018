@@ -6,9 +6,10 @@ import SuccessAlert from '../Alerts/SuccessAlert'
 import ErrorAlert from '../Alerts/ErrorAlert'
 import fetch from 'isomorphic-fetch'
 import { confirmAlert } from 'react-confirm-alert'
-import './ReportGroup.css'
 import HmeHeader from '../Header/HmeHeader'
+import {config} from '../../config'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import './ReportGroup.css'
 import 'react-confirm-alert/src/react-confirm-alert.css'
 // import createHistory from 'history/createBrowserHistory'
 // import {body} from 'body-parser';
@@ -47,7 +48,7 @@ export default class ReportGroup extends React.Component {
   getAvailableGroupStoreList () {
     this.state.available = []
     this.setState(this.state)
-    let url = 'http://localhost:7071/api/group/availabledetails?accountId=100&userName=swathikumary@nousinfo.com'
+    let url = config.url+'api/group/availabledetails?accountId=100&userName=swathikumary@nousinfo.com'
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
@@ -69,7 +70,7 @@ export default class ReportGroup extends React.Component {
     console.log(this.state.assigned)
     if (this.props.history.location.state.editGroup) {
       // let groupId = this.props.history.location.state.groupId;
-      let url = 'http://localhost:7071/api/group/edit?groupId=' + this.state.groupId + '&userName=swathikumary@nousinfo.com'
+      let url = config.url+'api/group/edit?groupId=' + this.state.groupId + '&userName=swathikumary@nousinfo.com'
 
       fetch(url)
         .then((response) => response.json())
@@ -133,7 +134,7 @@ export default class ReportGroup extends React.Component {
     this.state.editGroup = this.props.history.location.state.editGroup
     this.setState(this.state)
     let groupStoreObject = this.getGroupandStore(items)
-    let url = 'http://localhost:7071/api/group/create'
+    let url = config.url+'api/group/create'
 
     if (this.refs.groupName.value === '' || this.refs.groupName.value === undefined) {
       this.state.errorMessage = 'Group name may not be blank'
@@ -231,7 +232,7 @@ export default class ReportGroup extends React.Component {
 
   confirmDelete () {
     // let url = 'http://localhost:7071/api/group/delete?groupId=12&accountId=0';
-    let url = 'http://localhost:7071/api/group/delete?groupId=' + this.state.groupId + '&accountId=' + this.state.accountId
+    let url = config.url+'api/group/delete?groupId=' + this.state.groupId + '&accountId=' + this.state.accountId
     fetch(url, {
       method: 'DELETE'
     })
@@ -258,48 +259,47 @@ export default class ReportGroup extends React.Component {
 
   render () {
     let assigned = this.state.assigned
-    let unAssigned = this.state.available
     return (<section className='groupDetailsPage'><HmeHeader />
-      <div className='statusMessages'>
+      <div className='status-messages'>
         <SuccessAlert successMessage={this.state.successMessage} />
         <ErrorAlert errorMessage={this.state.errorMessage} />
       </div>
-      <section className={'reportContainer ' + (this.state.saveSuccess || this.state.deleteSuccess ? 'hide' : 'show')}>
+      <section className={'report-container ' + (this.state.saveSuccess || this.state.deleteSuccess ? 'hide' : 'show')}>
         <div>
           <h1>Reporting Group Details</h1>
         </div>
-        <div className='row reportGroupName'>
+        <div className='row reportgroup-name'>
           <div className='form-group'>
-            <label htmlFor='groupName' className='control-label col-xs-3 groupNameLabel'>Group Name : <span>*</span></label>
+            <label htmlFor='groupName' className='control-label col-xs-3 group-name-label'>Group Name : <span>*</span></label>
             <div className='col-xs-6'>
               <input type='text' ref='groupName' className='form-control' maxLength='50' />
             </div>
           </div>
         </div>
 
-        <div className='row reportDescription'>
+        <div className='row report-description'>
           <div className='form-group'>
-            <label htmlFor='groupName' className='control-label col-xs-3 groupLabelDescription'>Group Description : </label>
+            <label htmlFor='groupName' className='control-label col-xs-3 group-label-description'>Group Description : </label>
             <div className='col-xs-6'>
               <textarea rows='4' ref='groupDescription' cols='53' className='form-control' maxLength='200' />
             </div>
           </div>
         </div>
 
-        <div className='row groupSeperation'>
+        <div className='row group-seperation'>
           <CheckBoxList title='Available Groups/Stores' items={this.state.available} selectAll={(e, items) => this.selectAll(e, items)} toggle={(item) => this.toggle(item)} />
-          <div className='col-xs-2 moveGroupStore'>
+          <div className='col-xs-2 move-group-store'>
             <div className='moveToHierarchy pull-center'><button className='btn btn-default' onClick={this.add.bind(this)} >&gt;</button></div>
             <div className='removeFromToHierarchy pull-center'><button className='btn btn-default' onClick={this.remove.bind(this)}>&lt; </button></div>
           </div>
           <CheckBoxList title='Groups/Stores in Group' items={this.state.assigned} selectAll={(e, items) => this.selectAll(e, items)} toggle={(item) => this.toggle(item)} />
         </div>
 
-        <div className='row reportGroupButtons'>
+        <div className='row reportgroup-buttons'>
           <div className='col-xs-12'>
-            <button type='button' className='btn btn-primary  col-xs-2 reportGroupSave' onClick={this.saveAssigned.bind(this, assigned)}>Save</button>
-            <button type='button' className={'btn btn-danger reportGroupDelete col-xs-2 ' + (this.state.editGroup ? 'show' : 'hidden')} onClick={this.deleteGroup.bind(this)} >Delete</button>
-            <Link to='/grouphierarchy'><button type='button' className='btn btn-default reportGroupCancel  col-xs-2'>Cancel</button></Link>
+            <button type='button' className='btn btn-primary  col-xs-2 save-group-btn' onClick={this.saveAssigned.bind(this, assigned)}>Save</button>
+            <button type='button' className={'btn btn-danger reportgroup-delete col-xs-2 ' + (this.state.editGroup ? 'show' : 'hidden')} onClick={this.deleteGroup.bind(this)} >Delete</button>
+            <Link to='/grouphierarchy'><button type='button' className='btn btn-default report-group-cancel  col-xs-2'>Cancel</button></Link>
           </div>
         </div>
 

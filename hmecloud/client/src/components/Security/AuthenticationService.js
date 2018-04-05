@@ -1,5 +1,6 @@
 import decode from 'jwt-decode'
 import jwt from 'jsonwebtoken'
+import {config} from '../../config'
 // import crypto from 'crypto-js';
 // import * as crypto from 'crypto-js';
 
@@ -8,7 +9,7 @@ const crypto = require('crypto')
 export default class AuthenticationService {
   // Initializing important variables
   constructor (domain) {
-    this.domain = domain || 'http://localhost:8080' // API server domain
+    this.domain = domain || config.authUrl // API server domain
     this.fetch = this.fetch.bind(this) // React binding stuff
     this.login = this.login.bind(this)
     this.getProfile = this.getProfile.bind(this)

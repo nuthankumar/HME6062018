@@ -5,8 +5,9 @@ import ErrorAlert from '../Alerts/ErrorAlert'
 import fetch from 'isomorphic-fetch'
 import HmeHeader from '../Header/HmeHeader'
 import Tree, { TreeNode } from 'rc-tree'
-import 'rc-tree/assets/index.css'
 import ReportGroupTree from './ReportGroupTree'
+import {config} from '../../config'
+import 'rc-tree/assets/index.css'
 import './ReportGroup.css'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 
@@ -27,7 +28,7 @@ export default class ReportGroupHierarchy extends React.Component {
   }
 
   getTreeHierarchy () {
-    let url = 'http://localhost:7071/api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com'
+    let url = config.url+'api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com'
     // let url = "http://localhost:7071/api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com";
     fetch(url)
       .then((response) => response.json())
@@ -65,20 +66,20 @@ export default class ReportGroupHierarchy extends React.Component {
       })
     }
     return (<section className='groupManagementSection'><HmeHeader />
-      <section className='groupHierarchyTreeSection'>
+      <section className='grouphierarchy-tree-section'>
         <div>
           <h1>Reporting Group Management</h1>
         </div>
         <div className='row'>
           <div className='col-xs-12'>
-            <button type='button' className='btn btn-primary col-xs-2 reportGroupSave' onClick={this.addNewGroup.bind(this)}>Add New Group</button>
+            <button type='button' className='btn btn-primary col-xs-2 save-group-btn' onClick={this.addNewGroup.bind(this)}>Add New Group</button>
           </div>
         </div>
 
-        <div className='row groupHierarchyTree jumbotron'>
+        <div className='row grouphierarchy-tree jumbotron'>
           <div className='col-xs-4'>
             <Tree
-              className='hierarchyTree'
+              className='hierarchy-tree'
               showLine
               selectable={false}
               checkable

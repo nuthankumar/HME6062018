@@ -20,6 +20,7 @@ import HmeHeader from "../Header/HmeHeader";
 import fetch from "isomorphic-fetch";
 import SuccessAlert from "../Alerts/SuccessAlert";
 import ErrorAlert from "../Alerts/ErrorAlert";
+import {config} from '../../config'
 
 const ProductLogo = require("../../images/ProductLogo-1.png");
 const HMELogo = require("../../images/HMELogo.png");
@@ -95,7 +96,7 @@ class Report extends Component {
   }
   getTreeHierarchy() {
    // let url = "http://localhost:7071/api/group/listgrouphierarchy?accountId=100&userName=swathikumary@nousinfo.com";
-    let url =  "http://localhost:7071/api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com";
+    let url =  config.url+"api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com";
     fetch(url)
       .then(response => response.json())
       .then(data => {
@@ -185,14 +186,14 @@ class Report extends Component {
         <div className="reports">
           <SuccessAlert successMessage={this.state.successMessage} />
           <ErrorAlert errorMessage={this.state.errorMessage} />
-          <header className="reportsHeader">{t('title')}</header>
+          <header className="reports-header">{t('title')}</header>
           {/* <Trans i18nKey="title">
           </Trans> */}
-          <header className="reportsHeader">Summary Reports</header>
+          <header className="reports-header">Summary Reports</header>
           <form onSubmit={this.handleSubmit}>
-            <section className="reportsPaneSection">
-              <div className="reportsPane">
-                <div className="checkboxSectionsAdvanced">
+            <section className="reports-pane-section">
+              <div className="reports-pane">
+                <div className="checkbox-sections-advanced">
                   <div className="timings">
                     {" "}
                     <input
@@ -200,7 +201,7 @@ class Report extends Component {
                       checked={this.state.selectAll}
                       onChange={this.selectAll.bind(this)}
                     />{" "}
-                    <span className="spanHeading">
+                    <span className="span-heading">
                       <span> Select All </span>{" "}
                       <span className="tip openTip">?</span>
                     </span>{" "}
@@ -211,7 +212,7 @@ class Report extends Component {
                   </div>
                 </div>
 
-                <div className="savedReports">
+                <div className="saved-reports">
                   <Tree
                     className="myCls"
                     showLine
@@ -228,14 +229,14 @@ class Report extends Component {
                     {loop(this.state.treeData)}
                   </Tree>
                 </div>
-                <span className="spanHeading">
+                <span className="span-heading">
                   <span> Time Measures </span>{" "}
                   <span className="tip openTip">?</span>
                 </span>
                 <div>
                   <select
                     name="timeMeasure"
-                    className="timeMeasures"
+                    className="time-measures"
                     onChange={this.changeTimeMeasure.bind(this)}
                   >
                     <option selected={this.state.timeMeasure == 1} value="1">
@@ -256,17 +257,17 @@ class Report extends Component {
                     </option>
                   </select>
                 </div>
-                <div className="calendarSection">
-                  <div className="dateFrom">
-                    <span className="spanHeading">
+                <div className="calendar-section">
+                  <div className="date-from">
+                    <span className="span-heading">
                       <span> From </span> <span className="tip openTip">?</span>
                     </span>
                     <div className="calendar">
-                      <div className="calendarIcon">
+                      <div className="calendar-icon">
                         <img src={Calendar} aria-hidden="true" />{" "}
                       </div>
                       <DateTimeField
-                        className="dateTime"
+                        className="date-time"
                         mode={date}
                         timeFormat={false}
                         inputProps={{ readOnly: true }}
@@ -277,17 +278,17 @@ class Report extends Component {
                       />
                     </div>
                   </div>
-                  <div className="dateTo">
-                    <span className="spanHeading">
+                  <div className="date-to">
+                    <span className="span-heading">
                       <span> To </span>
                       <span className="tip openTip">?</span>
                     </span>
                     <div className="calendar">
-                      <div className="calendarIcon">
+                      <div className="calendar-icon">
                         <img src={Calendar} aria-hidden="true" />{" "}
                       </div>
                       <DateTimeField
-                        className="dateTime"
+                        className="date-time"
                         mode={date}
                         timeFormat={false}
                         inputProps={{ readOnly: true }}
@@ -307,11 +308,11 @@ class Report extends Component {
                   </span>
                   <div
                     className={
-                      "advancedOptionSection " +
+                      "advanced-option-section " +
                       (this.state.showAdvancedOptions ? "show" : "hidden")
                     }
                   >
-                    <div className="checkboxSectionsAdvanced">
+                    <div className="checkbox-sections-advanced">
                       <div className="timings">
                         <TimePicker
                           defaultValue={this.state.openTime}
@@ -338,7 +339,7 @@ class Report extends Component {
                       </div>
                     </div>
 
-                    <div className="checkboxSectionsAdvanced">
+                    <div className="checkbox-sections-advanced">
                       <div className="timings">
                         {" "}
                         <input
@@ -347,7 +348,7 @@ class Report extends Component {
                           checked={this.state.open}
                           onChange={this.check.bind(this, this.state.open)}
                         />{" "}
-                        <span className="spanHeading">
+                        <span className="span-heading">
                           <span> Open </span>
                           <span className="tip openTip">?</span>
                         </span>{" "}
@@ -360,15 +361,15 @@ class Report extends Component {
                           checked={this.state.close}
                           onChange={this.check.bind(this, this.state.close)}
                         />{" "}
-                        <span className="spanHeading">
+                        <span className="span-heading">
                           <span> Close </span>{" "}
                           <span className="tip openTip">?</span>
                         </span>{" "}
                       </div>
                     </div>
                     <span>Type </span>
-                    <div className="checkboxSections">
-                      <div className="TypeSubSection">
+                    <div className="checkbox-sections">
+                      <div className="type-sub-section">
                         {" "}
                         <input
                           type="radio"
@@ -377,12 +378,12 @@ class Report extends Component {
                           onChange={this.handleOnChange.bind(this)}
                           value={1}
                         />{" "}
-                        <span className="spanHeading">
+                        <span className="span-heading">
                           <span> Time Slice </span>{" "}
                           <span className="tip openTip">?</span>
                         </span>
                       </div>
-                      <div className="TypeSubSection">
+                      <div className="type-sub-section">
                         {" "}
                         <input
                           type="radio"
@@ -391,7 +392,7 @@ class Report extends Component {
                           onChange={this.handleOnChange.bind(this)}
                           value={2}
                         />{" "}
-                        <span className="spanHeading">
+                        <span className="span-heading">
                           <span> Cumulative </span>{" "}
                           <span className="tip openTip">?</span>{" "}
                         </span>{" "}
@@ -406,7 +407,7 @@ class Report extends Component {
                 </div>
 
                 <span>Include </span>
-                <div className="checkboxSections">
+                <div className="checkbox-sections">
                   <div>
                     {" "}
                     <input
@@ -430,10 +431,10 @@ class Report extends Component {
                     System Statistics{" "}
                   </div>
                 </div>
-                <span className="spanHeading">
+                <span className="span-heading">
                   <span> Format </span> <span className="tip openTip">?</span>
                 </span>
-                <div className="checkboxSections">
+                <div className="checkbox-sections">
                   <div>
                     {" "}
                     <input
@@ -458,12 +459,12 @@ class Report extends Component {
                   </div>
                 </div>
               </div>
-              <div className="reportsPane">
-                <span className="spanHeading">
+              <div className="reports-pane">
+                <span className="span-heading">
                   <span> Saved Reports Templates </span>{" "}
                   <span className="tip openTip">?</span>{" "}
                 </span>
-                <div className="savedReports">{this.savedReports()}</div>
+                <div className="saved-reports">{this.savedReports()}</div>
                 <span>Criteria</span>
                 <div className="container criteria">
                   <div className="col-md-12">
@@ -509,7 +510,7 @@ class Report extends Component {
                 <div>
                   <input
                     name="templateName"
-                    className="saveTemplate"
+                    className="save-template"
                     placeholder="(Name this template)"
                     value={this.state.templateName}
                     onChange={this.handleOnChange.bind(this)}
@@ -518,7 +519,7 @@ class Report extends Component {
                 </div>
                 <div
                   type="submit"
-                  className="generateReports"
+                  className="generate-reports"
                   onClick={this.generate.bind(this)}
                 >
                   {" "}
@@ -567,7 +568,7 @@ class Report extends Component {
         this.setState({
           token: token
         });
-        const url = "http://localhost:3002/" + token;
+        const url = config.jwtUrl + token;
         //window.location.href('url');
         window.location.assign(url);
         this.props.history.replace(url);
@@ -591,7 +592,7 @@ class Report extends Component {
 
   getSavedReports() {
     fetch(
-      "http://localhost:7071/api/reportTemplate/list?accountId=100&createdBy=1000",
+      config.url+"api/reportTemplate/list?accountId=100&createdBy=1000",
       {
         method: "GET",
         headers: {
@@ -627,7 +628,7 @@ class Report extends Component {
               {report.TemplateName}{" "}
             </div>
             <div
-              className="col-md-2 deleteIcon"
+              className="col-md-2 delete-icon"
               id={report.Id}
               onClick={this.delete.bind(this)}
             >
@@ -708,7 +709,7 @@ class Report extends Component {
 
   apply(e) {
     let url =
-      "http://localhost:7071/api/reportTemplate/gettemplate?templetId=" +
+      config.url+"api/reportTemplate/gettemplate?templetId=" +
       e.target.id;
     fetch(url, {
       method: "GET",
@@ -909,7 +910,7 @@ class Report extends Component {
         this.setState(this.state);
         isError = true;
       } else {
-        let url = "http://localhost:7071/api/reportTemplate/create";
+        let url = config.url+"api/reportTemplate/create";
         fetch(url, {
           method: "POST",
           headers: {

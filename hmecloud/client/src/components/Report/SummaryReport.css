@@ -1,20 +1,18 @@
-.showTableCell{
+.show-table-cell{
   display : table-cell;
 }
-.hideTableCell{
+.hide-table-cell{
   display : none;
 }
-.reportSummaryContainer{
+.reportsummary-container{
   margin : 20px 68px 0px 68px;
 }
-.downloadSummaryReportBtn{
 
-}
-.summaryHeader{
+.summary-header{
   background-color : #029fb9;
 
 }
-.summaryHeaderText{
+.summary-header-text{
   color: white;
   font-size: 26px;
   font-weight: bold;
@@ -23,10 +21,10 @@
   margin-top: 3px;
 }
 
-.downloadBtnSection{
+.download-btn-section{
   margin-bottom: 18px;
 }
-.downloadSummaryReportBtn{
+.download-summaryreport-btn{
   background-color: #06b1cb;
   text-align: center;
   bottom-border: none;
@@ -39,14 +37,14 @@
   border-radius: 0;
 }
 
-.summaryReportTable tr th.blankHeader{
+.summaryreport-table tr th.blankHeader{
   background: none;
   border: 0px;
   height: 23px;
   font-size: 12px;
 }
 
-.summaryReportTable tr th.tableHeading{
+.summaryreport-table tr th.tableHeading{
   background: #959595;
   border-top: 1px solid #FFFFFF;
   border-left: 1px solid #FFFFFF;
@@ -65,7 +63,7 @@
     vertical-align: middle;
 }
 
-.summaryReportTable th{
+.summaryreport-table th{
   background-color: #0087a1;
   border-top: 1px solid #FFFFFF;
   border-left: 1px solid #FFFFFF;
@@ -73,35 +71,35 @@
   height: 36px;
   vertical-align: middle;
 }
-.summaryReportTable th.groupsColHeader,.summaryReportTable th.storesColHeader{
+.summaryreport-table th.groupsColHeader,.summaryreport-table th.storesColHeader{
       width: 125px;
 }
-.summaryReportTable th.reportTableAttributesHeading{
+.summaryreport-table th.reportTableAttributesHeading{
       width: 175px;
 }
 
-.summaryReportTable td{
+.summaryreport-table td{
   border-top: 1px solid #FFFFFF;
   border-left: 1px solid #FFFFFF;
   text-align: center;
   vertical-align: middle;
   height: 42px;
 }
-.summaryReportTable tr th{
+.summaryreport-table tr th{
   text-align : center;
 }
 
-.summaryReportTableSection{
+.summaryreport-table-section{
       margin-top: 10px;
 }
 
-h2 .reportStartTime, h2 .reportEndTime{
+h2 .report-start-time, h2 .report-end-time{
   font-size: 14px;
   color: #008898;
   line-height: 20px;
   font-weight: 800;
 }
-h2 .reportStartTimeValue,h2 .reportEndTimeValue{
+h2 .report-start-time-value,h2 .report-end-time-value{
   color: #008898;
   font-size: 14px;
   line-height: 20px;
@@ -110,42 +108,42 @@ h2 .reportStartTimeValue,h2 .reportEndTimeValue{
   text-transform: uppercase;
 }
 
-.reportStartTimeHeader, .reportEndTimeHeader{
+.report-start-time-header, .report-end-time-header{
   margin-top:0px;
 }
-.reportPrintTimeHeader{
+.report-print-time-header{
     color: #959595;
     margin-top : 0px;
 }
 
-.reportPrintTime, .reportPrintTimeValue{
+.report-print-time, .report-print-time-value{
   font-weight: 100;
   text-transform: uppercase;
   text-transform: uppercase;
   font-size: 14px;
   line-height: 20px;
 }
-.fromToDetail{
+.from-to-detail{
   color:#008898;
   margin-bottom: 5px;
   font-size: 12px;
 }
-.showAllPaginationToggle{
+.show-all-pagination-toggle{
   text-align : right;
 }
-.leftpadding{
+.left-padding-none{
   padding-left : 0px;
 }
 
-#pageNavigations{
+#page-navigations{
   color: #D41B3E;
   margin-top:12px;
 }
-.pageNavs{
+.page-navs{
   display : inline-block;
   float:left;
 }
-.previousLinks, .nextLinks{
+.previous-link, .next-link{
   float: left;
   border: 1px solid white;
   background-color: red;
@@ -154,29 +152,29 @@ h2 .reportStartTimeValue,h2 .reportEndTimeValue{
   display : inline-block;
   cursor : pointer;
 }
-.previousPage{
+.previous-page{
   position: absolute;
   font-size: 18px !important;
   color: white;
   left: 78px;
   top:12px;
 }
-.nextPage{
+.next-page{
   position: absolute;
   font-size: 18px !important;
   color: white;
   left: 99px;
   top:12px;
 }
-.reportDataUnit{
+.report-data-unit{
   margin-top:20px;
 }
-.linkActive{
+.active-link{
   color: rgb(0, 136, 152);
   text-decoration: underline;
   cursor: pointer;
 }
-.linkInactive{
+.inactive-link{
   cursor: pointer;
   color: #D41B3E;
 }
@@ -190,13 +188,13 @@ h2 .reportStartTimeValue,h2 .reportEndTimeValue{
   height: 0;
   visibility: hidden;
 }
-.table .head-labelsRaw {
+table .raw-car-header-labels {
   border-bottom: 0px solid #d1d1d1;
 }
-.table .th {
+table .th {
   align-items: left;
 }
-.head-labelsRaw {
+.rawcar-header-labels {
   font-size: 12px;
   margin-left: 10px;
   padding-top: 8px;
@@ -204,38 +202,29 @@ h2 .reportStartTimeValue,h2 .reportEndTimeValue{
   text-align: left;
   width: 850px;
 }
-.fleft {
-  float: left;
-}
-
-.tableDetails {
+.rawcar-table-details {
   width: 100%;
   margin-left: 10em;
 }
-.thinHead {
+.thin-header {
   width: 115px;
 }
-
-.rawcarHeader {
-  /* background: url(/images/th_background_up.png); */
-
+.rawcar-header {
   border: 1px solid #ffffff;
-  /* color: #FFFFFF; */
   display: table;
   height: 36px;
-  /* float: left; */
 }
-.rawCarH1 {
+.rawcar-h1 {
   margin-top: 10px;
 }
-.rawCarh2 {
+.rawcar-h2 {
   color: #0087a1;
   margin-left: 7.5em;
   font-weight: bolder;
   font-size: 18px;
   margin-top: 10px;
 }
-.displayRecords {
+.display-records {
   border-collapse: collapse;
   /* border-spacing: 0px; */
   font-size: 12px;
@@ -243,18 +232,18 @@ h2 .reportStartTimeValue,h2 .reportEndTimeValue{
   padding-top: 0px;
   width: 1130px;
 }
-.tableLayout {
+.table-layout {
   margin-top: 0px;
   margin-left: 7.5em;
   margin-bottom: 25px;
   width: 1125px;
 }
-.tableLayout th {
+.table-layout th {
   font-weight: bold;
   font-size:12px;
   height: 30px;
 }
-.tableLayout th{
+.table-layout th{
 	/* background:url(/images/th_background_up.png); */
 	background-color: #0087a1;
 	border-top:1px solid #FFFFFF;
@@ -263,15 +252,15 @@ h2 .reportStartTimeValue,h2 .reportEndTimeValue{
     vertical-align:middle;
     text-align: center;
 }
-.displayResult{
+.display-result{
     background-color: #ffffff;
     text-align: center
 }
 
-.displayRecords  tr:nth-child(odd){
+.display-records  tr:nth-child(odd){
     background-color: #ffffff;
 }
-.displayRecords  tr:nth-child(even){
+.display-records  tr:nth-child(even){
     background-color: #ededed;;
 }
 
@@ -291,10 +280,10 @@ h2 .reportStartTimeValue,h2 .reportEndTimeValue{
   height: 36px;
   vertical-align: middle;
 }
-.colWidthSS5 {
+.col-width-ss5 {
   width: 300px;
 }
-h2.rep_head {
+h2.rep-head {
   margin-bottom: 3px;
 }
 
@@ -305,7 +294,7 @@ h2.rep_head {
   font-weight: 800;
 }
 
-#sscolwidth {
+#ss-col-width {
   height: 21px;
 }
 .table-layout-System.ssBord td {
@@ -316,7 +305,7 @@ h2.rep_head {
 .rnshade {
   background-color: #ffffff;
 }
-#sscolwidthSM {
+#ss-col-width-sm {
   padding-right: 35px;
 }
 .rshade {

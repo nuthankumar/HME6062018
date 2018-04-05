@@ -9,6 +9,7 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './SummaryReport.css'
 import '../../../node_modules/font-awesome/css/font-awesome.min.css'
+import {config} from '../../config'
 
 const hmeLogo = require('../../images/HMELogo.png')
 const zoomLogo = require('../../images/ZoomLogo.PNG')
@@ -208,7 +209,7 @@ export default class SummaryReport extends Component {
   }
 
   populateSummaryReportDetails () {
-    let url = 'http://localhost:7071/api/report/generatereport'
+    let url = config.url+'api/report/generatereport'
     let data = {
       'stores': [
         3,
@@ -247,13 +248,13 @@ export default class SummaryReport extends Component {
     let reportData = this.state.reportData.data
     return (<section className='reportSummaryPage'>
       <HmeHeader />
-      <section className='reportSummaryContainer'>
-        <div className='row downloadBtnSection'>
-          <button className='btn btn-default downloadSummaryReportBtn'>Download</button>
+      <section className='reportsummary-container'>
+        <div className='row download-btn-section'>
+          <button className='btn btn-default download-summaryreport-btn'>Download</button>
         </div>
         <div className='row'>
-          <div className='col-xs-9 summaryHeader'>
-            <div className='summaryHeaderText'>Summarized Report</div>
+          <div className='col-xs-9 summary-header'>
+            <div className='summary-header-text'>Summarized Report</div>
           </div>
           <div className='col-xs-3'>
             <img src={hmeLogo} />
@@ -263,41 +264,41 @@ export default class SummaryReport extends Component {
 
         <div className='row'>
 
-          <div className='col-xs-3 leftpadding'>
-            <h2 className='reportStartTimeHeader'>
-              <span className='reportStartTime'>Start Time:</span>
-              <span className='reportStartTimeValue'>MAR 31,2018 OPEN</span>
+          <div className='col-xs-3 left-padding-none'>
+            <h2 className='report-start-time-header'>
+              <span className='report-start-time'>Start Time:</span>
+              <span className='report-start-time-value'>MAR 31,2018 OPEN</span>
             </h2>
           </div>
-          <div className='col-xs-3 leftpadding'>
-            <h2 className='reportEndTimeHeader'>
-              <span className='reportEndTime'>End Time:</span>
-              <span className='reportEndTimeValue'>MAR 31,2018 OPEN</span>
+          <div className='col-xs-3 left-padding-none'>
+            <h2 className='report-end-time-header'>
+              <span className='report-end-time'>End Time:</span>
+              <span className='report-end-time-value'>MAR 31,2018 OPEN</span>
             </h2>
           </div>
 
-          <div className='col-xs-4 leftpadding'>
-            <h2 className='reportPrintTimeHeader'>
-              <span className='reportPrintTime'> Report Print Time</span>
-              <span className='reportPrintTimeValue'> APR2, 2019 4:08 AM</span>
+          <div className='col-xs-4 left-padding-none'>
+            <h2 className='report-print-time-header'>
+              <span className='report-print-time'> Report Print Time</span>
+              <span className='report-print-time-value'> APR2, 2019 4:08 AM</span>
             </h2>
           </div>
-          <div className='col-xs-2 leftpadding '>
-            <div id='pageNavigations'>
-              <div className='pageNavs'>
+          <div className='col-xs-2 left-padding-none'>
+            <div id='page-navigations'>
+              <div className='page-navs'>
                 Page <span className='pgStarts'>1</span> <span translate='' className='ReportsOf'>of </span> 1</div>
-              <div className='previousLinks' ><i className='fa fa-angle-left previousPage' /></div>
-              <div className='nextLinks'><i className='fa fa-angle-right nextPage' /></div>
+              <div className='previous-link' ><i className='fa fa-angle-left previous-page' /></div>
+              <div className='next-link'><i className='fa fa-angle-right next-page' /></div>
             </div>
           </div>
 
         </div>
 
         <div className='row'>
-          <div className='col-xs-12 showAllPaginationToggle'>Show: <span className={(this.state.allTab) ? 'linkActive' : 'linkInactive'} onClick={() => this.setState({allTab: true})}>All /</span><span className={(this.state.allTab) ? 'linkInactive' : 'linkActive'} onClick={() => this.setState({allTab: false})}>Pages</span></div>
+          <div className='col-xs-12 show-all-pagination-toggle'>Show: <span className={(this.state.allTab) ? 'active-link' : 'inactive-link'} onClick={() => this.setState({allTab: true})}>All /</span><span className={(this.state.allTab) ? 'inactive-link' : 'active-link'} onClick={() => this.setState({allTab: false})}>Pages</span></div>
         </div>
 
-        <div className='row summaryReportTableSection'>
+        <div className='row summaryreport-table-section'>
           <SummaryReportDataComponent handleDrillDown={this.handleDrillDown} reportData={this.state.reportData} />
         </div>
       </section>

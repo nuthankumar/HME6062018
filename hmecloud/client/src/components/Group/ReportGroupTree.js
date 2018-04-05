@@ -1,8 +1,5 @@
 import React from "react"
 import PropTypes from 'prop-types'
-import CheckBoxList from "./CheckBoxList"
-import SuccessAlert from "../Alerts/SuccessAlert"
-import ErrorAlert from "../Alerts/ErrorAlert"
 import fetch from 'isomorphic-fetch'
 import Tree, { TreeNode } from 'rc-tree'
 import 'rc-tree/assets/index.css'
