@@ -35,25 +35,25 @@ router.post('/creategroup', (request, response) => {
 
     if (!request.body.id) {
       // Create Group
-      groupController.create(input, response => {
-        if (response.status === true) {
-          res.status(200).send(response)
+      groupController.create(input, result => {
+        if (result.status === true) {
+          response.status(200).send(result)
         } else {
-          res.status(400).send(response)
+          response.status(400).send(result)
         }
       })
     } else {
       // Update Group
-      groupController.update(input, response => {
-        if (response.status === true) {
-          res.status(200).send(response)
+      groupController.update(input, result => {
+        if (result.status === true) {
+          response.status(200).send(result)
         } else {
-          res.status(400).send(response)
+          response.status(400).send(result)
         }
       })
     }
   } else {
-    res.status(400).send({
+    response.status(400).send({
       error: messages.CREATEGROUP.groupNameEmpty,
       status: false
     })
@@ -209,13 +209,13 @@ router.get('/availabledetails', (request, res) => {
     const createdBy = validate.isEmail(input.createdBy)
     if (!accountId) {
       res.status(400).send({
-        error: errors.LISTGROUP.accountId,
+        error: messages.LISTGROUP.accountId,
         status: false
       })
     }
     if (!createdBy) {
       res.status(400).send({
-        error: errors.LISTGROUP.createdBy,
+        error: messages.LISTGROUP.createdBy,
         status: false
       })
     }
@@ -230,17 +230,17 @@ router.get('/availabledetails', (request, res) => {
     }
   } else if (!request.query.accountId && request.query.userName) {
     res.status(400).send({
-      error: errors.LISTGROUP.accountId,
+      error: messages.LISTGROUP.accountId,
       status: false
     })
   } else if (request.query.accountId && !request.query.userName) {
     res.status(400).send({
-      error: errors.LISTGROUP.createdBy,
+      error: messages.LISTGROUP.createdBy,
       status: false
     })
   } else {
     res.status(400).send({
-      error: errors.LISTGROUP,
+      error: messages.LISTGROUP,
       status: false
     })
   }

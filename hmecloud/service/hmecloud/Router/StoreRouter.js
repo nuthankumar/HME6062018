@@ -75,10 +75,10 @@ router.post('/getRawCarDataReport', (request, res) => {
                 // TODO: Call the CSV file generation function to generate and send an email
               }
             } else {
-              const output = {
-                data: error,
-                status: false
-              }
+              // const output = {
+              //   data: error,
+              //   status: false
+              // }
               res.status(400).send(response)
             }
           })

@@ -1,7 +1,4 @@
-const validate = require('validator')
-const momentDurationFormatSetup = require('moment-duration-format')
 const moment = require('moment')
-
 const msFormat = (avgTime, formatFlag) => {
   if (avgTime) {
     if (formatFlag === 1) {

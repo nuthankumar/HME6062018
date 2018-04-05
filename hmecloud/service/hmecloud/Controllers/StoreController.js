@@ -75,10 +75,10 @@ router.post('/getRawCarDataReport', (request, res) => {
                 // TODO: Call the CSV file generation function to generate and send an email
               }
             } else {
-              const output = {
-                data: error,
-                status: false
-              }
+              // const output = {
+              //   data: error,
+              //   status: false
+              // }
               res.status(400).send(response)
             }
           })
@@ -107,21 +107,6 @@ router.post('/getRawCarDataReport', (request, res) => {
     })
   }
 })
-
-/**
- * Time Measure
- * get method with no input
- */
-router.get('/timemeasure', (req, res) => {
-  stores.timeMeasure((response) => {
-    if (response.status === true) {
-      res.status(200).send(response)
-    } else {
-      res.status(400).send(response)
-    }
-  })
-})
-
 router.post('/generatecsv', VerifyToken, (req, res) => {
   const input = {
     type: 'Day',

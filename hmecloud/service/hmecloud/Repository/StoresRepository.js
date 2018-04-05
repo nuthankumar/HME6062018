@@ -1,7 +1,7 @@
-const csvFile = require('../../Common/CsvUtils')
-var jsonexport = require('jsonexport')
+// const csvFile = require('../../Common/CsvUtils')
+// var jsonexport = require('jsonexport')
 const db = require('../../Model/DataBaseConnection/ConfigDb')
-const mail = require('../../Common/EmailUtil')
+// const mail = require('../../Common/EmailUtil')
 const dateUtils = require('../../Common/DateUtils')
 const HashMap = require('hashmap')
 const dateFormat = require('dateformat')
@@ -69,25 +69,24 @@ const timeMeasure = (callback) => {
 }
 
 const generateCSV = (input, callback) => {
-  const csv = csvFile.DAYREPORT
-  jsonexport(csv, function (err, csv) {
-    console.log('CSV', csv)
-    const loggedInUser = 'jaffersr@nousinfo.com'
-    var attachment = [{
-      // file on disk as an attachment
-      filename: 'package.csv',
-      content: csv,
-      encoding: 'utf16le'
-    }]
+// const csv = csvFile.DAYREPORT
+  //  jsonexport(csv, function (err, csv) {
+  //   console.log('CSV', csv)
+  //   const loggedInUser = 'jaffersr@nousinfo.com'
+  //   var attachment = [{
+  //     filename: 'package.csv',
+  //     content: csv,
+  //     encoding: 'utf16le'
+  //   }]
 
-    mail.send(loggedInUser, attachment, isMailSent => {
-      if (isMailSent) {
-        callback('success')
-      } else {
-        callback('failure')
-      }
-    })
-  })
+  //   mail.send(loggedInUser, attachment, isMailSent => {
+  //     if (isMailSent) {
+  //       callback('success')
+  //     } else {
+  //       callback('failure')
+  //     }
+  //   })
+  // })
 }
 
 const getRawCarDataReport = (input, callback) => {
@@ -117,9 +116,9 @@ const getRawCarDataReport = (input, callback) => {
     const len = result.length
     const storeData = result[len - 2]
     const dayPartData = result[len - 1]
-    rawCarData.store = storeData.Store_Name,
-    rawCarData.description = storeData.Brand_Name,
-    rawCarData.startTime = input.ReportTemplate_From_Date,
+    rawCarData.store = storeData.Store_Name
+    rawCarData.description = storeData.Brand_Name
+    rawCarData.startTime = input.ReportTemplate_From_Date
     rawCarData.stopTime = input.ReportTemplate_To_Date
     rawCarData.printDate = dateFormat(new Date(), 'isoDate')
     rawCarData.printTime = dateFormat(new Date(), 'shortTime')
@@ -127,12 +126,12 @@ const getRawCarDataReport = (input, callback) => {
       let rawCarTempId = item.RawDataID
       if (rawCarTempId && !departTimeStampMap.has(rawCarTempId)) {
         let departTimeStampList = result.filter(function (obj) {
-          return obj.RawDataID == rawCarTempId
+          return obj.RawDataID === rawCarTempId
         })
         let tempRawCarData = departTimeStampList[0]
         const rawCarDataObj = {}
-        rawCarDataObj.departureTime = tempRawCarData.DepartTimeStamp,
-        rawCarDataObj.eventName = tempRawCarData.CarRecordDataType_Name,
+        rawCarDataObj.departureTime = tempRawCarData.DepartTimeStamp
+        rawCarDataObj.eventName = tempRawCarData.CarRecordDataType_Name
         rawCarDataObj.carsInQueue = tempRawCarData.CarsInQueue
         rawCarData.dayPart = 'DP' + tempRawCarData.Daypart_ID + dateUtils.dayPartTime(tempRawCarData.Daypart_ID, len, dayPartData.StartTime, dayPartData.EndTime)
 

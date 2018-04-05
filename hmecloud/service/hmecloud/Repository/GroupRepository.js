@@ -308,7 +308,7 @@ const getgroupDetails = (input, callback) => {
           callback(output)
         }
       }).catch(error1 => {
-        output.data = error,
+        output.data = error1
         output.status = false
 
         callback(output)
@@ -319,7 +319,7 @@ const getgroupDetails = (input, callback) => {
       callback(output)
     }
   }).catch(error => {
-    output.data = error,
+    output.data = error
     output.status = false
 
     callback(output)
@@ -401,22 +401,22 @@ const listGroupHierarchy = (input, callback) => {
 
         if (!parentMap.has(parentGroupId)) {
           var parentGrpsList = result.filter(function (obj) {
-            return obj.ParentGroupId == parentGroupId
+            return obj.ParentGroupId === parentGroupId
           })
 
           for (let j = 0; j < parentGrpsList.length; j++) {
             const childGrpObj = parentGrpsList[j]
             const childGroupObject = {}
             if (childGrpObj.Type === 'group') {
-              childGroupObject.id = childGrpObj.Id,
-              childGroupObject.name = childGrpObj.Name,
-              childGroupObject.type = childGrpObj.Type,
+              childGroupObject.id = childGrpObj.Id
+              childGroupObject.name = childGrpObj.Name
+              childGroupObject.type = childGrpObj.Type
               childGroupObject.parentId = childGrpObj.ParentGroupId
               childGroupArray.push(childGroupObject)
             } else if (childGrpObj.Type === 'store') {
-              childGroupObject.id = childGrpObj.Id,
-              childGroupObject.name = childGrpObj.Name,
-              childGroupObject.type = childGrpObj.Type,
+              childGroupObject.id = childGrpObj.Id
+              childGroupObject.name = childGrpObj.Name
+              childGroupObject.type = childGrpObj.Type
               childGroupObject.parentId = childGrpObj.ParentGroupId
               childGroupArray.push(childGroupObject)
             }
@@ -430,11 +430,12 @@ const listGroupHierarchy = (input, callback) => {
       callback(output)
     }
 
-    data1 = childGroupArray.reduce(function (r, a) {
+    let data1 = childGroupArray.reduce(function (r, a) {
       function getParent (s, b) {
         return a.parentId === b.id ? b : (b.childrens && b.childrens.reduce(getParent, s))
       }
-      var index = 0, node
+      let index = 0
+      let node
       if ('parentId' in a) {
         node = r.reduce(getParent, {})
       }
@@ -453,7 +454,7 @@ const listGroupHierarchy = (input, callback) => {
       }
       return r
     }, [])
-    output.data = data1,
+    output.data = data1
     output.status = true
     callback(output)
   }).catch(error => {
