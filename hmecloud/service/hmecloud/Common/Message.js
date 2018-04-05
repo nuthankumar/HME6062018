@@ -5,8 +5,9 @@
 //     Group Hierarchy
 
 exports.LISTGROUP = {
-  createdBy: 'createdBy email is  required',
-  accountId: 'accountId number is  required'
+  createdBy: 'createdBy number is  required',
+  accountId: 'accountId number is  required',
+  notfound: 'No Records found'
 }
 
 exports.CREATEGROUP = {
@@ -18,10 +19,11 @@ exports.CREATEGROUP = {
   groupAlreadyExist: ' already exist in the user account',
   groupUpdatesSuccess: ' has been updated successfully',
   noRecordsFound: 'No records found for deleting',
-  RecordsDeleted: 'Records deleted Successfully',
-  RecordDeleted: 'Record deleted Successfully',
-  noDataForGivenId: 'No data found for the given groupId: ',
-  invalidRequestBody: 'Invalid request body'
+  RecordsDeleted: ' Records deleted Successfully',
+  RecordDeleted: ' Record deleted Successfully',
+  noDataForGivenId: 'No data found for the given Id: ',
+  invalidRequestBody: 'Invalid request body',
+  groupIdNo : 'GroupId: '
 }
 
 exports.REPORTSUMMARY = {
