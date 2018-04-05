@@ -1,7 +1,6 @@
 const express = require('express')
 const validate = require('validator')
 const router = express.Router()
-const i18n = require('i18n')
 const groupValidator = require('../Validators/GroupValidator')
 const authValidator = require('../Controllers/AuthenticationController')
 
