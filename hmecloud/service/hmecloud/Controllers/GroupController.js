@@ -3,12 +3,6 @@ const validate = require('validator')
 const groupRepository = require('../Repository/GroupRepository')
 const messages = require('../Common/Message')
 
-
-
-// get functions using accountid & name  - for the List
-
-// create function
-
 const createGroup = (input, callback) => {
     groupRepository.createGroup(input, result => {
         callback(result)

@@ -8,14 +8,15 @@ const messages = require('../Common/Message')
  */
 
 const createGroup = (request, callback) => {
-
+    console.log("The validator user" + request.userId)
     if (request.body.name) {
         const input = {
             id: request.body.id,
             name: request.body.name,
             description: request.body.description,
             groups: request.body.groups,
-            stores: request.body.stores
+            stores: request.body.stores,
+            userName: request.UserName 
         }
 
         if (!request.body.id) {

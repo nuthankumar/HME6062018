@@ -2,15 +2,11 @@
  * Using this file Manage the Group Hierachy level - stores and groups
  * Operation : Basic CURD App
  */
-
-// config the model
-//let Sequelize = require('sequelize')
 const db = require('../DataBaseConnection/Configuration')
 const group = require('../Model/Group')
 const groupDetails = require('../Model/GroupStore')
-// Config messages
+const sqlQuery = require('../Common/DataBaseQueries')
 const messages = require('../Common/Message')
-var HashMap = require('hashmap')
 
 // get functions using accountid & name  - for the List
 
@@ -249,48 +245,33 @@ const updateGroupData = (input, callback) => {
 }
 
 const getgroupDetails = (input, callback) => {
-  let output = {}
-
-  const condition = {
-    where: {
-      Id: input.groupId,
-      CreatedBy: input.userName
-    }
-  }
-  group.findOne(condition).then(result => {
-    if (result) {
-      // Getting the child Group and Store details
-      const Query = "SELECT g.Id, g.GroupName,'group' AS type FROM [dbo].[Group] as g where g.ParentGroup =" + input.groupId + " and g.CreatedBy='" + input.userName + "' union select s.Id, s.StoreName, 'store' AS type from Stores as s INNER JOIN GroupStore gd on s.Id = gd.StoreId INNER JOIN[dbo].[Group] as g on g.Id = gd.GroupId where gd.GroupId = " + input.groupId + " and g.CreatedBy ='" + input.userName + "'"
-      db.query(Query, {
+    let output = {}
+     db.query(sqlQuery.GroupHierarchy.getgroupDetails, {
+        replacements: { groupId: input.groupId},
         type: db.QueryTypes.SELECT
-      }).then(result1 => {
-        if (result1) {
-          output.data = ({
-            group: result,
-            details: result1
-          })
-          output.status = true
-
-          callback(output)
+    }).then(result => {
+        if (result.length > 0) {
+            const groupData = []
+            for (let i = 1; i < result.length; i++) {
+                groupData.push(result[i])
+            }
+            output.data = ({
+                group: result[0],
+                details: groupData
+            })
+            output.status = true
+            callback(output)
+        } else {
+            output.data = messages.CREATEGROUP.noDataForGivenId
+            output.status = false
+            callback(output)
         }
-      }).catch(error1 => {
-        output.data = error1
+      }).catch(error => {
+        output.data = error
         output.status = false
-
         callback(output)
       })
-    } else {
-      output.data = 'Data not found'
-      output.status = false
-      callback(output)
-    }
-  }).catch(error => {
-    output.data = error
-    output.status = false
-
-    callback(output)
-  })
-}
+} 
 
 const deleteGroupById = (input, callBack) => {
   const updateParentGroup = {
@@ -328,106 +309,22 @@ const deleteGroupById = (input, callBack) => {
 }
 
 const avaliabledGroups = (input, callback) => {
-  const Query = "SELECT DISTINCT(g.Id), g.GroupName,'group' AS type FROM [dbo].[Group] as g where g.ParentGroup is null and g.AccountId = " + input.accountId + " and g.CreatedBy='" + input.createdBy + "' union select distinct s.Id, s.StoreName, 'store' AS type from Stores as s, GroupStore AS gd WHERE s.Id NOT IN(SELECT StoreId FROM GroupStore WHERE StoreId IS NOT NULL) and s.AccountId =" + input.accountId + " and s.CreatedBy='" + input.createdBy + "'"
-  db.query(Query, {
-    type: db.QueryTypes.SELECT
-  }).then(result => {
     const output = {}
+    db.query(sqlQuery.GroupHierarchy.getAllAvailableGroupsAndStores, {
+        replacements: { accountId: input.accountId },
+        type: db.QueryTypes.SELECT
+    }).then(result => {
     if (result.length > 0) {
       output.data = result
       output.status = true
     } else {
-      output.data = 'notfound'
+      output.data = messages.CREATEGROUP.noDataForGivenId
       output.status = false
     }
     callback(output)
   }).catch(error => {
-    const output = {
-      data: error,
-      status: false
-    }
-    callback(output)
-  })
-}
-
-const listGroupHierarchy = (input, callback) => {
-  const Query =
-        'exec [dbo].[GetGroupHierarchy]  @Account_Id=' + input.AccountId
-
-  db.query(Query, {
-    type: db.QueryTypes.SELECT
-  }).then(result => {
-    const output = {}
-    const len = result.length
-    let parentMap = new HashMap()
-    let childGroupArray = []
-    if (len > 0) {
-      for (let i = 0; i < len; i++) {
-        let parentGroupId = result[i].ParentGroupId
-
-        if (!parentMap.has(parentGroupId)) {
-          var parentGrpsList = result.filter(function (obj) {
-            return obj.ParentGroupId === parentGroupId
-          })
-
-          for (let j = 0; j < parentGrpsList.length; j++) {
-            const childGrpObj = parentGrpsList[j]
-            const childGroupObject = {}
-            if (childGrpObj.Type === 'group') {
-              childGroupObject.id = childGrpObj.Id
-              childGroupObject.name = childGrpObj.Name
-              childGroupObject.type = childGrpObj.Type
-              childGroupObject.parentId = childGrpObj.ParentGroupId
-              childGroupArray.push(childGroupObject)
-            } else if (childGrpObj.Type === 'store') {
-              childGroupObject.id = childGrpObj.Id
-              childGroupObject.name = childGrpObj.Name
-              childGroupObject.type = childGrpObj.Type
-              childGroupObject.parentId = childGrpObj.ParentGroupId
-              childGroupArray.push(childGroupObject)
-            }
-          }
-          parentMap.set(parentGroupId, parentGroupId)
-        }
-      }
-    } else {
-      output.data = 'notfound'
-      output.status = false
-      callback(output)
-    }
-
-    let data1 = childGroupArray.reduce(function (r, a) {
-      function getParent (s, b) {
-        return a.parentId === b.id ? b : (b.childrens && b.childrens.reduce(getParent, s))
-      }
-      let index = 0
-      let node
-      if ('parentId' in a) {
-        node = r.reduce(getParent, {})
-      }
-      if (node && Object.keys(node).length) {
-        node.childrens = node.childrens || []
-        node.childrens.push(a)
-      } else {
-        while (index < r.length) {
-          if (r[index].parentId === a.id) {
-            a.childrens = (a.childrens || []).concat(r.splice(index, 1))
-          } else {
-            index++
-          }
-        }
-        r.push(a)
-      }
-      return r
-    }, [])
-    output.data = data1
-    output.status = true
-    callback(output)
-  }).catch(error => {
-    const output = {
-      data: error,
-      status: false
-    }
+    output.data= error,
+    output.status= false
     callback(output)
   })
 }
@@ -461,8 +358,6 @@ const addToHierarchy = (hierarchy, inputItem) => {
     })
   } else {
     var parent = getParent(hierarchy, inputItem.ParentGroupId)
-    console.log('id :' + inputItem.ParentGroupId + ' Parent :', parent)
-
     if (parent) {
       parent.Children.push({
         Id: inputItem.Id,
@@ -507,7 +402,6 @@ module.exports = {
   deleteGroupById,
     updateGroup,
   avaliabledGroups,
-  listGroupHierarchy,
   addToHierarchy,
   getAll
 }

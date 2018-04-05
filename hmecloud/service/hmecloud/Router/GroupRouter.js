@@ -3,12 +3,14 @@ const validate = require('validator')
 const router = express.Router()
 const i18n = require('i18n')
 const groupValidator = require('../Validators/GroupValidator')
+const authValidator = require('../Controllers/AuthenticationController')
+
 
 /**
  * Service for creating a new group
  * using name,desc,group,stores
  */
-router.post('/creategroup', (request, response) => {
+router.post('/creategroup', authValidator, (request, response, next) => {
     groupValidator.createGroup(request, result => {
         if (result.status === true) {
             response.status(201).send(result)
