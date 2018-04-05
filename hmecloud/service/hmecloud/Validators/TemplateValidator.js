@@ -21,16 +21,7 @@ const getalltemplate = (input, callback) => {
     values.AccountId = input.accountId
     values.CreatedBy = input.createdBy
     templateController.getAllReportTemplates(values, (result) => {
-      console.log("RESULT",result)
-      if (result.length > 0) {
-        output.data = result
-        output.status = true
-        callback(output)
-      } else {
-        output.error = messages.LISTGROUP.notfound
-        output.status = false
-        callback(output)
-      }
+      callback(result)
     })
   } else if (!AccountId && CreatedBy) {
     output.error = messages.LISTGROUP.accountId

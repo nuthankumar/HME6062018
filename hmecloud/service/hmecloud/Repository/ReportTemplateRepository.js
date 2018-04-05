@@ -3,40 +3,22 @@
  */
 
 const reportTemplates = require('../Model/ReportTemplate')
-// Config messages
-const messages = require('../Common/Message')
-const db = require('../DataBaseConnection/Configuration')
+const dataBase = require('../DataBaseConnection/Configuration')
+const sqlQuery = require('../Common/DataBaseQueries')
 
 // List all templates
 
-const getReportTemplates = (input, callback) => {
-  const Query =
-    'select distinct Id, TemplateName from ReportTemplates where AccountId=' +
-    input.AccountId +
-    ' and CreatedBy=' +
-    input.CreatedBy
-  db
-    .query(Query, {
-      type: db.QueryTypes.SELECT
+const getAllReportTemplates = (input, callback) => {
+  dataBase
+    .query(sqlQuery.ReportTemplates.getAllReportsTemplates, {
+      replacements: { AccountId: input.AccountId, CreatedBy: input.CreatedBy },
+      type: dataBase.QueryTypes.SELECT
     })
     .then(result => {
-      console.log('The raw data===****' + JSON.stringify(result))
-      const output = {}
-      if (result) {
-        output.data = result
-        output.status = true
-      } else {
-        output.data = 'notfound'
-        output.status = false
-      }
-      callback(output)
+      callback(result)
     })
     .catch(error => {
-      const output = {
-        data: error,
-        status: false
-      }
-      callback(output)
+      callback(error)
     })
 }
 
@@ -123,5 +105,5 @@ module.exports = {
   createReportTemplate,
   deleteReportTemplate,
   getReportTemplate,
-  getReportTemplates
+  getAllReportTemplates
 }
