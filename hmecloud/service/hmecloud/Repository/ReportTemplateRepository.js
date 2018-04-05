@@ -2,10 +2,10 @@
  * Sample CURD application in report templets Page in summary report
  */
 
-const reportTemplates = require('../../Model/Templates/ReportTemplate')
+const reportTemplates = require('../Model/ReportTemplate')
 // Config messages
-const messages = require('../../Common/Message')
-const db = require('../../Model/DataBaseConnection/ConfigDb')
+const messages = require('../Common/Message')
+const db = require('../DataBaseConnection/Configuration')
 
 // List all templates
 
