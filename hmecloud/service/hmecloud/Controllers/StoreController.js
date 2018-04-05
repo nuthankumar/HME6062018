@@ -1,4 +1,4 @@
-const messages = require('../../Common/Message')
+const messages = require('../Common/Message')
 const stores = require('../Repository/StoresRepository')
 const validate = require('validator')
 
