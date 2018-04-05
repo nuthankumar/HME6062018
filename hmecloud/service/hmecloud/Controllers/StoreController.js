@@ -1,8 +1,5 @@
-const express = require('express')
-const router = express.Router()
-var VerifyToken = require('../../Controllers/AuthenticationController/Authentication')
 const messages = require('../../Common/Message')
-const stores = require('../../Controllers/StoreController/Stores')
+const stores = require('../Repository/StoresRepository')
 const validate = require('validator')
 
 /**
@@ -13,7 +10,7 @@ const validate = require('validator')
  *
  */
 
-router.post('/generatereport', (req, res) => {
+const generateReport = (req, res) => { 
   const input = {
     stores: req.body.stores,
     fromDate: req.body.fromDate,
@@ -25,7 +22,6 @@ router.post('/generatereport', (req, res) => {
     format: req.body.format,
     templateName: req.body.templateName
   }
-  console.log(input)
 
   if (input !== null) {
     stores.generateSummaryReport(input, response => {
@@ -43,12 +39,12 @@ router.post('/generatereport', (req, res) => {
         status: false
       })
   }
-})
+}
 
 /*
  * This service is used to get the Raw Car Data details
  */
-router.post('/getRawCarDataReport', (request, res) => {
+const getRawCarDataReport = (request, res) => {
   const input = {
     ReportTemplate_StoreId: request.body.reportTemplateStoreId,
     ReportTemplate_Advanced_Op: request.body.reportTemplateAdvancedOp,
@@ -106,8 +102,9 @@ router.post('/getRawCarDataReport', (request, res) => {
       status: false
     })
   }
-})
-router.post('/generatecsv', VerifyToken, (req, res) => {
+}
+
+const generateCsv = (req, res) => {
   const input = {
     type: 'Day',
     AccountId: 0
@@ -119,6 +116,12 @@ router.post('/generatecsv', VerifyToken, (req, res) => {
       res.status(400).send(response)
     }
   })
-})
+}
 
-module.exports = router
+// module.exports = router
+
+module.exports = {
+  generateReport,
+  generateCsv,
+  getRawCarDataReport
+}

@@ -1,10 +1,8 @@
-// const csvFile = require('../../Common/CsvUtils')
-// var jsonexport = require('jsonexport')
-const db = require('../../Model/DataBaseConnection/ConfigDb')
-// const mail = require('../../Common/EmailUtil')
-const dateUtils = require('../../Common/DateUtils')
+const db = require('../DataBaseConnection/Configuration')
+const dateUtils = require('../Common/DateUtils')
 const HashMap = require('hashmap')
 const dateFormat = require('dateformat')
+
 const defaultFromTime = '00:00:00'
 const defaultEndTime = '23:59:59'
 
@@ -19,9 +17,8 @@ const generateSummaryReport = (input, callback) => {
     .query(Query, {
       type: db.QueryTypes.RAW
     })
-    .spread(result => {
-      if (result) {
-        console.log(result)
+    .spread(result => { 
+      if (result) {    
 
         const output = {
           data: result,
