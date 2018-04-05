@@ -5,7 +5,8 @@ const sqlQueries = {
     },
     'GroupHierarchy': {
         'getgroupDetails': 'exec [usp_GetGroupDetailsByGroupId] @GroupId = :groupId',
-        'getAllAvailableGroupsAndStores': 'exec [usp_GetAllAvailableGroupsAndStores] @AccountId = :accountId'
+        'getAllAvailableGroupsAndStores': 'exec [usp_GetAllAvailableGroupsAndStores] @AccountId = :accountId',
+        'getGroupHierarchy': 'exec [dbo].[usp_GetGroupHierarchy]  @AccountId= :accountId'
     }
 }
 

@@ -15,7 +15,7 @@ const createGroup = (input, callback) => {
   const condition = {
     where: {
       GroupName: input.name,
-      AccountId: 100 // toDO: input.accountId update this //TODO: To be updated
+        AccountId: input.accountId
     }
   }
 
@@ -24,9 +24,9 @@ const createGroup = (input, callback) => {
       group.create({
         GroupName: input.name,
         Description: input.description,
-        AccountId: 100, // input.accountId,  // TODO: To be updated
-        CreatedBy: 'swathikumary@nousinfo.com', // TODO: To be updated
-        UpdatedBy: 'swathikumary@nousinfo.com' // TODO: To be updated
+          AccountId: input.accountId, 
+          CreatedBy: input.userName, 
+          UpdatedBy: input.userName 
       }).then(result => {
         if (input.groups.length > 0 || input.stores.length > 0) {
           let maxSize = input.groups.length
@@ -44,7 +44,6 @@ const createGroup = (input, callback) => {
               }).catch(error1 => {
                 output.data = error1
                 output.status = false
-
                 callback(output)
               })
           }
@@ -92,7 +91,7 @@ const updateGroup = (input, callback) => {
   const condition = {
     where: {
       Id: input.id,
-      AccountId: 100 // toDO: input.accountId update this //TODO: To be updated
+        AccountId: input.accountId
     }
   }
   group.findOne(condition).then(data => {
@@ -101,7 +100,7 @@ const updateGroup = (input, callback) => {
         const condition = {
           where: {
             GroupName: input.name,
-            AccountId: 100 // toDO: input.accountId update this //TODO: To be updated
+              AccountId: input.accountId
           }
         }
         group.findAndCountAll(condition).then(count => {
@@ -162,7 +161,7 @@ const updateGroupData = (input, callback) => {
   group.update({
     GroupName: input.name,
     Description: input.description,
-    UpdatedBy: 'jaffer@nousinfo.com', // TODO: To be updated
+    UpdatedBy: input.userName,
     UpdatedDateTime: Date().now
   }, {
     where: {
@@ -370,10 +369,10 @@ const addToHierarchy = (hierarchy, inputItem) => {
 }
 
 const getAll = (input, callback) => {
-  const Query = 'exec [dbo].[usp_GetGroupHierarchy]  @AccountId=' + input.accountId
-  db.query(Query, {
-    type: db.QueryTypes.SELECT
-  }).then(result => {
+    db.query(sqlQuery.GroupHierarchy.getGroupHierarchy, {
+        replacements: { accountId: input.accountId },
+        type: db.QueryTypes.SELECT
+    }).then(result => {
     const output = {}
     if (result) {
       let hierarchy = []

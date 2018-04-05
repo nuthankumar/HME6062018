@@ -1,14 +1,11 @@
 const validate = require('validator')
 const groupController = require('../Controllers/GroupController')
-// const messages = require('../Common/Message')
-
 /**
  * Service to provide list of all groups
  * Rules : check accountId &
  */
 
 const createGroup = (request, callback) => {
-    console.log("The validator user" + request.userId)
     if (request.body.name) {
         const input = {
             id: request.body.id,
@@ -16,7 +13,8 @@ const createGroup = (request, callback) => {
             description: request.body.description,
             groups: request.body.groups,
             stores: request.body.stores,
-            userName: request.UserName 
+            userName: request.UserName,
+            accountId: request.AccountId
         }
 
         if (!request.body.id) {

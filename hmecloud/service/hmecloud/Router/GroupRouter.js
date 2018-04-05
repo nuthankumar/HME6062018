@@ -10,6 +10,7 @@ const authValidator = require('../Controllers/AuthenticationController')
  * using name,desc,group,stores
  */
 router.post('/creategroup', authValidator, (request, response, next) => {
+    console.log("THe accountId====" + request.AccountId)
     groupValidator.createGroup(request, result => {
         if (result.status === true) {
             response.status(201).send(result)
@@ -23,7 +24,7 @@ router.post('/creategroup', authValidator, (request, response, next) => {
  * This Service is used to get the Group details to edit the group
  */
 
-router.get('/editgroup', (request, response) => {
+router.get('/editgroup', authValidator, (request, response) => {
     groupValidator.getgroupDetails(request, result => {
         if (result.status === true) {
             response.status(200).send(result)
@@ -39,7 +40,7 @@ router.get('/editgroup', (request, response) => {
  * @param response
  */
 
-router.delete('/deletegroup', (request, response) => {
+router.delete('/deletegroup', authValidator, (request, response) => {
 
     groupValidator.deleteGroupById(request, result => {
         if (result === true) {
@@ -53,7 +54,7 @@ router.delete('/deletegroup', (request, response) => {
  *  Service to get the available Group and Store details
  */
 
-router.get('/availabledetails', (request, response) => {
+router.get('/availabledetails', authValidator, (request, response) => {
     groupValidator.avaliabledGroups(request, result => {
         if (result.status === true) {
             response.status(200).send(result)
@@ -66,7 +67,7 @@ router.get('/availabledetails', (request, response) => {
 /*
  * Service to get the Group Hierarchy
  */
-router.get('/getAll', (request, response) => {
+router.get('/getAll', authValidator, (request, response) => {
 
     groupValidator.getAll(request, result => {
         if (result.status === true) {

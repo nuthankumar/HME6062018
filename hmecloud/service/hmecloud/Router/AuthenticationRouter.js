@@ -7,8 +7,8 @@ const router = express.Router()
 router.get('/login', (request, response) => {
   const userDetails = {
     userId: 1,
-    UserName: 'abhradipr',
-    UserEmail: 'abhradipr@nousinfo.com',
+    UserName: 'HME Admin',
+    UserEmail: 'admin@hme.com',
     AccountId: 100,
     Role: 'Admin'
   }
