@@ -1,17 +1,9 @@
-/**
- * Using this file Manage the Group Hierachy level - stores and groups
- * Operation : Basic CURD App
- */
 
-// config the model
-const Sequelize = require('../DataBaseConnection/Configuration')
 const validate = require('validator')
-const group = require('../Model/Group')
-const groupDetails = require('../Model/GroupStore')
 const groupRepository = require('../Repository/GroupRepository')
-// Config messages
 const messages = require('../Common/Message')
-var HashMap = require('hashmap')
+const validator = require('../Validators/GroupValidator')
+
 
 // get functions using accountid & name  - for the List
 

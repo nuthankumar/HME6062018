@@ -5,7 +5,7 @@ const validate = require('validator')
  * Rules : check accountId &
  */
 
-/*const validateInput = (input, callback) => {
+const validateGroup = (input, callback) => {
 
 
-} */
+}

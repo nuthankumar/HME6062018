@@ -66,9 +66,6 @@ router.get('/availabledetails', (request, response) => {
             response.status(400).send(result)
         }
     })
-
-
-  
 })
 
 /*
