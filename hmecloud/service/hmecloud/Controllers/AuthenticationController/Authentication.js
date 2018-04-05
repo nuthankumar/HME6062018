@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const config = require('../../common/AuthKey')
+const config = require('../../Common/AuthKey')
 
 function verifyToken (request, response, next) {
   // check header or url parameters or post parameters for token

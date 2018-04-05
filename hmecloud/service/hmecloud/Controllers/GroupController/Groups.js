@@ -10,10 +10,10 @@ Sequelize = new Sequelize('hmeCloud', 'sa', 'nous@123', {
   dialect: 'mssql',
   operatorsAliases: false
 })
-const group = require('../../Model/groupModel/Group')
-const groupDetails = require('../../Model/groupModel/GroupStore')
+const group = require('../../Model/GroupModel/Group')
+const groupDetails = require('../../Model/GroupModel/GroupStore')
 // Config messages
-const messages = require('../../common/message')
+const messages = require('../../Common/Message')
 var HashMap = require('hashmap')
 
 // get functions using accountid & name  - for the List
