@@ -18,8 +18,8 @@ const schema = {
 var validateTemplate = function(data, config) {
     config = config || {};
     const result = Joi.validate(data, schema, config);
-    console.log('validation-result: ', result);
-    return result.error === null;
+    // console.log('validation-result: ', result);
+    return result.error === null; // to-do: return messages[]
 };
 
 exports.isValidTemplate = validateTemplate;
