@@ -1,10 +1,6 @@
 const Joi = require('joi');
 
 const schema = {
-    SubscriptionId: Joi.number().integer().required(),
-    EventCategory: Joi.string().required(),
-    EventInfo: Joi.string().required(),
-
     reportTemplateStoreId: Joi.number().integer().required(),
     reportTemplateAdvancedOp: Joi.string(),
     reportTemplateTimeMeasure: Joi.string(),
