@@ -23,7 +23,8 @@ exports.CREATEGROUP = {
   RecordDeleted: ' Record deleted Successfully',
   noDataForGivenId: 'No data found for the given Id: ',
   invalidRequestBody: 'Invalid request body',
-  groupIdNo: 'GroupId: '
+  groupIdNo: 'GroupId: ',
+  groupCreationFailed : ' Creation failed'
 }
 
 exports.REPORTSUMMARY = {

@@ -4,8 +4,23 @@ const groupRepository = require('../Repository/GroupRepository')
 const messages = require('../Common/Message')
 
 const createGroup = (input, callback) => {
+    let output = {}
     groupRepository.createGroup(input, result => {
-        callback(result)
+        if (result.length > 0) {
+            let isGroupCreated = result[0]
+            if (isGroupCreated.hasOwnProperty('groupId')) {
+                output.data = messages.CREATEGROUP.groupSuccess1 + input.name + messages.CREATEGROUP.groupSuccess2
+                output.status = true
+
+            } else if (isGroupCreated.hasOwnProperty('groupcount') && isGroupCreated.groupcount > 0) {
+                output.data = input.name + messages.CREATEGROUP.groupAlreadyExist
+                output.status = false
+            }
+        } else {
+            output.data = messages.CREATEGROUP.groupSuccess1+ input.name + messages.CREATEGROUP.groupCreationFailed
+            output.status = false
+        }
+        callback(output)
     })
 }
 
