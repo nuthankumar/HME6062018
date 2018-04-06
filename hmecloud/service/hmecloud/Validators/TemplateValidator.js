@@ -8,7 +8,7 @@ const templateController = require('../Controllers/ReportTemplateController')
  * @param  {funct} callback Function will be called once the input executed.
  * @public
  */
-const createTemplate = (input, callback) => {
+const create = (input, callback) => {
   let output = {}
   if (input.templateName) {
     templateController.create(input, (result) => {
@@ -27,7 +27,7 @@ const createTemplate = (input, callback) => {
  * @param  {funct} callback Function will be called once the input executed.
  * @public
  */
-const getTemplate = (input, callback) => {
+const get = (input, callback) => {
   let output = {}
   if (input.templetId) {
     templateController.get(input.templetId, (result) => {
@@ -46,7 +46,7 @@ const getTemplate = (input, callback) => {
  * @param  {funct} callback Function will be called once the input executed.
  * @public
  */
-const getalltemplate = (input, callback) => {
+const getAll = (input, callback) => {
   let output = {}
   let values = {}
   const AccountId = validate.isNumeric(input.accountId)
@@ -87,7 +87,7 @@ const getalltemplate = (input, callback) => {
  * @param  {funct} callback Function will be called once the input executed.
  * @public
  */
-const deleteTemplate = (input, callback) => {
+const deleteById = (input, callback) => {
   let output = {}
   const templateId = validate.isNumeric(input.templateId)
   if (!templateId) {
@@ -99,8 +99,8 @@ const deleteTemplate = (input, callback) => {
   })
 }
 module.exports = {
-  createTemplate,
-  getTemplate,
-  getalltemplate,
-  deleteTemplate
+  create,
+  get,
+  getAll,
+  deleteById
 }
