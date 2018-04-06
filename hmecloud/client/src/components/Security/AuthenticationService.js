@@ -1,6 +1,6 @@
 import decode from 'jwt-decode'
 import jwt from 'jsonwebtoken'
-import {config} from '../../config'
+import {Config} from '../../Config'
 import fetch from 'isomorphic-fetch'
 import btoa from 'btoa'
 // import crypto from 'crypto-js';
@@ -10,9 +10,9 @@ import btoa from 'btoa'
 
 export default class AuthenticationService {
   // Initializing important variablescls
-  
+
   constructor (domain) {
-    this.domain = domain || config.authUrl // API server domain
+    this.domain = domain || Config.authUrl // API server domain
     this.fetch = this.fetch.bind(this) // React binding stuff
     this.login = this.login.bind(this)
     this.getProfile = this.getProfile.bind(this)

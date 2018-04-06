@@ -2,7 +2,7 @@ import React from 'react'
 import fetch from 'isomorphic-fetch'
 import HmeHeader from '../Header/HmeHeader'
 import Tree, { TreeNode } from 'rc-tree'
-import { config } from '../../config'
+import { Config } from '../../Config'
 import 'rc-tree/assets/index.css'
 import './ReportGroup.css'
 // import { BrowserRouter } from 'react-router-dom'
@@ -22,7 +22,7 @@ export default class ReportGroupHierarchy extends React.Component {
   }
 
   getTreeHierarchy () {
-    let url = config.url + 'api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com'
+    let url = Config.url + 'api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com'
     // let url = "http://localhost:7071/api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com";
     fetch(url)
       .then((response) => response.json())

@@ -64,6 +64,7 @@ export default class SummaryReport extends Component {
           ]
         },
         day: {
+
           all: [ {
             TimeMeasure: 'mar 9 - mar 10th',
             data: [{groupId: 'G001', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
@@ -93,6 +94,12 @@ export default class SummaryReport extends Component {
           ]
         },
         dayPart: {
+          storeName: '',
+          storeDesc: '',
+          startTime:'',
+          stopTime: '',
+          printDate: '',
+          printTime:'',
           all: [ {
             startTime: 'MAR 9',
             endTime: 'MAR 10',

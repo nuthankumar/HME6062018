@@ -17,10 +17,10 @@ import "rc-time-picker/assets/index.css";
 import moment from "moment";
 import TimePicker from "rc-time-picker";
 import HmeHeader from "../Header/HmeHeader";
-import fetch from "isomorphic-fetch";
 import SuccessAlert from "../Alerts/SuccessAlert";
 import ErrorAlert from "../Alerts/ErrorAlert";
-import {config} from '../../config'
+import {Config} from '../../Config'
+import {CommonConstants} from '../../Constants'
 import Api from '../../Api'
 
 const ProductLogo = require("../../images/ProductLogo-1.png");
@@ -89,17 +89,16 @@ class Report extends Component {
       templateData : [],
       selectedStoreIds : []
     };
-
+    this.api = new Api()
     this.getSavedReports();
     this.handleChange = this.handleChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    this.Auth = new AuthService();
-    this.getTreeHierarchy();
-    
+    this.Auth = new AuthService()
+    this.getTreeHierarchy()
+
   }
 
   getTreeHierarchy() {
-    let api = new Api()
    // let url = "http://localhost:7071/api/group/listgrouphierarchy?accountId=100&userName=swathikumary@nousinfo.com";
    // let url =  config.url + "api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com";
     /*fetch(url)
@@ -114,11 +113,11 @@ class Report extends Component {
         this.state.errorMessage = error.message;
         this.setState(this.state);
       });*/
-      let subPath = 'api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com'
-      api.getData(subPath,data => {
-        console.log(data.data);
-        this.state.treeData = data.data;
-        this.setState(this.state);
+      let url = Config.apiBaseUrl + CommonConstants.apiUrls.getGroupHierarchyTree + '?accountId=100&userName=swathikumary@nousinfo.com'
+      this.api.getData(url,data => {
+        console.log(data.data)
+        this.state.treeData = data.data
+        this.setState(this.state)
       })
   }
 
@@ -578,7 +577,7 @@ class Report extends Component {
         this.setState({
           token: token
         });
-        const url = config.jwtUrl + token;
+        const url = Config.jwtUrl + token;
         //window.location.href('url');
         window.location.assign(url);
         this.props.history.replace(url);
@@ -601,8 +600,8 @@ class Report extends Component {
   }
 
   getSavedReports() {
-    fetch(
-      config.url+"api/reportTemplate/list?accountId=100&createdBy=1000",
+    /*fetch(
+      Config.baseUrl + CommonConstants.apiUrls.getSavedTemplateList + '?accountId=100&createdBy=1000',
       {
         method: "GET",
         headers: {
@@ -619,7 +618,15 @@ class Report extends Component {
           savedTemplates: data.data
         });
       })
-      .catch(error => {});
+      .catch(error => {});*/
+      let url = Config.baseUrl + CommonConstants.apiUrls.getSavedTemplates + '?accountId=100&createdBy=1000'
+      this.api.getData(url,data => {
+        this.setState({
+          savedTemplates: data.data
+        })
+      }, error => {
+        console.log(error)
+      })
   }
 
   savedReports() {
@@ -691,7 +698,6 @@ class Report extends Component {
       });
     };
 
-
     findStore(list);
     this.setState({
       selectedList: selectedList
@@ -718,7 +724,7 @@ class Report extends Component {
   }
 
   apply(e) {
-    let url =
+    /*let url =
       config.url+"api/reportTemplate/gettemplate?templetId=" +
       e.target.id;
     fetch(url, {
@@ -791,15 +797,63 @@ class Report extends Component {
           this.setState(this.state);
         }
       })
-      .catch(error => {});
-  }
+      .catch(error => {}); */
 
-  delete(e) {
+  let url = Config.baseUrl + CommonConstants.apiUrls.getSavedTemplateData + '?templetId=' +
+    e.target.id;
+    this.api.getData (url,data => {
+        let template = data.data;
+        this.setState({ tempStore: template.selectedList });
+        this.setState({ format: template.format });
+        this.setState({ type: template.type });
+        this.setState({ open: template.open });
+        this.setState({ close: template.close });
+        this.setState({ timeMeasure: template.timeMeasure });
+        let fromDate = moment(template.fromDate).format("DD/MM/YYYY");
+        this.setState({ fromDate: fromDate });
+        let toDate = moment(template.toDate).format("DD/MM/YYYY");
+        this.setState({ toDate: toDate });
+        this.setState({ defaultCheckedKeys: template.selectedList });
+        let selectedStoreIds = []
+        this.setState({
+          stores: this.findMatch(this.state.treeData, item => {
+            if(item.Type === "store" && template.selectedList.indexOf(item.Id.toString()) > -1){
+              selectedStoreIds.push(item.Id);
+            }
+            return (
+              item.Type === "store" &&
+              template.selectedList.indexOf(item.Id.toString()) > -1
+            );
+          })
+        });
+        this.setState({
+          selectedStoreIds : selectedStoreIds
+        })
+        if (_.contains(template.include, "1")) {
+          document.getElementById("longestTime").checked = true;
+        }
+        if (_.contains(template.include, "2")) {
+          document.getElementById("systemStatistics").checked = true;
+        }
+        this.setState({ include: template.include });
+
+        if (template.open == false) {
+          this.state.openTime = moment(template.openTime, "HH:mm a");
+          this.setState(this.state);
+        }
+        if (template.close == false) {
+          this.state.closeTime = moment(template.closeTime, "HH:mm a");
+          this.setState(this.state);
+        }
+      }, error => {
+        console.log(error)
+      })
+    }
+
+  delete (e) {
     // console.log(e.target.id);
-    let url =
-      config.url + "api/reportTemplate/delete?templetId=" +
-      e.target.id;
-    fetch(url, {
+
+    /*fetch(url, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -819,7 +873,19 @@ class Report extends Component {
         this.state.errorMessage = "ERROR";
         this.state.successMessage = "";
         this.setState(this.state);
-      });
+      });*/
+    let url = Config.baseUrl + CommonConstants.apiUrls.deleteTemplate + '?templetId=' +
+      e.target.id;
+    this.api.deleteData (url,data => {
+      this.state.successMessage = data.data;
+      this.state.errorMessage = "";
+      this.setState(this.state);
+      this.getSavedReports();
+    }, error => {
+      this.state.errorMessage = "ERROR";
+      this.state.successMessage = "";
+      this.setState(this.state);
+    })
   }
 
   generate(e) {
@@ -916,12 +982,12 @@ class Report extends Component {
     if (this.state.saveAsTemplate) {
       if (!this.state.templateName) {
         this.state.errorMessage =
-          "Please enter a template name to save a template";
-        this.setState(this.state);
+          "Please enter a template name to save a template"
+        this.setState(this.state)
         isError = true;
       } else {
-        let url = config.url+"api/reportTemplate/create";
-        fetch(url, {
+        //let url = config.url+"api/reportTemplate/create"
+        /*fetch(url, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -942,7 +1008,19 @@ class Report extends Component {
             this.state.errorMessage = "ERROR";
             this.state.successMessage = "";
             this.setState(this.state);
-          });
+          });*/
+          let url = Config.baseUrl + CommonConstants.apiUrls.createTemplate + '?templetId=' +
+            e.target.id;
+          this.api.postData (url, template[0] ,data => {
+            this.state.successMessage = data.data;
+            this.state.errorMessage = "";
+            this.setState(this.state);
+            this.getSavedReports();
+          }, error => {
+            this.state.errorMessage = "ERROR";
+            this.state.successMessage = "";
+            this.setState(this.state);
+          })
       }
     }
     if (!isError) {

@@ -8,16 +8,14 @@ import HmeHeader from '../Header/HmeHeader'
 var body = require('body-parser');
 var _ = require('underscore');
 
-
-
 export default class ReportGroupHierarchy extends React.Component {
-
-    static propTypes = {
-    keys: PropTypes.array,
-    };
-    static defaultProps = {
-    keys: ['0-0-0-0'],
-    };
+    // Need to be checked before removing
+    // static propTypes = {
+    // keys: PropTypes.array,
+    // };
+    // static defaultProps = {
+    // keys: ['0-0-0-0'],
+    // };
     constructor(props) {
        super(props);
        const keys = props.keys;
