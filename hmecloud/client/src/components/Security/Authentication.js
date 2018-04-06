@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import AuthenticationService from './AuthenticationService'
-import {config} from '../../config'
+import {Config} from '../../Config'
 
 export default function authenticate (AuthenticationComponent) {
   // Code here now
-  const authenticationService = new AuthenticationService(config.authUrl)
+  const authenticationService = new AuthenticationService(Config.authUrl)
 
   return class AuthWrapped extends Component {
     constructor () {

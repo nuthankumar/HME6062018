@@ -3,7 +3,7 @@ import moment from 'moment'
 import Header from '../Header/HmeHeader'
 import './SummaryReport.css'
 import fetch from 'isomorphic-fetch'
-import {config} from '../../config'
+import {Config} from '../../Config'
 import PageHeader from '../Header/PageHeader'
 
 class RawCarReport extends Component {
@@ -44,7 +44,7 @@ class RawCarReport extends Component {
       'ReportTemplate_Include_Stats': '',
       'reportTemplateFormat': 1
     }
-    let url = config.url + 'api/report/getRawCarDataReport?reportType=rr1'
+    let url = Config.url + 'api/report/getRawCarDataReport?reportType=rr1'
     fetch(url, {
       method: 'POST',
       headers: {
