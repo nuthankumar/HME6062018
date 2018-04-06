@@ -5,8 +5,8 @@ const sqlQueries = {
     'getAllAvailableGroupsAndStores': 'exec [usp_GetAllAvailableGroupsAndStores] @AccountId = :accountId',
     'getGroupHierarchy': 'exec [dbo].[usp_GetGroupHierarchy]  @AccountId= :accountId',
     'deleteGroupByGroupId': 'exec usp_DeleteGroupByGroupId @GroupId= :groupId',
-      'createGroup': 'exec usp_CreateGroup :groupName, :description, :accountId, :userName, :groups, :stores',
-      'updateGroup': 'exec usp_UpdateGroup :groupId, :groupName, :description, :accountId, :userName, :groups, :stores',
+    'createGroup': 'exec usp_CreateGroup :groupName, :description, :accountId, :userName, :groups, :stores',
+    'updateGroup': 'exec usp_UpdateGroup :groupId, :groupName, :description, :accountId, :userName, :groups, :stores'
   },
   'ReportTemplates': {
     'createReportTemplate': 'exec [dbo].[usp_InsertReportTemplate] @AccountId  =:AccountId  ,@Stores = :Stores,@TimeMeasure = :TimeMeasure ,@FromDate =:FromDate,@ToDate =:FromDate ,@OpenTime=:OpenTime ,@CloseTime =:CloseTime,@Type=:Type,@Open=:Open, @Close=:Close,@Include=:Include,@Format=:Format,@TemplateName=:TemplateName,@CreatedBy=:CreatedBy,@UpdatedBy=:UpdatedBy,@CreatedDateTime=:CreatedDateTime, @UpdatedDateTime=:UpdatedDateTime',

@@ -4,12 +4,7 @@
  */
 const db = require('../DataBaseConnection/Configuration')
 const repository = require('./Repository')
-const group = require('../Model/Group')
-const groupDetails = require('../Model/GroupStore')
 const sqlQuery = require('../Common/DataBaseQueries')
-const messages = require('../Common/Message')
-
-// get functions using accountid & name  - for the List
 
 const createGroup = (input, callback) => {
   repository.execute(sqlQuery.GroupHierarchy.createGroup, {
@@ -18,11 +13,10 @@ const createGroup = (input, callback) => {
   }, result => callback(result))
 }
 const updateGroup = (input, callback) => {
-    console.log("Repository invoked")
-    repository.execute(sqlQuery.GroupHierarchy.updateGroup, {
-        replacements: { groupId: input.id, groupName: input.name, description: input.description, accountId: input.accountId, userName: input.userName, groups: input.groups.toString(), stores: input.stores.toString() },
-        type: db.QueryTypes.SELECT
-    }, result => callback(result))
+  repository.execute(sqlQuery.GroupHierarchy.updateGroup, {
+    replacements: { groupId: input.id, groupName: input.name, description: input.description, accountId: input.accountId, userName: input.userName, groups: input.groups.toString(), stores: input.stores.toString() },
+    type: db.QueryTypes.SELECT
+  }, result => callback(result))
 }
 
 const getgroupDetails = (groupId, callback) => {
