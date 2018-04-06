@@ -31,6 +31,7 @@ const generateSummaryReport = (input, callback) => {
 const getRawCarDataReport = (input, callback) => {
   let fromDateTime
   let toDateTime
+  const output = {}
   if (input.ReportTemplate_From_Time) {
     fromDateTime = input.ReportTemplate_From_Date + ' ' + input.ReportTemplate_From_Time
   } else {
@@ -42,13 +43,31 @@ const getRawCarDataReport = (input, callback) => {
   } else {
     toDateTime = input.ReportTemplate_To_Date + ' ' + defaultEndTime
   }
-  const Query =
-        'exec usp_HME_Cloud_Get_Report_Raw_Data_Details ' + input.ReportTemplate_StoreId + " ,'" + input.ReportTemplate_From_Date + "', '" + input.ReportTemplate_To_Date + "','" + fromDateTime + "','" + toDateTime + "','" + input.ReportTemplate_Type + "'"
+
+
+  // const Query =
+  //       'exec usp_HME_Cloud_Get_Report_Raw_Data_Details ' + 
+//  input.ReportTemplate_StoreIds + " ,'" + input.ReportTemplate_From_Date + "', '" + input.ReportTemplate_To_Date + 
+//  "','" + fromDateTime + "','" + toDateTime + "','" + input.ReportTemplate_Type + "'"
+
+      const Query = `exec usp_HME_Cloud_Get_Report_Raw_Data_Details 
+        @StoreId = ${input.ReportTemplate_StoreIds},
+        @StoreStartDate = '${input.ReportTemplate_From_Date}',
+        @StoreEndDate= '${input.ReportTemplate_To_Date}',
+        @StartDateTime = '${fromDateTime}',
+        @EndDateTime = '${toDateTime}',
+        @CarDataRecordType_IDs = ${input.ReportTemplate_Type},
+        @ReportType = 'AC', 
+        @LaneConfig_ID = 1`
 
   db.query(Query, {
     type: db.QueryTypes.SELECT
   }).then(result => {
-    callback(result)
+    const output = {
+      data: result,
+      status: true
+    }
+    callback(output)
   }).catch(error => {
     const output = {
       data: error,

@@ -33,7 +33,7 @@ const reportValidator = (request, callback) => {
       input.ReportTemplate_Include_Stats = null
     }
 
-    if (input.ReportTemplate_From_Date === null || input.ReportTemplate_To_Date === null) {
+    if (!input.ReportTemplate_From_Date || !input.ReportTemplate_To_Date) {
       output.error = request.t('REPORTSUMMARY.DateCannotbeEmpty')
       output.status = false
       callback(output)
