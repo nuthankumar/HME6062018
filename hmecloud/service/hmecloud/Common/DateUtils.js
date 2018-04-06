@@ -1,4 +1,5 @@
 const moment = require('moment')
+const messages = require('../Common/Message')
 const momentDurationFormatSetup = require('moment-duration-format')
 const convertSecondsToMinutes = (avgTime, formatFlag) => {
   momentDurationFormatSetup(moment)
@@ -16,11 +17,9 @@ const convertSecondsToMinutes = (avgTime, formatFlag) => {
 const dayPartTime = (dayPartId, totalRecordCount, deviceStartTime, deviceEndTime) => {
   let dayPartTime
   if (dayPartId && dayPartId === 1) {
-    dayPartTime = ' OPEN-11:59'
-    // TODO: GET Time from Start date
+      dayPartTime = messages.COMMON.DAYPARTOPENTIME
   } else {
-    dayPartTime = 'CLOSE-23:59'
-    // TODO: GET Time from End date
+      dayPartTime = messages.COMMON.DAYPARTCLOSETIME
   }
   return dayPartTime
 }

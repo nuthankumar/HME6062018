@@ -55,5 +55,7 @@ exports.EventName = {
 
 exports.COMMON = {
 
-    CSVTYPE : 'CSV'
+    CSVTYPE: 'CSV',
+    DAYPARTOPENTIME: ' OPEN-11:59',
+    DAYPARTCLOSETIME: ' CLOSE-23:59'
 }
