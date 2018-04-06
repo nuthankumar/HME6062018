@@ -3,6 +3,9 @@ const stores = require('../Repository/StoresRepository')
 const dateUtils = require('../Common/DateUtils')
 const dateFormat = require('dateformat')
 const HashMap = require('hashmap')
+
+const defaultFromTime = '00:00:00'
+const defaultEndTime = '23:59:59'
 /**
  * This Service is used to Generate the Summary reports details for
  *provided details
@@ -30,17 +33,42 @@ const generateReport = (input, callBack) => {
  * @param {*} callBack
  */
 const getRawCarDataReport = (input, callBack) => {
+  let fromDateTime
+  let toDateTime
+
+  if (input.ReportTemplate_From_Time) {
+    fromDateTime = input.ReportTemplate_From_Date + ' ' + input.ReportTemplate_From_Time
+  } else {
+    fromDateTime = input.ReportTemplate_From_Date + ' ' + defaultFromTime
+  }
+
+  if (input.ReportTemplate_To_Time) {
+    toDateTime = input.ReportTemplate_To_Date + ' ' + input.ReportTemplate_To_Time
+  } else {
+    toDateTime = input.ReportTemplate_To_Date + ' ' + defaultEndTime
+  }
+
+  const rawCarDataqueryTemplate = {
+    ReportTemplate_StoreIds: input.ReportTemplate_StoreIds,
+    ReportTemplate_From_Date: input.ReportTemplate_From_Date,
+    ReportTemplate_To_Date: input.ReportTemplate_To_Date,
+    fromDateTime: fromDateTime,
+    toDateTime: toDateTime,
+    ReportTemplate_Type: input.ReportTemplate_Type,
+    ReportType: 'AC',
+    LaneConfig_ID: 1
+  }
   const rawCarDataList = []
   const rawCarData = {}
   const departTimeStampMap = new HashMap()
 
   if (input.reportType === 'rr1' || input.reportType === 'rrcsv1') {
-    stores.getRawCarDataReport(input, result => {
-      if (result.status) {
-        const len = result.data.length
+    stores.getRawCarDataReport(rawCarDataqueryTemplate, result => {
+      if (result) {
+        const len = result.length
         if (len > 1) {
-          const storeData = result.data[len - 2]
-          const dayPartData = result.data[1]
+          const storeData = result[len - 2]
+          const dayPartData = result[1]
           prepareStoreDetails(rawCarData, storeData, input)
           prepareResponsObject(result, departTimeStampMap, rawCarDataList, rawCarData, len, dayPartData, input)
           rawCarData.rawCarData = rawCarDataList
@@ -112,10 +140,10 @@ function prepareStoreDetails (rawCarData, storeData, input) {
  * @param {*} input
  */
 function prepareResponsObject (result, departTimeStampMap, rawCarDataList, rawCarData, len, dayPartData, input) {
-  result.data.forEach(item => {
+  result.forEach(item => {
     let rawCarTempId = item.RawDataID
     if (rawCarTempId && !departTimeStampMap.has(rawCarTempId)) {
-      let departTimeStampList = result.data.filter(function (obj) {
+      let departTimeStampList = result.filter(function (obj) {
         return obj.RawDataID === rawCarTempId
       })
       let tempRawCarData = departTimeStampList[0]
@@ -126,15 +154,16 @@ function prepareResponsObject (result, departTimeStampMap, rawCarDataList, rawCa
       rawCarData.dayPart = 'DP' + tempRawCarData.Daypart_ID + dateUtils.dayPartTime(tempRawCarData.Daypart_ID, len, dayPartData.StartTime, dayPartData.EndTime)
       for (let i = 0; i < departTimeStampList.length; i++) {
         let tempEventDetails = departTimeStampList[i]
-        if (tempEventDetails.EventType_Name.includes(messages.EventName.menu)) {
+        console.log(messages.EventName.MENU)
+        if (tempEventDetails.EventType_Name.includes(messages.EventName.MENU)) {
           rawCarDataObj.menu = dateUtils.convertSecondsToMinutes(tempEventDetails.DetectorTime, input.ReportTemplate_Format)
-        } else if (tempEventDetails.EventType_Name.includes(messages.EventName.laneQueue)) {
+        } else if (tempEventDetails.EventType_Name.includes(messages.EventName.LANEQUEUE)) {
           rawCarDataObj.laneQueue = dateUtils.convertSecondsToMinutes(tempEventDetails.DetectorTime, input.ReportTemplate_Format)
-        } else if (tempEventDetails.EventType_Name.includes(messages.EventName.laneTotal)) {
+        } else if (tempEventDetails.EventType_Name.includes(messages.EventName.LANETOTAl)) {
           rawCarDataObj.laneTotal = dateUtils.convertSecondsToMinutes(tempEventDetails.DetectorTime, input.ReportTemplate_Format)
-        } else if (tempEventDetails.EventType_Name.includes(messages.EventName.service)) {
+        } else if (tempEventDetails.EventType_Name.includes(messages.EventName.SERVICE)) {
           rawCarDataObj.service = dateUtils.convertSecondsToMinutes(tempEventDetails.DetectorTime, input.ReportTemplate_Format)
-        } else if (tempEventDetails.EventType_Name.includes(messages.EventName.greet)) {
+        } else if (tempEventDetails.EventType_Name.includes(messages.EventName.GREET)) {
           rawCarDataObj.greet = dateUtils.convertSecondsToMinutes(tempEventDetails.DetectorTime, input.ReportTemplate_Format)
         }
       }
