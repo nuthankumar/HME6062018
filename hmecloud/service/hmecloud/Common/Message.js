@@ -24,7 +24,9 @@ exports.CREATEGROUP = {
   noDataForGivenId: 'No data found for the given Id: ',
   invalidRequestBody: 'Invalid request body',
   groupIdNo: 'GroupId: ',
-  groupCreationFailed : ' Creation failed'
+  groupCreationFailed: ' Creation failed',
+    noDataForGivenName: 'No data found for the given name: ',
+  groupUpdationFailed : ' Updation failed'
 }
 
 exports.REPORTSUMMARY = {

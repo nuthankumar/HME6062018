@@ -25,9 +25,23 @@ const createGroup = (input, callback) => {
 }
 
 const updateGroup = (input, callback) => {
-
+    let output = {}
     groupRepository.updateGroup(input, result => {
-        callback(result)
+        if (result.length > 0) {
+            let isGroupUpdated = result[0]
+            if (isGroupUpdated.hasOwnProperty('groupId') && isGroupUpdated.groupId) {
+                output.data = messages.CREATEGROUP.groupSuccess1 + input.name + messages.CREATEGROUP.groupUpdatesSuccess
+                output.status = true
+
+            } else {
+                output.data = messages.CREATEGROUP.noDataForGivenName + input.name
+                output.status = false
+            }
+        } else {
+            output.data = messages.CREATEGROUP.groupSuccess1 + input.name + messages.CREATEGROUP.groupUpdationFailed
+            output.status = false
+        }
+        callback(output)
     })
 }
 const getgroupDetails = (input, callback) => {
