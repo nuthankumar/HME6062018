@@ -81,8 +81,8 @@
   background-size: cover; /* for IE9+, Safari 4.1+, Chrome 3.0+, Firefox 3.6+ */
  -webkit-background-size: cover; /* for Safari 3.0 - 4.0 , Chrome 1.0 - 3.0 */
  -moz-background-size: cover; /* optional for Firefox 3.6 */
- width: 28px !important;
- height: 30px !important;
+  width: 28px !important;
+  height: 30px !important;
 }
 
 .hierarchy-tree{
@@ -93,6 +93,7 @@
   border: 1px solid grey;
   height: 450px;
   width: 50%;
+  overflow: scroll;
 }
 
 .rc-tree li span.rc-tree-switcher.rc-tree-switcher_open{

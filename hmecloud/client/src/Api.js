@@ -11,17 +11,9 @@ class Api {
     body: JSON.stringify(data)
     })
     .then((response) => response.json())
-    .then((data) => {
-        this.state.successMessage = data.data
-        this.state.errorMessage = ''
-        this.state.saveSuccess = true
-        this.setState(this.state)
-        this.getAvailableGroupStoreList()
-    })
+    .then(callback)
     .catch((error) => {
-        this.state.successMessage = ''
-        this.state.errorMessage = error.message
-        this.setState(this.state)
+      console.log(error)
     })
   }
   getData (url, callback) {

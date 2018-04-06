@@ -3,6 +3,8 @@ import fetch from 'isomorphic-fetch'
 import HmeHeader from '../Header/HmeHeader'
 import Tree, { TreeNode } from 'rc-tree'
 import { Config } from '../../Config'
+import {CommonConstants} from '../../Constants'
+import Api from '../../Api'
 import 'rc-tree/assets/index.css'
 import './ReportGroup.css'
 // import { BrowserRouter } from 'react-router-dom'
@@ -18,13 +20,14 @@ export default class ReportGroupHierarchy extends React.Component {
       editGroup: false,
       groupId: null
     }
+    this.api = new Api()
     this.getTreeHierarchy()
   }
 
   getTreeHierarchy () {
-    let url = Config.url + 'api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com'
+    // let url = Config.url + 'api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com'
     // let url = "http://localhost:7071/api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com";
-    fetch(url)
+    /* fetch(url)
       .then((response) => response.json())
       .then((data) => {
         console.log(data.data)
@@ -32,6 +35,15 @@ export default class ReportGroupHierarchy extends React.Component {
         this.setState(this.state)
       })
       .catch((error) => {
+        this.state.successMessage = ''
+        this.state.errorMessage = error.message
+        this.setState(this.state)
+      }) */
+      let url = Config.apiBaseUrl + CommonConstants.apiUrls.getGroupHierarchyTree + '?accountId=100&userName=swathikumary@nousinfo.com'
+      this.api.getData(url,data => {
+        this.state.treeData = data.data
+        this.setState(this.state)
+      }, error => {
         this.state.successMessage = ''
         this.state.errorMessage = error.message
         this.setState(this.state)
