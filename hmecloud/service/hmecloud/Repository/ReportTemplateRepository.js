@@ -9,7 +9,6 @@ const sqlQuery = require('../Common/DataBaseQueries')
  * @param  {funct} callback Function will be called once the input executed.
  * @public
  */
-
 const create = (reportTemplate, callback) => {
   repository.execute(sqlQuery.ReportTemplates.createReportTemplate, {
     replacements: reportTemplate,
@@ -23,13 +22,13 @@ const create = (reportTemplate, callback) => {
  * @param  {funct} callback Function will be called once the input executed.
  * @public
  */
-
 const get = (reportTemplateId, callback) => {
   repository.execute(sqlQuery.ReportTemplates.getReportsTemplate, {
     replacements: { id: reportTemplateId },
     type: dataBase.QueryTypes.SELECT
   }, result => callback(result[0]))
 }
+
 /**
  * The method can be used to execute getall Report Template
  * @param  {input} accountId accountId   from  controller
@@ -37,13 +36,13 @@ const get = (reportTemplateId, callback) => {
  * @param  {funct} callback Function will be called once the input executed.
  * @public
  */
-
 const getAll = (accountId, createdById, callback) => {
   repository.execute(sqlQuery.ReportTemplates.getAllReportsTemplates, {
     replacements: { AccountId: accountId, CreatedBy: createdById },
     type: dataBase.QueryTypes.SELECT
   }, callback)
 }
+
 /**
  * The method can be used to execute delete Report Template
  * @param  {input} reportTemplateId  reportTemplateId   from  controller

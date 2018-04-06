@@ -8,7 +8,7 @@ const repository = require('../Repository/ReportTemplateRepository')
  * @param  {funct} callback Function will be called once the input executed.
  * @public
  */
-const createReportTemplate = (reportTemplate, callback) => {
+const create = (reportTemplate, callback) => {
   let output = {}
   const values = {
     AccountId: reportTemplate.AccountId,
@@ -48,8 +48,7 @@ const createReportTemplate = (reportTemplate, callback) => {
  * @param  {funct} callback Function will be called once the input executed.
  * @public
  */
-
-const getReportTemplate = (reportTemplate, callback) => {
+const get = (reportTemplate, callback) => {
   let output = {}
   repository.get(reportTemplate, (result) => {
     if (result) {
@@ -63,7 +62,15 @@ const getReportTemplate = (reportTemplate, callback) => {
     }
   })
 }
-const getAllReportTemplates = (input, callback) => {
+
+/**
+ * The method can be used to execute getAll Report Templates
+ * @param  {input} AccountId input from  user request
+ * @param  {input} CreatedBy input from  user request
+ * @param  {funct} callback Function will be called once the input executed.
+ * @public
+ */
+const getAll = (input, callback) => {
   let output = {}
   repository.getAll(input.AccountId, input.CreatedBy, (result) => {
     if (result.length > 0) {
@@ -77,7 +84,13 @@ const getAllReportTemplates = (input, callback) => {
     }
   })
 }
-const deleteReportTemplate = (input, callback) => {
+/**
+ * The method can be used to execute delete the report template
+ * @param  {input} input input from  user request
+ * @param  {funct} callback Function will be called once the input executed.
+ * @public
+ */
+const deleteById = (input, callback) => {
   let output = {}
   repository.deleteById(input, (result) => {
     if (result) {
@@ -93,8 +106,8 @@ const deleteReportTemplate = (input, callback) => {
 }
 
 module.exports = {
-  createReportTemplate,
-  deleteReportTemplate,
-  getReportTemplate,
-  getAllReportTemplates
+  create,
+  deleteById,
+  get,
+  getAll
 }
