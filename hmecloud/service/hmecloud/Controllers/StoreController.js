@@ -2,6 +2,7 @@ const messages = require('../Common/Message')
 const stores = require('../Repository/StoresRepository')
 const dateUtils = require('../Common/DateUtils')
 const dateFormat = require('dateformat')
+const csvGeneration = require('../Common/CsvUtils')
 const HashMap = require('hashmap')
 
 const defaultFromTime = '00:00:00'
@@ -77,7 +78,16 @@ const getRawCarDataReport = (input, callBack) => {
             rawCarData.status = true
             callBack(rawCarData)
           } else if (input.reportType === 'rrcsv1') {
-            // TODO: Call the CSV file generation function to generate and send an email
+            // Invoking CSV file generation function 
+              let csvInput = {}
+              csvInput.type = messages.COMMON.CSVTYPE,
+                  csvInput.reportName = input.ReportTemplate_Time_Measure + "_" + dateFormat(new Date(), 'isoDate'),
+              csvInput.email = input.UserEmail,
+              csvInput.reportinput = rawCarDataList
+              csvInput.subject = input.ReportTemplate_Time_Measure +" "+ fromDateTime + " - " + toDateTime
+              csvGeneration.generateCsvAndEmail(csvInput, result => {
+              callBack(result)
+              })
           }
         }
       } else {
@@ -154,16 +164,15 @@ function prepareResponsObject (result, departTimeStampMap, rawCarDataList, rawCa
       rawCarData.dayPart = 'DP' + tempRawCarData.Daypart_ID + dateUtils.dayPartTime(tempRawCarData.Daypart_ID, len, dayPartData.StartTime, dayPartData.EndTime)
       for (let i = 0; i < departTimeStampList.length; i++) {
         let tempEventDetails = departTimeStampList[i]
-        console.log(messages.EventName.MENU)
         if (tempEventDetails.EventType_Name.includes(messages.EventName.MENU)) {
           rawCarDataObj.menu = dateUtils.convertSecondsToMinutes(tempEventDetails.DetectorTime, input.ReportTemplate_Format)
-        } else if (tempEventDetails.EventType_Name.includes(messages.EventName.LANEQUEUE)) {
-          rawCarDataObj.laneQueue = dateUtils.convertSecondsToMinutes(tempEventDetails.DetectorTime, input.ReportTemplate_Format)
-        } else if (tempEventDetails.EventType_Name.includes(messages.EventName.LANETOTAl)) {
-          rawCarDataObj.laneTotal = dateUtils.convertSecondsToMinutes(tempEventDetails.DetectorTime, input.ReportTemplate_Format)
-        } else if (tempEventDetails.EventType_Name.includes(messages.EventName.SERVICE)) {
-          rawCarDataObj.service = dateUtils.convertSecondsToMinutes(tempEventDetails.DetectorTime, input.ReportTemplate_Format)
         } else if (tempEventDetails.EventType_Name.includes(messages.EventName.GREET)) {
+          rawCarDataObj.laneQueue = dateUtils.convertSecondsToMinutes(tempEventDetails.DetectorTime, input.ReportTemplate_Format)
+        } else if (tempEventDetails.EventType_Name.includes(messages.EventName.SERVICE)) {
+          rawCarDataObj.laneTotal = dateUtils.convertSecondsToMinutes(tempEventDetails.DetectorTime, input.ReportTemplate_Format)
+        } else if (tempEventDetails.EventType_Name.includes(messages.EventName.LANEQUEUE)) {
+          rawCarDataObj.service = dateUtils.convertSecondsToMinutes(tempEventDetails.DetectorTime, input.ReportTemplate_Format)
+        } else if (tempEventDetails.EventType_Name.includes(messages.EventName.LANETOTAl)) {
           rawCarDataObj.greet = dateUtils.convertSecondsToMinutes(tempEventDetails.DetectorTime, input.ReportTemplate_Format)
         }
       }

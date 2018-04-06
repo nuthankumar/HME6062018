@@ -52,3 +52,8 @@ exports.EventName = {
   SERVICE: 'Service',
   GREET: 'Greet'
 }
+
+exports.COMMON = {
+
+    CSVTYPE : 'CSV'
+}

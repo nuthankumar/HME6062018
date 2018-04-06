@@ -24,7 +24,8 @@ const reportValidator = (request, callback) => {
       Hours2: request.body,
       Minutes2: request.body,
       AMPM2: request.body.AMPM,
-      reportType: request.query.reportType
+      reportType: request.query.reportType,
+      UserEmail: request.UserEmail
     }
 
     if (input.ReportTemplate_Advanced_Op === 1 && (input.ReportTemplate_Open !== 1 || input.ReportTemplate_Close !== 1)) {
