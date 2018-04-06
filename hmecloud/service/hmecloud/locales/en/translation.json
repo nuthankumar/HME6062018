@@ -27,6 +27,7 @@
     "REPORTSUMMARY.InvalidStoreId": "Please select a valid Store",
     "REPORTSUMMARY.DateCannotbeEmpty": "Please select a date",
     "REPORTSUMMARY.DateRangeInvalid": "Date range invalid. For Raw Data Reports select a single day.",
-    "REPORTSUMMARY.InvalidReportType": "Invalid Report Type param"
+    "REPORTSUMMARY.InvalidReportType": "Invalid Report Type param",
+    "REPORTSUMMARY.InvalidEmail": "Invalid Invalid Email Id"
   }
 }

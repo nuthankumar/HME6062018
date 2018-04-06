@@ -2,10 +2,10 @@ const validate = require('validator')
 const storeController = require('../Controllers/StoreController')
 
 const reportValidator = (request, callback) => {
-   
-  if (request.body.reportTemplateStoreId) {
+  let output = {}
+  if (request.body.reportTemplateStoreIds) {
     const input = {
-      ReportTemplate_StoreId: request.body.reportTemplateStoreId,
+      ReportTemplate_StoreIds: request.body.reportTemplateStoreIds,
       ReportTemplate_Advanced_Op: request.body.reportTemplateAdvancedOp,
       ReportTemplate_Time_Measure: request.body.reportTemplateTimeMeasure,
       ReportTemplate_From_Date: request.body.reportTemplateFromDate,
@@ -16,11 +16,28 @@ const reportValidator = (request, callback) => {
       ReportTemplate_Close: request.body.reportTemplateClose,
       ReportTemplate_Type: request.body.reportTemplateType,
       ReportTemplate_Include_Longs: request.body.reportTemplateIncludeLongs,
+      ReportTemplate_Include_Stats: request.body.ReportTemplateIncludeStats,
       ReportTemplate_Format: request.body.reportTemplateFormat,
+      Hours1: request.body.Hours,
+      Minutes1: request.body.Minutes,
+      AMPM1: request.body.AMPM,
+      Hours2: request.body,
+      Minutes2: request.body,
+      AMPM2: request.body.AMPM,
       reportType: request.query.reportType
     }
 
-    
+    if (input.ReportTemplate_Advanced_Op === 1 && (input.ReportTemplate_Open !== 1 || input.ReportTemplate_Close !== 1)) {
+      input.ReportTemplate_Type = 'TC'
+      input.ReportTemplate_Include_Longs = null
+      input.ReportTemplate_Include_Stats = null
+    }
+
+    if (input.ReportTemplate_From_Date === null || input.ReportTemplate_To_Date === null) {
+      output.error = request.t('REPORTSUMMARY.DateCannotbeEmpty')
+      output.status = false
+      callback(output)
+    }
     if (!input.ReportTemplate_Time_Measure === 'Raw Data Report') {
       storeController.generateReport(input, result => {
         callback(result)
@@ -31,10 +48,7 @@ const reportValidator = (request, callback) => {
       })
     }
   } else {
-    let output = {}
-    output.error = request.t('CREATEGROUP.invalidRequestBody')
-    output.status = false
-    callback(output)
+
   }
 }
 
@@ -52,7 +66,7 @@ const csvValidator = (request, callback) => {
       callback(result)
     })
   } else {
-    output.error = request.t('CREATEGROUP.invalidRequestBody')
+    output.error = request.t('REPORTSUMMARY.InvalidEmail')
     output.status = false
     callback(output)
   }
