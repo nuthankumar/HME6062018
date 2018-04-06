@@ -29,11 +29,7 @@ router.post('/getRawCarDataReport', authValidator, (request, response, next) => 
    
   storeValidator.reportValidator(request, result => {
     if (result.status === true) {
-      if (result.reportType === 'rr1') {
-        response.status(200).send(result)
-      } else if (result.reportType === 'rrcsv1') {
-        // TODO: Call the CSV file generation function to generate and send an email
-      }
+      response.status(200).send(result)      
     } else {
       response.status(400).send(result.error)
     }

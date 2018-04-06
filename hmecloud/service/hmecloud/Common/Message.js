@@ -41,3 +41,11 @@ exports.REPORTSUMMARY = {
   deleteSuccess: 'Report Template Delete successfully',
   deteleFail: 'Unable to Delete Report'
 }
+
+exports.EventName = {
+  MENU: 'Menu Board',
+  LANEQUEUE: 'Lane Queue',
+  LANETOTAl: 'Lane Total',
+  SERVICE: 'Service',
+  GREET: 'Greet'
+}

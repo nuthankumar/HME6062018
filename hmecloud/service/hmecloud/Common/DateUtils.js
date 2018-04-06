@@ -1,5 +1,7 @@
 const moment = require('moment')
-const msFormat = (avgTime, formatFlag) => {
+const momentDurationFormatSetup = require('moment-duration-format')
+const convertSecondsToMinutes = (avgTime, formatFlag) => {
+  momentDurationFormatSetup(moment)
   if (avgTime) {
     if (formatFlag === 1) {
       return moment.duration(avgTime, 'seconds').format()
@@ -24,6 +26,6 @@ const dayPartTime = (dayPartId, totalRecordCount, deviceStartTime, deviceEndTime
 }
 
 module.exports = {
-  msFormat,
+  convertSecondsToMinutes,
   dayPartTime
 }
