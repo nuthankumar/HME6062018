@@ -11,8 +11,6 @@ import {CommonConstants} from '../../Constants'
 import Api from '../../Api'
 import './ReportGroup.css'
 import 'react-confirm-alert/src/react-confirm-alert.css'
-// import createHistory from 'history/createBrowserHistory'
-// import {body} from 'body-parser';
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 
 var _ = require('underscore')
@@ -30,9 +28,14 @@ export default class ReportGroup extends React.Component {
       accountId: null,
       groupId: null,
       saveSuccess: false,
-      deleteSuccess: false
+      deleteSuccess: false,
+      deleteAlertTitle: 'Confirm to Delete',
+      confirmDeleteMessage: 'Are you sure you want to remove this user?',
+      deleteConfirm:'Yes',
+      deleteCancel: 'No',
+      deleteSuceessMessage: 'Group Deleted Successfully',
+      deleteErrorMessage: 'Unable to delete group data'
     }
-    // this.populateGroupDetails();
     this.api = new Api()
     this.getAvailableGroupStoreList()
   }
@@ -44,28 +47,15 @@ export default class ReportGroup extends React.Component {
   getAvailableGroupStoreList () {
     this.state.available = []
     this.setState(this.state)
-    /*let url = config.url + 'api/group/availabledetails?accountId=100&userName=swathikumary@nousinfo.com'
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data.data)
-        this.state.available = data.data
-        this.setState(this.state)
-      })
-      .catch((error) => {
-        this.state.successMessage = ''
-        this.state.errorMessage = error.message
-        this.setState(this.state)
-      })*/
-      let url = Config.apiBaseUrl + CommonConstants.apiUrls.getAvailableGroups + '?accountId=100&userName=swathikumary@nousinfo.com'
-      this.api.getData(url,data => {
-        this.state.available = data.data
-        this.setState(this.state)
-      }, error => {
-        this.state.successMessage = ''
-        this.state.errorMessage = error.message
-        this.setState(this.state)
-      })
+    let url = Config.apiBaseUrl + CommonConstants.apiUrls.getAvailableGroups + '?accountId=100&userName=swathikumary@nousinfo.com'
+    this.api.getData(url,data => {
+      this.state.available = data.data
+      this.setState(this.state)
+    }, error => {
+      this.state.successMessage = ''
+      this.state.errorMessage = error.message
+      this.setState(this.state)
+    })
   }
 
   populateGroupDetails () {
@@ -74,30 +64,6 @@ export default class ReportGroup extends React.Component {
     this.setState(this.state)
     console.log(this.state.assigned)
     if (this.props.history.location.state.editGroup) {
-      // let groupId = this.props.history.location.state.groupId;
-      // let url = Config.url + 'api/group/edit?groupId=' + this.state.groupId + '&userName=swathikumary@nousinfo.com'
-
-      /*fetch(url)
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.status === false) {
-            this.state.successMessage = data.data
-            this.state.errorMessage = ''
-            this.state.assigned = []
-            this.setState(this.state)
-          } else {
-            this.state.accountId = data.data.group.AccountId
-            this.refs.groupName.value = data.data.group.GroupName
-            this.refs.groupDescription.value = data.data.group.Description
-            this.state.assigned = data.data.details
-            this.setState(this.state)
-          }
-        })
-        .catch((error) => {
-          this.state.successMessage = ''
-          this.state.errorMessage = error.message
-          this.setState(this.state)
-        })*/
         let url = Config.apiBaseUrl + CommonConstants.apiUrls.editGroupDetails + '?groupId=' + this.state.groupId + '&userName=swathikumary@nousinfo.com'
         this.api.getData(url,data => {
           if (data.status === false) {
@@ -159,8 +125,6 @@ export default class ReportGroup extends React.Component {
     this.state.editGroup = this.props.history.location.state.editGroup
     this.setState(this.state)
     let groupStoreObject = this.getGroupandStore(items)
-    //let url = Config.url + 'api/group/create'
-
     if (this.refs.groupName.value === '' || this.refs.groupName.value === undefined) {
       this.state.errorMessage = 'Group name may not be blank'
       this.state.successMessage = ''
@@ -190,44 +154,21 @@ export default class ReportGroup extends React.Component {
           stores: groupStoreObject.store
         }
       }
-      /* fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Cache-Control': 'no-cache',
-          'Pragma': 'no-cache'
-        },
-        body: JSON.stringify(data)
+
+      let url = Config.apiBaseUrl + CommonConstants.apiUrls.addNewGroup
+      this.api.postData(url,data,data => {
+        this.state.successMessage = data.data
+        this.state.errorMessage = ''
+        this.state.saveSuccess = true
+        this.setState(this.state)
+        this.getAvailableGroupStoreList()
+      }, error => {
+        this.state.successMessage = ''
+        this.state.errorMessage = error.message
+        this.setState(this.state)
       })
-        .then((response) => response.json())
-        .then((data) => {
-          this.state.successMessage = data.data
-          this.state.errorMessage = ''
-          this.state.saveSuccess = true
-          this.setState(this.state)
-          this.getAvailableGroupStoreList()
-        })
-        .catch((error) => {
-          this.state.successMessage = ''
-          this.state.errorMessage = error.message
-          this.setState(this.state)
-        }) */
-        let url = Config.apiBaseUrl + CommonConstants.apiUrls.addNewGroup
-        this.api.postData(url,data,data => {
-          this.state.successMessage = data.data
-          this.state.errorMessage = ''
-          this.state.saveSuccess = true
-          this.setState(this.state)
-          this.getAvailableGroupStoreList()
-        }, error => {
-          this.state.successMessage = ''
-          this.state.errorMessage = error.message
-          this.setState(this.state)
-        })
     }
 
-    // history.push('/grouphierarchy');
   }
 
   getGroupandStore (items) {
@@ -248,17 +189,17 @@ export default class ReportGroup extends React.Component {
 
   deleteGroup () {
     confirmAlert({
-      title: 'Confirm to Delete',
-      message: 'Are you sure you want to remove this user?',
+      title: this.state.deleteAlertTitle,
+      message: this.state.confirmDeleteMessage,
       buttons: [
         {
-          label: 'Yes',
+          label: this.state.deleteConfirm,
           onClick: () => {
             this.confirmDelete()
           }
         },
         {
-          label: 'No',
+          label: this.state.deleteCancel,
           onClick: () => {
 
           }
@@ -268,39 +209,15 @@ export default class ReportGroup extends React.Component {
   }
 
   confirmDelete () {
-    // let url = 'http://localhost:7071/api/group/delete?groupId=12&accountId=0';
-    /* let url = Config.url + 'api/group/delete?groupId=' + this.state.groupId + '&accountId=' + this.state.accountId
-    fetch(url, {
-      method: 'DELETE'
-    })
-      .then((data) => {
-        if (data.status === 200) {
-          this.state.successMessage = 'Group Deleted Successfully'
-          this.state.errorMessage = ''
-          this.state.deleteSuccess = true
-          this.setState(this.state)
-        } else {
-          this.state.errorMessage = 'Unable to delete group data'
-          this.state.successMessage = ''
-          this.setState(this.state)
-        }
-
-        // this.props.history.push('/grouphierarchy');
-      })
-      .catch((error) => {
-        this.state.errorMessage = error.message
-        this.state.successMessage = ''
-        this.setState(this.state)
-      }) */
       let url = Config.apiBaseUrl + CommonConstants.apiUrls.deleteGroup + '?groupId=' + this.state.groupId + '&accountId=' + this.state.accountId
       this.api.deleteData(url,data => {
         if (data.status === 200) {
-          this.state.successMessage = 'Group Deleted Successfully'
+          this.state.successMessage = this.state.deleteSuceessMessage
           this.state.errorMessage = ''
           this.state.deleteSuccess = true
           this.setState(this.state)
         } else {
-          this.state.errorMessage = 'Unable to delete group data'
+          this.state.errorMessage = this.state.deleteErrorMessage
           this.state.successMessage = ''
           this.setState(this.state)
         }

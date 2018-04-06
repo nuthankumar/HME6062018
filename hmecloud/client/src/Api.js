@@ -1,6 +1,11 @@
 import {Config} from './Config'
+/***
+GET, POST and DELETE api methods to be called from different components across the application.
+*/
 
 class Api {
+
+  /* Method for POST API calls */
   postData (url, data, callback) {
     fetch(url, {
     method: 'POST',
@@ -16,6 +21,8 @@ class Api {
       console.log(error)
     })
   }
+
+  /* Method for GET API calls */
   getData (url, callback) {
     fetch(url,{
         headers: {
@@ -29,6 +36,8 @@ class Api {
       console.log(error)
     })
   }
+
+  /* Method for POST API calls */
   deleteData (url, callback) {
     fetch(url,{
       method: 'DELETE',
