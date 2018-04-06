@@ -2,13 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\hmecloud",
-    "\\hmecloud\\hmecloud",
-    "\\hmecloud\\hmecloud\\common",
-    "\\hmecloud\\hmecloud\\Controller",
-    "\\hmecloud\\hmecloud\\Controller\\groupController",
-    "\\hmecloud\\hmecloud\\Router",
-    "\\hmecloud\\hmecloud\\Router\\groupRouter"
+    "\\hmecloud\\service\\hmecloud",
+    "\\hmecloud\\service\\hmecloud\\Model\\DataBaseConnection",
+    "\\hmecloud\\service\\hmecloud\\Router\\TemplatesRouter"
   ],
-  "SelectedNode": "\\hmecloud\\hmecloud\\Controller\\groupController\\groupHierarchy.js",
+  "SelectedNode": "\\hmecloud\\service",
   "PreviewInSolutionExplorer": false
 }

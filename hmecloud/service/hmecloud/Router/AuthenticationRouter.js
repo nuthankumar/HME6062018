@@ -8,7 +8,7 @@ router.get('/login', (request, response) => {
   const userDetails = {
     userId: 1,
     UserName: 'HME Admin',
-    UserEmail: 'admin@hme.com',
+    UserEmail: 'swathikumary@nousinfo.com',
     AccountId: 100,
     Role: 'Admin'
   }
