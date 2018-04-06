@@ -21,6 +21,7 @@ import fetch from "isomorphic-fetch";
 import SuccessAlert from "../Alerts/SuccessAlert";
 import ErrorAlert from "../Alerts/ErrorAlert";
 import {config} from '../../config'
+import Api from '../../Api'
 
 const ProductLogo = require("../../images/ProductLogo-1.png");
 const HMELogo = require("../../images/HMELogo.png");
@@ -94,11 +95,14 @@ class Report extends Component {
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.Auth = new AuthService();
     this.getTreeHierarchy();
+    
   }
+
   getTreeHierarchy() {
+    let api = new Api()
    // let url = "http://localhost:7071/api/group/listgrouphierarchy?accountId=100&userName=swathikumary@nousinfo.com";
-    let url =  config.url + "api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com";
-    fetch(url)
+   // let url =  config.url + "api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com";
+    /*fetch(url)
       .then(response => response.json())
       .then(data => {
         console.log(data.data);
@@ -109,7 +113,13 @@ class Report extends Component {
         this.state.successMessage = "";
         this.state.errorMessage = error.message;
         this.setState(this.state);
-      });
+      });*/
+      let subPath = 'api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com'
+      api.getData(subPath,data => {
+        console.log(data.data);
+        this.state.treeData = data.data;
+        this.setState(this.state);
+      })
   }
 
   componentWillMount() {

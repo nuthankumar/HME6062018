@@ -23,7 +23,7 @@ exports.CREATEGROUP = {
   RecordDeleted: ' Record deleted Successfully',
   noDataForGivenId: 'No data found for the given Id: ',
   invalidRequestBody: 'Invalid request body',
-  groupIdNo : 'GroupId: '
+  groupIdNo: 'GroupId: '
 }
 
 exports.REPORTSUMMARY = {
@@ -35,5 +35,9 @@ exports.REPORTSUMMARY = {
   InvalidStoreId: 'Please select a valid Store',
   DateCannotbeEmpty: 'Please select a date',
   DateRangeInvalid: 'Date range invalid. For Raw Data Reports select a single day.',
-  InvalidReportType: 'Invalid Report Type param'
+  InvalidReportType: 'Invalid Report Type param',
+  createSuccess: 'Report Template create successfully',
+  createFail: 'Unable to Create Report',
+  deleteSuccess: 'Report Template Delete successfully',
+  deteleFail: 'Unable to Delete Report'
 }

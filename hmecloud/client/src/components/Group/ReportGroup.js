@@ -86,6 +86,8 @@ export default class ReportGroup extends React.Component {
           this.state.errorMessage = error.message
           this.setState(this.state)
         })
+
+
     } else {
       this.refs.groupName.value = ''
       this.refs.groupDescription.value = ''

@@ -1,7 +1,7 @@
 const dataBase = require('../DataBaseConnection/Configuration')
 
 /**
- * The method can be used to execute the SQL query 
+ * The method can be used to execute the SQL statement
  * @param  {obj} query SQL statement to run in database
  * @param  {obj} parameters SQL paramters to be used to execute the query
  * @param  {funct} callback Function will be called once the query executed.
