@@ -23,7 +23,8 @@ exports.CREATEGROUP = {
   RecordDeleted: ' Record deleted Successfully',
   noDataForGivenId: 'No data found for the given Id: ',
   invalidRequestBody: 'Invalid request body',
-  groupIdNo: 'GroupId: '
+  groupIdNo: 'GroupId: ',
+  groupCreationFailed : ' Creation failed'
 }
 
 exports.REPORTSUMMARY = {
@@ -40,4 +41,12 @@ exports.REPORTSUMMARY = {
   createFail: 'Unable to Create Report',
   deleteSuccess: 'Report Template Delete successfully',
   deteleFail: 'Unable to Delete Report'
+}
+
+exports.EventName = {
+  MENU: 'Menu Board',
+  LANEQUEUE: 'Lane Queue',
+  LANETOTAl: 'Lane Total',
+  SERVICE: 'Service',
+  GREET: 'Greet'
 }
