@@ -9,12 +9,7 @@ const createTemplate = (input, callback) => {
 }
 
 const getTemplate = (input, callback) => {
-  let output = {}
-  if (!input.templetId) {
-    output.error = messages.REPORTSUMMARY.invalidTemplateId
-    output.status = false
-  }
-  templateController.getReportTemplate(input, (result) => {
+  templateController.getReportTemplate(input.templetId, (result) => {
     callback(result)
   })
 }
@@ -55,12 +50,12 @@ const getalltemplate = (input, callback) => {
 }
 const deleteTemplate = (input, callback) => {
   let output = {}
-  const templateId = validate.isNumeric(input.Id)
+  const templateId = validate.isNumeric(input.templateId)
   if (!templateId) {
     output.error = messages.REPORTSUMMARY.invalidTemplateId
     output.status = false
   }
-  templateController.getReportTemplate(input, (result) => {
+  templateController.deleteReportTemplate(input.templateId, (result) => {
     callback(result)
   })
 }
