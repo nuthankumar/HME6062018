@@ -13,12 +13,12 @@ const createGroup = (request, callback) => {
       accountId: request.AccountId
     }
     if (!request.body.id) {
-      groupController.createGroup(input, result => {
+      groupController.createGroup(request, input, result => {
         callback(result)
       })
     } else {
       // Update Group
-      groupController.updateGroup(input, result => {
+      groupController.updateGroup(request, input, result => {
         callback(result)
       })
     }
@@ -36,7 +36,7 @@ const getgroupDetails = (request, callback) => {
       groupId: request.query.groupId,
       userName: request.query.userName
     }
-    groupController.getgroupDetails(input, result => {
+    groupController.getgroupDetails(request, input, result => {
       callback(result)
     })
   } else if (!request.query.groupId && request.query.userName) {
@@ -72,7 +72,7 @@ const deleteGroupById = (request, callback) => {
       callback(output)
     }
     if (groupId && accountId) {
-      groupController.deleteGroupById(input, result => {
+      groupController.deleteGroupById(request, input, result => {
         callback(result)
       })
     }
@@ -104,7 +104,7 @@ const avaliabledGroups = (request, callback) => {
       callback(output)
     }
     if (accountId && input.createdBy) {
-      groupController.avaliabledGroups(input, result => {
+      groupController.avaliabledGroups(request, input, result => {
         callback(result)
       })
     }
@@ -138,7 +138,7 @@ const getAll = (request, callback) => {
       callback(output)
     }
     if (accountId) {
-      groupController.getAll(input, result => {
+      groupController.getAll(request, input, result => {
         callback(result)
       })
     }

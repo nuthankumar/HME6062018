@@ -1,47 +1,46 @@
 
 const groupRepository = require('../Repository/GroupRepository')
-const messages = require('../Common/Message')
 
-const createGroup = (input, callback) => {
+const createGroup = (request, input, callback) => {
   let output = {}
   groupRepository.createGroup(input, result => {
     if (result.length > 0) {
       let isGroupCreated = result[0]
       if (isGroupCreated.hasOwnProperty('groupId')) {
-        output.data = messages.CREATEGROUP.groupSuccess1 + input.name + messages.CREATEGROUP.groupSuccess2
+        output.data = request.t('CREATEGROUP.groupSuccess1') + input.name + request.t('CREATEGROUP.groupSuccess2')
         output.status = true
       } else if (isGroupCreated.hasOwnProperty('groupcount') && isGroupCreated.groupcount > 0) {
-        output.data = input.name + messages.CREATEGROUP.groupAlreadyExist
+        output.data = input.name + request.t('CREATEGROUP.groupAlreadyExist')
         output.status = false
       }
     } else {
-      output.data = messages.CREATEGROUP.groupSuccess1 + input.name + messages.CREATEGROUP.groupCreationFailed
+      output.data = request.t('CREATEGROUP.groupSuccess1') + input.name + request.t('CREATEGROUP.groupCreationFailed')
       output.status = false
     }
     callback(output)
   })
 }
 
-const updateGroup = (input, callback) => {
+const updateGroup = (request, input, callback) => {
   let output = {}
   groupRepository.updateGroup(input, result => {
     if (result.length > 0) {
       let isGroupUpdated = result[0]
       if (isGroupUpdated.hasOwnProperty('groupId') && isGroupUpdated.groupId) {
-        output.data = messages.CREATEGROUP.groupSuccess1 + input.name + messages.CREATEGROUP.groupUpdatesSuccess
+        output.data = request.t('CREATEGROUP.groupSuccess1') + input.name + request.t('CREATEGROUP.groupUpdatesSuccess')
         output.status = true
       } else {
-        output.data = messages.CREATEGROUP.noDataForGivenName + input.name
+        output.data = request.t('CREATEGROUP.noDataForGivenName') + input.name
         output.status = false
       }
     } else {
-      output.data = messages.CREATEGROUP.groupSuccess1 + input.name + messages.CREATEGROUP.groupUpdationFailed
+      output.data = request.t('CREATEGROUP.groupSuccess1') + input.name + request.t('CREATEGROUP.groupUpdationFailed')
       output.status = false
     }
     callback(output)
   })
 }
-const getgroupDetails = (input, callback) => {
+const getgroupDetails = (request, input, callback) => {
   let output = {}
   groupRepository.getgroupDetails(input.groupId, result => {
     if (result.length > 0) {
@@ -56,35 +55,35 @@ const getgroupDetails = (input, callback) => {
       output.status = true
       callback(output)
     } else {
-      output.data = messages.CREATEGROUP.noDataForGivenId + input.groupId
+      output.data = request.t('CREATEGROUP.noDataForGivenId') + input.groupId
       output.status = false
       callback(output)
     }
   })
 }
 
-const deleteGroupById = (input, callback) => {
+const deleteGroupById = (request, input, callback) => {
   let output = {}
   groupRepository.deleteGroupById(input.groupId, result => {
     if (result[0].deletedRecords > 0) {
-      output.data = messages.CREATEGROUP.groupIdNo + input.groupId + messages.CREATEGROUP.RecordDeleted
+      output.data = request.t('CREATEGROUP.groupIdNo') + input.groupId + request.t('CREATEGROUP.RecordDeleted')
       output.status = true
     } else {
-      output.data = messages.CREATEGROUP.noDataForGivenId + input.groupId
+      output.data = request.t('CREATEGROUP.noDataForGivenId') + input.groupId
       output.status = false
     }
     callback(output)
   })
 }
 
-const avaliabledGroups = (input, callback) => {
+const avaliabledGroups = (request, input, callback) => {
   let output = {}
   groupRepository.avaliabledGroups(input.accountId, result => {
     if (result.length > 0) {
       output.data = result
       output.status = true
     } else {
-      output.data = messages.CREATEGROUP.noDataForGivenId + input.accountId
+      output.data = request.t('CREATEGROUP.noDataForGivenId') + input.accountId
       output.status = false
     }
     callback(output)
@@ -130,7 +129,7 @@ const addToHierarchy = (hierarchy, inputItem) => {
   }
 }
 
-const getAll = (input, callback) => {
+const getAll = (request, input, callback) => {
   const output = {}
   groupRepository.getAll(input.accountId, result => {
     if (result) {
@@ -141,7 +140,7 @@ const getAll = (input, callback) => {
       output.data = hierarchy
       output.status = true
     } else {
-      output.data = messages.CREATEGROUP.noDataForGivenId + input.accountId
+      output.data = request.t('CREATEGROUP.noDataForGivenId') + input.accountId
       output.status = false
     }
     callback(output)
