@@ -3,6 +3,19 @@ const messages = require('../Common/Message')
 const repository = require('../Repository/ReportTemplateRepository')
 
 /**
+ * The method can be used to execute handel errors and return to routers.
+ * @param  {input} message input from custom messages.
+ * @param  {input} status input false.
+ * @public
+ */
+const errorHandler = (message, status) => {
+  let output = {}
+  output.error = message
+  output.status = status
+  return output
+}
+
+/**
  * The method can be used to execute create Report Template
  * @param  {input} reportTemplate input from  user request
  * @param  {funct} callback Function will be called once the input executed.
@@ -35,9 +48,7 @@ const create = (reportTemplate, callback) => {
       output.status = true
       callback(output)
     } else {
-      output.error = messages.REPORTSUMMARY.createFail
-      output.status = false
-      callback(output)
+      callback(errorHandler(messages.REPORTSUMMARY.createFail, false))
     }
   })
 }
@@ -59,6 +70,8 @@ const get = (reportTemplate, callback) => {
       output.data.include = Include
       output.status = true
       callback(output)
+    } else {
+      callback(errorHandler(messages.LISTGROUP.notfound, false))
     }
   })
 }
@@ -78,9 +91,7 @@ const getAll = (input, callback) => {
       output.status = true
       callback(output)
     } else {
-      output.error = messages.LISTGROUP.notfound
-      output.status = false
-      callback(output)
+      callback(errorHandler(messages.LISTGROUP.notfound, false))
     }
   })
 }
@@ -98,9 +109,7 @@ const deleteById = (input, callback) => {
       output.status = true
       callback(output)
     } else {
-      output.error = messages.REPORTSUMMARY.deteleFail
-      output.status = false
-      callback(output)
+      callback(errorHandler(messages.REPORTSUMMARY.deteleFail, false))
     }
   })
 }
