@@ -49,7 +49,7 @@ const reportValidator = (request, callback) => {
       })
     }
   } else {
-
+    callback({ error: 'undefined'});
   }
 }
 

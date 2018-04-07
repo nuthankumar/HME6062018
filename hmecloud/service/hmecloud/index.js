@@ -23,8 +23,8 @@ i18next
   .use(i18nextMiddleware.LanguageDetector)
   .init({
     backend: {
-      loadPath: __dirname + '/locales/{{lng}}/{{ns}}.json',
-      addPath: __dirname + '/locales/{{lng}}/{{ns}}.missing.json'
+      loadPath: __dirname + '/i18n/{{lng}}/{{ns}}.json',
+      addPath: __dirname + '/i18n/{{lng}}/{{ns}}.missing.json'
     },
     fallbackLng: 'en',
     preload: ['en', 'fr'],
