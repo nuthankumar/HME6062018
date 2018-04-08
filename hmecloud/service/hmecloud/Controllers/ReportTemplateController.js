@@ -66,8 +66,8 @@ const get = (reportTemplate, callback) => {
       const Stores = result.Stores.split(',')
       const Include = result.Include.split(',')
       output.data = result
-      output.data.selectedList = Stores
-      output.data.include = Include
+      output.data.SelectedList = Stores
+      output.data.Include = Include
       output.status = true
       callback(output)
     } else {
