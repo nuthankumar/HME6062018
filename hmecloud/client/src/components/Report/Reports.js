@@ -23,7 +23,7 @@ import {Config} from '../../Config'
 import {CommonConstants} from '../../Constants'
 import Api from '../../Api'
 import ReactTooltip from 'react-tooltip'
-
+import * as Enum from '../../Enums'
 const ProductLogo = require("../../images/ProductLogo-1.png");
 const HMELogo = require("../../images/HMELogo.png");
 const Calendar = require("../../images/mini-cal.jpg");
@@ -47,7 +47,6 @@ class Report extends Component {
       selectedTime: undefined
     });
   };
-
   static propTypes = {
     keys: PropTypes.array
   };
@@ -69,6 +68,8 @@ class Report extends Component {
       showAdvancedOptions: false,
       open: true,
       close: true,
+      openTime:'',
+      closeTime:'',
       include: [],
       format: 2,
       type: 2,
@@ -798,11 +799,15 @@ class Report extends Component {
       format: this.state.format,
       selectedStoreIds: this.state.selectedStoreIds,
       CreatedDateTime: "2018-04-04 00:00:00.000",
-      UpdatedDateTime: "2018-04-04 00:00:00.000"
+      UpdatedDateTime: "2018-04-04 00:00:00.000",
+      advancedOptions: (!this.state.open || !this.state.close),
+      longestTime: _.contains(this.state.include, "1"),
+      systemStatistics: _.contains(this.state.include, "2"),
     });
+ 
+    console.log(template);
     this.state.templateData = template;
     this.setState(this.state);
-    console.log(JSON.stringify(template[0]));
 
     //validations
     if (this.state.toDate < this.state.fromDate) {
@@ -878,7 +883,6 @@ class Report extends Component {
         this.setState(this.state)
         isError = true;
       } else {
-          console.log(JSON.stringify(template[0]));
           let url = Config.apiBaseUrl + CommonConstants.apiUrls.createTemplate
           this.api.postData (url, template[0] ,data => {
             this.state.successMessage = data.data;
