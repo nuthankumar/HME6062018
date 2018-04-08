@@ -16,13 +16,13 @@ const sqlQueries = {
   },
   'SummarizedReport': {
     'getRawData':
-            `exec [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details] 
-                 @StoreId  =:ReportTemplate_StoreIds  
+            `exec [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details]
+                 @StoreId  =:ReportTemplate_StoreIds
                 ,@StoreStartDate = :ReportTemplate_From_Date
-                ,@StoreEndDate = :ReportTemplate_To_Date 
+                ,@StoreEndDate = :ReportTemplate_To_Date
                 ,@StartDateTime =:fromDateTime
-                ,@EndDateTime =:toDateTime 
-                ,@CarDataRecordType_IDs=:ReportTemplate_Type 
+                ,@EndDateTime =:toDateTime
+                ,@CarDataRecordType_IDs=:ReportTemplate_Type
                 ,@ReportType =:ReportType
                 ,@LaneConfig_ID=:LaneConfig_ID`
 

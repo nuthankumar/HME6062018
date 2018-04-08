@@ -29,8 +29,8 @@ const create = (input, callback) => {
  */
 const get = (input, callback) => {
   let output = {}
-  if (input.templetId) {
-    templateController.get(input.templetId, (result) => {
+  if (input.templateId) {
+    templateController.get(input.templateId, (result) => {
       callback(result)
     })
   } else {

@@ -1,11 +1,11 @@
 const createHandler = require('azure-function-express').createHandler
 
-var express = require('express');
-const i18next = require('i18next');
-const i18nextMiddleware = require('i18next-express-middleware');
-const Backend = require('i18next-node-fs-backend');
+const express = require('express')
+const i18next = require('i18next')
+const i18nextMiddleware = require('i18next-express-middleware')
+const Backend = require('i18next-node-fs-backend')
 
-const bodyParser = require('body-parser');
+const bodyParser = require('body-parser')
 
 // Router config
 
@@ -29,9 +29,9 @@ i18next
     fallbackLng: 'en',
     preload: ['en', 'fr'],
     saveMissing: true
-  });
+  })
 
-  app.use(i18nextMiddleware.handle(i18next));
+app.use(i18nextMiddleware.handle(i18next))
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
