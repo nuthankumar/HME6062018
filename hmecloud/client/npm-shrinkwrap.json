@@ -10722,6 +10722,15 @@
         }
       }
     },
+    "react-tooltip": {
+      "version": "3.4.1",
+      "resolved": "https://registry.npmjs.org/react-tooltip/-/react-tooltip-3.4.1.tgz",
+      "integrity": "sha512-y51znyWPv9izgnG/2wI4PqFImTFjRts6Z0JvlZsi2rF+6Aoce4F0xV2t2+uLtYcX2cjZsxH0/O7qsG/LXCg8Gw==",
+      "requires": {
+        "classnames": "2.2.5",
+        "prop-types": "15.6.1"
+      }
+    },
     "react-transition-group": {
       "version": "1.2.1",
       "resolved": "https://registry.npmjs.org/react-transition-group/-/react-transition-group-1.2.1.tgz",

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 // import fetch from 'isomorphic-fetch'
 import HmeHeader from '../Header/HmeHeader'
 import SummaryReportDataComponent from './SummaryReportDataComponent'
+import GoalStatisticsDataComponent from './GoalStatisticsDataComponent'
 import PageHeader from '../Header/PageHeader'
 // import { BrowserRouter } from 'react-router-dom'
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
@@ -138,6 +139,32 @@ export default class SummaryReport extends Component {
         dayColumn: false,
         dayPartColumn: false,
         weekColumn: false
+      },
+      goalData: {
+        data: [
+          {
+              title: "<Goal A",
+              menu: "1",
+              greet: "2",
+              service: "3",
+              laneQueue: "4",
+              laneTotal: "5"
+            },{
+              title: "Cars",
+              menu: "1",
+              greet: "2",
+              service: "3",
+              laneQueue: "4",
+              laneTotal: "5"
+            },{
+              title: "%",
+              menu: "1",
+              greet: "2",
+              service: "3",
+              laneQueue: "4",
+              laneTotal: "5"
+            }
+        ]
       }
     }
     // this.getCurrentTimeMeasure()
@@ -298,6 +325,9 @@ export default class SummaryReport extends Component {
 
         <div className='row summaryreport-table-section'>
           <SummaryReportDataComponent handleDrillDown={this.handleDrillDown} reportData={this.state.reportData} />
+        </div>
+        <div className='row summaryreport-table-section'>
+          <GoalStatisticsDataComponent goalData = {this.state.goalData}/>
         </div>
       </section>
     </section>)
