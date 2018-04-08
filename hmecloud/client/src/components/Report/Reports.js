@@ -475,15 +475,14 @@ class Report extends Component {
                 <span>Criteria</span>
                 <div className="container criteria">
                   <div className="col-md-12">
-                    {" "}
-                    Stores :
-                    {this.state.stores.length ? this.renderStores() : "Select a Store"}{" "}
+
+                                      <span className="criteriaHeading">Stores :</span>
+                    {this.state.stores.length ? this.renderStores() : "Select a Store"}
                   </div>
-                  <div className="col-md-6"> From: {this.state.fromDate} </div>
-                  <div className="col-md-6"> To: {this.state.toDate}</div>
+                  <div className="col-md-6"> <span className="criteriaHeading">From :</span>{this.state.fromDate} </div>
+                  <div className="col-md-6"> <span className="criteriaHeading">To :</span>{this.state.toDate}</div>
                   <div className="col-md-12">
-                    {" "}
-                    Time Measure:{this.state.timeMeasure == 1
+                                      <span className="criteriaHeading">Time Measure :</span>{this.state.timeMeasure == 1
                       ? "Day"
                       : this.state.timeMeasure == 2
                         ? "Daypart"
@@ -494,14 +493,11 @@ class Report extends Component {
                             : ""}
                   </div>
                   <div className="col-md-12">
-                    {" "}
-                    Include:
-                    {this.state.include.length ? this.renderInclude() : "None"}
+                                      <span className="criteriaHeading">Include :</span>{this.state.include.length ? this.renderInclude() :"None"}
                   </div>
                   <div className="col-md-12">
-                    {" "}
-                    Format:{" "}
-                    {this.state.format == 1
+                                      <span className="criteriaHeading">Format :</span>
+                                      {this.state.format == 1
                       ? "Seconds(sec)"
                       : this.state.format == 2 ? "Minutes(min:sec)" : ""}
                   </div>
@@ -599,27 +595,10 @@ class Report extends Component {
   }
 
   getSavedReports() {
-    /*fetch(
-      Config.baseUrl + CommonConstants.apiUrls.getSavedTemplateList + '?accountId=100&createdBy=1000',
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "Cache-Control": "no-cache",
-          Pragma: "no-cache"
-        }
-      }
-    )
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          savedTemplates: data.data
-        });
-      })
-      .catch(error => {});*/
-      let url = Config.baseUrl + CommonConstants.apiUrls.getSavedTemplates + '?accountId=100&createdBy=1000'
-      this.api.getData(url,data => {
+      let url = Config.apiBaseUrl + CommonConstants.apiUrls.getSavedTemplates + '?accountId=100&createdBy=100'
+     // let url = Config.baseUrl + CommonConstants.apiUrls.getSavedTemplates + 'accountId=100&createdBy=1000'
+      this.api.getData(url, data => {
+          console.log(data);
         this.setState({
           savedTemplates: data.data
         })
@@ -634,9 +613,15 @@ class Report extends Component {
     if (savedTemplates) {
       let renderSavedTemplates = savedTemplates.map((report, index) => {
         return (
-          <div key={index} title={report.TemplateName}>
-            <div
-              className="col-md-10 savedName"
+          <div className='templateRow' key={index} title={report.TemplateName}>
+                <div
+
+
+                    className={
+                        "col-md-10 savedName " +
+                        (index % 2 === 0 ? "even" : "odd")
+                    }
+
               id={report.Id}
               onClick={this.apply.bind(this)}
             >
@@ -644,7 +629,10 @@ class Report extends Component {
               {report.TemplateName}{" "}
             </div>
             <div
-              className="col-md-2 delete-icon"
+                    className={
+                        "col-md-2 delete-icon " +
+                        (index % 2 === 0 ? "even" : "odd")
+                    }
               id={report.Id}
               onClick={this.delete.bind(this)}
             >
@@ -724,50 +712,51 @@ class Report extends Component {
 
   apply(e) { 
 
-  let url = Config.baseUrl + CommonConstants.apiUrls.getSavedTemplateData + '?templetId=' +
+      let url = Config.apiBaseUrl + CommonConstants.apiUrls.getSavedTemplateData + '?templateId=' +
     e.target.id;
     this.api.getData (url,data => {
         let template = data.data;
-        this.setState({ tempStore: template.selectedList });
-        this.setState({ format: template.format });
-        this.setState({ type: template.type });
-        this.setState({ open: template.open });
-        this.setState({ close: template.close });
-        this.setState({ timeMeasure: template.timeMeasure });
-        let fromDate = moment(template.fromDate).format("DD/MM/YYYY");
+        console.log(data.data)
+        this.setState({ tempStore: template.SelectedList });
+        this.setState({ format: template.Format });
+        this.setState({ type: template.Type });
+        this.setState({ open: template.Open });
+        this.setState({ close: template.Close });
+        this.setState({ timeMeasure: template.TimeMeasure });
+        let fromDate = moment(template.FromDate).format("DD/MM/YYYY");
         this.setState({ fromDate: fromDate });
-        let toDate = moment(template.toDate).format("DD/MM/YYYY");
+        let toDate = moment(template.ToDate).format("DD/MM/YYYY");
         this.setState({ toDate: toDate });
-        this.setState({ defaultCheckedKeys: template.selectedList });
+        this.setState({ defaultCheckedKeys: template.SelectedList });
         let selectedStoreIds = []
         this.setState({
           stores: this.findMatch(this.state.treeData, item => {
-            if(item.Type === "store" && template.selectedList.indexOf(item.Id.toString()) > -1){
+            if(item.Type === "store" && template.SelectedList.indexOf(item.Id.toString()) > -1){
               selectedStoreIds.push(item.Id);
             }
             return (
               item.Type === "store" &&
-              template.selectedList.indexOf(item.Id.toString()) > -1
+              template.SelectedList.indexOf(item.Id.toString()) > -1
             );
           })
         });
         this.setState({
           selectedStoreIds : selectedStoreIds
         })
-        if (_.contains(template.include, "1")) {
+        if (_.contains(template.Include, "1")) {
           document.getElementById("longestTime").checked = true;
         }
-        if (_.contains(template.include, "2")) {
+        if (_.contains(template.Include, "2")) {
           document.getElementById("systemStatistics").checked = true;
         }
-        this.setState({ include: template.include });
+        this.setState({ include: template.Include });
 
-        if (template.open == false) {
-          this.state.openTime = moment(template.openTime, "HH:mm a");
+        if (template.Open == false) {
+          this.state.openTime = moment(template.OpenTime, "HH:mm a");
           this.setState(this.state);
         }
-        if (template.close == false) {
-          this.state.closeTime = moment(template.closeTime, "HH:mm a");
+        if (template.Close == false) {
+          this.state.closeTime = moment(template.CloseTime, "HH:mm a");
           this.setState(this.state);
         }
       }, error => {
@@ -776,30 +765,7 @@ class Report extends Component {
     }
 
   delete (e) {
-    // console.log(e.target.id);
-
-    /*fetch(url, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "Cache-Control": "no-cache",
-        Pragma: "no-cache"
-      }
-    })
-      .then(response => response.json())
-      .then(data => {
-        this.state.successMessage = data.data;
-        this.state.errorMessage = "";
-        this.setState(this.state);
-        this.getSavedReports();
-      })
-      .catch(error => {
-        this.state.errorMessage = "ERROR";
-        this.state.successMessage = "";
-        this.setState(this.state);
-      });*/
-    let url = Config.baseUrl + CommonConstants.apiUrls.deleteTemplate + '?templetId=' +
+      let url = Config.apiBaseUrl + CommonConstants.apiUrls.deleteTemplate + '?templateId=' +
       e.target.id;
     this.api.deleteData (url,data => {
       this.state.successMessage = data.data;
@@ -830,7 +796,9 @@ class Report extends Component {
       type: this.state.type,
       include: this.state.include,
       format: this.state.format,
-      selectedStoreIds: this.state.selectedStoreIds
+      selectedStoreIds: this.state.selectedStoreIds,
+      CreatedDateTime: "2018-04-04 00:00:00.000",
+      UpdatedDateTime: "2018-04-04 00:00:00.000"
     });
     this.state.templateData = template;
     this.setState(this.state);
@@ -903,7 +871,6 @@ class Report extends Component {
         isError = true;
       }
     }
-    // console.log((moment(this.state.toDate, 'MM/DD/YYYY').diff(moment(this.state.fromDate, 'MM/DD/YYYY'),'days')));
     if (this.state.saveAsTemplate) {
       if (!this.state.templateName) {
         this.state.errorMessage =
@@ -911,31 +878,8 @@ class Report extends Component {
         this.setState(this.state)
         isError = true;
       } else {
-        //let url = config.url+"api/reportTemplate/create"
-        /*fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "Cache-Control": "no-cache",
-            Pragma: "no-cache"
-          },
-          body: JSON.stringify(template[0])
-        })
-          .then(response => response.json())
-          .then(data => {
-            this.state.successMessage = data.data;
-            this.state.errorMessage = "";
-            this.setState(this.state);
-            this.getSavedReports();
-          })
-          .catch(error => {
-            this.state.errorMessage = "ERROR";
-            this.state.successMessage = "";
-            this.setState(this.state);
-          });*/
-          let url = Config.baseUrl + CommonConstants.apiUrls.createTemplate + '?templetId=' +
-            e.target.id;
+          console.log(JSON.stringify(template[0]));
+          let url = Config.apiBaseUrl + CommonConstants.apiUrls.createTemplate
           this.api.postData (url, template[0] ,data => {
             this.state.successMessage = data.data;
             this.state.errorMessage = "";
