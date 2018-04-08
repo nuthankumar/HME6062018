@@ -1,7 +1,10 @@
 import React from 'react'
+import ReactTooltip from 'react-tooltip'
+import ReactDOM from "react-dom";
 
 const ProductLogo = require('../../images/ProductLogo-1.png')
 const HMELogo = require('../../images/HMELogo.png')
+const CogWheel = require("../../images/Cog.png");
 
 export default class HmeHeader extends React.Component {
   render () {
@@ -22,7 +25,9 @@ export default class HmeHeader extends React.Component {
           <div className='menu-items'><a href='./?pg=SettingsAccount'>My Account</a></div>
           <div className='menu-items'><a href='./?pg=SettingsStores'>Settings</a></div>
         </div>
-        <div className='cogWheel' />
+        <div className='cogWheelSection'>
+            <img className='cogWheel' src={CogWheel} aria-hidden='true' />
+        </div>         
       </nav>
     </div>)
   }
