@@ -14,12 +14,12 @@ export default class GoalStatisticsDataComponent extends Component {
 
   displayGoalStatisticsData (goalData) {
     return (<div>
-        <div className='col-xs-12'>Goal Statistics For Daypart</div>
-        <div className='col-xs-12 report-data-unit'>
-          <table className='summaryreport-table'>
+        <div className='col-xs-12 goalstatistics-header-text'>Goal Statistics For Daypart</div>
+        <div className='col-xs-12 goalstatistics-data-unit'>
+          <table className='goalstatistics-table'>
             <tbody>
               <tr>
-                <th className='blankHeader' />
+                <th className='blankHeader'/>
                 <th className='tableHeading' colSpan='4'>
                   <span>AVERAGE TIME</span><span>(min:sec)</span>
                 </th>

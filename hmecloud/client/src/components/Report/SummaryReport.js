@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import HmeHeader from '../Header/HmeHeader'
 import SummaryReportDataComponent from './SummaryReportDataComponent'
 import GoalStatisticsDataComponent from './GoalStatisticsDataComponent'
+import SystemStatistics from './SystemStatistics'
 import PageHeader from '../Header/PageHeader'
 // import { BrowserRouter } from 'react-router-dom'
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
@@ -15,6 +16,8 @@ export default class SummaryReport extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      showGoalStats: true,
+      showSystemStats: true,
       pageHeading : 'Summarized Report',
       reportData: {
         week: {
@@ -128,20 +131,21 @@ export default class SummaryReport extends Component {
               data: [{groupId: 'G001', storeId: '12345', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
             }
           ]
-        },
-        weeklyData: true,
-        dailyData: false,
-        dayPartData: false,
-        rawCarData: false,
-        allTab: false,
-        currentPage: null,
-        groupStoreColumns: false,
-        dayColumn: false,
-        dayPartColumn: false,
-        weekColumn: false
+        }
       },
+      weeklyData: true,
+      dailyData: false,
+      dayPartData: false,
+      rawCarData: false,
+      allTab: false,
+      currentPage: null,
+      groupStoreColumns: false,
+      dayColumn: false,
+      dayPartColumn: false,
+      weekColumn: false,
       goalData: {
-        data: [
+         data:
+        [
           {
               title: "<Goal A",
               menu: "1",
@@ -163,12 +167,122 @@ export default class SummaryReport extends Component {
               service: "3",
               laneQueue: "4",
               laneTotal: "5"
-            }
+            },
+            {
+                title: "<Goal B",
+                menu: "1",
+                greet: "2",
+                service: "3",
+                laneQueue: "4",
+                laneTotal: "5"
+              },{
+                title: "Cars",
+                menu: "1",
+                greet: "2",
+                service: "3",
+                laneQueue: "4",
+                laneTotal: "5"
+              },{
+                title: "%",
+                menu: "1",
+                greet: "2",
+                service: "3",
+                laneQueue: "4",
+                laneTotal: "5"
+              },
+              {
+                  title: "<Goal C",
+                  menu: "1",
+                  greet: "2",
+                  service: "3",
+                  laneQueue: "4",
+                  laneTotal: "5"
+                },{
+                  title: "Cars",
+                  menu: "1",
+                  greet: "2",
+                  service: "3",
+                  laneQueue: "4",
+                  laneTotal: "5"
+                },{
+                  title: "%",
+                  menu: "1",
+                  greet: "2",
+                  service: "3",
+                  laneQueue: "4",
+                  laneTotal: "5"
+                }
         ]
+        /* data: [
+          {
+            "title": "Goal A",
+            "color": "#545454",
+            "data": {
+              "Header": {
+                "Menu": "1",
+                "Greet": "2",
+                "Service": "3",
+                "LaneQueue": "4",
+                "LaneTotal": "5"
+              },
+              "Cars": {
+                "Menu": "1",
+                "Greet": "2",
+                "Service": "3",
+                "LaneQueue": "4",
+                "LaneTotal": "5"
+              },
+              "%": {
+                "Menu": "1",
+                "Greet": "2",
+                "Service": "3",
+                "LaneQueue": "4",
+                "LaneTotal": "5"
+              }
+            }
+          },
+          {
+            "title": "Goal B",
+            "color": "#545454",
+            "data": {
+              "Header": {
+                "Menu": "1",
+                "Greet": "2",
+                "Service": "3",
+                "LaneQueue": "4",
+                "LaneTotal": "5"
+              },
+              "Cars": {
+                "Menu": "1",
+                "Greet": "2",
+                "Service": "3",
+                "LaneQueue": "4",
+                "LaneTotal": "5"
+              },
+              "%": {
+                "Menu": "1",
+                "Greet": "2",
+                "Service": "3",
+                "LaneQueue": "4",
+                "LaneTotal": "5"
+              }
+            }
+          }
+        ] */
+      },
+      displayData: {
+        Lane: '1',
+        AverageCarsInLane: '3',
+        TotalPullouts: '0',
+        TotalPullins: '0',
+        DeleteOverMaximum: '0',
+        PowerFails: '0',
+        SystemResets: '0',
+        VBDResets: '0'
       }
     }
     // this.getCurrentTimeMeasure()
-    this.populateSummaryReportDetails()
+    // this.populateSummaryReportDetails()
     this.handleDrillDown = this.handleDrillDown.bind(this)
   }
 
@@ -226,6 +340,15 @@ export default class SummaryReport extends Component {
         this.setState(this.state)
         break
     }
+    this.constructReportRequest(templateData)
+  }
+  constructReportRequest(templateData){
+
+    this.populateSummaryReportDetails()
+  }
+
+  getSummaryReportData(){
+
   }
 
   handleDrillDown () {
@@ -277,6 +400,25 @@ export default class SummaryReport extends Component {
 
       }) */
   }
+  displayGoalStatistics(){
+    if(this.state.showGoalStats){
+      return (<div className='row goalstatistics-table-section'>
+        <GoalStatisticsDataComponent goalData = {this.state.goalData} />
+      </div>)
+    }else{
+      return <div/>
+    }
+  }
+
+  displaySystemStatistics(){
+    if(this.state.showSystemStats){
+      return (<div className='row systemstatistics-table-section'>
+        <SystemStatistics displayData = {this.state.displayData} />
+      </div>)
+    }else{
+      return <div/>
+    }
+  }
 
   render () {
     // let reportData = this.state.reportData.data
@@ -326,9 +468,8 @@ export default class SummaryReport extends Component {
         <div className='row summaryreport-table-section'>
           <SummaryReportDataComponent handleDrillDown={this.handleDrillDown} reportData={this.state.reportData} />
         </div>
-        <div className='row summaryreport-table-section'>
-          <GoalStatisticsDataComponent goalData = {this.state.goalData}/>
-        </div>
+        {this.displayGoalStatistics()}
+        {this.displaySystemStatistics()}
       </section>
     </section>)
   }

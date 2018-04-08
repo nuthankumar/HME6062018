@@ -89,7 +89,7 @@
   text-align : center;
 }
 
-.summaryreport-table-section{
+.summaryreport-table-section, .goalstatistics-table-section, .systemstatistics-table-section{
       margin-top: 10px;
 }
 
@@ -166,7 +166,7 @@ h2 .report-start-time-value,h2 .report-end-time-value{
   left: 99px;
   top:12px;
 }
-.report-data-unit{
+.report-data-unit, .goalstatistics-data-unit{
   margin-top:20px;
 }
 .active-link{
@@ -178,6 +178,66 @@ h2 .report-start-time-value,h2 .report-end-time-value{
   cursor: pointer;
   color: #D41B3E;
 }
+
+/* Goal Statistics css starts here*/
+.goalstatistics-table tr th.blankHeader{
+  background: none;
+  border: 0px;
+  height: 23px;
+  font-size: 12px;
+}
+
+.goalstatistics-table tr th.tableHeading{
+  background: #959595;
+  border-top: 1px solid #FFFFFF;
+  border-left: 1px solid #FFFFFF;
+  border-right: 1px solid #FFFFFF;
+  border-bottom: 0px solid #959595;
+  height: 23px;
+  font-size: 12px;
+}
+
+.goalstatistics-table th{
+  background-color: #0087a1;
+  border-top: 1px solid #FFFFFF;
+  border-left: 1px solid #FFFFFF;
+  color: white;
+  height: 36px;
+  vertical-align: middle;
+}
+.goalstatistics-table th.groupsColHeader,.goalstatistics-table th.storesColHeader{
+      width: 125px;
+}
+.goalstatistics-table th.reportTableAttributesHeading{
+      width: 175px;
+}
+
+.goalstatistics-table td{
+  border-top: 1px solid #FFFFFF;
+  border-left: 1px solid #FFFFFF;
+  text-align: center;
+  vertical-align: middle;
+  height: 21px;
+}
+.goalstatistics-table tr th{
+  text-align : center;
+}
+.goalstatistics-table{
+  border-bottom: 1px solid grey;
+  margin-bottom: 5px;
+}
+.goalstatistics-header-text{
+  color: #008898;
+  font-size: 17px;
+  line-height: 20px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+/* Goal Statistics css ends here*/
+
+
+
+
 /* Raw Car Data CSS*/
 
 .rawcar-data-section{
