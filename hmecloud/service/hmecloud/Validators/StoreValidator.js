@@ -39,7 +39,8 @@ const reportValidator = (request, callback) => {
       output.status = false
       callback(output)
     }
-    if (!input.ReportTemplate_Time_Measure === 'Raw Data Report') {
+    console.log(input.ReportTemplate_Time_Measure);
+    if (input.ReportTemplate_Time_Measure !== 'Raw Data Report') {
       storeController.generateReport(input, result => {
         callback(result)
       })
