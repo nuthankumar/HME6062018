@@ -5,14 +5,14 @@
 -- Author		:	JAYARAM V
 -- Created		:	06-APRIL-2018
 -- Tables		:	ReportTemplates
--- Purpose		:	Create a Report Template
+-- Purpose		:	Get all Report Template
 -- ===========================================================
 --				Modification History
 -- -----------------------------------------------------------
 -- Sl.No.	Date			Developer		Descriptopn
 -- -----------------------------------------------------------
 --  1.  	06-APRIL-2018	JAYARAM V	Procedure created
---	2.
+--	2.      08-APRIL-2018   JAYARAM V	Changed the Query
 -- ===========================================================
 -- EXEC [dbo].[dbo].[usp_GetReportTemplates] @AccountId and
 -- @createdBy
@@ -26,23 +26,8 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT [Id]
-		  ,[AccountId]
-		  ,[Stores]
-		  ,[TimeMeasure]
-		  ,[FromDate]
-		  ,[ToDate]
-		  ,[OpenTime]
-		  ,[CloseTime]
-		  ,[Type]
-		  ,[Open]
-		  ,[Close]
-		  ,[Include]
-		  ,[Format]
+	SELECT DISTINCT[Id]
 		  ,[TemplateName]
-		  ,[CreatedBy]
-		  ,[UpdatedBy]
-		  ,[CreatedDateTime]
-		  ,[UpdatedDateTime]  from [dbo].[ReportTemplates]
+		   from [dbo].[ReportTemplates]
 	WHERE AccountId = @AccountId and  CreatedBy = @CreatedBy
 END
