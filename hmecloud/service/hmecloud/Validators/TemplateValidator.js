@@ -10,7 +10,7 @@ const templateController = require('../Controllers/ReportTemplateController')
  */
 const create = (input, callback) => {
   let output = {}
-  if (input.templateName) {
+  if (input.body.templateName) {
     templateController.create(input, (result) => {
       callback(result)
     })

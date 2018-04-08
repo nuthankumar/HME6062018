@@ -37,8 +37,8 @@ const create = (reportTemplate, callback) => {
     Include: (reportTemplate.body.include).toString(),
     Format: reportTemplate.body.format,
     TemplateName: reportTemplate.body.templateName,
-    CreatedBy: reportTemplate.body.CreatedBy,
-    UpdatedBy: reportTemplate.body.UpdatedBy,
+    CreatedBy: reportTemplate.AccountId,
+    UpdatedBy: reportTemplate.AccountId,
     CreatedDateTime: reportTemplate.body.CreatedDateTime,
     UpdatedDateTime: reportTemplate.body.UpdatedDateTime
   }

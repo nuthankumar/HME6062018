@@ -10,7 +10,7 @@ app.use(bodyParser.json())
  * @param  {filename} Authenticationcontroller from controller floder
  * @public
  */
-const authentication = require('./Controller/AuthenticationController')
+const authentication = require('./Router/AuthenticationRouter')
 
 /**
  * This Webservices Representing JWT Authentication
@@ -18,6 +18,6 @@ const authentication = require('./Controller/AuthenticationController')
  * @public
  */
 
-app.use('/api/auth', authentication)
+app.use('/api/authentication', authentication)
 
 module.exports = createHandler(app)
