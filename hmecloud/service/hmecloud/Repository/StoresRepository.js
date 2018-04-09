@@ -1,12 +1,13 @@
 const repository = require('./Repository')
-const dataBase = require('../DataBaseConnection/Configuration')
+const dataBase = require('../DataBaseConnection/Configuration').db
+const dataBaseSql = require('../DataBaseConnection/Configuration').sqlConfig
 const sqlQuery = require('../Common/DataBaseQueries')
 
 const sql = require('mssql')
 
 const generateSummaryReport = (input, callback) => {
 
-  const sql_pool = new sql.ConnectionPool(dataBase.sqlConfig, err => {
+    const sql_pool = new sql.ConnectionPool(dataBaseSql, err => {
     sql_pool.request() // or: new sql.Request(pool2)
       .input('InputType', sql.VarChar(5), '1')
       .execute('_usp_HME_Cloud_Get_Report_By_Daypart', (err, result) => {
