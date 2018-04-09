@@ -5,6 +5,7 @@ import './SummaryReport.css'
 import fetch from 'isomorphic-fetch'
 import {Config} from '../../Config'
 import PageHeader from '../Header/PageHeader'
+import Api from '../../Api'
 
 class RawCarReport extends Component {
   constructor (props) {
@@ -22,50 +23,43 @@ class RawCarReport extends Component {
         dayPart: 'DP OPEN-11:59'
       }
     }
+    this.api = new Api()
     this.displayRecords = this.displayRecords.bind(this)
     this.displayItems = this.displayItems.bind(this)
     this.getRawCarData = this.getRawCarData.bind(this)
+
   }
   componentDidMount () {
     this.getRawCarData()
   }
 
   getRawCarData () {
-    let data = {
-      'reportTemplateStoreId': '4', // String
-      'reportTemplateAdvancedOp': 0,
-      'reportTemplateTimeMeasure': 'Raw Data Report',
-      'reportTemplateFromDate': '2018-03-24',
-      'reportTemplateToDate': '2018-03-24',
-      'reportTemplateOpen': 1,
-      'reportTemplateClose': 1,
-      'reportTemplateType': 11,
-      'reportTemplateIncludeLongs': 'on',
-      'ReportTemplate_Include_Stats': '',
-      'reportTemplateFormat': 1
-    }
-    let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache'
-      },
-      body: JSON.stringify(data)
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        this.state.displayData = data.data
-        this.state.rawData = true
-        this.setState(this.state)
-      })
-      .catch((error) => {
-        this.state.successMessage = ''
-        this.state.errorMessage = error.message
-        this.setState(this.state)
-      })
+      let data = {
+          "reportTemplateStoreIds": "4",
+          "reportTemplateAdvancedOp": 0,
+          "reportTemplateTimeMeasure": "Raw Data Report",
+          "reportTemplateFromDate": "2018-03-24",
+          "reportTemplateToDate": "2018-03-24",
+          "reportTemplateFromTime": "",
+          "reportTemplateToTime": "",
+          "reportTemplateOpen": 1,
+          "reportTemplateClose": 1,
+          "reportTemplateType": 11,
+          "reportTemplateIncludeLongs": "on",
+          "ReportTemplate_Include_Stats": "",
+          "reportTemplateFormat": 1
+      }
+      let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
+      this.api.postData(url, data, data => {
+          console.log(data);
+          this.state.displayData = data
+          this.state.rawData = true
+          this.setState(this.state)
+      }, error => {
+          this.state.successMessage = ''
+          this.state.errorMessage = error.message
+          this.setState(this.state)
+          })
   }
 
   timeChange (name) {
@@ -77,7 +71,9 @@ class RawCarReport extends Component {
       if (this.state.displayData) {
         return (<section className='rawcar-data-page'>
           <section className='rawcar-data-section'>
-            <div className='clear rawcar-table-details'>
+
+                <div className='btn btn-danger emailCSV'> Email CSV version</div>
+             <div className='clear rawcar-table-details'>
               <PageHeader pageHeading={this.state.pageHeading} />
               <table className='rawcar-header-labels clear'>
                 <tbody>
@@ -89,7 +85,6 @@ class RawCarReport extends Component {
                     <th>
                       <span>Start Time:</span>
                     </th>
-
                     <td>
                       {this.state.displayData.startTime ? this.state.displayData.startTime : 'N/A'}&nbsp;
                     </td>
@@ -121,7 +116,7 @@ class RawCarReport extends Component {
               <div className='rawcar-header'>
                 <h2 className='rawcar-h2'>{this.state.displayData.dayPart}</h2>
               </div>
-              <table className='display-records table-layout'>
+              <table className='display-records table-layout table-layoutRawCar'>
                 <tbody>
                   <tr>
                     <th>Departure Time</th>

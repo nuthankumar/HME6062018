@@ -68,7 +68,7 @@ export default class ReportGroupHierarchy extends React.Component {
           return <TreeNode className='treeNode' title={item.Name}
             key={item.Id}>{loop(item.Children)}</TreeNode>
         }
-        return <TreeNode className='treeNode' title={item.Name} key={item.Id} />
+        return <TreeNode className='treeNode' title={item.Name} key={item.Id}/>
       })
     }
     return (<section className='groupManagementSection'><HmeHeader />
@@ -82,7 +82,7 @@ export default class ReportGroupHierarchy extends React.Component {
           </div>
         </div>
 
-        <div className='row grouphierarchy-tree jumbotron'>
+        <div className='grouphierarchy-tree jumbotron'>
           <div className='col-xs-4'>
             <Tree
               className='hierarchy-tree'

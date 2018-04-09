@@ -170,6 +170,7 @@ class Report extends Component {
                 <div className="saved-reports">
                   <Tree
                     className="myCls"
+                    showIcon={false}
                     showLine
                     checkable
                     selectable={false}

@@ -265,6 +265,16 @@ h2 .report-start-time-value,h2 .report-end-time-value{
 
 /* Raw Car Data CSS*/
 
+.emailCSV {
+    padding: 10px;
+    margin: 10px 15px;
+    background-color: #d41b3e !important;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+
 .rawcar-data-section{
   margin: 20px 68px 0px 68px;
 }
@@ -292,8 +302,7 @@ table .th {
   width: 850px;
 }
 .rawcar-table-details {
-  width: 100%;
-  margin-left: 10em;
+  margin-left: 2em;
 }
 .thin-header {
   width: 115px;
@@ -453,3 +462,8 @@ table.longest td {
 .rnshade {
     background-color: #ffffff;
 }
+
+.table-layoutRawCar {
+    margin-left: 0px;
+}
+
