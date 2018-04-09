@@ -4,6 +4,7 @@ const VerifyToken = require('../Controllers/AuthenticationController')
 const storeValidator = require('../Validators/StoreValidator')
 const authValidator = require('../Controllers/AuthenticationController')
 const daySingle = require('../Common/Day_Single')
+const dateFormat = require('dateformat')
 /**
  * This Service is used to Generate the Summary reports details for
  *provided details
@@ -16,9 +17,17 @@ router.post('/generatereport', authValidator, (request, response) => {
     const output = {}
     if (reportType === 'daySingle') {
         output.reportData = daySingle.Day_Single
+        output.reportData.startTime = request.body.reportTemplateFromDate
+        output.reportData.stopTime = request.body.reportTemplateToDate
+        output.reportData.printDate = dateFormat(new Date(), 'isoDate')
+        output.reportData.printTime = dateFormat(new Date(), 'shortTime')
         output.status = true
     } else if (reportType === 'weekSingle') {
         output.reportData = daySingle.Week_Single
+        output.reportData.startTime = request.body.reportTemplateFromDate
+        output.reportData.stopTime = request.body.reportTemplateToDate
+        output.reportData.printDate = dateFormat(new Date(), 'isoDate')
+        output.reportData.printTime = dateFormat(new Date(), 'shortTime')
         output.status = true
     }
     response.status(200).send(output)
