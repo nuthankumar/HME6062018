@@ -41,7 +41,7 @@ exports.REPORTSUMMARY = {
   InvalidReportType: 'Invalid Report Type param',
   createSuccess: 'Report Template create successfully',
   createFail: 'Unable to Create Report',
-  deleteSuccess: 'Report Template Delete successfully',
+  deleteSuccess: 'Report Template Deleted successfully',
   deteleFail: 'Unable to Delete Report'
 }
 
