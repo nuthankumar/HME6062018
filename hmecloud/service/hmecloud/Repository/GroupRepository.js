@@ -2,7 +2,7 @@
  * Using this file Manage the Group Hierachy level - stores and groups
  * Operation : Basic CURD App
  */
-const db = require('../DataBaseConnection/Configuration')
+const db = require('../DataBaseConnection/Configuration').db
 const repository = require('./Repository')
 const sqlQuery = require('../Common/DataBaseQueries')
 
