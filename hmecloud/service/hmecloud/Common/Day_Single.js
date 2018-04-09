@@ -1,8 +1,8 @@
 exports.Day_Single = {
     "storeName": "store1",
     "storeDesc": "store1",
-    "startTime": "",
-    "stopTime": "",
+    "startTime": "2018-03-15",
+    "stopTime": "2018-03-15",
     "printDate": "",
     "printTime": "",
     "currentPageNo": "",
@@ -10,7 +10,7 @@ exports.Day_Single = {
     "singleDay": [{
         "data": [{
             "day": {
-                "timeSpan": "03/09 - Daypart1",
+                "timeSpan": "03/15 - Daypart1",
                 "currentDaypart": "6:00 am - 11:00 am"
             },
             "menu": "0.26",
@@ -22,7 +22,7 @@ exports.Day_Single = {
         },
         {
             "day": {
-                "timeSpan": "03/09 - Daypart2",
+                "timeSpan": "03/15 - Daypart2",
                 "currentDaypart": "12:00 pm - 2:15 pm"
             },
             "menu": "0.36",
@@ -39,8 +39,8 @@ exports.Day_Single = {
 exports.Week_Single = {
     "storeName": "store1",
     "storeDesc": "store1",
-    "startTime": "",
-    "stopTime": "",
+    "startTime": "2018-03-15",
+    "stopTime": "2018-03-21",
     "printDate": "",
     "printTime": "",
     "currentPageNo": "",
@@ -48,7 +48,7 @@ exports.Week_Single = {
     "singleWeek": [{
         "data": [{
             "week": {
-                "timeSpan": "03/09 - Daypart1",
+                "timeSpan": "03/15 - Daypart1",
                 "currentDaypart": "6:00 am - 11:00 am"
             },
             "menu": "0.26",
@@ -60,7 +60,7 @@ exports.Week_Single = {
         },
         {
             "week": {
-                "timeSpan": "03/09 - Daypart2",
+                "timeSpan": "03/15 - Daypart2",
                 "currentDaypart": "12:00 pm - 2:15 pm"
             },
             "menu": "0.36",

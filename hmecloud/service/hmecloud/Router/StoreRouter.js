@@ -17,15 +17,15 @@ router.post('/generatereport', authValidator, (request, response) => {
     const output = {}
     if (reportType === 'daySingle') {
         output.reportData = daySingle.Day_Single
-        output.reportData.startTime = request.body.reportTemplateFromDate
-        output.reportData.stopTime = request.body.reportTemplateToDate
+       // output.reportData.startTime = request.body.reportTemplateFromDate
+       // output.reportData.stopTime = request.body.reportTemplateToDate
         output.reportData.printDate = dateFormat(new Date(), 'isoDate')
         output.reportData.printTime = dateFormat(new Date(), 'shortTime')
         output.status = true
     } else if (reportType === 'weekSingle') {
         output.reportData = daySingle.Week_Single
-        output.reportData.startTime = request.body.reportTemplateFromDate
-        output.reportData.stopTime = request.body.reportTemplateToDate
+        //output.reportData.startTime = request.body.reportTemplateFromDate
+        //output.reportData.stopTime = request.body.reportTemplateToDate
         output.reportData.printDate = dateFormat(new Date(), 'isoDate')
         output.reportData.printTime = dateFormat(new Date(), 'shortTime')
         output.status = true
