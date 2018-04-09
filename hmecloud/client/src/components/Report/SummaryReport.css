@@ -379,3 +379,52 @@ h2.rep-head {
   border-collapse: separate;
   border-bottom: 1px solid #aeaeae;
 }
+
+
+
+
+
+.lastTd {
+    border-left: 1px solid #aeaeae;
+    border-right: 1px solid white;
+    border-top: 1px solid #aeaeae;
+    width: 125px;
+}
+.headerColumn {
+    width: 125px;
+    border-right: 0px solid gray;
+}
+.timeSpan {
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.table-layout td {
+    border-top: 1px solid #FFFFFF;
+    border-left: 1px solid #FFFFFF;
+    text-align: center;
+    vertical-align: middle;
+}
+.rshade {
+    background-color: #ededed;
+}
+.boldin {
+    font-weight: bold;
+}
+.daypart td {
+    height: 42px;
+}
+table.longest td {
+    line-height: .9;
+}
+
+.colWidth5 {
+    width: 175px;
+}
+
+.rshade {
+    background-color: #ededed;
+}
+.rnshade {
+    background-color: #ffffff;
+}
