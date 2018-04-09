@@ -65,10 +65,11 @@ const getRawCarDataReport = (input, callBack) => {
 
   if (input.reportType === 'rr1' || input.reportType === 'rrcsv1') {
     stores.getRawCarDataReport(rawCarDataqueryTemplate, result => {
-      if (result) {
+        if (result) {
+            console.log("The result===" + JSON.stringify(result))
         const len = result.length
         if (len > 1) {
-          const storeData = result[len - 2]
+          const storeData = result[len - 1]
           const dayPartData = result[1]
           prepareStoreDetails(rawCarData, storeData, input)
           prepareResponsObject(result, departTimeStampMap, rawCarDataList, rawCarData, len, dayPartData, input)
@@ -129,7 +130,8 @@ module.exports = {
  * @param {*} storeData
  * @param {*} input
  */
-function prepareStoreDetails (rawCarData, storeData, input) {
+function prepareStoreDetails(rawCarData, storeData, input) {
+    console.log("THe Store data===" + JSON.stringify(storeData))
   rawCarData.store = storeData.Store_Name
   rawCarData.description = storeData.Brand_Name
   rawCarData.startTime = input.ReportTemplate_From_Date
