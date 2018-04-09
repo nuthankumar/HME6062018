@@ -36,7 +36,9 @@
   width: 105px;
   border-radius: 0;
 }
-
+.summaryreport-table{
+  font-size: 12px;
+}
 .summaryreport-table tr th.blankHeader{
   background: none;
   border: 0px;
@@ -91,6 +93,21 @@
 
 .summaryreport-table-section, .goalstatistics-table-section, .systemstatistics-table-section{
       margin-top: 10px;
+}
+
+.currentMeasure{
+  font-size: 10px;
+  font-weight: 500;
+  color: #D41B3E;
+}
+.timeSpan{
+  color: #D41B3E;
+  font-weight: bold;
+}
+
+.timeMeasureColumn:hover{
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .goalstatistics-table td{

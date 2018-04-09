@@ -23,129 +23,113 @@ export default class SummaryReport extends Component {
       showSystemStats: true,
       pageHeading : 'Summarized Report',
       reportData: {
-        week: {
-          all: [ {
-            startTime: 'MAR 9',
-            endTime: 'MAR 10',
-            data: [{groupId: null, storeId: 12345, week: '04/04/2018', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-              {groupId: 'G002', storeId: 12345, week: '04/04/2018', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-              {groupId: 'G003', storeId: 12345, week: '04/04/2018', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-              {groupId: 'G004', storeId: 12345, week: '04/04/2018', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-          },
-          {
-            startTime: 'MAR 9',
-            endTime: 'MAR 10',
-            data: [{groupId: 'G001', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-              {groupId: 'G002', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-              {groupId: 'G003', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-              {groupId: 'G004', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-          },
-          {
-            startTime: 'MAR 9',
-            endTime: 'MAR 10',
-            data: [{groupId: 'G001', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-              {groupId: 'G002', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-              {groupId: 'G003', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-              {groupId: 'G004', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-          },
-          {
-            startTime: 'MAR 9',
-            endTime: 'MAR 10',
-            data: [{groupId: 'G001', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-              {groupId: 'G002', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-              {groupId: 'G003', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-              {groupId: 'G004', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-          }
-          ],
-          pages: [
-            {
-              startTime: 'MAR 9',
-              endTime: 'MAR 10',
-              data: [{groupId: 'G005', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+        storeName : "store1",
+        storeDesc : "store1",
+        startTime:"",
+        stopTime: "",
+        printDate: "",
+        printTime: "",
+        currentPageNo:"",
+        TotalPageCount:"",
+        singleDayPart: [ {
+          data:[ {
+            daypart:{timeSpan:"03/09 - Daypart1",currentDaypart:"6:00 am - 11:00 am"},
+            menu: "0.26",
+            greet: "0.36",
+            service: "1.26",
+            laneQueue:"1.46",
+            laneTotal:"1.56",
+            totalCars:"1.66"
             },
-            {
-              startTime: 'MAR 9',
-              endTime: 'MAR 10',
-              data: [{groupId: 'G006', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+           {
+            daypart:{timeSpan:"03/09 - Daypart2",currentDaypart:"12:00 pm - 2:15 pm"},
+            menu: "0.36",
+            greet: "0.46",
+            service: "0.56",
+            laneQueue:"1.26",
+            laneTotal:"1.36",
+            totalCars:"1.46"
+            }]
             }
-          ]
-        },
-        day: {
+          ],
 
-          all: [ {
-            TimeMeasure: 'mar 9 - mar 10th',
-            data: [{groupId: 'G001', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-          },
-          {
-            TimeMeasure: 'mar 9 - mar 10th',
-            data: [{groupId: 'G001', storeId: null, day: '04/04/2018', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-          },
-          {
-            TimeMeasure: 'mar 9 - mar 10th',
-            data: [{groupId: 'G001', storeId: null, day: '05/04/2018', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-          },
-          {
-            TimeMeasure: 'mar 9 - mar 10th',
-            data: [{groupId: 'G001', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-          }
-          ],
-          pages: [
-            {
-              TimeMeasure: 'mar 9 - mar 10th',
-              data: [{groupId: 'G001', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-            },
-            {
-              TimeMeasure: 'mar 9 - mar 10th',
-              data: [{groupId: 'G001', storeId: null, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-            }
-          ]
-        },
-        dayPart: {
-          storeName: '',
-          storeDesc: '',
-          startTime:'',
-          stopTime: '',
-          printDate: '',
-          printTime:'',
-          all: [ {
-            startTime: 'MAR 9',
-            endTime: 'MAR 10',
-            data: [{groupId: 'G001', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-          },
-          {
-            startTime: 'MAR 9',
-            endTime: 'MAR 10',
-            data: [{groupId: 'G001', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-          },
-          {
-                    date: "",
-                    daypart: "",
-                    data:[{groupId: 'G001', storeId: '123456', daypart : "03-09 Daypart 1", menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-                          {groupId: 'G002', storeId: '1234567', daypart : "03-09 Daypart 2", menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+          multiPleDayPart: [ {
+            title:"mar 09",
+            data:[{
+              groupId:"",
+              storeId:"",
+              menu: "",
+              greet: "",
+              service: "",
+              laneQueue:"",
+              laneTotal:"",
+              totalCars:""
+              },
+             {
+              groupId:"",
+              storeId:"",
+              greet: "",
+              service: "",
+              laneQueue:"",
+              laneTotal:"",
+              totalCars:""
+              },
+             {
+              groupId:"",
+              storeId:"",
+              menu: "",
+              greet: "",
+              service: "",
+              laneQueue:"",
+              laneTotal:"",
+              totalCars:""
+              }]},
+              {
+            title:"mar 09",
+            data:[{
+              groupId:"",
+              storeId:"",
+              menu: "",
+              greet: "",
+              service: "",
+              laneQueue:"",
+              laneTotal:"",
+              totalCars:""
+              },
+             {
+              groupId:"",
+              storeId:"",
+              menu: "",
+              greet: "",
+              service: "",
+              laneQueue:"",
+              laneTotal:"",
+              totalCars:""
+              },
+             {
+              groupId:"",
+              storeId:"",
+              menu: "",
+              greet: "",
+              service: "",
+              laneQueue:"",
+              laneTotal:"",
+              totalCars:""
+              }]
               }
-          ],
-          pages: [
-            {
-              TimeMeasure: 'mar 9 - mar 10th',
-              data: [{groupId: 'G001', storeId: '12345', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+
+            ],
+            weeklyData: true,
+            dailyData: false,
+            dayPartData: false,
+            rawCarData: false,
+            allTab: false,
+            currentPage: null,
+            groupStoreColumns: false,
+            dayColumn: false,
+            dayPartColumn: false,
+            weekColumn: false,
             },
-            {
-              TimeMeasure: 'mar 9 - mar 10th',
-              data: [{groupId: 'G001', storeId: '12345', menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-            }
-          ]
-        }
-      },
-      weeklyData: true,
-      dailyData: false,
-      dayPartData: false,
-      rawCarData: false,
-      allTab: false,
-      currentPage: null,
-      groupStoreColumns: false,
-      dayColumn: false,
-      dayPartColumn: false,
-      weekColumn: false,
       goalData: {
          data:
         [
@@ -203,7 +187,7 @@ export default class SummaryReport extends Component {
     */
     switch (templateData[0].timeMeasure) {
       case '1' : this.state.dailyData = true
-        if (templateData[0].selectedList.length === 1) {
+        if (templateData[0].selectedStoreIds.length === 1) {
           this.state.reportData.dayColumn = true
           this.state.reportData.groupStoreColumns = false
         } else {
@@ -214,7 +198,7 @@ export default class SummaryReport extends Component {
         break
 
       case '2' : this.state.dayPartData = true
-        if (templateData[0].selectedList.length === 1) {
+        if (templateData[0].selectedStoreIds.length === 1) {
           this.state.reportData.dayPartColumn = true
           this.state.reportData.groupStoreColumns = false
         } else {
@@ -225,7 +209,7 @@ export default class SummaryReport extends Component {
         break
 
       case '3' : this.state.weeklyData = true
-        if (templateData[0].selectedList.length === 1) {
+        if (templateData[0].selectedStoreIds.length === 1) {
           this.state.reportData.weekColumn = true
           this.state.reportData.groupStoreColumns = false
         } else {
@@ -236,7 +220,7 @@ export default class SummaryReport extends Component {
         break
 
       case '4' : this.state.rawCarData = true
-        if (templateData[0].selectedList.length === 1) {
+        if (templateData[0].selectedStoreIds.length === 1) {
           this.state.reportData.dayPartColumn = true
           this.state.reportData.groupStoreColumns = false
         } else {
