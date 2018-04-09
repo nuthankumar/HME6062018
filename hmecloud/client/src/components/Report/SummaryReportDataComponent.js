@@ -65,9 +65,9 @@ export default class SummaryReportDataComponent extends Component {
           <tr>
             <td className={this.dynamicColumnData.showGroupsStores}>{reportItem.groupId != null ? reportItem.groupId : 'NA'}</td>
             <td className={this.dynamicColumnData.showGroupsStores} onClick={this.props.reportData.handleDrillDown}>{reportItem.storeId}</td>
-            <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayColumn}><span className='timeSpan'>{reportItem.day.timeSpan}</span><br/><span className='currentMeasure'>{reportItem.day.currentDaypart}</span></td>
+            <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayColumn}><span className='timeSpan'>{reportItem.day? reportItem.day.timeSpan : '' }</span><br/><span className='currentMeasure'>{reportItem.day  ? reportItem.day.currentDaypart :''}</span></td>
             <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayPartColumn}><span className='timeSpan'>{reportItem.daypart.timeSpan}</span><br/><span className='currentMeasure'>{reportItem.daypart.currentDaypart}</span></td>
-            <td className={'timeMeasureColumn '+this.dynamicColumnData.showWeekColumn}><span>{reportItem.week}</span> </td>
+            <td className={'timeMeasureColumn '+ this.dynamicColumnData.showWeekColumn}><span>{reportItem.week}</span> </td>
             <td>{reportItem.menu}</td>
             <td>{reportItem.greet}</td>
             <td>{reportItem.service}</td>
