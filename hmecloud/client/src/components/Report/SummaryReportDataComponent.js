@@ -21,8 +21,8 @@ export default class SummaryReportDataComponent extends Component {
   }
 
   displaySummarizedData (reportData) {
-    if (reportData.dayPart.all.length > 0) {
-      return reportData.dayPart.all.map((reportItem) => {
+    if (reportData.singleDayPart.length > 0) {
+      return reportData.singleDayPart.map((reportItem) => {
         return (
           <div className='col-xs-12 report-data-unit'>
             <div className={'col-xs-12 from-to-detail ' + this.dynamicColumnData.showFromToTime}><span>{reportItem.startTime}</span> <span>OPEN - </span> <span>{reportItem.endTime}</span> <span>CLOSE</span></div>
@@ -65,9 +65,9 @@ export default class SummaryReportDataComponent extends Component {
           <tr>
             <td className={this.dynamicColumnData.showGroupsStores}>{reportItem.groupId != null ? reportItem.groupId : 'NA'}</td>
             <td className={this.dynamicColumnData.showGroupsStores} onClick={this.props.reportData.handleDrillDown}>{reportItem.storeId}</td>
-            <td className={this.dynamicColumnData.showDayColumn}><span>{reportItem.day}</span></td>
-            <td className={this.dynamicColumnData.showDayPartColumn}><span>{reportItem.daypart}</span></td>
-            <td className={this.dynamicColumnData.showWeekColumn}><span>{reportItem.week}</span></td>
+            <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayColumn}><span className='timeSpan'>{reportItem.day.timeSpan}</span><br/><span className='currentMeasure'>{reportItem.day.currentDaypart}</span></td>
+            <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayPartColumn}><span className='timeSpan'>{reportItem.daypart.timeSpan}</span><br/><span className='currentMeasure'>{reportItem.daypart.currentDaypart}</span></td>
+            <td className={'timeMeasureColumn '+this.dynamicColumnData.showWeekColumn}><span>{reportItem.week}</span> </td>
             <td>{reportItem.menu}</td>
             <td>{reportItem.greet}</td>
             <td>{reportItem.service}</td>
