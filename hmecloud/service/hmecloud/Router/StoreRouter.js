@@ -17,6 +17,9 @@ router.post('/generatereport', authValidator, (request, response) => {
     if (reportType === 'daySingle') {
         output.reportData = daySingle.Day_Single
         output.status = true
+    } else if (reportType === 'weekSingle') {
+        output.reportData = daySingle.Week_Single
+        output.status = true
     }
     response.status(200).send(output)
 
