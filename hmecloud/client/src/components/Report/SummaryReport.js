@@ -5,6 +5,9 @@ import SummaryReportDataComponent from './SummaryReportDataComponent'
 import GoalStatisticsDataComponent from './GoalStatisticsDataComponent'
 import SystemStatistics from './SystemStatistics'
 import PageHeader from '../Header/PageHeader'
+import {Config} from '../../Config'
+import {CommonConstants} from '../../Constants'
+import Api from '../../Api'
 // import { BrowserRouter } from 'react-router-dom'
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './SummaryReport.css'
@@ -113,13 +116,13 @@ export default class SummaryReport extends Component {
             startTime: 'MAR 9',
             endTime: 'MAR 10',
             data: [{groupId: 'G001', storeId: 12345, menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-          }
-            /* {
-                      startTime:'MAR 9',
-                      endTime:'MAR 10',
-                      data:[{groupId: 'G001', storeId: '123456', daypart : "03-09 Daypart 1", menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
-                            {groupId: 'G002', storeId: '1234567', daypart : "03-09 Daypart 2", menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
-                    } */
+          },
+          {
+                    date: "",
+                    daypart: "",
+                    data:[{groupId: 'G001', storeId: '123456', daypart : "03-09 Daypart 1", menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5},
+                          {groupId: 'G002', storeId: '1234567', daypart : "03-09 Daypart 2", menu: 0.30, greet: 1.00, service: 1.30, laneQueue: 2.00, laneTotal: 5.00, totalCars: 5}]
+              }
           ],
           pages: [
             {
@@ -148,127 +151,29 @@ export default class SummaryReport extends Component {
         [
           {
               title: "<Goal A",
-              menu: "1",
-              greet: "2",
-              service: "3",
-              laneQueue: "4",
-              laneTotal: "5"
-            },{
-              title: "Cars",
-              menu: "1",
-              greet: "2",
-              service: "3",
-              laneQueue: "4",
-              laneTotal: "5"
-            },{
-              title: "%",
-              menu: "1",
-              greet: "2",
-              service: "3",
-              laneQueue: "4",
-              laneTotal: "5"
+              menu: {goal:"1", cars:"1",percentage:"1"},
+              greet: {goal:"2", cars:"1",percentage:"1"},
+              service: {goal:"3", cars:"1",percentage:"1"},
+              laneQueue: {goal:"4", cars:"1",percentage:"1"},
+              laneTotal: {goal:"5", cars:"1",percentage:"1"}
             },
             {
                 title: "<Goal B",
-                menu: "1",
-                greet: "2",
-                service: "3",
-                laneQueue: "4",
-                laneTotal: "5"
-              },{
-                title: "Cars",
-                menu: "1",
-                greet: "2",
-                service: "3",
-                laneQueue: "4",
-                laneTotal: "5"
-              },{
-                title: "%",
-                menu: "1",
-                greet: "2",
-                service: "3",
-                laneQueue: "4",
-                laneTotal: "5"
-              },
-              {
-                  title: "<Goal C",
-                  menu: "1",
-                  greet: "2",
-                  service: "3",
-                  laneQueue: "4",
-                  laneTotal: "5"
-                },{
-                  title: "Cars",
-                  menu: "1",
-                  greet: "2",
-                  service: "3",
-                  laneQueue: "4",
-                  laneTotal: "5"
-                },{
-                  title: "%",
-                  menu: "1",
-                  greet: "2",
-                  service: "3",
-                  laneQueue: "4",
-                  laneTotal: "5"
-                }
+                menu: {goal:"6", cars:"1",percentage:"1"},
+                greet: {goal:"7", cars:"1",percentage:"1"},
+                service: {goal:"8", cars:"1",percentage:"1"},
+                laneQueue: {goal:"9", cars:"1",percentage:"1"},
+                laneTotal: {goal:"10", cars:"1",percentage:"1"}
+            },
+            {
+                title: "<Goal C",
+                menu: {goal:"11", cars:"1",percentage:"1"},
+                greet: {goal:"12", cars:"1",percentage:"1"},
+                service: {goal:"13", cars:"1",percentage:"1"},
+                laneQueue: {goal:"14", cars:"1",percentage:"1"},
+                laneTotal: {goal:"15", cars:"1",percentage:"1"}
+            },
         ]
-        /* data: [
-          {
-            "title": "Goal A",
-            "color": "#545454",
-            "data": {
-              "Header": {
-                "Menu": "1",
-                "Greet": "2",
-                "Service": "3",
-                "LaneQueue": "4",
-                "LaneTotal": "5"
-              },
-              "Cars": {
-                "Menu": "1",
-                "Greet": "2",
-                "Service": "3",
-                "LaneQueue": "4",
-                "LaneTotal": "5"
-              },
-              "%": {
-                "Menu": "1",
-                "Greet": "2",
-                "Service": "3",
-                "LaneQueue": "4",
-                "LaneTotal": "5"
-              }
-            }
-          },
-          {
-            "title": "Goal B",
-            "color": "#545454",
-            "data": {
-              "Header": {
-                "Menu": "1",
-                "Greet": "2",
-                "Service": "3",
-                "LaneQueue": "4",
-                "LaneTotal": "5"
-              },
-              "Cars": {
-                "Menu": "1",
-                "Greet": "2",
-                "Service": "3",
-                "LaneQueue": "4",
-                "LaneTotal": "5"
-              },
-              "%": {
-                "Menu": "1",
-                "Greet": "2",
-                "Service": "3",
-                "LaneQueue": "4",
-                "LaneTotal": "5"
-              }
-            }
-          }
-        ] */
       },
       displayData: {
         Lane: '1',
@@ -283,6 +188,7 @@ export default class SummaryReport extends Component {
     }
     // this.getCurrentTimeMeasure()
     // this.populateSummaryReportDetails()
+    this.api = new Api()
     this.handleDrillDown = this.handleDrillDown.bind(this)
   }
 
@@ -338,67 +244,50 @@ export default class SummaryReport extends Component {
           this.state.reportData.groupStoreColumns = true
         }
         this.setState(this.state)
+        this.props.history.push("/rawcardatareport",this.state.templateData);
         break
     }
-    this.constructReportRequest(templateData)
+    // this.constructReportRequest(templateData)
   }
+
   constructReportRequest(templateData){
-
-    this.populateSummaryReportDetails()
-  }
-
-  getSummaryReportData(){
-
+    let template = templateData[0]
+    let request = {
+     reportTemplateStoreIds: template.selectedStoreIds,
+     reportTemplateAdvancedOp: template.advancedOptions,
+     reportTemplateTimeMeasure: template.timeMeasure,
+     reportTemplateFromDate: template.fromDate,
+     reportTemplateToDate: template.toDate,
+     reportTemplateOpen: template.open,
+     reportTemplateClose: template.close,
+     reportTemplateType: template.type,
+     reportTemplateIncludeLongs: template.longestTime,
+     ReportTemplate_Include_Stats: template.longestTime,
+     reportTemplateFormat: template.format
+    }
+    this.populateSummaryReportDetails(request)
   }
 
   handleDrillDown () {
     // api call for getting the next drilldown
-    if (this.props.weeklyData) {
+    if (this.state.weeklyData) {
       console.log('weekly data')
-    } else if (this.props.dailyData) {
+    } else if (this.state.dailyData) {
       console.log('daily data')
-    } else if (this.props.dayPartData) {
+    } else if (this.state.dayPartData) {
       console.log('day data')
-    } else if (this.props.rawCarData) {
+    } else if (this.state.rawCarData) {
       console.log('raw car data')
     }
   }
 
-  populateSummaryReportDetails () {
-    /* let url = config.url + 'api/report/generatereport'
-    let data = {
-      'stores': [
-        3,
-        5
-      ],
-      fromDate: '2017-03-03T00:00:00.000Z',
-      toDate: '2018-03-26T00:00:00.000Z',
-      openTime: '12:08 AM',
-      closeTime: null,
-      type: 1,
-      advanceType: true,
-      include: 1,
-      format: 1,
-      templateName: 'samples'
-    }
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache'
-      },
-      body: JSON.stringify(data)
+  populateSummaryReportDetails (request) {
+    let url = Config.baseUrl + CommonConstants.apiUrls.generateReport
+    this.api.postData (url, request ,data => {
+      console.log(data)
+    }, error => {
+      console.log(error)
     })
-      .then((response) => response.json())
-      .then((data) => {
-        this.state.reportData.data = JSON.stringify(data.data)
-        this.setState(this.state)
-      })
-      .catch((error) => {
-
-      }) */
   }
   displayGoalStatistics(){
     if(this.state.showGoalStats){
@@ -458,7 +347,6 @@ export default class SummaryReport extends Component {
               <div className='next-link'><i className='fa fa-angle-right next-page' /></div>
             </div>
           </div>
-
         </div>
 
         <div className='row'>

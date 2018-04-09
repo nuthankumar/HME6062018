@@ -39,7 +39,7 @@ export default class SummaryReportDataComponent extends Component {
                   <th className={'storesColHeader ' + this.dynamicColumnData.showGroupsStores}><span>Stores</span></th>
                   <th className={'reportTableAttributesHeading ' + this.dynamicColumnData.showDayColumn}><span>Day</span></th>
                   <th className={'reportTableAttributesHeading ' + this.dynamicColumnData.showDayPartColumn}><span>DayPart</span></th>
-                  <th className={'reportTableAttributesHeading ' + this.dynamicColumnData.showWeekColumn}><span>DayPart</span></th>
+                  <th className={'reportTableAttributesHeading ' + this.dynamicColumnData.showWeekColumn}><span>Weekly</span></th>
                   <th className='reportTableAttributesHeading'><span>Menu</span></th>
                   <th className='reportTableAttributesHeading'><span>Greet</span></th>
                   <th className='reportTableAttributesHeading'><span>Service</span></th>

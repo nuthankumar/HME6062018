@@ -44,7 +44,7 @@ class RawCarReport extends Component {
       'ReportTemplate_Include_Stats': '',
       'reportTemplateFormat': 1
     }
-    let url = Config.url + 'api/report/getRawCarDataReport?reportType=rr1'
+    let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
     fetch(url, {
       method: 'POST',
       headers: {

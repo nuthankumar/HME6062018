@@ -93,6 +93,14 @@
       margin-top: 10px;
 }
 
+.goalstatistics-table td{
+  width: 175px;
+}
+
+.goalStatistics-row{
+  margin-bottom: 5px;
+}
+
 h2 .report-start-time, h2 .report-end-time{
   font-size: 14px;
   color: #008898;

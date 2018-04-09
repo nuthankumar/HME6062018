@@ -39,7 +39,7 @@ class SystemStatistics extends Component {
           <table cellspacing='0' className='table-layout-System ssBord col-width-ss5'>
             <tbody>
               <tr>
-                <th className='lane1' colspan='2'><span>{t[language].ReportsLane}</span> {displayData.Lane}</th>
+                <th className='lane1' colSpan='2'><span>{t[language].ReportsLane}</span> {displayData.Lane}</th>
               </tr>
               <tr>
                 <td id='ss-col-width' className='rnshade'><span>{t[language].ReportsAverageCarsInLane}</span></td>
