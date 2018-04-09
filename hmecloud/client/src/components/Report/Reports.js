@@ -8,11 +8,8 @@ import Tree, { TreeNode } from "rc-tree";
 import "rc-tree/assets/index.css";
 import "../../../node_modules/react-datetime/css/react-datetime.css";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-
 import DateTimeField from "react-datetime";
 import DateTime from "react-datetime";
-//import './basic.less';
-
 import "rc-time-picker/assets/index.css";
 import moment from "moment";
 import TimePicker from "rc-time-picker";
@@ -29,17 +26,11 @@ const HMELogo = require("../../images/HMELogo.png");
 const Calendar = require("../../images/mini-cal.jpg");
 const Asc = require("../../images/Arrow_red_asc.png");
 const Desc = require("../../images/Arrow_red_desc.png");
-
 const Delete = require("../../images/redEx.png");
 const _ = require("underscore");
 
 class Report extends Component {
-  // ToDo: Need to be checked with Nandish
-  //  state = {
-  //   selectedTime: moment()
-  // };
   handleValueChange = selectedTime => {
-    console.log(selectedTime && selectedTime.format("HH:mm:ss"));
     this.setState({ selectedTime });
   };
   clear = () => {
@@ -92,7 +83,6 @@ class Report extends Component {
     };
     this.api = new Api()
     this.getSavedReports();
-    this.handleChange = this.handleChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.Auth = new AuthService()
     this.getTreeHierarchy()
@@ -102,7 +92,6 @@ class Report extends Component {
   getTreeHierarchy() {
       let url = Config.apiBaseUrl + CommonConstants.apiUrls.getGroupHierarchyTree + '?accountId=100&userName=swathikumary@nousinfo.com'
       this.api.getData(url,data => {
-        console.log(data.data)
         this.state.treeData = data.data
         this.setState(this.state)
       })
@@ -114,15 +103,8 @@ class Report extends Component {
   onCheck(checkedKeys, node) {
     this.state.selectedList = checkedKeys;
     this.state.defaultCheckedKeys = checkedKeys;
-
-    this.state.stores = _.pluck(
-      _.where(_.pluck(node.checkedNodes, "props"), { type: "store" }),
-      "title"
-        );
-      this.state.selectedStoreIds = _.pluck(
-        _.where(_.pluck(node.checkedNodes, "props"), { type: "store" }),
-        "value"
-          );
+    this.state.stores = _.pluck(_.where(_.pluck(node.checkedNodes, "props"), { type: "store" }),"title");
+    this.state.selectedStoreIds = _.pluck(_.where(_.pluck(node.checkedNodes, "props"), { type: "store" }),"value");
     this.setState(this.state);
   }
 
@@ -132,35 +114,13 @@ class Report extends Component {
       value: value
     };
   }
-  handleChange(value, formattedValue) {
-    this.setState({
-      value: value, // ISO String, ex: "2016-11-19T12:00:00.000Z"
-      formattedValue: formattedValue // Formatted String, ex: "11/19/2016"
-    });
-  }
   onSelect = (selectedKeys, info) => {
-    console.log("selected", selectedKeys, info);
+
     this.selKey = info.node.props.eventKey;
   };
 
   render() {
     const { date, format, mode, inputFormat } = this.state;
-    const customLabel = (
-      <span className="cus-label">
-        <span>operations: </span>
-        <span style={{ color: "blue" }} onClick={this.onEdit}>
-          Edit
-        </span>&nbsp;
-        <label onClick={e => e.stopPropagation()}>
-          <input type="checkbox" /> checked
-        </label>{" "}
-        &nbsp;
-        <span style={{ color: "red" }} onClick={this.onDel}>
-          Delete
-        </span>
-      </span>
-    );
-
     const loop = data => {
       return data.map(item => {
         if (item.Children && item.Children.length) {
@@ -191,21 +151,19 @@ class Report extends Component {
               <div className="reports-pane">
                 <div className="checkbox-sections-advanced">
                   <div className="timings">
-                    {" "}
+                    
                     <input
                       type="checkbox"
                       checked={this.state.selectAll}
                       onChange={this.selectAll.bind(this)}
-                    />{" "}
+                    />
                     <span className="span-heading">
-                      <span> Select All </span>{" "}
+                      <span> Select All </span>
                       <a data-tip="Select one store for a single-store report.  Select multiple stores for a comparison report."><span className="tip openTip">?</span></a>
                       <ReactTooltip place="right" type="dark" effect="solid" />
-                    </span>{" "}
+                    </span>
                   </div>
                   <div className="timings">
-                    {" "}
-                    <span>Brand</span>{" "}
                   </div>
                 </div>
 
@@ -227,32 +185,16 @@ class Report extends Component {
                   </Tree>
                 </div>
                 <span className="span-heading">
-                                  <span> Time Measures </span>{" "}
+                                  <span> Time Measures </span>
                                   <a data-tip="The report will summarize or average the data over the time intervals you choose. For example, choose week if you want all of the days of each rolled up into one-week intervals. Only one store may be selected at a time for a Raw Data Report."><span className="tip openTip">?</span></a>
                                   <ReactTooltip place="right" type="dark" effect="solid" />
                 </span>
                 <div>
-                  <select
-                    name="timeMeasure"
-                    className="time-measures"
-                    onChange={this.changeTimeMeasure.bind(this)}
-                  >
-                    <option selected={this.state.timeMeasure == 1} value="1">
-                      {" "}
-                      Day
-                    </option>
-                    <option selected={this.state.timeMeasure == 2} value="2">
-                      {" "}
-                      Daypart
-                    </option>
-                    <option selected={this.state.timeMeasure == 3} value="3">
-                      {" "}
-                      Week{" "}
-                    </option>
-                    <option selected={this.state.timeMeasure == 4} value="4">
-                      {" "}
-                      Raw Data Report
-                    </option>
+                  <select name="timeMeasure" className="time-measures" onChange={this.changeTimeMeasure.bind(this)}>
+                    <option selected={this.state.timeMeasure == 1} value="1">Day</option>
+                    <option selected={this.state.timeMeasure == 2} value="2">Daypart</option>
+                    <option selected={this.state.timeMeasure == 3} value="3">Week</option>
+                    <option selected={this.state.timeMeasure == 4} value="4">Raw Data Report</option>
                   </select>
                 </div>
                 <div className="calendar-section">
@@ -264,7 +206,7 @@ class Report extends Component {
                     </span>
                     <div className="calendar">
                       <div className="calendar-icon">
-                        <img src={Calendar} aria-hidden="true" />{" "}
+                        <img src={Calendar} aria-hidden="true" />
                       </div>
                       <DateTimeField
                         className="date-time"
@@ -286,7 +228,7 @@ class Report extends Component {
                     </span>
                     <div className="calendar">
                       <div className="calendar-icon">
-                        <img src={Calendar} aria-hidden="true" />{" "}
+                        <img src={Calendar} aria-hidden="true" />
                       </div>
                       <DateTimeField
                         className="date-time"
@@ -305,8 +247,8 @@ class Report extends Component {
                 <div>
                                   <div className='advancedOptions' onClick={this.showAdvanced.bind(this)}>
                                          <span className='textPaddingSmall'> Advanced Options </span>
-                                         <img src={Asc} className={(this.state.showAdvancedOptions ? "show" : "hidden")} aria-hidden="true" />{" "}
-                                         <img src={Desc} className={(this.state.showAdvancedOptions ? "hidden" : "show")}  aria-hidden="true" />{" "}
+                                         <img src={Asc} className={(this.state.showAdvancedOptions ? "show" : "hidden")} aria-hidden="true" />
+                                         <img src={Desc} className={(this.state.showAdvancedOptions ? "hidden" : "show")}  aria-hidden="true" />
                                  </div>
                   <div
                     className={
@@ -342,9 +284,6 @@ class Report extends Component {
                     </div>
 
                     <div className="checkbox-sections-advanced">
-
-
-
                                           <div className="alignCenter timings">
                                               <input
                                                   name="open"
@@ -355,76 +294,52 @@ class Report extends Component {
                                               <span className="textPaddingSmall">  Open  <a data-tip="Leave the Open and/or Close boxes checked if you want the start and/or end times to remain as configured in the ZOOM timer.  Uncheck the box(es) if you want to choose a specific start and/or end time."><span className="tip openTip">?</span></a>
                                                   <ReactTooltip place="right" type="dark" effect="solid" /> </span>
                                           </div>
-
-
-                  
                       <div className="timings">
-                        {" "}
                         <input
                           name="close"
                           type="checkbox"
                           checked={this.state.close}
                           onChange={this.check.bind(this, this.state.close)}
-                        />{" "}
+                        />
                         <span className="span-heading">
-                          <span> Close </span>{" "}
+                          <span> Close </span>
                           <a data-tip="Leave the Open and/or Close boxes checked if you want the start and/or end times to remain as configured in the ZOOM timer.  Uncheck the box(es) if you want to choose a specific start and/or end time."><span className="tip openTip">?</span></a>
                           <ReactTooltip place="right" type="dark" effect="solid" />
-                        </span>{" "}
+                        </span>
                       </div>
                     </div>
                     <span>Type </span>
                     <div className="checkbox-sections">
                       <div className="type-sub-section">
-                        {" "}
                         <input
                           type="radio"
                           name="type"
                           checked={this.state.type == 1 ? true : false}
                           onChange={this.handleOnChange.bind(this)}
                           value={1}
-                        />{" "}
+                        />
                         <span className="span-heading">
-                          <span> Time Slice </span>{" "}
+                          <span> Time Slice </span>
                           <a data-tip="Choose Time Slice if you are only interested in a narrow window of time within each daypart, day, or week.  Use the controls above to choose a start and end time."><span className="tip openTip">?</span></a>
                           <ReactTooltip place="right" type="dark" effect="solid" />
                         </span>
                       </div>
                       <div className="type-sub-section">
-                        {" "}
-                        <input
-                          type="radio"
-                          name="type"
-                          checked={this.state.type == 2 ? true : false}
-                          onChange={this.handleOnChange.bind(this)}
-                          value={2}
-                        />{" "}
+                        <input type="radio" name="type" checked={this.state.type == 2 ? true : false} onChange={this.handleOnChange.bind(this)} value={2}/>
                         <span className="span-heading">
-                          <span> Cumulative </span>{" "}
+                          <span> Cumulative </span>
                           <a data-tip="Choose Cumulative if you want the report to include everything from the chosen start  date and time to the chosen end date and time."><span className="tip openTip">?</span></a>
                           <ReactTooltip place="right" type="dark" effect="solid" />
-                        </span>{" "}
+                        </span>
                       </div>
                     </div>
-                    <span className="note">
-                      {" "}
-                      *Reports including Advanced Options are generated by CSV
-                      and sent by email.{" "}
-                    </span>
+                    <span className="note">*Reports including Advanced Options are generated by CSV and sent by email.</span>
                   </div>
                 </div>
-
                 <span>Include </span>
                 <div className="checkbox-sections">
-
-                                  <div className="alignCenter">
-                                      <input
-                                          type="checkbox"
-                                          id="longestTime"
-                                          disabled={this.state.showAdvancedOptions}
-                                          value={1}
-                                          onChange={this.include.bind(this)}
-                                      />
+                          <div className="alignCenter">
+                                      <input type="checkbox" id="longestTime" disabled={this.state.showAdvancedOptions} value={1} onChange={this.include.bind(this)}/>
                                       <span className="textPaddingSmall">  Longest Time </span>
                                   </div>
                                   <div className="alignCenter">
@@ -468,7 +383,7 @@ class Report extends Component {
               </div>
               <div className="reports-pane">
                 <span className="span-heading">
-                  <span> Saved Reports Templates </span>{" "}
+                  <span> Saved Reports Templates </span>
                   <a data-tip="Select a previously saved report template to run a common report, or select new options and save a new report template to use later."><span className="tip openTip">?</span></a>
                   <ReactTooltip place="right" type="dark" effect="solid" />
                 </span>
@@ -527,8 +442,8 @@ class Report extends Component {
                   className="generate-reports"
                   onClick={this.generate.bind(this)}
                 >
-                  {" "}
-                  Generate Report{" "}
+                  
+                  Generate Report
                 </div>
               </div>
             </section>
@@ -597,9 +512,7 @@ class Report extends Component {
 
   getSavedReports() {
       let url = Config.apiBaseUrl + CommonConstants.apiUrls.getSavedTemplates + '?accountId=100&createdBy=100'
-     // let url = Config.baseUrl + CommonConstants.apiUrls.getSavedTemplates + 'accountId=100&createdBy=1000'
       this.api.getData(url, data => {
-          console.log(data);
         this.setState({
           savedTemplates: data.data
         })
@@ -608,44 +521,19 @@ class Report extends Component {
       })
   }
 
-  savedReports() {
-    let savedTemplates = this.state.savedTemplates;
-
-    if (savedTemplates) {
+ savedReports() {
+  let savedTemplates = this.state.savedTemplates;
+  if (savedTemplates) {
       let renderSavedTemplates = savedTemplates.map((report, index) => {
         return (
           <div className='templateRow' key={index} title={report.TemplateName}>
-                <div
-
-
-                    className={
-                        "col-md-10 savedName " +
-                        (index % 2 === 0 ? "even" : "odd")
-                    }
-
-              id={report.Id}
-              onClick={this.apply.bind(this)}
-            >
-              {" "}
-              {report.TemplateName}{" "}
-            </div>
-            <div
-                    className={
-                        "col-md-2 delete-icon " +
-                        (index % 2 === 0 ? "even" : "odd")
-                    }
-              id={report.Id}
-              onClick={this.delete.bind(this)}
-            >
-              {" "}
+                <div className={"col-md-10 savedName " +(index % 2 === 0 ? "even" : "odd")} id={report.Id} onClick={this.apply.bind(this)}>
+                   {report.TemplateName}
+                </div>
+            <div className={"col-md-2 delete-icon " +(index % 2 === 0 ? "even" : "odd")} id={report.Id} onClick={this.delete.bind(this)}>
               <span id={report.Id}>
-                <img
-                  className="logOutIcon"
-                  id={report.Id}
-                  src={Delete}
-                  aria-hidden="true"
-                />
-              </span>{" "}
+                <img className="logOutIcon" id={report.Id} src={Delete} aria-hidden="true"/>
+              </span>
             </div>
           </div>
         );
@@ -717,7 +605,6 @@ class Report extends Component {
     e.target.id;
     this.api.getData (url,data => {
         let template = data.data;
-        console.log(data.data)
         this.setState({ tempStore: template.SelectedList });
         this.setState({ format: template.Format });
         this.setState({ type: template.Type });
@@ -744,14 +631,9 @@ class Report extends Component {
         this.setState({
           selectedStoreIds : selectedStoreIds
         })
-        if (_.contains(template.Include, "1")) {
-          document.getElementById("longestTime").checked = true;
-        }
-        if (_.contains(template.Include, "2")) {
-          document.getElementById("systemStatistics").checked = true;
-        }
+        _.contains(template.Include, "1") ? document.getElementById("longestTime").checked = true : ''
+        _.contains(template.Include, "2") ? document.getElementById("systemStatistics").checked = true:''
         this.setState({ include: template.Include });
-
         if (template.Open == false) {
           this.state.openTime = moment(template.OpenTime, "HH:mm a");
           this.setState(this.state);
@@ -785,24 +667,12 @@ class Report extends Component {
     let isError = false;
     let template = [];
     template.push({
-      selectedList: this.state.selectedList,
-      timeMeasure: this.state.timeMeasure,
-      fromDate: this.state.fromDate,
-      toDate: this.state.toDate,
-      openTime: moment(this.state.openTime).format("HH:mm a"),
-      closeTime: moment(this.state.closeTime).format("HH:mm a"),
-      templateName: this.state.templateName,
-      open: this.state.open,
-      close: this.state.close,
-      type: this.state.type,
-      include: this.state.include,
-      format: this.state.format,
-      selectedStoreIds: this.state.selectedStoreIds,
-      CreatedDateTime: "2018-04-04 00:00:00.000",
-      UpdatedDateTime: "2018-04-04 00:00:00.000",
-      advancedOptions: (!this.state.open || !this.state.close),
-      longestTime: _.contains(this.state.include, "1"),
-      systemStatistics: _.contains(this.state.include, "2"),
+      selectedList: this.state.selectedList,timeMeasure: this.state.timeMeasure,fromDate: this.state.fromDate,toDate: this.state.toDate,
+      openTime: moment(this.state.openTime).format("HH:mm a"),closeTime: moment(this.state.closeTime).format("HH:mm a"),
+      templateName: this.state.templateName,open: this.state.open,close: this.state.close,
+      type: this.state.type,include: this.state.include,format: this.state.format,selectedStoreIds: this.state.selectedStoreIds,
+      CreatedDateTime: moment().format("YYYY-MM-DD HH:mm:ss a"), UpdatedDateTime: moment().format("YYYY-MM-DD HH:mm:ss a"),
+      advancedOptions: (!this.state.open || !this.state.close), longestTime: _.contains(this.state.include, "1"),systemStatistics: _.contains(this.state.include, "2"),
     });
  
     console.log(template);
@@ -826,8 +696,8 @@ class Report extends Component {
       if (
         moment(this.state.toDate, "MM/DD/YYYY").diff(
           moment(this.state.fromDate, "MM/DD/YYYY"),
-          "days"
-        ) > 31
+              "days"
+          ) > CommonConstants.TimeMeasureValidations.Month
       ) {
         this.state.errorMessage =
           "Date range invalid. For Day Reports select any 1 month period.";
@@ -840,8 +710,8 @@ class Report extends Component {
       if (
         moment(this.state.toDate, "MM/DD/YYYY").diff(
           moment(this.state.fromDate, "MM/DD/YYYY"),
-          "days"
-        ) > 14
+              "days"
+          ) > CommonConstants.TimeMeasureValidations.TwoWeeks
       ) {
         this.state.errorMessage =
           "Date range invalid. For Daypart Reports select any 2 week period.";
@@ -854,8 +724,8 @@ class Report extends Component {
       if (
         moment(this.state.toDate, "MM/DD/YYYY").diff(
           moment(this.state.fromDate, "MM/DD/YYYY"),
-          "days"
-        ) > 62
+              "days"
+          ) > CommonConstants.TimeMeasureValidations.TwoMonths
       ) {
         this.state.errorMessage =
           "Date range invalid. For Week Reports select any 2 month period.";
@@ -867,8 +737,8 @@ class Report extends Component {
       if (
         moment(this.state.toDate, "MM/DD/YYYY").diff(
           moment(this.state.fromDate, "MM/DD/YYYY"),
-          "days"
-        ) > 0
+              "days"
+          ) > CommonConstants.TimeMeasureValidations.Today
       ) {
         this.state.errorMessage =
           "Date range invalid. For Raw Data Reports select a single day.";
@@ -935,10 +805,8 @@ class Report extends Component {
       renderInclude = include.map(function(include, index) {
         return (
           <span key={index}>
-            <span className={index == 0 ? "hidden" : ""}>,</span>{" "}
-            {include == 1
-              ? "Longest Time"
-              : include == 2 ? "System Statistics" : ""}
+            <span className={index == 0 ? "hidden" : ""}>,</span>
+            {include == 1? "Longest Time": include == 2 ? "System Statistics" : ""}
           </span>
         );
       });
