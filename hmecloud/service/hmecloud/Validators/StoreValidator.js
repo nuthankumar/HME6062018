@@ -1,10 +1,11 @@
 const validate = require('validator')
 const storeController = require('../Controllers/StoreController')
 const dayReportController = require('../Controllers/DayReportController')
+const weekReportController = require('../Controllers/WeekReportController')
 
 const reportValidator = (request, callback) => {
   let output = {}
-  console.log('report validator', request.body.selectedStoreIds);
+  console.log('report validator', request.body.selectedStoreIds)
   if (request.body.selectedStoreIds) {
     const input = {
       ReportTemplate_StoreIds: request.body.selectedStoreIds, //  [] array of object
@@ -20,7 +21,7 @@ const reportValidator = (request, callback) => {
       Include: request.body.include, // [] array
       longestTime: request.body.longestTime, // boolean
       // systemStatistics: request.body.systemStatistics, // boolean
-      ReportTemplate_Format: request.body.format, // number
+      // ReportTemplate_Format: request.body.format, // number
       // Hours1: request.body.Hours,
       // Minutes1: request.body.Minutes,
       // AMPM1: request.body.AMPM,
@@ -28,23 +29,21 @@ const reportValidator = (request, callback) => {
       // Minutes2: request.body,
       // AMPM2: request.body.AMPM,
       reportType: request.query.reportType,
-        UserEmail: request.UserEmail,
-        CarDataRecordType_ID: request.UserPreferenceValue
+      UserEmail: request.UserEmail,
+      CarDataRecordType_ID: request.UserPreferenceValue
     }
-
     // if advance option true and open/ close is true report type can be 2=TC
     // longest and system statistic disalbled and should be false
     if (input.ReportTemplate_Advanced_Op && (input.ReportTemplate_Open || input.ReportTemplate_Close)) {
-        if (input.ReportTemplate_Type === 1) {
-            input.ReportTemplate_Type = 'TC'
-        } 
-            input.longestTime = false
-            input.systemStatistics = false
-        
+      if (input.ReportTemplate_Type === 1) {
+        input.ReportTemplate_Type = 'TC'
       }
-      if (input.ReportTemplate_Type === 2) {
-          input.ReportTemplate_Type = 'AC'
-      }
+      input.longestTime = false
+      input.systemStatistics = false
+    }
+    if (input.ReportTemplate_Type === 2) {
+      input.ReportTemplate_Type = 'AC'
+    }
     // If date range is null
     if (!input.ReportTemplate_From_Date || !input.ReportTemplate_To_Date) {
       output.error = request.t('REPORTSUMMARY.DateCannotbeEmpty')
@@ -54,21 +53,21 @@ const reportValidator = (request, callback) => {
     console.log(input.ReportTemplate_Time_Measure)
     // report time measure day data
     if (input.ReportTemplate_Time_Measure === 1) {
-        dayReportController.generateDayReport(input, result => {
+      dayReportController.generateDayReport(input, result => {
         callback(result)
       })
-    } // report time measure day part data
-    else if (input.ReportTemplate_Time_Measure === 2) {
+      // report time measure day part data
+    } else if (input.ReportTemplate_Time_Measure === 2) {
       storeController.generateReport(input, result => {
         callback(result)
       })
-    } // report time measure week data
-    else if (input.ReportTemplate_Time_Measure === 3) {
-      storeController.getRawCarDataReport(input, result => {
+      // report time measure week data
+    } else if (input.ReportTemplate_Time_Measure === 3) {
+      weekReportController.generateWeekReport(input, result => {
         callback(result)
       })
-    } // report time measure raw car data
-    else if (input.ReportTemplate_Time_Measure === 4) {
+      // report time measure raw car data
+    } else if (input.ReportTemplate_Time_Measure === 4) {
       storeController.getRawCarDataReport(input, result => {
         callback(result)
       })

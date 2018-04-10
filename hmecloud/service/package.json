@@ -15,6 +15,7 @@
     "i18next-node-fs-backend": "^1.0.0",
     "jsonexport": "2.0.11",
     "jsonwebtoken": "8.2.0",
+    "lodash": "^4.17.5",
     "moment": "^2.22.0",
     "moment-duration-format": "2.2.2",
     "mssql": "^4.1.0",
