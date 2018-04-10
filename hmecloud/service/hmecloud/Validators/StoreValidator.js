@@ -5,52 +5,69 @@ const reportValidator = (request, callback) => {
   let output = {}
   if (request.body.reportTemplateStoreIds) {
     const input = {
-      ReportTemplate_StoreIds: request.body.reportTemplateStoreIds,
-      ReportTemplate_Advanced_Op: request.body.reportTemplateAdvancedOp,
-      ReportTemplate_Time_Measure: request.body.reportTemplateTimeMeasure,
-      ReportTemplate_From_Date: request.body.reportTemplateFromDate,
-      ReportTemplate_To_Date: request.body.reportTemplateToDate,
-      ReportTemplate_From_Time: request.body.reportTemplateFromTime,
-      ReportTemplate_To_Time: request.body.reportTemplateToTime,
-      ReportTemplate_Open: request.body.reportTemplateOpen,
-      ReportTemplate_Close: request.body.reportTemplateClose,
-      ReportTemplate_Type: request.body.reportTemplateType,
-      ReportTemplate_Include_Longs: request.body.reportTemplateIncludeLongs,
-      ReportTemplate_Include_Stats: request.body.ReportTemplateIncludeStats,
-      ReportTemplate_Format: request.body.reportTemplateFormat,
-      Hours1: request.body.Hours,
-      Minutes1: request.body.Minutes,
-      AMPM1: request.body.AMPM,
-      Hours2: request.body,
-      Minutes2: request.body,
-      AMPM2: request.body.AMPM,
+      ReportTemplate_StoreIds: request.body.reportTemplateStoreIds, //  [] array of object
+      ReportTemplate_Advanced_Op: request.body.advancedOptions, // boolean
+      ReportTemplate_Time_Measure: request.body.timeMeasure, // number
+      ReportTemplate_From_Date: request.body.fromDate, // string date
+      ReportTemplate_To_Date: request.body.toDate, // string date
+      ReportTemplate_From_Time: request.body.openTime, // hours:min AM/PM
+      ReportTemplate_To_Time: request.body.closeTime, // hours:min AM/PM
+      ReportTemplate_Open: request.body.open, // boolean
+      ReportTemplate_Close: request.body.close, // boolean
+      ReportTemplate_Type: request.body.type, // number
+      Include: request.body.include, // [] array
+      longestTime: request.body.longestTime, // boolean
+      // systemStatistics: request.body.systemStatistics, // boolean
+      // ReportTemplate_Format: request.body.format, // number
+      // Hours1: request.body.Hours,
+      // Minutes1: request.body.Minutes,
+      // AMPM1: request.body.AMPM,
+      // Hours2: request.body,
+      // Minutes2: request.body,
+      // AMPM2: request.body.AMPM,
       reportType: request.query.reportType,
       UserEmail: request.UserEmail
     }
 
-    if (input.ReportTemplate_Advanced_Op === 1 && (input.ReportTemplate_Open !== 1 || input.ReportTemplate_Close !== 1)) {
+    // if advance option true and open/ close is true report type can be 2=TC
+    // longest and system statistic disalbled and should be false
+    if (input.ReportTemplate_Advanced_Op && (input.ReportTemplate_Open || input.ReportTemplate_Close)) {
       input.ReportTemplate_Type = 'TC'
-      input.ReportTemplate_Include_Longs = null
-      input.ReportTemplate_Include_Stats = null
+      input.longestTime = false
+      input.systemStatistics = false
     }
-
+    // If date range is null
     if (!input.ReportTemplate_From_Date || !input.ReportTemplate_To_Date) {
       output.error = request.t('REPORTSUMMARY.DateCannotbeEmpty')
       output.status = false
       callback(output)
     }
-    console.log(input.ReportTemplate_Time_Measure);
-    if (input.ReportTemplate_Time_Measure !== 'Raw Data Report') {
+    console.log(input.ReportTemplate_Time_Measure)
+    // report time measure day data
+    if (input.ReportTemplate_Time_Measure === '1') {
       storeController.generateReport(input, result => {
         callback(result)
       })
-    } else {
+    } // report time measure day part data
+    else if (input.ReportTemplate_Time_Measure === '2') {
+      storeController.generateReport(input, result => {
+        callback(result)
+      })
+    } // report time measure week data
+    else if (input.ReportTemplate_Time_Measure === '3') {
+      storeController.getRawCarDataReport(input, result => {
+        callback(result)
+      })
+    } // report time measure raw car data
+    else if (input.ReportTemplate_Time_Measure === '4') {
       storeController.getRawCarDataReport(input, result => {
         callback(result)
       })
     }
   } else {
-    callback({ error: 'undefined'});
+    output.error = request.t('REPORTSUMMARY.InvalidStoreId')
+    output.status = false
+    callback(output)
   }
 }
 
