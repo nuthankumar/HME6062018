@@ -168,7 +168,7 @@ export default class SummaryReportDataComponent extends Component {
   }
 
   render () {
-    let reportData = this.props.reportDatao
+    let reportData = this.props.reportData
     return (<div>{this.displaySummarizedData(reportData)}</div>)
   }
 }

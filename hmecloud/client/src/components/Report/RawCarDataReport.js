@@ -72,7 +72,7 @@ class RawCarReport extends Component {
         return (<section className='rawcar-data-page'>
           <section className='rawcar-data-section'>
 
-                <div className='btn btn-danger emailCSV'> Email CSV version</div>
+            <div className='btn btn-danger emailCSV'> Email CSV version</div>
              <div className='clear rawcar-table-details'>
               <PageHeader pageHeading={this.state.pageHeading} />
               <table className='rawcar-header-labels clear'>

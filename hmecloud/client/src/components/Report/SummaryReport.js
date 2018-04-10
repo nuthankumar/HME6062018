@@ -23,12 +23,12 @@ export default class SummaryReport extends Component {
       showSystemStats: true,
       pageHeading : 'Summarized Report',
       reportData: {
-        storeName : "store1",
-        storeDesc : "store1",
-        startTime:"",
-        stopTime: "",
-        printDate: "",
-        printTime: "",
+        storeName : "McDonalds 202000	",
+        storeDesc : "McDonald's",
+        startTime:"Mar 9, 2018 OPEN",
+        stopTime: "	Mar 11, 2018 CLOSE",
+        printDate: "Apr 10, 2018",
+        printTime: "	3:05 AM",
         currentPageNo:"",
         TotalPageCount:"",
         singleDayPart: [ {
@@ -174,11 +174,76 @@ export default class SummaryReport extends Component {
     // this.getCurrentTimeMeasure()
     // this.populateSummaryReportDetails()
     this.api = new Api()
+    this.setTimeMeasures(this.props.history.location.state)
     this.handleDrillDown = this.handleDrillDown.bind(this)
+    this.headerDetails = this.headerDetails.bind(this)
   }
 
   componentWillMount () {
-    this.setTimeMeasures(this.props.history.location.state)
+  //  this.setTimeMeasures(this.props.history.location.state)
+  }
+
+  headerDetails(){
+    if(this.state.singleStore){
+      return(<table className='rawcar-header-labels clear'>
+          <tbody>
+            <tr>
+              <th className='thin-header'>
+                <span>Store</span>:
+              </th>
+              <td className='thin-header'>{this.state.reportData.storeName ? this.state.reportData.storeName : 'N/A' }</td>
+              <th>
+                <span>Start Time:</span>
+              </th>
+              <td>
+                {this.state.reportData.startTime ? this.state.reportData.startTime : 'N/A'}&nbsp;
+              </td>
+              <th>
+                <span>Print Date:</span>
+              </th>
+              <td> {this.state.reportData.printDate ? this.state.reportData.printDate : 'N/A'} </td>
+            </tr>
+            <tr>
+              <th>
+                <span>Description:</span>
+              </th>
+              <td>{this.state.reportData.storeDesc ? this.state.reportData.storeDesc : 'N/A'}</td>
+              <th>
+                <span>Stop Time:</span>
+              </th>
+              <td>
+                {this.state.reportData.stopTime ? this.state.reportData.stopTime : 'N/A' }&nbsp;
+              </td>
+              <th>
+                <span>Print Time: </span>
+              </th>
+              <td>{this.state.reportData.printTime ? this.state.reportData.printTime : 'N/A' }</td>
+            </tr>
+          </tbody>
+        </table>)
+    }else{
+        return(<div>
+          <div className='col-xs-3 left-padding-none'>
+            <h2 className='report-start-time-header'>
+              <span className='report-start-time'>Start Time:</span>
+              <span className='report-start-time-value'>MAR 31,2018 OPEN</span>
+            </h2>
+          </div>
+          <div className='col-xs-3 left-padding-none'>
+            <h2 className='report-end-time-header'>
+              <span className='report-end-time'>End Time:</span>
+              <span className='report-end-time-value'>MAR 31,2018 OPEN</span>
+            </h2>
+          </div>
+
+          <div className='col-xs-4 left-padding-none'>
+            <h2 className='report-print-time-header'>
+              <span className='report-print-time'> Report Print Time</span>
+              <span className='report-print-time-value'> APR2, 2019 4:08 AM</span>
+            </h2>
+          </div>
+        </div>)
+    }
   }
 
   setTimeMeasures (templateData) {
@@ -311,27 +376,9 @@ export default class SummaryReport extends Component {
           <button className='btn btn-default download-summaryreport-btn'>Download</button>
         </div>
         <PageHeader pageHeading={this.state.pageHeading} />
+
         <div className='row'>
-
-          <div className='col-xs-3 left-padding-none'>
-            <h2 className='report-start-time-header'>
-              <span className='report-start-time'>Start Time:</span>
-              <span className='report-start-time-value'>MAR 31,2018 OPEN</span>
-            </h2>
-          </div>
-          <div className='col-xs-3 left-padding-none'>
-            <h2 className='report-end-time-header'>
-              <span className='report-end-time'>End Time:</span>
-              <span className='report-end-time-value'>MAR 31,2018 OPEN</span>
-            </h2>
-          </div>
-
-          <div className='col-xs-4 left-padding-none'>
-            <h2 className='report-print-time-header'>
-              <span className='report-print-time'> Report Print Time</span>
-              <span className='report-print-time-value'> APR2, 2019 4:08 AM</span>
-            </h2>
-          </div>
+          {this.headerDetails()}
           <div className={'col-xs-2 left-padding-none ' + (this.state.allTab ? 'hide' : 'show')}>
             <div id='page-navigations'>
               <div className='page-navs'>
