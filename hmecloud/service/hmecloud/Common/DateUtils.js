@@ -86,5 +86,6 @@ module.exports = {
   currentTime,
     dateDifference,
     convertMMMddMM,
-    converthhmmsstt
+    converthhmmsstt,
+    convertmmddyyyy
 }
