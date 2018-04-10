@@ -4,6 +4,9 @@
 .hide-table-cell{
   display : none;
 }
+.disable{
+  pointer-events: none;
+}
 .reportsummary-container{
   margin : 20px 68px 0px 68px;
 }
@@ -171,6 +174,7 @@ h2 .report-start-time-value,h2 .report-end-time-value{
 .page-navs{
   display : inline-block;
   float:left;
+  margin-right: 2px;
 }
 .previous-link, .next-link{
   float: left;
@@ -185,15 +189,19 @@ h2 .report-start-time-value,h2 .report-end-time-value{
   position: absolute;
   font-size: 18px !important;
   color: white;
-  left: 78px;
+  left: 88px;
   top:12px;
 }
 .next-page{
   position: absolute;
   font-size: 18px !important;
   color: white;
-  left: 99px;
+  left: 109px;
   top:12px;
+}
+.start-page{
+  border: 1px solid #D41B3E;
+  padding: 0px 4px 0px 3px;
 }
 .report-data-unit, .goalstatistics-data-unit{
   margin-top:20px;

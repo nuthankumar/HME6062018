@@ -4,6 +4,7 @@ import HmeHeader from '../Header/HmeHeader'
 import SummaryReportDataComponent from './SummaryReportDataComponent'
 import GoalStatisticsDataComponent from './GoalStatisticsDataComponent'
 import SystemStatistics from './SystemStatistics'
+import PaginationComponent from '../Common/PaginationComponent'
 import PageHeader from '../Header/PageHeader'
 import {Config} from '../../Config'
 import {CommonConstants} from '../../Constants'
@@ -123,13 +124,17 @@ export default class SummaryReport extends Component {
             dailyData: false,
             dayPartData: false,
             rawCarData: false,
-            allTab: false,
+            pagination: true,
             currentPage: null,
             groupStoreColumns: false,
             dayColumn: false,
             dayPartColumn: false,
             weekColumn: false,
-            singleStore: false
+            singleStore: false,
+            curPage: 1,
+            totalPages:4,
+            disablePrevButton: false,
+            disableNextButton: false
             },
       goalData: {
          data:
@@ -174,13 +179,13 @@ export default class SummaryReport extends Component {
     // this.getCurrentTimeMeasure()
     // this.populateSummaryReportDetails()
     this.api = new Api()
-    this.setTimeMeasures(this.props.history.location.state)
+  //  this.setTimeMeasures(this.props.history.location.state)
     this.handleDrillDown = this.handleDrillDown.bind(this)
     this.headerDetails = this.headerDetails.bind(this)
   }
 
   componentWillMount () {
-  //  this.setTimeMeasures(this.props.history.location.state)
+    this.setTimeMeasures(this.props.history.location.state)
   }
 
   headerDetails(){
@@ -348,7 +353,7 @@ export default class SummaryReport extends Component {
     })
   }
   displayGoalStatistics(){
-    if(this.state.showGoalStats){
+    if(this.state.goalData && this.state.singleStore){
       return (<div className='row goalstatistics-table-section'>
         <GoalStatisticsDataComponent goalData = {this.state.goalData} />
       </div>)
@@ -358,13 +363,37 @@ export default class SummaryReport extends Component {
   }
 
   displaySystemStatistics(){
-    if(this.state.showSystemStats){
+    if(this.state.displayData && this.state.singleStore){
       return (<div className='row systemstatistics-table-section'>
         <SystemStatistics displayData = {this.state.displayData} />
       </div>)
     }else{
       return <div/>
     }
+  }
+
+  handlePreviousPage(curPage,totalPages){
+    if(curPage > 1){
+      this.state.reportData.disablePrevButton = false
+      --curPage
+      this.state.reportData.curPage = curPage
+    }else{
+      this.state.reportData.disablePrevButton = true
+      this.state.reportData.disableNextButton = false
+    }
+    this.setState(this.state)
+  }
+
+  handleNextPage(curPage,totalPages){
+    if(curPage < totalPages){
+      this.state.reportData.disableNextButton = false
+      ++curPage
+      this.state.reportData.curPage = curPage
+    }else{
+      this.state.reportData.disableNextButton = true
+        this.state.reportData.disablePrevButton = false
+    }
+    this.setState(this.state)
   }
 
   render () {
@@ -379,18 +408,13 @@ export default class SummaryReport extends Component {
 
         <div className='row'>
           {this.headerDetails()}
-          <div className={'col-xs-2 left-padding-none ' + (this.state.allTab ? 'hide' : 'show')}>
-            <div id='page-navigations'>
-              <div className='page-navs'>
-                Page <span className='pgStarts'>1</span> <span translate='' className='ReportsOf'>of </span> 1</div>
-              <div className='previous-link' ><i className='fa fa-angle-left previous-page' /></div>
-              <div className='next-link'><i className='fa fa-angle-right next-page' /></div>
-            </div>
+          <div className={'col-xs-2 left-padding-none ' + (this.state.reportData.pagination ? 'show' : 'hide')}>
+            <PaginationComponent pagination = {this.state.reportData.pagination} totalPages= {this.state.reportData.totalPages} curPage= {this.state.reportData.curPage} handlePreviousPage = {(curPage,totalPages) => this.handlePreviousPage(curPage,totalPages)} handleNextPage = {(curPage,totalPages) => this.handleNextPage(curPage,totalPages)} disablePrevButton= {this.state.reportData.disablePrevButton} disableNextButton= {this.state.reportData.disableNextButton}  />
           </div>
         </div>
 
         <div className='row'>
-          <div className='col-xs-12 show-all-pagination-toggle'>Show: <span className={(this.state.allTab) ? 'active-link' : 'inactive-link'} onClick={() => this.setState({allTab: true})}>All /</span><span className={(this.state.allTab) ? 'inactive-link' : 'active-link'} onClick={() => this.setState({allTab: false})}>Pages</span></div>
+          <div className='col-xs-12 show-all-pagination-toggle'>Show: <span className={(this.state.pagination) ? 'inactive-link' : 'active-link'} onClick={() => this.setState({pagination: false})}>All /</span><span className={(this.state.pagination) ? 'active-link' : 'inactive-link' } onClick={() => this.setState({pagination: true})}>Pages</span></div>
         </div>
 
         <div className='row summaryreport-table-section'>

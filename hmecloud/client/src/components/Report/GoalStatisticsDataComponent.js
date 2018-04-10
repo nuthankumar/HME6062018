@@ -57,11 +57,9 @@ export default class GoalStatisticsDataComponent extends Component {
       return (
             <table className='goalstatistics-table goalstatistics-table-content'>
               <tbody>
-                <tr className = 'goalStatistics-row'>
                   {this.getStatisticsRow(goalItem,"goal",goalItem.title)}
                   {this.getStatisticsRow(goalItem,"cars","Cars")}
                   {this.getStatisticsRow(goalItem,"percentage","%")}
-                </tr>
               </tbody>
             </table>
       )
