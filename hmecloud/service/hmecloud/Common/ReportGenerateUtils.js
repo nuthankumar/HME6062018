@@ -1,8 +1,8 @@
 const dateUtils = require('../Common/DateUtils')
 // This function is used to Prepare Store Details
 const  prepareStoreDetails = (daysingleResult, storeData, input) => {
-    daysingleResult.store = storeData.Store_Name
-    daysingleResult.description = storeData.Brand_Name
+    daysingleResult.storeName = storeData.Store_Name
+    daysingleResult.storeDesc = storeData.Brand_Name
     daysingleResult.startTime = input.ReportTemplate_From_Date
     daysingleResult.stopTime = input.ReportTemplate_To_Date
     daysingleResult.printDate = dateUtils.currentDate()

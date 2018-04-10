@@ -36,7 +36,7 @@ const generateDaypartReport = (input, callBack) => {
     data: ''
   }
   const data = []
-  console.log('Day Report controller invoked')
+
 
   input.ReportTemplate_From_Time = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
   input.ReportTemplate_To_Time = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
@@ -44,25 +44,34 @@ const generateDaypartReport = (input, callBack) => {
   if (input !== null) {
     dayPartRepository.generateDayPartSummaryReport(input, result => {
       if (result.status === true) {
+        const storeDetails = result.data[0]
+        console.log(storeDetails);
         const averageTimeResultSet = result.data[1]
 
         const longestTimes = result.data[2]
         const goalsStatistics = result.data[3]
         const getGoalTime = result.data[4]
-        console.log(input.ReportTemplate_StoreIds.length)
+
         // Single Store result
 
         if (input.ReportTemplate_StoreIds.length < 2) {
           convertTimeFormatonEachRowObjectElement(input, averageTimeResultSet, data)
-          //  console.log(data)
+
           dayPartObject.data = data
           singleDayParts.push(dayPartObject)
           reportData.singleDayPart = singleDayParts
-          reportData.selectedStoreIds = input.ReportTemplate_StoreIds
-          reportData.timeMeasure = input.ReportTemplate_Time_Measure
-          reportData.startTime = moment(input.ReportTemplate_From_Date, 'YYYY/MM/dd').format('MMM D,YYYY')
-          reportData.stopTime = moment(input.ReportTemplate_To_Date, 'YYYY/MM/dd').format('MMM D,YYYY')
+          // reportData.selectedStoreIds = input.ReportTemplate_StoreIds
+          // reportData.timeMeasure = input.ReportTemplate_Time_Measure
+          // reportData.startTime = moment(input.ReportTemplate_From_Date, 'YYYY/MM/dd').format('MMM D,YYYY')
+          // reportData.stopTime = moment(input.ReportTemplate_To_Date, 'YYYY/MM/dd').format('MMM D,YYYY')
+          
+          // reportData.storeName = storeDetails[0]['Store_Name']
+          // reportData.storeDesc = storeDetails[0]['Brand_Name'] 
+          // reportData.printDate = dateUtils.currentDate()
+          // reportData.printTime = dateUtils.currentTime()
 
+
+          reportUtil.prepareStoreDetails(reportData,storeDetails[0], input)
           const dayPartTotalObject = _.last(averageTimeResultSet)
           const totalCars = dayPartTotalObject['Total_Car']
 
@@ -74,7 +83,7 @@ const generateDaypartReport = (input, callBack) => {
           // LongesTimes
 
           // Longst time
-          // reportUtil.prepareStoreDetails(daysingleResult, getGoalTime, input)
+       //   reportUtil.prepareStoreDetails(daysingleResult, getGoalTime, input)
 
           reportData.goalStatistics = dataArray[0]
           callBack(reportData)
@@ -136,7 +145,6 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars) {
     }
   }
 
-  // console.log(totalCars);
   var populate = (result, goal, event, property, key, value) => {
     if (key.toLowerCase().includes(goal.toLowerCase()) && key.toLowerCase().includes(event.toLowerCase())) {
       result[goal][event][property] = value
@@ -198,7 +206,6 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars) {
 
 function convertTimeFormatonEachRowObjectElement (input, averageTimeResultSet, data) {
   averageTimeResultSet.map(row => {
-    console.log(row)
     var daypartObject = {daypart: ''}
     let parts = {
       daypart: {
@@ -220,7 +227,6 @@ function convertTimeFormatonEachRowObjectElement (input, averageTimeResultSet, d
   })
   return data
 }
-// console.log(data)
 
 function convertEventsTimeFormat (key, row, value, parts, input) {
   if (row['StartTime'] && row['StoreDate'] !== 'Total Daypart' && row['EndTime']) {
