@@ -685,7 +685,13 @@ const language = [
     'OK': 'OK',
     'StoreNameColumn': 'Store Name Column',
     'AddNewGroup': 'Add New Group',
-    'ReportingGroupManagement': 'Reporting Group Management'
+    'ReportingGroupManagement': 'Reporting Group Management',
+    'ReportingGroupDetails': 'Reporting Group Details',
+    'GroupName': 'Group Name',
+    'GroupDescription': 'Group Description',
+    'AvailableGroupsStores': 'Available Groups/Stores',
+    'GroupsStoresinGroup': 'Groups/Stores in Group',
+    'delete': 'Delete'
   },
 
   // French
@@ -1376,7 +1382,13 @@ const language = [
     'OK': 'OK',
     'StoreNameColumn': 'Nom du Restaurant Colonne',
     'AddNewGroup': 'Ajouter un nouveau groupe',
-    'ReportingGroupManagement': 'Gestion du groupe de reporting'
+    'ReportingGroupManagement': 'Gestion du groupe de reporting',
+    'ReportingGroupDetails': 'Détails du groupe de rapports',
+    'GroupName': 'Nom de groupe',
+    'GroupDescription': 'Description du groupe',
+    'AvailableGroupsStores': 'Groupes / magasins disponibles',
+    'GroupsStoresinGroup': 'Groupes / magasins dans le groupe',
+    'delete': 'supprimer'
   }
 ]
 export default language
