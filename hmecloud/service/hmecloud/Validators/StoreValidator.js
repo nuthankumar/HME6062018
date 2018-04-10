@@ -35,10 +35,16 @@ const reportValidator = (request, callback) => {
     // if advance option true and open/ close is true report type can be 2=TC
     // longest and system statistic disalbled and should be false
     if (input.ReportTemplate_Advanced_Op && (input.ReportTemplate_Open || input.ReportTemplate_Close)) {
-      input.ReportTemplate_Type = 'TC'
-      input.longestTime = false
-      input.systemStatistics = false
-    }
+        if (input.ReportTemplate_Type === 1) {
+            input.ReportTemplate_Type = 'TC'
+        } 
+            input.longestTime = false
+            input.systemStatistics = false
+        
+      }
+      if (input.ReportTemplate_Type === 2) {
+          input.ReportTemplate_Type = 'AC'
+      }
     // If date range is null
     if (!input.ReportTemplate_From_Date || !input.ReportTemplate_To_Date) {
       output.error = request.t('REPORTSUMMARY.DateCannotbeEmpty')

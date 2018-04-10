@@ -4,9 +4,6 @@ const dateUtils = require('../Common/DateUtils')
 const dateFormat = require('dateformat')
 const csvGeneration = require('../Common/CsvUtils')
 const HashMap = require('hashmap')
-
-const defaultFromTime = '00:00:00'
-const defaultEndTime = '23:59:59'
 /**
  * This Service is used to Generate the Summary reports details for
  *provided details
@@ -34,20 +31,10 @@ const generateReport = (input, callBack) => {
  * @param {*} callBack
  */
 const getRawCarDataReport = (input, callBack) => {
-  let fromDateTime
-  let toDateTime
+    let fromDateTime = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
 
-  if (input.ReportTemplate_From_Time) {
-    fromDateTime = input.ReportTemplate_From_Date + ' ' + input.ReportTemplate_From_Time
-  } else {
-    fromDateTime = input.ReportTemplate_From_Date + ' ' + defaultFromTime
-  }
+    let toDateTime = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
 
-  if (input.ReportTemplate_To_Time) {
-    toDateTime = input.ReportTemplate_To_Date + ' ' + input.ReportTemplate_To_Time
-  } else {
-    toDateTime = input.ReportTemplate_To_Date + ' ' + defaultEndTime
-  }
 
   const rawCarDataqueryTemplate = {
     ReportTemplate_StoreIds: input.ReportTemplate_StoreIds,
@@ -56,7 +43,7 @@ const getRawCarDataReport = (input, callBack) => {
     fromDateTime: fromDateTime,
     toDateTime: toDateTime,
     ReportTemplate_Type: input.CarDataRecordType_ID,
-    ReportType: 'AC',
+      ReportType: input.ReportTemplate_Type,
     LaneConfig_ID: 1
   }
   const rawCarDataList = []
