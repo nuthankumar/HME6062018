@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import "../Footer/Footer.css";
 import t from '../Language/language'
 import * as languageSettings from '../Language/languageSettings'
+import { Config } from '../../Config'
 
 const ProductLogo = require('../../images/ProductLogo-1.png')
 const HMELogo = require('../../images/HMELogo.png')
@@ -23,14 +24,14 @@ export default class Footer extends React.Component {
             <div class="copyright">
             <span>HM Electronics, Inc. ©2018
 	    |
-		    <a class="terms" href="/images/HMECLOUD_Terms_and_Conditions.pdf" target="_blank" translate="" key="useragreement">{t[language].useragreement}</a>
+		    <a class="terms" href={Config.coldFusionUrl + "/images/HMECLOUD_Terms_and_Conditions.pdf"} target="_blank" translate="" key="useragreement">{t[language].useragreement}</a>
                     |
-			<a class="privacy" href="/images/HMECLOUD_Privacy_Policy.pdf" target="_blank" translate="" key="privacypolicy">{t[language].privacypolicy}</a>
+			<a class="privacy" href={Config.coldFusionUrl + "/images/HMECLOUD_Privacy_Policy.pdf"} target="_blank" translate="" key="privacypolicy">{t[language].privacypolicy}</a>
                     |
-		    <a class="supply" href="/images/California_Transparency_Supply_Chains_Act_Disclosures.pdf" target="_blank" translate="" key="californiasupply">{t[language].californiasupply}</a>
+		    <a class="supply" href={Config.coldFusionUrl + "/images/California_Transparency_Supply_Chains_Act_Disclosures.pdf"} target="_blank" translate="" key="californiasupply">{t[language].californiasupply}</a>
                     |
-		    <a class="cookie" href="/images/HMECLOUD_Cookie_Policy.pdf" target="_blank" translate="" key="cookiepolicy">{t[language].cookiepolicy}</a>
-                </span></div>
+		    <a class="cookie" href={Config.coldFusionUrl + "/images/HMECLOUD_Cookie_Policy.pdf" } target="_blank">{t[language].cookiepolicy}</a>
+            </span></div>
         </div>
     </div>)
   }
