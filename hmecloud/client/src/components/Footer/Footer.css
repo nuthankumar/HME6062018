@@ -11,13 +11,7 @@
     padding-top: 10px;
     padding-left: 20px;
 }
-/*.copyright a:link, .copyright a:visited, .copyright a:active {
-        color: #d41b3e;
-        font-size: 10px;
-        font-weight: bold;
-        text-decoration: none;
+.copyright .black_link {
+    color: black !important;
+    padding: 0px 5px;
 }
-a:link, a:visited, a:active {
-    color: #D41B3E;
-    font-size: inherit;
-    }*/
