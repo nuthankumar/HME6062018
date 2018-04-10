@@ -35,19 +35,23 @@ class RawCarReport extends Component {
 
   getRawCarData () {
       let data = {
-          "reportTemplateStoreIds": "4",
-          "reportTemplateAdvancedOp": 0,
-          "reportTemplateTimeMeasure": "Raw Data Report",
-          "reportTemplateFromDate": "2018-03-24",
-          "reportTemplateToDate": "2018-03-24",
-          "reportTemplateFromTime": "",
-          "reportTemplateToTime": "",
-          "reportTemplateOpen": 1,
-          "reportTemplateClose": 1,
-          "reportTemplateType": 11,
-          "reportTemplateIncludeLongs": "on",
-          "ReportTemplate_Include_Stats": "",
-          "reportTemplateFormat": 1
+          "timeMeasure": 4,
+          "fromDate": "2018-03-24",
+          "toDate": "2018-03-24",
+          "openTime": "12:00 AM",
+          "closeTime": "12:00 PM",
+          "open": true,
+          "close": true,
+          "type": 2,
+          "include": [
+              "1",
+              "2"
+          ],
+          "format": 2,
+          "selectedStoreIds": ["4"],
+          "advancedOptions": false,
+          "longestTime": true,
+          "systemStatistics": true
       }
       let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
       this.api.postData(url, data, data => {
@@ -72,7 +76,7 @@ class RawCarReport extends Component {
         return (<section className='rawcar-data-page'>
           <section className='rawcar-data-section'>
 
-                <div className='btn btn-danger emailCSV'> Email CSV version</div>
+                <div className='btn btn-danger emailCSV' onClick={this.emailAsCSV.bind(this)}> Email CSV version</div>
              <div className='clear rawcar-table-details'>
               <PageHeader pageHeading={this.state.pageHeading} />
               <table className='rawcar-header-labels clear'>
@@ -174,6 +178,42 @@ class RawCarReport extends Component {
         {this.displayRecords()}
       </div>
     )
+  }
+  emailAsCSV() {
+      let data = {
+          "timeMeasure": 4,
+          "fromDate": "2018-03-24",
+          "toDate": "2018-03-24",
+          "openTime": "12:00 AM",
+          "closeTime": "12:00 PM",
+          "open": true,
+          "close": true,
+          "type": 2,
+          "include": [
+              "1",
+              "2"
+          ],
+          "format": 2,
+          "selectedStoreIds": ["4"],
+          "advancedOptions": false,
+          "longestTime": true,
+          "systemStatistics": true
+      }
+      let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rrcsv1'
+      this.api.postData(url, data, data => {
+          if (data.status) {
+              console.log(data);
+              this.setState({
+                  email: data.data
+              });
+              this.state.emailId = data.data;
+              this.props.history.push("/emailSent", this.state.emailId); 
+           }
+           }, error => {
+          this.state.successMessage = ''
+          this.state.errorMessage = 'Failed sending Email'
+          this.setState(this.state)
+      })
   }
 }
 

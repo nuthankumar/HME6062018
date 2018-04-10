@@ -13,6 +13,7 @@ import DateTime from "react-datetime";
 import "rc-time-picker/assets/index.css";
 import moment from "moment";
 import TimePicker from "rc-time-picker";
+import Footer from "../Footer/Footer";
 import HmeHeader from "../Header/HmeHeader";
 import SuccessAlert from "../Alerts/SuccessAlert";
 import ErrorAlert from "../Alerts/ErrorAlert";
@@ -450,6 +451,7 @@ class Report extends Component {
             </section>
           </form>
         </div>
+              <Footer />
       </section>
      )
     }

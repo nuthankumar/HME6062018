@@ -1,0 +1,38 @@
+.black_link {
+    color: black !important;
+}
+a:link, a:visited, a:active {
+    color: #D41B3E;
+    font-size: inherit;
+    text-decoration: none;
+}
+.user-info-section span {
+    display: inline;
+    float: left;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+}
+
+#Navbar ul li {
+    color: #9be0ea !important;
+    display: inline;
+    float: left;
+    font-size: 14px;
+    padding-right: 30px;
+    padding-top: 18px;
+    text-transform: uppercase;
+}
+#Navbar {
+    font-size: 14px;
+    height: 56px;
+    width: 80%;
+    margin: 0 auto;
+    min-width: 900px;
+}
+
+    #Navbar ul li.active_tab {
+        color: white !important;
+        font-weight: bold;
+    }
