@@ -69,6 +69,13 @@ const dateDifference = (fromDate, toDate) => {
   let diffent = date2.diff(date1, 'days')
   return diffent
 }
+const convertMMMddMM = (dateVal) => {
+    return moment(dateVal).format('MMM MM/DD')
+}
+
+const converthhmmsstt = (dateVal) => {
+    return moment(dateVal).format('hh:mm:ss A')
+}
 
 module.exports = {
   convertSecondsToMinutes,
@@ -77,5 +84,7 @@ module.exports = {
   toTime,
   currentDate,
   currentTime,
-  dateDifference
+    dateDifference,
+    convertMMMddMM,
+    converthhmmsstt
 }
