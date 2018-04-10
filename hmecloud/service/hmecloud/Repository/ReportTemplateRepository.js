@@ -1,6 +1,6 @@
 
 const repository = require('./Repository')
-const dataBase = require('../DataBaseConnection/Configuration')
+const dataBase = require('../DataBaseConnection/Configuration').db
 const sqlQuery = require('../Common/DataBaseQueries')
 
 /**

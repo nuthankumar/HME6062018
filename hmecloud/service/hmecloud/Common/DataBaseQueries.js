@@ -24,8 +24,16 @@ const sqlQueries = {
                 ,@EndDateTime =:toDateTime
                 ,@CarDataRecordType_IDs=:ReportTemplate_Type
                 ,@ReportType =:ReportType
-                ,@LaneConfig_ID=:LaneConfig_ID`
-
+                ,@LaneConfig_ID=:LaneConfig_ID`,
+    'weekReport': `exec [dbo].[usp_HME_Cloud_Get_Report_By_Week]
+                  @Device_IDs = :Device_IDs,
+                  @StoreStartDate =:StoreStartDate,
+                  @StoreEndDate =:StoreEndDate,
+                  @StartDateTime =:StartDateTime,
+                  @EndDateTime =:EndDateTime,
+                  @CarDataRecordType_ID =:CarDataRecordType_ID,
+                  @ReportType =:ReportType,
+                  @LaneConfig_ID =:LaneConfig_ID`
   }
 }
 

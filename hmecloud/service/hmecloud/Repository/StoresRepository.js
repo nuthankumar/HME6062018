@@ -1,12 +1,12 @@
 const repository = require('./Repository')
-const dataBase = require('../DataBaseConnection/Configuration')
+const dataBase = require('../DataBaseConnection/Configuration').db
+const dataBaseSql = require('../DataBaseConnection/Configuration').sqlConfig
 const sqlQuery = require('../Common/DataBaseQueries')
 
 const sql = require('mssql')
 
 const generateSummaryReport = (input, callback) => {
-
-  const sql_pool = new sql.ConnectionPool(dataBase.sqlConfig, err => {
+  const sql_pool = new sql.ConnectionPool(dataBaseSql, err => {
     sql_pool.request() // or: new sql.Request(pool2)
       .input('InputType', sql.VarChar(5), '1')
       .execute('_usp_HME_Cloud_Get_Report_By_Daypart', (err, result) => {
@@ -31,7 +31,7 @@ const generateSummaryReport = (input, callback) => {
           if (result) callback(result)
         })
     })
-  
+
     sql.on('error', err => {
       console.log('sql-error: ', err)
     })
@@ -39,20 +39,20 @@ const generateSummaryReport = (input, callback) => {
 
   /*
   // this does NOT work for multiple resultsets!
-    const Query = `exec usp_HME_Cloud_Get_Report_By_Daypart 
-      @Device_IDs= '${input.reportTemplateStoreIds.toString()}' 
+    const Query = `exec usp_HME_Cloud_Get_Report_By_Daypart
+      @Device_IDs= '${input.reportTemplateStoreIds.toString()}'
      ,@StoreStartDate= '${input.reportTemplateFromDate}'
      ,@StoreEndDate= '${input.reportTemplateToDate}'
      ,@StartDateTime= '${input.reportTemplateToTime}'
      ,@EndDateTime= '${input.reportTemplateClose}'
      ,@CarDataRecordType_ID= 11
-     ,@ReportType= ${input.reportTemplateType} 
+     ,@ReportType= ${input.reportTemplateType}
      ,@LaneConfig_ID= 1`
   */
   /*
     const Query = `EXEC _usp_HME_Cloud_Get_Report_By_Daypart :InputType`
     const inputType = 1;
-  
+
     dataBase
       .query(Query, //{
       {
@@ -86,7 +86,60 @@ const getRawCarDataReport = (template, callback) => {
     type: dataBase.QueryTypes.SELECT
   }, result => callback(result))
 }
+
+const getDayDataReport = (input, callback) => {
+  const output = {}
+  const sqlPool = new sql.ConnectionPool(dataBaseSql, err => {
+    if (err) {
+      output.data = err
+      output.status = false
+      console.log(err)
+      callback(output)
+    }
+    sqlPool.request()
+      .input('Device_IDs', sql.VarChar(500), input.ReportTemplate_StoreIds.toString())
+      .input('StoreStartDate', sql.Date, input.ReportTemplate_From_Date)
+      .input('StoreEndDate', sql.Date, input.ReportTemplate_To_Date)
+      .input('StartDateTime', sql.DateTime2, input.FromDateTime)
+      .input('EndDateTime', sql.DateTime2, input.ToDateTime)
+      .input('CarDataRecordType_ID', sql.SmallInt, input.ReportTemplate_Type)
+      .execute('usp_HME_Cloud_Get_Report_By_Date', (err, result) => {
+        if (err) {
+          output.data = err
+          output.status = false
+          console.log(err)
+          callback(output)
+        }
+        if (result && result.recordsets) {
+          output.data = result.recordsets
+          output.status = true
+          callback(output)
+        }
+      })
+  })
+
+  sqlPool.on('error', err => {
+    if (err) {
+      callback(err)
+    }
+  })
+}
+/**
+ * The method can be used to execute get Report Template
+ * @param  {template} template input from controller
+ * @param  {funct} callback Function will be called once the input executed.
+ * @public
+ */
+const getWeekReport = (template, callback) => {
+  repository.execute(sqlQuery.SummarizedReport.weekReport, {
+    replacements: template,
+    type: dataBase.QueryTypes.SELECT
+  }, result => callback(result))
+}
+
 module.exports = {
   generateSummaryReport,
-  getRawCarDataReport
+  getRawCarDataReport,
+  getDayDataReport,
+  getWeekReport
 }

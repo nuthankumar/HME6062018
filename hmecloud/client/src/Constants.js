@@ -10,5 +10,11 @@ export const CommonConstants = {
     'editGroupDetails': 'api/group/edit',
     'addNewGroup': 'api/group/create',
     'deleteGroup': 'api/group/delete'
-  }
+    },
+  'TimeMeasureValidations': {
+      'TwoMonths': 62,
+      'Month' : 31,
+      'TwoWeeks': 14,
+      'Today':0 ,
+   }
 }

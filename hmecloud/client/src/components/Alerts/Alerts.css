@@ -1,0 +1,19 @@
+#Content {
+    width: 80%;
+    margin: 0 auto;
+    min-width: 1126px;
+}
+
+    #Content .forms {
+        margin-bottom: 25px;
+        margin-top: 47px;
+    }
+        #Content .forms div.appr h4 {
+            color: #009933;
+        }
+
+        #Content .forms h4 {
+            color: #b5b5b5;
+            font-size: 20px;
+            margin-bottom: 22px;
+        }

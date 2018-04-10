@@ -10,7 +10,8 @@ router.get('/login', (request, response) => {
     UserName: 'HME Admin',
     UserEmail: 'admin@hme.com',
     AccountId: 100,
-    Role: 'Admin'
+    Role: 'Admin',
+    UserPreferencesValue: 11 // After authentication get the Preference value from itbl_User_Preferences table based on logged in user Id
   }
   let jwtToken = jwt.sign(userDetails, config.secret, {
     expiresIn: (5 * 60000) // expires in 5 mins

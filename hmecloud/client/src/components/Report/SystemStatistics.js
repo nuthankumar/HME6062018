@@ -36,10 +36,10 @@ class SystemStatistics extends Component {
       <div>
         <div className='systemSec' id='page-container'>
           <h2 className='rep-head'><span>{t[language].systemstats}</span></h2>
-          <table cellspacing='0' className='table-layout-System ssBord col-width-ss5'>
+          <table cellSpacing='0' className='table-layout-System ssBord col-width-ss5'>
             <tbody>
               <tr>
-                <th className='lane1' colspan='2'><span>{t[language].ReportsLane}</span> {displayData.Lane}</th>
+                <th className='lane1' colSpan='2'><span>{t[language].ReportsLane}</span> {displayData.Lane}</th>
               </tr>
               <tr>
                 <td id='ss-col-width' className='rnshade'><span>{t[language].ReportsAverageCarsInLane}</span></td>

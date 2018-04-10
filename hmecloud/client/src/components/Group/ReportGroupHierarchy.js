@@ -2,6 +2,8 @@ import React from 'react'
 import fetch from 'isomorphic-fetch'
 import HmeHeader from '../Header/HmeHeader'
 import Tree, { TreeNode } from 'rc-tree'
+import t from '../Language/language'
+import * as languageSettings from '../Language/languageSettings'
 import { Config } from '../../Config'
 import {CommonConstants} from '../../Constants'
 import Api from '../../Api'
@@ -15,6 +17,7 @@ export default class ReportGroupHierarchy extends React.Component {
   constructor () {
     super()
     this.state = {
+      currentLanguage: languageSettings.getCurrentLanguage(),
       treeData: [
       ],
       editGroup: false,
@@ -25,20 +28,6 @@ export default class ReportGroupHierarchy extends React.Component {
   }
 
   getTreeHierarchy () {
-    // let url = Config.url + 'api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com'
-    // let url = "http://localhost:7071/api/group/getAll?accountId=100&userName=swathikumary@nousinfo.com";
-    /* fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data.data)
-        this.state.treeData = data.data
-        this.setState(this.state)
-      })
-      .catch((error) => {
-        this.state.successMessage = ''
-        this.state.errorMessage = error.message
-        this.setState(this.state)
-      }) */
       let url = Config.apiBaseUrl + CommonConstants.apiUrls.getGroupHierarchyTree + '?accountId=100&userName=swathikumary@nousinfo.com'
       this.api.getData(url,data => {
         this.state.treeData = data.data
@@ -61,6 +50,7 @@ export default class ReportGroupHierarchy extends React.Component {
     console.log(node.node.props.eventKey)
   }
   render () {
+    const language = this.state.currentLanguage
     const loop = data => {
       return data.map((item) => {
         // item.Children = [];
@@ -68,21 +58,21 @@ export default class ReportGroupHierarchy extends React.Component {
           return <TreeNode className='treeNode' title={item.Name}
             key={item.Id}>{loop(item.Children)}</TreeNode>
         }
-        return <TreeNode className='treeNode' title={item.Name} key={item.Id} />
+        return <TreeNode className='treeNode' title={item.Name} key={item.Id}/>
       })
     }
     return (<section className='groupManagementSection'><HmeHeader />
       <section className='grouphierarchy-tree-section'>
         <div>
-          <h1>Reporting Group Management</h1>
+          <h1>{t[language].ReportingGroupManagement}</h1>
         </div>
         <div className='row'>
           <div className='col-xs-12'>
-            <button type='button' className='btn btn-primary col-xs-2 save-group-btn' onClick={this.addNewGroup.bind(this)}>Add New Group</button>
+            <button type='button' className='btn btn-primary  save-group-btn' onClick={this.addNewGroup.bind(this)}>{t[language].AddNewGroup}</button>
           </div>
         </div>
 
-        <div className='row grouphierarchy-tree jumbotron'>
+        <div className='grouphierarchy-tree jumbotron'>
           <div className='col-xs-4'>
             <Tree
               className='hierarchy-tree'

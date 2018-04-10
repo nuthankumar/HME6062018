@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 // import fetch from 'isomorphic-fetch'
 // import { BrowserRouter } from 'react-router-dom'
+import LongestTime from './LongestTime'
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './SummaryReport.css'
 import '../../../node_modules/font-awesome/css/font-awesome.min.css'
@@ -8,6 +9,89 @@ export default class SummaryReportDataComponent extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      LongestTimes: [
+      {
+          "Menu": {
+              "Value": 0.59,
+              "Date": "Mar 03/05",
+              "Time": "07:53:22 PM"
+          },
+          "Greet": {
+              "Value": 0.59,
+              "Date": "Mar 03/05",
+              "Time": "07:53:22 PM"
+          },
+          "Service": {
+              "Value": 0.59,
+              "Date": "Mar 03/05",
+              "Time": "07:53:22 PM"
+          },
+          "LaneQueue": {
+              "Value": 0.59,
+              "Date": "Mar 03/05",
+              "Time": "07:53:22 PM"
+          },
+          "LaneTotal": {
+              "Value": 0.59,
+              "Date": "Mar 03/05",
+              "Time": "07:53:22 PM"
+          }
+      },
+      {
+          "Menu": {
+              "Value": 0.59,
+              "Date": "Mar 03/05",
+              "Time": "07:53:22 PM"
+          },
+          "Greet": {
+              "Value": 0.59,
+              "Date": "Mar 03/05",
+              "Time": "07:53:22 PM"
+          },
+          "Service": {
+              "Value": 0.59,
+              "Date": "Mar 03/05",
+              "Time": "07:53:22 PM"
+          },
+          "LaneQueue": {
+              "Value": 0.59,
+              "Date": "Mar 03/05",
+              "Time": "07:53:22 PM"
+          },
+          "LaneTotal": {
+              "Value": 0.59,
+              "Date": "Mar 03/05",
+              "Time": "07:53:22 PM"
+          }
+      },
+      {
+          "Menu": {
+              "Value": 0.59,
+              "Date": "Mar 03/05",
+              "Time": "07:53:22 PM"
+          },
+          "Greet": {
+              "Value": 0.59,
+              "Date": "Mar 03/05",
+              "Time": "07:53:22 PM"
+          },
+          "Service": {
+              "Value": 0.59,
+              "Date": "Mar 03/05",
+              "Time": "07:53:22 PM"
+          },
+          "LaneQueue": {
+              "Value": 0.59,
+              "Date": "Mar 03/05",
+              "Time": "07:53:22 PM"
+          },
+          "LaneTotal": {
+              "Value": 0.59,
+              "Date": "Mar 03/05",
+              "Time": "07:53:22 PM"
+          }
+      }
+      ]
     }
     this.dynamicColumnData = {
       showFromToTime: (this.props.reportData.dayColumn || this.props.reportData.dayPartColumn || this.props.reportData.weekColumn ? 'hide' : 'show'),
@@ -21,8 +105,8 @@ export default class SummaryReportDataComponent extends Component {
   }
 
   displaySummarizedData (reportData) {
-    if (reportData.dayPart.all.length > 0) {
-      return reportData.dayPart.all.map((reportItem) => {
+    if (reportData.singleDayPart.length > 0) {
+      return reportData.singleDayPart.map((reportItem) => {
         return (
           <div className='col-xs-12 report-data-unit'>
             <div className={'col-xs-12 from-to-detail ' + this.dynamicColumnData.showFromToTime}><span>{reportItem.startTime}</span> <span>OPEN - </span> <span>{reportItem.endTime}</span> <span>CLOSE</span></div>
@@ -37,9 +121,9 @@ export default class SummaryReportDataComponent extends Component {
                 <tr>
                   <th className={'groupsColHeader ' + this.dynamicColumnData.showGroupsStores}><span>Groups</span></th>
                   <th className={'storesColHeader ' + this.dynamicColumnData.showGroupsStores}><span>Stores</span></th>
-                  <th className={'reportTableAttributesHeading ' + this.dynamicColumnData.showDayColumn}><span>Day</span></th>
-                  <th className={'reportTableAttributesHeading ' + this.dynamicColumnData.showDayPartColumn}><span>DayPart</span></th>
-                  <th className={'reportTableAttributesHeading ' + this.dynamicColumnData.showWeekColumn}><span>DayPart</span></th>
+                  <th className={'reporttable-attributes-heading-dynamic ' + this.dynamicColumnData.showDayColumn}><span>Day</span></th>
+                  <th className={'reporttable-attributes-heading-dynamic ' + this.dynamicColumnData.showDayPartColumn}><span>DayPart</span></th>
+                  <th className={'reporttable-attributes-heading-dynamic ' + this.dynamicColumnData.showWeekColumn}><span>Weekly</span></th>
                   <th className='reportTableAttributesHeading'><span>Menu</span></th>
                   <th className='reportTableAttributesHeading'><span>Greet</span></th>
                   <th className='reportTableAttributesHeading'><span>Service</span></th>
@@ -50,6 +134,7 @@ export default class SummaryReportDataComponent extends Component {
                 {this.displaySummarizedRowData(reportItem.data)}
               </tbody>
             </table>
+            <LongestTime LongestTimes = {this.state.LongestTimes} />
           </div>
         )
       })
@@ -65,9 +150,9 @@ export default class SummaryReportDataComponent extends Component {
           <tr>
             <td className={this.dynamicColumnData.showGroupsStores}>{reportItem.groupId != null ? reportItem.groupId : 'NA'}</td>
             <td className={this.dynamicColumnData.showGroupsStores} onClick={this.props.reportData.handleDrillDown}>{reportItem.storeId}</td>
-            <td className={this.dynamicColumnData.showDayColumn}><span>{reportItem.day}</span></td>
-            <td className={this.dynamicColumnData.showDayPartColumn}><span>{reportItem.daypart}</span></td>
-            <td className={this.dynamicColumnData.showWeekColumn}><span>{reportItem.week}</span></td>
+            <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayColumn}><span className='timeSpan'>{reportItem.day? reportItem.day.timeSpan : '' }</span><br/><span className='currentMeasure'>{reportItem.day  ? reportItem.day.currentDaypart :''}</span></td>
+            <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayPartColumn}><span className='timeSpan'>{reportItem.daypart.timeSpan}</span><br/><span className='currentMeasure'>{reportItem.daypart.currentDaypart}</span></td>
+            <td className={'timeMeasureColumn '+ this.dynamicColumnData.showWeekColumn}><span>{reportItem.week}</span> </td>
             <td>{reportItem.menu}</td>
             <td>{reportItem.greet}</td>
             <td>{reportItem.service}</td>
@@ -84,7 +169,6 @@ export default class SummaryReportDataComponent extends Component {
 
   render () {
     let reportData = this.props.reportData
-
     return (<div>{this.displaySummarizedData(reportData)}</div>)
   }
 }

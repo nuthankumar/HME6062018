@@ -4,9 +4,6 @@ const dateUtils = require('../Common/DateUtils')
 const dateFormat = require('dateformat')
 const csvGeneration = require('../Common/CsvUtils')
 const HashMap = require('hashmap')
-
-const defaultFromTime = '00:00:00'
-const defaultEndTime = '23:59:59'
 /**
  * This Service is used to Generate the Summary reports details for
  *provided details
@@ -34,20 +31,10 @@ const generateReport = (input, callBack) => {
  * @param {*} callBack
  */
 const getRawCarDataReport = (input, callBack) => {
-  let fromDateTime
-  let toDateTime
+    let fromDateTime = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
 
-  if (input.ReportTemplate_From_Time) {
-    fromDateTime = input.ReportTemplate_From_Date + ' ' + input.ReportTemplate_From_Time
-  } else {
-    fromDateTime = input.ReportTemplate_From_Date + ' ' + defaultFromTime
-  }
+    let toDateTime = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
 
-  if (input.ReportTemplate_To_Time) {
-    toDateTime = input.ReportTemplate_To_Date + ' ' + input.ReportTemplate_To_Time
-  } else {
-    toDateTime = input.ReportTemplate_To_Date + ' ' + defaultEndTime
-  }
 
   const rawCarDataqueryTemplate = {
     ReportTemplate_StoreIds: input.ReportTemplate_StoreIds,
@@ -55,8 +42,8 @@ const getRawCarDataReport = (input, callBack) => {
     ReportTemplate_To_Date: input.ReportTemplate_To_Date,
     fromDateTime: fromDateTime,
     toDateTime: toDateTime,
-    ReportTemplate_Type: input.ReportTemplate_Type,
-    ReportType: 'AC',
+    ReportTemplate_Type: input.CarDataRecordType_ID,
+      ReportType: input.ReportTemplate_Type,
     LaneConfig_ID: 1
   }
   const rawCarDataList = []
@@ -65,10 +52,11 @@ const getRawCarDataReport = (input, callBack) => {
 
   if (input.reportType === 'rr1' || input.reportType === 'rrcsv1') {
     stores.getRawCarDataReport(rawCarDataqueryTemplate, result => {
-      if (result) {
+        if (result) {
+            console.log("The result===" + JSON.stringify(result))
         const len = result.length
         if (len > 1) {
-          const storeData = result[len - 2]
+          const storeData = result[len - 1]
           const dayPartData = result[1]
           prepareStoreDetails(rawCarData, storeData, input)
           prepareResponsObject(result, departTimeStampMap, rawCarDataList, rawCarData, len, dayPartData, input)
@@ -79,6 +67,7 @@ const getRawCarDataReport = (input, callBack) => {
             callBack(rawCarData)
           } else if (input.reportType === 'rrcsv1') {
             // Invoking CSV file generation function
+            let output = {}
             let csvInput = {}
             csvInput.type = messages.COMMON.CSVTYPE,
             csvInput.reportName = input.ReportTemplate_Time_Measure + '_' + dateFormat(new Date(), 'isoDate'),
@@ -86,7 +75,15 @@ const getRawCarDataReport = (input, callBack) => {
             csvInput.reportinput = rawCarDataList
             csvInput.subject = input.ReportTemplate_Time_Measure + ' ' + fromDateTime + ' - ' + toDateTime
             csvGeneration.generateCsvAndEmail(csvInput, result => {
-              callBack(result)
+                if (result) {
+                    output.data = input.UserEmail
+                    output.status = true
+                } else {
+                    output.data = input.UserEmail
+                    output.status = false
+                }
+
+                callBack(output)
             })
           }
         }
@@ -129,7 +126,7 @@ module.exports = {
  * @param {*} storeData
  * @param {*} input
  */
-function prepareStoreDetails (rawCarData, storeData, input) {
+function prepareStoreDetails(rawCarData, storeData, input) {
   rawCarData.store = storeData.Store_Name
   rawCarData.description = storeData.Brand_Name
   rawCarData.startTime = input.ReportTemplate_From_Date

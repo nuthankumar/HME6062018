@@ -41,7 +41,7 @@ exports.REPORTSUMMARY = {
   InvalidReportType: 'Invalid Report Type param',
   createSuccess: 'Report Template create successfully',
   createFail: 'Unable to Create Report',
-  deleteSuccess: 'Report Template Delete successfully',
+  deleteSuccess: 'Report Template Deleted successfully',
   deteleFail: 'Unable to Delete Report'
 }
 
@@ -53,6 +53,20 @@ exports.EventName = {
   GREET: 'Greet'
 }
 
+exports.Events = {
+  MENU: 'Menu',
+  LANEQUEUE: 'Queue',
+  LANETOTAl: 'Lane',
+  SERVICE: 'Service',
+  GREET: 'Greet',
+  CASHIER: 'Cashier'
+}
+
+
+exports.TimeFormat = {
+  Seconds: 1,
+  MINUTES: 2
+}
 exports.COMMON = {
 
     CSVTYPE: 'CSV',

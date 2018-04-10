@@ -8,7 +8,7 @@ const dataBase = require('../DataBaseConnection/Configuration')
  * @public
  */
 const execute = (query, parameters, callback) => {
-  dataBase
+  dataBase.db
     .query(query, parameters)
     .then(result => {
       callback(result)

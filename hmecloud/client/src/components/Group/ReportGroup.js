@@ -5,6 +5,8 @@ import ErrorAlert from '../Alerts/ErrorAlert'
 import fetch from 'isomorphic-fetch'
 import { confirmAlert } from 'react-confirm-alert'
 import HmeHeader from '../Header/HmeHeader'
+import t from '../Language/language'
+import * as languageSettings from '../Language/languageSettings'
 import { Link } from 'react-router-dom'
 import {Config} from '../../Config'
 import {CommonConstants} from '../../Constants'
@@ -19,6 +21,7 @@ export default class ReportGroup extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      currentLanguage: languageSettings.getCurrentLanguage(),
       available: [],
       assigned: [],
       counter: 0,
@@ -229,6 +232,7 @@ export default class ReportGroup extends React.Component {
   }
 
   render () {
+    const language = this.state.currentLanguage
     let assigned = this.state.assigned
     return (<section className='groupDetailsPage'><HmeHeader />
       <div className='status-messages'>
@@ -237,11 +241,11 @@ export default class ReportGroup extends React.Component {
       </div>
       <section className={'report-container ' + (this.state.saveSuccess || this.state.deleteSuccess ? 'hide' : 'show')}>
         <div>
-          <h1>Reporting Group Details</h1>
+          <h1>{t[language].ReportingGroupDetails}</h1>
         </div>
         <div className='row reportgroup-name'>
           <div className='form-group'>
-            <label htmlFor='groupName' className='control-label col-xs-3 group-name-label'>Group Name : <span>*</span></label>
+            <label htmlFor='groupName' className='control-label col-xs-3 group-name-label'>{t[language].GroupName} : <span>*</span></label>
             <div className='col-xs-6'>
               <input type='text' ref='groupName' className='form-control' maxLength='50' />
             </div>
@@ -250,7 +254,7 @@ export default class ReportGroup extends React.Component {
 
         <div className='row report-description'>
           <div className='form-group'>
-            <label htmlFor='groupName' className='control-label col-xs-3 group-label-description'>Group Description : </label>
+            <label htmlFor='groupName' className='control-label col-xs-3 group-label-description'>{t[language].GroupDescription} : </label>
             <div className='col-xs-6'>
               <textarea rows='4' ref='groupDescription' cols='53' className='form-control' maxLength='200' />
             </div>
@@ -258,19 +262,19 @@ export default class ReportGroup extends React.Component {
         </div>
 
         <div className='row group-seperation'>
-          <CheckBoxList title='Available Groups/Stores' items={this.state.available} selectAll={(e, items) => this.selectAll(e, items)} toggle={(item) => this.toggle(item)} />
+          <CheckBoxList title={t[language].AvailableGroupsStores} items={this.state.available} selectAll={(e, items) => this.selectAll(e, items)} toggle={(item) => this.toggle(item)} />
           <div className='col-xs-2 move-group-store'>
             <div className='moveToHierarchy pull-center'><button className='btn btn-default' onClick={this.add.bind(this)} >&gt;</button></div>
             <div className='removeFromToHierarchy pull-center'><button className='btn btn-default' onClick={this.remove.bind(this)}>&lt; </button></div>
           </div>
-          <CheckBoxList title='Groups/Stores in Group' items={this.state.assigned} selectAll={(e, items) => this.selectAll(e, items)} toggle={(item) => this.toggle(item)} />
+          <CheckBoxList title={t[language].GroupsStoresinGroup} items={this.state.assigned} selectAll={(e, items) => this.selectAll(e, items)} toggle={(item) => this.toggle(item)} />
         </div>
 
         <div className='row reportgroup-buttons'>
           <div className='col-xs-12'>
-            <button type='button' className='btn btn-primary  col-xs-2 save-group-btn' onClick={this.saveAssigned.bind(this, assigned)}>Save</button>
-            <button type='button' className={'btn btn-danger reportgroup-delete col-xs-2 ' + (this.state.editGroup ? 'show' : 'hidden')} onClick={this.deleteGroup.bind(this)} >Delete</button>
-            <Link to='/grouphierarchy'><button type='button' className='btn btn-default report-group-cancel col-xs-2'>Cancel</button></Link>
+            <div className="border-right"> <button type='button' className='btn btn-primary  col-xs-2 save-group-btn' onClick={this.saveAssigned.bind(this, assigned)}>{t[language].save}</button> </div>
+            <div className="border-right"> <button type='button' className={'btn btn-danger reportgroup-delete col-xs-2 ' + (this.state.editGroup ? 'show' : 'hidden')} onClick={this.deleteGroup.bind(this)} >{t[language].delete}</button> </div>
+            <div>  <Link to='/grouphierarchy'><button type='button' className='btn btn-default report-group-cancel col-xs-2'>{t[language].cancel}</button></Link> </div>
           </div>
         </div>
 
