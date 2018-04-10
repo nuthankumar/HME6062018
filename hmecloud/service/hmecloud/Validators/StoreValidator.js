@@ -7,7 +7,7 @@ const weekReportController = require('../Controllers/WeekReportController')
 const reportValidator = (request, callback) => {
   let output = {}
   console.log('report validator', request.body.selectedStoreIds)
-  if (request.body.selectedStoreIds) {
+  if (request.body.selectedStoreIds.length > 0) {
     const input = {
       ReportTemplate_StoreIds: request.body.selectedStoreIds, //  [] array of object
       ReportTemplate_Advanced_Op: request.body.advancedOptions, // boolean
@@ -34,7 +34,7 @@ const reportValidator = (request, callback) => {
       CarDataRecordType_ID: request.UserPreferenceValue
     }
 
-        // if advance option true and open/ close is true report type can be 2=TC
+    // if advance option true and open/ close is true report type can be 2=TC
     // longest and system statistic disalbled and should be false
     if (input.ReportTemplate_Advanced_Op && (input.ReportTemplate_Open || input.ReportTemplate_Close)) {
       if (input.ReportTemplate_Type === 1) {
