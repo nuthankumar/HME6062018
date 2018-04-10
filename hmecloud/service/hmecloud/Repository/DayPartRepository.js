@@ -1,9 +1,4 @@
-const repository = require('./Repository')
-const dataBase = require('../DataBaseConnection/Configuration').db
 const dataBaseSql = require('../DataBaseConnection/Configuration').sqlConfig
-const sqlQuery = require('../Common/DataBaseQueries')
-
-
 const sql = require('mssql')
 
 const generateDayPartSummaryReport = (input, callback) => {
@@ -12,11 +7,10 @@ const generateDayPartSummaryReport = (input, callback) => {
     if (err) {
       output.data = err
       output.status = false
-   callback(output)
+      callback(output)
     }
 
     const inputType = input.ReportTemplate_StoreIds.length
-   
 
     sqlPool.request()
       .input('InputType', sql.VarChar(5), inputType)
@@ -29,16 +23,15 @@ const generateDayPartSummaryReport = (input, callback) => {
       .input('ReportType', sql.Char(2), 'AC')
       .input('LaneConfig_ID', sql.TinyInt, '1')
       .execute('_usp_HME_Cloud_Get_Report_By_Daypart', (err, result) => {
-        
         if (err) {
           output.data = err
           output.status = false
-          
+
           callback(output)
         }
         if (result && result.recordsets) {
           output.data = result.recordsets
-         
+
           output.status = true
           callback(output)
         }
@@ -48,13 +41,12 @@ const generateDayPartSummaryReport = (input, callback) => {
   sqlPool.on('error', err => {
     console.log('POOOL')
     if (err) {
-      
       callback(err)
     }
   })
 }
 
 module.exports = {
-    generateDayPartSummaryReport,
-    
-  }
+  generateDayPartSummaryReport
+
+}

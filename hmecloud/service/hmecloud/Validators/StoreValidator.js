@@ -22,7 +22,7 @@ const reportValidator = (request, callback) => {
       Include: request.body.include, // [] array
       longestTime: request.body.longestTime, // boolean
       // systemStatistics: request.body.systemStatistics, // boolean
-      // ReportTemplate_Format: request.body.format, // number
+      ReportTemplate_Format: request.body.format, // number
       // Hours1: request.body.Hours,
       // Minutes1: request.body.Minutes,
       // AMPM1: request.body.AMPM,
@@ -33,7 +33,8 @@ const reportValidator = (request, callback) => {
       UserEmail: request.UserEmail,
       CarDataRecordType_ID: request.UserPreferenceValue
     }
-    // if advance option true and open/ close is true report type can be 2=TC
+
+        // if advance option true and open/ close is true report type can be 2=TC
     // longest and system statistic disalbled and should be false
     if (input.ReportTemplate_Advanced_Op && (input.ReportTemplate_Open || input.ReportTemplate_Close)) {
       if (input.ReportTemplate_Type === 1) {

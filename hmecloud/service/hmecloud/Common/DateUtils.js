@@ -9,7 +9,7 @@ const defaultEndTime = '23:59:59'
 const convertSecondsToMinutes = (avgTime, formatFlag) => {
   momentDurationFormatSetup(moment)
   if (avgTime) {
-    if (formatFlag === 1) {
+    if (formatFlag === 2) {
       return moment.duration(avgTime, 'seconds').format()
     } else {
       return avgTime

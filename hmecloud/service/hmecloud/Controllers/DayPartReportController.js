@@ -1,15 +1,14 @@
 const messages = require('../Common/Message')
 const dayPartRepository = require('../Repository/DayPartRepository')
 const dateUtils = require('../Common/DateUtils')
-const dateFormat = require('dateformat')
 const csvGeneration = require('../Common/CsvUtils')
-const HashMap = require('hashmap')
 const _ = require('lodash')
-const defaultFromTime = '00:00:00'
-const defaultEndTime = '23:59:59'
 const convertTime = require('convert-time')
 const moment = require('moment')
 const reportUtil = require('../Common/ReportGenerateUtils')
+
+const defaultFromTime = '00:00:00'
+const defaultEndTime = '23:59:59'
 /**
  * This Service is used to Generate the Summary reports details for
  *provided details
@@ -29,7 +28,8 @@ const generateDaypartReport = (input, callBack) => {
     printTime: '',
     currentPageNo: '',
     TotalPageCount: '',
-    singleDayPart: ''
+    singleDayPart: '',
+    goalStatistics: ''
   }
   let singleDayParts = []
   let dayPartObject = {
@@ -45,6 +45,7 @@ const generateDaypartReport = (input, callBack) => {
     dayPartRepository.generateDayPartSummaryReport(input, result => {
       if (result.status === true) {
         const averageTimeResultSet = result.data[1]
+
         const longestTimes = result.data[2]
         const goalsStatistics = result.data[3]
         const getGoalTime = result.data[4]
@@ -53,6 +54,7 @@ const generateDaypartReport = (input, callBack) => {
 
         if (input.ReportTemplate_StoreIds.length < 2) {
           convertTimeFormatonEachRowObjectElement(input, averageTimeResultSet, data)
+          //  console.log(data)
           dayPartObject.data = data
           singleDayParts.push(dayPartObject)
           reportData.singleDayPart = singleDayParts
@@ -73,7 +75,9 @@ const generateDaypartReport = (input, callBack) => {
 
           // Longst time
           // reportUtil.prepareStoreDetails(daysingleResult, getGoalTime, input)
-          callBack(dataArray[0])
+
+          reportData.goalStatistics = dataArray[0]
+          callBack(reportData)
         } else {
           //  Multi store
 
@@ -193,33 +197,32 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars) {
 }
 
 function convertTimeFormatonEachRowObjectElement (input, averageTimeResultSet, data) {
-  if (input.ReportTemplate_Type === messages.TimeFormat.MINUTES) {
-    averageTimeResultSet.map(row => {
-      var daypartObject = {daypart: ''}
-      let parts = {
-        daypart: {
-          timeSpan: '',
-          currentDaypart: ''
-        },
-        menu: {value: ''},
-        greet: {value: ''},
-        service: {value: ''},
-        laneQueue: {value: ''},
-        laneTotal: {value: ''},
-        totalCars: {value: ''}
-      }
-      Object.keys(row).map(function (key, value) {
-        convertEventsTimeFormat(key, row, value, parts)
-      })
-      daypartObject = parts
-      data.push(daypartObject)
+  averageTimeResultSet.map(row => {
+    console.log(row)
+    var daypartObject = {daypart: ''}
+    let parts = {
+      daypart: {
+        timeSpan: '',
+        currentDaypart: ''
+      },
+      menu: {value: ''},
+      greet: {value: ''},
+      service: {value: ''},
+      laneQueue: {value: ''},
+      laneTotal: {value: ''},
+      totalCars: {value: ''}
+    }
+    Object.keys(row).map(function (key, value) {
+      convertEventsTimeFormat(key, row, value, parts, input)
     })
-  }
-  // console.log(data)
+    daypartObject = parts
+    data.push(daypartObject)
+  })
   return data
 }
+// console.log(data)
 
-function convertEventsTimeFormat (key, row, value, parts) {
+function convertEventsTimeFormat (key, row, value, parts, input) {
   if (row['StartTime'] && row['StoreDate'] !== 'Total Daypart' && row['EndTime']) {
     var dateSplit = row['StoreDate'].split('/')
     parts.daypart.timeSpan = `${dateSplit[1]}/${dateSplit[0]}-Daypart+${row['DayPartIndex']}`
@@ -227,15 +230,15 @@ function convertEventsTimeFormat (key, row, value, parts) {
   }
 
   if (key.includes(messages.Events.MENU)) {
-    parts.menu.value = dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)
+    parts.menu.value = input.ReportTemplate_Format === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)
   } else if (key.includes(messages.Events.LANEQUEUE)) {
-    parts.laneQueue.value = dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)
+    parts.laneQueue.value = input.ReportTemplate_Format === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)
   } else if (key.includes(messages.Events.LANETOTAl)) {
-    parts.laneTotal.value = dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)
+    parts.laneTotal.value = input.ReportTemplate_Format === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)
   } else if (key.includes(messages.Events.SERVICE)) {
-    parts.service.value = dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)
+    parts.service.value = input.ReportTemplate_Format === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)
   } else if (key.includes(messages.Events.GREET)) {
-    parts.greet.value = dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)
+    parts.greet.value = input.ReportTemplate_Format === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)
   }
 }
 
