@@ -3,9 +3,10 @@ const storeController = require('../Controllers/StoreController')
 
 const reportValidator = (request, callback) => {
   let output = {}
-  if (request.body.reportTemplateStoreIds) {
+  console.log('report validator', request.body.selectedStoreIds);
+  if (request.body.selectedStoreIds) {
     const input = {
-      ReportTemplate_StoreIds: request.body.reportTemplateStoreIds, //  [] array of object
+      ReportTemplate_StoreIds: request.body.selectedStoreIds, //  [] array of object
       ReportTemplate_Advanced_Op: request.body.advancedOptions, // boolean
       ReportTemplate_Time_Measure: request.body.timeMeasure, // number
       ReportTemplate_From_Date: request.body.fromDate, // string date
@@ -44,22 +45,22 @@ const reportValidator = (request, callback) => {
     }
     console.log(input.ReportTemplate_Time_Measure)
     // report time measure day data
-    if (input.ReportTemplate_Time_Measure === '1') {
+    if (input.ReportTemplate_Time_Measure === 1) {
       storeController.generateReport(input, result => {
         callback(result)
       })
     } // report time measure day part data
-    else if (input.ReportTemplate_Time_Measure === '2') {
+    else if (input.ReportTemplate_Time_Measure === 2) {
       storeController.generateReport(input, result => {
         callback(result)
       })
     } // report time measure week data
-    else if (input.ReportTemplate_Time_Measure === '3') {
+    else if (input.ReportTemplate_Time_Measure === 3) {
       storeController.getRawCarDataReport(input, result => {
         callback(result)
       })
     } // report time measure raw car data
-    else if (input.ReportTemplate_Time_Measure === '4') {
+    else if (input.ReportTemplate_Time_Measure === 4) {
       storeController.getRawCarDataReport(input, result => {
         callback(result)
       })
