@@ -27,16 +27,21 @@ const generateDaypartReport = (input, callBack) => {
     printDate: '',
     printTime: '',
     currentPageNo: '',
-    TotalPageCount: '',
-    singleDayPart: '',
-    goalStatistics: ''
+    TotalPageCount: ''
+    // singleDayPart: '',
+    // goalStatistics: ''
   }
   let singleDayParts = []
   let dayPartObject = {
     data: ''
   }
-  const data = []
 
+  let data = []
+  let averageTimeResultSet
+  let storeDetails
+  let longestTimes
+  let goalsStatistics
+  let getGoalTime
 
   input.ReportTemplate_From_Time = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
   input.ReportTemplate_To_Time = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
@@ -44,13 +49,15 @@ const generateDaypartReport = (input, callBack) => {
   if (input !== null) {
     dayPartRepository.generateDayPartSummaryReport(input, result => {
       if (result.status === true) {
-        const storeDetails = result.data[0]
-        console.log(storeDetails);
-        const averageTimeResultSet = result.data[1]
-
-        const longestTimes = result.data[2]
-        const goalsStatistics = result.data[3]
-        const getGoalTime = result.data[4]
+        if (input.ReportTemplate_StoreIds.length > 1) {
+          averageTimeResultSet = result.data[0]
+        } else {
+          storeDetails = result.data[0]
+          averageTimeResultSet = result.data[1]
+          longestTimes = result.data[2]
+          goalsStatistics = result.data[3]
+          getGoalTime = result.data[4]
+        }
 
         // Single Store result
 
@@ -60,37 +67,31 @@ const generateDaypartReport = (input, callBack) => {
           dayPartObject.data = data
           singleDayParts.push(dayPartObject)
           reportData.singleDayPart = singleDayParts
-          // reportData.selectedStoreIds = input.ReportTemplate_StoreIds
-          // reportData.timeMeasure = input.ReportTemplate_Time_Measure
-          // reportData.startTime = moment(input.ReportTemplate_From_Date, 'YYYY/MM/dd').format('MMM D,YYYY')
-          // reportData.stopTime = moment(input.ReportTemplate_To_Date, 'YYYY/MM/dd').format('MMM D,YYYY')
-          
-          // reportData.storeName = storeDetails[0]['Store_Name']
-          // reportData.storeDesc = storeDetails[0]['Brand_Name'] 
-          // reportData.printDate = dateUtils.currentDate()
-          // reportData.printTime = dateUtils.currentTime()
-
-
-          reportUtil.prepareStoreDetails(reportData,storeDetails[0], input)
+          reportUtil.prepareStoreDetails(reportData, storeDetails[0], input)
           const dayPartTotalObject = _.last(averageTimeResultSet)
           const totalCars = dayPartTotalObject['Total_Car']
 
           const dataArray = []
-          // goal satistic array values
-          getGoalStatistic(goalsStatistics, getGoalTime, dataArray, totalCars)
-          // reportData
-          // goal statistic == dataArray[0]
-          // LongesTimes
-
-          // Longst time
-       //   reportUtil.prepareStoreDetails(daysingleResult, getGoalTime, input)
+          reportUtil.getGoalStatistic(goalsStatistics, getGoalTime, dataArray, totalCars)
 
           reportData.goalStatistics = dataArray[0]
           callBack(reportData)
         } else {
+          // reportUtil.prepareStoreDetails(reportData, storeDetails[0], input)
           //  Multi store
+          const multipleDayPart = []
+          const groupByStore = {
+            title: '',
+            data: []
+          }
 
-          callBack(averageTimeResultSet)
+          convertTimeFormatonEachRowObjectElement(input, averageTimeResultSet, data)
+          const daypartIndex = _.groupBy(data, 'dayPartIndex')
+          groupByStore.data = daypartIndex
+          groupByStore.title = moment(input.ReportTemplate_From_Date).format('MMM DD')
+          multipleDayPart.push(groupByStore)
+          //  reportData.multipleDayPart(multipleDayPart)
+          callBack(multipleDayPart)
         }
       } else {
         callBack(result)
@@ -101,109 +102,6 @@ const generateDaypartReport = (input, callBack) => {
   }
 }
 
-function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars) {
-  const goalGrades = {
-    goalA: {
-      title: '<Goal A',
-      menu: {goal: '', cars: '', percentage: ''},
-      greet: {goal: '', cars: '', percentage: ''},
-      service: {goal: '', cars: '', percentage: ''},
-      laneQueue: {goal: '', cars: '', percentage: ''},
-      laneTotal: {goal: '', cars: '', percentage: ''}
-    },
-    goalB: {
-      title: '<Goal B',
-      menu: {goal: '', cars: '', percentage: ''},
-      greet: {goal: '', cars: '', percentage: ''},
-      service: {goal: '', cars: '', percentage: ''},
-      laneQueue: {goal: '', cars: '', percentage: ''},
-      laneTotal: {goal: '', cars: '', percentage: ''}
-    },
-    goalC: {
-      title: '<Goal C',
-      menu: {goal: '', cars: '', percentage: ''},
-      greet: {goal: '', cars: '', percentage: ''},
-      service: {goal: '', cars: '', percentage: ''},
-      laneQueue: {goal: '', cars: '', percentage: ''},
-      laneTotal: {goal: '', cars: '', percentage: ''}
-    },
-    goalD: {
-      title: '<Goal D',
-      menu: {goal: '', cars: '', percentage: ''},
-      greet: {goal: '', cars: '', percentage: ''},
-      service: {goal: '', cars: '', percentage: ''},
-      laneQueue: {goal: '', cars: '', percentage: ''},
-      laneTotal: {goal: '', cars: '', percentage: ''}
-    },
-    goalF: {
-      title: 'Goal D',
-      menu: {goal: '', cars: '', percentage: ''},
-      greet: {goal: '', cars: '', percentage: ''},
-      service: {goal: '', cars: '', percentage: ''},
-      laneQueue: {goal: '', cars: '', percentage: ''},
-      laneTotal: {goal: '', cars: '', percentage: ''}
-    }
-  }
-
-  var populate = (result, goal, event, property, key, value) => {
-    if (key.toLowerCase().includes(goal.toLowerCase()) && key.toLowerCase().includes(event.toLowerCase())) {
-      result[goal][event][property] = value
-    }
-  }
-
-  var populatePercentage = (result, goal, event, property, key, value, totalCarsCount) => {
-    if (key.toLowerCase().includes(goal.toLowerCase()) && key.toLowerCase().includes(event.toLowerCase())) {
-      if (value === 0 || value === null) {
-        result[goal][event][property] = `0%`
-      } else {
-        result[goal][event][property] = `${Math.round(value / totalCarsCount * 100)}%`
-      }
-    }
-  }
-
-  var prepareGoal = (result, event, property, key, value) => {
-    populate(result, 'goalA', event, property, key, value)
-    populate(result, 'goalB', event, property, key, value)
-    populate(result, 'goalC', event, property, key, value)
-    populate(result, 'goalD', event, property, key, value)
-    populate(result, 'goalF', event, property, key, value)
-  }
-
-  var prepareGoalPercentage = (result, event, property, key, value, totalCars) => {
-    populatePercentage(result, 'goalA', event, property, key, value, totalCars)
-    populatePercentage(result, 'goalB', event, property, key, value, totalCars)
-    populatePercentage(result, 'goalC', event, property, key, value, totalCars)
-    populatePercentage(result, 'goalD', event, property, key, value, totalCars)
-    populatePercentage(result, 'goalF', event, property, key, value, totalCars)
-  }
-  // Get the values for the goals
-  _.map(getGoalTime[0], (value, key) => {
-    prepareGoal(goalGrades, 'menu', 'goal', key, value)
-    prepareGoal(goalGrades, 'greet', 'goal', key, value)
-    prepareGoal(goalGrades, 'service', 'goal', key, value)
-    prepareGoal(goalGrades, 'laneQueue', 'goal', key, value)
-    prepareGoal(goalGrades, 'laneTotal', 'goal', key, value)
-  })
-
-  // get the values for the cars
-  return _.map(goalsStatistics[0], (value, key) => {
-    prepareGoal(goalGrades, 'menu', 'cars', key, value)
-    prepareGoal(goalGrades, 'greet', 'cars', key, value)
-    prepareGoal(goalGrades, 'service', 'cars', key, value)
-    prepareGoal(goalGrades, 'laneQueue', 'cars', key, value)
-    prepareGoal(goalGrades, 'laneTotal', 'cars', key, value)
-
-    prepareGoalPercentage(goalGrades, 'menu', 'percentage', key, value, totalCars)
-    prepareGoalPercentage(goalGrades, 'greet', 'percentage', key, value, totalCars)
-    prepareGoalPercentage(goalGrades, 'service', 'percentage', key, value, totalCars)
-    prepareGoalPercentage(goalGrades, 'laneQueue', 'percentage', key, value, totalCars)
-    prepareGoalPercentage(goalGrades, 'laneTotal', 'percentage', key, value, totalCars)
-    // value : statistic value
-    //  totalCars : avgTimeCalculate
-    dataArray.push(goalGrades)
-  })
-}
-
 function convertTimeFormatonEachRowObjectElement (input, averageTimeResultSet, data) {
   averageTimeResultSet.map(row => {
     var daypartObject = {daypart: ''}
@@ -212,6 +110,7 @@ function convertTimeFormatonEachRowObjectElement (input, averageTimeResultSet, d
         timeSpan: '',
         currentDaypart: ''
       },
+      dayPartIndex: '',
       menu: {value: ''},
       greet: {value: ''},
       service: {value: ''},
@@ -229,12 +128,12 @@ function convertTimeFormatonEachRowObjectElement (input, averageTimeResultSet, d
 }
 
 function convertEventsTimeFormat (key, row, value, parts, input) {
-  if (row['StartTime'] && row['StoreDate'] !== 'Total Daypart' && row['EndTime']) {
+  if (row['StartTime'] && row['StoreDate'] !== 'Total Daypart' && row['EndTime'] && input.ReportTemplate_StoreIds.length < 2) {
     var dateSplit = row['StoreDate'].split('/')
     parts.daypart.timeSpan = `${dateSplit[1]}/${dateSplit[0]}-Daypart+${row['DayPartIndex']}`
     parts.daypart.currentDaypart = `${convertTime(row['StartTime'])}-${convertTime(row['EndTime'])}`
   }
-
+  parts.dayPartIndex = row['DayPartIndex']
   if (key.includes(messages.Events.MENU)) {
     parts.menu.value = input.ReportTemplate_Format === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)
   } else if (key.includes(messages.Events.LANEQUEUE)) {
