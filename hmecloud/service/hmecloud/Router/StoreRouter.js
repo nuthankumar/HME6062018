@@ -15,36 +15,14 @@ const dateFormat = require('dateformat')
  */
 router.post('/generatereport', authValidator, (request, response) => {
   let reportType = request.query.reportType
-  const output = {}
-  if (reportType === 'daySingle') {
-    output.reportData = daySingle.Day_Single
-    // output.reportData.startTime = request.body.reportTemplateFromDate
-    // output.reportData.stopTime = request.body.reportTemplateToDate
-    output.reportData.printDate = dateFormat(new Date(), 'isoDate')
-    output.reportData.printTime = dateFormat(new Date(), 'shortTime')
-    output.status = true
-  } else if (reportType === 'weekSingle') {
-    output.reportData = daySingle.Week_Single
-    // output.reportData.startTime = request.body.reportTemplateFromDate
-    // output.reportData.stopTime = request.body.reportTemplateToDate
-    output.reportData.printDate = dateFormat(new Date(), 'isoDate')
-    output.reportData.printTime = dateFormat(new Date(), 'shortTime')
-    output.status = true
-  } else if (reportType === 'dayPartSingle') {
-    output.reportData = dayPart.singleStore
-    output.reportData.startTime = request.body.reportTemplateFromDate
-    output.reportData.stopTime = request.body.reportTemplateToDate
-    output.status = true
-  }
-  response.status(200).send(output)
-
-  /* storeValidator.reportValidator(request, result => {
+ 
+   storeValidator.reportValidator(request, result => {
     if (result.status === true) {
       response.status(200).send(result.data)
     } else {
       response.status(400).send(result)
     }
-  }) */
+  })
 })
 
 /**
