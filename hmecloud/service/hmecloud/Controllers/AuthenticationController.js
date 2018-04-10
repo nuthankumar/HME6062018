@@ -29,6 +29,7 @@ function verifyToken (request, response, next) {
     request.UserName = decoded.UserName
     request.Role = decoded.Role
     request.AccountId = decoded.AccountId
+    request.UserPreferenceValue = decoded.UserPreferencesValue
     next()
   })
 }
