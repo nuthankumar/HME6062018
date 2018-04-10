@@ -186,6 +186,8 @@ export default class SummaryReport extends Component {
 
   componentWillMount () {
     this.setTimeMeasures(this.props.history.location.state)
+    this.state.templateData = this.props.history.location.state;
+    this.setState(this.state)
   }
 
   headerDetails(){
@@ -328,7 +330,8 @@ export default class SummaryReport extends Component {
      ReportTemplate_Include_Stats: template.longestTime,
      reportTemplateFormat: template.format
     }
-    this.populateSummaryReportDetails(request)
+    return request
+  //  this.populateSummaryReportDetails(request)
   }
 
   handleDrillDown () {
@@ -396,14 +399,32 @@ export default class SummaryReport extends Component {
     this.setState(this.state)
   }
 
+  downloadPdf(templateData){
+    let request = this.constructReportRequest(templateData[0])
+    let url = Config.baseUrl + CommonConstants.apiUrls.generateReport
+    this.api.postData(url, request, data => {
+      if (data.status) {
+          this.state.errorMessage = ''
+          this.state.pdfEmailMessage = data.data
+          this.setState(this.state)
+          this.props.history.push("/emailSent", this.state.pdfEmailMessage);
+       }
+       }, error => {
+      this.state.successMessage = ''
+      this.state.errorMessage = 'Failed sending Email'
+      this.setState(this.state)
+    })
+  }
+
   render () {
     // let reportData = this.state.reportData.data
     return (<section className='report-summary-page'>
       <HmeHeader />
       <section className='reportsummary-container'>
         <div className='row download-btn-section'>
-          <button className='btn btn-default download-summaryreport-btn'>Download</button>
+          <button className='btn btn-default download-summaryreport-btn' onClick={() => this.downloadPdf(this.state.templateData[0])}>Download</button>
         </div>
+        <div className='pdfError'>{this.state.errorMessage}</div>
         <PageHeader pageHeading={this.state.pageHeading} />
 
         <div className='row'>
