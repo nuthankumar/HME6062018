@@ -683,7 +683,9 @@ const language = [
     'Inactive Group': 'Inactive Group',
     'All stores will be removed from this group': 'All stores will be removed from this group',
     'OK': 'OK',
-    'StoreNameColumn': 'Store Name Column'
+    'StoreNameColumn': 'Store Name Column',
+    'AddNewGroup': 'Add New Group',
+    'ReportingGroupManagement': 'Reporting Group Management'
   },
 
   // French
@@ -1372,7 +1374,9 @@ const language = [
     'Inactive Group': 'Groupe inactif',
     'All stores will be removed from this group': 'Tous les magasins seront supprimés de ce groupe',
     'OK': 'OK',
-    'StoreNameColumn': 'Nom du Restaurant Colonne'
+    'StoreNameColumn': 'Nom du Restaurant Colonne',
+    'AddNewGroup': 'Ajouter un nouveau groupe',
+    'ReportingGroupManagement': 'Gestion du groupe de reporting'
   }
 ]
 export default language
