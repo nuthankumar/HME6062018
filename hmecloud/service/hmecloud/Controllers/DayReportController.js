@@ -22,17 +22,13 @@ const generateDayReport = (input, callBack) => {
         let daysingleResult = {}
         stores.getDayDataReport(datReportqueryTemplate, result => {
             if (result.status === true) {
-                //console.log("The Day details====" + JSON.stringify(result.data[0]))
-              //  console.log("Longest details" + JSON.stringify(result.data[1]))
-               // console.log("Gold statistics" + JSON.stringify(result.data[2]))
-              //  console.log("The Store Object" + JSON.stringify(result.data[3]))
                 // Preparing Single Store results
                 if (storesLength === 1) {
                     reportUtil.prepareStoreDetails(daysingleResult, result.data[3], input)
-                  //  prepareDayResults(daysingleResult, result.data[0]);
+                    prepareDayResults(daysingleResult, result.data[0]);
                     reportUtil.prepareLongestTimes(daysingleResult, result.data[1], input.ReportTemplate_Format)
                     //prepareGoalsStatistics(daysingleResult, result.data[1])
-                    console.log("The Store response===" + JSON.stringify(daysingleResult))
+                   // console.log("The Store response===" + JSON.stringify(daysingleResult))
                 } else if (storesLength > 1) {
 
                 } 
@@ -56,7 +52,9 @@ function prepareDayResults(daysingleResult, dayData) {
     let dataList = []
     let dataObject = {}
     dayData.forEach(item => {
-     //   dataObject.Day = dateUtils.convertmmddyyyy(dayData.StoreDate)
+        dataObject.Day = dateUtils.convertmmddyyyy(item.StoreDate)
+        dataObject.TimeSpan = "OPEN - CLOSE"
+        if (item.)
     })
     
 
