@@ -67,6 +67,7 @@ const getRawCarDataReport = (input, callBack) => {
             callBack(rawCarData)
           } else if (input.reportType === 'rrcsv1') {
             // Invoking CSV file generation function
+            let output = {}
             let csvInput = {}
             csvInput.type = messages.COMMON.CSVTYPE,
             csvInput.reportName = input.ReportTemplate_Time_Measure + '_' + dateFormat(new Date(), 'isoDate'),
@@ -74,7 +75,15 @@ const getRawCarDataReport = (input, callBack) => {
             csvInput.reportinput = rawCarDataList
             csvInput.subject = input.ReportTemplate_Time_Measure + ' ' + fromDateTime + ' - ' + toDateTime
             csvGeneration.generateCsvAndEmail(csvInput, result => {
-              callBack(result)
+                if (result) {
+                    output.data = input.UserEmail
+                    output.status = true
+                } else {
+                    output.data = input.UserEmail
+                    output.status = false
+                }
+
+                callBack(output)
             })
           }
         }
