@@ -1,5 +1,11 @@
 const dateUtils = require('../Common/DateUtils')
+<<<<<<< HEAD
 const _ = require('lodash')
+=======
+const messages = require('../Common/Message')
+const moment = require('moment')
+const momentDurationFormatSetup = require('moment-duration-format')
+>>>>>>> 2960268303ac8cfc8f09f9419be7db899e84ba0a
 // This function is used to Prepare Store Details
 const prepareStoreDetails = (daysingleResult, storeData, input) => {
   daysingleResult.storeName = storeData.Store_Name
@@ -14,6 +20,7 @@ const prepareStoreDetails = (daysingleResult, storeData, input) => {
 }
 
 // This function is used to prepare Longest details for Day Report
+<<<<<<< HEAD
 const prepareLongestTimes = (daysingleResult, longestData, format) => {
   let LongestTimes = []
   // console.log("The length=====$$$$$$$$" + JSON.stringify(longestData))
@@ -126,6 +133,65 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars) {
     dataArray.push(goalGrades)
   })
   return dataArray[0]
+=======
+const prepareLongestTimes = (daysingleResult, longestData, format) =>{
+    let LongestTimes = []
+    let longestObj = {}
+    let k = 0
+    for (let i = 0; i < longestData.length; i++) {
+        let tempTimeObj = longestData[i]
+        if (tempTimeObj.headerName.includes(messages.EventName.MENU)) {
+            let timeObj = {}
+            timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
+            timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
+            timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
+            longestObj.Menu = timeObj
+            LongestTimes.push(longestObj)
+        } else if (tempTimeObj.headerName.includes(messages.EventName.GREET)) {
+            let timeObj = {}
+            timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
+            timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
+            timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
+            LongestTimes[k].Greet = timeObj
+            k = k + 1
+            if (k === 2) {
+                k = 0
+            }
+        } else if (tempTimeObj.headerName.includes(messages.EventName.SERVICE)) {
+            let timeObj = {}
+            timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
+            timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
+            timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
+            LongestTimes[k].Service = timeObj
+            k = k + 1
+            if (k === 2) {
+                k = 0
+            }
+        } else if (tempTimeObj.headerName.includes(messages.EventName.LANEQUEUE)) {
+            let timeObj = {}
+            timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
+            timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
+            timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
+            LongestTimes[k].LaneQueue = timeObj
+            k = k + 1
+            if (k === 2) {
+                k = 0
+            }
+        }else if (tempTimeObj.headerName.includes(messages.EventName.LANETOTAl)) {
+            let timeObj = {}
+            timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
+            timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
+            timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
+            LongestTimes[k].LaneTotal = timeObj
+            k = k + 1
+            if (k === 2) {
+                k = 0
+            }
+        }
+      }
+    daysingleResult.LongestTimes = LongestTimes
+    return daysingleResult
+>>>>>>> 2960268303ac8cfc8f09f9419be7db899e84ba0a
 }
 
 module.exports = {
