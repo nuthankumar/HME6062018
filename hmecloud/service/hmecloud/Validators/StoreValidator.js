@@ -1,5 +1,6 @@
 const validate = require('validator')
 const storeController = require('../Controllers/StoreController')
+const dayReportController = require('../Controllers/DayReportController')
 
 const reportValidator = (request, callback) => {
   let output = {}
@@ -27,7 +28,8 @@ const reportValidator = (request, callback) => {
       // Minutes2: request.body,
       // AMPM2: request.body.AMPM,
       reportType: request.query.reportType,
-      UserEmail: request.UserEmail
+        UserEmail: request.UserEmail,
+        CarDataRecordType_ID: request.UserPreferenceValue
     }
 
     // if advance option true and open/ close is true report type can be 2=TC
@@ -46,7 +48,7 @@ const reportValidator = (request, callback) => {
     console.log(input.ReportTemplate_Time_Measure)
     // report time measure day data
     if (input.ReportTemplate_Time_Measure === 1) {
-      storeController.generateReport(input, result => {
+        dayReportController.generateDayReport(input, result => {
         callback(result)
       })
     } // report time measure day part data

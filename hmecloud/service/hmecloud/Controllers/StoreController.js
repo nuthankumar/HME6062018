@@ -55,7 +55,7 @@ const getRawCarDataReport = (input, callBack) => {
     ReportTemplate_To_Date: input.ReportTemplate_To_Date,
     fromDateTime: fromDateTime,
     toDateTime: toDateTime,
-    ReportTemplate_Type: input.ReportTemplate_Type,
+    ReportTemplate_Type: input.CarDataRecordType_ID,
     ReportType: 'AC',
     LaneConfig_ID: 1
   }
