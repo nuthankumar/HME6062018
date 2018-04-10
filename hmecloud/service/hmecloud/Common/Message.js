@@ -53,6 +53,20 @@ exports.EventName = {
   GREET: 'Greet'
 }
 
+exports.Events = {
+  MENU: 'Menu',
+  LANEQUEUE: 'Queue',
+  LANETOTAl: 'Lane',
+  SERVICE: 'Service',
+  GREET: 'Greet',
+  CASHIER: 'Cashier'
+}
+
+
+exports.TimeFormat = {
+  Seconds: 1,
+  MINUTES: 2
+}
 exports.COMMON = {
 
     CSVTYPE: 'CSV',
