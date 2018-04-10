@@ -20,7 +20,7 @@ const reportValidator = (request, callback) => {
       Include: request.body.include, // [] array
       longestTime: request.body.longestTime, // boolean
       // systemStatistics: request.body.systemStatistics, // boolean
-      // ReportTemplate_Format: request.body.format, // number
+      ReportTemplate_Format: request.body.format, // number
       // Hours1: request.body.Hours,
       // Minutes1: request.body.Minutes,
       // AMPM1: request.body.AMPM,

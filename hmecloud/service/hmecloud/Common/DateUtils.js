@@ -1,6 +1,7 @@
 const moment = require('moment')
 const messages = require('../Common/Message')
 const momentDurationFormatSetup = require('moment-duration-format')
+const dateFormat = require('dateformat')
 
 const defaultFromTime = '00:00:00'
 const defaultEndTime = '23:59:59'
@@ -50,10 +51,23 @@ const toTime = (dateVal, timeVal) => {
     return moment(toDateTime).format("YYYY-MM-DD HH:mm:ss")
 }
 
+const currentDate = () => {
+    return dateFormat(new Date(), 'isoDate')
+}
+
+const currentTime = () => {
+    return dateFormat(new Date(), 'shortTime')
+}
+
+const convertmmddyyyy = (dateValue) => {
+    return moment(dateValue).format("mm/dd/yyyy")
+}
 
 module.exports = {
   convertSecondsToMinutes,
     dayPartTime,
     fromTime,
-    toTime
+    toTime,
+    currentDate,
+    currentTime
 }

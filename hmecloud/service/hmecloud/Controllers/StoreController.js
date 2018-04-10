@@ -127,7 +127,6 @@ module.exports = {
  * @param {*} input
  */
 function prepareStoreDetails(rawCarData, storeData, input) {
-    console.log("THe Store data===" + JSON.stringify(storeData))
   rawCarData.store = storeData.Store_Name
   rawCarData.description = storeData.Brand_Name
   rawCarData.startTime = input.ReportTemplate_From_Date

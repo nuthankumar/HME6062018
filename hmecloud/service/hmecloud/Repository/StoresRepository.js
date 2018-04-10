@@ -98,16 +98,14 @@ const getDayDataReport = (input, callback) => {
             console.log(err)
             callback(output)
         }
-
         sqlPool.request()
             .input('Device_IDs', sql.VarChar(500), input.ReportTemplate_StoreIds.toString())
             .input('StoreStartDate', sql.Date, input.ReportTemplate_From_Date)
             .input('StoreEndDate', sql.Date, input.ReportTemplate_To_Date)
-            .input('StartDateTime', sql.Date, input.FromDateTime)
-            .input('EndDateTime', sql.Date, input.ToDateTime)
+            .input('StartDateTime', sql.DateTime2 , input.FromDateTime)
+            .input('EndDateTime', sql.DateTime2 , input.ToDateTime)
             .input('CarDataRecordType_ID', sql.SmallInt, input.ReportTemplate_Type)
             .execute('usp_HME_Cloud_Get_Report_By_Date', (err, result) => {
-
                 if (err) {
                     output.data = err
                     output.status = false 
