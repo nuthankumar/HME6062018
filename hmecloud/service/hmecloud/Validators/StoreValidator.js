@@ -1,6 +1,7 @@
 const validate = require('validator')
 const storeController = require('../Controllers/StoreController')
 const dayReportController = require('../Controllers/DayReportController')
+const dayPartReportController = require('../Controllers/DayPartReportController')
 const weekReportController = require('../Controllers/WeekReportController')
 
 const reportValidator = (request, callback) => {
@@ -58,7 +59,7 @@ const reportValidator = (request, callback) => {
       })
       // report time measure day part data
     } else if (input.ReportTemplate_Time_Measure === 2) {
-      storeController.generateReport(input, result => {
+      dayPartReportController.generateDaypartReport(input, result => {
         callback(result)
       })
       // report time measure week data
