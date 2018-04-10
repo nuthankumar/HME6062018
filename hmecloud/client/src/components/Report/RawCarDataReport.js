@@ -29,41 +29,18 @@ class RawCarReport extends Component {
     this.getRawCarData = this.getRawCarData.bind(this)
 
   }
-  componentDidMount () {
+  componentDidMount() {
+      
+
     this.getRawCarData()
   }
 
-  getRawCarData () {
-      let data = {
-          "timeMeasure": 4,
-          "fromDate": "2018-03-24",
-          "toDate": "2018-03-24",
-          "openTime": "12:00 AM",
-          "closeTime": "12:00 PM",
-          "open": true,
-          "close": true,
-          "type": 2,
-          "include": [
-              "1",
-              "2"
-          ],
-          "format": 2,
-          "selectedStoreIds": ["4"],
-          "advancedOptions": false,
-          "longestTime": true,
-          "systemStatistics": true
-      }
-      let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
-      this.api.postData(url, data, data => {
-          console.log(data);
-          this.state.displayData = data
-          this.state.rawData = true
-          this.setState(this.state)
-      }, error => {
-          this.state.successMessage = ''
-          this.state.errorMessage = error.message
-          this.setState(this.state)
-          })
+  getRawCarData() {
+      let data = this.props.history.location.state
+      this.state.displayData = data.rawCarData;
+      this.state.rawCarRequest = data.rawCarRequest
+      this.state.rawData = true;
+      this.setState(this.state)
   }
 
   timeChange (name) {
@@ -180,29 +157,9 @@ class RawCarReport extends Component {
     )
   }
   emailAsCSV() {
-      let data = {
-          "timeMeasure": 4,
-          "fromDate": "2018-03-24",
-          "toDate": "2018-03-24",
-          "openTime": "12:00 AM",
-          "closeTime": "12:00 PM",
-          "open": true,
-          "close": true,
-          "type": 2,
-          "include": [
-              "1",
-              "2"
-          ],
-          "format": 2,
-          "selectedStoreIds": ["4"],
-          "advancedOptions": false,
-          "longestTime": true,
-          "systemStatistics": true
-      }
       let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rrcsv1'
-      this.api.postData(url, data, data => {
+      this.api.postData(url, this.state.rawCarRequest, data => {
           if (data.status) {
-              console.log(data);
               this.setState({
                   email: data.data
               });

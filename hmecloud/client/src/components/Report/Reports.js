@@ -770,7 +770,52 @@ class Report extends Component {
       }
     }
     if (!isError) {
-      this.props.history.push("/summaryreport",this.state.templateData);
+        if (this.state.timeMeasure == 4) {
+            let rawCarData = [];
+            console.log(this.state);
+            console.log(template);
+
+            let selectedStoreIds = this.state.selectedStoreIds
+            selectedStoreIds = selectedStoreIds.map(String);
+
+            rawCarData.push(
+                {
+                    "timeMeasure": parseInt(this.state.timeMeasure),
+                    "fromDate": this.state.fromDate,
+                    "toDate": this.state.toDate,
+                    "openTime": this.state.openTime,
+                    "closeTime": this.state.closeTime,
+                    "open": this.state.open,
+                    "close": this.state.close,
+                    "type": this.state.type,
+                    "include": this.state.include,
+                    "format": this.state.format,
+                    "selectedStoreIds": selectedStoreIds,
+                    "advancedOptions": template[0].advancedOptions,
+                    "longestTime": template[0].longestTime,
+                    "systemStatistics":template[0].systemStatistics
+                }
+            )
+            this.setState({
+                rawCarRequest: rawCarData[0]
+            });
+            console.log(JSON.stringify(rawCarData[0]));
+            let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
+            this.api.postData(url, rawCarData[0], data => {
+                console.log(data);
+              //  this.props.history.push("/rawcardatareport", this.state.rawCarData);
+                this.props.history.push({
+                    pathname: '/rawcardatareport',
+                    state: { rawCarRequest: rawCarData[0] , rawCarData : data }
+                })
+            }, error => {
+                this.state.successMessage = ''
+                this.state.errorMessage = error.message
+                this.setState(this.state)
+            })
+        } else {
+            this.props.history.push("/summaryreport", this.state.templateData);
+        }
     }
   }
 
