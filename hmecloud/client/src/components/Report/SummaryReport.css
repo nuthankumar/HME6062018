@@ -80,6 +80,10 @@
       width: 175px;
 }
 
+.summaryreport-table th.reporttable-attributes-heading-dynamic{
+  width: 125px;
+}
+
 .summaryreport-table td{
   border-top: 1px solid #FFFFFF;
   border-left: 1px solid #FFFFFF;
@@ -212,6 +216,10 @@ h2 .report-start-time-value,h2 .report-end-time-value{
   font-size: 12px;
 }
 
+.goalstatistics-table tr.goalstatistics-row-heading th.blank-heading{
+  background: none;
+}
+
 .goalstatistics-table tr th.tableHeading{
   background: #959595;
   border-top: 1px solid #FFFFFF;
@@ -248,8 +256,17 @@ h2 .report-start-time-value,h2 .report-end-time-value{
   text-align : center;
 }
 .goalstatistics-table{
-  border-bottom: 1px solid grey;
+  /* border-bottom: 1px solid grey; */
+  border-bottom: 1px solid #aeaeae;
   margin-bottom: 5px;
+}
+
+.goalstatistics-table.goalstatistics-table-content{
+  border-bottom: 1px solid #aeaeae;
+}
+
+.goalstatistics-table.goalstatistics-table-header{
+  border-bottom: none;
 }
 .goalstatistics-header-text{
   color: #008898;
@@ -332,7 +349,6 @@ table .th {
 }
 .table-layout {
   margin-top: 0px;
-  margin-left: 7.5em;
   margin-bottom: 25px;
   width: 1125px;
 }
@@ -428,7 +444,7 @@ h2.rep-head {
     width: 125px;
     border-right: 0px solid gray;
 }
-.timeSpan {
+.longtime-timeSpan {
     font-size: 10px;
     font-weight: 500;
 }
@@ -466,4 +482,3 @@ table.longest td {
 .table-layoutRawCar {
     margin-left: 0px;
 }
-

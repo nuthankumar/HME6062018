@@ -16,7 +16,7 @@ export default class GoalStatisticsDataComponent extends Component {
     return (<div>
         <div className='col-xs-12 goalstatistics-header-text'>Goal Statistics For Daypart</div>
         <div className='col-xs-12 goalstatistics-data-unit'>
-          <table className='goalstatistics-table'>
+          <table className='goalstatistics-table goalstatistics-table-header'>
             <tbody>
               <tr>
                 <th className='blankHeader'/>
@@ -24,8 +24,8 @@ export default class GoalStatisticsDataComponent extends Component {
                   <span>AVERAGE TIME</span><span>(min:sec)</span>
                 </th>
               </tr>
-              <tr>
-                <th className='reportTableAttributesHeading'><span></span></th>
+              <tr className='goalstatistics-row-heading'>
+                <th className='reportTableAttributesHeading blank-heading'><span></span></th>
                 <th className='reportTableAttributesHeading'><span>Menu</span></th>
                 <th className='reportTableAttributesHeading'><span>Greet</span></th>
                 <th className='reportTableAttributesHeading'><span>Service</span></th>
@@ -55,14 +55,14 @@ export default class GoalStatisticsDataComponent extends Component {
       }) */
 
       return (
-            <table className='goalstatistics-table'>
-            <tbody>
-              <tr className = 'goalStatistics-row'>
-                {this.getStatisticsRow(goalItem,"goal",goalItem.title)}
-                {this.getStatisticsRow(goalItem,"cars","Cars")}
-                {this.getStatisticsRow(goalItem,"percentage","%")}
-              </tr>
-            </tbody>
+            <table className='goalstatistics-table goalstatistics-table-content'>
+              <tbody>
+                <tr className = 'goalStatistics-row'>
+                  {this.getStatisticsRow(goalItem,"goal",goalItem.title)}
+                  {this.getStatisticsRow(goalItem,"cars","Cars")}
+                  {this.getStatisticsRow(goalItem,"percentage","%")}
+                </tr>
+              </tbody>
             </table>
       )
     })

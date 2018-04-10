@@ -129,6 +129,7 @@ export default class SummaryReport extends Component {
             dayColumn: false,
             dayPartColumn: false,
             weekColumn: false,
+            singleStore: false
             },
       goalData: {
          data:
@@ -190,9 +191,11 @@ export default class SummaryReport extends Component {
         if (templateData[0].selectedStoreIds.length === 1) {
           this.state.reportData.dayColumn = true
           this.state.reportData.groupStoreColumns = false
+          this.state.singleStore = true
         } else {
           this.state.reportData.dayColumn = false
           this.state.reportData.groupStoreColumns = true
+          this.state.singleStore = false
         }
         this.setState(this.state)
         break
@@ -201,9 +204,11 @@ export default class SummaryReport extends Component {
         if (templateData[0].selectedStoreIds.length === 1) {
           this.state.reportData.dayPartColumn = true
           this.state.reportData.groupStoreColumns = false
+          this.state.singleStore = true
         } else {
           this.state.reportData.dayPartColumn = false
           this.state.reportData.groupStoreColumns = true
+          this.state.singleStore = false
         }
         this.setState(this.state)
         break
@@ -212,9 +217,11 @@ export default class SummaryReport extends Component {
         if (templateData[0].selectedStoreIds.length === 1) {
           this.state.reportData.weekColumn = true
           this.state.reportData.groupStoreColumns = false
+          this.state.singleStore = true
         } else {
           this.state.reportData.weekColumn = false
           this.state.reportData.groupStoreColumns = true
+          this.state.singleStore = false
         }
         this.setState(this.state)
         break
@@ -223,9 +230,11 @@ export default class SummaryReport extends Component {
         if (templateData[0].selectedStoreIds.length === 1) {
           this.state.reportData.dayPartColumn = true
           this.state.reportData.groupStoreColumns = false
+          this.state.singleStore = true
         } else {
           this.state.reportData.dayPartColumn = false
           this.state.reportData.groupStoreColumns = true
+          this.state.singleStore = false
         }
         this.setState(this.state)
         this.props.history.push("/rawcardatareport",this.state.templateData);
