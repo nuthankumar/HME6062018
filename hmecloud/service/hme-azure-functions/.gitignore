@@ -1,6 +1,6 @@
 
-/func-store/node_modules
-/func-auth/node_modules
+/**/node_modules/
+/**/node_modules/
 
 bin
 obj

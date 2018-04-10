@@ -1,58 +1,41 @@
-var express = require("express");
-var morgan = require("morgan");
-var passport = require("passport");
-var BearerStrategy = require('passport-azure-ad').BearerStrategy;
+'use strict';
 
-var options = {
-    identityMetadata: "https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration/",
-    clientId: "00000000-xxxx-0000-xxxx-000000000000",
-    validateIssuer: false,
-    loggingLevel: 'warn',
-    passReqToCallback: false
-};
+var adal = require('adal-node');
 
 module.exports = function (context, req) {
+  var AuthenticationContext = adal.AuthenticationContext;
 
-/*
-    context.log('http-trigger', req.body); //to-do: use bunyan
-*/
+  let params = req.body
+  const tenant = 'nousinfo.onmicrosoft.com',
+    authorityHostUrl = 'https://login.microsoftonline.com',
+    clientId = 'bb902204-5228-4e3c-8d79-d4e0bd722bc9'
 
-    //to-do: implement core-translator-mediator
-    if (req.body.params === null || req.body.params === 'undefined') {
+  const authorityUrl = authorityHostUrl + '/' + tenant,
+    resource = '00000002-0000-0000-c000-000000000000',
+    authContext = new AuthenticationContext(authorityUrl)
+
+  authContext.acquireTokenWithUsernamePassword(resource, params.username,
+    params.password, clientId, function (err, tokenResponse) {
+      if (err) {
         context.res = {
-            status: 400,
-            body: "request body cannot be empty"
-        };
-        context.done();
-    }
-
-    // Check for client id placeholder
-    if (options.clientId === req.header.clientId) {
-        context.log("Please update 'options' with the client id (application id) of your application");
-        return;
-    }
-
-    var bearerStrategy = new BearerStrategy(options,
-        function (token, done) {
-            // Send user info using the second argument
-            done(null, {}, token);
+          status: 404,
+          body: err.stack
         }
-    );
-
-    passport.initialize();
-    passport.use(bearerStrategy);
-
-    passport.authenticate('oauth-bearer', {session: false}),(req, res) => {
-        var claims = req.authInfo;
-        context.log('User info: ', req.user);
-        context.log('Validated claims: ', claims);
-        
+      } else {
         context.res = {
-            status: 200,
-            body: {'name': claims['name']}
-        };
-        context.done();
-    }
-
-    context.done();
-};
+          status: 200,
+          body: {
+            tokenType: tokenResponse.tokenType,
+            expiresIn: tokenResponse.expiresIn,
+            expiresOn: tokenResponse.expiresOn,
+            accessToken: tokenResponse.accessToken,
+            refreshToken: tokenResponse.refreshToken,
+            userId: tokenResponse.userId,
+            familyName: tokenResponse.familyName,
+            givenName: tokenResponse.givenName
+          }
+        }
+      }
+      context.done();
+    })
+}

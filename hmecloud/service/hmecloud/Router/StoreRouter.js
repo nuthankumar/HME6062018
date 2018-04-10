@@ -15,7 +15,7 @@ const dateFormat = require('dateformat')
  */
 router.post('/generatereport', authValidator, (request, response) => {
   let reportType = request.query.reportType
- 
+
    storeValidator.reportValidator(request, result => {
     if (result.status === true) {
       response.status(200).send(result.data)
