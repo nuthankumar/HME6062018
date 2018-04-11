@@ -18,7 +18,6 @@ export default class EmailAlert extends React.Component {
         const language = this.state.currentLanguage
         return (
             <section>
-                <HmeHeader />
                     <div id="Content">
                             <div class="forms clear">
                         <div class="appr">
@@ -26,7 +25,6 @@ export default class EmailAlert extends React.Component {
                                 </div>
                             </div>
                     </div>
-                <Footer />
                 </section>
             )
     }

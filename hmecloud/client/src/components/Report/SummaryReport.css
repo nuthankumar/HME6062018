@@ -490,3 +490,6 @@ table.longest td {
 .table-layoutRawCar {
     margin-left: 0px;
 }
+.rawCarContainer{
+    width:100%;
+}

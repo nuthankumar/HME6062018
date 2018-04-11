@@ -17,3 +17,17 @@
             font-size: 20px;
             margin-bottom: 22px;
         }
+.loaderSection {
+    margin:0 auto;
+}
+.loaderTxt {
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+.loaderNote {
+    font-family: Arial;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 23px;
+    color: #808080;
+}

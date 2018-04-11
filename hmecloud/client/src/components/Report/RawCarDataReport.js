@@ -1,16 +1,18 @@
 import React, { Component } from 'react'
 import moment from 'moment'
-import Header from '../Header/HmeHeader'
 import './SummaryReport.css'
 import fetch from 'isomorphic-fetch'
 import {Config} from '../../Config'
 import PageHeader from '../Header/PageHeader'
+
+import Loader from '../Alerts/Loader'
 import Api from '../../Api'
 
 class RawCarReport extends Component {
   constructor (props) {
     super(props)
     this.state = {
+        showLoader:false,
       rawData: false,
       pageHeading: 'Raw Car Data Report',
       displayData: {
@@ -148,15 +150,22 @@ class RawCarReport extends Component {
       )
     })
   }
-  render () {
+  render() {
+      const { showLoader } = this.state;
+      console.log(showLoader);
     return (
-      <div>
-        <Header />
-        {this.displayRecords()}
+        <div className="rawCarContainer">
+            <Loader showLoader={showLoader} />
+            <div className={showLoader ? 'hidden' : 'show'}>
+                {this.displayRecords()}
+            </div>
       </div>
     )
   }
   emailAsCSV() {
+      this.setState({
+          showLoader: true
+      })
       let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rrcsv1'
       this.api.postData(url, this.state.rawCarRequest, data => {
           if (data.status) {
@@ -164,6 +173,9 @@ class RawCarReport extends Component {
                   email: data.data
               });
               this.state.emailId = data.data;
+              this.setState({
+                  showLoader: false
+              })
               this.props.history.push("/emailSent", this.state.emailId); 
            }
            }, error => {
