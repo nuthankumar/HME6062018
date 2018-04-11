@@ -76,8 +76,6 @@ function prepareMultiStoreResults(daysingleResult, daysData, format, colors, goa
             multiStoreObj.title = tempRawCarData.StoreDate
             for (let i = 0; i < dayResultsList.length; i++) {
                 let storeObj = dayResultsList[i]
-                let groupId = {}
-                let storeId = {}
                 let store = {}
 
                 if (item.StoreDate !== 'Total Day') {
@@ -116,6 +114,12 @@ function prepareDayObject(item, format, colors, goalSettings) {
     let dataObject = {}
     let groupId = {}
     let storeId = {}
+
+    groupId.value = item.GroupName
+    dataObject.groupId = groupId
+
+    storeId.value = item.Store_ID
+    dataObject.storeId = storeId
 
     menu.value = dateUtils.convertSecondsToMinutes(item['Menu Board'], format)
     menu.color = reportUtil.getColourCode('Menu Board', item['Menu Board'], colors, goalSettings)
