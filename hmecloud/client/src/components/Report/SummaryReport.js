@@ -120,17 +120,16 @@ export default class SummaryReport extends Component {
               }
 
             ],
-            weeklyData: true,
-            dailyData: false,
-            dayPartData: false,
-            rawCarData: false,
+            weeklyData: this.props.history.location.state.reportData.weeklyData,
+            dailyData: this.props.history.location.state.reportData.dailyData,
+            dayPartData: this.props.history.location.state.reportData.dayPartData,
+            rawCarData: this.props.history.location.state.reportData.rawCarData,
             pagination: true,
-            currentPage: null,
-            groupStoreColumns: false,
-            dayColumn: false,
-            dayPartColumn: false,
-            weekColumn: false,
-            singleStore: false,
+            groupStoreColumns: this.props.history.location.state.reportData.groupStoreColumns,
+            dayColumn: this.props.history.location.state.reportData.dayColumn,
+            dayPartColumn: this.props.history.location.state.reportData.dayPartColumn,
+            weekColumn: this.props.history.location.state.reportData.weekColumn,
+            singleStore: this.props.history.location.state.reportData.singleStore,
             curPage: 1,
             totalPages:4,
             disablePrevButton: false,
@@ -189,7 +188,7 @@ export default class SummaryReport extends Component {
     this.state.templateData = this.props.history.location.state;
     this.setState(this.state)
   }
-
+  
   headerDetails(){
     if(this.state.singleStore){
       return(<table className='rawcar-header-labels clear'>
@@ -338,6 +337,7 @@ export default class SummaryReport extends Component {
     // api call for getting the next drilldown
     if (this.state.weeklyData) {
       console.log('weekly data')
+
     } else if (this.state.dailyData) {
       console.log('daily data')
     } else if (this.state.dayPartData) {
