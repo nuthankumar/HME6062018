@@ -14,20 +14,19 @@ import './i18n'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 // import { Router, Route } from 'react-router-dom'
 // import history from '../history';
-
+import Layout from './components/Common/Layout';
 import Login from './components/Security/Login'
 
 ReactDOM.render(<Router>
-  <div>
-    <Route path='/' exact component={App} />
-    <Route exact path='/login' component={Login} />
-    <Route exact path='/reports' component={Reports} />
-    <Route exact path='/groups' component={ReportGroup} />
-    <Route exact path='/grouphierarchy' component={ReportGroupHierarchy} />
-    <Route exact path='/summaryreport' component={SummaryReport} />
-    <Route exact path='/rawcardatareport' component={RawCarDataReport} />
-    <Route exact path='/longestTime' component={LongestTime} />
-    <Route exact path='/emailSent' component={EmailAlert} />
+    <div>         
+        <Route exact path="/" render={(props) => <Layout Params={props}><Route path='/' component={(Reports)} /></Layout>} />
+        <Route exact path="/reports" render={(props) => <Layout Params={props}><Route path='/reports' component={(Reports)} /></Layout>} />
+        <Route exact path="/groups" render={(props) => <Layout Params={props}><Route path='/groups' component={(ReportGroup)} /></Layout>} />
+        <Route exact path="/emailSent" render={(props) => <Layout Params={props}><Route path='/emailSent' component={(EmailAlert)} /></Layout>} />
+        <Route exact path="/longestTime" render={(props) => <Layout Params={props}><Route path='/longestTime' component={(LongestTime)} /></Layout>} />
+        <Route exact path="/rawcardatareport" render={(props) => <Layout Params={props}><Route path='/rawcardatareport' component={(RawCarDataReport)} /></Layout>} />
+        <Route exact path="/grouphierarchy" render={(props) => <Layout Params={props}><Route path='/grouphierarchy' component={(ReportGroupHierarchy)} /></Layout>} />        <Route exact path="/longestTime" render={(props) => <Layout Params={props}><Route path='/grouphierarchy' component={(ReportGroupHierarchy)} /></Layout>} />
+        <Route exact path="/summaryreport" render={(props) => <Layout Params={props}><Route path='/summaryreport' component={(SummaryReport)} /></Layout>} />        <Route exact path="/longestTime" render={(props) => <Layout Params={props}><Route path='/summaryreport' component={(SummaryReport)} /></Layout>} />
   </div>
 </Router>, document.getElementById('root'))
 registerServiceWorker()

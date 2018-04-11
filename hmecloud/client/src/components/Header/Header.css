@@ -27,10 +27,33 @@
     min-width: 900px;
 }
 
-    #Navbar ul li.active_tab {
-        color: white !important;
-        font-weight: bold;
-    }
+#Navbar ul li.active_tab {
+    color: white !important;
+    font-weight: bold;
+}
+.subMenu {
+    width: 100%;
+    margin: 0 auto;
+    display: block;
+    height: 56px;
+    font-size: 14px;
+    height: 56px;
+    width: 80%;
+    min-width: 900px;
+    float: none !important;
+}
+.menuBar {
+    float:left;
+}
+.menuBar ul li {
+    color: #9be0ea !important;
+    display: inline;
+    float: left;
+    font-size: 14px;
+    padding-right: 30px;
+    padding-top: 18px;
+    text-transform: uppercase;
+}
 
 .headerMenu{
    color: #9be0ea
@@ -39,7 +62,13 @@ a.active_tab.headerMenu {
 color:white;
 font-weight:bold;
 }
-
+.subMenu li a {
+    color: #06b1cb;
+}
+.subMenu .active_tab {
+    color: #06b1cb !important;
+    font-weight: bold;
+}
 .headerLink {
     display: flex;
     align-items: center;
