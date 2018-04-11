@@ -8,9 +8,9 @@ const repository = require('../Repository/ReportTemplateRepository')
  * @param  {input} status input false.
  * @public
  */
-const errorHandler = (message, status) => {
+const errorHandler = (message, status, request) => {
   let output = {}
-  output.error = message
+  output.error = request.t(message)
   output.status = status
   return output
 }
@@ -44,11 +44,13 @@ const create = (reportTemplate, callback) => {
   }
   repository.create(values, (result) => {
     if (result) {
-      output.data = messages.REPORTSUMMARY.createSuccess
+      output.data = reportTemplate.t('REPORTSUMMARY.createSuccess')
       output.status = true
       callback(output)
     } else {
-      callback(errorHandler(messages.REPORTSUMMARY.createFail, false))
+      output.error = reportTemplate.t('REPORTSUMMARY.createFail')
+      output.status = false
+      callback(output)
     }
   })
 }
@@ -59,7 +61,7 @@ const create = (reportTemplate, callback) => {
  * @param  {funct} callback Function will be called once the input executed.
  * @public
  */
-const get = (reportTemplate, callback) => {
+const get = (reportTemplate, request, callback) => {
   let output = {}
   repository.get(reportTemplate, (result) => {
     if (result) {
@@ -71,7 +73,9 @@ const get = (reportTemplate, callback) => {
       output.status = true
       callback(output)
     } else {
-      callback(errorHandler(messages.LISTGROUP.notfound, false))
+      output.error = request.t('LISTGROUP.notfound')
+      output.status = false
+      callback(output)
     }
   })
 }
@@ -83,7 +87,7 @@ const get = (reportTemplate, callback) => {
  * @param  {funct} callback Function will be called once the input executed.
  * @public
  */
-const getAll = (input, callback) => {
+const getAll = (input, request, callback) => {
   let output = {}
   repository.getAll(input.AccountId, input.CreatedBy, (result) => {
     if (result.length > 0) {
@@ -91,7 +95,9 @@ const getAll = (input, callback) => {
       output.status = true
       callback(output)
     } else {
-      callback(errorHandler(messages.LISTGROUP.notfound, false))
+      output.error = request.t('LISTGROUP.notfound')
+      output.status = false
+      callback(output)
     }
   })
 }
@@ -103,13 +109,15 @@ const getAll = (input, callback) => {
  */
 const deleteById = (input, callback) => {
   let output = {}
-  repository.deleteById(input, (result) => {
+  repository.deleteById(input.query.templateId, (result) => {
     if (result) {
-      output.data = messages.REPORTSUMMARY.deleteSuccess
+      output.data =input.t('REPORTSUMMARY.deleteSuccess')
       output.status = true
       callback(output)
     } else {
-      callback(errorHandler(messages.REPORTSUMMARY.deteleFail, false))
+      output.error = input.t('LISTGROUP.notfound')
+      output.status = false
+      callback(output)
     }
   })
 }

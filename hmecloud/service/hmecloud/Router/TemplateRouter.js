@@ -31,7 +31,7 @@ router.post('/create', authenticator, (request, response) => {
  * @public
  */
 router.get('/get', authenticator, (request, response) => {
-  validator.get(request.query, result => handelResult(result, response))
+  validator.get(request, result => handelResult(result, response))
 })
 
 /**
@@ -43,7 +43,7 @@ router.get('/get', authenticator, (request, response) => {
  * @public
  */
 router.get('/getAll', authenticator, (request, response) => {
-  validator.getAll(request.query, result => handelResult(result, response))
+  validator.getAll(request, result => handelResult(result, response))
 })
 
 /**
@@ -55,6 +55,6 @@ router.get('/getAll', authenticator, (request, response) => {
  * @public
  */
 router.delete('/delete', authenticator, (request, response) => {
-  validator.deleteById(request.query, result => handelResult(result, response))
+  validator.deleteById(request, result => handelResult(result, response))
 })
 module.exports = router

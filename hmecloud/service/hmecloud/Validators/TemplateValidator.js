@@ -8,14 +8,14 @@ const templateController = require('../Controllers/ReportTemplateController')
  * @param  {funct} callback Function will be called once the input executed.
  * @public
  */
-const create = (input, callback) => {
+const create = (request, callback) => {
   let output = {}
-  if (input.body.templateName) {
-    templateController.create(input, (result) => {
+  if (request.body.templateName) {
+    templateController.create(request, (result) => {
       callback(result)
     })
   } else {
-    output.error = messages.REPORTSUMMARY.invalidTemplateName
+    output.error = request.t('REPORTSUMMARY.invalidTemplateName')
     output.status = false
     callback(output)
   }
@@ -27,14 +27,15 @@ const create = (input, callback) => {
  * @param  {funct} callback Function will be called once the input executed.
  * @public
  */
-const get = (input, callback) => {
+const get = (request, callback) => {
   let output = {}
-  if (input.templateId) {
-    templateController.get(input.templateId, (result) => {
+  const templateId = validate.isNumeric(request.query.templateId)
+  if (templateId) {
+    templateController.get(request.query.templateId, request, (result) => {
       callback(result)
     })
   } else {
-    output.error = messages.REPORTSUMMARY.invalidTemplateId
+    output.error = request.t('REPORTSUMMARY.invalidTemplateId')
     output.status = false
     callback(output)
   }
@@ -49,34 +50,34 @@ const get = (input, callback) => {
 const getAll = (input, callback) => {
   let output = {}
   let values = {}
-  const AccountId = validate.isNumeric(input.accountId)
-  const CreatedBy = validate.isNumeric(input.createdBy)
+  const AccountId = validate.isNumeric(input.query.accountId)
+  const CreatedBy = validate.isNumeric(input.query.createdBy)
   if (!AccountId) {
-    output.error = messages.LISTGROUP.accountId
+    output.error = input.t('LISTGROUP.accountId')
     output.status = false
     callback(output)
   }
   if (!CreatedBy) {
-    output.error = messages.LISTGROUP.createdBy
+    output.error = input.t('LISTGROUP.createdBy')
     output.status = false
     callback(output)
   }
   if (AccountId && CreatedBy) {
-    values.AccountId = input.accountId
-    values.CreatedBy = input.createdBy
-    templateController.getAll(values, (result) => {
+    values.AccountId = input.query.accountId
+    values.CreatedBy = input.query.createdBy
+    templateController.getAll(values, input, (result) => {
       callback(result)
     })
   } else if (!AccountId && CreatedBy) {
-    output.error = messages.LISTGROUP.accountId
+    output.error = input.t('LISTGROUP.accountId')
     output.status = false
     callback(output)
   } else if (AccountId && !CreatedBy) {
-    output.error = messages.LISTGROUP.createdBy
+    output.error = input.t('LISTGROUP.createdBy')
     output.status = false
     callback(output)
   } else {
-    output.error = messages.LISTGROUP
+    output.error = input.t('CREATEGROUP.invalidInput')
     output.status = false
   }
 }
@@ -88,13 +89,14 @@ const getAll = (input, callback) => {
  * @public
  */
 const deleteById = (input, callback) => {
-  let output = {}
-  const templateId = validate.isNumeric(input.templateId)
+    let output = {}
+  const templateId = validate.isNumeric(input.query.templateId)
   if (!templateId) {
-    output.error = messages.REPORTSUMMARY.invalidTemplateId
+    output.error = input.t('REPORTSUMMARY.invalidTemplateId')
     output.status = false
+    callback(output)
   }
-  templateController.deleteById(input.templateId, (result) => {
+  templateController.deleteById(input, (result) => {
     callback(result)
   })
 }
