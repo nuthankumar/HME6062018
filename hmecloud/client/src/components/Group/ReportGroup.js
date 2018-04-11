@@ -4,7 +4,6 @@ import SuccessAlert from '../Alerts/SuccessAlert'
 import ErrorAlert from '../Alerts/ErrorAlert'
 import fetch from 'isomorphic-fetch'
 import { confirmAlert } from 'react-confirm-alert'
-import HmeHeader from '../Header/HmeHeader'
 import t from '../Language/language'
 import * as languageSettings from '../Language/languageSettings'
 import { Link } from 'react-router-dom'
@@ -28,7 +27,7 @@ export default class ReportGroup extends React.Component {
       successMessage: '',
       errorMessage: '',
       editGroup: false,
-      accountId: null,
+      accountId: 100,
       groupId: null,
       saveSuccess: false,
       deleteSuccess: false,
@@ -214,7 +213,7 @@ export default class ReportGroup extends React.Component {
   confirmDelete () {
       let url = Config.apiBaseUrl + CommonConstants.apiUrls.deleteGroup + '?groupId=' + this.state.groupId + '&accountId=' + this.state.accountId
       this.api.deleteData(url,data => {
-        if (data.status === 200) {
+        if (data.data) {
           this.state.successMessage = this.state.deleteSuceessMessage
           this.state.errorMessage = ''
           this.state.deleteSuccess = true
@@ -234,7 +233,7 @@ export default class ReportGroup extends React.Component {
   render () {
     const language = this.state.currentLanguage
     let assigned = this.state.assigned
-    return (<section className='groupDetailsPage'><HmeHeader />
+    return (<section className='groupDetailsPage'>
       <div className='status-messages'>
         <SuccessAlert successMessage={this.state.successMessage} />
         <ErrorAlert errorMessage={this.state.errorMessage} />

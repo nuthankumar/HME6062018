@@ -31,27 +31,18 @@ const createGroup = (request, callback) => {
 }
 const getgroupDetails = (request, callback) => {
   let output = {}
-  if (request.query.groupId && request.query.userName) {
-    const input = {
-      groupId: request.query.groupId,
-      userName: request.query.userName
+    if (request.query.groupId) {
+        const input = {
+            groupId: request.query.groupId
+        }
+        groupController.getgroupDetails(request, input, result => {
+            callback(result)
+        })
+    } else if (!request.query.groupId) {
+        output.error = request.t('CREATEGROUP.groupId')
+        output.status = false
+        callback(output)
     }
-    groupController.getgroupDetails(request, input, result => {
-      callback(result)
-    })
-  } else if (!request.query.groupId && request.query.userName) {
-    output.error = request.t('CREATEGROUP.groupId')
-    output.status = false
-    callback(output)
-  } else if (request.query.groupId && !request.query.userName) {
-    output.error = request.t('LISTGROUP.createdBy')
-    output.status = false
-    callback(output)
-  } else {
-    output.error = request.t('CREATEGROUP.invalidInput')
-    output.status = false
-    callback(output)
-  }
 }
 const deleteGroupById = (request, callback) => {
   let output = {}

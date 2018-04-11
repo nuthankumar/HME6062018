@@ -1,6 +1,5 @@
 import React from 'react'
 import fetch from 'isomorphic-fetch'
-import HmeHeader from '../Header/HmeHeader'
 import Tree, { TreeNode } from 'rc-tree'
 import t from '../Language/language'
 import * as languageSettings from '../Language/languageSettings'
@@ -28,7 +27,7 @@ export default class ReportGroupHierarchy extends React.Component {
   }
 
   getTreeHierarchy () {
-      let url = Config.apiBaseUrl + CommonConstants.apiUrls.getGroupHierarchyTree + '?accountId=100&userName=swathikumary@nousinfo.com'
+      let url = Config.apiBaseUrl + CommonConstants.apiUrls.getGroupHierarchyTree
       this.api.getData(url,data => {
         this.state.treeData = data.data
         this.setState(this.state)
@@ -61,7 +60,7 @@ export default class ReportGroupHierarchy extends React.Component {
         return <TreeNode className='treeNode' title={item.Name} key={item.Id}/>
       })
     }
-    return (<section className='groupManagementSection'><HmeHeader />
+    return (<section className='groupManagementSection'>
       <section className='grouphierarchy-tree-section'>
         <div>
           <h1>{t[language].ReportingGroupManagement}</h1>

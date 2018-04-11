@@ -8,9 +8,9 @@ export const CommonConstants = {
     'deleteTemplate': 'api/reportTemplate/delete',
     'createTemplate': 'api/reportTemplate/create',
     'getAvailableGroups': 'api/group/availabledetails',
-    'editGroupDetails': 'api/group/edit',
-    'addNewGroup': 'api/group/create',
-    'deleteGroup': 'api/group/delete'
+    'editGroupDetails': 'api/group/editgroup',
+    'addNewGroup': 'api/group/creategroup',
+    'deleteGroup': 'api/group/deletegroup'
     },
   'TimeMeasureValidations': {
       'TwoMonths': 62,
