@@ -19,9 +19,9 @@ const reportValidator = (request, callback) => {
       ReportTemplate_Open: request.body.open, // boolean
       ReportTemplate_Close: request.body.close, // boolean
       ReportTemplate_Type: request.body.type, // number
-      Include: request.body.include, // [] array
+      // Include: request.body.include, // [] array
       longestTime: request.body.longestTime, // boolean
-      // systemStatistics: request.body.systemStatistics, // boolean
+      systemStatistics: request.body.systemStatistics, // boolean
       ReportTemplate_Format: request.body.format, // number
       // Hours1: request.body.Hours,
       // Minutes1: request.body.Minutes,

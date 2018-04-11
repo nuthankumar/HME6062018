@@ -18,7 +18,7 @@ router.post('/generatereport', authValidator, (request, response) => {
 
    storeValidator.reportValidator(request, result => {
     if (result.status === true) {
-      response.status(200).send(result.data)
+      response.status(200).send(result)
     } else {
       response.status(400).send(result)
     }

@@ -46,60 +46,96 @@ const generateDaypartReport = (input, callBack) => {
   input.ReportTemplate_From_Time = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
   input.ReportTemplate_To_Time = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
 
-  if (input !== null) {
-    dayPartRepository.generateDayPartSummaryReport(input, result => {
-      if (result.status === true) {
-        if (input.ReportTemplate_StoreIds.length > 1) {
-          averageTimeResultSet = result.data[0]
-        } else {
-          storeDetails = result.data[0]
-          averageTimeResultSet = result.data[1]
-          longestTimes = result.data[2]
-          goalsStatistics = result.data[3]
-          getGoalTime = result.data[4]
-        }
+  dayPartRepository.generateDayPartSummaryReport(input, result => {
+    if (result.status === true) {
+      if (input.ReportTemplate_StoreIds.length > 1) {
+        averageTimeResultSet = result.data[0]
+      } else {
+        storeDetails = result.data[0]
+        averageTimeResultSet = result.data[1]
+        longestTimes = result.data[2]
+        goalsStatistics = result.data[3]
+        getGoalTime = result.data[4]
+      }
 
-        // Single Store result
+      // Single Store result
 
-        if (input.ReportTemplate_StoreIds.length < 2) {
-          convertTimeFormatonEachRowObjectElement(input, averageTimeResultSet, data)
+      if (input.ReportTemplate_StoreIds.length < 2) {
+        convertTimeFormatonEachRowObjectElement(input, averageTimeResultSet, data)
 
-          dayPartObject.data = data
-          singleDayParts.push(dayPartObject)
-          reportData.singleDayPart = singleDayParts
-          reportUtil.prepareStoreDetails(reportData, storeDetails[0], input)
+        dayPartObject.data = data
+        singleDayParts.push(dayPartObject)
+        reportData.singleDayPart = singleDayParts
+        reportUtil.prepareStoreDetails(reportData, storeDetails[0], input)
+
+        // goal statistics
+        if (input.longestTime) {
           const dayPartTotalObject = _.last(averageTimeResultSet)
           const totalCars = dayPartTotalObject['Total_Car']
-
           const dataArray = []
           reportUtil.getGoalStatistic(goalsStatistics, getGoalTime, dataArray, totalCars)
-
           reportData.goalStatistics = dataArray[0]
-          callBack(reportData)
-        } else {
-          // reportUtil.prepareStoreDetails(reportData, storeDetails[0], input)
-          //  Multi store
-          const multipleDayPart = []
-          const groupByStore = {
-            title: '',
-            data: []
-          }
-
-          convertTimeFormatonEachRowObjectElement(input, averageTimeResultSet, data)
-          const daypartIndex = _.groupBy(data, 'dayPartIndex')
-          groupByStore.data = daypartIndex
-          groupByStore.title = moment(input.ReportTemplate_From_Date).format('MMM DD')
-          multipleDayPart.push(groupByStore)
-          //  reportData.multipleDayPart(multipleDayPart)
-          callBack(multipleDayPart)
         }
+
+        if (input.systemStatistics) {
+          // goal Longest time
+          reportUtil.prepareLongestTimes(reportData, longestTimes, input.ReportTemplate_Format)
+        }
+
+        reportData.status = true
+        callBack(reportData)
       } else {
-        callBack(result)
+        //  Multi store
+        reportData.timeMeasure = input.ReportTemplate_Time_Measure
+        reportData.selectedStoreIds = input.ReportTemplate_StoreIds
+        // reportData.currentPageNo
+        // reportData.TotalPageCount
+        let groupByStore = new Object()
+        groupByStore.data = new Array()
+
+        const multiparts = {
+          dayPartIndex: '',
+          groupId: { value: '' },
+          storeId: { value: '' },
+          menu: { value: '' },
+          greet: { value: '' },
+          service: { value: '' },
+          laneQueue: { value: '' },
+          laneTotal: { value: '' },
+          totalCars: { value: '' }
+        }
+        convertTimeFormatonEachRowObjectElement(input, averageTimeResultSet, data)
+        let dayPartIndex = 0
+        reportData.multipleDayPart = []
+
+        averageTimeResultSet.forEach(daypartsRow => {
+          Object.keys(daypartsRow).map(function (key, value) {
+            convertEventsTimeFormat(key, daypartsRow, value, multiparts, input)
+          })
+
+          if (multiparts['dayPartIndex'] === dayPartIndex) {
+            groupByStore.title = moment(input.ReportTemplate_From_Date).format('MMM DD')
+            groupByStore.data.push(multiparts)
+          } else {
+            if (dayPartIndex !== 0) {
+              reportData.multipleDayPart.push(groupByStore)
+              groupByStore = new Object()
+              groupByStore.data = new Array()
+            } else {
+              groupByStore.data.push(multiparts)
+            }
+            dayPartIndex = multiparts['dayPartIndex']
+          }
+        })
+
+        reportData.multipleDayPart.push(groupByStore)
+        reportData.status = true
+        callBack(reportData)
       }
-    })
-  } else {
-    callBack(messages.CREATEGROUP.invalidRequestBody)
-  }
+    } else {
+      callBack(result)
+    }
+  })
 }
 
 function convertTimeFormatonEachRowObjectElement (input, averageTimeResultSet, data) {
@@ -118,6 +154,7 @@ function convertTimeFormatonEachRowObjectElement (input, averageTimeResultSet, d
       laneTotal: {value: ''},
       totalCars: {value: ''}
     }
+
     Object.keys(row).map(function (key, value) {
       convertEventsTimeFormat(key, row, value, parts, input)
     })
@@ -133,7 +170,11 @@ function convertEventsTimeFormat (key, row, value, parts, input) {
     parts.daypart.timeSpan = `${dateSplit[1]}/${dateSplit[0]}-Daypart+${row['DayPartIndex']}`
     parts.daypart.currentDaypart = `${convertTime(row['StartTime'])}-${convertTime(row['EndTime'])}`
   }
+
+  //  console.log(parts)
   parts.dayPartIndex = row['DayPartIndex']
+  // console.log('parts.dayPartIndex ', parts['DayPartIndex'])
+
   if (key.includes(messages.Events.MENU)) {
     parts.menu.value = input.ReportTemplate_Format === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)
   } else if (key.includes(messages.Events.LANEQUEUE)) {

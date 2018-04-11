@@ -14,9 +14,9 @@ const generateDayReport = (input, callBack) => {
         ReportTemplate_To_Date: input.ReportTemplate_To_Date,
         FromDateTime: fromDateTime,
         ToDateTime: toDateTime,
-        ReportTemplate_Type: input.CarDataRecordType_ID
+        ReportTemplate_Type: input.reportType,
+        CarDataRecordType_ID:input.CarDataRecordType_ID
     }
-
 
     if (input !== null) {
         let daysingleResult = {}
@@ -26,7 +26,9 @@ const generateDayReport = (input, callBack) => {
                 if (storesLength === 1) {
                     reportUtil.prepareStoreDetails(daysingleResult, result.data[3], input)
                     prepareDayResults(daysingleResult, result.data[0], input.ReportTemplate_Format);
-                    reportUtil.prepareLongestTimes(daysingleResult, result.data[1], input.ReportTemplate_Format)
+                    if (input.longestTime) {
+                        reportUtil.prepareLongestTimes(daysingleResult, result.data[1], input.ReportTemplate_Format)
+                    }
                     let colrs = result.data[4]
                     getGoalTime = result.data[5]
                     const dayPartTotalObject = _.last(result.data[0])
@@ -55,7 +57,8 @@ const generateDayReport = (input, callBack) => {
 
 function prepareDayResults(daysingleResult, dayData, format) {
     let singleDay = []
-    let data = []
+    let dataList = []
+    let dayDataObj = {}
    
     dayData.forEach(item => {
         let menu = {}
@@ -92,7 +95,7 @@ function prepareDayResults(daysingleResult, dayData, format) {
             totalCars.color = "Red"
             dataObject.totalCars = totalCars
 
-            data.push(dataObject)
+            dataList.push(dataObject)
         } else {
             dataObject.day = item.StoreDate
             dataObject.timeSpan = "W-Avg"
@@ -120,10 +123,11 @@ function prepareDayResults(daysingleResult, dayData, format) {
             totalCars.color = "Red"
             dataObject.totalCars = totalCars
 
-            data.push(dataObject)
+            dataList.push(dataObject)
         }
     })
-    singleDay.push(data)
+    dayDataObj.data = dataList
+    singleDay.push(dayDataObj)
     daysingleResult.singleDay = singleDay
 } 
 
