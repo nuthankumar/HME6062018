@@ -18,8 +18,6 @@ const prepareStoreDetails = (daysingleResult, storeData, input) => {
 }
 
 function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, isMinutes) {
-  
-  
   const goalGrades = {
     goalA: {
       title: '<Goal A',
@@ -121,7 +119,7 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
 
     dataArray.push(goalGrades)
   })
-  
+
   return dataArray[0]
 }
 // This function is used to prepare Longest details for Day Report
@@ -242,9 +240,73 @@ const storesDetails = (result, colors, goalSettings, format) => {
   return storesData
 }
 
+// Mutiple store
+
+// This function is used to prepare colors with event values
+const getAllStoresDetails = (result, colors, goalSettings, format) => {
+  let storeDetails = _.filter(result, (value) => {
+    if (value.StoreNo) {
+      return value
+    }
+  })
+  let colorSettings = []
+  if (colors.length > 0) {
+    colorSettings = colors[0].ColourCode.split('|')
+  }
+  let getColor = (event, eventValue) => {
+    let color = colorSettings[2]
+    const eventSettings = _.pickBy(goalSettings[0], (value, key) => {
+      if (key.toLowerCase().includes(event.toLowerCase())) {
+        if (value && eventValue < value) {
+          if (key.includes('GoalA')) {
+            color = colorSettings[0]
+          } else if (key.includes('GoalB')) {
+            color = colorSettings[1]
+          } else if (key.includes('GoalC')) {
+            color = colorSettings[2]
+          }
+          return true
+        }
+      }
+    })
+    return color
+  }
+  let storesData = []
+  _.forEach(storeDetails, (items) => {
+    if (format === 2) {
+      let Week = {
+        'index': items.WeekIndex,
+        'week': {'open': items.WeekStartDate, 'close': items.WeekEndDate},
+        'menu': {'value': dateUtils.convertSecondsToMinutes(parseInt(items['Menu Board']), format), 'color': getColor('Menu', items['Menu Board'])},
+        'greet': {'value': dateUtils.convertSecondsToMinutes(parseInt(items.Greet), format), 'color': getColor('Greet', items.Greet)},
+        'service': {'value': dateUtils.convertSecondsToMinutes(parseInt(items.Service), format), 'color': getColor('Service', items.Service)},
+        'laneQueue': {'value': dateUtils.convertSecondsToMinutes(parseInt(items['Lane Queue']), format), 'color': getColor('Lane Queue', items['Lane Queue'])},
+        'laneTotal': {'value': dateUtils.convertSecondsToMinutes(parseInt(items['Lane Total']), format), 'color': getColor('Lane Total', items['Lane Total'])},
+        'totalCars': {'value': dateUtils.convertSecondsToMinutes(parseInt(items['Total_Car']), format), 'color': getColor('Total_Car', items['Total_Car'])}
+      }
+      return storesData.push(Week)
+    } else {
+      let Week = {
+        'index': items.WeekIndex,
+        'week': {'open': items.WeekStartDate, 'close': items.WeekEndDate},
+        'menu': {'value': items['Menu Board'], 'color': getColor('Menu', items['Menu Board'])},
+        'greet': {'value': items.Greet, 'color': getColor('Greet', items.Greet)},
+        'service': {'value': items.Service, 'color': getColor('Service', items.Service)},
+        'laneQueue': {'value': items['Lane Queue'], 'color': getColor('Lane Queue', items['Lane Queue'])},
+        'laneTotal': {'value': items['Lane Total'], 'color': getColor('Lane Total', items['Lane Total'])},
+        'totalCars': {'value': items['Total_Car'], 'color': getColor('Total_Car', items['Total_Car'])}
+      }
+      return storesData.push(Week)
+    }
+  })
+
+  return storesData
+}
+
 module.exports = {
   prepareStoreDetails,
   prepareLongestTimes,
   getGoalStatistic,
-  storesDetails
+  storesDetails,
+  getAllStoresDetails
 }

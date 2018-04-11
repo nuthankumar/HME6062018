@@ -32,19 +32,19 @@ const generateWeekReport = (input, callback) => {
   repository.getWeekReport(inputDate, (result) => {
     // callback(result)
     if (result.length > 0) {
-      let reportData = {
-        data: {
-          singleWeek: [
-            {
-              data: []
-            }
-          ],
-          goalData: [],
-          longTimes: []
-        }
-      }
       const repositoryData = result
       if (input.reportType === 'weekSingle') {
+        let reportData = {
+          data: {
+            singleWeek: [
+              {
+                data: []
+              }
+            ],
+            goalData: [],
+            longTimes: []
+          }
+        }
         reportData.data.timeMeasure = 3
         reportData.data.selectedStoreIds = input.ReportTemplate_StoreIds
         reportData.data.startTime = moment(fromDateTime).format('LL')
@@ -59,22 +59,33 @@ const generateWeekReport = (input, callback) => {
         // goal setings
         let goalTimes = _.filter(repositoryData, group => group['Cashier_GoalA'])
         let daysingleResult = []
-        const getGoalsData = reportGenerate.getGoalStatistic(goalSettings, goalTimes, daysingleResult, carTotals)
+        const getGoalsData = reportGenerate.getGoalStatistic(goalSettings, goalTimes, daysingleResult, carTotals, input.ReportTemplate_Format)
         const longTimes = reportGenerate.prepareLongestTimes(daysingleResult, goalsData, input.ReportTemplate_Format)
         reportData.data.singleWeek[0].data = StoreData
         reportData.data.goalData = getGoalsData
         reportData.data.longTimes = longTimes
         callback(reportData)
       } else {
-        let storeDetails = _.filter(result, (value) => {
-          if (value.StoreNo) {
-            return value
+        let reportData = {
+          data: {
+            mutipleWeek: [
+              {
+                data: []
+              }
+            ]
           }
-        })
-        var youngest = _.chain(storeDetails).groupBy('WeekIndex')
-
-        const StoreData = reportGenerate.storesDetails(repositoryData, colors, goalSettings)
-        callback(youngest)
+        }
+        reportData.data.timeMeasure = 3
+        reportData.data.selectedStoreIds = input.ReportTemplate_StoreIds
+        reportData.data.startTime = moment(fromDateTime).format('LL')
+        reportData.data.stopTime = moment(toDateTime).format('LL')
+        reportData.status = true
+        let colors = _.filter(repositoryData, val => val.ColourCode)
+        let goalSettings = _.filter(repositoryData, group => group['Menu Board - GoalA'])
+        const StoreData = reportGenerate.getAllStoresDetails(repositoryData, colors, goalSettings, input.ReportTemplate_Format)
+        const youngest = _.chain(StoreData).groupBy('index')
+        reportData.data.mutipleWeek[0].data = youngest
+        callback(reportData)
       }
     } else {
       let output = {}
