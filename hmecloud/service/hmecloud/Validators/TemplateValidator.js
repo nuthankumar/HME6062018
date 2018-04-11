@@ -1,5 +1,4 @@
 const validate = require('validator')
-const messages = require('../Common/Message')
 const templateController = require('../Controllers/ReportTemplateController')
 
 /**
@@ -89,7 +88,7 @@ const getAll = (input, callback) => {
  * @public
  */
 const deleteById = (input, callback) => {
-    let output = {}
+  let output = {}
   const templateId = validate.isNumeric(input.query.templateId)
   if (!templateId) {
     output.error = input.t('REPORTSUMMARY.invalidTemplateId')

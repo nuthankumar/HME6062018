@@ -31,10 +31,9 @@ const generateReport = (input, callBack) => {
  * @param {*} callBack
  */
 const getRawCarDataReport = (input, callBack) => {
-    let fromDateTime = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
+  let fromDateTime = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
 
-    let toDateTime = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
-
+  let toDateTime = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
 
   const rawCarDataqueryTemplate = {
     ReportTemplate_StoreIds: input.ReportTemplate_StoreIds,
@@ -43,7 +42,7 @@ const getRawCarDataReport = (input, callBack) => {
     fromDateTime: fromDateTime,
     toDateTime: toDateTime,
     ReportTemplate_Type: input.CarDataRecordType_ID,
-      ReportType: input.ReportTemplate_Type,
+    ReportType: input.ReportTemplate_Type,
     LaneConfig_ID: 1
   }
   const rawCarDataList = []
@@ -52,8 +51,8 @@ const getRawCarDataReport = (input, callBack) => {
 
   if (input.reportType === 'rr1' || input.reportType === 'rrcsv1') {
     stores.getRawCarDataReport(rawCarDataqueryTemplate, result => {
-        if (result) {
-            console.log("The result===" + JSON.stringify(result))
+      if (result) {
+        console.log('The result===' + JSON.stringify(result))
         const len = result.length
         if (len > 1) {
           const storeData = result[len - 1]
@@ -75,15 +74,15 @@ const getRawCarDataReport = (input, callBack) => {
             csvInput.reportinput = rawCarDataList
             csvInput.subject = input.ReportTemplate_Time_Measure + ' ' + fromDateTime + ' - ' + toDateTime
             csvGeneration.generateCsvAndEmail(csvInput, result => {
-                if (result) {
-                    output.data = input.UserEmail
-                    output.status = true
-                } else {
-                    output.data = input.UserEmail
-                    output.status = false
-                }
+              if (result) {
+                output.data = input.UserEmail
+                output.status = true
+              } else {
+                output.data = input.UserEmail
+                output.status = false
+              }
 
-                callBack(output)
+              callBack(output)
             })
           }
         }
@@ -126,7 +125,7 @@ module.exports = {
  * @param {*} storeData
  * @param {*} input
  */
-function prepareStoreDetails(rawCarData, storeData, input) {
+function prepareStoreDetails (rawCarData, storeData, input) {
   rawCarData.storeName = storeData.Store_Name
   rawCarData.storeDescription = storeData.Brand_Name
   rawCarData.startTime = input.ReportTemplate_From_Date

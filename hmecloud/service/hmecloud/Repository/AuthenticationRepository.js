@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const config = require('../Common/AuthKey')
+const message = require('../Common/Message')
 
 function verifyToken (request, response, next) {
   // check header or url parameters or post parameters for token
@@ -8,7 +9,7 @@ function verifyToken (request, response, next) {
   if (!jwtToken) {
     return response.status(403).send({
       auth: false,
-      message: 'No token provided.'
+      message: message.JWT.TOKENMISS
     })
   }
   let encodeToken = Buffer.from(jwtToken, 'base64')
@@ -21,7 +22,7 @@ function verifyToken (request, response, next) {
         .status(500)
         .send({
           auth: false,
-          message: 'Failed to authenticate token.'
+          message: message.JWT.TOKENMISS
         })
     }
     request.userId = decoded.userId

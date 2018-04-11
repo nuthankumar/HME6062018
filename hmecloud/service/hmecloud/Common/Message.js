@@ -25,8 +25,8 @@ exports.CREATEGROUP = {
   invalidRequestBody: 'Invalid request body',
   groupIdNo: 'GroupId: ',
   groupCreationFailed: ' Creation failed',
-    noDataForGivenName: 'No data found for the given name: ',
-  groupUpdationFailed : ' Updation failed'
+  noDataForGivenName: 'No data found for the given name: ',
+  groupUpdationFailed: ' Updation failed'
 }
 
 exports.REPORTSUMMARY = {
@@ -62,16 +62,18 @@ exports.Events = {
   CASHIER: 'Cashier'
 }
 
-
 exports.TimeFormat = {
   Seconds: 1,
   MINUTES: 2
 }
 exports.COMMON = {
 
-    CSVTYPE: 'CSV',
-    DAYPARTOPENTIME: ' OPEN-11:59',
-    DAYPARTCLOSETIME: ' CLOSE-23:59',
-    DAYOPENCLOSE: 'OPEN-CLOSE',
-    WAVG : 'W-Avg'
+  CSVTYPE: 'CSV',
+  DAYPARTOPENTIME: ' OPEN-11:59',
+  DAYPARTCLOSETIME: ' CLOSE-23:59'
+}
+
+exports.JWT = {
+  TOKENMISS: 'No token provided',
+  JWTFAIL: 'Failed to authenticate token'
 }

@@ -84,15 +84,12 @@ const generateWeekReport = (input, callback) => {
         reportData.data.startTime = moment(fromDateTime).format('LL')
         reportData.data.stopTime = moment(toDateTime).format('LL')
         reportData.status = true
-        // console.log('DAYAS', days)
-        // console.log('months', months)
         let colors = _.filter(repositoryData, val => val.ColourCode)
         let goalSettings = _.filter(repositoryData, group => group['Menu Board - GoalA'])
         const StoreData = reportGenerate.getAllStoresDetails(repositoryData, colors, goalSettings, input.ReportTemplate_Format)
-        // const youngest = _.chain(StoreData).groupBy('index')
-        //  const length = _.size(youngest, 'index')
-        // console.log('elngth', length)
         reportData.data.timeMeasureType[0].data = StoreData
+        const pagenation = getPaginatedItems(reportData, 0)
+        console.log('Pages', pagenation)
         callback(reportData)
       }
     } else {
@@ -119,6 +116,22 @@ const carTotal = (StoreData) => {
   const getCarsTotal = _.last(StoreData)
   const totalCars = getCarsTotal.totalCars
   return totalCars.value
+}
+
+const getPaginatedItems = (items, start) => {
+// count the total
+// and using 7 if more than
+  let page = start
+  let perpage = 3
+  let offset = (page - 1) * perpage
+  let paginatedItems = _.rest(items, offset).slice(0, perpage)
+  return {
+    page: page,
+    per_page: perpage,
+    total: items.length,
+    total_pages: Math.ceil(items.length / perpage),
+    data: paginatedItems
+  }
 }
 
 module.exports = {

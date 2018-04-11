@@ -1,14 +1,14 @@
 const messages = require('../Common/Message')
 const dayPartRepository = require('../Repository/DayPartRepository')
 const dateUtils = require('../Common/DateUtils')
-const csvGeneration = require('../Common/CsvUtils')
+// const csvGeneration = require('../Common/CsvUtils')
 const _ = require('lodash')
 const convertTime = require('convert-time')
 const moment = require('moment')
 const reportUtil = require('../Common/ReportGenerateUtils')
 
-const defaultFromTime = '00:00:00'
-const defaultEndTime = '23:59:59'
+// const defaultFromTime = '00:00:00'
+// const defaultEndTime = '23:59:59'
 /**
  * This Service is used to Generate the Summary reports details for
  *provided details
@@ -60,19 +60,17 @@ const generateDaypartReport = (input, callBack) => {
         getGoalTime = result.data[4]
         systemStatisticsLane = result.data[5]
         systemStatisticsGenral = result.data[6]
-
       }
 
-      
       // Single Store result
-      console.log(storeDetails);
+      console.log(storeDetails)
 
       if (input.ReportTemplate_StoreIds.length < 2) {
         convertTimeFormatonEachRowObjectElement(input, averageTimeResultSet, data)
 
         dayPartObject.data = data
         singleDayParts.push(dayPartObject)
-          reportData.timeMeasureType = singleDayParts
+        reportData.timeMeasureType = singleDayParts
         reportUtil.prepareStoreDetails(reportData, storeDetails[0], input)
 
         // goal statistics
@@ -87,9 +85,7 @@ const generateDaypartReport = (input, callBack) => {
           reportUtil.prepareLongestTimes(reportData, longestTimes, input.ReportTemplate_Format)
         }
 
-        
         if (input.systemStatistics) {
-
           let displayData = {}
 
           displayData.Lane = systemStatisticsLane[0]['Lane']
@@ -129,7 +125,7 @@ const generateDaypartReport = (input, callBack) => {
         }
         convertTimeFormatonEachRowObjectElement(input, averageTimeResultSet, data)
         let dayPartIndex = 0
-          reportData.timeMeasureType = []
+        reportData.timeMeasureType = []
 
         averageTimeResultSet.forEach(daypartsRow => {
           Object.keys(daypartsRow).map(function (key, value) {
@@ -141,7 +137,7 @@ const generateDaypartReport = (input, callBack) => {
             groupByStore.data.push(multiparts)
           } else {
             if (dayPartIndex !== 0) {
-                reportData.timeMeasureType.push(groupByStore)
+              reportData.timeMeasureType.push(groupByStore)
               groupByStore = new Object()
               groupByStore.data = new Array()
             } else {
@@ -151,7 +147,7 @@ const generateDaypartReport = (input, callBack) => {
           }
         })
 
-          reportData.timeMeasureType.push(groupByStore)
+        reportData.timeMeasureType.push(groupByStore)
         reportData.status = true
         callBack(reportData)
       }
@@ -193,9 +189,9 @@ function convertEventsTimeFormat (key, row, value, parts, input) {
     parts.daypart.timeSpan = `${dateSplit[1]}/${dateSplit[0]}-Daypart+${row['DayPartIndex']}`
     parts.daypart.currentDaypart = `${convertTime(row['StartTime'])}-${convertTime(row['EndTime'])}`
   }
- 
+
   parts.dayPartIndex = row['DayPartIndex']
-  
+
 
   if (key.includes(messages.Events.MENU)) {
     parts.menu.value = input.ReportTemplate_Format === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)
