@@ -93,32 +93,20 @@ const avaliabledGroups = (request, callback) => {
 }
 const getAll = (request, callback) => {
   let output = {}
-  if (request.AccountId) {
+    if (request.AccountId) {
     const input = {
-      accountId: request.AccountId
+        accountId: request.AccountId
     }
-<<<<<<< HEAD
-    // const accountId = validate.isNumeric(input.accountId)
-    if (!input.AccountId) {
-=======
      if (!input.accountId) {
->>>>>>> 690420220d862eef2590d1ebe54e420d4a3fa322
       output.error = request.t('LISTGROUP.accountId')
       output.status = false
       callback(output)
     }
-    if (input.AccountId) {
+        if (input.accountId) {
       groupController.getAll(request, input, result => {
         callback(result)
       })
     }
-<<<<<<< HEAD
-  } else if (!request.AccountId) {
-    output.error = request.t('LISTGROUP.accountId')
-    output.status = false
-    callback(output)
-=======
->>>>>>> 690420220d862eef2590d1ebe54e420d4a3fa322
   } else {
     output.error = request.t('LISTGROUP')
     output.status = false

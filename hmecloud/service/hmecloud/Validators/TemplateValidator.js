@@ -47,14 +47,8 @@ const get = (request, callback) => {
  * @public
  */
 const getAll = (input, callback) => {
+  let output = {}
   let values = {}
-<<<<<<< HEAD
-  values.AccountId = input.AccountId
-  values.CreatedBy = input.AccountId
-  templateController.getAll(values, input, (result) => {
-    callback(result)
-  })
-=======
   if (!input.AccountId) {
     output.error = input.t('LISTGROUP.accountId')
     output.status = false
@@ -71,7 +65,6 @@ const getAll = (input, callback) => {
     output.error = input.t('CREATEGROUP.invalidInput')
     output.status = false
   }
->>>>>>> 690420220d862eef2590d1ebe54e420d4a3fa322
 }
 
 /**
