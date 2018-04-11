@@ -80,7 +80,20 @@ class Report extends Component {
       checkStores: false,
       treeData: [],
       templateData : [],
-      selectedStoreIds : []
+      selectedStoreIds : [],
+      reportData:{
+        weeklyData: false,
+        dailyData: false,
+        dayPartData: false,
+        rawCarData: false,
+        pagination: true,
+        currentPage: null,
+        groupStoreColumns: false,
+        dayColumn: false,
+        dayPartColumn: false,
+        weekColumn: false,
+        singleStore: false,
+      }
     };
     this.api = new Api()
     this.getSavedReports();
@@ -152,7 +165,7 @@ class Report extends Component {
               <div className="reports-pane">
                 <div className="checkbox-sections-advanced">
                   <div className="timings">
-                    
+
                     <input
                       type="checkbox"
                       checked={this.state.selectAll}
@@ -286,16 +299,16 @@ class Report extends Component {
                     </div>
 
                     <div className="checkbox-sections-advanced">
-                                          <div className="alignCenter timings">
-                                              <input
-                                                  name="open"
-                                                  type="checkbox"
-                                                  checked={this.state.open}
-                                                  onChange={this.check.bind(this, this.state.open)}
-                                              />
-                                              <span className="textPaddingSmall">  Open  <a data-tip="Leave the Open and/or Close boxes checked if you want the start and/or end times to remain as configured in the ZOOM timer.  Uncheck the box(es) if you want to choose a specific start and/or end time."><span className="tip openTip">?</span></a>
-                                                  <ReactTooltip place="right" type="dark" effect="solid" /> </span>
-                                          </div>
+                      <div className="alignCenter timings">
+                          <input
+                              name="open"
+                              type="checkbox"
+                              checked={this.state.open}
+                              onChange={this.check.bind(this, this.state.open)}
+                          />
+                          <span className="textPaddingSmall">  Open  <a data-tip="Leave the Open and/or Close boxes checked if you want the start and/or end times to remain as configured in the ZOOM timer.  Uncheck the box(es) if you want to choose a specific start and/or end time."><span className="tip openTip">?</span></a>
+                          <ReactTooltip place="right" type="dark" effect="solid" /> </span>
+                      </div>
                       <div className="timings">
                         <input
                           name="close"
@@ -356,7 +369,7 @@ class Report extends Component {
                                   </div>
                                  </div>
                 <span className="span-heading">
-                                  <span> Format </span> 
+                                  <span> Format </span>
                                   <a data-tip="Select one store for a single-store report.  Select multiple stores for a comparison report."><span className="tip openTip">?</span></a>
                                   <ReactTooltip place="right" type="dark" effect="solid" />
                 </span>
@@ -444,7 +457,7 @@ class Report extends Component {
                   className="generate-reports"
                   onClick={this.generate.bind(this)}
                 >
-                  
+
                   Generate Report
                 </div>
               </div>
@@ -602,7 +615,7 @@ class Report extends Component {
     return selectedList;
   }
 
-  apply(e) { 
+  apply(e) {
 
       let url = Config.apiBaseUrl + CommonConstants.apiUrls.getSavedTemplateData + '?templateId=' +
     e.target.id;
@@ -677,7 +690,7 @@ class Report extends Component {
       CreatedDateTime: moment().format("YYYY-MM-DD HH:mm:ss a"), UpdatedDateTime: moment().format("YYYY-MM-DD HH:mm:ss a"),
       advancedOptions: (!this.state.open || !this.state.close), longestTime: _.contains(this.state.include, "1"),systemStatistics: _.contains(this.state.include, "2"),
     });
- 
+
     console.log(template);
     this.state.templateData = template;
     this.setState(this.state);
@@ -770,53 +783,138 @@ class Report extends Component {
       }
     }
     if (!isError) {
-        if (this.state.timeMeasure == 4) {
-            let rawCarData = [];
-            console.log(this.state);
-            console.log(template);
+      let templateData = this.state.templateData[0].timeMeasure
+      switch (this.state.templateData[0].timeMeasure) {
+        case '1' : this.state.dailyData = true
+          if (templateData.selectedStoreIds.length === 1) {
+            this.state.dayColumn = true
+            this.state.groupStoreColumns = false
+            this.state.singleStore = true
+          } else {
+            this.state.dayColumn = false
+            this.state.groupStoreColumns = true
+            this.state.singleStore = false
+          }
+          this.setState(this.state)
+          break
 
-            let selectedStoreIds = this.state.selectedStoreIds
-            selectedStoreIds = selectedStoreIds.map(String);
+        case '2' : this.state.dayPartData = true
+          if (templateData.selectedStoreIds.length === 1) {
+            this.state.dayPartColumn = true
+            this.state.groupStoreColumns = false
+            this.state.singleStore = true
+          } else {
+            this.state.dayPartColumn = false
+            this.state.groupStoreColumns = true
+            this.state.singleStore = false
+          }
+          this.setState(this.state)
+          this.generateDaypartReport()
+          break
 
-            rawCarData.push(
-                {
-                    "timeMeasure": parseInt(this.state.timeMeasure),
-                    "fromDate": this.state.fromDate,
-                    "toDate": this.state.toDate,
-                    "openTime": this.state.openTime,
-                    "closeTime": this.state.closeTime,
-                    "open": this.state.open,
-                    "close": this.state.close,
-                    "type": this.state.type,
-                    "include": this.state.include,
-                    "format": this.state.format,
-                    "selectedStoreIds": selectedStoreIds,
-                    "advancedOptions": template[0].advancedOptions,
-                    "longestTime": template[0].longestTime,
-                    "systemStatistics":template[0].systemStatistics
-                }
-            )
-            this.setState({
-                rawCarRequest: rawCarData[0]
-            });
-            console.log(JSON.stringify(rawCarData[0]));
-            let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
-            this.api.postData(url, rawCarData[0], data => {
-                console.log(data);
-              //  this.props.history.push("/rawcardatareport", this.state.rawCarData);
-                this.props.history.push({
-                    pathname: '/rawcardatareport',
-                    state: { rawCarRequest: rawCarData[0] , rawCarData : data }
-                })
-            }, error => {
-                this.state.successMessage = ''
-                this.state.errorMessage = error.message
-                this.setState(this.state)
-            })
-        } else {
-            this.props.history.push("/summaryreport", this.state.templateData);
+        case '3' : this.state.weeklyData = true
+          if (templateData[0].selectedStoreIds.length === 1) {
+            this.state.reportData.weekColumn = true
+            this.state.reportData.groupStoreColumns = false
+            this.state.singleStore = true
+          } else {
+            this.state.reportData.weekColumn = false
+            this.state.reportData.groupStoreColumns = true
+            this.state.singleStore = false
+          }
+          this.setState(this.state)
+          break
+
+        case '4' : this.state.rawCarData = true
+          if (templateData[0].selectedStoreIds.length === 1) {
+            this.state.reportData.dayPartColumn = true
+            this.state.reportData.groupStoreColumns = false
+            this.state.singleStore = true
+          } else {
+            this.state.reportData.dayPartColumn = false
+            this.state.reportData.groupStoreColumns = true
+            this.state.singleStore = false
+          }
+          this.setState(this.state)
+          this.generateRawCarDataReport(template)
+        //  this.props.history.push("/rawcardatareport",this.state.templateData);
+          break
         }
+
     }
+  }
+
+  generateRawCarDataReport(template){
+    let rawCarData = [];
+    console.log(this.state);
+    let selectedStoreIds = this.state.selectedStoreIds
+    selectedStoreIds = selectedStoreIds.map(String);
+    rawCarData.push(
+        {
+            "timeMeasure": parseInt(this.state.timeMeasure),
+            "fromDate": this.state.fromDate,
+            "toDate": this.state.toDate,
+            "openTime": this.state.openTime,
+            "closeTime": this.state.closeTime,
+            "open": this.state.open,
+            "close": this.state.close,
+            "type": this.state.type,
+            "include": this.state.include,
+            "format": this.state.format,
+            "selectedStoreIds": selectedStoreIds,
+            "advancedOptions": template[0].advancedOptions,
+            "longestTime": template[0].longestTime,
+            "systemStatistics":template[0].systemStatistics
+        }
+    )
+    this.setState({
+        rawCarRequest: rawCarData[0]
+    });
+    console.log(JSON.stringify(rawCarData[0]));
+    let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
+    this.api.postData(url, rawCarData[0], data => {
+        console.log(data);
+      //  this.props.history.push("/rawcardatareport", this.state.rawCarData);
+        this.props.history.push({
+            pathname: '/rawcardatareport',
+            state: { rawCarRequest: rawCarData[0] , rawCarData : data }
+        })
+    }, error => {
+        this.state.successMessage = ''
+        this.state.errorMessage = error.message
+        this.setState(this.state)
+    })
+  }
+
+  generateDaypartReport(){
+    let template = this.state.templateData[0]
+    let request = {
+      "timeMeasure": parseInt(template.timeMeasure),
+      "fromDate": template.fromDate,
+      "toDate": template.toDate,
+      "openTime": template.openTime,
+      "closeTime": template.closeTime,
+      "open": template.open,
+      "close": template.close,
+      "type": template.type,
+      "include": template.include,
+      "format": template.format,
+      "selectedStoreIds": template.selectedStoreIds,
+      "advancedOptions": template.advancedOptions,
+      "longestTime": template.longestTime,
+      "systemStatistics":template.systemStatistics
+    }
+    let url = Config.baseUrl + CommonConstants.apiUrls.generateReport
+    this.api.postData(url, request, data => {
+        this.props.history.push({
+            pathname: '/summaryreport',
+            state: { reportData: this.state.reportData , reportDataResponse : data.data }
+        })
+    }, error => {
+        this.state.successMessage = ''
+        this.state.errorMessage = error.message
+        this.setState(this.state)
+    })
   }
 
   changeDate(date, dateSelection) {
