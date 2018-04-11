@@ -67,10 +67,11 @@ exports.TimeFormat = {
   MINUTES: 2
 }
 exports.COMMON = {
-
-  CSVTYPE: 'CSV',
-  DAYPARTOPENTIME: ' OPEN-11:59',
-  DAYPARTCLOSETIME: ' CLOSE-23:59'
+    CSVTYPE: 'CSV',
+    DAYPARTOPENTIME: ' OPEN-11:59',
+    DAYPARTCLOSETIME: ' CLOSE-23:59',
+    DAYOPENCLOSE: 'OPEN-CLOSE',
+    WAVG: 'W-Avg'
 }
 
 exports.JWT = {
