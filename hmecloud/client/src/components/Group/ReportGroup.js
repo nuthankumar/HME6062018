@@ -49,7 +49,7 @@ export default class ReportGroup extends React.Component {
   getAvailableGroupStoreList () {
     this.state.available = []
     this.setState(this.state)
-    let url = Config.apiBaseUrl + CommonConstants.apiUrls.getAvailableGroups + '?accountId=100&userName=swathikumary@nousinfo.com'
+    let url = Config.apiBaseUrl + CommonConstants.apiUrls.getAvailableGroups
     this.api.getData(url,data => {
       this.state.available = data.data
       this.setState(this.state)
@@ -66,7 +66,7 @@ export default class ReportGroup extends React.Component {
     this.setState(this.state)
     console.log(this.state.assigned)
     if (this.props.history.location.state.editGroup) {
-        let url = Config.apiBaseUrl + CommonConstants.apiUrls.editGroupDetails + '?groupId=' + this.state.groupId + '&userName=swathikumary@nousinfo.com'
+        let url = Config.apiBaseUrl + CommonConstants.apiUrls.editGroupDetails + '?groupId=' + this.state.groupId
         this.api.getData(url,data => {
           if (data.status === false) {
             this.state.successMessage = data.data
@@ -179,9 +179,9 @@ export default class ReportGroup extends React.Component {
       store: []
     }
     _.each(items, function (item) {
-      if (item.type === 'group') {
+      if (item.Type === 'group') {
         groupStore.group.push(item.Id)
-      } else if (item.type === 'store') {
+      } else if (item.Type === 'store') {
         groupStore.store.push(item.Id)
       }
     })
@@ -211,7 +211,7 @@ export default class ReportGroup extends React.Component {
   }
 
   confirmDelete () {
-      let url = Config.apiBaseUrl + CommonConstants.apiUrls.deleteGroup + '?groupId=' + this.state.groupId + '&accountId=' + this.state.accountId
+      let url = Config.apiBaseUrl + CommonConstants.apiUrls.deleteGroup + '?groupId=' + this.state.groupId
       this.api.deleteData(url,data => {
         if (data.data) {
           this.state.successMessage = this.state.deleteSuceessMessage

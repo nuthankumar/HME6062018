@@ -44,8 +44,14 @@
   .group-name-label, .group-label-description{
     font-weight : 100;
   }
-  .save-group-btn,.reportgroup-delete,.reportgroup-cancel{
+  .save-group-btn,.reportgroup-delete,.reportgroup-cancel, .add-group-btn{
     border-radius : 0 !important;
+  }
+
+  .save-group-btn{
+    background-color: #d41b3e !important;
+    color: #ffffff !important;
+    cursor: pointer;
   }
   .move-group-store{
     text-align:center;
@@ -77,7 +83,7 @@
 
 .treeNode span.rc-tree-switcher{
 
-  
+
   background-size: cover; /* for IE9+, Safari 4.1+, Chrome 3.0+, Firefox 3.6+ */
  -webkit-background-size: cover; /* for Safari 3.0 - 4.0 , Chrome 1.0 - 3.0 */
  -moz-background-size: cover; /* optional for Firefox 3.6 */

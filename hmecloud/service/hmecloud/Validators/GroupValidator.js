@@ -46,25 +46,24 @@ const getgroupDetails = (request, callback) => {
 }
 const deleteGroupById = (request, callback) => {
   let output = {}
-  if (request.query.groupId && request.query.accountId) {
+  if (request.query.groupId ) {
     const input = {
       groupId: request.query.groupId,
-      accountId: request.query.accountId
+      accountId: request.AccountId
     }
     const groupId = validate.isNumeric(input.groupId)
-    const accountId = validate.isNumeric(input.accountId)
     if (!groupId) {
       output.error = request.t('CREATEGROUP.groupId')
       output.status = false
       callback(output)
-    } else if (!accountId) {
+    } else if (!input.accountId) {
       output.error = request.t('LISTGROUP.accountId')
       output.status = false
       callback(output)
     }
-    if (groupId && accountId) {
+    if (groupId && input.accountId) {
       groupController.deleteGroupById(request, input, result => {
-        callback(result)
+       callback(result)
       })
     }
   } else {
@@ -75,46 +74,22 @@ const deleteGroupById = (request, callback) => {
 }
 
 const avaliabledGroups = (request, callback) => {
-  if (request.query.accountId && request.query.userName) {
     const input = {
-      accountId: request.query.accountId,
-      createdBy: request.query.userName
+      accountId: request.AccountId
+      }
+
+    if (!input.accountId) {
+        output.error = request.t('LISTGROUP.accountId')
+        output.status = false
+        callback(output)
     }
-    const accountId = validate.isNumeric(input.accountId)
-    const createdBy = validate.isEmail(input.createdBy)
-    if (!accountId) {
-      let output = {}
-      output.error = request.t('LISTGROUP.accountId')
-      output.status = false
-      callback(output)
-    }
-    if (!createdBy) {
-      let output = {}
-      output.error = request.t('LISTGROUP.createdBy')
-      output.status = false
-      callback(output)
-    }
-    if (accountId && input.createdBy) {
+
+      if (input.accountId) {
       groupController.avaliabledGroups(request, input, result => {
         callback(result)
       })
     }
-  } else if (!request.query.accountId && request.query.userName) {
-    let output = {}
-    output.error = request.t('LISTGROUP.accountId')
-    output.status = false
-    callback(output)
-  } else if (request.query.accountId && !request.query.userName) {
-    let output = {}
-    output.error = request.t('LISTGROUP.createdBy')
-    output.status = false
-    callback(output)
-  } else {
-    let output = {}
-    output.error = request.t('LISTGROUP')
-    output.status = false
-    callback(output)
-  }
+ 
 }
 const getAll = (request, callback) => {
   let output = {}
@@ -122,8 +97,12 @@ const getAll = (request, callback) => {
     const input = {
       accountId: request.AccountId
     }
+<<<<<<< HEAD
     // const accountId = validate.isNumeric(input.accountId)
     if (!input.AccountId) {
+=======
+     if (!input.accountId) {
+>>>>>>> 690420220d862eef2590d1ebe54e420d4a3fa322
       output.error = request.t('LISTGROUP.accountId')
       output.status = false
       callback(output)
@@ -133,10 +112,13 @@ const getAll = (request, callback) => {
         callback(result)
       })
     }
+<<<<<<< HEAD
   } else if (!request.AccountId) {
     output.error = request.t('LISTGROUP.accountId')
     output.status = false
     callback(output)
+=======
+>>>>>>> 690420220d862eef2590d1ebe54e420d4a3fa322
   } else {
     output.error = request.t('LISTGROUP')
     output.status = false

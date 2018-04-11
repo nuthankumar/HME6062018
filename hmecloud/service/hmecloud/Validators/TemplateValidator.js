@@ -48,11 +48,30 @@ const get = (request, callback) => {
  */
 const getAll = (input, callback) => {
   let values = {}
+<<<<<<< HEAD
   values.AccountId = input.AccountId
   values.CreatedBy = input.AccountId
   templateController.getAll(values, input, (result) => {
     callback(result)
   })
+=======
+  if (!input.AccountId) {
+    output.error = input.t('LISTGROUP.accountId')
+    output.status = false
+    callback(output)
+  }
+ 
+  if (input.AccountId) {
+    values.AccountId = input.AccountId
+      values.CreatedBy = input.AccountId
+    templateController.getAll(values, input, (result) => {
+      callback(result)
+    })
+  }  else {
+    output.error = input.t('CREATEGROUP.invalidInput')
+    output.status = false
+  }
+>>>>>>> 690420220d862eef2590d1ebe54e420d4a3fa322
 }
 
 /**
