@@ -17,7 +17,7 @@ const CogWheel = require("../../images/Cog.png");
 export default class HmeHeader extends React.Component {
     constructor(props) {
         super(props)
-        languageSettings.setCurrentLanguage('fr');
+        //languageSettings.setCurrentLanguage('fr');
         this.state = {
             currentLanguage: languageSettings.getCurrentLanguage(),
             settingsDropdown:false

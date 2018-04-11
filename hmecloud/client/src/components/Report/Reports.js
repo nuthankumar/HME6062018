@@ -22,6 +22,8 @@ import {CommonConstants} from '../../Constants'
 import Api from '../../Api'
 import ReactTooltip from 'react-tooltip'
 import * as Enum from '../../Enums'
+import t from '../Language/language'
+import * as languageSettings from '../Language/languageSettings'
 const ProductLogo = require("../../images/ProductLogo-1.png");
 const HMELogo = require("../../images/HMELogo.png");
 const Calendar = require("../../images/mini-cal.jpg");
@@ -55,6 +57,7 @@ class Report extends Component {
       mode: "time"
     };
     this.state = {
+      currentLanguage: languageSettings.getCurrentLanguage(),
       selectAll: false,
       selectedList: [],
       showAdvancedOptions: false,
@@ -134,6 +137,7 @@ class Report extends Component {
   };
 
   render() {
+    const language = this.state.currentLanguage
     const { date, format, mode, inputFormat } = this.state;
     const loop = data => {
       return data.map(item => {
@@ -149,15 +153,15 @@ class Report extends Component {
     };
 
     return (
-      <I18n ns="translations">
-    {
-      (t, { i18n }) => (
+    //  <I18n ns="translations">
+    //{
+    //  (t, { i18n }) => (
       <section className="reportsPage">
         <HmeHeader />
         <div className="reports">
           <SuccessAlert successMessage={this.state.successMessage} />
           <ErrorAlert errorMessage={this.state.errorMessage} />
-          <header className="reports-header">{t('title')}</header>
+          <header className="reports-header">{t[language].summaryReport}</header>
           {/* <Trans i18nKey="title">
           </Trans> */}
           <form onSubmit={this.handleSubmit}>
@@ -172,12 +176,14 @@ class Report extends Component {
                       onChange={this.selectAll.bind(this)}
                     />
                     <span className="span-heading">
-                      <span> Select All </span>
-                      <a data-tip="Select one store for a single-store report.  Select multiple stores for a comparison report."><span className="tip openTip">?</span></a>
-                      <ReactTooltip place="right" type="dark" effect="solid" />
+                                        <span> {t[language].selectall} </span>
+                   
                     </span>
                   </div>
                   <div className="timings">
+                                    <span> {t[language].brand} </span>
+                                    <a data-tip={t[language].selectonestore}><span className="tip openTip">?</span></a>
+                                    <ReactTooltip place="right" type="dark" effect="solid" />
                   </div>
                 </div>
 
@@ -200,23 +206,24 @@ class Report extends Component {
                   </Tree>
                 </div>
                 <span className="span-heading">
-                                  <span> Time Measures </span>
-                                  <a data-tip="The report will summarize or average the data over the time intervals you choose. For example, choose week if you want all of the days of each rolled up into one-week intervals. Only one store may be selected at a time for a Raw Data Report."><span className="tip openTip">?</span></a>
+                                <span> {t[language].timemeasure} </span>
+                               
+                                  <a data-tip={t[language].thereportwillsummarize}><span className="tip openTip">?</span></a>
                                   <ReactTooltip place="right" type="dark" effect="solid" />
                 </span>
                 <div>
-                  <select name="timeMeasure" className="time-measures" onChange={this.changeTimeMeasure.bind(this)}>
-                    <option selected={this.state.timeMeasure == 1} value="1">Day</option>
-                    <option selected={this.state.timeMeasure == 2} value="2">Daypart</option>
-                    <option selected={this.state.timeMeasure == 3} value="3">Week</option>
-                    <option selected={this.state.timeMeasure == 4} value="4">Raw Data Report</option>
+                                <select name="timeMeasure" className="time-measures" onChange={this.changeTimeMeasure.bind(this)}>
+                                    <option selected={this.state.timeMeasure == 1} value="1">{t[language].day}</option>
+                                    <option selected={this.state.timeMeasure == 2} value="2">{t[language].daypart}</option>
+                                    <option selected={this.state.timeMeasure == 3} value="3">{t[language].week}</option>
+                                    <option selected={this.state.timeMeasure == 4} value="4">{t[language].rawdatareport}</option>
                   </select>
                 </div>
                 <div className="calendar-section">
                   <div className="date-from">
                     <span className="span-heading">
-                                          <span> From </span>
-                                          <a data-tip="Choose a start and end date for the overall time period of the report. Single store can select any 2 month period. Multiple store can select any 1 month period."><span className="tip openTip">?</span></a>
+                                        <span>  {t[language].from} </span>
+                                        <a data-tip={t[language].choosestartorend}><span className="tip openTip">?</span></a>
                                           <ReactTooltip place="right" type="dark" effect="solid" />
                     </span>
                     <div className="calendar">
@@ -237,8 +244,9 @@ class Report extends Component {
                   </div>
                   <div className="date-to">
                     <span className="span-heading">
-                      <span> To </span>
-                      <a data-tip="Choose a start and end date for the overall time period of the report. Single store can select any 2 month period. Multiple store can select any 1 month period."><span className="tip openTip">?</span></a>
+                                        <span>  {t[language].to} </span>
+                                        
+                                        <a data-tip={t[language].choosestartorend}><span className="tip openTip">?</span></a>
                       <ReactTooltip place="right" type="dark" effect="solid" />
                     </span>
                     <div className="calendar">
@@ -258,10 +266,9 @@ class Report extends Component {
                     </div>
                   </div>
                 </div>
-
                 <div>
                                   <div className='advancedOptions' onClick={this.showAdvanced.bind(this)}>
-                                         <span className='textPaddingSmall'> Advanced Options </span>
+                                    <span className='textPaddingSmall'> {t[language].advancedoptions} </span>
                                          <img src={Asc} className={(this.state.showAdvancedOptions ? "show" : "hidden")} aria-hidden="true" />
                                          <img src={Desc} className={(this.state.showAdvancedOptions ? "hidden" : "show")}  aria-hidden="true" />
                                  </div>
@@ -306,7 +313,8 @@ class Report extends Component {
                               checked={this.state.open}
                               onChange={this.check.bind(this, this.state.open)}
                           />
-                          <span className="textPaddingSmall">  Open  <a data-tip="Leave the Open and/or Close boxes checked if you want the start and/or end times to remain as configured in the ZOOM timer.  Uncheck the box(es) if you want to choose a specific start and/or end time."><span className="tip openTip">?</span></a>
+                          <span className="textPaddingSmall">  {t[language].open}
+                                       <a data-tip={t[language].leavetheopencloseboxes}><span className="tip openTip">?</span></a>
                           <ReactTooltip place="right" type="dark" effect="solid" /> </span>
                       </div>
                       <div className="timings">
@@ -317,13 +325,13 @@ class Report extends Component {
                           onChange={this.check.bind(this, this.state.close)}
                         />
                         <span className="span-heading">
-                          <span> Close </span>
-                          <a data-tip="Leave the Open and/or Close boxes checked if you want the start and/or end times to remain as configured in the ZOOM timer.  Uncheck the box(es) if you want to choose a specific start and/or end time."><span className="tip openTip">?</span></a>
+                                                <span> {t[language].close} </span>
+                                                <a data-tip={t[language].leavetheopencloseboxes}><span className="tip openTip">?</span></a>
                           <ReactTooltip place="right" type="dark" effect="solid" />
                         </span>
                       </div>
                     </div>
-                    <span>Type </span>
+                    <span>{t[language].type}</span>
                     <div className="checkbox-sections">
                       <div className="type-sub-section">
                         <input
@@ -334,28 +342,28 @@ class Report extends Component {
                           value={1}
                         />
                         <span className="span-heading">
-                          <span> Time Slice </span>
-                          <a data-tip="Choose Time Slice if you are only interested in a narrow window of time within each daypart, day, or week.  Use the controls above to choose a start and end time."><span className="tip openTip">?</span></a>
+                                                <span> {t[language].timeslice}</span>
+                          <a data-tip={t[language].choosetimeslice}><span className="tip openTip">?</span></a>
                           <ReactTooltip place="right" type="dark" effect="solid" />
                         </span>
                       </div>
                       <div className="type-sub-section">
                         <input type="radio" name="type" checked={this.state.type == 2 ? true : false} onChange={this.handleOnChange.bind(this)} value={2}/>
                         <span className="span-heading">
-                          <span> Cumulative </span>
-                          <a data-tip="Choose Cumulative if you want the report to include everything from the chosen start  date and time to the chosen end date and time."><span className="tip openTip">?</span></a>
+                                                <span> {t[language].cumulative} </span>
+                          <a data-tip={t[language].choosecumulative}><span className="tip openTip">?</span></a>
                           <ReactTooltip place="right" type="dark" effect="solid" />
                         </span>
                       </div>
                     </div>
-                    <span className="note">*Reports including Advanced Options are generated by CSV and sent by email.</span>
+                    <span className="note">{t[language].reportsadvancedreport} </span>
                   </div>
                 </div>
-                <span>Include </span>
+                <span>{t[language].include}  </span>
                 <div className="checkbox-sections">
                           <div className="alignCenter">
                                       <input type="checkbox" id="longestTime" disabled={this.state.showAdvancedOptions} value={1} onChange={this.include.bind(this)}/>
-                                      <span className="textPaddingSmall">  Longest Time </span>
+                                      <span className="textPaddingSmall"> {t[language].longesttimes} </span>
                                   </div>
                                   <div className="alignCenter">
                                       <input
@@ -365,12 +373,13 @@ class Report extends Component {
                                           value={2}
                                           onChange={this.include.bind(this)}
                                       />
-                                      <span className="textPaddingSmall">  System Statistics </span>
+                                      <span className="textPaddingSmall">  {t[language].systemstats} </span>
                                   </div>
                                  </div>
                 <span className="span-heading">
-                                  <span> Format </span>
-                                  <a data-tip="Select one store for a single-store report.  Select multiple stores for a comparison report."><span className="tip openTip">?</span></a>
+                                <span> {t[language].format}  </span>
+                                
+                                <a data-tip={t[language].selectonestore}><span className="tip openTip">?</span></a>
                                   <ReactTooltip place="right" type="dark" effect="solid" />
                 </span>
                 <div className="checkbox-sections">
@@ -382,7 +391,7 @@ class Report extends Component {
                                           onChange={this.handleOnChange.bind(this)}
                                           value={1}
                                       />
-                                      <span className="textPaddingSmall">  Seconds(sec) </span>
+                                      <span className="textPaddingSmall"> {t[language].secondswformat} </span>
                                   </div>
                                   <div className="alignCenter">
                                       <input
@@ -392,45 +401,45 @@ class Report extends Component {
                                           onChange={this.handleOnChange.bind(this)}
                                           value={2}
                                       />
-                                      <span className="textPaddingSmall"> Minutes(min:sec) </span>
+                                      <span className="textPaddingSmall"> {t[language].minuteswformat}  </span>
                                   </div>
                 </div>
               </div>
               <div className="reports-pane">
                 <span className="span-heading">
-                  <span> Saved Reports Templates </span>
-                  <a data-tip="Select a previously saved report template to run a common report, or select new options and save a new report template to use later."><span className="tip openTip">?</span></a>
+                                <span>  {t[language].savedreporttemplates}  </span>
+                                <a data-tip={t[language].selectapreviousreport}><span className="tip openTip">?</span></a>
                   <ReactTooltip place="right" type="dark" effect="solid" />
                 </span>
                 <div className="saved-reports">{this.savedReports()}</div>
-                <span>Criteria</span>
+                <span>{t[language].criteria} </span>
                 <div className="container criteria">
                   <div className="col-md-12">
 
-                                      <span className="criteriaHeading">Stores :</span>
+                                    <span className="criteriaHeading">{t[language].stores} :</span>
                     {this.state.stores.length ? this.renderStores() : "Select a Store"}
                   </div>
-                  <div className="col-md-6"> <span className="criteriaHeading">From :</span>{this.state.fromDate} </div>
-                  <div className="col-md-6"> <span className="criteriaHeading">To :</span>{this.state.toDate}</div>
+                  <div className="col-md-6"> <span className="criteriaHeading">{t[language].from} :</span>{this.state.fromDate} </div>
+                  <div className="col-md-6"> <span className="criteriaHeading">{t[language].to} :</span>{this.state.toDate}</div>
                   <div className="col-md-12">
-                                      <span className="criteriaHeading">Time Measure :</span>{this.state.timeMeasure == 1
-                      ? "Day"
+                      <span className="criteriaHeading">{t[language].timemeasure} :</span>{this.state.timeMeasure == 1
+                       ? t[language].day
                       : this.state.timeMeasure == 2
-                        ? "Daypart"
-                        : this.state.timeMeasure == 3
-                          ? "Week"
-                          : this.state.timeMeasure == 4
-                            ? "Raw Data Report"
+                                            ? t[language].daypart
+                                            : this.state.timeMeasure == 3
+                                                ? t[language].week
+                                                : this.state.timeMeasure == 4
+                                                    ? t[language].rawdatareport
                             : ""}
                   </div>
                   <div className="col-md-12">
-                                      <span className="criteriaHeading">Include :</span>{this.state.include.length ? this.renderInclude() :"None"}
+                      <span className="criteriaHeading">{t[language].include} :</span>{this.state.include.length ? this.renderInclude() : "None"}
                   </div>
                   <div className="col-md-12">
-                                      <span className="criteriaHeading">Format :</span>
-                                      {this.state.format == 1
-                      ? "Seconds(sec)"
-                      : this.state.format == 2 ? "Minutes(min:sec)" : ""}
+                                    <span className="criteriaHeading">{t[language].format}  :</span>
+                                    {this.state.format == 1
+                                        ? t[language].secondswformat
+                                        : this.state.format == 2 ? t[language].minuteswformat : ""}
                   </div>
                 </div>
                 <div className="alignCenter">
@@ -440,13 +449,13 @@ class Report extends Component {
                     value={this.state.saveAsTemplate}
                     onChange={this.check.bind(this, this.state.saveAsTemplate)}
                   />
-                  <span className="textPaddingLarge"> Save as Template </span>
+                  <span className="textPaddingLarge"> {t[language].saveastemplate}  </span>
                 </div>
                 <div>
                   <input
                     name="templateName"
                     className="save-template"
-                    placeholder="  (Name this template)"
+                    placeholder={t[language].namethistemplate}
                     value={this.state.templateName}
                     onChange={this.handleOnChange.bind(this)}
                     maxLength={25}
@@ -457,8 +466,7 @@ class Report extends Component {
                   className="generate-reports"
                   onClick={this.generate.bind(this)}
                 >
-
-                  Generate Report
+                  {t[language].generatereport} 
                 </div>
               </div>
             </section>
@@ -466,9 +474,9 @@ class Report extends Component {
         </div>
               <Footer />
       </section>
-     )
-    }
-    </I18n>
+   //  )
+    //}
+    //</I18n>
     );
   }
 
@@ -627,9 +635,9 @@ class Report extends Component {
         this.setState({ open: template.Open });
         this.setState({ close: template.Close });
         this.setState({ timeMeasure: template.TimeMeasure });
-        let fromDate = moment(template.FromDate).format("DD/MM/YYYY");
+        let fromDate = moment(template.FromDate).format("MM/DD/YYYY");
         this.setState({ fromDate: fromDate });
-        let toDate = moment(template.ToDate).format("DD/MM/YYYY");
+        let toDate = moment(template.ToDate).format("MM/YY/YYYY");
         this.setState({ toDate: toDate });
         this.setState({ defaultCheckedKeys: template.SelectedList });
         let selectedStoreIds = []
@@ -679,6 +687,7 @@ class Report extends Component {
   }
 
   generate(e) {
+      let language = this.state.currentLanguage;
     this.setState({ errorMessage: "" });
     let isError = false;
     let template = [];
@@ -697,13 +706,12 @@ class Report extends Component {
 
     //validations
     if (this.state.toDate < this.state.fromDate) {
-      this.state.errorMessage =
-        "Date range invalid. Starting date may not be beyond ending date.";
+        this.state.errorMessage = t[language].daterangeinvalidbeyond ;
       this.setState(this.state);
     }
 
     if (this.state.selectedList.length == 0) {
-      this.state.errorMessage = "Please Select a store";
+        this.state.errorMessage = t[language].pleaseselectstore;
       this.setState(this.state);
       isError = true;
     }
@@ -715,8 +723,7 @@ class Report extends Component {
               "days"
           ) > CommonConstants.TimeMeasureValidations.Month
       ) {
-        this.state.errorMessage =
-          "Date range invalid. For Day Reports select any 1 month period.";
+          this.state.errorMessage = t[language].daterangeinvalid1month;
         this.setState(this.state);
         isError = true;
       }
@@ -729,8 +736,7 @@ class Report extends Component {
               "days"
           ) > CommonConstants.TimeMeasureValidations.TwoWeeks
       ) {
-        this.state.errorMessage =
-          "Date range invalid. For Daypart Reports select any 2 week period.";
+          this.state.errorMessage = t[language].daterangeinvalid2week;
         this.setState(this.state);
         isError = true;
       }
@@ -743,8 +749,7 @@ class Report extends Component {
               "days"
           ) > CommonConstants.TimeMeasureValidations.TwoMonths
       ) {
-        this.state.errorMessage =
-          "Date range invalid. For Week Reports select any 2 month period.";
+          this.state.errorMessage = t[language].daterangeinvalid2month;
         this.setState(this.state);
         isError = true;
       }
@@ -756,16 +761,14 @@ class Report extends Component {
               "days"
           ) > CommonConstants.TimeMeasureValidations.Today
       ) {
-        this.state.errorMessage =
-          "Date range invalid. For Raw Data Reports select a single day.";
+          this.state.errorMessage = t[language].daterangeinvalidsingleday
         this.setState(this.state);
         isError = true;
       }
     }
     if (this.state.saveAsTemplate) {
       if (!this.state.templateName) {
-        this.state.errorMessage =
-          "Please enter a template name to save a template"
+          this.state.errorMessage = t[language].pleaseneteratemplatename
         this.setState(this.state)
         isError = true;
       } else {
@@ -825,18 +828,7 @@ class Report extends Component {
           this.setState(this.state)
           break
 
-        case '4' : this.state.rawCarData = true
-          if (templateData[0].selectedStoreIds.length === 1) {
-            this.state.reportData.dayPartColumn = true
-            this.state.reportData.groupStoreColumns = false
-            this.state.singleStore = true
-          } else {
-            this.state.reportData.dayPartColumn = false
-            this.state.reportData.groupStoreColumns = true
-            this.state.singleStore = false
-          }
-          this.setState(this.state)
-          this.generateRawCarDataReport(template)
+        case '4' : this.generateRawCarDataReport(template)
         //  this.props.history.push("/rawcardatareport",this.state.templateData);
           break
         }
@@ -873,7 +865,6 @@ class Report extends Component {
     console.log(JSON.stringify(rawCarData[0]));
     let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
     this.api.postData(url, rawCarData[0], data => {
-        console.log(data);
       //  this.props.history.push("/rawcardatareport", this.state.rawCarData);
         this.props.history.push({
             pathname: '/rawcardatareport',
