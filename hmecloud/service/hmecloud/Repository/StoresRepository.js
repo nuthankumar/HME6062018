@@ -97,7 +97,7 @@ const getDayDataReport = (input, callback) => {
       callback(output)
     }
     sqlPool.request()
-        .input('StoreIDs', sql.VarChar(500), input.ReportTemplate_StoreIds.toString())
+      .input('StoreIDs', sql.VarChar(500), input.ReportTemplate_StoreIds.toString())
       .input('StoreStartDate', sql.Date, input.ReportTemplate_From_Date)
       .input('StoreEndDate', sql.Date, input.ReportTemplate_To_Date)
       .input('StartDateTime', sql.DateTime2, input.FromDateTime)
