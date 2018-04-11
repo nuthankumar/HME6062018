@@ -16,7 +16,9 @@ const prepareStoreDetails = (daysingleResult, storeData, input) => {
   return daysingleResult
 }
 
-function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars) {
+function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, isMinutes) {
+  
+  
   const goalGrades = {
     goalA: {
       title: '<Goal A',
@@ -93,11 +95,11 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars) {
   }
   // Get the values for the goals
   _.map(getGoalTime[0], (value, key) => {
-    prepareGoal(goalGrades, 'menu', 'goal', key, value)
-    prepareGoal(goalGrades, 'greet', 'goal', key, value)
-    prepareGoal(goalGrades, 'service', 'goal', key, value)
-    prepareGoal(goalGrades, 'laneQueue', 'goal', key, value)
-    prepareGoal(goalGrades, 'laneTotal', 'goal', key, value)
+    prepareGoal(goalGrades, 'menu', 'goal', key, value = (isMinutes === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)))
+    prepareGoal(goalGrades, 'greet', 'goal', key, value = (isMinutes === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)))
+    prepareGoal(goalGrades, 'service', 'goal', key, value = (isMinutes === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)))
+    prepareGoal(goalGrades, 'laneQueue', 'goal', key, value = (isMinutes === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)))
+    prepareGoal(goalGrades, 'laneTotal', 'goal', key, value = (isMinutes === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)))
   })
 
   // get the values for the cars
@@ -118,7 +120,7 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars) {
 
     dataArray.push(goalGrades)
   })
-  console.log(dataArray[0])
+  
   return dataArray[0]
 }
 // This function is used to prepare Longest details for Day Report

@@ -127,8 +127,8 @@ module.exports = {
  * @param {*} input
  */
 function prepareStoreDetails(rawCarData, storeData, input) {
-  rawCarData.store = storeData.Store_Name
-  rawCarData.description = storeData.Brand_Name
+  rawCarData.storeName = storeData.Store_Name
+  rawCarData.storeDescription = storeData.Brand_Name
   rawCarData.startTime = input.ReportTemplate_From_Date
   rawCarData.stopTime = input.ReportTemplate_To_Date
   rawCarData.printDate = dateFormat(new Date(), 'isoDate')
