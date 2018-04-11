@@ -67,7 +67,7 @@ export default class ReportGroupHierarchy extends React.Component {
         </div>
         <div className='row'>
           <div className='col-xs-12'>
-            <button type='button' className='btn btn-primary  save-group-btn' onClick={this.addNewGroup.bind(this)}>{t[language].AddNewGroup}</button>
+            <button type='button' className='btn btn-primary  add-group-btn' onClick={this.addNewGroup.bind(this)}>{t[language].AddNewGroup}</button>
           </div>
         </div>
 
