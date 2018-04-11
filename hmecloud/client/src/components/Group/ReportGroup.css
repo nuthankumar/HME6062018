@@ -32,6 +32,18 @@
     margin-left : 5px;
   }
 
+  .reportgroup-cancel{
+    font-size: 14px !important;
+    font-weight: bold;
+    vertical-align: middle;
+    color: #D41B3E;
+    text-decoration: none;
+    margin-top: 6px;
+  }
+  .reportgroup-cancel:hover{
+    color: #D41B3E;
+    text-decoration: underline;
+  }
   .unlinked-grouplist,.linked-groupList{
     list-style:none;
     padding-left:0px;
@@ -52,6 +64,7 @@
     background-color: #d41b3e !important;
     color: #ffffff !important;
     cursor: pointer;
+    border-color: #D41B42 !important;
   }
   .move-group-store{
     text-align:center;
