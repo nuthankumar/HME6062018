@@ -51,8 +51,11 @@ export default class ReportGroup extends React.Component {
     this.setState(this.state)
     let url = Config.apiBaseUrl + CommonConstants.apiUrls.getAvailableGroups
     this.api.getData(url,data => {
-      this.state.available = data.data
-      this.setState(this.state)
+       let groupId = parseInt(this.props.history.location.state.groupId)
+       let available = _.without(data.data, _.findWhere(data.data, {
+         Id: groupId
+       }));
+      this.setState({available : available})
     }, error => {
       this.state.successMessage = ''
       this.state.errorMessage = error.message
