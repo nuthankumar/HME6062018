@@ -703,7 +703,8 @@ const language = [
     'subNavbarDashboard': 'Dashboard',
     'subNavbarReports': 'Reports',
     'subNavbarDeviceSettingsHistory': 'Device Settings History',
-  },
+    'help':'Help'
+    },
 
   // French
   {
@@ -1407,8 +1408,8 @@ const language = [
     'navbarDistributers': 'Distributers',
     'navbarAudioManager': 'Audio Manager',
     'navbarOptionSettings': 'Display Settings',
-    'navbarOptionLeaderboard': 'Customize Leaderboard',
-    'navbarOptionHelp': 'Help',
+    'navbarOptionLeaderboard': 'Personnaliser le classement',
+    'navbarOptionHelp': 'Aidez-moi',
     'subNavbarStores': 'Stores',
     'subNavbarUsers': 'Users',
     'subNavbarRoles': 'Roles',

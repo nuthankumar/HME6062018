@@ -107,7 +107,7 @@ class Report extends Component {
   }
 
   getTreeHierarchy() {
-      let url = Config.apiBaseUrl + CommonConstants.apiUrls.getGroupHierarchyTree + '?accountId=100&userName=swathikumary@nousinfo.com'
+      let url = Config.apiBaseUrl + CommonConstants.apiUrls.getGroupHierarchyTree
       this.api.getData(url,data => {
         this.state.treeData = data.data
         this.setState(this.state)
@@ -533,7 +533,7 @@ class Report extends Component {
   }
 
   getSavedReports() {
-      let url = Config.apiBaseUrl + CommonConstants.apiUrls.getSavedTemplates + '?accountId=100&createdBy=100'
+      let url = Config.apiBaseUrl + CommonConstants.apiUrls.getSavedTemplates
       this.api.getData(url, data => {
         this.setState({
           savedTemplates: data.data
