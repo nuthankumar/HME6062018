@@ -89,14 +89,14 @@ const getAll = (input, callback) => {
  * @public
  */
 const deleteById = (input, callback) => {
-  let output = {}
+    let output = {}
   const templateId = validate.isNumeric(input.query.templateId)
   if (!templateId) {
     output.error = input.t('REPORTSUMMARY.invalidTemplateId')
     output.status = false
     callback(output)
   }
-  templateController.deleteById(input.query.templateId, (result) => {
+  templateController.deleteById(input, (result) => {
     callback(result)
   })
 }
