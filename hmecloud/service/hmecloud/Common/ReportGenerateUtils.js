@@ -5,15 +5,16 @@ const moment = require('moment')
 const momentDurationFormatSetup = require('moment-duration-format')
 // This function is used to Prepare Store Details
 const prepareStoreDetails = (daysingleResult, storeData, input) => {
-  daysingleResult.storeName = storeData['Store_Name']
-  daysingleResult.storeDesc = storeData['Brand_Name']
+    if (storeData && storeData[0]) {
+     daysingleResult.storeName = (storeData[0].Store_Name ? storeData[0].Store_Name : 'N/A')
+     daysingleResult.storeDesc = (storeData[0].Brand_Name ? storeData[0].Brand_Name : 'N/A')
+    }
   daysingleResult.startTime = input.ReportTemplate_From_Date
   daysingleResult.stopTime = input.ReportTemplate_To_Date
   daysingleResult.printDate = dateUtils.currentDate()
   daysingleResult.printTime = dateUtils.currentTime()
   daysingleResult.timeMeasure = input.ReportTemplate_Time_Measure
   daysingleResult.selectedStoreIds = input.ReportTemplate_StoreIds
-  console.log(daysingleResult)
   return daysingleResult
 }
 
@@ -337,10 +338,9 @@ const getAllStoresDetails = (result, colors, goalSettings, format) => {
   return storesData
 }
 
-/*const prepareStatistics = (daysingleResult, systemStatisticsLane, systemStatisticsGenral) => {
+const prepareStatistics = (daysingleResult, systemStatisticsLane, systemStatisticsGenral) => {
 
     let displayData = {}
-
     displayData.Lane = systemStatisticsLane[0]['Lane']
     displayData.AverageCarsInLane = systemStatisticsLane[0]['AvgCarsInLane']
     displayData.TotalPullouts = systemStatisticsLane[0]['Pullouts']
@@ -349,10 +349,8 @@ const getAllStoresDetails = (result, colors, goalSettings, format) => {
     displayData.PowerFails = systemStatisticsGenral[0]['PowerFails']
     displayData.SystemResets = systemStatisticsGenral[0]['SystemResets']
     displayData.VBDResets = systemStatisticsGenral[0]['VDBResets']
-    reportData.systemStatistics = {}
-    reportData.systemStatistics = displayData
-    console.log("The Statistics=====" + displayData)
-} */
+    daysingleResult.systemStatistics = displayData
+} 
 
 module.exports = {
   prepareStoreDetails,
@@ -360,6 +358,6 @@ module.exports = {
   getGoalStatistic,
   storesDetails,
   getAllStoresDetails,
-    getColourCode
-    //,prepareStatistics
+  getColourCode,
+  prepareStatistics
 }

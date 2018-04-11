@@ -82,7 +82,11 @@ const monthDifference = (fromDate, toDate) => {
     const date2 = moment(toDate)
     let diffent = date2.diff(date1, 'months')
     return diffent
-  }
+}
+
+const convertMonthDayYear = (dateVal) => {
+    return moment(dateVal).format('LL')
+}
 module.exports = {
   convertSecondsToMinutes,
   dayPartTime,
@@ -94,5 +98,6 @@ module.exports = {
     convertMMMddMM,
     converthhmmsstt,
     convertmmddyyyy,
-    monthDifference
+    monthDifference,
+    convertMonthDayYear
 }

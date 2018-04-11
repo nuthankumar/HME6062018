@@ -3,6 +3,7 @@ const stores = require('../Repository/StoresRepository')
 const reportUtil = require('../Common/ReportGenerateUtils')
 const _ = require('lodash')
 const HashMap = require('hashmap')
+const messages = require('../Common/Message')
 
 const generateDayReport = (input, callBack) => {
   let fromDateTime = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
@@ -29,15 +30,24 @@ const generateDayReport = (input, callBack) => {
           let goalstatisticsDetails = result.data[2]
           let goalSettings = _.filter(goalstatisticsDetails, group => group['Menu Board - GoalA'])
           prepareDayResults(daysingleResult, result.data[0], input.ReportTemplate_Format, colors, goalSettings)
-                    if (input.longestTime) {
-            reportUtil.prepareLongestTimes(daysingleResult, result.data[1], input.ReportTemplate_Format)
+           if (input.longestTime) {
+           reportUtil.prepareLongestTimes(daysingleResult, result.data[1], input.ReportTemplate_Format)
           }
           getGoalTime = result.data[5]
           const dayPartTotalObject = _.last(result.data[0])
           const totalCars = dayPartTotalObject['Total_Car']
           const dataArray = []
           reportUtil.getGoalStatistic(goalstatisticsDetails, getGoalTime, dataArray, totalCars)
-          daysingleResult.goalData = dataArray[0]
+           daysingleResult.goalData = dataArray[0]
+            if (input.systemStatistics) {
+                let systemStatisticsLane
+                let systemStatisticsGenral
+                systemStatisticsLane = result.data[7]
+                systemStatisticsGenral = result.data[6]
+                if (systemStatisticsLane && systemStatisticsGenral) {
+                    reportUtil.prepareStatistics(daysingleResult, systemStatisticsLane, systemStatisticsGenral)
+                }
+            }
         } else if (storesLength > 1) {
           // Colours
           let colors = result.data[4]
@@ -56,37 +66,33 @@ const generateDayReport = (input, callBack) => {
 }
 
 // This function is used to prepare the Multi Store results for Day Report
-function prepareMultiStoreResults (daysingleResult, daysData, format, colors, goalSettings) {
-  const dayIndexIds = new HashMap()
+function prepareMultiStoreResults(daysingleResult, daysData, format, colors, goalSettings) {
+    const dayIndexIds = new HashMap()
   let timeMeasure = []
   daysData.forEach(item => {
     let dayIndexId = item.DayID
-    //   console.log("The Items===" + JSON.stringify(item))
-
     if (dayIndexId && !dayIndexIds.has(dayIndexId)) {
       let dayResultsList = daysData.filter(function (obj) {
         return obj.DayID === dayIndexId
       })
       let multiStoreObj = {}
       let tempData = []
-      let tempRawCarData = dayResultsList[0]
-      multiStoreObj.title = tempRawCarData.StoreDate
+        let tempRawCarData = dayResultsList[0]
+      multiStoreObj.title = dateUtils.convertMonthDayYear(tempRawCarData.StoreDate) + messages.COMMON.OPENVALUE + " - " + dateUtils.convertMonthDayYear(tempRawCarData.StoreDate) + messages.COMMON.CLOSEVALUE
       for (let i = 0; i < dayResultsList.length; i++) {
         let storeObj = dayResultsList[i]
         let store = {}
-
-        if (item.StoreDate !== 'Total Day') {
+          if (storeObj.StoreNo !== 'Total Day') {
           let dataObject = prepareDayObject(storeObj, format, colors, goalSettings)
           store.name = storeObj.StoreNo
           dataObject.store = store
-
           tempData.push(dataObject)
         } else {
           let dataObject = prepareDayObject(storeObj, format, colors, goalSettings)
-          store.name = storeObj.StoreNo
-          store.timeSpan = 'W-Avg'
-          dataObject.store = store
-
+          let store1 = {}
+          store1.name = storeObj.StoreNo
+          store1.timeSpan = messages.COMMON.WAVG
+          dataObject.store = store1
           tempData.push(dataObject)
         }
       }
@@ -153,12 +159,12 @@ function prepareDayResults (daysingleResult, dayData, format, colors, goalSettin
     if (item.StoreDate !== 'Total Day') {
       let dataObject = prepareDayObject(item, format, colors, goalSettings)
       dataObject.day = item.StoreDate
-      dataObject.timeSpan = 'OPEN - CLOSE'
+        dataObject.timeSpan = messages.COMMON.DAYOPENCLOSE
       dataList.push(dataObject)
     } else {
       let dataObject = prepareDayObject(item, format, colors, goalSettings)
       dataObject.day = item.StoreDate
-      dataObject.timeSpan = 'W-Avg'
+        dataObject.timeSpan = messages.COMMON.WAVG
       dataList.push(dataObject)
     }
   })

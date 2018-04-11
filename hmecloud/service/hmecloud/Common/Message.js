@@ -71,7 +71,9 @@ exports.COMMON = {
     DAYPARTOPENTIME: ' OPEN-11:59',
     DAYPARTCLOSETIME: ' CLOSE-23:59',
     DAYOPENCLOSE: 'OPEN-CLOSE',
-    WAVG: 'W-Avg'
+    WAVG: 'W-Avg',
+    OPENVALUE: ' OPEN',
+    CLOSEVALUE: ' CLOSE'
 }
 
 exports.JWT = {
