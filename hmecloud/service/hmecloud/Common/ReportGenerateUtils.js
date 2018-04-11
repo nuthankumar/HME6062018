@@ -16,171 +16,219 @@ const prepareStoreDetails = (daysingleResult, storeData, input) => {
   return daysingleResult
 }
 
-function getGoalStatistic(goalsStatistics, getGoalTime, dataArray, totalCars) {
-    const goalGrades = {
-        goalA: {
-            title: '<Goal A',
-            menu: { goal: '', cars: '', percentage: '' },
-            greet: { goal: '', cars: '', percentage: '' },
-            service: { goal: '', cars: '', percentage: '' },
-            laneQueue: { goal: '', cars: '', percentage: '' },
-            laneTotal: { goal: '', cars: '', percentage: '' }
-        },
-        goalB: {
-            title: '<Goal B',
-            menu: { goal: '', cars: '', percentage: '' },
-            greet: { goal: '', cars: '', percentage: '' },
-            service: { goal: '', cars: '', percentage: '' },
-            laneQueue: { goal: '', cars: '', percentage: '' },
-            laneTotal: { goal: '', cars: '', percentage: '' }
-        },
-        goalC: {
-            title: '<Goal C',
-            menu: { goal: '', cars: '', percentage: '' },
-            greet: { goal: '', cars: '', percentage: '' },
-            service: { goal: '', cars: '', percentage: '' },
-            laneQueue: { goal: '', cars: '', percentage: '' },
-            laneTotal: { goal: '', cars: '', percentage: '' }
-        },
-        goalD: {
-            title: '<Goal D',
-            menu: { goal: '', cars: '', percentage: '' },
-            greet: { goal: '', cars: '', percentage: '' },
-            service: { goal: '', cars: '', percentage: '' },
-            laneQueue: { goal: '', cars: '', percentage: '' },
-            laneTotal: { goal: '', cars: '', percentage: '' }
-        },
-        goalF: {
-            title: 'Goal D',
-            menu: { goal: '', cars: '', percentage: '' },
-            greet: { goal: '', cars: '', percentage: '' },
-            service: { goal: '', cars: '', percentage: '' },
-            laneQueue: { goal: '', cars: '', percentage: '' },
-            laneTotal: { goal: '', cars: '', percentage: '' }
-        }
+function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars) {
+  const goalGrades = {
+    goalA: {
+      title: '<Goal A',
+      menu: { goal: '', cars: '', percentage: '' },
+      greet: { goal: '', cars: '', percentage: '' },
+      service: { goal: '', cars: '', percentage: '' },
+      laneQueue: { goal: '', cars: '', percentage: '' },
+      laneTotal: { goal: '', cars: '', percentage: '' }
+    },
+    goalB: {
+      title: '<Goal B',
+      menu: { goal: '', cars: '', percentage: '' },
+      greet: { goal: '', cars: '', percentage: '' },
+      service: { goal: '', cars: '', percentage: '' },
+      laneQueue: { goal: '', cars: '', percentage: '' },
+      laneTotal: { goal: '', cars: '', percentage: '' }
+    },
+    goalC: {
+      title: '<Goal C',
+      menu: { goal: '', cars: '', percentage: '' },
+      greet: { goal: '', cars: '', percentage: '' },
+      service: { goal: '', cars: '', percentage: '' },
+      laneQueue: { goal: '', cars: '', percentage: '' },
+      laneTotal: { goal: '', cars: '', percentage: '' }
+    },
+    goalD: {
+      title: '<Goal D',
+      menu: { goal: '', cars: '', percentage: '' },
+      greet: { goal: '', cars: '', percentage: '' },
+      service: { goal: '', cars: '', percentage: '' },
+      laneQueue: { goal: '', cars: '', percentage: '' },
+      laneTotal: { goal: '', cars: '', percentage: '' }
+    },
+    goalF: {
+      title: 'Goal D',
+      menu: { goal: '', cars: '', percentage: '' },
+      greet: { goal: '', cars: '', percentage: '' },
+      service: { goal: '', cars: '', percentage: '' },
+      laneQueue: { goal: '', cars: '', percentage: '' },
+      laneTotal: { goal: '', cars: '', percentage: '' }
     }
+  }
 
-    var populate = (result, goal, event, property, key, value) => {
-        if (key.toLowerCase().includes(goal.toLowerCase()) && key.toLowerCase().includes(event.toLowerCase())) {
-            result[goal][event][property] = value
-        }
+  var populate = (result, goal, event, property, key, value) => {
+    if (key.toLowerCase().includes(goal.toLowerCase()) && key.toLowerCase().includes(event.toLowerCase())) {
+      result[goal][event][property] = value
     }
+  }
 
-    var populatePercentage = (result, goal, event, property, key, value, totalCarsCount) => {
-        if (key.toLowerCase().includes(goal.toLowerCase()) && key.toLowerCase().includes(event.toLowerCase())) {
-            if (value === 0 || value === null) {
-                result[goal][event][property] = `0%`
-            } else {
-                result[goal][event][property] = `${Math.round(value / totalCarsCount * 100)}%`
-            }
-        }
+  var populatePercentage = (result, goal, event, property, key, value, totalCarsCount) => {
+    if (key.toLowerCase().includes(goal.toLowerCase()) && key.toLowerCase().includes(event.toLowerCase())) {
+      if (value === 0 || value === null) {
+        result[goal][event][property] = `0%`
+      } else {
+        result[goal][event][property] = `${Math.round(value / totalCarsCount * 100)}%`
+      }
     }
+  }
 
-    var prepareGoal = (result, event, property, key, value) => {
-        populate(result, 'goalA', event, property, key, value)
-        populate(result, 'goalB', event, property, key, value)
-        populate(result, 'goalC', event, property, key, value)
-        populate(result, 'goalD', event, property, key, value)
-        populate(result, 'goalF', event, property, key, value)
-    }
+  var prepareGoal = (result, event, property, key, value) => {
+    populate(result, 'goalA', event, property, key, value)
+    populate(result, 'goalB', event, property, key, value)
+    populate(result, 'goalC', event, property, key, value)
+    populate(result, 'goalD', event, property, key, value)
+    populate(result, 'goalF', event, property, key, value)
+  }
 
-    var prepareGoalPercentage = (result, event, property, key, value, totalCars) => {
-        populatePercentage(result, 'goalA', event, property, key, value, totalCars)
-        populatePercentage(result, 'goalB', event, property, key, value, totalCars)
-        populatePercentage(result, 'goalC', event, property, key, value, totalCars)
-        populatePercentage(result, 'goalD', event, property, key, value, totalCars)
-        populatePercentage(result, 'goalF', event, property, key, value, totalCars)
-    }
-    // Get the values for the goals
-    _.map(getGoalTime[0], (value, key) => {
-        prepareGoal(goalGrades, 'menu', 'goal', key, value)
-        prepareGoal(goalGrades, 'greet', 'goal', key, value)
-        prepareGoal(goalGrades, 'service', 'goal', key, value)
-        prepareGoal(goalGrades, 'laneQueue', 'goal', key, value)
-        prepareGoal(goalGrades, 'laneTotal', 'goal', key, value)
-    })
+  var prepareGoalPercentage = (result, event, property, key, value, totalCars) => {
+    populatePercentage(result, 'goalA', event, property, key, value, totalCars)
+    populatePercentage(result, 'goalB', event, property, key, value, totalCars)
+    populatePercentage(result, 'goalC', event, property, key, value, totalCars)
+    populatePercentage(result, 'goalD', event, property, key, value, totalCars)
+    populatePercentage(result, 'goalF', event, property, key, value, totalCars)
+  }
+  // Get the values for the goals
+  _.map(getGoalTime[0], (value, key) => {
+    prepareGoal(goalGrades, 'menu', 'goal', key, value)
+    prepareGoal(goalGrades, 'greet', 'goal', key, value)
+    prepareGoal(goalGrades, 'service', 'goal', key, value)
+    prepareGoal(goalGrades, 'laneQueue', 'goal', key, value)
+    prepareGoal(goalGrades, 'laneTotal', 'goal', key, value)
+  })
 
-    // get the values for the cars
-    _.map(goalsStatistics[0], (value, key) => {
-        prepareGoal(goalGrades, 'menu', 'cars', key, value)
-        prepareGoal(goalGrades, 'greet', 'cars', key, value)
-        prepareGoal(goalGrades, 'service', 'cars', key, value)
-        prepareGoal(goalGrades, 'laneQueue', 'cars', key, value)
-        prepareGoal(goalGrades, 'laneTotal', 'cars', key, value)
+  // get the values for the cars
+  _.map(goalsStatistics[0], (value, key) => {
+    prepareGoal(goalGrades, 'menu', 'cars', key, value)
+    prepareGoal(goalGrades, 'greet', 'cars', key, value)
+    prepareGoal(goalGrades, 'service', 'cars', key, value)
+    prepareGoal(goalGrades, 'laneQueue', 'cars', key, value)
+    prepareGoal(goalGrades, 'laneTotal', 'cars', key, value)
 
-        prepareGoalPercentage(goalGrades, 'menu', 'percentage', key, value, totalCars)
-        prepareGoalPercentage(goalGrades, 'greet', 'percentage', key, value, totalCars)
-        prepareGoalPercentage(goalGrades, 'service', 'percentage', key, value, totalCars)
-        prepareGoalPercentage(goalGrades, 'laneQueue', 'percentage', key, value, totalCars)
-        prepareGoalPercentage(goalGrades, 'laneTotal', 'percentage', key, value, totalCars)
-        // value : statistic value
-        //  totalCars : avgTimeCalculate
-        dataArray.push(goalGrades)
-    })
-    return dataArray[0]
+    prepareGoalPercentage(goalGrades, 'menu', 'percentage', key, value, totalCars)
+    prepareGoalPercentage(goalGrades, 'greet', 'percentage', key, value, totalCars)
+    prepareGoalPercentage(goalGrades, 'service', 'percentage', key, value, totalCars)
+    prepareGoalPercentage(goalGrades, 'laneQueue', 'percentage', key, value, totalCars)
+    prepareGoalPercentage(goalGrades, 'laneTotal', 'percentage', key, value, totalCars)
+    // value : statistic value
+    //  totalCars : avgTimeCalculate
+
+    dataArray.push(goalGrades)
+  })
+  console.log(dataArray[0])
+  return dataArray[0]
 }
-    // This function is used to prepare Longest details for Day Report
-    const prepareLongestTimes = (daysingleResult, longestData, format) => {
-    let LongestTimes = []
-    let longestObj = {}
-    let k = 0
-    for (let i = 0; i < longestData.length; i++) {
-        let tempTimeObj = longestData[i]
-        if (tempTimeObj.headerName.includes(messages.EventName.MENU)) {
-            let timeObj = {}
-            timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
-            timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
-            timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
-            longestObj.Menu = timeObj
-            LongestTimes.push(longestObj)
-        } else if (tempTimeObj.headerName.includes(messages.EventName.GREET)) {
-            let timeObj = {}
-            timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
-            timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
-            timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
-            LongestTimes[k].Greet = timeObj
-            k = k + 1
-            if (k === 2) {
-                k = 0
-            }
-        } else if (tempTimeObj.headerName.includes(messages.EventName.SERVICE)) {
-            let timeObj = {}
-            timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
-            timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
-            timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
-            LongestTimes[k].Service = timeObj
-            k = k + 1
-            if (k === 2) {
-                k = 0
-            }
-        } else if (tempTimeObj.headerName.includes(messages.EventName.LANEQUEUE)) {
-            let timeObj = {}
-            timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
-            timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
-            timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
-            LongestTimes[k].LaneQueue = timeObj
-            k = k + 1
-            if (k === 2) {
-                k = 0
-            }
-        }else if (tempTimeObj.headerName.includes(messages.EventName.LANETOTAl)) {
-            let timeObj = {}
-            timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
-            timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
-            timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
-            LongestTimes[k].LaneTotal = timeObj
-            k = k + 1
-            if (k === 2) {
-                k = 0
-            }
+// This function is used to prepare Longest details for Day Report
+const prepareLongestTimes = (daysingleResult, longestData, format) => {
+  let LongestTimes = []
+  let longestObj = {}
+  let k = 0
+  for (let i = 0; i < longestData.length; i++) {
+    let tempTimeObj = longestData[i]
+    if (tempTimeObj.headerName.includes(messages.EventName.MENU)) {
+      let timeObj = {}
+      timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
+      timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
+      timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
+      longestObj.Menu = timeObj
+      LongestTimes.push(longestObj)
+    } else if (tempTimeObj.headerName.includes(messages.EventName.GREET)) {
+      let timeObj = {}
+      timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
+      timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
+      timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
+      LongestTimes[k].Greet = timeObj
+      k = k + 1
+      if (k === 2) {
+        k = 0
+      }
+    } else if (tempTimeObj.headerName.includes(messages.EventName.SERVICE)) {
+      let timeObj = {}
+      timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
+      timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
+      timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
+      LongestTimes[k].Service = timeObj
+      k = k + 1
+      if (k === 2) {
+        k = 0
+      }
+    } else if (tempTimeObj.headerName.includes(messages.EventName.LANEQUEUE)) {
+      let timeObj = {}
+      timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
+      timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
+      timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
+      LongestTimes[k].LaneQueue = timeObj
+      k = k + 1
+      if (k === 2) {
+        k = 0
+      }
+    } else if (tempTimeObj.headerName.includes(messages.EventName.LANETOTAl)) {
+      let timeObj = {}
+      timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
+      timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
+      timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
+      LongestTimes[k].LaneTotal = timeObj
+      k = k + 1
+      if (k === 2) {
+        k = 0
+      }
+    }
+  }
+  daysingleResult.LongestTimes = LongestTimes
+  return daysingleResult
+}
+// This function is used to prepare colors with event values
+const storesDetails = (result, colors, goalSettings) => {
+  let storeDetails = _.filter(result, (value) => {
+    if (value.StoreNo) {
+      return value
+    }
+  })
+  let colorSettings = []
+  if (colors.length > 0) {
+    colorSettings = colors[0].ColourCode.split('|')
+  }
+  let getColor = (event, eventValue) => {
+    let color = colorSettings[2]
+    const eventSettings = _.pickBy(goalSettings[0], (value, key) => {
+      if (key.toLowerCase().includes(event.toLowerCase())) {
+        if (value && eventValue < value) {
+          if (key.includes('GoalA')) {
+            color = colorSettings[0]
+          } else if (key.includes('GoalB')) {
+            color = colorSettings[1]
+          } else if (key.includes('GoalC')) {
+            color = colorSettings[2]
+          }
+          return true
         }
       }
-    daysingleResult.LongestTimes = LongestTimes
-    return daysingleResult
+    })
+    return color
+  }
+  let storesData = []
+  _.forEach(storeDetails, (items) => {
+    let Week = {
+      'week': {'open': items.WeekStartDate, 'close': items.WeekEndDate},
+      'menu': {'value': items['Menu Board'], 'color': getColor('Menu', items['Menu Board'])},
+      'greet': {'value': items.Greet, 'color': getColor('Greet', items.Greet)},
+      'service': {'value': items.Service, 'color': getColor('Service', items.Service)},
+      'laneQueue': {'value': items['Lane Queue'], 'color': getColor('Lane Queue', items['Lane Queue'])},
+      'laneTotal': {'value': items['Lane Total'], 'color': getColor('Lane Total', items['Lane Total'])},
+      'totalCars': {'value': items['Total_Car'], 'color': getColor('Total_Car', items['Total_Car'])}
+    }
+    return storesData.push(Week)
+  })
+
+  return storesData
 }
 
 module.exports = {
   prepareStoreDetails,
   prepareLongestTimes,
-  getGoalStatistic
+  getGoalStatistic,
+  storesDetails
 }
