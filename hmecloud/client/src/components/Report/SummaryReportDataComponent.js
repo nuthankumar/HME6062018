@@ -102,11 +102,12 @@ export default class SummaryReportDataComponent extends Component {
     }
     this.displaySummarizedData = this.displaySummarizedData.bind(this)
     this.displaySummarizedRowData = this.displaySummarizedRowData.bind(this)
+    this.displayLongestTimes = this.displayLongestTimes.bind(this)
   }
 
   displaySummarizedData (reportData) {
-    if (reportData.singleDayPart.length > 0) {
-      return reportData.singleDayPart.map((reportItem) => {
+    if (reportData.response.timeMeasureType.length > 0) {
+      return reportData.response.timeMeasureType.map((reportItem) => {
         return (
           <div className='col-xs-12 report-data-unit'>
             <div className={'col-xs-12 from-to-detail ' + this.dynamicColumnData.showFromToTime}><span>{reportItem.startTime}</span> <span>OPEN - </span> <span>{reportItem.endTime}</span> <span>CLOSE</span></div>
@@ -134,7 +135,7 @@ export default class SummaryReportDataComponent extends Component {
                 {this.displaySummarizedRowData(reportItem.data)}
               </tbody>
             </table>
-            <LongestTime LongestTimes = {this.state.LongestTimes} />
+            {this.displayLongestTimes()}
           </div>
         )
       })
@@ -148,17 +149,17 @@ export default class SummaryReportDataComponent extends Component {
       return reportRowData.map((reportItem) => {
         return (
           <tr>
-            <td className={this.dynamicColumnData.showGroupsStores}>{reportItem.groupId != null ? reportItem.groupId : 'NA'}</td>
-            <td className={this.dynamicColumnData.showGroupsStores} onClick={this.props.reportData.handleDrillDown}>{reportItem.storeId}</td>
+            <td className={this.dynamicColumnData.showGroupsStores}>{reportItem.groupId ? reportItem.groupId.value : '' }</td>
+            <td className={this.dynamicColumnData.showGroupsStores} onClick={this.props.reportData.handleDrillDown}>{reportItem.storeId ? reportItem.storeId.value : ''}</td>
             <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayColumn}><span className='timeSpan'>{reportItem.day? reportItem.day.timeSpan : '' }</span><br/><span className='currentMeasure'>{reportItem.day  ? reportItem.day.currentDaypart :''}</span></td>
-            <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayPartColumn}><span className='timeSpan'>{reportItem.daypart.timeSpan}</span><br/><span className='currentMeasure'>{reportItem.daypart.currentDaypart}</span></td>
-            <td className={'timeMeasureColumn '+ this.dynamicColumnData.showWeekColumn}><span>{reportItem.week}</span> </td>
-            <td>{reportItem.menu}</td>
-            <td>{reportItem.greet}</td>
-            <td>{reportItem.service}</td>
-            <td>{reportItem.laneQueue}</td>
-            <td>{reportItem.laneTotal}</td>
-            <td>{reportItem.totalCars}</td>
+            <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayPartColumn}><span className='timeSpan'>{reportItem.daypart? reportItem.daypart.timeSpan : ''}</span><br/><span className='currentMeasure'>{reportItem.daypart ? reportItem.daypart.currentDaypart : ''}</span></td>
+            <td className={'timeMeasureColumn '+ this.dynamicColumnData.showWeekColumn}><span>{reportItem.week? reportItem.week.timeSpan : ''}</span> <span className='currentMeasure'>{reportItem.week ? reportItem.week.currentDaypart : ''}</span></td>
+            <td>{reportItem.menu.value}</td>
+            <td>{reportItem.greet.value}</td>
+            <td>{reportItem.service.value}</td>
+            <td>{reportItem.laneQueue.value}</td>
+            <td>{reportItem.laneTotal.value}</td>
+            <td>{reportItem.totalCars.value}</td>
           </tr>
         )
       })
@@ -167,6 +168,17 @@ export default class SummaryReportDataComponent extends Component {
     }
   }
 
+  displayLongestTimes(){
+    if(this.props.reportData.singleStore){
+      return(
+        <LongestTime LongestTimes = {this.state.LongestTimes} className = {(this.props.reportData.singleStore) ? 'show' : 'hide'}/>
+      )
+    }else{
+      return(
+        <div/>
+      )
+    }
+  }
   render () {
     let reportData = this.props.reportData
     return (<div>{this.displaySummarizedData(reportData)}</div>)
