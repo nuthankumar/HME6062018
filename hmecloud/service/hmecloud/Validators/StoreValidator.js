@@ -6,7 +6,7 @@ const weekReportController = require('../Controllers/WeekReportController')
 
 const reportValidator = (request, callback) => {
   let output = {}
-  console.log('report validator', request.body.selectedStoreIds)
+
   if (request.body.selectedStoreIds.length > 0) {
     const input = {
       ReportTemplate_StoreIds: request.body.selectedStoreIds, //  [] array of object
@@ -19,16 +19,9 @@ const reportValidator = (request, callback) => {
       ReportTemplate_Open: request.body.open, // boolean
       ReportTemplate_Close: request.body.close, // boolean
       ReportTemplate_Type: request.body.type, // number
-      // Include: request.body.include, // [] array
       longestTime: request.body.longestTime, // boolean
       systemStatistics: request.body.systemStatistics, // boolean
       ReportTemplate_Format: request.body.format, // number
-      // Hours1: request.body.Hours,
-      // Minutes1: request.body.Minutes,
-      // AMPM1: request.body.AMPM,
-      // Hours2: request.body,
-      // Minutes2: request.body,
-      // AMPM2: request.body.AMPM,
       reportType: request.query.reportType,
       UserEmail: request.UserEmail,
       CarDataRecordType_ID: request.UserPreferenceValue
@@ -52,7 +45,7 @@ const reportValidator = (request, callback) => {
       output.status = false
       callback(output)
     }
-    console.log(input.ReportTemplate_Time_Measure)
+
     // report time measure day data
     if (input.ReportTemplate_Time_Measure === 1) {
       dayReportController.generateDayReport(input, result => {
