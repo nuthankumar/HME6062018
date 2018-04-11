@@ -53,10 +53,11 @@ const generateDaypartReport = (input, callBack) => {
       if (input.ReportTemplate_StoreIds.length > 1) {
         averageTimeResultSet = result.data[0]
       } else {
-        storeDetails = result.data[0]
-        averageTimeResultSet = result.data[1]
-        longestTimes = result.data[2]
-        goalsStatistics = result.data[3]
+        
+        averageTimeResultSet = result.data[0]
+        longestTimes = result.data[1]
+        goalsStatistics = result.data[2]
+        storeDetails = result.data[3]
         getGoalTime = result.data[4]
         systemStatisticsLane = result.data[5]
         systemStatisticsGenral = result.data[6]
@@ -88,15 +89,19 @@ const generateDaypartReport = (input, callBack) => {
         if (input.systemStatistics) {
           let displayData = {}
 
-          displayData.Lane = systemStatisticsLane[0]['Lane']
-          displayData.AverageCarsInLane = systemStatisticsLane[0]['AvgCarsInLane']
-          displayData.TotalPullouts = systemStatisticsLane[0]['Pullouts']
-          displayData.TotalPullins = systemStatisticsLane[0]['Pullins']
-          displayData.DeleteOverMaximum = systemStatisticsLane[0]['DeleteOverMax']
-          displayData.PowerFails = systemStatisticsGenral[0]['PowerFails']
-          displayData.SystemResets = systemStatisticsGenral[0]['SystemResets']
-          displayData.VBDResets = systemStatisticsGenral[0]['VDBResets']
-          console.log(systemStatisticsLane[0]['Lane'])
+          if (systemStatisticsLane[0]) {
+            displayData.Lane = systemStatisticsLane[0]['Lane']
+            displayData.AverageCarsInLane = systemStatisticsLane[0]['AvgCarsInLane']
+            displayData.TotalPullouts = systemStatisticsLane[0]['Pullouts']
+            displayData.TotalPullins = systemStatisticsLane[0]['Pullins']
+            displayData.DeleteOverMaximum = systemStatisticsLane[0]['DeleteOverMax']
+          }
+          if (systemStatisticsGenral[0]) {
+            displayData.PowerFails = systemStatisticsGenral[0]['PowerFails']
+            displayData.SystemResets = systemStatisticsGenral[0]['SystemResets']
+            displayData.VBDResets = systemStatisticsGenral[0]['VDBResets']
+          }
+
           reportData.systemStatistics = {}
           reportData.systemStatistics = displayData
         }
@@ -191,7 +196,6 @@ function convertEventsTimeFormat (key, row, value, parts, input) {
   }
 
   parts.dayPartIndex = row['DayPartIndex']
-
 
   if (key.includes(messages.Events.MENU)) {
     parts.menu.value = input.ReportTemplate_Format === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)

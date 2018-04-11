@@ -10,19 +10,16 @@ const generateDayPartSummaryReport = (input, callback) => {
       callback(output)
     }
 
-    const inputType = input.ReportTemplate_StoreIds.length
-
     sqlPool.request()
-      .input('InputType', sql.VarChar(5), inputType)
-      .input('Device_IDs', sql.VarChar(5), `${input.ReportTemplate_StoreIds.toString()}`)
+      .input('StoreIDs', sql.VarChar(5), input.ReportTemplate_StoreIds.toString())
       .input('StoreStartDate', sql.Date, input.ReportTemplate_From_Date)
       .input('StoreEndDate', sql.Date, input.ReportTemplate_To_Date)
-      .input('StartDateTime', sql.Date, input.ReportTemplate_From_Time)
-      .input('EndDateTime', sql.Date, input.ReportTemplate_To_Time)
-      .input('CarDataRecordType_ID', sql.VarChar(255), '11')
-      .input('ReportType', sql.Char(2), 'AC')
+      .input('StartDateTime', sql.DateTime2, input.ReportTemplate_From_Time)
+      .input('EndDateTime', sql.DateTime2, input.ReportTemplate_To_Time)
+      .input('CarDataRecordType_ID', sql.VarChar(255), input.CarDataRecordType_ID)
+      .input('ReportType', sql.Char(2), input.ReportTemplate_Type)
       .input('LaneConfig_ID', sql.TinyInt, '1')
-      .execute('_usp_HME_Cloud_Get_Report_By_Daypart', (err, result) => {
+      .execute('usp_HME_Cloud_Get_Report_By_Daypart_Details', (err, result) => {
         if (err) {
           output.data = err
           output.status = false
