@@ -337,11 +337,29 @@ const getAllStoresDetails = (result, colors, goalSettings, format) => {
   return storesData
 }
 
+/*const prepareStatistics = (daysingleResult, systemStatisticsLane, systemStatisticsGenral) => {
+
+    let displayData = {}
+
+    displayData.Lane = systemStatisticsLane[0]['Lane']
+    displayData.AverageCarsInLane = systemStatisticsLane[0]['AvgCarsInLane']
+    displayData.TotalPullouts = systemStatisticsLane[0]['Pullouts']
+    displayData.TotalPullins = systemStatisticsLane[0]['Pullins']
+    displayData.DeleteOverMaximum = systemStatisticsLane[0]['DeleteOverMax']
+    displayData.PowerFails = systemStatisticsGenral[0]['PowerFails']
+    displayData.SystemResets = systemStatisticsGenral[0]['SystemResets']
+    displayData.VBDResets = systemStatisticsGenral[0]['VDBResets']
+    reportData.systemStatistics = {}
+    reportData.systemStatistics = displayData
+    console.log("The Statistics=====" + displayData)
+} */
+
 module.exports = {
   prepareStoreDetails,
   prepareLongestTimes,
   getGoalStatistic,
   storesDetails,
   getAllStoresDetails,
-  getColourCode
+    getColourCode
+    //,prepareStatistics
 }

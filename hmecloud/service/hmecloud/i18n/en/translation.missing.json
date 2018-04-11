@@ -1,0 +1,15 @@
+{
+  "CREATEGROUP": {
+    "groupNameEmpty": "CREATEGROUP.groupNameEmpty",
+    "groupSuccess1": "CREATEGROUP.groupSuccess1",
+    "invalidInput": "CREATEGROUP.invalidInput",
+    "groupId": "CREATEGROUP.groupId"
+  },
+  "REPORTSUMMARY": {
+    "InvalidStoreId": "REPORTSUMMARY.InvalidStoreId",
+    "invalidTemplateId": "REPORTSUMMARY.invalidTemplateId"
+  },
+  "LISTGROUP": {
+    "createdBy": "LISTGROUP.createdBy"
+  }
+}

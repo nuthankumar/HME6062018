@@ -3,6 +3,7 @@ const stores = require('../Repository/StoresRepository')
 const reportUtil = require('../Common/ReportGenerateUtils')
 const _ = require('lodash')
 const HashMap = require('hashmap')
+const messages = require('../Common/Message')
 
 
 const generateDayReport = (input, callBack) => {
@@ -39,6 +40,15 @@ const generateDayReport = (input, callBack) => {
                     const dataArray = []
                     reportUtil.getGoalStatistic(goalstatisticsDetails, getGoalTime, dataArray, totalCars)
                     daysingleResult.goalData = dataArray[0] 
+                    if (input.systemStatistics) {
+                        let systemStatisticsLane
+                        let systemStatisticsGenral
+                        systemStatisticsLane = result.data[5]
+                        systemStatisticsGenral = result.data[6]
+
+                        reportUtil.prepareStatistics(daysingleResult, systemStatisticsLane, systemStatisticsGenral)
+                    }
+
                 } else if (storesLength > 1) {
                     //Colours
                     let colors = result.data[4]
@@ -87,7 +97,7 @@ function prepareMultiStoreResults(daysingleResult, daysData, format, colors, goa
                 } else {
                     let dataObject = prepareDayObject(storeObj, format, colors, goalSettings)
                     store.name = storeObj.StoreNo
-                    store.timeSpan = "W-Avg"
+                    store.timeSpan = messages.COMMON.WAVG
                     dataObject.store = store
 
                     tempData.push(dataObject)
@@ -159,12 +169,12 @@ function prepareDayResults(daysingleResult, dayData, format, colors, goalSetting
         if (item.StoreDate !== 'Total Day') {
             let dataObject = prepareDayObject(item, format, colors, goalSettings)
             dataObject.day = item.StoreDate
-            dataObject.timeSpan = "OPEN - CLOSE"
+            dataObject.timeSpan = messages.COMMON.DAYOPENCLOSE
             dataList.push(dataObject)
         } else {
             let dataObject = prepareDayObject(item, format, colors, goalSettings)
             dataObject.day = item.StoreDate
-            dataObject.timeSpan = "W-Avg"
+            dataObject.timeSpan = messages.COMMON.WAVG
             dataList.push(dataObject)
         }
     })

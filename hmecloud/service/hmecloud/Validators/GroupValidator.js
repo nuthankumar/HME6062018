@@ -127,17 +127,17 @@ const avaliabledGroups = (request, callback) => {
 }
 const getAll = (request, callback) => {
   let output = {}
-  if (request.query.accountId) {
+    if (request.AccountId) {
     const input = {
-      accountId: request.query.accountId
+        accountId: request.AccountId
     }
-    const accountId = validate.isNumeric(input.accountId)
-    if (!accountId) {
+   // const accountId = validate.isNumeric(input.accountId)
+        if (!input.accountId) {
       output.error = request.t('LISTGROUP.accountId')
       output.status = false
       callback(output)
     }
-    if (accountId) {
+        if (input.accountId) {
       groupController.getAll(request, input, result => {
         callback(result)
       })
