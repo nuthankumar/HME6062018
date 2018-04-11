@@ -33,7 +33,7 @@ const send = (toAddress, subject, attachment, callBack) => {
   }
 
   transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
+    if (error) {
       callBack(error)
     } else {
       callBack(true)

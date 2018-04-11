@@ -47,38 +47,12 @@ const get = (request, callback) => {
  * @public
  */
 const getAll = (input, callback) => {
-  let output = {}
   let values = {}
-  const AccountId = validate.isNumeric(input.query.accountId)
-  const CreatedBy = validate.isNumeric(input.query.createdBy)
-  if (!AccountId) {
-    output.error = input.t('LISTGROUP.accountId')
-    output.status = false
-    callback(output)
-  }
-  if (!CreatedBy) {
-    output.error = input.t('LISTGROUP.createdBy')
-    output.status = false
-    callback(output)
-  }
-  if (AccountId && CreatedBy) {
-    values.AccountId = input.query.accountId
-    values.CreatedBy = input.query.createdBy
-    templateController.getAll(values, input, (result) => {
-      callback(result)
-    })
-  } else if (!AccountId && CreatedBy) {
-    output.error = input.t('LISTGROUP.accountId')
-    output.status = false
-    callback(output)
-  } else if (AccountId && !CreatedBy) {
-    output.error = input.t('LISTGROUP.createdBy')
-    output.status = false
-    callback(output)
-  } else {
-    output.error = input.t('CREATEGROUP.invalidInput')
-    output.status = false
-  }
+  values.AccountId = input.AccountId
+  values.CreatedBy = input.AccountId
+  templateController.getAll(values, input, (result) => {
+    callback(result)
+  })
 }
 
 /**

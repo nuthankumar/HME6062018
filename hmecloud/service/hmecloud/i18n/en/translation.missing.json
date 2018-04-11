@@ -10,6 +10,7 @@
     "invalidTemplateId": "REPORTSUMMARY.invalidTemplateId"
   },
   "LISTGROUP": {
-    "createdBy": "LISTGROUP.createdBy"
+    "createdBy": "LISTGROUP.createdBy",
+    "accountId": "LISTGROUP.accountId"
   }
 }
