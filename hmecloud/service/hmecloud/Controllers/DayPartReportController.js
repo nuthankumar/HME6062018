@@ -64,8 +64,6 @@ const generateDaypartReport = (input, callBack) => {
       }
 
       // Single Store result
-      console.log(storeDetails)
-
       if (input.ReportTemplate_StoreIds.length < 2) {
         convertTimeFormatonEachRowObjectElement(input, averageTimeResultSet, data)
 
