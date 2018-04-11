@@ -13,8 +13,6 @@ import DateTime from "react-datetime";
 import "rc-time-picker/assets/index.css";
 import moment from "moment";
 import TimePicker from "rc-time-picker";
-import Footer from "../Footer/Footer";
-import HmeHeader from "../Header/HmeHeader";
 import SuccessAlert from "../Alerts/SuccessAlert";
 import ErrorAlert from "../Alerts/ErrorAlert";
 import {Config} from '../../Config'
@@ -159,7 +157,6 @@ class Report extends Component {
     //{
     //  (t, { i18n }) => (
       <section className="reportsPage">
-        <HmeHeader />
         <div className="reports">
           <SuccessAlert successMessage={this.state.successMessage} />
           <ErrorAlert errorMessage={this.state.errorMessage} />
@@ -474,7 +471,6 @@ class Report extends Component {
             </section>
           </form>
         </div>
-              <Footer />
       </section>
    //  )
     //}
@@ -801,7 +797,9 @@ class Report extends Component {
     }
     if (!isError) {
       let templateData = this.state.templateData[0]
-      switch (this.state.templateData[0].timeMeasure) {
+      let timeMeasure = this.state.templateData[0].timeMeasure.toString()
+      switch (timeMeasure) {
+
         case '1' : this.state.reportData.dailyData = true
           if (templateData.selectedStoreIds.length === 1) {
             this.state.reportData.dayColumn = true
@@ -813,6 +811,7 @@ class Report extends Component {
             this.state.reportData.singleStore = false
           }
           this.setState(this.state)
+          this.generateDaypartReport()
           break
 
         case '2' : this.state.reportData.dayPartData = true
@@ -830,7 +829,7 @@ class Report extends Component {
           break
 
         case '3' : this.state.reportData.weeklyData = true
-          if (templateData[0].selectedStoreIds.length === 1) {
+          if (templateData.selectedStoreIds.length === 1) {
             this.state.reportData.weekColumn = true
             this.state.reportData.groupStoreColumns = false
             this.state.singleStore = true
@@ -840,6 +839,7 @@ class Report extends Component {
             this.state.singleStore = false
           }
           this.setState(this.state)
+          this.generateDaypartReport()
           break
 
         case '4' : this.generateRawCarDataReport(template)
@@ -895,8 +895,8 @@ class Report extends Component {
     let template = this.state.templateData[0]
     let request = {
       "timeMeasure": parseInt(template.timeMeasure),
-      "fromDate": template.fromDate,
-      "toDate": template.toDate,
+      "fromDate": moment(template.fromDate).format('YYYY-MM-DD'),
+      "toDate": moment(template.toDate).format('YYYY-MM-DD'),
       "openTime": template.openTime,
       "closeTime": template.closeTime,
       "open": template.open,
@@ -905,7 +905,7 @@ class Report extends Component {
       "include": template.include,
       "format": template.format,
     //  "selectedStoreIds": template.selectedStoreIds,
-      "selectedStoreIds": [15, 16],
+      "selectedStoreIds": [ "4" ],
       "advancedOptions": template.advancedOptions,
       "longestTime": template.longestTime,
       "systemStatistics":template.systemStatistics

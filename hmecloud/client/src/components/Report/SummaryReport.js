@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 // import fetch from 'isomorphic-fetch'
-import HmeHeader from '../Header/HmeHeader'
 import SummaryReportDataComponent from './SummaryReportDataComponent'
 import GoalStatisticsDataComponent from './GoalStatisticsDataComponent'
 import SystemStatistics from './SystemStatistics'
@@ -100,7 +99,7 @@ export default class SummaryReport extends Component {
   }
 
   headerDetails(){
-    if(this.state.singleStore){
+    if(this.state.reportData.singleStore){
       return(<table className='rawcar-header-labels clear'>
           <tbody>
             <tr>
@@ -338,7 +337,6 @@ export default class SummaryReport extends Component {
   render () {
     // let reportData = this.state.reportData.data
     return (<section className='report-summary-page'>
-      <HmeHeader />
       <section className='reportsummary-container'>
         <div className='row download-btn-section'>
           <button className='btn btn-default download-summaryreport-btn' onClick={() => this.downloadPdf(this.state.templateData[0])}>Download</button>
