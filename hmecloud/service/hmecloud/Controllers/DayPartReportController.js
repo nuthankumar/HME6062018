@@ -72,7 +72,7 @@ const generateDaypartReport = (input, callBack) => {
 
         dayPartObject.data = data
         singleDayParts.push(dayPartObject)
-        reportData.singleDayPart = singleDayParts
+          reportData.timeMeasureType = singleDayParts
         reportUtil.prepareStoreDetails(reportData, storeDetails[0], input)
 
         // goal statistics
@@ -129,7 +129,7 @@ const generateDaypartReport = (input, callBack) => {
         }
         convertTimeFormatonEachRowObjectElement(input, averageTimeResultSet, data)
         let dayPartIndex = 0
-        reportData.multipleDayPart = []
+          reportData.timeMeasureType = []
 
         averageTimeResultSet.forEach(daypartsRow => {
           Object.keys(daypartsRow).map(function (key, value) {
@@ -141,7 +141,7 @@ const generateDaypartReport = (input, callBack) => {
             groupByStore.data.push(multiparts)
           } else {
             if (dayPartIndex !== 0) {
-              reportData.multipleDayPart.push(groupByStore)
+                reportData.timeMeasureType.push(groupByStore)
               groupByStore = new Object()
               groupByStore.data = new Array()
             } else {
@@ -151,7 +151,7 @@ const generateDaypartReport = (input, callBack) => {
           }
         })
 
-        reportData.multipleDayPart.push(groupByStore)
+          reportData.timeMeasureType.push(groupByStore)
         reportData.status = true
         callBack(reportData)
       }
