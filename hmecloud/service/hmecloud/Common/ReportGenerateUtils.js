@@ -5,14 +5,15 @@ const moment = require('moment')
 const momentDurationFormatSetup = require('moment-duration-format')
 // This function is used to Prepare Store Details
 const prepareStoreDetails = (daysingleResult, storeData, input) => {
-  daysingleResult.storeName = storeData.Store_Name
-  daysingleResult.storeDesc = storeData.Brand_Name
+  daysingleResult.storeName = storeData['Store_Name']
+  daysingleResult.storeDesc = storeData['Brand_Name']
   daysingleResult.startTime = input.ReportTemplate_From_Date
   daysingleResult.stopTime = input.ReportTemplate_To_Date
   daysingleResult.printDate = dateUtils.currentDate()
   daysingleResult.printTime = dateUtils.currentTime()
   daysingleResult.timeMeasure = input.ReportTemplate_Time_Measure
   daysingleResult.selectedStoreIds = input.ReportTemplate_StoreIds
+  console.log(daysingleResult)
   return daysingleResult
 }
 

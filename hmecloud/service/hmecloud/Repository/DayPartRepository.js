@@ -39,7 +39,6 @@ const generateDayPartSummaryReport = (input, callback) => {
   })
 
   sqlPool.on('error', err => {
-    console.log('POOOL')
     if (err) {
       callback(err)
     }

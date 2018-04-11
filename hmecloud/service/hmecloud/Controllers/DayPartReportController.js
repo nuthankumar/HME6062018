@@ -42,6 +42,8 @@ const generateDaypartReport = (input, callBack) => {
   let longestTimes
   let goalsStatistics
   let getGoalTime
+  let systemStatisticsLane
+  let systemStatisticsGenral
 
   input.ReportTemplate_From_Time = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
   input.ReportTemplate_To_Time = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
@@ -56,9 +58,14 @@ const generateDaypartReport = (input, callBack) => {
         longestTimes = result.data[2]
         goalsStatistics = result.data[3]
         getGoalTime = result.data[4]
+        systemStatisticsLane = result.data[5]
+        systemStatisticsGenral = result.data[6]
+
       }
 
+      
       // Single Store result
+      console.log(storeDetails);
 
       if (input.ReportTemplate_StoreIds.length < 2) {
         convertTimeFormatonEachRowObjectElement(input, averageTimeResultSet, data)
@@ -69,17 +76,33 @@ const generateDaypartReport = (input, callBack) => {
         reportUtil.prepareStoreDetails(reportData, storeDetails[0], input)
 
         // goal statistics
-        if (input.longestTime) {
-          const dayPartTotalObject = _.last(averageTimeResultSet)
-          const totalCars = dayPartTotalObject['Total_Car']
-          const dataArray = []
-          reportUtil.getGoalStatistic(goalsStatistics, getGoalTime, dataArray, totalCars)
-          reportData.goalStatistics = dataArray[0]
-        }
+        const dayPartTotalObject = _.last(averageTimeResultSet)
+        const totalCars = dayPartTotalObject['Total_Car']
+        const dataArray = []
+        reportUtil.getGoalStatistic(goalsStatistics, getGoalTime, dataArray, totalCars, input.ReportTemplate_Format)
+        reportData.goalStatistics = dataArray[0]
 
-        if (input.systemStatistics) {
+        if (input.longestTime) {
           // goal Longest time
           reportUtil.prepareLongestTimes(reportData, longestTimes, input.ReportTemplate_Format)
+        }
+
+        
+        if (input.systemStatistics) {
+
+          let displayData = {}
+
+          displayData.Lane = systemStatisticsLane[0]['Lane']
+          displayData.AverageCarsInLane = systemStatisticsLane[0]['AvgCarsInLane']
+          displayData.TotalPullouts = systemStatisticsLane[0]['Pullouts']
+          displayData.TotalPullins = systemStatisticsLane[0]['Pullins']
+          displayData.DeleteOverMaximum = systemStatisticsLane[0]['DeleteOverMax']
+          displayData.PowerFails = systemStatisticsGenral[0]['PowerFails']
+          displayData.SystemResets = systemStatisticsGenral[0]['SystemResets']
+          displayData.VBDResets = systemStatisticsGenral[0]['VDBResets']
+          console.log(systemStatisticsLane[0]['Lane'])
+          reportData.systemStatistics = {}
+          reportData.systemStatistics = displayData
         }
 
         reportData.status = true
@@ -170,10 +193,9 @@ function convertEventsTimeFormat (key, row, value, parts, input) {
     parts.daypart.timeSpan = `${dateSplit[1]}/${dateSplit[0]}-Daypart+${row['DayPartIndex']}`
     parts.daypart.currentDaypart = `${convertTime(row['StartTime'])}-${convertTime(row['EndTime'])}`
   }
-
-  //  console.log(parts)
+ 
   parts.dayPartIndex = row['DayPartIndex']
-  // console.log('parts.dayPartIndex ', parts['DayPartIndex'])
+  
 
   if (key.includes(messages.Events.MENU)) {
     parts.menu.value = input.ReportTemplate_Format === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)
