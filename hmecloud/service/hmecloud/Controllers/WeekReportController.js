@@ -68,8 +68,6 @@ const storeDetails = (repositoryData, colors, goalSettings) => {
   if (colors.length > 0) {
     colorSettings = colors[0].ColourCode.split('|')
   }
-
-  console.log('DATA', colorSettings)
   let getColor = (event, eventValue) => {
     let color = colorSettings[2]
     const eventSettings = _.pickBy(goalSettings[0], (value, key) => {
