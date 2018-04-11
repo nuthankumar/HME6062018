@@ -46,25 +46,24 @@ const getgroupDetails = (request, callback) => {
 }
 const deleteGroupById = (request, callback) => {
   let output = {}
-  if (request.query.groupId && request.query.accountId) {
+  if (request.query.groupId ) {
     const input = {
       groupId: request.query.groupId,
-      accountId: request.query.accountId
+      accountId: request.AccountId
     }
     const groupId = validate.isNumeric(input.groupId)
-    const accountId = validate.isNumeric(input.accountId)
     if (!groupId) {
       output.error = request.t('CREATEGROUP.groupId')
       output.status = false
       callback(output)
-    } else if (!accountId) {
+    } else if (!input.accountId) {
       output.error = request.t('LISTGROUP.accountId')
       output.status = false
       callback(output)
     }
-    if (groupId && accountId) {
+    if (groupId && input.accountId) {
       groupController.deleteGroupById(request, input, result => {
-        callback(result)
+       callback(result)
       })
     }
   } else {
@@ -108,10 +107,6 @@ const getAll = (request, callback) => {
         callback(result)
       })
     }
-  } else if (!request.query.accountId) {
-    output.error = request.t('LISTGROUP.accountId')
-    output.status = false
-    callback(output)
   } else {
     output.error = request.t('LISTGROUP')
     output.status = false
