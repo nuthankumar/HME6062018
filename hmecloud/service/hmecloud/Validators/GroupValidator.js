@@ -75,46 +75,22 @@ const deleteGroupById = (request, callback) => {
 }
 
 const avaliabledGroups = (request, callback) => {
-  if (request.query.accountId && request.query.userName) {
     const input = {
-      accountId: request.query.accountId,
-      createdBy: request.query.userName
+      accountId: request.AccountId
+      }
+
+    if (!input.accountId) {
+        output.error = request.t('LISTGROUP.accountId')
+        output.status = false
+        callback(output)
     }
-    const accountId = validate.isNumeric(input.accountId)
-    const createdBy = validate.isEmail(input.createdBy)
-    if (!accountId) {
-      let output = {}
-      output.error = request.t('LISTGROUP.accountId')
-      output.status = false
-      callback(output)
-    }
-    if (!createdBy) {
-      let output = {}
-      output.error = request.t('LISTGROUP.createdBy')
-      output.status = false
-      callback(output)
-    }
-    if (accountId && input.createdBy) {
+
+      if (input.accountId) {
       groupController.avaliabledGroups(request, input, result => {
         callback(result)
       })
     }
-  } else if (!request.query.accountId && request.query.userName) {
-    let output = {}
-    output.error = request.t('LISTGROUP.accountId')
-    output.status = false
-    callback(output)
-  } else if (request.query.accountId && !request.query.userName) {
-    let output = {}
-    output.error = request.t('LISTGROUP.createdBy')
-    output.status = false
-    callback(output)
-  } else {
-    let output = {}
-    output.error = request.t('LISTGROUP')
-    output.status = false
-    callback(output)
-  }
+ 
 }
 const getAll = (request, callback) => {
   let output = {}
@@ -122,8 +98,7 @@ const getAll = (request, callback) => {
     const input = {
         accountId: request.AccountId
     }
-   // const accountId = validate.isNumeric(input.accountId)
-        if (!input.accountId) {
+     if (!input.accountId) {
       output.error = request.t('LISTGROUP.accountId')
       output.status = false
       callback(output)
