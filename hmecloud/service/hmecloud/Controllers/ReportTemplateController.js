@@ -109,13 +109,13 @@ const getAll = (input, request, callback) => {
  */
 const deleteById = (input, callback) => {
   let output = {}
-  repository.deleteById(input, (result) => {
+  repository.deleteById(input.query.templateId, (result) => {
     if (result) {
-      output.data = messages.REPORTSUMMARY.deleteSuccess
+      output.data = input.t('REPORTSUMMARY.deleteSuccess')
       output.status = true
       callback(output)
     } else {
-      output.error = messages.LISTGROUP.notfound
+      output.error = input.t('LISTGROUP.notfound')
       output.status = false
       callback(output)
     }

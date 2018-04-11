@@ -96,6 +96,8 @@ class Report extends Component {
         dayPartColumn: false,
         weekColumn: false,
         singleStore: false,
+        longestTime: false,
+	      systemStatistics: false
       }
     };
     this.api = new Api()
@@ -177,7 +179,7 @@ class Report extends Component {
                     />
                     <span className="span-heading">
                                         <span> {t[language].selectall} </span>
-                   
+
                     </span>
                   </div>
                   <div className="timings">
@@ -207,7 +209,7 @@ class Report extends Component {
                 </div>
                 <span className="span-heading">
                                 <span> {t[language].timemeasure} </span>
-                               
+
                                   <a data-tip={t[language].thereportwillsummarize}><span className="tip openTip">?</span></a>
                                   <ReactTooltip place="right" type="dark" effect="solid" />
                 </span>
@@ -245,7 +247,7 @@ class Report extends Component {
                   <div className="date-to">
                     <span className="span-heading">
                                         <span>  {t[language].to} </span>
-                                        
+
                                         <a data-tip={t[language].choosestartorend}><span className="tip openTip">?</span></a>
                       <ReactTooltip place="right" type="dark" effect="solid" />
                     </span>
@@ -378,7 +380,7 @@ class Report extends Component {
                                  </div>
                 <span className="span-heading">
                                 <span> {t[language].format}  </span>
-                                
+
                                 <a data-tip={t[language].selectonestore}><span className="tip openTip">?</span></a>
                                   <ReactTooltip place="right" type="dark" effect="solid" />
                 </span>
@@ -466,7 +468,7 @@ class Report extends Component {
                   className="generate-reports"
                   onClick={this.generate.bind(this)}
                 >
-                  {t[language].generatereport} 
+                  {t[language].generatereport}
                 </div>
               </div>
             </section>
@@ -691,9 +693,21 @@ class Report extends Component {
     this.setState({ errorMessage: "" });
     let isError = false;
     let template = [];
+    this.openTime = moment(this.state.openTime).format("HH:mm a")
+    this.closeTime = moment(this.state.closeTime).format("HH:mm a")
+    if(this.openTime === 'Invalid date'){
+     this.openTime = ''
+    }else{
+     this.openTime = moment(this.state.openTime).format("HH:mm a")
+    }
+    if(this.closeTime === 'Invalid date'){
+       this.closeTime = ''
+    }else{
+      this.closeTime = moment(this.state.closeTime).format("HH:mm a")
+    }
     template.push({
       selectedList: this.state.selectedList,timeMeasure: this.state.timeMeasure,fromDate: this.state.fromDate,toDate: this.state.toDate,
-      openTime: moment(this.state.openTime).format("HH:mm a"),closeTime: moment(this.state.closeTime).format("HH:mm a"),
+      openTime: this.openTime,closeTime: this.closeTime,
       templateName: this.state.templateName,open: this.state.open,close: this.state.close,
       type: this.state.type,include: this.state.include,format: this.state.format,selectedStoreIds: this.state.selectedStoreIds,
       CreatedDateTime: moment().format("YYYY-MM-DD HH:mm:ss a"), UpdatedDateTime: moment().format("YYYY-MM-DD HH:mm:ss a"),
@@ -786,36 +800,36 @@ class Report extends Component {
       }
     }
     if (!isError) {
-      let templateData = this.state.templateData[0].timeMeasure
+      let templateData = this.state.templateData[0]
       switch (this.state.templateData[0].timeMeasure) {
-        case '1' : this.state.dailyData = true
+        case '1' : this.state.reportData.dailyData = true
           if (templateData.selectedStoreIds.length === 1) {
-            this.state.dayColumn = true
-            this.state.groupStoreColumns = false
-            this.state.singleStore = true
+            this.state.reportData.dayColumn = true
+            this.state.reportData.groupStoreColumns = false
+            this.state.reportData.singleStore = true
           } else {
-            this.state.dayColumn = false
-            this.state.groupStoreColumns = true
-            this.state.singleStore = false
+            this.state.reportData.dayColumn = false
+            this.state.reportData.groupStoreColumns = true
+            this.state.reportData.singleStore = false
           }
           this.setState(this.state)
           break
 
-        case '2' : this.state.dayPartData = true
+        case '2' : this.state.reportData.dayPartData = true
           if (templateData.selectedStoreIds.length === 1) {
-            this.state.dayPartColumn = true
-            this.state.groupStoreColumns = false
-            this.state.singleStore = true
+            this.state.reportData.dayPartColumn = true
+            this.state.reportData.groupStoreColumns = false
+            this.state.reportData.singleStore = true
           } else {
-            this.state.dayPartColumn = false
-            this.state.groupStoreColumns = true
-            this.state.singleStore = false
+            this.state.reportData.dayPartColumn = false
+            this.state.reportData.groupStoreColumns = true
+            this.state.reportData.singleStore = false
           }
           this.setState(this.state)
           this.generateDaypartReport()
           break
 
-        case '3' : this.state.weeklyData = true
+        case '3' : this.state.reportData.weeklyData = true
           if (templateData[0].selectedStoreIds.length === 1) {
             this.state.reportData.weekColumn = true
             this.state.reportData.groupStoreColumns = false
@@ -890,16 +904,17 @@ class Report extends Component {
       "type": template.type,
       "include": template.include,
       "format": template.format,
-      "selectedStoreIds": template.selectedStoreIds,
+    //  "selectedStoreIds": template.selectedStoreIds,
+      "selectedStoreIds": [15, 16],
       "advancedOptions": template.advancedOptions,
       "longestTime": template.longestTime,
       "systemStatistics":template.systemStatistics
     }
-    let url = Config.baseUrl + CommonConstants.apiUrls.generateReport
+    let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport
     this.api.postData(url, request, data => {
         this.props.history.push({
             pathname: '/summaryreport',
-            state: { reportData: this.state.reportData , reportDataResponse : data.data }
+            state: { reportData: this.state.reportData , reportDataResponse : data }
         })
     }, error => {
         this.state.successMessage = ''

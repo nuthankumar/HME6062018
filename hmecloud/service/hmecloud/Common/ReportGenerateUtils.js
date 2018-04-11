@@ -240,6 +240,32 @@ const storesDetails = (result, colors, goalSettings, format) => {
   return storesData
 }
 
+const getColourCode = (event, eventValue, colors, goalSettings) => {
+    let colorSettings = []
+    let color
+    if (colors.length > 0) {
+        colorSettings = colors[0].ColourCode.split('|')
+    }
+        color  = colorSettings[2] 
+        const eventSettings = _.pickBy(goalSettings[0], (value, key) => {
+            if (key.toLowerCase().includes(event.toLowerCase())) {
+                if (value && eventValue < value) {
+                    if (key.includes('GoalA')) {
+                        color = colorSettings[0]
+                    } else if (key.includes('GoalB')) {
+                        color = colorSettings[1]
+                    } else if (key.includes('GoalC')) {
+                        color = colorSettings[2]
+                    }
+                    return color
+                   
+                } 
+            } 
+           
+        })
+    return color
+}
+
 // Mutiple store
 
 // This function is used to prepare colors with event values
@@ -248,7 +274,8 @@ const getAllStoresDetails = (result, colors, goalSettings, format) => {
     if (value.StoreNo) {
       return value
     }
-  })
+    })
+
   let colorSettings = []
   if (colors.length > 0) {
     colorSettings = colors[0].ColourCode.split('|')
@@ -308,5 +335,6 @@ module.exports = {
   prepareLongestTimes,
   getGoalStatistic,
   storesDetails,
-  getAllStoresDetails
+    getAllStoresDetails,
+    getColourCode
 }

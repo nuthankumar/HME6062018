@@ -24,117 +24,26 @@ export default class SummaryReport extends Component {
       showSystemStats: true,
       pageHeading : 'Summarized Report',
       reportData: {
-        storeName : "McDonalds 202000	",
-        storeDesc : "McDonald's",
-        startTime:"Mar 9, 2018 OPEN",
-        stopTime: "	Mar 11, 2018 CLOSE",
-        printDate: "Apr 10, 2018",
-        printTime: "	3:05 AM",
         currentPageNo:"",
         TotalPageCount:"",
-        singleDayPart: [ {
-          data:[ {
-            daypart:{timeSpan:"03/09 - Daypart1",currentDaypart:"6:00 am - 11:00 am"},
-            menu: "0.26",
-            greet: "0.36",
-            service: "1.26",
-            laneQueue:"1.46",
-            laneTotal:"1.56",
-            totalCars:"1.66"
-            },
-           {
-            daypart:{timeSpan:"03/09 - Daypart2",currentDaypart:"12:00 pm - 2:15 pm"},
-            menu: "0.36",
-            greet: "0.46",
-            service: "0.56",
-            laneQueue:"1.26",
-            laneTotal:"1.36",
-            totalCars:"1.46"
-            }]
-            }
-          ],
-
-          multiPleDayPart: [ {
-            title:"mar 09",
-            data:[{
-              groupId:"",
-              storeId:"",
-              menu: "",
-              greet: "",
-              service: "",
-              laneQueue:"",
-              laneTotal:"",
-              totalCars:""
-              },
-             {
-              groupId:"",
-              storeId:"",
-              greet: "",
-              service: "",
-              laneQueue:"",
-              laneTotal:"",
-              totalCars:""
-              },
-             {
-              groupId:"",
-              storeId:"",
-              menu: "",
-              greet: "",
-              service: "",
-              laneQueue:"",
-              laneTotal:"",
-              totalCars:""
-              }]},
-              {
-            title:"mar 09",
-            data:[{
-              groupId:"",
-              storeId:"",
-              menu: "",
-              greet: "",
-              service: "",
-              laneQueue:"",
-              laneTotal:"",
-              totalCars:""
-              },
-             {
-              groupId:"",
-              storeId:"",
-              menu: "",
-              greet: "",
-              service: "",
-              laneQueue:"",
-              laneTotal:"",
-              totalCars:""
-              },
-             {
-              groupId:"",
-              storeId:"",
-              menu: "",
-              greet: "",
-              service: "",
-              laneQueue:"",
-              laneTotal:"",
-              totalCars:""
-              }]
-              }
-
-            ],
-            weeklyData: this.props.history.location.state.reportData.weeklyData,
-            dailyData: this.props.history.location.state.reportData.dailyData,
-            dayPartData: this.props.history.location.state.reportData.dayPartData,
-            rawCarData: this.props.history.location.state.reportData.rawCarData,
-            pagination: true,
-            groupStoreColumns: this.props.history.location.state.reportData.groupStoreColumns,
-            dayColumn: this.props.history.location.state.reportData.dayColumn,
-            dayPartColumn: this.props.history.location.state.reportData.dayPartColumn,
-            weekColumn: this.props.history.location.state.reportData.weekColumn,
-            singleStore: this.props.history.location.state.reportData.singleStore,
-            curPage: 1,
-            totalPages:4,
-            disablePrevButton: false,
-            disableNextButton: false
-            },
+        weeklyData: false,
+        dailyData: false,
+        dayPartData: false,
+        rawCarData: false,
+        pagination: false,
+        groupStoreColumns: false,
+        dayColumn: false,
+        dayPartColumn: false,
+        weekColumn: false,
+        singleStore: false,
+        curPage: 1,
+        totalPages:4,
+        disablePrevButton: false,
+        disableNextButton: false,
+        longestTime: false,
+        systemStatistics: false,
+        response:{}
+        },
       goalData: {
          data:
         [
@@ -184,11 +93,12 @@ export default class SummaryReport extends Component {
   }
 
   componentWillMount () {
-    this.setTimeMeasures(this.props.history.location.state)
+    //this.setTimeMeasures(this.props.history.location.state)
+    this.populateSummaryReportDetails()
     this.state.templateData = this.props.history.location.state;
     this.setState(this.state)
   }
-  
+
   headerDetails(){
     if(this.state.singleStore){
       return(<table className='rawcar-header-labels clear'>
@@ -348,12 +258,21 @@ export default class SummaryReport extends Component {
   }
 
   populateSummaryReportDetails (request) {
-    let url = Config.baseUrl + CommonConstants.apiUrls.generateReport
-    this.api.postData (url, request ,data => {
-      console.log(data)
-    }, error => {
-      console.log(error)
-    })
+    this.state.reportData.weeklyData = this.props.history.location.state.reportData.weeklyData
+    this.state.reportData.dailyData = this.props.history.location.state.reportData.dailyData
+    this.state.reportData.dayPartData = this.props.history.location.state.reportData.dayPartData
+    this.state.reportData.rawCarData = this.props.history.location.state.reportData.rawCarData
+    this.state.pagination = true
+    this.state.reportData.groupStoreColumns = this.props.history.location.state.reportData.groupStoreColumns
+    this.state.reportData.dayColumn = this.props.history.location.state.reportData.dayColumn
+    this.state.reportData.dayPartColumn = this.props.history.location.state.reportData.dayPartColumn
+    this.state.reportData.weekColumn = this.props.history.location.state.reportData.weekColumn
+    this.state.reportData.singleStore = this.props.history.location.state.reportData.singleStore
+    this.state.reportData.longestTime = this.props.history.location.state.reportData.longestTime
+    this.state.reportData.systemStatistics = this.props.history.location.state.reportData.systemStatistics
+  //  this.state.reportData = this.props.history.location.state.reportDataResponse
+    this.state.reportData.response = this.props.history.location.state.reportDataResponse
+    this.setState(this.state)
   }
   displayGoalStatistics(){
     if(this.state.goalData && this.state.singleStore){

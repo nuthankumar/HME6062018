@@ -97,8 +97,12 @@ export default class HmeHeader extends React.Component {
       </nav>
     </div>)
     }
-
+    
     toggle(e) {
         this.state.settingsDropdown ? this.setState({ settingsDropdown: false }) : this.setState({ settingsDropdown:true }) 
+    }
+
+    redirectUrl(url) {
+        console.log(url)
     }
 }

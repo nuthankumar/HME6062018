@@ -2,6 +2,7 @@ const dateUtils = require('../Common/DateUtils')
 const stores = require('../Repository/StoresRepository')
 const reportUtil = require('../Common/ReportGenerateUtils')
 const _ = require('lodash')
+const HashMap = require('hashmap')
 
 
 const generateDayReport = (input, callBack) => {
@@ -25,18 +26,24 @@ const generateDayReport = (input, callBack) => {
                 // Preparing Single Store results
                 if (storesLength === 1) {
                     reportUtil.prepareStoreDetails(daysingleResult, result.data[3], input)
-                    prepareDayResults(daysingleResult, result.data[0], input.ReportTemplate_Format);
+                    let colors = result.data[4]
+                    let goalstatisticsDetails = result.data[2]
+                    let goalSettings = _.filter(goalstatisticsDetails, group => group['Menu Board - GoalA'])
+                    prepareDayResults(daysingleResult, result.data[0], input.ReportTemplate_Format, colors, goalSettings);
                     if (input.longestTime) {
                         reportUtil.prepareLongestTimes(daysingleResult, result.data[1], input.ReportTemplate_Format)
                     }
-                    let colrs = result.data[4]
                     getGoalTime = result.data[5]
                     const dayPartTotalObject = _.last(result.data[0])
                     const totalCars = dayPartTotalObject['Total_Car']
                     const dataArray = []
-                    reportUtil.getGoalStatistic(result.data[1], getGoalTime, dataArray, totalCars)
+                    reportUtil.getGoalStatistic(goalstatisticsDetails, getGoalTime, dataArray, totalCars)
                     daysingleResult.goalData = dataArray[0] 
                 } else if (storesLength > 1) {
+                    //Colours
+                    let colors = result.data[4]
+                    let goalstatisticsDetails = result.data[2]
+                    prepareMultiStoreResults(daysingleResult, result.data[0], input.ReportTemplate_Format, colors, goalstatisticsDetails)
 
                 } 
                 daysingleResult.status = true
@@ -51,84 +58,115 @@ const generateDayReport = (input, callBack) => {
 }
 
 
+// This function is used to prepare the Multi Store results for Day Report
+function prepareMultiStoreResults(daysingleResult, daysData, format, colors, goalSettings) {
+    const dayIndexIds = new HashMap()
+    let timeMeasure = []
+    daysData.forEach(item => {
+        let dayIndexId = item.DayID
+     //   console.log("The Items===" + JSON.stringify(item))
 
+        if (dayIndexId && !dayIndexIds.has(dayIndexId)) {
+            let dayResultsList = daysData.filter(function (obj) {
+                return obj.DayID === dayIndexId
+            })
+            let multiStoreObj = {}
+            let tempData = []
+            let tempRawCarData = dayResultsList[0]
+            multiStoreObj.title = tempRawCarData.StoreDate
+            for (let i = 0; i < dayResultsList.length; i++) {
+                let storeObj = dayResultsList[i]
+                let groupId = {}
+                let storeId = {}
+                let store = {}
+
+                if (item.StoreDate !== 'Total Day') {
+                    let dataObject = prepareDayObject(storeObj, format, colors, goalSettings)
+                    store.name = storeObj.StoreNo
+                    dataObject.store = store
+
+                    tempData.push(dataObject)
+                } else {
+                    let dataObject = prepareDayObject(storeObj, format, colors, goalSettings)
+                    store.name = storeObj.StoreNo
+                    store.timeSpan = "W-Avg"
+                    dataObject.store = store
+
+                    tempData.push(dataObject)
+                }
+            }
+            multiStoreObj.data = tempData
+            timeMeasure.push(multiStoreObj)
+            dayIndexIds.set(dayIndexId, dayIndexId)
+        }
+        
+        
+    })
+
+    daysingleResult.timeMeasureType = timeMeasure
+}
+
+function prepareDayObject(item, format, colors, goalSettings) {
+    let menu = {}
+    let greet = {}
+    let service = {}
+    let laneQueue = {}
+    let laneTotal = {}
+    let totalCars = {}
+    let dataObject = {}
+    let groupId = {}
+    let storeId = {}
+
+    menu.value = dateUtils.convertSecondsToMinutes(item['Menu Board'], format)
+    menu.color = reportUtil.getColourCode('Menu Board', item['Menu Board'], colors, goalSettings)
+    dataObject.menu = menu
+
+    greet.value = dateUtils.convertSecondsToMinutes(item.Greet, format)
+    greet.color = reportUtil.getColourCode('Greet', item.Greet, colors, goalSettings)
+    dataObject.greet = greet
+
+    service.value = dateUtils.convertSecondsToMinutes(item.Service, format)
+    service.color = reportUtil.getColourCode('Service', item.Service, colors, goalSettings)
+    dataObject.service = service
+
+    laneQueue.value = dateUtils.convertSecondsToMinutes(item['Lane Queue'], format)
+    laneQueue.color = reportUtil.getColourCode('Lane Queue', item['Lane Queue'], colors, goalSettings)
+    dataObject.laneQueue = laneQueue
+
+    laneTotal.value = dateUtils.convertSecondsToMinutes(item['Lane Total'], format)
+    laneTotal.color = reportUtil.getColourCode('Lane Total', item['Lane Total'], colors, goalSettings)
+    dataObject.laneTotal = laneTotal
+
+    totalCars.value = dateUtils.convertSecondsToMinutes(item['Total_Car'], format)
+    dataObject.totalCars = totalCars
+
+    return dataObject
+}
 
 // This function is used to Prepare the Day details
 
-function prepareDayResults(daysingleResult, dayData, format) {
+function prepareDayResults(daysingleResult, dayData, format, colors, goalSettings) {
     let singleDay = []
     let dataList = []
     let dayDataObj = {}
    
     dayData.forEach(item => {
-        let menu = {}
-        let greet = {}
-        let service = {}
-        let laneQueue = {}
-        let laneTotal = {}
-        let totalCars = {}
-        let dataObject = {}
+        
         if (item.StoreDate !== 'Total Day') {
+            let dataObject = prepareDayObject(item, format, colors, goalSettings)
             dataObject.day = item.StoreDate
             dataObject.timeSpan = "OPEN - CLOSE"
-            menu.value = dateUtils.convertSecondsToMinutes(item['Menu Board'], format) 
-            menu.color = "Red"
-            dataObject.menu = menu
-
-            greet.value = dateUtils.convertSecondsToMinutes(item.Greet, format)
-            greet.color = "RED"
-            dataObject.greet = greet
-
-            service.value = dateUtils.convertSecondsToMinutes(item.Service, format)
-            service.color = "Red"
-            dataObject.service = service
-
-            laneQueue.value = dateUtils.convertSecondsToMinutes(item['Lane Queue'], format)
-            laneQueue.color = "Red"
-            dataObject.laneQueue = laneQueue
-
-            laneTotal.value = dateUtils.convertSecondsToMinutes(item['Lane Total'], format)
-            laneTotal.color = "Red"
-            dataObject.laneTotal = laneTotal
-
-            totalCars.value = dateUtils.convertSecondsToMinutes(item['Total_Car'], format)
-            totalCars.color = "Red"
-            dataObject.totalCars = totalCars
-
             dataList.push(dataObject)
         } else {
+            let dataObject = prepareDayObject(item, format, colors, goalSettings)
             dataObject.day = item.StoreDate
             dataObject.timeSpan = "W-Avg"
-            menu.value = dateUtils.convertSecondsToMinutes(item['Menu Board'], format)
-            menu.color = "Red"
-            dataObject.menu = menu
-
-            greet.value = dateUtils.convertSecondsToMinutes(item.Greet, format)
-            greet.color = "RED"
-            dataObject.greet = greet
-
-            service.value = dateUtils.convertSecondsToMinutes(item.Service, format)
-            service.color = "Red"
-            dataObject.service = service
-
-            laneQueue.value = dateUtils.convertSecondsToMinutes(item['Lane Queue'], format)
-            laneQueue.color = "Red"
-            dataObject.laneQueue = laneQueue
-
-            laneTotal.value = dateUtils.convertSecondsToMinutes(item['Lane Total'], format)
-            laneTotal.color = "Red"
-            dataObject.laneTotal = laneTotal
-
-            totalCars.value = dateUtils.convertSecondsToMinutes(item['Total_Car'], format)
-            totalCars.color = "Red"
-            dataObject.totalCars = totalCars
-
             dataList.push(dataObject)
         }
     })
     dayDataObj.data = dataList
     singleDay.push(dayDataObj)
-    daysingleResult.singleDay = singleDay
+    daysingleResult.timeMeasureType = singleDay
 } 
 
 module.exports = {
