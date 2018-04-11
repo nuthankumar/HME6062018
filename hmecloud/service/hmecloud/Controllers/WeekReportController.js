@@ -20,7 +20,7 @@ const generateWeekReport = (input, callback) => {
   let fromDateTime = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
   let toDateTime = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
   const inputDate = {
-    Device_IDs: (input.ReportTemplate_StoreIds).toString(),
+    StoreIDs: (input.ReportTemplate_StoreIds).toString(),
     StoreStartDate: input.ReportTemplate_From_Date,
     StoreEndDate: input.ReportTemplate_To_Date,
     StartDateTime: fromDateTime,
@@ -33,18 +33,18 @@ const generateWeekReport = (input, callback) => {
     // callback(result)
     if (result.length > 0) {
       const repositoryData = result
-      if (input.reportType === 'weekSingle') {
-        let reportData = {
-          data: {
-            singleWeek: [
-              {
-                data: []
-              }
-            ],
-            goalData: [],
-            longTimes: []
-          }
+      let reportData = {
+        data: {
+          timeMeasureType: [
+            {
+              data: []
+            }
+          ],
+          goalData: [],
+          longTimes: []
         }
+      }
+      if (input.reportType === 'weekSingle') {
         reportData.data.timeMeasure = 3
         reportData.data.selectedStoreIds = input.ReportTemplate_StoreIds
         reportData.data.startTime = moment(fromDateTime).format('LL')
@@ -53,22 +53,26 @@ const generateWeekReport = (input, callback) => {
         // events data
         let colors = _.filter(repositoryData, val => val.ColourCode)
         let goalSettings = _.filter(repositoryData, group => group['Menu Board - GoalA'])
-        const StoreData = reportGenerate.storesDetails(repositoryData, colors, goalSettings, input.ReportTemplate_Format)
+        const StoreData = reportGenerate.getAllStoresDetails(repositoryData, colors, goalSettings, input.ReportTemplate_Format)
+
         const goalsData = goalData(repositoryData)
+
         const carTotals = carTotal(StoreData)
+
         // goal setings
         let goalTimes = _.filter(repositoryData, group => group['Cashier_GoalA'])
         let daysingleResult = []
         const getGoalsData = reportGenerate.getGoalStatistic(goalSettings, goalTimes, daysingleResult, carTotals, input.ReportTemplate_Format)
-        const longTimes = reportGenerate.prepareLongestTimes(daysingleResult, goalsData, input.ReportTemplate_Format)
-        reportData.data.singleWeek[0].data = StoreData
+        // const longTimes = reportGenerate.prepareLongestTimes(daysingleResult, goalsData, input.ReportTemplate_Format)
+        //  console.log('longTimes', longTimes)
+        reportData.data.timeMeasureType[0].data = StoreData
         reportData.data.goalData = getGoalsData
-        reportData.data.longTimes = longTimes
+        // reportData.data.longTimes = longTimes
         callback(reportData)
       } else {
         let reportData = {
           data: {
-            mutipleWeek: [
+            timeMeasureType: [
               {
                 data: []
               }
@@ -80,11 +84,15 @@ const generateWeekReport = (input, callback) => {
         reportData.data.startTime = moment(fromDateTime).format('LL')
         reportData.data.stopTime = moment(toDateTime).format('LL')
         reportData.status = true
+        // console.log('DAYAS', days)
+        // console.log('months', months)
         let colors = _.filter(repositoryData, val => val.ColourCode)
         let goalSettings = _.filter(repositoryData, group => group['Menu Board - GoalA'])
         const StoreData = reportGenerate.getAllStoresDetails(repositoryData, colors, goalSettings, input.ReportTemplate_Format)
-        const youngest = _.chain(StoreData).groupBy('index')
-        reportData.data.mutipleWeek[0].data = youngest
+        // const youngest = _.chain(StoreData).groupBy('index')
+        //  const length = _.size(youngest, 'index')
+        // console.log('elngth', length)
+        reportData.data.timeMeasureType[0].data = StoreData
         callback(reportData)
       }
     } else {

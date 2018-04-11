@@ -26,7 +26,7 @@ const sqlQueries = {
                 ,@ReportType =:ReportType
                 ,@LaneConfig_ID=:LaneConfig_ID`,
     'weekReport': `exec [dbo].[usp_HME_Cloud_Get_Report_By_Week]
-                  @Device_IDs = :Device_IDs,
+                  @StoreIDs = :StoreIDs,
                   @StoreStartDate =:StoreStartDate,
                   @StoreEndDate =:StoreEndDate,
                   @StartDateTime =:StartDateTime,
