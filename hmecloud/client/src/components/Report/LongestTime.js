@@ -1,106 +1,24 @@
 import React, { Component } from 'react'
 import './SummaryReport.css'
+import t from '../Language/language'
+import * as languageSettings from '../Language/languageSettings'
 
 class LongestTime extends Component {
     constructor(props) {
         super(props)
-
         this.state = {
-            LongestTimes: [
-            {
-                "Menu": {
-                    "Value": 0.59,
-                    "Date": "Mar 03/05",
-                    "Time": "07:53:22 PM"
-                },
-                "Greet": {
-                    "Value": 0.59,
-                    "Date": "Mar 03/05",
-                    "Time": "07:53:22 PM"
-                },
-                "Service": {
-                    "Value": 0.59,
-                    "Date": "Mar 03/05",
-                    "Time": "07:53:22 PM"
-                },
-                "LaneQueue": {
-                    "Value": 0.59,
-                    "Date": "Mar 03/05",
-                    "Time": "07:53:22 PM"
-                },
-                "LaneTotal": {
-                    "Value": 0.59,
-                    "Date": "Mar 03/05",
-                    "Time": "07:53:22 PM"
-                }
-            },
-            {
-                "Menu": {
-                    "Value": 0.59,
-                    "Date": "Mar 03/05",
-                    "Time": "07:53:22 PM"
-                },
-                "Greet": {
-                    "Value": 0.59,
-                    "Date": "Mar 03/05",
-                    "Time": "07:53:22 PM"
-                },
-                "Service": {
-                    "Value": 0.59,
-                    "Date": "Mar 03/05",
-                    "Time": "07:53:22 PM"
-                },
-                "LaneQueue": {
-                    "Value": 0.59,
-                    "Date": "Mar 03/05",
-                    "Time": "07:53:22 PM"
-                },
-                "LaneTotal": {
-                    "Value": 0.59,
-                    "Date": "Mar 03/05",
-                    "Time": "07:53:22 PM"
-                }
-            },
-            {
-                "Menu": {
-                    "Value": 0.59,
-                    "Date": "Mar 03/05",
-                    "Time": "07:53:22 PM"
-                },
-                "Greet": {
-                    "Value": 0.59,
-                    "Date": "Mar 03/05",
-                    "Time": "07:53:22 PM"
-                },
-                "Service": {
-                    "Value": 0.59,
-                    "Date": "Mar 03/05",
-                    "Time": "07:53:22 PM"
-                },
-                "LaneQueue": {
-                    "Value": 0.59,
-                    "Date": "Mar 03/05",
-                    "Time": "07:53:22 PM"
-                },
-                "LaneTotal": {
-                    "Value": 0.59,
-                    "Date": "Mar 03/05",
-                    "Time": "07:53:22 PM"
-                }
-            }
-            ]
-
+            currentLanguage: languageSettings.getCurrentLanguage(),
         }
-
     }
 
     render() {
+        const language = this.state.currentLanguage
         return (<section>
                 <table cellSpacing="0" className="table-layout daypart longest">
                   <tbody>
                     <tr>
                       <td rowSpan="4" className='rshade boldin longTimes headerColumn'>
-                        <span translate="" key="ReportsLongest">Longest</span><br/><span translate="" key="ReportsTimes">Times</span><br/>
+                            <span>{t[language].ReportsLongest}</span><br /><span>{t[language].ReportsTimes}</span><br/>
                         <span className="longtime-timeSpan">(min)</span>
                       </td>
                     </tr>

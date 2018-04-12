@@ -3,8 +3,6 @@ import './SummaryReport.css'
 
 import t from '../Language/language'
 import * as languageSettings from '../Language/languageSettings'
-// setTranslations({pt})
-// setDefaultLanguage('pt')
 
 class SystemStatistics extends Component {
   constructor (props) {

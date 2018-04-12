@@ -449,7 +449,7 @@ h2.rep-head {
     width: 125px;
 }
 .headerColumn {
-    width: 125px;
+    width: 125px !important;
     border-right: 0px solid gray;
 }
 .longtime-timeSpan {
