@@ -156,15 +156,20 @@ function prepareDayResults (daysingleResult, dayData, format, colors, goalSettin
   let dayDataObj = {}
 
   dayData.forEach(item => {
-    if (item.StoreDate !== 'Total Day') {
-      let dataObject = prepareDayObject(item, format, colors, goalSettings)
-      dataObject.day = item.StoreDate
-        dataObject.timeSpan = messages.COMMON.DAYOPENCLOSE
+      if (item.StoreDate !== 'Total Day') {
+          let day = {}
+          let dataObject = prepareDayObject(item, format, colors, goalSettings)
+
+          day.timeSpan = dateUtils.convertmmddyyyy(item.StoreDate)
+          day.currentDaypart = messages.COMMON.DAYOPENCLOSE
+          dataObject.day = day
       dataList.push(dataObject)
-    } else {
+      } else {
+          let day = {}
       let dataObject = prepareDayObject(item, format, colors, goalSettings)
-      dataObject.day = item.StoreDate
-        dataObject.timeSpan = messages.COMMON.WAVG
+          day.timeSpan = item.StoreDate
+          day.currentDaypart = messages.COMMON.WAVG
+          dataObject.day = day
       dataList.push(dataObject)
     }
   })
