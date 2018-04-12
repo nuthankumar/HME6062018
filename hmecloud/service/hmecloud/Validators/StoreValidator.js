@@ -8,8 +8,8 @@ const dateUtils = require('../Common/DateUtils')
 const reportValidator = (request, callback) => {
   let output = {}
 
-  if (request.body.selectedStoreIds.length > 0) {
-    const input = {
+    if (request.body.selectedStoreIds.length > 0) {
+      const input = {
       ReportTemplate_StoreIds: request.body.selectedStoreIds, //  [] array of object
       ReportTemplate_Advanced_Op: request.body.advancedOptions, // boolean
       ReportTemplate_Time_Measure: request.body.timeMeasure, // number

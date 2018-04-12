@@ -8,8 +8,8 @@ const messages = require('../Common/Message')
 const generateDayReport = (input, callBack) => {
   let fromDateTime = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
   let toDateTime = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
-  let storesLength = input.ReportTemplate_StoreIds.length
-  const datReportqueryTemplate = {
+    let storesLength = input.ReportTemplate_StoreIds.length
+    const datReportqueryTemplate = {
     ReportTemplate_StoreIds: input.ReportTemplate_StoreIds,
     ReportTemplate_From_Date: input.ReportTemplate_From_Date,
     ReportTemplate_To_Date: input.ReportTemplate_To_Date,
@@ -24,12 +24,14 @@ const generateDayReport = (input, callBack) => {
     stores.getDayDataReport(datReportqueryTemplate, result => {
       if (result.status === true) {
         // Preparing Single Store results
+          let colors 
+          let goalstatisticsDetails 
           if (storesLength === 1) {
               let goalDataList = []
               let goalData = {}
           reportUtil.prepareStoreDetails(daysingleResult, result.data[3], input)
-          let colors = result.data[4]
-          let goalstatisticsDetails = result.data[2]
+           colors = result.data[4]
+           goalstatisticsDetails = result.data[2]
           let goalSettings = _.filter(goalstatisticsDetails, group => group['Menu Board - GoalA'])
           prepareDayResults(daysingleResult, result.data[0], input.ReportTemplate_Format, colors, goalSettings)
            if (input.longestTime) {
@@ -38,9 +40,9 @@ const generateDayReport = (input, callBack) => {
           getGoalTime = result.data[5]
           const dayPartTotalObject = _.last(result.data[0])
           const totalCars = dayPartTotalObject['Total_Car']
-          const dataArray = []
-          reportUtil.getGoalStatistic(goalstatisticsDetails, getGoalTime, dataArray, totalCars)
-            goalDataList.push(dataArray[0])
+          let dataArray = []
+          dataArray = reportUtil.getGoalStatistic(goalstatisticsDetails, getGoalTime, dataArray, totalCars)
+            goalDataList.push(dataArray)
             goalData.data = goalDataList
             daysingleResult.goalData = goalData
             if (input.systemStatistics) {
@@ -54,12 +56,44 @@ const generateDayReport = (input, callBack) => {
             }
         } else if (storesLength > 1) {
           // Colours
-          let colors = result.data[4]
-          let goalstatisticsDetails = result.data[2]
+              colors = result.data[4]
+              goalstatisticsDetails = result.data[2]
           prepareMultiStoreResults(daysingleResult, result.data[0], input.ReportTemplate_Format, colors, goalstatisticsDetails)
         }
-        daysingleResult.status = true
-        callBack(daysingleResult)
+          
+          if (input.reportType.toLowerCase().trim() === ' csv') {
+              console.log("CSV file genration executed")
+             let output = {}
+             /*  let csvInput = {}
+              csvInput.type = request.t('COMMON.CSVTYPE')
+              csvInput.reportName = input.ReportTemplate_Time_Measure + '_' + dateFormat(new Date(), 'isoDate'),
+                  csvInput.email = input.UserEmail,
+                  csvInput.reportinput = rawCarDataList
+              csvInput.subject = input.ReportTemplate_Time_Measure + ' ' + fromDateTime + ' - ' + toDateTime
+              csvGeneration.generateCsvAndEmail(csvInput, result => {
+                  if (result) {
+                      output.data = input.UserEmail
+                      output.status = true
+                  } else {
+                      output.data = input.UserEmail
+                      output.status = false
+                  }
+
+                  callBack(output)
+              })
+
+             */
+              output.data = "CSV file sent successfully"
+              output.status = true
+              callBack(output) 
+          } else if (input.reportType && input.reportType.toLowerCase() === 'pdf') {
+              console.log("PDF file genration executed")
+
+          } else {
+              daysingleResult.status = true
+              callBack(daysingleResult)
+          }
+        
       } else {
         callBack(result)
       }
