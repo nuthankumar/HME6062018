@@ -29,7 +29,7 @@ const generateDaypartReport = (input, callBack) => {
     printTime: '',
     currentPageNo: '',
     TotalPageCount: ''
-   
+
   }
   let singleDayParts = []
   let dayPartObject = {
@@ -38,6 +38,7 @@ const generateDaypartReport = (input, callBack) => {
 
   let data = []
   let averageTimeResultSet
+  let colorSettings
   let storeDetails
   let longestTimes
   let goalsStatistics
@@ -48,41 +49,48 @@ const generateDaypartReport = (input, callBack) => {
   input.ReportTemplate_From_Time = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
   input.ReportTemplate_To_Time = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
 
+  input.ReportTemplate_From_Time = moment(input.ReportTemplate_From_Time).format('YYYY-MM-DD HH:mm:ss')
+  input.ReportTemplate_From_Time = moment(input.ReportTemplate_From_Time).format('YYYY-MM-DD HH:mm:ss')
   dayPartRepository.generateDayPartSummaryReport(input, result => {
     if (result.status === true) {
       if (input.ReportTemplate_StoreIds.length > 1) {
         averageTimeResultSet = result.data[0]
+        colorSettings = result.data[1]
+        goalsStatistics = result.data[2]
       } else {
         averageTimeResultSet = result.data[0]
-        longestTimes = result.data[1]
+        colorSettings = result.data[1]
         goalsStatistics = result.data[2]
-        storeDetails = result.data[3]
-        getGoalTime = result.data[4]
-        systemStatisticsGenral = result.data[5]
-        systemStatisticsLane = result.data[6]
+        longestTimes = result.data[3]
+        storeDetails = result.data[4]
+        getGoalTime = result.data[5]
+        systemStatisticsGenral = result.data[6]
+        systemStatisticsLane = result.data[7]
       }
 
       // Single Store result
-      if (input.ReportTemplate_StoreIds.length < 2) {
-        convertTimeFormatonEachRowObjectElement(input, averageTimeResultSet, data)
-
+      if (input.ReportTemplate_StoreIds.length < 2) { 
+        averageTimeResultSet.forEach(item => {
+          let dataObject = prepareDayPartObject(item, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
+          data.push(dataObject)
+        })
         dayPartObject.data = data
         singleDayParts.push(dayPartObject)
         reportData.timeMeasureType = singleDayParts
-        reportUtil.prepareStoreDetails(reportData, storeDetails[0], input)
+        reportUtil.prepareStoreDetails(reportData, storeDetails, input)
 
         // goal statistics
         const dayPartTotalObject = _.last(averageTimeResultSet)
         const totalCars = dayPartTotalObject['Total_Car']
         let dataArray = []
-        dataArray = reportUtil.getGoalStatistic(goalsStatistics, getGoalTime, dataArray, totalCars, input.ReportTemplate_Format)
+        dataArray = reportUtil.getGoalStatistic(goalsStatistics, getGoalTime, dataArray, totalCars, input.ReportTemplate_Format, colorSettings)
         reportData.goalData = dataArray
 
         if (input.longestTime) {
           // goal Longest time
           reportUtil.prepareLongestTimes(reportData, longestTimes, input.ReportTemplate_Format)
         }
-		// system statistics
+        // system statistics
         if (input.systemStatistics) {
           reportUtil.prepareStatistics(reportData, systemStatisticsLane, systemStatisticsGenral)
         }
@@ -123,13 +131,13 @@ const generateDaypartReport = (input, callBack) => {
               let store = {}
 
               if (item.StoreDate !== 'Total Day') {
-                let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format)
-                store.name = storeObj.StoreNo
-                dataObject.store = store
+                let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
+                // store.name = storeObj.StoreNo
+                // dataObject.store = store
 
                 tempData.push(dataObject)
               } else {
-                let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format)
+                let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
                 store.name = storeObj.StoreNo
                 store.timeSpan = 'W-Avg'
                 dataObject.store = store
@@ -151,7 +159,7 @@ const generateDaypartReport = (input, callBack) => {
   })
 }
 
-function prepareDayPartObject (item, format) {
+function prepareDayPartObject (item, format, input, colors, goalSettings) {
   let menu = {}
   let greet = {}
   let service = {}
@@ -161,35 +169,44 @@ function prepareDayPartObject (item, format) {
   let dataObject = {}
   let groupId = {}
   let storeId = {}
+  let daypart = {}
 
-  dataObject.dayPartIndex = item.DayPartIndex
-  groupId.value = item.GroupName
-  dataObject.groupId = groupId
+  if (item.StartTime !== null && item.StoreDate !== 'Total Daypart' && item.EndTime !== null && input.ReportTemplate_StoreIds.length < 2) {
+    var dateSplit = item['StoreDate'].split('-')
+    daypart.timeSpan = `${dateSplit[1]}/${dateSplit[0]}-Daypart${item['DayPartIndex']}`
+    daypart.currentDaypart = `${dateUtils.converthhmmsstt(item.StartTime)}-${dateUtils.converthhmmsstt(item.EndTime)}`
+    dataObject.daypart = daypart
+  }
 
-  storeId.value = item.Store_ID
-  dataObject.storeId = storeId
+  if (input.ReportTemplate_StoreIds.length > 1) {
+    dataObject.dayPartIndex = item.DayPartIndex
+    groupId.value = item.GroupName
+    dataObject.groupId = groupId
+    storeId.value = item.Store_ID
+    dataObject.storeId = storeId
+  }
 
   menu.value = dateUtils.convertSecondsToMinutes(item['Menu Board'], format)
-  //  menu.color = reportUtil.getColourCode('Menu Board', item['Menu Board'], colors, goalSettings)
+  menu.color = reportUtil.getColourCode('Menu Board', item['Menu Board'], colors, goalSettings)
   dataObject.menu = menu
 
   greet.value = dateUtils.convertSecondsToMinutes(item.Greet, format)
-  //  greet.color = reportUtil.getColourCode('Greet', item.Greet, colors, goalSettings)
+  greet.color = reportUtil.getColourCode('Greet', item.Greet, colors, goalSettings)
   dataObject.greet = greet
 
   service.value = dateUtils.convertSecondsToMinutes(item.Service, format)
-  //  service.color = reportUtil.getColourCode('Service', item.Service, colors, goalSettings)
+  service.color = reportUtil.getColourCode('Service', item.Service, colors, goalSettings)
   dataObject.service = service
 
   laneQueue.value = dateUtils.convertSecondsToMinutes(item['Lane Queue'], format)
-  //  laneQueue.color = reportUtil.getColourCode('Lane Queue', item['Lane Queue'], colors, goalSettings)
+  laneQueue.color = reportUtil.getColourCode('Lane Queue', item['Lane Queue'], colors, goalSettings)
   dataObject.laneQueue = laneQueue
 
   laneTotal.value = dateUtils.convertSecondsToMinutes(item['Lane Total'], format)
-  // laneTotal.color = reportUtil.getColourCode('Lane Total', item['Lane Total'], colors, goalSettings)
+  laneTotal.color = reportUtil.getColourCode('Lane Total', item['Lane Total'], colors, goalSettings)
   dataObject.laneTotal = laneTotal
 
-  totalCars.value = dateUtils.convertSecondsToMinutes(item['Total_Car'], format)
+  totalCars.value = item['Total_Car'] // dateUtils.convertSecondsToMinutes(item['Total_Car'], format)
   dataObject.totalCars = totalCars
 
   return dataObject
@@ -225,17 +242,14 @@ function convertTimeFormatonEachRowObjectElement (input, averageTimeResultSet, d
 }
 
 function convertEventsTimeFormat (key, row, value, parts, input) {
-  // if (row['StartTime'] && row['StoreDate'] !== 'Total Daypart' && row['EndTime'] && input.ReportTemplate_StoreIds.length < 2) {
-  //   var dateSplit = row['StoreDate'].split('/')
-  //   parts.daypart.timeSpan = `${dateSplit[1]}/${dateSplit[0]}-Daypart+${row['DayPartIndex']}`
-  //   parts.daypart.currentDaypart = `${dateUtils.converthhmmsstt(row.StartTime)}-${dateUtils.converthhmmsstt(row.EndTime)}`
-
-  // }
-
+  if (row['StartTime'] && row['StoreDate'] !== 'Total Daypart' && row['EndTime']) {
+    var dateSplit = row['StoreDate'].split('-')
+    parts.daypart.timeSpan = `${dateSplit[1]}/${dateSplit[0]}-Daypart${row['DayPartIndex']}`
+    parts.daypart.currentDaypart = `${dateUtils.converthhmmsstt(row.StartTime)}-${dateUtils.converthhmmsstt(row.EndTime)}`
+  }
+  parts.groupName.value = row['GroupName']
+  parts.storeId.value = row['Store_ID']
   parts.dayPartIndex = row['DayPartIndex']
-  // console.log(row['GroupName'])
-  // parts.groupName['value'] = row['GroupName'] || null
-  // parts.storeId['value'] = row['Store_ID'] || null
   if (key.includes(messages.Events.MENU)) {
     parts.menu.value = input.ReportTemplate_Format === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)
   } else if (key.includes(messages.Events.LANEQUEUE)) {

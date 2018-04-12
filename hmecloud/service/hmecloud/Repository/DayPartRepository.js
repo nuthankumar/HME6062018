@@ -11,12 +11,12 @@ const generateDayPartSummaryReport = (input, callback) => {
       callback(output)
     }
 
-    console.log(input)
+    
 
     sqlPool.request()
-      .input('StoreIDs', sql.VarChar(5), input.ReportTemplate_StoreIds.toString())
-      .input('StoreStartDate', sql.Date, input.ReportTemplate_From_Date)
-      .input('StoreEndDate', sql.Date, input.ReportTemplate_To_Date)
+      .input('StoreIDs', sql.VarChar(500), input.ReportTemplate_StoreIds.toString())
+      .input('InputStoreStartDate', sql.NVarChar(50), input.ReportTemplate_From_Date)
+      .input('InputStoreEndDate', sql.NVarChar(50), input.ReportTemplate_To_Date)
       .input('InputStartDateTime', sql.NVarChar(50), input.ReportTemplate_From_Time)
       .input('InputEndDateTime', sql.NVarChar(50), input.ReportTemplate_To_Time)
       .input('CarDataRecordType_ID', sql.VarChar(255), input.CarDataRecordType_ID)

@@ -1,6 +1,7 @@
 const dateUtils = require('../Common/DateUtils')
 const _ = require('lodash')
 const messages = require('../Common/Message')
+
 // This function is used to Prepare Store Details
 const prepareStoreDetails = (daysingleResult, storeData, input) => {
   if (storeData && storeData[0]) {
@@ -16,10 +17,12 @@ const prepareStoreDetails = (daysingleResult, storeData, input) => {
   return daysingleResult
 }
 
-function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, isMinutes) {
+function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, isMinutes, colors) {
+ let  colorSettings = colors[0].ColourCode.split('|')
   const goalGrades = {
     goalA: {
       title: '<Goal A',
+      color: colorSettings[0],
       menu: { goal: '', cars: '', percentage: '' },
       greet: { goal: '', cars: '', percentage: '' },
       service: { goal: '', cars: '', percentage: '' },
@@ -28,6 +31,7 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
     },
     goalB: {
       title: '<Goal B',
+      color: colorSettings[1],
       menu: { goal: '', cars: '', percentage: '' },
       greet: { goal: '', cars: '', percentage: '' },
       service: { goal: '', cars: '', percentage: '' },
@@ -36,6 +40,7 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
     },
     goalC: {
       title: '<Goal C',
+      color: colorSettings[2],
       menu: { goal: '', cars: '', percentage: '' },
       greet: { goal: '', cars: '', percentage: '' },
       service: { goal: '', cars: '', percentage: '' },
@@ -44,6 +49,7 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
     },
     goalD: {
       title: '<Goal D',
+      color: colorSettings[2],
       menu: { goal: '', cars: '', percentage: '' },
       greet: { goal: '', cars: '', percentage: '' },
       service: { goal: '', cars: '', percentage: '' },
@@ -52,6 +58,7 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
     },
     goalF: {
       title: 'Goal D',
+      color: colorSettings[2],
       menu: { goal: '', cars: '', percentage: '' },
       greet: { goal: '', cars: '', percentage: '' },
       service: { goal: '', cars: '', percentage: '' },
@@ -113,6 +120,10 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
     prepareGoalPercentage(goalGrades, 'service', 'percentage', key, value, totalCars)
     prepareGoalPercentage(goalGrades, 'laneQueue', 'percentage', key, value, totalCars)
     prepareGoalPercentage(goalGrades, 'laneTotal', 'percentage', key, value, totalCars)
+
+  //  goalGrades.goalA.color = getColourCode('Menu Board', item['Menu Board'], color, goalsStatistics)
+
+
 
     dataArray.push(goalGrades)
   })
