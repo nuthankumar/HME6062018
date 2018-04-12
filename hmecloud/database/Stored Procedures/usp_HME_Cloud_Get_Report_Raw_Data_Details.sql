@@ -3,10 +3,9 @@
 -- ===========================================================
 -- Name			:	usp_HME_Cloud_Get_Report_Raw_Data_Details
 -- Author		:	Swathi Kumar
--- Created		:	6-April-2018
--- Tables		:	Group,GroupStore
--- Purpose		:	To get the Raw Car Data for the given Store, 
---					StoreStartDate, StoreEndDate, StartDateTime and EndDateTime
+-- Created		:	12-April-2018
+-- Tables		:	Group,Stores
+-- Purpose		:	To get the Raw Car details
 -- ===========================================================
 --				Modification History
 -- -----------------------------------------------------------
@@ -14,8 +13,9 @@
 -- -----------------------------------------------------------
 -- 1.
 -- ===========================================================
--- EXEC [dbo].[dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details] @GroupId = 126
+-- EXEC [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details] '4', '2018-03-24', '2018-03-24'
 -- ===========================================================
+
 
 CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details](
 	@StoreId int,

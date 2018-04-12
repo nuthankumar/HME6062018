@@ -48,13 +48,13 @@ FROM GroupHierarchy
 UNION ALL 
 SELECT 
 	GH.Id [ParentGroup], 
-	store.Id,  
-	store.StoreName ,
+	store.Store_ID,  
+	store.Store_Name ,
 	ISNULL(GH.[Level],8)+1,
 	'store' AS [Type]
 FROM GroupHierarchy AS GH
 INNER JOIN GroupStore gs ON GH.Id = gs.GroupId 
-RIGHT JOIN Stores AS store ON store.Id = gs.StoreId
+RIGHT JOIN tbl_Stores AS store ON store.Store_ID = gs.StoreId
 
 ORDER BY [Level],[Name]  
 GO
