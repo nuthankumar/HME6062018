@@ -27,8 +27,7 @@ const generateDayReport = (input, callBack) => {
           let colors 
           let goalstatisticsDetails 
           if (storesLength === 1) {
-              let goalDataList = []
-              let goalData = {}
+     
           reportUtil.prepareStoreDetails(daysingleResult, result.data[3], input)
            colors = result.data[4]
            goalstatisticsDetails = result.data[2]
@@ -42,9 +41,7 @@ const generateDayReport = (input, callBack) => {
           const totalCars = dayPartTotalObject['Total_Car']
           let dataArray = []
           dataArray = reportUtil.getGoalStatistic(goalstatisticsDetails, getGoalTime, dataArray, totalCars)
-            goalDataList.push(dataArray)
-            goalData.data = goalDataList
-            daysingleResult.goalData = goalData
+            daysingleResult.goalData = dataArray
             if (input.systemStatistics) {
                 let systemStatisticsLane
                 let systemStatisticsGenral
@@ -61,7 +58,7 @@ const generateDayReport = (input, callBack) => {
           prepareMultiStoreResults(daysingleResult, result.data[0], input.ReportTemplate_Format, colors, goalstatisticsDetails)
         }
           
-          if (input.reportType.toLowerCase().trim() === ' csv') {
+         /* if (input.reportType.toLowerCase().trim() === ' csv') {
               console.log("CSV file genration executed")
              let output = {}
              /*  let csvInput = {}
@@ -82,17 +79,17 @@ const generateDayReport = (input, callBack) => {
                   callBack(output)
               })
 
-             */
+             
               output.data = "CSV file sent successfully"
               output.status = true
               callBack(output) 
           } else if (input.reportType && input.reportType.toLowerCase() === 'pdf') {
               console.log("PDF file genration executed")
 
-          } else {
+          } else { */
               daysingleResult.status = true
               callBack(daysingleResult)
-          }
+        //  }
         
       } else {
         callBack(result)
