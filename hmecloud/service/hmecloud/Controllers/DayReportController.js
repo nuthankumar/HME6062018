@@ -24,7 +24,9 @@ const generateDayReport = (input, callBack) => {
     stores.getDayDataReport(datReportqueryTemplate, result => {
       if (result.status === true) {
         // Preparing Single Store results
-        if (storesLength === 1) {
+          if (storesLength === 1) {
+              let goalDataList = []
+              let goalData = {}
           reportUtil.prepareStoreDetails(daysingleResult, result.data[3], input)
           let colors = result.data[4]
           let goalstatisticsDetails = result.data[2]
@@ -38,7 +40,9 @@ const generateDayReport = (input, callBack) => {
           const totalCars = dayPartTotalObject['Total_Car']
           const dataArray = []
           reportUtil.getGoalStatistic(goalstatisticsDetails, getGoalTime, dataArray, totalCars)
-           daysingleResult.goalData = dataArray[0]
+            goalDataList.push(dataArray[0])
+            goalData.data = goalDataList
+            daysingleResult.goalData = goalData
             if (input.systemStatistics) {
                 let systemStatisticsLane
                 let systemStatisticsGenral
