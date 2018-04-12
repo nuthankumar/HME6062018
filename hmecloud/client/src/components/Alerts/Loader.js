@@ -21,9 +21,9 @@ export default class Loader extends React.Component {
         console.log(showLoader);
         return (
             <section className={"loaderSection text-center " + (showLoader ? 'show' : 'hidden')}>
-                <h3 className="loaderTxt">Please wait while your report is being generated...</h3>
+                <h3 className="loaderTxt">{t[language].ReportsLoadingPleaseWait}</h3>
                 <div><img src={LoaderImg}/></div>
-                <div className="loaderNote">Please Note: This report may take a while to load depending on the amount of data being requested.</div>
+                <div className="loaderNote">{t[language].ReportsPleaseNote}</div>
             </section>
         )
     }

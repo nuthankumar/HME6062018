@@ -535,7 +535,9 @@ class Report extends Component {
   getSavedReports() {
       let url = Config.apiBaseUrl + CommonConstants.apiUrls.getSavedTemplates
       this.api.getData(url, data => {
-        this.setState({
+
+          this.state.savedTemplates = []
+          this.setState({
           savedTemplates: data.data
         })
       }, error => {
@@ -725,6 +727,17 @@ class Report extends Component {
       this.setState(this.state);
       isError = true;
     }
+        if (moment(this.state.toDate, "MM/DD/YYYY") < moment(this.state.fromDate, "MM/DD/YYYY")) {
+            this.state.errorMessage = t[language].daterangeinvalidbeyond;
+            this.setState(this.state);
+            isError = true;
+    }
+    if (this.state.selectedStoreIds.length >= 250) {
+        this.state.errorMessage = t[language].storeselectioninvalid250;
+            this.setState(this.state);
+            isError = true;
+        }
+
 
     if (this.state.timeMeasure == 1) {
       if (
@@ -738,6 +751,7 @@ class Report extends Component {
         isError = true;
       }
     }
+    
 
     if (this.state.timeMeasure == 2) {
       if (
@@ -774,25 +788,49 @@ class Report extends Component {
           this.state.errorMessage = t[language].daterangeinvalidsingleday
         this.setState(this.state);
         isError = true;
+        }
+        if (this.state.selectedStoreIds.length > 1) {
+            this.state.errorMessage = t[language].invalidselectiononestore
+          this.setState(this.state);
+          isError = true;
       }
+    }
+
+    if (this.state.templateName) {
+        if (!this.state.saveAsTemplate) {
+            this.state.errorMessage = t[language].pleasechecksaveastemplate
+            this.setState(this.state)
+            isError = true;
+        }
     }
     if (this.state.saveAsTemplate) {
       if (!this.state.templateName) {
-          this.state.errorMessage = t[language].pleaseneteratemplatename
+        this.state.errorMessage = t[language].pleaseneteratemplatename
         this.setState(this.state)
         isError = true;
       } else {
-          let url = Config.apiBaseUrl + CommonConstants.apiUrls.createTemplate
-          this.api.postData (url, template[0] ,data => {
-            this.state.successMessage = data.data;
-            this.state.errorMessage = "";
-            this.setState(this.state);
-            this.getSavedReports();
-          }, error => {
-            this.state.errorMessage = "ERROR";
-            this.state.successMessage = "";
-            this.setState(this.state);
-          })
+          //console.log(this.state.savedTemplates)
+          //if (this.state.savedTemplates.length()) {
+          //    if (this.state.savedTemplates.length >= 10) {
+          //        this.state.errorMessage = t[language].savedtemplatelimit;
+          //        this.setState(this.state);
+          //        isError = true;
+          //    }
+              
+          //}
+                        let url = Config.apiBaseUrl + CommonConstants.apiUrls.createTemplate
+              this.api.postData(url, template[0], data => {
+                  this.state.successMessage = data.data;
+                  this.state.errorMessage = "";
+                  this.setState(this.state);
+                  this.getSavedReports();
+              }, error => {
+                  this.state.errorMessage = "ERROR";
+                  this.state.successMessage = "";
+                  this.setState(this.state);
+              })
+          
+          
       }
     }
     if (!isError) {
