@@ -19,7 +19,7 @@
 CREATE PROCEDURE [dbo].[usp_GetGroupDetailsByGroupId]
 	@GroupId INT
 AS
-BEGIN
+ 
 DECLARE @query NVARCHAR(3000)
 
 SET @query = ''
@@ -41,18 +41,17 @@ FROM [dbo].[Group] AS g
 WHERE g.ParentGroup = @GroupId
 UNION 
 SELECT 
-	s.Id, 
-	s.StoreName,
+	s.Store_ID, 
+	s.Store_Name,
 	'store' AS [Type] 
 FROM 
-	Stores AS s 
-INNER JOIN GroupStore gd ON s.Id = gd.StoreId 
+tbl_Stores AS s
+INNER JOIN GroupStore gd ON s.Store_ID = gd.StoreId 
 INNER JOIN[dbo].[Group] AS g ON g.Id = gd.GroupId 
 WHERE 
 gd.GroupId = @GroupId 
 
 EXECUTE(@query);
-END
 GO
 
 

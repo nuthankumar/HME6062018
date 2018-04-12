@@ -11,7 +11,7 @@
 -- -----------------------------------------------------------
 -- Sl.No.	Date			Developer		Descriptopn   
 -- -----------------------------------------------------------
---  1.  	
+--  1.	
 --	2.
 -- ===========================================================
 -- EXEC [dbo].[usp_GetAllAvailableGroupsAndStores] @AccountId = 100
@@ -26,20 +26,15 @@ SELECT
 	g.GroupName,
 	'group' AS [Type] 
 FROM [dbo].[Group] AS g 
-WHERE 
-	g.ParentGroup IS NULL 
-AND 
-	g.AccountId = @AccountId
+WHERE g.ParentGroup IS NULL AND g.AccountId = @AccountId
 UNION
 SELECT 
-	DISTINCT s.Id, 
-	s.StoreName, 
+	DISTINCT s.Store_ID, 
+	s.Store_Name, 
 	'store' AS [Type] 
-FROM 
-	Stores AS s, GroupStore AS gd 
-WHERE 
-	s.AccountId = @AccountId AND
-	s.Id NOT IN(
+FROM tbl_Stores AS s, GroupStore AS gd 
+WHERE s.Store_Account_ID = @AccountId AND
+	s.Store_ID NOT IN(
 		SELECT 
 			StoreId 
 		FROM GroupStore 
