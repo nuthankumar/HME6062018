@@ -59,7 +59,7 @@ const currentTime = () => {
 }
 
 const convertmmddyyyy = (dateValue) => {
-  return moment(dateValue).format('mm/dd/yyyy')
+  return moment(dateValue).format('MM/DD/YYYY')
 }
 
 const dateDifference = (fromDate, toDate) => {
@@ -87,6 +87,10 @@ const monthDifference = (fromDate, toDate) => {
 const convertMonthDayYear = (dateVal) => {
     return moment(dateVal).format('LL')
 }
+
+const getAdvancedSelectionMaxDate = (noOfDays, dateValue) => {
+     return moment(dateValue).add(noOfDays, 'day').format('YYYY-MM-DD')
+}
 module.exports = {
   convertSecondsToMinutes,
   dayPartTime,
@@ -99,5 +103,6 @@ module.exports = {
     converthhmmsstt,
     convertmmddyyyy,
     monthDifference,
-    convertMonthDayYear
+    convertMonthDayYear,
+    getAdvancedSelectionMaxDate
 }

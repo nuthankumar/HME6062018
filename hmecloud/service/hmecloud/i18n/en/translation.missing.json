@@ -7,7 +7,13 @@
   },
   "REPORTSUMMARY": {
     "InvalidStoreId": "REPORTSUMMARY.InvalidStoreId",
-    "invalidTemplateId": "REPORTSUMMARY.invalidTemplateId"
+    "invalidTemplateId": "REPORTSUMMARY.invalidTemplateId",
+    "DayInvalidDateRange": "REPORTSUMMARY.DayInvalidDateRange",
+    "DateRangeInvalid": "REPORTSUMMARY.DateRangeInvalid",
+    "FormDateGreaterThanToDate": "REPORTSUMMARY.FormDateGreaterThanToDate",
+    "DateCannotbeEmpty": "REPORTSUMMARY.DateCannotbeEmpty",
+    "WeekInvalidDateRange": "REPORTSUMMARY.WeekInvalidDateRange",
+    "AdvancedDayInvalidDateRange": "REPORTSUMMARY.AdvancedDayInvalidDateRange"
   },
   "LISTGROUP": {
     "createdBy": "LISTGROUP.createdBy",
