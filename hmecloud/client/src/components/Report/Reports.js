@@ -934,6 +934,7 @@ class Report extends Component {
     console.log(JSON.stringify(rawCarData[0]));
     let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
     this.api.postData(url, rawCarData[0], data => {
+        console.log(data.data);
       //  this.props.history.push("/rawcardatareport", this.state.rawCarData);
         this.props.history.push({
             pathname: '/rawcardatareport',

@@ -234,13 +234,15 @@ export default class SummaryReport extends Component {
     this.state.reportData.response = this.props.history.location.state.reportDataResponse
     console.log("**************",this.state.reportData.response)
     if(this.props.history.location.state.reportDataResponse.goalData && this.state.reportData.singleStore){
-      this.state.goalData = this.props.history.location.state.reportDataResponse.goalData
+        this.state.goalData = this.props.history.location.state.reportDataResponse.goalStatistics
     }
     this.setState(this.state)
     console.log(this.state.reportData.longestTime)
   }
-  displayGoalStatistics(){
-    if(this.state.goalData && this.state.reportData.singleStore){
+  displayGoalStatistics() {
+      console.log('goal stats')
+      if (this.props.history.location.state.reportDataResponse.goalStatistics && this.state.reportData.singleStore) {
+
       return (<div className='row goalstatistics-table-section'>
         <GoalStatisticsDataComponent goalData = {this.state.goalData} />
       </div>)

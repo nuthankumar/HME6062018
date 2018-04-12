@@ -7,6 +7,35 @@ export default class GoalStatisticsDataComponent extends Component {
   constructor (props) {
     super(props)
     this.state = {
+        goalData: {
+            data:
+            [
+                {
+                    title: "<Goal A",
+                    menu: { goal: "1", cars: "1", percentage: "1" },
+                    greet: { goal: "2", cars: "1", percentage: "1" },
+                    service: { goal: "3", cars: "1", percentage: "1" },
+                    laneQueue: { goal: "4", cars: "1", percentage: "1" },
+                    laneTotal: { goal: "5", cars: "1", percentage: "1" }
+                },
+                {
+                    title: "<Goal B",
+                    menu: { goal: "6", cars: "1", percentage: "1" },
+                    greet: { goal: "7", cars: "1", percentage: "1" },
+                    service: { goal: "8", cars: "1", percentage: "1" },
+                    laneQueue: { goal: "9", cars: "1", percentage: "1" },
+                    laneTotal: { goal: "10", cars: "1", percentage: "1" }
+                },
+                {
+                    title: "<Goal C",
+                    menu: { goal: "11", cars: "1", percentage: "1" },
+                    greet: { goal: "12", cars: "1", percentage: "1" },
+                    service: { goal: "13", cars: "1", percentage: "1" },
+                    laneQueue: { goal: "14", cars: "1", percentage: "1" },
+                    laneTotal: { goal: "15", cars: "1", percentage: "1" }
+                },
+            ]
+        }
     }
     this.displayGoalStatisticsData = this.displayGoalStatisticsData.bind(this)
     this.displayGoalStatisticsRowData = this.displayGoalStatisticsRowData.bind(this)
@@ -36,13 +65,15 @@ export default class GoalStatisticsDataComponent extends Component {
           </table>
           </div>
           <div className='col-xs-12'>
-            {this.displayGoalStatisticsRowData(goalData)}
+            {this.displayGoalStatisticsRowData(goalData.data)}
           </div>
         </div>)
   }
 
-  displayGoalStatisticsRowData (goalRowData) {
-    if (goalRowData.length > 0) {
+  displayGoalStatisticsRowData(goalRowData) {
+      //console.log(JSON.stringify(this.props.goalData));
+      //let goalRowData = this.state.goalData;
+      if (goalRowData.length > 0) {
       return goalRowData.map((goalItem) => {
         /*return (<table className='goalstatistics-table'>
         <tbody>
@@ -81,7 +112,8 @@ export default class GoalStatisticsDataComponent extends Component {
   }
 
   render () {
-    let goalData = this.props.goalData
-    return (<div>{this.displayGoalStatisticsData(goalData)}</div>)
+      let goalData = this.props.goalData
+      console.log(JSON.stringify(goalData));
+             return (<div>{this.displayGoalStatisticsData(goalData)}</div>)
   }
 }
