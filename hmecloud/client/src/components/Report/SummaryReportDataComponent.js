@@ -86,7 +86,9 @@ export default class SummaryReportDataComponent extends Component {
     }
   }
 
-  displayLongestTimes(){
+  displayLongestTimes() {
+
+      console.log(this.props.reportData);
     if(this.props.reportData.longestTime){
       return(
         <LongestTime LongestTimes = {this.props.reportData.response.LongestTimes} className = {(this.props.reportData.singleStore) ? 'show' : 'hide'}/>

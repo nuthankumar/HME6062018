@@ -237,6 +237,7 @@ export default class SummaryReport extends Component {
       this.state.goalData = this.props.history.location.state.reportDataResponse.goalData
     }
     this.setState(this.state)
+    console.log(this.state.reportData.longestTime)
   }
   displayGoalStatistics(){
     if(this.state.goalData && this.state.reportData.singleStore){
@@ -248,10 +249,10 @@ export default class SummaryReport extends Component {
     }
   }
 
-  displaySystemStatistics(){
-    if(this.state.displayData && this.state.reportData.singleStore){
-      return (<div className='row systemstatistics-table-section'>
-        <SystemStatistics displayData = {this.state.displayData} />
+  displaySystemStatistics() {
+      if (this.state.reportData.systemStatistics && this.state.reportData.singleStore) {
+        return (<div className='row systemstatistics-table-section'>
+            <SystemStatistics systemStats={this.props.history.location.state.reportDataResponse.systemStatistics} />
       </div>)
     }else{
       return <div/>
@@ -285,7 +286,6 @@ export default class SummaryReport extends Component {
   }
 
   getPageDetails(curPage){
-
     let request = {
       "timeMeasure": parseInt(this.state.reportData.timeMeasure),
       "fromDate": moment(this.state.reportData.fromDate).format('YYYY-MM-DD'),

@@ -637,7 +637,7 @@ class Report extends Component {
         this.setState({ timeMeasure: template.TimeMeasure });
         let fromDate = moment(template.FromDate).format("MM/DD/YYYY");
         this.setState({ fromDate: fromDate });
-        let toDate = moment(template.ToDate).format("MM/YY/YYYY");
+        let toDate = moment(template.ToDate).format("MM/DD/YYYY");
         this.setState({ toDate: toDate });
         this.setState({ defaultCheckedKeys: template.SelectedList });
         let selectedStoreIds = []
@@ -712,15 +712,24 @@ class Report extends Component {
       advancedOptions: (!this.state.open || !this.state.close), longestTime: _.contains(this.state.include, "1"),systemStatistics: _.contains(this.state.include, "2"),
     });
 
-    if(template.longestTime){
+    if(template[0].longestTime){
       this.state.reportData.longestTime = true
       this.setState(this.state)
     }else{
       this.state.reportData.longestTime = false
       this.setState(this.state)
+      }
+    if (template[0].systemStatistics) {
+        this.state.reportData.systemStatistics = true
+        this.setState(this.state)
+    } else {
+        this.state.reportData.systemStatistics = false
+        this.setState(this.state)
     }
 
-    console.log(template);
+
+
+      
     this.state.templateData = template;
     this.setState(this.state);
 

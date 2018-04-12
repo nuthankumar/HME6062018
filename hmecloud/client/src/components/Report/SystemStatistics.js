@@ -9,29 +9,14 @@ import * as languageSettings from '../Language/languageSettings'
 class SystemStatistics extends Component {
   constructor (props) {
     super(props)
-    // languageSettings.setCurrentLanguage ('fr');
     this.state = {
       currentLanguage: languageSettings.getCurrentLanguage(),
-      displayData: {
-        Lane: '1',
-        AverageCarsInLane: '3',
-        TotalPullouts: '0',
-        TotalPullins: '0',
-        DeleteOverMaximum: '0',
-        PowerFails: '0',
-        SystemResets: '0',
-        VBDResets: '0'
-      }
     }
-    // this.displayRecords = this.displayRecords.bind(this)
-
-    // console.log(languageSettings.getCurrentLanguage ());
   }
 
   render () {
     const language = this.state.currentLanguage
-    let displayData = this.props.displayData
-    console.log(this.props.displayData)
+    let displayData = this.props.systemStats
     return (
       <div>
         <div className='systemSec' id='page-container'>
@@ -71,10 +56,6 @@ class SystemStatistics extends Component {
               </tr>
             </tbody>
           </table>
-        </div>
-
-        <div>
-          {t[language].username}
         </div>
       </div>
     )
