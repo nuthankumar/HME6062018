@@ -65,7 +65,7 @@ export default class GoalStatisticsDataComponent extends Component {
           </table>
           </div>
           <div className='col-xs-12'>
-            {this.displayGoalStatisticsRowData(goalData.data)}
+            {this.displayGoalStatisticsRowData(goalData)}
           </div>
         </div>)
   }
@@ -73,7 +73,7 @@ export default class GoalStatisticsDataComponent extends Component {
   displayGoalStatisticsRowData(goalRowData) {
       //console.log(JSON.stringify(this.props.goalData));
       //let goalRowData = this.state.goalData;
-      if (goalRowData.length > 0) {
+      if (goalRowData) {
       return goalRowData.map((goalItem) => {
         /*return (<table className='goalstatistics-table'>
         <tbody>
@@ -114,6 +114,6 @@ export default class GoalStatisticsDataComponent extends Component {
   render () {
       let goalData = this.props.goalData
       console.log(JSON.stringify(goalData));
-             return (<div>{this.displayGoalStatisticsData(goalData)}</div>)
+      return (<div>{this.displayGoalStatisticsData(goalData)}</div>)
   }
 }
