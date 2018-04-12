@@ -1,21 +1,19 @@
 'use strict';
 
-var adal = require('adal-node');
+var adal = require('adal-node')
+const config = require('./config')
 
 module.exports = function (context, req) {
   var AuthenticationContext = adal.AuthenticationContext;
 
   let params = req.body
-  const tenant = 'nousinfo.onmicrosoft.com',
-    authorityHostUrl = 'https://login.microsoftonline.com',
-    clientId = 'bb902204-5228-4e3c-8d79-d4e0bd722bc9'
 
-  const authorityUrl = authorityHostUrl + '/' + tenant,
-    resource = '00000002-0000-0000-c000-000000000000',
+  const authorityUrl = config.authorityHostUrl + '/' + config.tenant,
+
     authContext = new AuthenticationContext(authorityUrl)
 
-  authContext.acquireTokenWithUsernamePassword(resource, params.username,
-    params.password, clientId, function (err, tokenResponse) {
+  authContext.acquireTokenWithUsernamePassword(config.resource, params.username,
+    params.password, config.clientId, function (err, tokenResponse) {
       if (err) {
         context.res = {
           status: 404,
@@ -36,6 +34,6 @@ module.exports = function (context, req) {
           }
         }
       }
-      context.done();
+      context.done()
     })
 }

@@ -221,6 +221,7 @@ const storesDetails = (result, colors, goalSettings, format) => {
       let Week = {
         'group': {'value': items.GroupName},
         'storeId': {'value': items.StoreID},
+        'index': items.WeekIndex,
         'week': {'open': items.WeekStartDate, 'close': items.WeekEndDate},
         'menu': {'value': dateUtils.convertSecondsToMinutes(parseInt(items['Menu Board']), format), 'color': getColor('Menu', items['Menu Board'])},
         'greet': {'value': dateUtils.convertSecondsToMinutes(parseInt(items.Greet), format), 'color': getColor('Greet', items.Greet)},
@@ -234,6 +235,7 @@ const storesDetails = (result, colors, goalSettings, format) => {
       let Week = {
         'group': {'value': items.GroupName},
         'storeId': {'value': items.StoreID},
+        'index': items.WeekIndex,
         'week': {'open': items.WeekStartDate, 'close': items.WeekEndDate},
         'menu': {'value': items['Menu Board'], 'color': getColor('Menu', items['Menu Board'])},
         'greet': {'value': items.Greet, 'color': getColor('Greet', items.Greet)},

@@ -84,7 +84,7 @@ const generateDaypartReport = (input, callBack) => {
         const totalCars = dayPartTotalObject['Total_Car']
         let dataArray = []
         dataArray = reportUtil.getGoalStatistic(goalsStatistics, getGoalTime, dataArray, totalCars, input.ReportTemplate_Format)
-        reportData.goalStatistics = dataArray
+        reportData.goalData = dataArray
 
         if (input.longestTime) {
           // goal Longest time

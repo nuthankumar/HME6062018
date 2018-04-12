@@ -68,33 +68,33 @@ export default class SummaryReport extends Component {
               <th className='thin-header'>
                 <span>Store</span>:
               </th>
-              <td className='thin-header'>{this.state.reportData.storeName ? this.state.reportData.storeName : 'N/A' }</td>
+              <td className='thin-header'>{this.state.reportData.response.storeName ? this.state.reportData.response.storeName : 'N/A' }</td>
               <th>
                 <span>Start Time:</span>
               </th>
               <td>
-                {this.state.reportData.startTime ? this.state.reportData.startTime : 'N/A'}&nbsp;
+                      {this.state.reportData.response.startTime ? this.state.reportData.response.startTime : 'N/A'}&nbsp;
               </td>
               <th>
                 <span>Print Date:</span>
               </th>
-              <td> {this.state.reportData.printDate ? this.state.reportData.printDate : 'N/A'} </td>
+              <td> {this.state.reportData.response.printDate ? this.state.reportData.response.printDate : 'N/A'} </td>
             </tr>
             <tr>
               <th>
                 <span>Description:</span>
               </th>
-              <td>{this.state.reportData.storeDesc ? this.state.reportData.storeDesc : 'N/A'}</td>
+              <td>{this.state.reportData.response.storeDesc ? this.state.reportData.response.storeDesc : 'N/A'}</td>
               <th>
                 <span>Stop Time:</span>
               </th>
               <td>
-                {this.state.reportData.stopTime ? this.state.reportData.stopTime : 'N/A' }&nbsp;
+                {this.state.reportData.response.stopTime ? this.state.reportData.response.stopTime : 'N/A' }&nbsp;
               </td>
               <th>
                 <span>Print Time: </span>
               </th>
-              <td>{this.state.reportData.printTime ? this.state.reportData.printTime : 'N/A' }</td>
+              <td>{this.state.reportData.response.printTime ? this.state.reportData.response.printTime : 'N/A' }</td>
             </tr>
           </tbody>
         </table>)
@@ -234,13 +234,13 @@ export default class SummaryReport extends Component {
     this.state.reportData.response = this.props.history.location.state.reportDataResponse
     console.log("**************",this.state.reportData.response)
     if(this.props.history.location.state.reportDataResponse.goalData && this.state.reportData.singleStore){
-      this.state.goalData = this.props.history.location.state.reportDataResponse.goalData
+        this.state.goalData = this.props.history.location.state.reportDataResponse.goalData
     }
     this.setState(this.state)
     console.log(this.state.reportData.longestTime)
   }
-  displayGoalStatistics(){
-    if(this.state.goalData && this.state.reportData.singleStore){
+  displayGoalStatistics() {
+      if (this.props.history.location.state.reportDataResponse.goalData && this.state.reportData.singleStore) {
       return (<div className='row goalstatistics-table-section'>
         <GoalStatisticsDataComponent goalData = {this.state.goalData} />
       </div>)

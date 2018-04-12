@@ -9,15 +9,15 @@
 -- ===========================================================
 --				Modification History
 -- -----------------------------------------------------------
--- Sl.No.	Date			Developer		Descriptopn
+-- Sl.No.	Date			Developer		Descriptopn   
 -- -----------------------------------------------------------
 --  1.  	06-APRIL-2018	JAYARAM V	Procedure created
 --	2.
 -- ===========================================================
--- EXEC [dbo].[usp_InsertReportTemplate] values @AccountId ...
+-- EXEC [dbo].[usp_InsertReportTemplate] @AccountId = 100
 -- ===========================================================
 
-ALTER PROCEDURE [dbo].[usp_InsertReportTemplate]
+CREATE PROCEDURE [dbo].[usp_InsertReportTemplate]
 	@AccountId			INT,
 	@Stores				VARCHAR(MAX),
 	@TimeMeasure		INT,
@@ -35,8 +35,29 @@ ALTER PROCEDURE [dbo].[usp_InsertReportTemplate]
 	@UpdatedBy			INT,
 	@CreatedDateTime	DATETIME,
 	@UpdatedDateTime	DATETIME
-AS
+AS 
+BEGIN
+DECLARE @IsTemplateExist int
+DECLARE @InsertedTemplate int
 
+	SET @IsTemplateExist = 
+	( SELECT 
+		count(*) 
+	FROM 
+		[ReportTemplates] 
+	WHERE 
+		TemplateName = @TemplateName 
+	AND 
+		AccountId = @AccountId 
+	AND CreatedBy = @CreatedBy
+	);
+if(@IsTemplateExist > 1)
+BEGIN
+	SELECT 
+		@IsTemplateExist as TemplateExist
+ END
+ ELSE
+ BEGIN
  INSERT INTO [dbo].[ReportTemplates] (
 	AccountId ,
 	Stores,
@@ -54,8 +75,8 @@ AS
 	CreatedBy,
 	UpdatedBy,
 	CreatedDateTime,
-	UpdatedDateTime)
-	 VALUES
+	UpdatedDateTime) 
+	 VALUES 
 	 (
 	@AccountId ,
 	@Stores,
@@ -75,3 +96,10 @@ AS
 	@CreatedDateTime,
 	@UpdatedDateTime
 	 )
+	 SET @InsertedTemplate = @@IDENTITY
+	 SELECT @InsertedTemplate AS TemplateID
+END
+END
+GO
+
+
