@@ -712,6 +712,14 @@ class Report extends Component {
       advancedOptions: (!this.state.open || !this.state.close), longestTime: _.contains(this.state.include, "1"),systemStatistics: _.contains(this.state.include, "2"),
     });
 
+    if(template.longestTime){
+      this.state.reportData.longestTime = true
+      this.setState(this.state)
+    }else{
+      this.state.reportData.longestTime = false
+      this.setState(this.state)
+    }
+
     console.log(template);
     this.state.templateData = template;
     this.setState(this.state);
@@ -751,7 +759,7 @@ class Report extends Component {
         isError = true;
       }
     }
-    
+
 
     if (this.state.timeMeasure == 2) {
       if (
@@ -816,7 +824,7 @@ class Report extends Component {
           //        this.setState(this.state);
           //        isError = true;
           //    }
-              
+
           //}
                         let url = Config.apiBaseUrl + CommonConstants.apiUrls.createTemplate
               this.api.postData(url, template[0], data => {
@@ -829,8 +837,8 @@ class Report extends Component {
                   this.state.successMessage = "";
                   this.setState(this.state);
               })
-          
-          
+
+
       }
     }
     if (!isError) {

@@ -9,89 +9,7 @@ export default class SummaryReportDataComponent extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      LongestTimes: [
-      {
-          "Menu": {
-              "Value": 0.59,
-              "Date": "Mar 03/05",
-              "Time": "07:53:22 PM"
-          },
-          "Greet": {
-              "Value": 0.59,
-              "Date": "Mar 03/05",
-              "Time": "07:53:22 PM"
-          },
-          "Service": {
-              "Value": 0.59,
-              "Date": "Mar 03/05",
-              "Time": "07:53:22 PM"
-          },
-          "LaneQueue": {
-              "Value": 0.59,
-              "Date": "Mar 03/05",
-              "Time": "07:53:22 PM"
-          },
-          "LaneTotal": {
-              "Value": 0.59,
-              "Date": "Mar 03/05",
-              "Time": "07:53:22 PM"
-          }
-      },
-      {
-          "Menu": {
-              "Value": 0.59,
-              "Date": "Mar 03/05",
-              "Time": "07:53:22 PM"
-          },
-          "Greet": {
-              "Value": 0.59,
-              "Date": "Mar 03/05",
-              "Time": "07:53:22 PM"
-          },
-          "Service": {
-              "Value": 0.59,
-              "Date": "Mar 03/05",
-              "Time": "07:53:22 PM"
-          },
-          "LaneQueue": {
-              "Value": 0.59,
-              "Date": "Mar 03/05",
-              "Time": "07:53:22 PM"
-          },
-          "LaneTotal": {
-              "Value": 0.59,
-              "Date": "Mar 03/05",
-              "Time": "07:53:22 PM"
-          }
-      },
-      {
-          "Menu": {
-              "Value": 0.59,
-              "Date": "Mar 03/05",
-              "Time": "07:53:22 PM"
-          },
-          "Greet": {
-              "Value": 0.59,
-              "Date": "Mar 03/05",
-              "Time": "07:53:22 PM"
-          },
-          "Service": {
-              "Value": 0.59,
-              "Date": "Mar 03/05",
-              "Time": "07:53:22 PM"
-          },
-          "LaneQueue": {
-              "Value": 0.59,
-              "Date": "Mar 03/05",
-              "Time": "07:53:22 PM"
-          },
-          "LaneTotal": {
-              "Value": 0.59,
-              "Date": "Mar 03/05",
-              "Time": "07:53:22 PM"
-          }
-      }
-      ]
+
     }
     this.dynamicColumnData = {
       showFromToTime: (this.props.reportData.dayColumn || this.props.reportData.dayPartColumn || this.props.reportData.weekColumn ? 'hide' : 'show'),
@@ -169,9 +87,9 @@ export default class SummaryReportDataComponent extends Component {
   }
 
   displayLongestTimes(){
-    if(this.props.reportData.singleStore){
+    if(this.props.reportData.longestTime){
       return(
-        <LongestTime LongestTimes = {this.state.LongestTimes} className = {(this.props.reportData.singleStore) ? 'show' : 'hide'}/>
+        <LongestTime LongestTimes = {this.props.reportData.response.LongestTimes} className = {(this.props.reportData.singleStore) ? 'show' : 'hide'}/>
       )
     }else{
       return(

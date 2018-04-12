@@ -5,6 +5,7 @@ import GoalStatisticsDataComponent from './GoalStatisticsDataComponent'
 import SystemStatistics from './SystemStatistics'
 import PaginationComponent from '../Common/PaginationComponent'
 import PageHeader from '../Header/PageHeader'
+import moment from 'moment'
 import {Config} from '../../Config'
 import {CommonConstants} from '../../Constants'
 import Api from '../../Api'
@@ -29,7 +30,7 @@ export default class SummaryReport extends Component {
         dailyData: false,
         dayPartData: false,
         rawCarData: false,
-        pagination: false,
+        pagination: true,
         groupStoreColumns: false,
         dayColumn: false,
         dayPartColumn: false,
@@ -42,46 +43,7 @@ export default class SummaryReport extends Component {
         longestTime: false,
         systemStatistics: false,
         response:{}
-        },
-      goalData: {
-         data:
-        [
-          {
-              title: "<Goal A",
-              menu: {goal:"1", cars:"1",percentage:"1"},
-              greet: {goal:"2", cars:"1",percentage:"1"},
-              service: {goal:"3", cars:"1",percentage:"1"},
-              laneQueue: {goal:"4", cars:"1",percentage:"1"},
-              laneTotal: {goal:"5", cars:"1",percentage:"1"}
-            },
-            {
-                title: "<Goal B",
-                menu: {goal:"6", cars:"1",percentage:"1"},
-                greet: {goal:"7", cars:"1",percentage:"1"},
-                service: {goal:"8", cars:"1",percentage:"1"},
-                laneQueue: {goal:"9", cars:"1",percentage:"1"},
-                laneTotal: {goal:"10", cars:"1",percentage:"1"}
-            },
-            {
-                title: "<Goal C",
-                menu: {goal:"11", cars:"1",percentage:"1"},
-                greet: {goal:"12", cars:"1",percentage:"1"},
-                service: {goal:"13", cars:"1",percentage:"1"},
-                laneQueue: {goal:"14", cars:"1",percentage:"1"},
-                laneTotal: {goal:"15", cars:"1",percentage:"1"}
-            },
-        ]
-      },
-      displayData: {
-        Lane: '1',
-        AverageCarsInLane: '3',
-        TotalPullouts: '0',
-        TotalPullins: '0',
-        DeleteOverMaximum: '0',
-        PowerFails: '0',
-        SystemResets: '0',
-        VBDResets: '0'
-      }
+        }
     }
     // this.getCurrentTimeMeasure()
     // this.populateSummaryReportDetails()
@@ -261,7 +223,6 @@ export default class SummaryReport extends Component {
     this.state.reportData.dailyData = this.props.history.location.state.reportData.dailyData
     this.state.reportData.dayPartData = this.props.history.location.state.reportData.dayPartData
     this.state.reportData.rawCarData = this.props.history.location.state.reportData.rawCarData
-    this.state.pagination = true
     this.state.reportData.groupStoreColumns = this.props.history.location.state.reportData.groupStoreColumns
     this.state.reportData.dayColumn = this.props.history.location.state.reportData.dayColumn
     this.state.reportData.dayPartColumn = this.props.history.location.state.reportData.dayPartColumn
@@ -271,10 +232,14 @@ export default class SummaryReport extends Component {
     this.state.reportData.systemStatistics = this.props.history.location.state.reportData.systemStatistics
   //  this.state.reportData = this.props.history.location.state.reportDataResponse
     this.state.reportData.response = this.props.history.location.state.reportDataResponse
+    console.log("**************",this.state.reportData.response)
+    if(this.props.history.location.state.reportDataResponse.goalData && this.state.reportData.singleStore){
+      this.state.goalData = this.props.history.location.state.reportDataResponse.goalData
+    }
     this.setState(this.state)
   }
   displayGoalStatistics(){
-    if(this.state.goalData && this.state.singleStore){
+    if(this.state.goalData && this.state.reportData.singleStore){
       return (<div className='row goalstatistics-table-section'>
         <GoalStatisticsDataComponent goalData = {this.state.goalData} />
       </div>)
@@ -284,7 +249,7 @@ export default class SummaryReport extends Component {
   }
 
   displaySystemStatistics(){
-    if(this.state.displayData && this.state.singleStore){
+    if(this.state.displayData && this.state.reportData.singleStore){
       return (<div className='row systemstatistics-table-section'>
         <SystemStatistics displayData = {this.state.displayData} />
       </div>)
@@ -303,6 +268,7 @@ export default class SummaryReport extends Component {
       this.state.reportData.disableNextButton = false
     }
     this.setState(this.state)
+    this.getPageDetails(curPage)
   }
 
   handleNextPage(curPage,totalPages){
@@ -315,6 +281,42 @@ export default class SummaryReport extends Component {
         this.state.reportData.disablePrevButton = false
     }
     this.setState(this.state)
+    this.getPageDetails(curPage)
+  }
+
+  getPageDetails(curPage){
+
+    let request = {
+      "timeMeasure": parseInt(this.state.reportData.timeMeasure),
+      "fromDate": moment(this.state.reportData.fromDate).format('YYYY-MM-DD'),
+      "toDate": moment(this.state.reportData.toDate).format('YYYY-MM-DD'),
+      "openTime": this.state.reportData.openTime,
+      "closeTime": this.state.reportData.closeTime,
+      "open": this.state.reportData.open,
+      "close": this.state.reportData.close,
+      "type": this.state.reportData.type,
+      "include": this.state.reportData.include,
+      "format": this.state.reportData.format,
+      "pagination": this.state.reportData.pagination,
+      "currentPageNo": this.state.curPage,
+      "offset": "2",
+    //  "selectedStoreIds": template.selectedStoreIds,
+      "selectedStoreIds": [ "4" ],
+      "advancedOptions": this.state.reportData.advancedOptions,
+      "longestTime": this.state.reportData.longestTime,
+      "systemStatistics":this.state.reportData.systemStatistics
+    }
+    let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport
+    this.api.postData(url, request, data => {
+        this.props.history.push({
+            pathname: '/summaryreport',
+            state: { reportData: this.state.reportData , reportDataResponse : data }
+        })
+    }, error => {
+        this.state.successMessage = ''
+        this.state.errorMessage = error.message
+        this.setState(this.state)
+    })
   }
 
   downloadPdf(templateData){

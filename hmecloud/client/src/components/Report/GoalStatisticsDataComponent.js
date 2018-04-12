@@ -36,7 +36,7 @@ export default class GoalStatisticsDataComponent extends Component {
           </table>
           </div>
           <div className='col-xs-12'>
-            {this.displayGoalStatisticsRowData(goalData.data)}
+            {this.displayGoalStatisticsRowData(goalData)}
           </div>
         </div>)
   }
