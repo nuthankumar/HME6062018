@@ -3,6 +3,7 @@ const sql = require('mssql')
 
 const generateDayPartSummaryReport = (input, callback) => {
   const output = {}
+  
   const sqlPool = new sql.ConnectionPool(dataBaseSql, err => {
     if (err) {
       output.data = err
@@ -23,12 +24,12 @@ const generateDayPartSummaryReport = (input, callback) => {
         if (err) {
           output.data = err
           output.status = false
-
+        
           callback(output)
         }
         if (result && result.recordsets) {
           output.data = result.recordsets
-
+        
           output.status = true
           callback(output)
         }
@@ -37,6 +38,7 @@ const generateDayPartSummaryReport = (input, callback) => {
 
   sqlPool.on('error', err => {
     if (err) {
+      
       callback(err)
     }
   })

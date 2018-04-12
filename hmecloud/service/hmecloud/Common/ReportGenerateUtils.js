@@ -1,14 +1,12 @@
 const dateUtils = require('../Common/DateUtils')
 const _ = require('lodash')
 const messages = require('../Common/Message')
-const moment = require('moment')
-const momentDurationFormatSetup = require('moment-duration-format')
 // This function is used to Prepare Store Details
 const prepareStoreDetails = (daysingleResult, storeData, input) => {
-    if (storeData && storeData[0]) {
-     daysingleResult.storeName = (storeData[0].Store_Name ? storeData[0].Store_Name : 'N/A')
-     daysingleResult.storeDesc = (storeData[0].Brand_Name ? storeData[0].Brand_Name : 'N/A')
-    }
+  if (storeData && storeData[0]) {
+    daysingleResult.storeName = (storeData[0].Store_Name ? storeData[0].Store_Name : 'N/A')
+    daysingleResult.storeDesc = (storeData[0].Brand_Name ? storeData[0].Brand_Name : 'N/A')
+  }
   daysingleResult.startTime = input.ReportTemplate_From_Date
   daysingleResult.stopTime = input.ReportTemplate_To_Date
   daysingleResult.printDate = dateUtils.currentDate()
@@ -115,13 +113,18 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
     prepareGoalPercentage(goalGrades, 'service', 'percentage', key, value, totalCars)
     prepareGoalPercentage(goalGrades, 'laneQueue', 'percentage', key, value, totalCars)
     prepareGoalPercentage(goalGrades, 'laneTotal', 'percentage', key, value, totalCars)
-    // value : statistic value
-    //  totalCars : avgTimeCalculate
 
     dataArray.push(goalGrades)
   })
+  let goalStats = []
+  Object.keys(dataArray[0]).map(function (key, value) {
+    goalStats.push(dataArray[0][key])
+  })
 
-  return dataArray[0]
+  dataArray = []
+  dataArray = goalStats
+
+  return dataArray
 }
 // This function is used to prepare Longest details for Day Report
 const prepareLongestTimes = (daysingleResult, longestData, format) => {
@@ -152,6 +155,7 @@ const prepareLongestTimes = (daysingleResult, longestData, format) => {
       timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
       timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
       timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
+      console.log('timeObj', timeObj)
       LongestTimes[k].Service = timeObj
       k = k + 1
       if (k === 2) {
@@ -265,7 +269,6 @@ const getColourCode = (event, eventValue, colors, goalSettings) => {
         return color
       }
     }
-
   })
   return color
 }
@@ -339,18 +342,33 @@ const getAllStoresDetails = (result, colors, goalSettings, format) => {
 }
 
 const prepareStatistics = (daysingleResult, systemStatisticsLane, systemStatisticsGenral) => {
+  let displayData = {
+    Lane: 0,
+    AverageCarsInLane: 0,
+    TotalPullouts: 0,
+    TotalPullins: 0,
+    DeleteOverMaximum: 0,
+    PowerFails: 0,
+    SystemResets: 0,
+    VBDResets: 0
+  }
 
-    let displayData = {}
+  if (systemStatisticsLane[0]) {
     displayData.Lane = systemStatisticsLane[0]['Lane']
     displayData.AverageCarsInLane = systemStatisticsLane[0]['AvgCarsInLane']
     displayData.TotalPullouts = systemStatisticsLane[0]['Pullouts']
     displayData.TotalPullins = systemStatisticsLane[0]['Pullins']
     displayData.DeleteOverMaximum = systemStatisticsLane[0]['DeleteOverMax']
+  }
+
+  if (systemStatisticsGenral[0]) {
     displayData.PowerFails = systemStatisticsGenral[0]['PowerFails']
     displayData.SystemResets = systemStatisticsGenral[0]['SystemResets']
     displayData.VBDResets = systemStatisticsGenral[0]['VDBResets']
-    daysingleResult.systemStatistics = displayData
-} 
+  }
+
+  daysingleResult.systemStatistics = displayData
+}
 
 module.exports = {
   prepareStoreDetails,
