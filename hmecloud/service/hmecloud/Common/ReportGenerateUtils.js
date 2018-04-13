@@ -141,7 +141,7 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
   dataArray = []
   dataArray = goalStats
 
-  return _.toArray(dataArray[0])
+  return dataArray
 }
 // This function is used to prepare Longest details for Day Report
 const prepareLongestTimes = (daysingleResult, longestData, format) => {
