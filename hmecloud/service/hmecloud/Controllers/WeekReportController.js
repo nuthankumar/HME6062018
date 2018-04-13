@@ -49,9 +49,8 @@ const generateWeekReport = (input, callback) => {
         data.LongestTimes = {}
         const longData = reportGenerate.prepareLongestTimes(data, goalsData, input.ReportTemplate_Format)
         // Group Goals
-        let tempGoal = []
-        let goalsGroup = {}
-        goalsGroup.data = getGoalsData
+        let goalsGroup = []
+        goalsGroup = getGoalsData
         data.goalData = goalsGroup
         reportData = data
         reportData.status = true
