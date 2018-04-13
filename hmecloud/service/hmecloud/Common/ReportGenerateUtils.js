@@ -20,7 +20,7 @@ const prepareStoreDetails = (daysingleResult, storeData, input) => {
 function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, isMinutes, colors) {
   let colorSettings
   if (_.isUndefined(colors[0])) {
-    colorSettings= ['NA', 'NA', 'NA']
+    colorSettings = ['N/A', 'N/A', 'N/A']
   } else {
     colorSettings = colors[0].ColourCode.split('|')
   }
@@ -30,53 +30,53 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
       title: '<Goal A',
 
       color: colorSettings[0],
-      menu: { goal: 'NA', cars: 'NA', percentage: '0%' },
-      greet: { goal: 'NA', cars: 'NA', percentage: '0%' },
-      service: { goal: 'NA', cars: 'NA', percentage: '0%' },
-      laneQueue: { goal: 'NA', cars: 'NA', percentage: '0%' },
-      laneTotal: { goal: 'NA', cars: 'NA', percentage: '0%' }
+      menu: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
+      greet: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
+      service: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
+      laneQueue: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
+      laneTotal: { goal: 'N/A', cars: 'N/A', percentage: '0%' }
     },
     goalB: {
       title: '<Goal B',
       color: colorSettings[1],
-      menu: { goal: 'NA', cars: 'NA', percentage: '0%' },
-      greet: { goal: 'NA', cars: 'NA', percentage: '0%' },
-      service: { goal: 'NA', cars: 'NA', percentage: '0%' },
-      laneQueue: { goal: 'NA', cars: 'NA', percentage: '0%' },
-      laneTotal: { goal: 'NA', cars: 'NA', percentage: '0%' }
+      menu: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
+      greet: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
+      service: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
+      laneQueue: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
+      laneTotal: { goal: 'N/A', cars: 'N/A', percentage: '0%' }
     },
     goalC: {
       title: '<Goal C',
       color: colorSettings[2],
-      menu: { goal: 'NA', cars: 'NA', percentage: '0%' },
-      greet: { goal: 'NA', cars: 'NA', percentage: '0%' },
-      service: { goal: 'NA', cars: 'NA', percentage: '0%' },
-      laneQueue: { goal: 'NA', cars: 'NA', percentage: '0%' },
-      laneTotal: { goal: 'NA', cars: 'NA', percentage: '0%' }
+      menu: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
+      greet: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
+      service: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
+      laneQueue: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
+      laneTotal: { goal: 'N/A', cars: 'N/A', percentage: '0%' }
     },
     goalD: {
       title: '<Goal D',
       color: colorSettings[2],
-      menu: { goal: 'NA', cars: 'NA', percentage: '0%' },
-      greet: { goal: 'NA', cars: 'NA', percentage: '0%' },
-      service: { goal: 'NA', cars: 'NA', percentage: '0%' },
-      laneQueue: { goal: 'NA', cars: 'NA', percentage: '0%' },
-      laneTotal: { goal: 'NA', cars: 'NA', percentage: '0%' }
+      menu: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
+      greet: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
+      service: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
+      laneQueue: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
+      laneTotal: { goal: 'N/A', cars: 'N/A', percentage: '0%' }
     },
     goalF: {
       title: 'Goal D',
       color: colorSettings[2],
-      menu: { goal: 'NA', cars: 'NA', percentage: '0%' },
-      greet: { goal: 'NA', cars: 'NA', percentage: '0%' },
-      service: { goal: 'NA', cars: 'NA', percentage: '0%' },
-      laneQueue: { goal: 'NA', cars: 'NA', percentage: '0%' },
-      laneTotal: { goal: 'NA', cars: 'NA', percentage: '0%' }
+      menu: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
+      greet: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
+      service: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
+      laneQueue: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
+      laneTotal: { goal: 'N/A', cars: 'N/A', percentage: '0%' }
     }
   }
 
   var populate = (result, goal, event, property, key, value) => {
     if (key.toLowerCase().includes(goal.toLowerCase()) && key.toLowerCase().includes(event.toLowerCase())) {
-      result[goal][event][property] = value || 'NA'
+      result[goal][event][property] = value || 'N/A'
     }
   }
 
@@ -90,8 +90,8 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
     }
   }
 
-  var prepareGoal = (result, event, property, key, value) => {
-    populate(result, 'goalA', event, property, key, value)
+  var prepareGoal = (result, event, property, key, value, isMinutes) => {
+    populate(result, 'goalA', event, property, key, value, isMinutes)
     populate(result, 'goalB', event, property, key, value)
     populate(result, 'goalC', event, property, key, value)
     populate(result, 'goalD', event, property, key, value)
@@ -106,14 +106,21 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
     populatePercentage(result, 'goalF', event, property, key, value, totalCars)
   }
   // Get the values for the goals
-  _.map(getGoalTime[0], (value, key) => {    
-    prepareGoal(goalGrades, 'menu', 'goal', key, value = (isMinutes === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)))
-    prepareGoal(goalGrades, 'greet', 'goal', key, value = (isMinutes === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)))
-    prepareGoal(goalGrades, 'service', 'goal', key, value = (isMinutes === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)))
-    prepareGoal(goalGrades, 'laneQueue', 'goal', key, value = (isMinutes === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)))
-    prepareGoal(goalGrades, 'laneTotal', 'goal', key, value = (isMinutes === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)))
+
+  let GoalTime = _.map(getGoalTime[0], (value, key) => {
+    let object = {}
+    object.key = key
+    object.value = (isMinutes === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES))
+    return object
   })
 
+  GoalTime.forEach(element => {
+    prepareGoal(goalGrades, 'menu', 'goal', element.key, element.value)
+    prepareGoal(goalGrades, 'greet', 'goal', element.key, element.value)
+    prepareGoal(goalGrades, 'service', 'goal', element.key, element.value)
+    prepareGoal(goalGrades, 'laneQueue', 'goal', element.key, element.value)
+    prepareGoal(goalGrades, 'laneTotal', 'goal', element.key, element.value)
+  })
   // get the values for the cars
   _.map(goalsStatistics[0], (value, key) => {
     prepareGoal(goalGrades, 'menu', 'cars', key, value)
@@ -172,7 +179,7 @@ const prepareLongestTimes = (daysingleResult, longestData, format) => {
       timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
       timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
       timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
-      console.log('timeObj', timeObj)
+
       LongestTimes[k].Service = timeObj
       k = k + 1
       if (k === 2) {
