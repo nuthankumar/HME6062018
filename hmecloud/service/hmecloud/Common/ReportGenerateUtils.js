@@ -18,7 +18,13 @@ const prepareStoreDetails = (daysingleResult, storeData, input) => {
 }
 
 function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, isMinutes, colors) {
- let  colorSettings = colors[0].ColourCode.split('|')
+  let colorSettings
+  if (_.isUndefined(colors[0])) {
+    colorSettings= ['NA', 'NA', 'NA']
+  } else {
+    colorSettings = colors[0].ColourCode.split('|')
+  }
+
   const goalGrades = {
     goalA: {
       title: '<Goal A',
@@ -121,9 +127,7 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
     prepareGoalPercentage(goalGrades, 'laneQueue', 'percentage', key, value, totalCars)
     prepareGoalPercentage(goalGrades, 'laneTotal', 'percentage', key, value, totalCars)
 
-  //  goalGrades.goalA.color = getColourCode('Menu Board', item['Menu Board'], color, goalsStatistics)
-
-
+    //  goalGrades.goalA.color = getColourCode('Menu Board', item['Menu Board'], color, goalsStatistics)
 
     dataArray.push(goalGrades)
   })
