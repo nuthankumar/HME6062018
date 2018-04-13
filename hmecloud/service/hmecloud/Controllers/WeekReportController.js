@@ -36,8 +36,8 @@ const generateWeekReport = (input, callback) => {
         const groupbyIndex = _.groupBy(StoreData, indexValue => indexValue.index)
         let vals = _.values(groupbyIndex)
         let storesVals = _.flatten(vals)
-        let temptimeMeasure = []
-        data.temptimeMeasure = storesVals
+        let timeMeasureType = []
+        data.timeMeasureType = storesVals
         //timeMeasureType = temptimeMeasure
         data.totalRecordCount = _.find(repositoryData, totalRecords => totalRecords.TotalRecCount)
         const carTotals = carTotal(StoreData)
@@ -61,8 +61,8 @@ const generateWeekReport = (input, callback) => {
         const groupbyIndex = _.groupBy(StoreData, indexValue => indexValue.index)
         let vals = _.values(groupbyIndex)
         let storesVals = _.flatten(vals)
-        let temptimeMeasure = []
-        data.temptimeMeasure = storesVals
+        let timeMeasureType = []
+        data.timeMeasureType = storesVals
         data.totalRecordCount = _.find(repositoryData, totalRecords => totalRecords.TotalRecCount)
         reportData = data
         reportData.status = true
