@@ -26,6 +26,7 @@ export default class SummaryReport extends Component {
             showGoalStats: true,
             showSystemStats: true,
             pageHeading: 'Summarized Report',
+            showDownloadOptions:false,
             reportData: {
                 currentPageNo: "",
                 TotalPageCount: "",
@@ -372,8 +373,10 @@ export default class SummaryReport extends Component {
     }
 
     downloadPdf(templateData) {
-        let request = this.constructReportRequest(templateData[0])
-        let url = Config.baseUrl + CommonConstants.apiUrls.generateReport
+        console.log(this.state.reportData.drillDownRequestData);
+        let request = this.state.reportData.drillDownRequestData
+        //console.log(request);
+        let url = Config.baseUrl + CommonConstants.apiUrls.generateReport +'?reportType=csv'
         this.api.postData(url, request, data => {
             if (data.status) {
                 this.state.errorMessage = ''
@@ -393,8 +396,15 @@ export default class SummaryReport extends Component {
         // let reportData = this.state.reportData.data
         return (<section className='report-summary-page'>
             <section className='reportsummary-container'>
-                <div className='row download-btn-section'>
-                    <button className='btn btn-default download-summaryreport-btn' onClick={() => this.downloadPdf(this.state.templateData[0])}>{t[language].download}</button>
+                <div className='row download-btn-section downloadOptionsSection'>
+                    <div className='btn btn-default download-summaryreport-btn' onClick={this.toggleDownload.bind(this)}>
+                        <div>{t[language].download}</div>
+                    </div>
+                    <div className={(this.state.showDownloadOptions) ? 'downloadOptions show' : 'downloadOptions hidden'}>
+                        <div onClick={this.downloadPdf.bind(this)}>PDF</div>
+                        <div onClick={this.downloadPdf.bind(this)}>CSV</div>
+                    </div>
+                   
                 </div>
                 <div className='pdfError'>{this.state.errorMessage}</div>
                 <PageHeader pageHeading={t[language].ReportsSummarizedReport} />
@@ -418,5 +428,11 @@ export default class SummaryReport extends Component {
             </section>
         </section>)
     }
-  
+
+    toggleDownload(e) {
+        let showDownLoad = this.state.showDownloadOptions
+        this.setState({
+            showDownloadOptions: !showDownLoad
+        })
+    }
 }
