@@ -15,8 +15,5 @@
     "WeekInvalidDateRange": "REPORTSUMMARY.WeekInvalidDateRange",
     "AdvancedDayInvalidDateRange": "REPORTSUMMARY.AdvancedDayInvalidDateRange"
   },
-  "LISTGROUP": {
-    "createdBy": "LISTGROUP.createdBy",
-    "accountId": "LISTGROUP.accountId"
-  }
+  "LISTGROUP": "LISTGROUP"
 }

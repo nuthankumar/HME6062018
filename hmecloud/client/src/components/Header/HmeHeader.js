@@ -7,10 +7,12 @@ import "../Header/Header.css";
 import { Config } from '../../Config'
 import { Link } from 'react-router-dom'
 import MasqueradeHeader from '../Header/masqueradeHeader';
+import Api from '../../Api'
 
 const ProductLogo = require('../../images/ProductLogo-1.png')
 const HMELogo = require('../../images/HMELogo.png')
 const CogWheel = require("../../images/Cog.png");
+
 
 export default class HmeHeader extends React.Component {
     constructor(props) {
@@ -21,7 +23,27 @@ export default class HmeHeader extends React.Component {
             settingsDropdown: false,
             showSubMenu: true,
         }
+
+        this.apiMediator = new Api()
     }
+
+    componentDidMount(){
+        this.setUserContext()
+    }
+
+    setUserContext(){
+        localStorage.setItem('loggedInUserToken', Config.token)
+        localStorage.setItem('viewAsUserToken', Config.ctxToken)
+        
+        const loggedInUser = localStorage.getItem('loggedInUserToken');
+        const viewAsUser = localStorage.getItem('viewAsUserToken');
+        if (loggedInUser) {
+            this.apiMediator.verifyToken
+        console.log('loggedInUser: ', loggedInUser)          
+        console.log('viewAsUser: ', viewAsUser)          
+        }
+    }
+
     renderAdminMenuItems(isAdmin) {
         const { language, showSubMenu } = this.state;
         if (isAdmin) {
@@ -65,28 +87,20 @@ export default class HmeHeader extends React.Component {
                     <div> <a href={Config.coldFusionUrl}> <img className='logOutIcon' src={ProductLogo} aria-hidden='true' /> </a></div>
                     <div className='user-info-section'>
                         <span>
-                            <a className="black_link headerLink" href={Config.coldFusionUrl + "?pg=SettingsAccount"}><span> {t[language].headerLoggedInAs} </span> <span className="username">{loggedInUser}</span></a> 
+                            <a className="black_link headerLink" href={Config.coldFusionUrl + "?pg=SettingsAccount"}><span> {t[language].headerLoggedInAs} </span> <span className="username">{loggedInUser}</span></a>
                             <MasqueradeHeader isAdmin={isAdmin} viewAsUser={viewAsUser} />
-                        
-                        </span>                        
-                        
+                        </span>
                         <button className='logout'> <a className="black_link" href={Config.coldFusionUrl + "?pg=Logout"}> {t[language].headerSignOut}</a></button>
                         <img className='logOutIcon' src={HMELogo} aria-hidden='true' />
-                        
-                        
                     </div>
                 </header>
                 <nav className='reports-navigation-header'>
                     <div id="Navbar" className="Navbar">
                         <div className="mainMenu menuBar">
-
-                            {
-                                this.renderClientMenuItems(isAdmin)
-                            }
+                            { this.renderClientMenuItems(isAdmin)}
 
                             {/* admin menu */}
-                            {this.renderAdminMenuItems(isAdmin)}
-
+                            { this.renderAdminMenuItems(isAdmin) }
                         </div>
                     </div>
                     <div className='cogWheelSection'>
