@@ -4,6 +4,8 @@ import * as ReactDOM from 'react-dom';
 import HmeHeader from '../Header/HmeHeader';
 import AdminSubHeader from '../Header/adminSubHeader';
 import Footer from '../Footer/Footer';
+import AutoSignOut from '../Security/AutoSignOut';
+
 import { Config } from '../../Config'
 
 export default class Layout extends React.Component {
@@ -23,6 +25,7 @@ export default class Layout extends React.Component {
                     {children}
                 </div>
                 <Footer />
+                <AutoSignOut />
             </div>
         );
     }
