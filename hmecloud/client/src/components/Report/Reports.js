@@ -709,7 +709,7 @@ class Report extends Component {
       selectedList: this.state.selectedList,timeMeasure: this.state.timeMeasure,fromDate: this.state.fromDate,toDate: this.state.toDate,
       openTime: this.openTime,closeTime: this.closeTime,
       templateName: this.state.templateName,open: this.state.open,close: this.state.close,
-      type: this.state.type,include: this.state.include,format: this.state.format,selectedStoreIds: ["3",  "4"],
+      type: this.state.type,include: this.state.include,format: this.state.format,selectedStoreIds: ["4"],
       CreatedDateTime: moment().format("YYYY-MM-DD HH:mm:ss a"), UpdatedDateTime: moment().format("YYYY-MM-DD HH:mm:ss a"),
       advancedOptions: (!this.state.open || !this.state.close), longestTime: _.contains(this.state.include, "1"),systemStatistics: _.contains(this.state.include, "2"),
     });
@@ -964,7 +964,7 @@ class Report extends Component {
       "include": template.include,
       "format": template.format,
     //  "selectedStoreIds": template.selectedStoreIds,
-      "selectedStoreIds": [ "3",  "4"  ],
+      "selectedStoreIds": [ "4"  ],
       "advancedOptions": template.advancedOptions,
       "longestTime": template.longestTime,
       "systemStatistics":template.systemStatistics

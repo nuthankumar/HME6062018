@@ -88,20 +88,23 @@ export default class GoalStatisticsDataComponent extends Component {
       return (
             <table className='goalstatistics-table goalstatistics-table-content'>
               <tbody>
-                  {this.getStatisticsRow(goalItem,"goal",goalItem.title)}
-                  {this.getStatisticsRow(goalItem,"cars","Cars")}
-                  {this.getStatisticsRow(goalItem,"percentage","%")}
-              </tbody>
-            </table>
-      )
-    })
-    } else {
-      return <div>No records found</div>
-    }
-  }
+              {this.getStatisticsRow(goalItem, "goal", goalItem.title, goalItem.color)}
+              {this.getStatisticsRow(goalItem,"cars","Cars")}
+              {this.getStatisticsRow(goalItem,"percentage","%")}
+          </tbody>
+        </table>
+  )
+})
+} else {
+  return <div>No records found</div>
+}
+}
 
-  getStatisticsRow(goalItem,type,title){
-     return <tr>
+getStatisticsRow(goalItem,type,title,color){
+  var Style = {
+      backgroundColor: color
+  };
+  return <tr style={Style}>
         <td>{title}</td>
         <td>{goalItem.menu[type]}</td>
         <td>{goalItem.greet[type]}</td>
