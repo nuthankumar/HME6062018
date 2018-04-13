@@ -27,11 +27,9 @@ const prepareJsonForExport = (storeData, input, csvInput, callback) => {
         storeDataList.push(store)
     })
     csvInput.reportinput = storeDataList
-
     csvGeneration.generateCsvAndEmail(csvInput, result => {
         let output = {}
         if (result) {
-            console.log("The csv export response:::::", result)
             output.data = input.UserEmail
             output.status = true
         } else {

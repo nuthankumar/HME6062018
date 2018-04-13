@@ -35,7 +35,6 @@ const generateDayReport = (request, input, callback) => {
                     csvInput.email = input.UserEmail,
                     csvInput.subject = request.t('COMMON.DAYREPORTTITLE') + ' ' + fromDateTime + ' - ' + toDateTime + (input.ReportTemplate_Format === 1 ? "(TimeSlice)" : "(Cumulative)")
                 dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput, csvResults => {
-                    console.log("The result====", csvResults)
                     callback(csvResults)
                 })
 
@@ -101,21 +100,30 @@ function prepareMultiStoreResults(daysingleResult, daysData, format, colors, goa
       let multiStoreObj = {}
       let tempData = []
         let tempRawCarData = dayResultsList[0]
-      multiStoreObj.title = dateUtils.convertMonthDayYear(tempRawCarData.StoreDate) + messages.COMMON.OPENVALUE + " - " + dateUtils.convertMonthDayYear(tempRawCarData.StoreDate) + messages.COMMON.CLOSEVALUE
-      for (let i = 0; i < dayResultsList.length; i++) {
-        let storeObj = dayResultsList[i]
+        if (tempRawCarData.StoreDate !== 'Total Day') {
+            multiStoreObj.title = dateUtils.convertMonthDayYear(tempRawCarData.StoreDate) + messages.COMMON.OPENVALUE + " - " + dateUtils.convertMonthDayYear(tempRawCarData.StoreDate) + messages.COMMON.CLOSEVALUE
+        }
+
+        for (let i = 0; i < dayResultsList.length; i++) {
+          let storeObj = dayResultsList[i]
+          
         let store = {}
-          if (storeObj.StoreNo !== 'Total Day') {
+            if (storeObj.StoreDate !== 'Total Day') {
+            let dataObject = prepareDayObject(storeObj, format, colors, goalSettings)
+
+                if (storeObj.StoreNo && !storeObj.StoreNo.includes('Subtotal')) {
+                    store.name = storeObj.StoreNo + " - " + storeObj.Store_Name
+                    dataObject.store = store
+                } else {
+                    store.name = " "
+                    dataObject.store = store
+                }
+            tempData.push(dataObject)
+            } else {
           let dataObject = prepareDayObject(storeObj, format, colors, goalSettings)
-          store.name = storeObj.StoreNo
+          let store = {}
+          store.name = " "
           dataObject.store = store
-          tempData.push(dataObject)
-        } else {
-          let dataObject = prepareDayObject(storeObj, format, colors, goalSettings)
-          let store1 = {}
-          store1.name = storeObj.StoreNo
-          store1.timeSpan = messages.COMMON.WAVG
-          dataObject.store = store1
           tempData.push(dataObject)
         }
       }
@@ -137,9 +145,15 @@ function prepareDayObject (item, format, colors, goalSettings) {
   let totalCars = {}
   let dataObject = {}
   let groupId = {}
-  let storeId = {}
-
-  groupId.value = item.GroupName
+    let storeId = {}
+    if (item.StoreNo && item.StoreNo.includes('Subtotal')) {
+        groupId.value = item.GroupName+" "+item.StoreNo
+    } else if (item.StoreDate && item.StoreDate === 'Total Day') {
+        groupId.value = item.StoreDate
+        groupId.timeSpan = "W-Avg"
+    }else {
+        groupId.value = item.GroupName
+    }
   dataObject.groupId = groupId
 
   storeId.value = item.Store_ID
@@ -167,7 +181,6 @@ function prepareDayObject (item, format, colors, goalSettings) {
 
   totalCars.value = item['Total_Car']
   dataObject.totalCars = totalCars
-
   return dataObject
 }
 
