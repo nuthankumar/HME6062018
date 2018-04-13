@@ -10,8 +10,8 @@ const dateFormat = require('dateformat')
 const generateDayReport = (request, input, callback) => {
   let fromDateTime = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
   let toDateTime = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
-    let storesLength = input.ReportTemplate_StoreIds.length
-    const datReportqueryTemplate = {
+  let storesLength = input.ReportTemplate_StoreIds.length
+  const datReportqueryTemplate = {
     ReportTemplate_StoreIds: input.ReportTemplate_StoreIds,
     ReportTemplate_From_Date: input.ReportTemplate_From_Date,
     ReportTemplate_To_Date: input.ReportTemplate_To_Date,
@@ -24,73 +24,75 @@ const generateDayReport = (request, input, callback) => {
   if (input !== null) {
     let daysingleResult = {}
     stores.getDayDataReport(datReportqueryTemplate, result => {
-        if (result.status === true) {
-            // Preparing Single Store results
-            // Preparing response for CSV
+      if (result.status === true) {
+        // Preparing Single Store results
+        // Preparing response for CSV
 
-            if (input.reportType.toLowerCase().trim() === 'csv' || input.reportType.toLowerCase().trim() === 'pdf') {
-                let csvInput = {}
-                csvInput.type = request.t('COMMON.CSVTYPE')
-                csvInput.reportName = request.t('COMMON.DAYREPORTNAME') + '_' + dateFormat(new Date(), 'isoDate'),
-                    csvInput.email = input.UserEmail,
-                    csvInput.subject = request.t('COMMON.DAYREPORTTITLE') + ' ' + fromDateTime + ' - ' + toDateTime + (input.ReportTemplate_Format === 1 ? "(TimeSlice)" : "(Cumulative)")
-                dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput, csvResults => {
-                    console.log("The result====", csvResults)
-                    callback(csvResults)
-                })
-
-            } else {
-            let colors
-            let goalstatisticsDetails
-            if (storesLength === 1) {
-
-                reportUtil.prepareStoreDetails(daysingleResult, result.data[3], input)
-                colors = result.data[4]
-                goalstatisticsDetails = result.data[2]
-                let goalSettings = _.filter(goalstatisticsDetails, group => group['Menu Board - GoalA'])
-                prepareDayResults(daysingleResult, result.data[0], input.ReportTemplate_Format, colors, goalSettings)
-                if (input.longestTime) {
-                    reportUtil.prepareLongestTimes(daysingleResult, result.data[1], input.ReportTemplate_Format)
-                }
-                getGoalTime = result.data[5]
-                const dayPartTotalObject = _.last(result.data[0])
-                const totalCars = dayPartTotalObject['Total_Car']
-                let dataArray = []
-                dataArray = reportUtil.getGoalStatistic(goalstatisticsDetails, getGoalTime, dataArray, totalCars, input.ReportTemplate_Format, colors)
-                daysingleResult.goalData = dataArray
-                if (input.systemStatistics) {
-                    let systemStatisticsLane
-                    let systemStatisticsGenral
-                    systemStatisticsLane = result.data[7]
-                    systemStatisticsGenral = result.data[6]
-                    if (systemStatisticsLane && systemStatisticsGenral) {
-                        reportUtil.prepareStatistics(daysingleResult, systemStatisticsLane, systemStatisticsGenral)
-                    }
-                }
-            } else if (storesLength > 1) {
-                // Colours
-                colors = result.data[4]
-                goalstatisticsDetails = result.data[2]
-                prepareMultiStoreResults(daysingleResult, result.data[0], input.ReportTemplate_Format, colors, goalstatisticsDetails)
+        if (input.reportType.toLowerCase().trim() === 'csv' || input.reportType.toLowerCase().trim() === 'pdf') {
+          let csvInput = {}
+          csvInput.type = request.t('COMMON.CSVTYPE')
+          csvInput.reportName = request.t('COMMON.DAYREPORTNAME') + '_' + dateFormat(new Date(), 'isoDate'),
+          csvInput.email = input.UserEmail,
+          csvInput.subject = request.t('COMMON.DAYREPORTTITLE') + ' ' + fromDateTime + ' - ' + toDateTime + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')
+          dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput, csvResults => {
+            console.log('The result====', csvResults)
+            callback(csvResults)
+          })
+        } else {
+          let colors
+          let goalstatisticsDetails
+          let totalRecordCount
+          if (storesLength === 1) {
+            reportUtil.prepareStoreDetails(daysingleResult, result.data[3], input)
+            colors = result.data[4]
+            goalstatisticsDetails = result.data[2]
+            let goalSettings = _.filter(goalstatisticsDetails, group => group['Menu Board - GoalA'])
+            prepareDayResults(daysingleResult, result.data[0], input.ReportTemplate_Format, colors, goalSettings)
+            if (input.longestTime) {
+              reportUtil.prepareLongestTimes(daysingleResult, result.data[1], input.ReportTemplate_Format)
             }
+            
+            totalRecordCount = _.last(result.data)
+            daysingleResult.totalRecordCount = totalRecordCount[0]
+            getGoalTime = result.data[5]
+            const dayPartTotalObject = _.last(result.data[0])
+            const totalCars = dayPartTotalObject['Total_Car']
+            let dataArray = []
+            dataArray = reportUtil.getGoalStatistic(goalstatisticsDetails, getGoalTime, dataArray, totalCars, input.ReportTemplate_Format, colors)
+            daysingleResult.goalData = dataArray
+            if (input.systemStatistics) {
+              let systemStatisticsLane
+              let systemStatisticsGenral
+              systemStatisticsLane = result.data[7]
+              systemStatisticsGenral = result.data[6]
+              if (systemStatisticsLane && systemStatisticsGenral) {
+                reportUtil.prepareStatistics(daysingleResult, systemStatisticsLane, systemStatisticsGenral)
+              }
+            }
+          } else if (storesLength > 1) {
+            // Colours
+            colors = result.data[4]
+            goalstatisticsDetails = result.data[2]
+            totalRecordCount = _.last(result.data)
+            daysingleResult.totalRecordCount = totalRecordCount[0]
+            prepareMultiStoreResults(daysingleResult, result.data[0], input.ReportTemplate_Format, colors, goalstatisticsDetails)
+          }
 
-            daysingleResult.status = true
-                callback(daysingleResult)
-        } 
-        
-      } else {
-            callback(result)
+          daysingleResult.status = true
+          callback(daysingleResult)
         }
-
+      } else {
+        callback(result)
+      }
     })
   } else {
-      callback(messages.CREATEGROUP.invalidRequestBody)
+    callback(messages.CREATEGROUP.invalidRequestBody)
   }
 }
 
 // This function is used to prepare the Multi Store results for Day Report
-function prepareMultiStoreResults(daysingleResult, daysData, format, colors, goalSettings) {
-    const dayIndexIds = new HashMap()
+function prepareMultiStoreResults (daysingleResult, daysData, format, colors, goalSettings) {
+  const dayIndexIds = new HashMap()
   let timeMeasure = []
   daysData.forEach(item => {
     let dayIndexId = item.DayID
@@ -100,12 +102,12 @@ function prepareMultiStoreResults(daysingleResult, daysData, format, colors, goa
       })
       let multiStoreObj = {}
       let tempData = []
-        let tempRawCarData = dayResultsList[0]
-      multiStoreObj.title = dateUtils.convertMonthDayYear(tempRawCarData.StoreDate) + messages.COMMON.OPENVALUE + " - " + dateUtils.convertMonthDayYear(tempRawCarData.StoreDate) + messages.COMMON.CLOSEVALUE
+      let tempRawCarData = dayResultsList[0]
+      multiStoreObj.title = dateUtils.convertMonthDayYear(tempRawCarData.StoreDate) + messages.COMMON.OPENVALUE + ' - ' + dateUtils.convertMonthDayYear(tempRawCarData.StoreDate) + messages.COMMON.CLOSEVALUE
       for (let i = 0; i < dayResultsList.length; i++) {
         let storeObj = dayResultsList[i]
         let store = {}
-          if (storeObj.StoreNo !== 'Total Day') {
+        if (storeObj.StoreNo !== 'Total Day') {
           let dataObject = prepareDayObject(storeObj, format, colors, goalSettings)
           store.name = storeObj.StoreNo
           dataObject.store = store
@@ -179,20 +181,20 @@ function prepareDayResults (daysingleResult, dayData, format, colors, goalSettin
   let dayDataObj = {}
 
   dayData.forEach(item => {
-      if (item.StoreDate !== 'Total Day') {
-          let day = {}
-          let dataObject = prepareDayObject(item, format, colors, goalSettings)
-
-          day.timeSpan = dateUtils.convertmmddyyyy(item.StoreDate)
-          day.currentDaypart = messages.COMMON.DAYOPENCLOSE
-          dataObject.day = day
-      dataList.push(dataObject)
-      } else {
-          let day = {}
+    if (item.StoreDate !== 'Total Day') {
+      let day = {}
       let dataObject = prepareDayObject(item, format, colors, goalSettings)
-          day.timeSpan = item.StoreDate
-          day.currentDaypart = messages.COMMON.WAVG
-          dataObject.day = day
+
+      day.timeSpan = dateUtils.convertmmddyyyy(item.StoreDate)
+      day.currentDaypart = messages.COMMON.DAYOPENCLOSE
+      dataObject.day = day
+      dataList.push(dataObject)
+    } else {
+      let day = {}
+      let dataObject = prepareDayObject(item, format, colors, goalSettings)
+      day.timeSpan = item.StoreDate
+      day.currentDaypart = messages.COMMON.WAVG
+      dataObject.day = day
       dataList.push(dataObject)
     }
   })
