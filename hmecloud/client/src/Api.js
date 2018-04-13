@@ -30,18 +30,12 @@ class Api {
         'Authorization': 'Bearer ' + Config.ctxToken
         // 'x-access-token': Config.token
       }
-    }).then(response => {
-      console.log('response: ', response)
-      return response.json()
-    }).then(data =>{
-      console.log('data: ', data)
-      callback(data)
     })
-      // .then((response) => response.json())
-      // .then(callback)
-      // .catch((error) => {
-      //   console.log(error)
-      // })
+      .then((response) => response.json())
+      .then(callback)
+      .catch((error) => {
+        console.log(error)
+      })
   }
 
   /* Method for POST API calls */

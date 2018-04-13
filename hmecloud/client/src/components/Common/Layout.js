@@ -4,12 +4,17 @@ import * as ReactDOM from 'react-dom';
 import HmeHeader from '../Header/HmeHeader';
 import AdminSubHeader from '../Header/adminSubHeader';
 import Footer from '../Footer/Footer';
+import { Config } from '../../Config'
 
 export default class Layout extends React.Component {
     render() {
         const { Params, children } = this.props;
         let pathName = Params.location.pathname;
-        let isAdmin = true;
+        
+        localStorage.setItem('id_token', Config.token)
+        let idToken = localStorage.getItem('id_token')
+        let isAdmin = (idToken) ? true : false;
+
         return (
             <div>
                 <HmeHeader isAdmin={isAdmin}/>
