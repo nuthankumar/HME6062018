@@ -165,7 +165,7 @@ function prepareDayObject (item, format, colors, goalSettings) {
   laneTotal.color = reportUtil.getColourCode('Lane Total', item['Lane Total'], colors, goalSettings)
   dataObject.laneTotal = laneTotal
 
-  totalCars.value = dateUtils.convertSecondsToMinutes(item['Total_Car'], format)
+  totalCars.value = item['Total_Car']
   dataObject.totalCars = totalCars
 
   return dataObject
