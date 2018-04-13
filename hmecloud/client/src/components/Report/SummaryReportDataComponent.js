@@ -67,8 +67,6 @@ export default class SummaryReportDataComponent extends Component {
 
   displaySummarizedRowData (reportRowData) {
       this.props.reportData.generate = false
-      console.log(reportRowData);
-
     if (reportRowData.length > 0) {
         return reportRowData.map((reportItem) => {
             let menuColor = reportItem.menu.color
