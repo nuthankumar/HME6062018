@@ -39,5 +39,17 @@
     "AdvancedDateRangeWeekInvalid": "Date range invalid. For Advanced Options Reports select any 2 month period.",
     "StoreSelectionInvalid": "Store selection invalid. You may select up to 250 stores from the list below.",
     "AdvancedDayInvalidDateRange": "Date range invalid. For Advanced Options Reports select any 1 month period."
+  },
+
+  "COMMON": {
+    "CSVTYPE": "CSV",
+    "DAYPARTOPENTIME": " OPEN-11:59",
+    "DAYPARTCLOSETIME": " CLOSE-23:59",
+    "DAYOPENCLOSE": "OPEN-CLOSE",
+    "WAVG": "W-Avg",
+    "OPENVALUE": " OPEN",
+    "CLOSEVALUE": " CLOSE",
+    "DAYREPORTNAME": "summarizedDayReport",
+    "DAYREPORTTITLE": " CSV Day Report"
   }
 }
