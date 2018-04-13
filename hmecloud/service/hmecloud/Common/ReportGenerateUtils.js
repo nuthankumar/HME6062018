@@ -84,7 +84,7 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
 
   var populatePercentage = (result, goal, event, property, key, value, totalCarsCount) => {
     if (key.toLowerCase().includes(goal.toLowerCase()) && key.toLowerCase().includes(event.toLowerCase())) {
-      if (value === 0 || value === null || isNaN(value) || _.isUndefined(value)) {
+      if (value === 0 || value === null || isNaN(value) || _.isUndefined(value) || totalCarsCount === 0) {
         result[goal][event][property] = `0%`
       } else {
         result[goal][event][property] = `${Math.round(value / totalCarsCount * 100)}%`
@@ -164,14 +164,18 @@ const prepareLongestTimes = (daysingleResult, longestData, format) => {
       timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
       timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
       timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
-      longestObj.Menu = timeObj
+      if (!_.isUndefined(LongestTimes[k])) {
+        longestObj.Menu = timeObj
+      }
       LongestTimes.push(longestObj)
     } else if (tempTimeObj.headerName.includes(messages.EventName.GREET)) {
       let timeObj = {}
       timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
       timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
       timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
-      LongestTimes[k].Greet = timeObj
+      if (!_.isUndefined(LongestTimes[k])) {
+        LongestTimes[k].Greet = timeObj
+      }
       k = k + 1
       if (k === 2) {
         k = 0
@@ -181,8 +185,9 @@ const prepareLongestTimes = (daysingleResult, longestData, format) => {
       timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
       timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
       timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
-
-      LongestTimes[k].Service = timeObj
+      if (!_.isUndefined(LongestTimes[k])) {
+        LongestTimes[k].Service = timeObj
+      }
       k = k + 1
       if (k === 2) {
         k = 0
@@ -192,7 +197,9 @@ const prepareLongestTimes = (daysingleResult, longestData, format) => {
       timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
       timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
       timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
-      LongestTimes[k].LaneQueue = timeObj
+      if (!_.isUndefined(LongestTimes[k])) {
+        LongestTimes[k].LaneQueue = timeObj
+      }
       k = k + 1
       if (k === 2) {
         k = 0
@@ -202,7 +209,9 @@ const prepareLongestTimes = (daysingleResult, longestData, format) => {
       timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
       timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
       timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
-      LongestTimes[k].LaneTotal = timeObj
+      if (!_.isUndefined(LongestTimes[k])) {
+        LongestTimes[k].LaneTotal = timeObj
+      }
       k = k + 1
       if (k === 2) {
         k = 0
