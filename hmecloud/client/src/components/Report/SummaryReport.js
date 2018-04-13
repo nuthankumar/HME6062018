@@ -197,6 +197,7 @@ export default class SummaryReport extends Component {
   handleDrillDown (storeId) {
     // api call for getting the next drilldown
     if ( !this.state.reportData.generate ) {
+      this.state.reportData.generate = false
       console.log('Getting store id'+storeId);
       // this.state.reportData.response = {}
       let request = this.props.history.location.state.reportRequest;
@@ -213,15 +214,11 @@ export default class SummaryReport extends Component {
           this.state.errorMessage = error.message
           this.setState(this.state)
       })
-    }else{
-      this.state.reportData.generate = true
-      this.setState(this.state)
     }
-
   }
 
   populateSummaryReportDetails (request) {
-    if(this.props.history.location.state.reportData){
+      this.state.reportData.generate = false
       let reportData = this.props.history.location.state.reportData;
       this.state.reportData.weeklyData = reportData.weeklyData
       this.state.reportData.dailyData = reportData.dailyData
@@ -242,15 +239,9 @@ export default class SummaryReport extends Component {
         this.state.goalData = this.props.history.location.state.reportDataResponse.goalData
       }
       this.setState(this.state)
-    }else{
-      this.state.reportData.generate = false
-      this.setState(this.state)
-    }
   }
   displayGoalStatistics() {
-      console.log('goal stats')
-      if (this.props.history.location.state.reportDataResponse.goalStatistics && this.state.reportData.singleStore) {
-
+      if (this.props.history.location.state.reportDataResponse && this.props.history.location.state.reportDataResponse.goalStatistics && this.state.reportData.singleStore) {
       return (<div className='row goalstatistics-table-section'>
         <GoalStatisticsDataComponent goalData = {this.state.goalData} />
       </div>)

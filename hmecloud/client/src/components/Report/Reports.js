@@ -709,7 +709,7 @@ class Report extends Component {
       selectedList: this.state.selectedList,timeMeasure: this.state.timeMeasure,fromDate: this.state.fromDate,toDate: this.state.toDate,
       openTime: this.openTime,closeTime: this.closeTime,
       templateName: this.state.templateName,open: this.state.open,close: this.state.close,
-      type: this.state.type,include: this.state.include,format: this.state.format,selectedStoreIds: this.state.selectedStoreIds,
+      type: this.state.type,include: this.state.include,format: this.state.format,selectedStoreIds: ["3",  "4"],
       CreatedDateTime: moment().format("YYYY-MM-DD HH:mm:ss a"), UpdatedDateTime: moment().format("YYYY-MM-DD HH:mm:ss a"),
       advancedOptions: (!this.state.open || !this.state.close), longestTime: _.contains(this.state.include, "1"),systemStatistics: _.contains(this.state.include, "2"),
     });
@@ -951,6 +951,7 @@ class Report extends Component {
 
   generateDaypartReport(){
     let template = this.state.templateData[0]
+    this.state.reportData.generate = true
     let request = {
       "timeMeasure": parseInt(template.timeMeasure),
       "fromDate": moment(template.fromDate).format('YYYY-MM-DD'),
@@ -963,7 +964,7 @@ class Report extends Component {
       "include": template.include,
       "format": template.format,
     //  "selectedStoreIds": template.selectedStoreIds,
-      "selectedStoreIds": [ "4" ],
+      "selectedStoreIds": [ "3",  "4"  ],
       "advancedOptions": template.advancedOptions,
       "longestTime": template.longestTime,
       "systemStatistics":template.systemStatistics
