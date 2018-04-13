@@ -4,6 +4,8 @@ const reportUtil = require('../Common/ReportGenerateUtils')
 const _ = require('lodash')
 const HashMap = require('hashmap')
 const messages = require('../Common/Message')
+const dataExportUtil = require('../Common/DataExportUtil')
+const dateFormat = require('dateformat')
 
 const generateDayReport = (request, input, callBack) => {
   let fromDateTime = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
@@ -24,6 +26,18 @@ const generateDayReport = (request, input, callBack) => {
     stores.getDayDataReport(datReportqueryTemplate, result => {
       if (result.status === true) {
         // Preparing Single Store results
+          // Preparing response for CSV
+
+          if (input.reportType.toLowerCase().trim() === 'csv') {
+              console.log("CSV invoked")
+              let csvInput = {}
+              csvInput.type = request.t('COMMON.CSVTYPE')
+              csvInput.reportName = request.t('COMMON.DAYREPORTNAME') + '_' + dateFormat(new Date(), 'isoDate'),
+              csvInput.email = input.UserEmail,
+                  csvInput.subject = request.t('COMMON.DAYREPORTTITLE') + ' ' + fromDateTime + ' - ' + toDateTime + (input.ReportTemplate_Format === 1 ? "(TimeSlice)" : "(Cumulatice)")
+              console.log("CSV in$$$", csvInput)
+              dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput)
+          }
           let colors 
           let goalstatisticsDetails 
           if (storesLength === 1) {
@@ -58,38 +72,9 @@ const generateDayReport = (request, input, callBack) => {
           prepareMultiStoreResults(daysingleResult, result.data[0], input.ReportTemplate_Format, colors, goalstatisticsDetails)
         }
           
-        /*  if (input.reportType.toLowerCase().trim() === ' csv') {
-              console.log("CSV file genration executed")
-             let output = {}
-               let csvInput = {}
-              csvInput.type = request.t('COMMON.CSVTYPE')
-            //  csvInput.reportName = input.ReportTemplate_Time_Measure + '_' + dateFormat(new Date(), 'isoDate'),
-                  csvInput.email = input.UserEmail,
-                 // csvInput.reportinput = rawCarDataList
-           //   csvInput.subject = input.ReportTemplate_Time_Measure + ' ' + fromDateTime + ' - ' + toDateTime
-            /*  csvGeneration.generateCsvAndEmail(csvInput, result => {
-                  if (result) {
-                      output.data = input.UserEmail
-                      output.status = true
-                  } else {
-                      output.data = input.UserEmail
-                      output.status = false
-                  }
-
-                  callBack(output)
-              }) 
-
-             
-              output.data = "CSV file sent successfully"
-              output.status = true
-              callBack(output) 
-          } else if (input.reportType && input.reportType.toLowerCase() === 'pdf') {
-              console.log("PDF file genration executed")
-
-          } else { */
-              daysingleResult.status = true
-              callBack(daysingleResult)
-         //}
+         daysingleResult.status = true
+         callBack(daysingleResult)
+         
         
       } else {
         callBack(result)
