@@ -41,6 +41,8 @@ class RawCarReport extends Component {
       let data = this.props.history.location.state
       this.state.displayData = data.rawCarData;
       this.state.rawCarRequest = data.rawCarRequest
+      console.log(data.rawCarRequest)
+      console.log(data.rawCarData)
       this.state.rawData = true;
       this.setState(this.state)
   }
@@ -152,7 +154,6 @@ class RawCarReport extends Component {
   }
   render() {
       const { showLoader } = this.state;
-      console.log(showLoader);
     return (
         <div className="rawCarContainer">
             <Loader showLoader={showLoader} />

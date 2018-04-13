@@ -2,13 +2,16 @@
     color: black !important;
 }
 
+.view-as {
+    color: rgb(245, 108, 108) !important;
+}
 .user-info-section span {
     display: inline;
     float: left;
     font-size: 10px;
     font-weight: bold;
-    padding: 10px;
-    text-align: center;
+    padding: 2px;
+    text-align: right;
 }
 
 #Navbar ul li {

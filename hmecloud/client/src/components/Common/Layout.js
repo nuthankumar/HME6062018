@@ -9,7 +9,7 @@ export default class Layout extends React.Component {
     render() {
         const { Params, children } = this.props;
         let pathName = Params.location.pathname;
-        let isAdmin = true;
+        let isAdmin = false;
         return (
             <div>
                 <HmeHeader isAdmin={isAdmin}/>

@@ -703,6 +703,7 @@ const language = [
     'subNavbarDashboard': 'Dashboard',
     'subNavbarReports': 'Reports',
     'subNavbarDeviceSettingsHistory': 'Device Settings History',
+    'Groups': 'Groups'
   },
 
   // French
@@ -1415,6 +1416,7 @@ const language = [
     'subNavbarDashboard': 'Dashboard',
     'subNavbarReports': 'Reports',
     'subNavbarDeviceSettingsHistory': 'Device Settings History',
+    'Groups': 'groupes'
   }
 ]
 export default language
