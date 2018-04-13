@@ -6,13 +6,11 @@ import * as languageSettings from '../Language/languageSettings'
 import "../Header/Header.css";
 import { Config } from '../../Config'
 import { Link } from 'react-router-dom'
+import MasqueradeHeader from '../Header/masqueradeHeader';
 
 const ProductLogo = require('../../images/ProductLogo-1.png')
 const HMELogo = require('../../images/HMELogo.png')
 const CogWheel = require("../../images/Cog.png");
-
-
-
 
 export default class HmeHeader extends React.Component {
     constructor(props) {
@@ -36,7 +34,7 @@ export default class HmeHeader extends React.Component {
                     <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsAccounts"}>{t[language].navbarAccounts}</a></li>
                     <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsDistributors"}>{t[language].navbarDistributers}</a></li>
                 </ul>
-        );
+            );
         } else {
             return '';
         }
@@ -60,47 +58,55 @@ export default class HmeHeader extends React.Component {
     render() {
         const { language, showSubMenu } = this.state;
         const { isAdmin } = this.props;
+        let viewAsUser = 'Manoj VS', loggedInUser = 'Rudra'
         return (
             <div >
                 <header className='reports-page-header'>
                     <div> <a href={Config.coldFusionUrl}> <img className='logOutIcon' src={ProductLogo} aria-hidden='true' /> </a></div>
                     <div className='user-info-section'>
-                        <span> <a className="black_link headerLink" href={Config.coldFusionUrl + "?pg=SettingsAccount"}><span> {t[language].headerLoggedInAs} </span> <span className="username">' Rudra</span></a> </span>
+                        <span>
+                            <a className="black_link headerLink" href={Config.coldFusionUrl + "?pg=SettingsAccount"}><span> {t[language].headerLoggedInAs} </span> <span className="username">{loggedInUser}</span></a> 
+                            <MasqueradeHeader isAdmin={isAdmin} viewAsUser={viewAsUser} />
+                        
+                        </span>                        
+                        
                         <button className='logout'> <a className="black_link" href={Config.coldFusionUrl + "?pg=Logout"}> {t[language].headerSignOut}</a></button>
-                  <img className='logOutIcon' src={HMELogo} aria-hidden='true' />
-                </div>
-              </header>
-      <nav className='reports-navigation-header'>
-       <div id="Navbar" className="Navbar">    
-            <div className="mainMenu menuBar">
-               
-                    {
-                        this.renderClientMenuItems(isAdmin)
-                    }
+                        <img className='logOutIcon' src={HMELogo} aria-hidden='true' />
+                        
+                        
+                    </div>
+                </header>
+                <nav className='reports-navigation-header'>
+                    <div id="Navbar" className="Navbar">
+                        <div className="mainMenu menuBar">
 
-                    {/* admin menu */}
-                    {this.renderAdminMenuItems(isAdmin)}
-                
-            </div>
-      </div>
-        <div className='cogWheelSection'>
-            {/*<a data-tip="<a>HTML tooltip</a> <br/> <a>HTML tooltip</a> <br/> <a>HTML tooltip</a>" data-html={true} data-event='click focus'>  <img className='cogWheel' src={CogWheel} aria-hidden='true' /></a>
+                            {
+                                this.renderClientMenuItems(isAdmin)
+                            }
+
+                            {/* admin menu */}
+                            {this.renderAdminMenuItems(isAdmin)}
+
+                        </div>
+                    </div>
+                    <div className='cogWheelSection'>
+                        {/*<a data-tip="<a>HTML tooltip</a> <br/> <a>HTML tooltip</a> <br/> <a>HTML tooltip</a>" data-html={true} data-event='click focus'>  <img className='cogWheel' src={CogWheel} aria-hidden='true' /></a>
             <ReactTooltip html={true} place="right" type="dark" effect="solid" globalEventOff='click' eventOff='click' />*/}
-            <div className="dropdown open">
-                <a href="javascript:void(0);" className="dropdown-toggle" onClick={this.toggle.bind(this)}><img className='cogWheel' src={CogWheel} aria-hidden='true' /></a>
-                <ul className={'dropdown-menu dropdown-menu-right ' + (this.state.settingsDropdown ? 'show' : 'hide')}>
-                    <li><a href={Config.coldFusionUrl + "?pg=Settings"}>{t[language].navbarOptionSettings}</a></li>
-                    <li><a href={Config.coldFusionUrl + "?pg=Leaderboard&amp;st=Edit"}>{t[language].navbarOptionLeaderboard}</a></li>
-                    <li><a href={Config.coldFusionUrl + "?pg=Help"}>{t[language].navbarOptionHelp}</a></li>
-                </ul>
-            </div>
-        </div>         
-      </nav>
-    </div>)
+                        <div className="dropdown open">
+                            <a href="javascript:void(0);" className="dropdown-toggle" onClick={this.toggle.bind(this)}><img className='cogWheel' src={CogWheel} aria-hidden='true' /></a>
+                            <ul className={'dropdown-menu dropdown-menu-right ' + (this.state.settingsDropdown ? 'show' : 'hide')}>
+                                <li><a href={Config.coldFusionUrl + "?pg=Settings"}>{t[language].navbarOptionSettings}</a></li>
+                                <li><a href={Config.coldFusionUrl + "?pg=Leaderboard&amp;st=Edit"}>{t[language].navbarOptionLeaderboard}</a></li>
+                                <li><a href={Config.coldFusionUrl + "?pg=Help"}>{t[language].navbarOptionHelp}</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>)
     }
-    
+
     toggle(e) {
-        this.state.settingsDropdown ? this.setState({ settingsDropdown: false }) : this.setState({ settingsDropdown:true }) 
+        this.state.settingsDropdown ? this.setState({ settingsDropdown: false }) : this.setState({ settingsDropdown: true })
     }
 
     redirectUrl(url) {
