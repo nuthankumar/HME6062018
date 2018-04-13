@@ -106,7 +106,7 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
     populatePercentage(result, 'goalF', event, property, key, value, totalCars)
   }
   // Get the values for the goals
-  _.map(getGoalTime[0], (value, key) => {    
+  _.map(getGoalTime[0], (value, key) => {
     prepareGoal(goalGrades, 'menu', 'goal', key, value = (isMinutes === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)))
     prepareGoal(goalGrades, 'greet', 'goal', key, value = (isMinutes === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)))
     prepareGoal(goalGrades, 'service', 'goal', key, value = (isMinutes === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)))
@@ -236,30 +236,42 @@ const storesDetails = (result, colors, goalSettings, format) => {
   _.forEach(storeDetails, (items) => {
     if (format === 2) {
       let Week = {
-        'group': {'value': items.GroupName},
-        'storeId': {'value': items.StoreID},
-        'index': items.WeekIndex,
-        'week': {'open': items.WeekStartDate, 'close': items.WeekEndDate},
-        'menu': {'value': dateUtils.convertSecondsToMinutes(parseInt(items['Menu Board']), format), 'color': getColor('Menu', items['Menu Board'])},
-        'greet': {'value': dateUtils.convertSecondsToMinutes(parseInt(items.Greet), format), 'color': getColor('Greet', items.Greet)},
-        'service': {'value': dateUtils.convertSecondsToMinutes(parseInt(items.Service), format), 'color': getColor('Service', items.Service)},
-        'laneQueue': {'value': dateUtils.convertSecondsToMinutes(parseInt(items['Lane Queue']), format), 'color': getColor('Lane Queue', items['Lane Queue'])},
-        'laneTotal': {'value': dateUtils.convertSecondsToMinutes(parseInt(items['Lane Total']), format), 'color': getColor('Lane Total', items['Lane Total'])},
-        'totalCars': {'value': dateUtils.convertSecondsToMinutes(parseInt(items['Total_Car']), format), 'color': getColor('Total_Car', items['Total_Car'])}
+        'title': moment(items.WeekStartDate).format('LL') + ' OPEN -' + moment(items.WeekEndDate).format('LL') + ' CLOSE',
+        'data': [
+          {
+            'group': {'value': items.GroupName},
+            'storeId': {'value': items.StoreID},
+            'index': items.WeekIndex,
+            'store': {'name': items.StoreNo},
+            'week': {'open': items.WeekStartDate, 'close': items.WeekEndDate},
+            'menu': {'value': dateUtils.convertSecondsToMinutes(parseInt(items['Menu Board']), format), 'color': getColor('Menu', items['Menu Board'])},
+            'greet': {'value': dateUtils.convertSecondsToMinutes(parseInt(items.Greet), format), 'color': getColor('Greet', items.Greet)},
+            'service': {'value': dateUtils.convertSecondsToMinutes(parseInt(items.Service), format), 'color': getColor('Service', items.Service)},
+            'laneQueue': {'value': dateUtils.convertSecondsToMinutes(parseInt(items['Lane Queue']), format), 'color': getColor('Lane Queue', items['Lane Queue'])},
+            'laneTotal': {'value': dateUtils.convertSecondsToMinutes(parseInt(items['Lane Total']), format), 'color': getColor('Lane Total', items['Lane Total'])},
+            'totalCars': {'value': dateUtils.convertSecondsToMinutes(parseInt(items['Total_Car']), format), 'color': getColor('Total_Car', items['Total_Car'])}
+          }
+        ]
       }
       return storesData.push(Week)
     } else {
       let Week = {
-        'group': {'value': items.GroupName},
-        'storeId': {'value': items.StoreID},
-        'index': items.WeekIndex,
-        'week': {'open': items.WeekStartDate, 'close': items.WeekEndDate},
-        'menu': {'value': items['Menu Board'], 'color': getColor('Menu', items['Menu Board'])},
-        'greet': {'value': items.Greet, 'color': getColor('Greet', items.Greet)},
-        'service': {'value': items.Service, 'color': getColor('Service', items.Service)},
-        'laneQueue': {'value': items['Lane Queue'], 'color': getColor('Lane Queue', items['Lane Queue'])},
-        'laneTotal': {'value': items['Lane Total'], 'color': getColor('Lane Total', items['Lane Total'])},
-        'totalCars': {'value': items['Total_Car'], 'color': getColor('Total_Car', items['Total_Car'])}
+        'title': moment(items.WeekStartDate).format('LL') + ' OPEN -' + moment(items.WeekEndDate).format('LL') + ' CLOSE',
+        'data': [
+          {
+            'group': {'value': items.GroupName},
+            'storeId': {'value': items.StoreID},
+            'index': items.WeekIndex,
+            'store': {'name': items.StoreNo},
+            'week': {'open': items.WeekStartDate, 'close': items.WeekEndDate},
+            'menu': {'value': items['Menu Board'], 'color': getColor('Menu', items['Menu Board'])},
+            'greet': {'value': items.Greet, 'color': getColor('Greet', items.Greet)},
+            'service': {'value': items.Service, 'color': getColor('Service', items.Service)},
+            'laneQueue': {'value': items['Lane Queue'], 'color': getColor('Lane Queue', items['Lane Queue'])},
+            'laneTotal': {'value': items['Lane Total'], 'color': getColor('Lane Total', items['Lane Total'])},
+            'totalCars': {'value': items['Total_Car'], 'color': getColor('Total_Car', items['Total_Car'])}
+          }
+        ]
       }
       return storesData.push(Week)
     }
@@ -327,11 +339,18 @@ const getAllStoresDetails = (result, colors, goalSettings, format) => {
   let storesData = []
   _.forEach(storeDetails, (items) => {
     if (format === 2) {
+      let weekinfo
+      if (items.StoreNo === 'Total Week') {
+        items.WeekStartDate = 'Total Week'
+      } else {
+        items.WeekStartDate = dateUtils.convertmmddyyyy(items.WeekStartDate)
+        items.WeekEndDate = dateUtils.convertmmddyyyy(items.WeekEndDate)
+      }
       let Week = {
         'group': {'value': items.GroupName},
         'storeId': {'value': items.StoreID},
         'index': items.WeekIndex,
-        'week': {'open': items.WeekStartDate, 'close': items.WeekEndDate},
+        'week': {'timeSpan': items.WeekStartDate + (items.StoreNo !== 'Total Week' ? '-' + items.WeekEndDate : " "), 'currentWeekpart': 'OPEN-CLOSE'},
         'menu': {'value': dateUtils.convertSecondsToMinutes(parseInt(items['Menu Board']), format), 'color': getColor('Menu', items['Menu Board'])},
         'greet': {'value': dateUtils.convertSecondsToMinutes(parseInt(items.Greet), format), 'color': getColor('Greet', items.Greet)},
         'service': {'value': dateUtils.convertSecondsToMinutes(parseInt(items.Service), format), 'color': getColor('Service', items.Service)},
@@ -341,11 +360,17 @@ const getAllStoresDetails = (result, colors, goalSettings, format) => {
       }
       return storesData.push(Week)
     } else {
+      if (items.StoreNo === 'Total Week') {
+        items.WeekStartDate = 'Total Week'
+      } else {
+        items.WeekStartDate = dateUtils.convertmmddyyyy(items.WeekStartDate)
+        items.WeekEndDate = dateUtils.convertmmddyyyy(items.WeekEndDate)
+      }
       let Week = {
         'group': {'value': items.GroupName},
         'storeId': {'value': items.StoreID},
         'index': items.WeekIndex,
-        'week': {'open': items.WeekStartDate, 'close': items.WeekEndDate},
+        'week': {'timeSpan': items.WeekStartDate + (items.StoreNo !== 'Total Week' ? '-' + items.WeekEndDate : " "), 'currentWeekpart': 'OPEN-CLOSE'},
         'menu': {'value': items['Menu Board'], 'color': getColor('Menu', items['Menu Board'])},
         'greet': {'value': items.Greet, 'color': getColor('Greet', items.Greet)},
         'service': {'value': items.Service, 'color': getColor('Service', items.Service)},

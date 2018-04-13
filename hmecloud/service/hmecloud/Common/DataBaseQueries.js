@@ -34,7 +34,7 @@ const sqlQueries = {
                   @ReportType =:ReportType,
                   @LaneConfig_ID =:LaneConfig_ID,
                   @RecordPerPage =:RecordPerPage,
-                   @PageNumber =:PageNumber`
+                  @PageNumber =:PageNumber`
   }
 }
 

@@ -20,68 +20,54 @@ const generateWeekReport = (input, callback) => {
     PageNumber: input.pageNumber
   }
   repository.getWeekReport(inputDate, (result) => {
-    // callback(result)
     if (result.length > 0) {
       const repositoryData = result
-      let reportData = {
-        data: {
-          timeMeasureType: [
-            {
-              data: []
-            }
-          ],
-          goalData: [],
-          longTimes: []
-        }
-      }
-
-      reportData.data.timeMeasure = 3
-      reportData.data.selectedStoreIds = input.ReportTemplate_StoreIds
-      reportData.data.startTime = moment(fromDateTime).format('LL')
-      reportData.data.stopTime = moment(toDateTime).format('LL')
-      reportData.status = true
-      // events data
+      let reportData = {}
+      let data = {}
+      data.timeMeasure = 3
+      data.selectedStoreIds = input.ReportTemplate_StoreIds
+      data.startTime = moment(fromDateTime).format('LL')
+      data.stopTime = moment(toDateTime).format('LL')
       let colors = _.filter(repositoryData, val => val.ColourCode)
-      let goalSettings = _.filter(repositoryData, group => group['Menu Board - GoalA'])
-      const StoreData = reportGenerate.getAllStoresDetails(repositoryData, colors, goalSettings, input.ReportTemplate_Format)
-      const groupbyIndex = _.groupBy(StoreData, indexValue => indexValue.index)
-      reportData.data.timeMeasureType[0].data = groupbyIndex
-      reportData.data.totalRecordCount = _.find(repositoryData, totalRecords => totalRecords.TotalRecCount)
-      if (input.reportType === 'weekSingle') {
-        const goalsData = goalData(repositoryData)
+      // Single Store
+      if (input.ReportTemplate_StoreIds.length === 1) {
+        let goalSettings = _.filter(repositoryData, group => group['Menu Board - GoalA'])
+        const StoreData = reportGenerate.getAllStoresDetails(repositoryData, colors, goalSettings, input.ReportTemplate_Format)
+        const groupbyIndex = _.groupBy(StoreData, indexValue => indexValue.index)
+        let vals = _.values(groupbyIndex)
+        let storesVals = _.flatten(vals)
+        let temptimeMeasure = {}
+        temptimeMeasure.data = storesVals
+        data.timeMeasureType = temptimeMeasure
+        reportData.data = data
+        data.timeMeasureType = temptimeMeasure
+        data.totalRecordCount = _.find(repositoryData, totalRecords => totalRecords.TotalRecCount)
         const carTotals = carTotal(StoreData)
         // goal setings
-        let goalTimes = _.filter(repositoryData, group => group['Cashier_GoalA'])
         let daysingleResult = []
-        const getGoalsData = reportGenerate.getGoalStatistic(goalSettings, goalTimes, daysingleResult, carTotals, input.ReportTemplate_Format)
-        const longTimes = reportGenerate.prepareLongestTimes(daysingleResult, goalsData, input.ReportTemplate_Format)
-        // group by index
-
-        reportData.data.goalData = getGoalsData
-        reportData.data.longTimes = longTimes
-
+        let goalTimes = _.filter(repositoryData, group => group['Cashier_GoalA'])
+        const getGoalsData = reportGenerate.getGoalStatistic(goalSettings, goalTimes, daysingleResult, carTotals, input.ReportTemplate_Format, colors)
+        const goalsData = goalData(repositoryData) // need to work on long times
+        data.LongestTimes = {}
+        const longData = reportGenerate.prepareLongestTimes(data, goalsData, input.ReportTemplate_Format)
+        // Group Goals
+        let tempGoal = []
+        let goalsGroup = {}
+        goalsGroup.data = getGoalsData
+        data.goalData = goalsGroup
+        reportData.data = data
+        reportData.status = true
         callback(reportData)
-      } else {
-        // let reportData = {
-        //   data: {
-        //     timeMeasureType: [
-        //       {
-        //         data: []
-        //       }
-        //     ]
-        //   }
-        // }
-        // reportData.data.timeMeasure = 3
-        // reportData.data.selectedStoreIds = input.ReportTemplate_StoreIds
-        // reportData.data.startTime = moment(fromDateTime).format('LL')
-        // reportData.data.stopTime = moment(toDateTime).format('LL')
-        // reportData.status = true
-        // let colors = _.filter(repositoryData, val => val.ColourCode)
-        // let goalSettings = _.filter(repositoryData, group => group['Menu Board - GoalA'])
-        // const StoreData = reportGenerate.getAllStoresDetails(repositoryData, colors, goalSettings, input.ReportTemplate_Format)
-        // reportData.data.timeMeasureType[0].data = StoreData
-        // const pagenation = getPaginatedItems(reportData, 0)
-        // // console.log('Pages', pagenation)
+      } else if (input.ReportTemplate_StoreIds.length > 1) {
+        let goalSettings = _.filter(repositoryData, group => group['Menu Board - GoalA'])
+        const StoreData = reportGenerate.storesDetails(repositoryData, colors, goalSettings, input.ReportTemplate_Format)
+        const groupbyIndex = _.groupBy(StoreData, indexValue => indexValue.index)
+        let vals = _.values(groupbyIndex)
+        let storesVals = _.flatten(vals)
+        let temptimeMeasure = {}
+        temptimeMeasure.data = storesVals
+        data.timeMeasureType = temptimeMeasure
+        reportData.data = data
         callback(reportData)
       }
     } else {
@@ -96,11 +82,11 @@ const generateWeekReport = (input, callback) => {
 const goalData = (repositoryData) => {
   let goals = []
   goals = _.filter(repositoryData, (value) => {
-    console.log()
     if (value.headerName) {
       return value
     }
   })
+
   return goals
 }
 
