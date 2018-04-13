@@ -1,23 +1,23 @@
 -- ===========================================================
 --      Copyright © 2018, HME, All Rights Reserved
 -- ===========================================================
--- Name			:	usp_HME_Cloud_Get_Report_By_Week
+-- Name			:	usp_HME_Cloud_Get_Report_By_Date_Details
 -- Author		:	Swathi Kumar
 -- Created		:	12-April-2018
 -- Tables		:	Group,Stores
--- Purpose		:	To get Weekly report details for the given StoreIds
+-- Purpose		:	To get Day report details for the given StoreIds
 -- ===========================================================
 --				Modification History
 -- -----------------------------------------------------------
 -- Sl.No.	Date			Developer		Descriptopn   
 -- -----------------------------------------------------------
--- 1.
+-- 1.		13/04/2018		Swathi Kumar	Added Subtotal calculation
 -- ===========================================================
--- EXEC [dbo].[usp_HME_Cloud_Get_Report_By_Week] '4', '2018-03-24', '2018-03-24'
+-- 	-- exec [usp_HME_Cloud_Get_Report_By_Date_Details] '4', '2018-03-24', '2018-03-24', '2018-03-24 00:00:00' , '2018-03-24 12:00:00', 11, 'AC'
 -- ===========================================================
 
--- exec usp_HME_Cloud_Get_Report_By_Week '997', '2014-08-01', '2014-08-31', NULL, NULL, '11'--, 'TC'
-CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Week](
+
+CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details](
 	@StoreIDs varchar(500),
 	@StoreStartDate date,
 	@StoreEndDate date,
@@ -31,59 +31,21 @@ CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Week](
 )
 AS
 BEGIN
-	/*
-		Copyright (c) 2014 HME, Inc.
-
-		Author:
-			Wells Wang (2014-08-10)
-
-		Description:
-			This proc is used for Cloud Reporting of week report.
-			It calculates avg time (seconds) at each detector.
-
-		Parameters:
-			@Device_IDs: required. a list of device id's separated by comma
-			@StoreStartDate: required. 
-			@StoreEndDate: required. 
-			@StartDateTime: optional. default to '1900-01-01 00:00:00'
-			@EndDateTime: optional. default to '3000-01-01 23:59:59'
-			@CarDataRecordType_ID: required. default to '11'. it can also be '11,4'
-			@ReportType: optional. default to 'AC'. AC: cumulative  TC: Time Slice
-			@LaneConfig_ID optional. default to 1
-
-		Usage:
-			EXECUTE dbo.usp_HME_Cloud_Get_Report_By_Week @Device_IDs, @StoreStartDate, @StoreEndDate, @StartDateTime, @EndDateTime, @CarDataRecordType_ID, @ReportType, @LaneConfig_ID
-
-		Documentation:
-			This report is used for both single and multiple stores. The logic is slightly different with each type.
-			For single store, the final result is pivoted by event type of the store. There's only one summary row for the entire period.
-			For multi store, the final result is pivoted by event category. There's one summary row for every store date for combined stores.
-
-		Based on:
-			New
-		Depends on:
-			dbo.usp_HME_Cloud_Get_Report_Raw_Data
-		Depends on me:
-			/hmecloud/_tmp_login_create.cfm
-	*/
-
 	/******************************
 	 step 1. initialization
 	******************************/
-
 	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 	SET NOCOUNT ON
 
 	DECLARE @cols NVARCHAR(2000)
-	DECLARE @query NVARCHAR(3000)
-	DECLARE @sum_query NVARCHAR(600)
+	DECLARE @query NVARCHAR(MAX)
+	DECLARE @sum_query NVARCHAR(2000)
 	DECLARE @header TABLE(headerName varchar(25), headerID smallint, Detector_ID smallint, sort smallint)
 	DECLARE @headerSourceCol varchar(50)
-	DECLARE @TheDevice_ID int
-	DECLARE @TotalRecCount smallint
-	DECLARE @NoOfPages smallint
 	DECLARE @isMultiStore bit = 0
 	DECLARE @Device_IDs varchar(500)
+	DECLARE @TotalRecCount smallint
+	DECLARE @NoOfPages smallint
 
 	IF @StartDateTime IS NULL 
 		SET @StartDateTime = '1900-01-01 00:00:00'
@@ -112,6 +74,34 @@ BEGIN
 		EventType_Sort smallint,
 		LaneConfig_ID tinyint
 	)
+
+	CREATE TABLE #rollup_data(
+		ID smallint NULL,
+		StoreNo varchar(50),
+		Store_Name varchar(50),
+		Device_UID uniqueidentifier,
+		StoreDate varchar(25),
+		Device_ID int,
+		GroupName varchar(50),
+		Store_ID int,
+		Category varchar(50),
+		AVG_DetectorTime int,
+		Total_Car int
+	)
+	CREATE TABLE #GroupDetails
+		(
+			GroupName varchar(200),
+			Store_ID int,
+			Store_Name varchar(50)
+		)
+
+		SET @Device_IDs = ''
+		SELECT @Device_IDs = CONVERT(varchar,dinf.Device_ID) + ',' + @Device_IDs 
+		 FROM tbl_DeviceInfo AS dinf INNER JOIN tbl_Stores strs ON dinf.Device_Store_ID = strs.Store_ID 
+		 WHERE dinf.Device_Store_ID IN (Select cValue FROM dbo.split(@StoreIDs,','))
+
+		IF LEN(@Device_IDs)>0 
+			SET @Device_IDs = LEFT(@Device_IDs, LEN(@Device_IDs)-1)
 
 	-- This is table is created temporarly. Once we get the data it needs to be removed
 	DECLARE  @getGoalTime TABLE (
@@ -142,48 +132,6 @@ BEGIN
 		LaneTotal_GoalD int
 	)
 
-	CREATE TABLE #rollup_data(
-		ID smallint ,
-		WeekIndex smallint,
-		WeekStartDate char(10),
-		WeekEndDate char(10),
-		StoreNo varchar(50),
-		Device_UID uniqueidentifier,
-		Device_ID int,
-		GroupName varchar(50),
-		StoreID int,
-		Category varchar(50),
-		AVG_DetectorTime int,
-		Total_Car int
-	)
-
-	CREATE TABLE #Week(
-		id int IDENTITY(1,1),
-		WeekIndex smallint,
-		StoreDate date,
-		WeekStartDate date,
-		WeekEndDate date
-	)
-
-	CREATE TABLE #GroupDetails
-		(
-			GroupName varchar(200),
-			Store_ID int
-		)
-
-	SET @Device_IDs = ''
-	SELECT @Device_IDs = CONVERT(varchar,dinf.Device_ID) + ',' + @Device_IDs 
-		FROM tbl_DeviceInfo AS dinf INNER JOIN tbl_Stores strs ON dinf.Device_Store_ID = strs.Store_ID 
-		WHERE dinf.Device_Store_ID IN (Select cValue FROM dbo.split(@StoreIDs,','))
-	SET @Device_IDs = CASE WHEN LEN(@Device_IDs)>0 THEN LEFT(@Device_IDs, LEN(@Device_IDs)-1) ELSE @Device_IDs END
-	
-	INSERT INTO #GroupDetails(GroupName, Store_ID)
-	SELECT DISTINCT g.GroupName, ts.Store_ID 
-		FROM [Group] g INNER JOIN GroupStore gs ON g.ID = gs.GroupID
-		INNER JOIN  tbl_Stores ts ON gs.StoreID = ts.Store_ID 
-		WHERE gs.StoreID in (SELECT cValue FROM dbo.split(@StoreIDs,','))
-
-
 	/*************************************
 	 step 2. populate, then roll up data
 	*************************************/
@@ -192,34 +140,18 @@ BEGIN
 	INSERT INTO #raw_data
 	EXECUTE dbo.usp_HME_Cloud_Get_Report_Raw_Data @Device_IDs, @StoreStartDate, @StoreEndDate, @StartDateTime, @EndDateTime, @CarDataRecordType_ID, @ReportType, @LaneConfig_ID
 
-	-- get each of the store date from the range
-	INSERT INTO #Week(StoreDate)
-	SELECT	ThisDate
-	FROM	dbo.uf_GetDatesByRange(@StoreStartDate, @StoreEndDate)
 
-	-- divide the range by 7, figure out the week index for every block of seven days
-	UPDATE	#Week
-	SET		WeekIndex = ((id-1)/7) + 1;
-
-	-- calculate start and end date of each week
-	WITH FirstDayOfWeek(id, WeekIndex, WeekStartDate)
-	AS
-	(
-		SELECT	MIN(id), WeekIndex, MIN(StoreDate)
-		FROM	#Week
-		GROUP BY WeekIndex
-	)
-	UPDATE	w
-	SET		w.WeekStartDate = f.WeekStartDate,
-			w.WeekEndDate = DateAdd(day, 6, f.WeekStartDate)
-	FROM	FirstDayOfWeek f
-			INNER JOIN #Week w ON w.WeekIndex = f.WeekIndex
+	INSERT INTO #GroupDetails(GroupName, Store_ID, Store_Name)
+		SELECT DISTINCT g.GroupName,ts.Store_ID, ts.Store_Name
+		FROM [Group] g INNER JOIN GroupStore gs ON g.ID = gs.GroupID
+		INNER JOIN  tbl_Stores ts ON gs.StoreID = ts.Store_ID 
+		WHERE gs.StoreID in (SELECT cValue FROM dbo.split(@StoreIDs,','))
 
 	-- determine whether it's multi store or single store
 	-- for single stores, the column names would be its event name
 	-- for multi stores, the column names would be category name
 	IF EXISTS(SELECT 1 FROM dbo.Split(@Device_IDs, ',') HAVING MAX(id) > 1)
-		BEGIN	-- multi store
+		BEGIN	-- this is multi store
 			SET @isMultiStore = 1
 
 			INSERT INTO @header
@@ -232,31 +164,40 @@ BEGIN
 			ORDER BY sort
 
 			SET @headerSourceCol = 'EventType_Category'
-			SET @TheDevice_ID = (SELECT TOP 1 Device_ID FROM #raw_data 
-				WHERE Device_ID IN(SELECT Device_ID FROM #rollup_data) GROUP BY Device_ID 
-						ORDER BY MAX(Daypart_ID) DESC)
-		
 			SET @sum_query = '
-				SELECT	WeekIndex,
-						WeekStartDate,
-						WeekEndDate,
-						''Total Week'',
-						NULL, 
-						NULL,
-						NULL,
-						NULL,
-						Category,
-						AVG(AVG_DetectorTime),
-						COUNT(Total_Car)
-				FROM	#rollup_data
-				GROUP BY WeekIndex,
-						WeekStartDate,
-						WeekEndDate,
-						Category'
-		
+				SELECT StoreNo, Store_Name, Device_UID, StoreDate, Device_ID, GroupName, Store_ID, Category, AVG_DetectorTime , Total_Car
+				FROM (
+						SELECT	''Subtotal'' StoreNo, 
+							NULL Store_Name,
+							NULL Device_UID,
+							CAST(d.StoreDate AS varchar(25)) StoreDate,
+							NULL Device_ID,
+							g.GroupName,
+							NULL Store_ID,
+							d.EventType_Category Category,
+							AVG(d.DetectorTime) AVG_DetectorTime,
+							COUNT(d.CarDataRecord_ID) Total_Car
+						FROM	#raw_data d LEFT JOIN #GroupDetails g ON d.Store_ID = g.Store_ID
+						GROUP BY d.StoreDate, g.GroupName, d.EventType_Category
+						HAVING COUNT(*)>1
+						
+						UNION ALL
+						SELECT	NULL StoreNo,
+							NULL Store_Name,
+							NULL Device_UID,
+							''Total Day'' StoreDate,
+							NULL Device_ID,
+							NULL GroupName,
+							NULL Store_ID,
+							EventType_Name Category,
+							AVG(DetectorTime) AVG_DetectorTime,
+							COUNT(CarDataRecord_ID) Total_Car
+						FROM	#raw_data
+						GROUP BY EventType_Name
+					) A'
 		END
 	ELSE
-		BEGIN	-- single store
+		BEGIN	-- this is single store
 			INSERT INTO @header
 			SELECT	DISTINCT EventType_Name, EventType_ID, Detector_ID, EventType_Sort
 			FROM    #raw_data
@@ -267,95 +208,93 @@ BEGIN
 			ORDER BY sort
 
 			SET @headerSourceCol = 'EventType_Name'
-			SET @TheDevice_ID = CAST(@Device_IDs AS int)
 			SET @sum_query = '
-				SELECT	10000, NULL, NULL,
-						''Total Week'',
-						NULL, 
-						NULL,
-						NULL, 
-						NULL,
-						Category,
-						AVG(AVG_DetectorTime),
-						COUNT(Total_Car)
-				FROM	#rollup_data
-				GROUP BY Category'
-				
-		END 
+				SELECT	NULL StoreNo,
+					NULL Store_Name,
+					NULL Device_UID,
+					''Total Day'' StoreDate,
+					NULL Device_ID,
+					NULL GroupName,
+					NULL Store_ID,
+					EventType_Name Category,
+					AVG(DetectorTime) AVG_DetectorTime,
+					COUNT(CarDataRecord_ID) Total_Car
+				FROM	#raw_data
+				GROUP BY Store_Number, EventType_Name'
+		END
 
 
-	-- roll up records into each store week
+	-- roll up records into each store date
 	-- for single stores, generate a single summary row for all dates
-	-- for multip stores, generate a summary row for each week
+	-- for multip stores, generate a summary row for each date
 	SET @query = N'
-		INSERT INTO	#rollup_data(WeekIndex, WeekStartDate, WeekEndDate, StoreNo, Device_UID, Device_ID, GroupName, StoreID, Category, AVG_DetectorTime, Total_Car)
-		SELECT	w.WeekIndex,
-				CAST(w.WeekStartDate AS char(10)),
-				CAST(w.WeekEndDate AS char(10)),
-				Store_Number,
-				Device_UID,
-				Device_ID,
+		INSERT INTO	#rollup_data(StoreNo, Store_Name, Device_UID, StoreDate, Device_ID, GroupName, Store_ID, Category, AVG_DetectorTime , Total_Car )
+		SELECT	d.Store_Number,
+				ts.Store_Name,
+				d.Device_UID,
+				CAST(d.StoreDate AS varchar(25)),
+				d.Device_ID,
 				ts.GroupName,
 				ts.Store_ID,' +
 				@headerSourceCol + ',
-				AVG(DetectorTime),
-				COUNT(CarDataRecord_ID)
-		FROM	#raw_data r
-				INNER JOIN #week w ON w.StoreDate = r.StoreDate
-				INNER JOIN #GroupDetails ts ON r.Store_ID = ts.Store_ID
-		GROUP BY w.WeekIndex,
-				w.WeekStartDate,
-				w.WeekEndDate,' +
+				AVG(d.DetectorTime),
+				COUNT(d.CarDataRecord_ID)
+		FROM	#raw_data d LEFT JOIN #GroupDetails ts ON d.Store_ID = ts.Store_ID
+		GROUP BY d.StoreDate,' +
 				@headerSourceCol + ',
-				Store_Number,
-				Device_UID,
-				Device_ID,
+				d.Store_Number,
+				ts.Store_Name,
+				d.Device_UID,
+				d.Device_ID,
 				ts.GroupName,
 				ts.Store_ID
-		ORDER BY w.WeekIndex,
-				w.WeekStartDate,
-				w.WeekEndDate,' +
+		ORDER BY d.StoreDate,' +
 				@headerSourceCol + ',
-				Store_Number,
-				Device_UID,
-				Device_ID,
+				d.Store_Number,
+				d.Device_UID,
+				d.Device_ID,
 				ts.GroupName,
 				ts.Store_ID
-		' 
+		--UNION ALL ' --+ @sum_query
 
 	-- execute above query to populate #rollup_data table
 	EXECUTE(@query);
 	SET @query = '';
+	
+	INSERT INTO #rollup_data (StoreNo, Store_Name, Device_UID, StoreDate, Device_ID, GroupName, Store_ID, Category, AVG_DetectorTime , Total_Car)
+	EXECUTE(@sum_query);
+	SET @sum_query = '';
 
-	SELECT * INTO #rollup_data_all FROM #rollup_data
+	SELECT * INTO #rollup_data_all FROM #rollup_data;
 
-	SELECT IDENTITY(Smallint, 1,1) ID, WeekIndex INTO #WeekIndex FROM #rollup_data_all
-	GROUP BY WeekIndex
-	ORDER BY WeekIndex
+	SELECT IDENTITY(Smallint, 1,1) ID, StoreDate INTO #DayIndex FROM #rollup_data_all
+	GROUP BY StoreDate
+	ORDER BY StoreDate
 
 	UPDATE t SET t.ID = w.ID
-	FROM #rollup_data_all t INNER JOIN #WeekIndex w ON t.WeekIndex = w.WeekIndex
+	FROM #rollup_data_all t INNER JOIN #DayIndex w ON t.StoreDate = w.StoreDate
 
-	SELECT @TotalRecCount = MAX(ID) FROM #rollup_data_all WHERE WeekIndex <10000
+	SELECT @TotalRecCount = MAX(ID) FROM #rollup_data_all 
 	SET @NoOfPages = CEILING (CASE WHEN @RecordPerPage <>0 THEN CONVERT(Float, @TotalRecCount)/CONVERT(Float, @RecordPerPage) ELSE 1.0 END)
 
 	TRUNCATE TABLE #rollup_data
+	
 	IF (@PageNumber >0 )
 	BEGIN
-		INSERT INTO #rollup_data(ID, WeekIndex, WeekStartDate, WeekEndDate, StoreNo, Device_UID, Device_ID, GroupName, StoreID, Category, AVG_DetectorTime, Total_Car)
-		SELECT ID, WeekIndex, WeekStartDate, WeekEndDate, StoreNo, Device_UID, Device_ID, GroupName, StoreID, Category, AVG_DetectorTime, Total_Car 
+		INSERT INTO #rollup_data(ID, StoreNo, Store_Name, Device_UID, StoreDate, Device_ID, GroupName, Store_ID, Category, AVG_DetectorTime , Total_Car)
+		SELECT ID, StoreNo, Store_Name, Device_UID, StoreDate, Device_ID, GroupName, Store_ID, Category, AVG_DetectorTime , Total_Car 
 		FROM #rollup_data_all WHERE ID BETWEEN (@RecordPerPage*(@PageNumber-1))+1 AND  (@RecordPerPage*@PageNumber)
 	END
 	ELSE
 	BEGIN
-		INSERT INTO #rollup_data(ID, WeekIndex, WeekStartDate, WeekEndDate, StoreNo, Device_UID, Device_ID, GroupName, StoreID, Category, AVG_DetectorTime, Total_Car)
-		SELECT ID, WeekIndex, WeekStartDate, WeekEndDate, StoreNo, Device_UID, Device_ID, GroupName, StoreID, Category, AVG_DetectorTime, Total_Car 
+		INSERT INTO #rollup_data(ID, StoreNo, Store_Name, Device_UID, StoreDate, Device_ID, GroupName, Store_ID, Category, AVG_DetectorTime , Total_Car)
+		SELECT ID, StoreNo, Store_Name, Device_UID, StoreDate, Device_ID, GroupName, Store_ID, Category, AVG_DetectorTime , Total_Car
 		FROM #rollup_data_all 
-	END
-	
-	INSERT INTO #rollup_data (WeekIndex, WeekStartDate, WeekEndDate, StoreNo, Device_UID, Device_ID, GroupName, StoreID, Category, AVG_DetectorTime, Total_Car)
-	EXEC (@sum_query);
+	END;
 
+	--INSERT INTO #rollup_data (StoreNo, Device_UID, StoreDate, Device_ID, GroupName, Store_ID, Category, AVG_DetectorTime , Total_Car)
+	--EXEC (@sum_query);
+	
 	-- below is a hack!!
 	-- when a single store has change of config (for instanc: menu board, service... to pre loop, menu board, service...) 
 	-- or when multi store don't have the same config for each store
@@ -364,52 +303,45 @@ BEGIN
 	WITH	Max_TotalCar_By_Day
 	AS
 	(
-		SELECT	StoreNo, WeekIndex, MAX(Total_Car) AS Max_TotalCar
+		SELECT	StoreNo, StoreDate, MAX(Total_Car) AS Max_TotalCar
 		FROM	#rollup_data
-		GROUP BY StoreNo, WeekIndex
+		GROUP BY StoreNo, StoreDate
 	)
 	UPDATE	#rollup_data
 	SET		Total_Car = mc.Max_TotalCar
 	FROM	#rollup_data d
 			INNER JOIN Max_TotalCar_By_Day mc ON mc.StoreNo = d.StoreNo
-				AND	mc.WeekIndex = d.WeekIndex
-
-
-	
+				AND	mc.StoreDate = d.StoreDate
 
 	-- pivot table to display avg time by event/category name for each day
 	SET @query = N'
-	SELECT	*
+	SELECT	*, RANK () OVER (ORDER BY Storedate) DayID
 	FROM	#rollup_data
 	PIVOT(
 		AVG(AVG_DetectorTime)
 		FOR Category IN (' + @cols + ')
 	) AS p
-	ORDER BY WeekIndex, StoreNo;'
+	ORDER BY StoreDate, StoreNo;'
 
-	
+
 	/***********************************
 		step 3. return result sets
 	***********************************/
-
 	-- return avg time report
-	EXECUTE(@query)
-		
-	-- EXECUTE dbo.usp_HME_Cloud_Get_Device_Goals @Device_IDs
+	EXECUTE(@query);
 
-	-- return top 3 longest times
-	IF (@isMultiStore = 0 )
-		SELECT	e.headerName, t.DetectorTime, t.DeviceTimeStamp, e.Detector_ID,t.EventType_ID , e.headerID
+	-- return top 3 longest times (only applicable to single store)
+	IF (@isMultiStore = 0)
+		SELECT	e.headerName, t.DetectorTime, t.DeviceTimeStamp, t.Detector_ID
 		FROM 	@header e
 		CROSS APPLY
 		(
-			SELECT	TOP 3 DetectorTime, DeviceTimeStamp, r.EventType_ID
+			SELECT	TOP 3 DetectorTime, DeviceTimeStamp, Detector_ID
 			FROM	#raw_data r
 			WHERE	r.EventType_ID = e.headerID
 			ORDER BY DetectorTime DESC
 		)	AS t
 		ORDER BY e.Detector_ID, DetectorTime DESC
-	
 	ELSE
 		SELECT 1	-- fake resultset in case the application expecting it
 
@@ -486,6 +418,29 @@ BEGIN
 		SELECT 1	-- fake resultset in case the application expecting it
 
 		SET @query = '';
+	IF (@isMultiStore = 0)
+		BEGIN 
+		SELECT 
+			a.Device_ID, 
+			b.Store_Number, 
+			b.Store_Name, 
+			c.Brand_Name, 
+			a.Device_LaneConfig_ID
+		FROM tbl_DeviceInfo a
+		LEFT JOIN tbl_Stores b WITH (NOLOCK) ON a.Device_Store_ID = b.Store_ID
+		LEFT JOIN ltbl_Brands c WITH (NOLOCK) ON b.Store_Brand_ID = c.Brand_ID
+		WHERE 
+			Device_ID IN (@Device_IDs)
+		AND b.Store_Number <> ''
+		ORDER BY
+		b.Store_Number
+
+		EXECUTE(@query);
+		END
+	ELSE
+		SELECT 1
+
+		SET @query = '';
 		SELECT 
 			Preferences_Preference_Value as ColourCode 
 		FROM 
@@ -496,7 +451,6 @@ BEGIN
 			Preferences_Preference_ID=5
 
 	EXECUTE(@query);
-
 		SET @query = '';	
 			INSERT INTO @getGoalTime  VALUES(15,30,60,90,120,5,10,15,20,30,60,90,120,30,60,90,120,30,30,120,180,90,150,300,420)
 			SELECT * 
@@ -504,9 +458,33 @@ BEGIN
 			@getGoalTime;
 
 			EXECUTE(@query);
+			-- Changes for System Statistics
+	IF (@isMultiStore = 0)
+	BEGIN
+		SET @query = '';
+			-- Device SystemStatistics General
+				EXEC GetDeviceSystemStatisticsGeneral @Device_IDs,@StoreEndDate,@StoreStartDate
+		EXECUTE(@query);
+		-- include pullins
+				DECLARE @IncludePullins bit
+				SELECT @IncludePullins = CASE WHEN DeviceSetting_SettingValue = 1 THEN 0 ELSE 1 End
+					FROM tbl_DeviceSetting WITH (NOLOCK)
+					WHERE DeviceSetting_Device_ID = @Device_IDs
+					AND DeviceSetting_Setting_ID = '6002'
+			SET @query = ''
+				-- Device SystemStatistics Lane
+		EXEC GetDeviceSystemStatisticsLane  @Device_IDs,@StoreEndDate,@StoreStartDate, @includePullins 
+		EXECUTE(@query);
+	END
+
 	SELECT @TotalRecCount TotalRecCount, @NoOfPages NoOfPages
 	RETURN(0)
+
+
+	-- exec [usp_HME_Cloud_Get_Report_By_Date_Details] '4', '2018-03-24', '2018-03-24', '2018-03-24 00:00:00' , '2018-03-24 12:00:00', 11, 'AC'
+
 END
+
 GO
 
 

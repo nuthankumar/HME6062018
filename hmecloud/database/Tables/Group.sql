@@ -11,25 +11,31 @@
 -- -----------------------------------------------------------
 -- Sl.No.	Date			Developer		Descriptopn   
 -- -----------------------------------------------------------
--- 1.
+-- 1.		13/04/2018		Swathi Kumar	Added Subtotal calculation
 -- ===========================================================
 -- 
 -- ===========================================================
 
-CREATE TABLE [dbo].[Group]
-(
-    [Id]                INT				NOT NULL IDENTITY(1,1),
-    [GroupName]         VARCHAR(50)		NOT NULL,
-    [Description]       VARCHAR(250)	NULL,
-    [AccountId]         INT				NOT NULL,
-    [CreatedBy]         VARCHAR(50)		NOT NULL,
-    [UpdatedBy]         VARCHAR(50)		NOT NULL,
-    [CreatedDateTime]   DATE			NOT NULL,
-    [UpdatedDateTime]   DATE			NOT NULL,
-    [ParentGroup]       INT				NULL,
-    CONSTRAINT [PK_Group] PRIMARY KEY CLUSTERED 
+CREATE TABLE [dbo].[Group](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[GroupName] [varchar](50) NOT NULL,
+	[Description] [varchar](250) NULL,
+	[AccountId] [int] NOT NULL,
+	[CreatedBy] [varchar](50) NOT NULL,
+	[UpdatedBy] [varchar](50) NOT NULL,
+	[CreatedDateTime] [date] NOT NULL,
+	[UpdatedDateTime] [date] NOT NULL,
+	[ParentGroup] [int] NULL,
+ CONSTRAINT [PK_Group] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Group]  WITH CHECK ADD  CONSTRAINT [FK_Group_Parent_Group] FOREIGN KEY([ParentGroup])
+REFERENCES [dbo].[Group] ([Id])
+GO
+
+ALTER TABLE [dbo].[Group] CHECK CONSTRAINT [FK_Group_Parent_Group]
 GO
