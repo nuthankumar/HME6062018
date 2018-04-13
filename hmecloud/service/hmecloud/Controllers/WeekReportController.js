@@ -39,15 +39,13 @@ const generateWeekReport = (input, callback) => {
         let temptimeMeasure = {}
         temptimeMeasure.data = storesVals
         data.timeMeasureType = temptimeMeasure
-        reportData.data = data
-        data.timeMeasureType = temptimeMeasure
         data.totalRecordCount = _.find(repositoryData, totalRecords => totalRecords.TotalRecCount)
         const carTotals = carTotal(StoreData)
         // goal setings
         let daysingleResult = []
         let goalTimes = _.filter(repositoryData, group => group['Cashier_GoalA'])
         const getGoalsData = reportGenerate.getGoalStatistic(goalSettings, goalTimes, daysingleResult, carTotals, input.ReportTemplate_Format, colors)
-        const goalsData = goalData(repositoryData) // need to work on long times
+        const goalsData = goalData(repositoryData)
         data.LongestTimes = {}
         const longData = reportGenerate.prepareLongestTimes(data, goalsData, input.ReportTemplate_Format)
         // Group Goals
@@ -55,7 +53,7 @@ const generateWeekReport = (input, callback) => {
         let goalsGroup = {}
         goalsGroup.data = getGoalsData
         data.goalData = goalsGroup
-        reportData.data = data
+        reportData = data
         reportData.status = true
         callback(reportData)
       } else if (input.ReportTemplate_StoreIds.length > 1) {
@@ -67,7 +65,9 @@ const generateWeekReport = (input, callback) => {
         let temptimeMeasure = {}
         temptimeMeasure.data = storesVals
         data.timeMeasureType = temptimeMeasure
-        reportData.data = data
+        data.totalRecordCount = _.find(repositoryData, totalRecords => totalRecords.TotalRecCount)
+        reportData = data
+        reportData.status = true
         callback(reportData)
       }
     } else {
