@@ -28,6 +28,7 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
   const goalGrades = {
     goalA: {
       title: '<Goal A',
+
       color: colorSettings[0],
       menu: { goal: '', cars: '', percentage: '' },
       greet: { goal: '', cars: '', percentage: '' },
@@ -81,7 +82,7 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
 
   var populatePercentage = (result, goal, event, property, key, value, totalCarsCount) => {
     if (key.toLowerCase().includes(goal.toLowerCase()) && key.toLowerCase().includes(event.toLowerCase())) {
-      if (value === 0 || value === null) {
+      if (value === 0 || value === null || isNaN(value) || _.isUndefined(value)) {
         result[goal][event][property] = `0%`
       } else {
         result[goal][event][property] = `${Math.round(value / totalCarsCount * 100)}%`
@@ -131,6 +132,7 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
 
     dataArray.push(goalGrades)
   })
+
   let goalStats = []
   Object.keys(dataArray[0]).map(function (key, value) {
     goalStats.push(dataArray[0][key])
@@ -139,7 +141,7 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
   dataArray = []
   dataArray = goalStats
 
-  return dataArray
+  return _.toArray(dataArray[0])
 }
 // This function is used to prepare Longest details for Day Report
 const prepareLongestTimes = (daysingleResult, longestData, format) => {
