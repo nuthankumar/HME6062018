@@ -83,6 +83,7 @@ class Report extends Component {
       templateData : [],
       selectedStoreIds : [],
       reportData:{
+        generate: false,
         weeklyData: false,
         dailyData: false,
         dayPartData: false,
@@ -687,7 +688,8 @@ class Report extends Component {
   }
 
   generate(e) {
-      let language = this.state.currentLanguage;
+    let language = this.state.currentLanguage;
+    this.state.reportData.generate = true
     this.setState({ errorMessage: "" });
     let isError = false;
     let template = [];
@@ -729,7 +731,7 @@ class Report extends Component {
 
 
 
-      
+
     this.state.templateData = template;
     this.setState(this.state);
 
@@ -970,7 +972,7 @@ class Report extends Component {
     this.api.postData(url, request, data => {
         this.props.history.push({
             pathname: '/summaryreport',
-            state: { reportData: this.state.reportData , reportDataResponse : data }
+            state: { reportData: this.state.reportData , reportDataResponse : data, reportRequest: request }
         })
     }, error => {
         this.state.successMessage = ''

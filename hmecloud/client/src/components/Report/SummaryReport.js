@@ -42,6 +42,7 @@ export default class SummaryReport extends Component {
         disableNextButton: false,
         longestTime: false,
         systemStatistics: false,
+        generate: false,
         response:{}
         }
     }
@@ -68,33 +69,33 @@ export default class SummaryReport extends Component {
               <th className='thin-header'>
                 <span>Store</span>:
               </th>
-              <td className='thin-header'>{this.state.reportData.response.storeName ? this.state.reportData.response.storeName : 'N/A' }</td>
+              <td className='thin-header'>{this.state.reportData.storeName ? this.state.reportData.storeName : 'N/A' }</td>
               <th>
                 <span>Start Time:</span>
               </th>
               <td>
-                      {this.state.reportData.response.startTime ? this.state.reportData.response.startTime : 'N/A'}&nbsp;
+                {this.state.reportData.startTime ? this.state.reportData.startTime : 'N/A'}&nbsp;
               </td>
               <th>
                 <span>Print Date:</span>
               </th>
-              <td> {this.state.reportData.response.printDate ? this.state.reportData.response.printDate : 'N/A'} </td>
+              <td> {this.state.reportData.printDate ? this.state.reportData.printDate : 'N/A'} </td>
             </tr>
             <tr>
               <th>
                 <span>Description:</span>
               </th>
-              <td>{this.state.reportData.response.storeDesc ? this.state.reportData.response.storeDesc : 'N/A'}</td>
+              <td>{this.state.reportData.storeDesc ? this.state.reportData.storeDesc : 'N/A'}</td>
               <th>
                 <span>Stop Time:</span>
               </th>
               <td>
-                {this.state.reportData.response.stopTime ? this.state.reportData.response.stopTime : 'N/A' }&nbsp;
+                {this.state.reportData.stopTime ? this.state.reportData.stopTime : 'N/A' }&nbsp;
               </td>
               <th>
                 <span>Print Time: </span>
               </th>
-              <td>{this.state.reportData.response.printTime ? this.state.reportData.response.printTime : 'N/A' }</td>
+              <td>{this.state.reportData.printTime ? this.state.reportData.printTime : 'N/A' }</td>
             </tr>
           </tbody>
         </table>)
@@ -128,12 +129,12 @@ export default class SummaryReport extends Component {
     checking for time measure selected after filling template and generating report.
     Mapping day, daypart week and raw car data as 1, 2,3 and 4 respectively
     */
-    switch (templateData[0].timeMeasure) {
-      case '1' : this.state.dailyData = true
+    switch (templateData.timeMeasure) {
+      case '1' : this.state.reportData.dailyData = true
         if (templateData[0].selectedStoreIds.length === 1) {
           this.state.reportData.dayColumn = true
           this.state.reportData.groupStoreColumns = false
-          this.state.singleStore = true
+          this.state.reportData.singleStore = true
         } else {
           this.state.reportData.dayColumn = false
           this.state.reportData.groupStoreColumns = true
@@ -142,7 +143,7 @@ export default class SummaryReport extends Component {
         this.setState(this.state)
         break
 
-      case '2' : this.state.dayPartData = true
+      case '2' : this.state.reportData.dayPartData = true
         if (templateData[0].selectedStoreIds.length === 1) {
           this.state.reportData.dayPartColumn = true
           this.state.reportData.groupStoreColumns = false
@@ -150,36 +151,25 @@ export default class SummaryReport extends Component {
         } else {
           this.state.reportData.dayPartColumn = false
           this.state.reportData.groupStoreColumns = true
-          this.state.singleStore = false
+          this.state.reportData.singleStore = false
         }
         this.setState(this.state)
         break
 
-      case '3' : this.state.weeklyData = true
+      case '3' : this.state.reportData.weeklyData = true
         if (templateData[0].selectedStoreIds.length === 1) {
           this.state.reportData.weekColumn = true
           this.state.reportData.groupStoreColumns = false
-          this.state.singleStore = true
+          this.state.reportData.singleStore = true
         } else {
           this.state.reportData.weekColumn = false
           this.state.reportData.groupStoreColumns = true
-          this.state.singleStore = false
+          this.state.reportData.singleStore = false
         }
         this.setState(this.state)
         break
 
-      case '4' : this.state.rawCarData = true
-        if (templateData[0].selectedStoreIds.length === 1) {
-          this.state.reportData.dayPartColumn = true
-          this.state.reportData.groupStoreColumns = false
-          this.state.singleStore = true
-        } else {
-          this.state.reportData.dayPartColumn = false
-          this.state.reportData.groupStoreColumns = true
-          this.state.singleStore = false
-        }
-        this.setState(this.state)
-        this.props.history.push("/rawcardatareport",this.state.templateData);
+      case '4' : this.props.history.push("/rawcardatareport",this.state.templateData);
         break
     }
     // this.constructReportRequest(templateData)
@@ -204,43 +194,63 @@ export default class SummaryReport extends Component {
   //  this.populateSummaryReportDetails(request)
   }
 
-  handleDrillDown () {
+  handleDrillDown (storeId) {
     // api call for getting the next drilldown
-    if (this.state.weeklyData) {
-      console.log('weekly data')
-
-    } else if (this.state.dailyData) {
-      console.log('daily data')
-    } else if (this.state.dayPartData) {
-      console.log('day data')
-    } else if (this.state.rawCarData) {
-      console.log('raw car data')
+    if ( !this.state.reportData.generate ) {
+      console.log('Getting store id'+storeId);
+      // this.state.reportData.response = {}
+      let request = this.props.history.location.state.reportRequest;
+      // during drill down updating the store id in template request
+      request.selectedStoreIds = []
+      request.selectedStoreIds.push(storeId)
+      this.setTimeMeasures(request)
+      let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport
+      this.api.postData(url, request, data => {
+        this.state.reportData.response = data
+        this.setState(this.state)
+      }, error => {
+          this.state.successMessage = ''
+          this.state.errorMessage = error.message
+          this.setState(this.state)
+      })
+    }else{
+      this.state.reportData.generate = true
+      this.setState(this.state)
     }
+
   }
 
   populateSummaryReportDetails (request) {
-    this.state.reportData.weeklyData = this.props.history.location.state.reportData.weeklyData
-    this.state.reportData.dailyData = this.props.history.location.state.reportData.dailyData
-    this.state.reportData.dayPartData = this.props.history.location.state.reportData.dayPartData
-    this.state.reportData.rawCarData = this.props.history.location.state.reportData.rawCarData
-    this.state.reportData.groupStoreColumns = this.props.history.location.state.reportData.groupStoreColumns
-    this.state.reportData.dayColumn = this.props.history.location.state.reportData.dayColumn
-    this.state.reportData.dayPartColumn = this.props.history.location.state.reportData.dayPartColumn
-    this.state.reportData.weekColumn = this.props.history.location.state.reportData.weekColumn
-    this.state.reportData.singleStore = this.props.history.location.state.reportData.singleStore
-    this.state.reportData.longestTime = this.props.history.location.state.reportData.longestTime
-    this.state.reportData.systemStatistics = this.props.history.location.state.reportData.systemStatistics
-  //  this.state.reportData = this.props.history.location.state.reportDataResponse
-    this.state.reportData.response = this.props.history.location.state.reportDataResponse
-    console.log("**************",this.state.reportData.response)
-    if(this.props.history.location.state.reportDataResponse.goalData && this.state.reportData.singleStore){
+    if(this.props.history.location.state.reportData){
+      let reportData = this.props.history.location.state.reportData;
+      this.state.reportData.weeklyData = reportData.weeklyData
+      this.state.reportData.dailyData = reportData.dailyData
+      this.state.reportData.dayPartData = reportData.dayPartData
+      this.state.reportData.rawCarData = reportData.rawCarData
+      this.state.reportData.groupStoreColumns = reportData.groupStoreColumns
+      this.state.reportData.dayColumn = reportData.dayColumn
+      this.state.reportData.dayPartColumn = reportData.dayPartColumn
+      this.state.reportData.weekColumn = reportData.weekColumn
+      this.state.reportData.singleStore = reportData.singleStore
+      this.state.reportData.longestTime = reportData.longestTime
+      this.state.reportData.systemStatistics = reportData.systemStatistics
+      this.state.reportData.generate = reportData.generate
+    //  this.state.reportData = this.props.history.location.state.reportDataResponse
+      this.state.reportData.response = this.props.history.location.state.reportDataResponse
+      console.log("**************",this.state.reportData.response)
+      if(this.props.history.location.state.reportDataResponse.goalData && this.state.reportData.singleStore){
         this.state.goalData = this.props.history.location.state.reportDataResponse.goalData
+      }
+      this.setState(this.state)
+    }else{
+      this.state.reportData.generate = false
+      this.setState(this.state)
     }
-    this.setState(this.state)
-    console.log(this.state.reportData.longestTime)
   }
   displayGoalStatistics() {
-      if (this.props.history.location.state.reportDataResponse.goalData && this.state.reportData.singleStore) {
+      console.log('goal stats')
+      if (this.props.history.location.state.reportDataResponse.goalStatistics && this.state.reportData.singleStore) {
+
       return (<div className='row goalstatistics-table-section'>
         <GoalStatisticsDataComponent goalData = {this.state.goalData} />
       </div>)

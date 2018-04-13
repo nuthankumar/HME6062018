@@ -67,8 +67,8 @@ export default class SummaryReportDataComponent extends Component {
       return reportRowData.map((reportItem) => {
         return (
           <tr>
-            <td className={this.dynamicColumnData.showGroupsStores}>{reportItem.groupId ? reportItem.groupId.value : '' }</td>
-            <td className={this.dynamicColumnData.showGroupsStores} onClick={this.props.reportData.handleDrillDown}>{reportItem.storeId ? reportItem.storeId.value : ''}</td>
+            <td className={this.dynamicColumnData.showGroupsStores}> {reportItem.groupId ? reportItem.groupId.value : '' }</td>
+            <td className={this.dynamicColumnData.showGroupsStores}> <a href='#' className='' onClick={this.props.handleDrillDown(reportItem.storeId)}>{reportItem.storeId ? reportItem.storeId.value : ''} </a></td>
             <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayColumn}><span className='timeSpan'>{reportItem.day? reportItem.day.timeSpan : '' }</span><br/><span className='currentMeasure'>{reportItem.day  ? reportItem.day.currentDaypart :''}</span></td>
             <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayPartColumn}><span className='timeSpan'>{reportItem.daypart? reportItem.daypart.timeSpan : ''}</span><br/><span className='currentMeasure'>{reportItem.daypart ? reportItem.daypart.currentDaypart : ''}</span></td>
             <td className={'timeMeasureColumn '+ this.dynamicColumnData.showWeekColumn}><span>{reportItem.week? reportItem.week.timeSpan : ''}</span> <span className='currentMeasure'>{reportItem.week ? reportItem.week.currentDaypart : ''}</span></td>
