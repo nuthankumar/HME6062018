@@ -64,24 +64,36 @@ export default class SummaryReportDataComponent extends Component {
 
   displaySummarizedRowData (reportRowData) {
     if (reportRowData.length > 0) {
-      return reportRowData.map((reportItem) => {
+        return reportRowData.map((reportItem) => {
+            console.log(reportItem.menu.color);
+            let menuColor = reportItem.menu.color
+            let menuStyle = { backgroundColor: menuColor };
+            let greetColor = reportItem.greet.color
+            let greetStyle = { backgroundColor: greetColor };
+            let serviceColor = reportItem.service.color
+            let serviceStyle = { backgroundColor: serviceColor };
+            let laneQueueColor = reportItem.laneQueue.color
+            let laneQueueStyle = { backgroundColor: laneQueueColor };
+            let laneTotalColor = reportItem.laneTotal.color
+            let laneTotalStyle = { backgroundColor: laneTotalColor };
+
         return (
           <tr>
-            <td className={this.dynamicColumnData.showGroupsStores}> {reportItem.groupId ? reportItem.groupId.value : '' }</td>
+                <td className={this.dynamicColumnData.showGroupsStores}> {reportItem.groupId ? reportItem.groupId.value : '' }</td>
             <td className={this.dynamicColumnData.showGroupsStores}> <a href='#' className='' onClick={this.props.handleDrillDown(reportItem.storeId)}>{reportItem.storeId ? reportItem.storeId.value : ''} </a></td>
             <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayColumn}><span className='timeSpan'>{reportItem.day? reportItem.day.timeSpan : '' }</span><br/><span className='currentMeasure'>{reportItem.day  ? reportItem.day.currentDaypart :''}</span></td>
             <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayPartColumn}><span className='timeSpan'>{reportItem.daypart? reportItem.daypart.timeSpan : ''}</span><br/><span className='currentMeasure'>{reportItem.daypart ? reportItem.daypart.currentDaypart : ''}</span></td>
             <td className={'timeMeasureColumn '+ this.dynamicColumnData.showWeekColumn}><span>{reportItem.week? reportItem.week.timeSpan : ''}</span> <span className='currentMeasure'>{reportItem.week ? reportItem.week.currentDaypart : ''}</span></td>
-            <td>{reportItem.menu.value}</td>
-            <td>{reportItem.greet.value}</td>
-            <td>{reportItem.service.value}</td>
-            <td>{reportItem.laneQueue.value}</td>
-            <td>{reportItem.laneTotal.value}</td>
+            <td style={menuStyle}>{reportItem.menu.value}</td>
+            <td style={greetStyle}>{reportItem.greet.value}</td>
+            <td style={serviceStyle}>{reportItem.service.value}</td>
+            <td style={laneQueueStyle}>{reportItem.laneQueue.value}</td>
+            <td style={laneTotalStyle}>{reportItem.laneTotal.value}</td>
             <td>{reportItem.totalCars.value}</td>
           </tr>
         )
       })
-    } else {
+    }else {
       return <div>No records found</div>
     }
   }

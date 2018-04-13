@@ -493,3 +493,16 @@ table.longest td {
 .rawCarContainer{
     width:100%;
 }
+
+span.redFont {
+    color: #D41B3E;
+    font-size: 18px;
+    line-height: 0;
+}
+.goalNote {
+    color: #777;
+    font-size: 12px;
+    margin-right: 125px;
+    margin-bottom: 3px;
+    text-align: right;
+}

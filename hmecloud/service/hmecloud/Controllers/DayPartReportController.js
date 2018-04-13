@@ -1,15 +1,11 @@
-const messages = require('../Common/Message')
 const dayPartRepository = require('../Repository/DayPartRepository')
 const dateUtils = require('../Common/DateUtils')
 // const csvGeneration = require('../Common/CsvUtils')
 const _ = require('lodash')
-const convertTime = require('convert-time')
 const moment = require('moment')
 const reportUtil = require('../Common/ReportGenerateUtils')
 const HashMap = require('hashmap')
 
-const defaultFromTime = '00:00:00'
-const defaultEndTime = '23:59:59'
 /**
  * This Service is used to Generate the Summary reports details for
  *provided details
@@ -69,7 +65,7 @@ const generateDaypartReport = (input, callBack) => {
       }
 
       // Single Store result
-      if (input.ReportTemplate_StoreIds.length < 2) { 
+      if (input.ReportTemplate_StoreIds.length < 2) {
         averageTimeResultSet.forEach(item => {
           let dataObject = prepareDayPartObject(item, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
           data.push(dataObject)
@@ -206,61 +202,10 @@ function prepareDayPartObject (item, format, input, colors, goalSettings) {
   laneTotal.color = reportUtil.getColourCode('Lane Total', item['Lane Total'], colors, goalSettings)
   dataObject.laneTotal = laneTotal
 
-  totalCars.value = item['Total_Car'] // dateUtils.convertSecondsToMinutes(item['Total_Car'], format)
+  totalCars.value = item['Total_Car']
   dataObject.totalCars = totalCars
 
   return dataObject
-}
-
-function convertTimeFormatonEachRowObjectElement (input, averageTimeResultSet, data) {
-  averageTimeResultSet.map(row => {
-    var daypartObject = {daypart: ''}
-    let parts = {
-      daypart: {
-        timeSpan: '',
-        currentDaypart: ''
-      },
-      dayPartIndex: '',
-      groupName: {value: ''},
-      storeId: {value: ''},
-      menu: {value: ''},
-      greet: {value: ''},
-      service: {value: ''},
-      laneQueue: {value: ''},
-      laneTotal: {value: ''},
-      totalCars: {value: ''}
-    }
-
-    Object.keys(row).map(function (key, value) {
-      convertEventsTimeFormat(key, row, value, parts, input)
-    })
-    daypartObject = parts
-
-    data.push(daypartObject)
-  })
-  return data
-}
-
-function convertEventsTimeFormat (key, row, value, parts, input) {
-  if (row['StartTime'] && row['StoreDate'] !== 'Total Daypart' && row['EndTime']) {
-    var dateSplit = row['StoreDate'].split('-')
-    parts.daypart.timeSpan = `${dateSplit[1]}/${dateSplit[0]}-Daypart${row['DayPartIndex']}`
-    parts.daypart.currentDaypart = `${dateUtils.converthhmmsstt(row.StartTime)}-${dateUtils.converthhmmsstt(row.EndTime)}`
-  }
-  parts.groupName.value = row['GroupName']
-  parts.storeId.value = row['Store_ID']
-  parts.dayPartIndex = row['DayPartIndex']
-  if (key.includes(messages.Events.MENU)) {
-    parts.menu.value = input.ReportTemplate_Format === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)
-  } else if (key.includes(messages.Events.LANEQUEUE)) {
-    parts.laneQueue.value = input.ReportTemplate_Format === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)
-  } else if (key.includes(messages.Events.LANETOTAl)) {
-    parts.laneTotal.value = input.ReportTemplate_Format === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)
-  } else if (key.includes(messages.Events.SERVICE)) {
-    parts.service.value = input.ReportTemplate_Format === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)
-  } else if (key.includes(messages.Events.GREET)) {
-    parts.greet.value = input.ReportTemplate_Format === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES)
-  }
 }
 
 module.exports = {
