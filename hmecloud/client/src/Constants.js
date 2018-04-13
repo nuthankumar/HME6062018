@@ -17,5 +17,6 @@ export const CommonConstants = {
       'Month' : 31,
       'TwoWeeks': 14,
       'Today':0 ,
-   }
-}
+  },
+  'Drilldown': [2,4,1]
+  }
