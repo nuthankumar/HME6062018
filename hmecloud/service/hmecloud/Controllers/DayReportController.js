@@ -5,7 +5,7 @@ const _ = require('lodash')
 const HashMap = require('hashmap')
 const messages = require('../Common/Message')
 
-const generateDayReport = (input, callBack) => {
+const generateDayReport = (request, input, callBack) => {
   let fromDateTime = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
   let toDateTime = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
     let storesLength = input.ReportTemplate_StoreIds.length
@@ -29,7 +29,7 @@ const generateDayReport = (input, callBack) => {
           if (storesLength === 1) {
      
           reportUtil.prepareStoreDetails(daysingleResult, result.data[3], input)
-           colors = result.data[4]
+              colors = result.data[4]
            goalstatisticsDetails = result.data[2]
           let goalSettings = _.filter(goalstatisticsDetails, group => group['Menu Board - GoalA'])
           prepareDayResults(daysingleResult, result.data[0], input.ReportTemplate_Format, colors, goalSettings)
@@ -39,8 +39,8 @@ const generateDayReport = (input, callBack) => {
           getGoalTime = result.data[5]
           const dayPartTotalObject = _.last(result.data[0])
           const totalCars = dayPartTotalObject['Total_Car']
-          let dataArray = []
-          dataArray = reportUtil.getGoalStatistic(goalstatisticsDetails, getGoalTime, dataArray, totalCars)
+              let dataArray = []
+            dataArray = reportUtil.getGoalStatistic(goalstatisticsDetails, getGoalTime, dataArray, totalCars, input.ReportTemplate_Format, colors)
             daysingleResult.goalData = dataArray
             if (input.systemStatistics) {
                 let systemStatisticsLane
@@ -58,16 +58,16 @@ const generateDayReport = (input, callBack) => {
           prepareMultiStoreResults(daysingleResult, result.data[0], input.ReportTemplate_Format, colors, goalstatisticsDetails)
         }
           
-         /* if (input.reportType.toLowerCase().trim() === ' csv') {
+          if (input.reportType.toLowerCase().trim() === ' csv') {
               console.log("CSV file genration executed")
              let output = {}
-             /*  let csvInput = {}
+               let csvInput = {}
               csvInput.type = request.t('COMMON.CSVTYPE')
-              csvInput.reportName = input.ReportTemplate_Time_Measure + '_' + dateFormat(new Date(), 'isoDate'),
+            //  csvInput.reportName = input.ReportTemplate_Time_Measure + '_' + dateFormat(new Date(), 'isoDate'),
                   csvInput.email = input.UserEmail,
-                  csvInput.reportinput = rawCarDataList
-              csvInput.subject = input.ReportTemplate_Time_Measure + ' ' + fromDateTime + ' - ' + toDateTime
-              csvGeneration.generateCsvAndEmail(csvInput, result => {
+                 // csvInput.reportinput = rawCarDataList
+           //   csvInput.subject = input.ReportTemplate_Time_Measure + ' ' + fromDateTime + ' - ' + toDateTime
+            /*  csvGeneration.generateCsvAndEmail(csvInput, result => {
                   if (result) {
                       output.data = input.UserEmail
                       output.status = true
@@ -77,7 +77,7 @@ const generateDayReport = (input, callBack) => {
                   }
 
                   callBack(output)
-              })
+              }) */
 
              
               output.data = "CSV file sent successfully"
@@ -86,10 +86,10 @@ const generateDayReport = (input, callBack) => {
           } else if (input.reportType && input.reportType.toLowerCase() === 'pdf') {
               console.log("PDF file genration executed")
 
-          } else { */
+          } else { 
               daysingleResult.status = true
               callBack(daysingleResult)
-        //  }
+         }
         
       } else {
         callBack(result)

@@ -83,7 +83,7 @@ const reportValidator = (request, callback) => {
         output.status = false
         callback(output)
       }
-      dayReportController.generateDayReport(input, result => {
+        dayReportController.generateDayReport(request, input, result => {
         callback(result)
       })
       // report time measure day part data
