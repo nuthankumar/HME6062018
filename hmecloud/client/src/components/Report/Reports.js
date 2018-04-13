@@ -81,7 +81,8 @@ class Report extends Component {
       checkStores: false,
       treeData: [],
       templateData : [],
-      selectedStoreIds : [],
+      selectedStoreIds: [],
+      disableIncludes:false,
       reportData:{
         generate: false,
         weeklyData: false,
@@ -122,8 +123,19 @@ class Report extends Component {
     this.state.selectedList = checkedKeys;
     this.state.defaultCheckedKeys = checkedKeys;
     this.state.stores = _.pluck(_.where(_.pluck(node.checkedNodes, "props"), { type: "store" }),"title");
-    this.state.selectedStoreIds = _.pluck(_.where(_.pluck(node.checkedNodes, "props"), { type: "store" }),"value");
+    let selectedStoreIds = _.pluck(_.where(_.pluck(node.checkedNodes, "props"), { type: "store" }), "value");
+    this.state.selectedStoreIds = selectedStoreIds;
     this.setState(this.state);
+
+    if (selectedStoreIds.length > 1) {
+        this.setState({ include: [] });
+        document.getElementById("longestTime").checked = false;
+        document.getElementById("systemStatistics").checked = false;
+        this.setState({ disableIncludes: true })
+    }
+    else {
+        this.setState({ disableIncludes: false })
+    }
   }
 
   getInitialState() {
@@ -362,14 +374,14 @@ class Report extends Component {
                 <span>{t[language].include}  </span>
                 <div className="checkbox-sections">
                           <div className="alignCenter">
-                                      <input type="checkbox" id="longestTime" disabled={this.state.showAdvancedOptions} value={1} onChange={this.include.bind(this)}/>
+                                    <input type="checkbox" id="longestTime" disabled={this.state.showAdvancedOptions || this.state.disableIncludes} value={1} onChange={this.include.bind(this)}/>
                                       <span className="textPaddingSmall"> {t[language].longesttimes} </span>
                                   </div>
                                   <div className="alignCenter">
                                       <input
                                           type="checkbox"
-                                          id="systemStatistics"
-                                          disabled={this.state.showAdvancedOptions}
+                                        id="systemStatistics"
+                                        disabled={this.state.showAdvancedOptions || this.state.disableIncludes}
                                           value={2}
                                           onChange={this.include.bind(this)}
                                       />
@@ -708,8 +720,8 @@ class Report extends Component {
     template.push({
       selectedList: this.state.selectedList,timeMeasure: this.state.timeMeasure,fromDate: this.state.fromDate,toDate: this.state.toDate,
       openTime: this.openTime,closeTime: this.closeTime,
-      templateName: this.state.templateName,open: this.state.open,close: this.state.close,
-      type: this.state.type,include: this.state.include,format: this.state.format,selectedStoreIds: ["4"],
+      templateName: this.state.templateName, open: this.state.open, close: this.state.close,
+      type: this.state.type, include: this.state.include, format: this.state.format, selectedStoreIds: this.state.selectedStoreIds,
       CreatedDateTime: moment().format("YYYY-MM-DD HH:mm:ss a"), UpdatedDateTime: moment().format("YYYY-MM-DD HH:mm:ss a"),
       advancedOptions: (!this.state.open || !this.state.close), longestTime: _.contains(this.state.include, "1"),systemStatistics: _.contains(this.state.include, "2"),
     });
@@ -889,11 +901,11 @@ class Report extends Component {
           if (templateData.selectedStoreIds.length === 1) {
             this.state.reportData.weekColumn = true
             this.state.reportData.groupStoreColumns = false
-            this.state.singleStore = true
+            this.state.reportData.singleStore = true
           } else {
             this.state.reportData.weekColumn = false
             this.state.reportData.groupStoreColumns = true
-            this.state.singleStore = false
+            this.state.reportData.singleStore = false
           }
           this.setState(this.state)
           this.generateDaypartReport()
@@ -933,10 +945,9 @@ class Report extends Component {
     this.setState({
         rawCarRequest: rawCarData[0]
     });
-    console.log(JSON.stringify(rawCarData[0]));
+
     let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
     this.api.postData(url, rawCarData[0], data => {
-        console.log(data.data);
       //  this.props.history.push("/rawcardatareport", this.state.rawCarData);
         this.props.history.push({
             pathname: '/rawcardatareport',
@@ -952,6 +963,30 @@ class Report extends Component {
   generateDaypartReport(){
     let template = this.state.templateData[0]
     this.state.reportData.generate = true
+
+
+    //{
+    //    "timeMeasure": 3,
+    //        "fromDate": "2018-03-24",
+    //            "toDate": "2018-03-24",
+    //                "openTime": "12:00 AM",
+    //                    "closeTime": "08:00 PM",
+    //                        "open": true,
+    //                            "close": true,
+    //                                "type": 2,
+    //                                    "format": 2,
+    //                                        "selectedStoreIds": [
+    //                                            4
+    //                                        ],
+    //                                            "advancedOptions": true,
+    //                                                "longestTime": true,
+    //                                                    "systemStatistics": true,
+    //                                                        "recordPerPage":4,
+    //                                                            "pageNumber":1
+    //} 
+
+
+
     let request = {
       "timeMeasure": parseInt(template.timeMeasure),
       "fromDate": moment(template.fromDate).format('YYYY-MM-DD'),
@@ -963,14 +998,19 @@ class Report extends Component {
       "type": template.type,
       "include": template.include,
       "format": template.format,
-    //  "selectedStoreIds": template.selectedStoreIds,
-      "selectedStoreIds": [ "4"  ],
+      "selectedStoreIds": template.selectedStoreIds,
+    //  "selectedStoreIds": [ "4"  ],
       "advancedOptions": template.advancedOptions,
       "longestTime": template.longestTime,
-      "systemStatistics":template.systemStatistics
+      "systemStatistics": template.systemStatistics,
+      "recordPerPage": 4,
+      "pageNumber": 1
     }
-    let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport
+    console.log(JSON.stringify(request));
+    let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
+    console.log(request);
     this.api.postData(url, request, data => {
+        console.log(JSON.stringify(data));
         this.props.history.push({
             pathname: '/summaryreport',
             state: { reportData: this.state.reportData , reportDataResponse : data, reportRequest: request }
@@ -1055,8 +1095,14 @@ class Report extends Component {
         selectedStoreIds: this.findMatchedIds(this.state.treeData, item => {
           return item.Type === "store";
         })
-      });
-     } else {
+        });
+
+      this.setState({ disableIncludes : true })
+      this.setState({ include: [] });
+      document.getElementById("longestTime").checked = false;
+      document.getElementById("systemStatistics").checked = false;
+    } else {
+        this.setState({ disableIncludes: false })
       this.setState({ defaultCheckedKeys: [],
                       selectedList:[],
                       stores:[]

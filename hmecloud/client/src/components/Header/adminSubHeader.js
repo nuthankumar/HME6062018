@@ -14,6 +14,7 @@ export default class AdminSubHeader extends React.Component {
     render() {
         const { language } = this.state;
         const { isAdmin, pathName } = this.props;
+        console.log(isAdmin);
         return (
             <div className={"subMenu menuBar " + (isAdmin && pathName == '/reports' ? 'show' : 'hidden')}>
                 <ul>

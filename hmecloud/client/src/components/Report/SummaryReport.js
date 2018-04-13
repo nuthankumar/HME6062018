@@ -52,6 +52,7 @@ export default class SummaryReport extends Component {
     this.api = new Api()
   //  this.setTimeMeasures(this.props.history.location.state)
     this.handleDrillDown = this.handleDrillDown.bind(this)
+    //this.drilldown = this.drilldown.bind(this)
     this.headerDetails = this.headerDetails.bind(this)
   }
 
@@ -195,30 +196,7 @@ export default class SummaryReport extends Component {
     return request
   //  this.populateSummaryReportDetails(request)
   }
-
-  handleDrillDown (storeId) {
-    // api call for getting the next drilldown
-    if (!this.state.reportData.generate && this.props.history.location.state) {
-      this.state.reportData.generate = false
-      console.log('Getting store id'+storeId);
-      // this.state.reportData.response = {}
-      let request = this.props.history.location.state.reportRequest;
-      // during drill down updating the store id in template request
-      request.selectedStoreIds = []
-      request.selectedStoreIds.push(storeId)
-      this.setTimeMeasures(request)
-      let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport
-      this.api.postData(url, request, data => {
-        this.state.reportData.response = data
-        this.setState(this.state)
-      }, error => {
-          this.state.successMessage = ''
-          this.state.errorMessage = error.message
-          this.setState(this.state)
-      })
-    }
-  }
-
+    
   populateSummaryReportDetails () {
       if(this.props.history.location.state){
         this.state.reportData.generate = true
@@ -249,7 +227,8 @@ export default class SummaryReport extends Component {
 
   }
   displayGoalStatistics() {
-    if(this.props.history.location.state){
+      if (this.props.history.location.state) {
+          console.log(this.props.history.location.state.reportDataResponse);
       if (this.props.history.location.state.reportDataResponse && this.props.history.location.state.reportDataResponse.goalData && this.state.reportData.singleStore) {
         return (<div className='row goalstatistics-table-section'>
           <GoalStatisticsDataComponent goalData = {this.state.goalData} />
@@ -262,6 +241,8 @@ export default class SummaryReport extends Component {
   }
 
   displaySystemStatistics() {
+
+      console.log(this.props.history.location.state.systemStatistics);
       if (this.state.reportData.systemStatistics && this.state.reportData.singleStore) {
         return (<div className='row systemstatistics-table-section'>
             <SystemStatistics systemStats={this.props.history.location.state.reportDataResponse.systemStatistics} />
@@ -370,11 +351,35 @@ export default class SummaryReport extends Component {
         </div>
 
         <div className='row summaryreport-table-section'>
-          <SummaryReportDataComponent handleDrillDown={this.handleDrillDown} reportData={this.state.reportData} drillDownRequestData = {this.state.drillDownRequestData}/>
+            <SummaryReportDataComponent handleDrillDown={this.handleDrillDown} reportData={this.state.reportData} drillDownRequestData={this.state.drillDownRequestData} />
         </div>
         {this.displayGoalStatistics()}
         {this.displaySystemStatistics()}
       </section>
     </section>)
+  }
+
+  handleDrillDown(storeId) {
+      console.log('handle drill');
+      // api call for getting the next drilldown
+      if (!this.state.reportData.generate && this.props.history.location.state) {
+          this.state.reportData.generate = false
+          console.log('Getting store id' + storeId);
+          // this.state.reportData.response = {}
+          let request = this.props.history.location.state.reportRequest;
+          // during drill down updating the store id in template request
+          request.selectedStoreIds = []
+          request.selectedStoreIds.push(storeId)
+          this.setTimeMeasures(request)
+          let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport
+          this.api.postData(url, request, data => {
+              this.state.reportData.response = data
+              this.setState(this.state)
+          }, error => {
+              this.state.successMessage = ''
+              this.state.errorMessage = error.message
+              this.setState(this.state)
+          })
+      }
   }
 }
