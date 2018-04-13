@@ -506,3 +506,58 @@ span.redFont {
     margin-bottom: 3px;
     text-align: right;
 }
+.downloadOptionsSection {
+    position: relative;
+    display:flex;
+
+}
+.downloadOptions {
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+
+.downloadOptions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: block;
+
+    background: #ededed;
+    color: #06b1cb;
+    font-weight: bold;
+    font-size: 12px;
+    text-decoration: none;
+    width: 130px;
+    z-index: 1;
+}
+    .downloadOptions div {
+        border: 1px solid #06b1cb !important;
+        padding: 5px;
+        text-align:center;
+    }
+
+        .downloadOptions div:hover {
+            background-color: #06b1cb;
+            color:white;
+        }        
+        
+        
+        
+        .reportsummary-container .download-btn-section {
+            width: 200px;
+            position: relative;
+        }
+.download-summaryreport-btn {
+    background-color: #06b1cb;
+    text-align: center;
+    bottom-border: none;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 10px 10px;
+    font-size: 1.12em;
+    font-weight: normal;
+    width: 130px;
+    border-radius: 0;
+}

@@ -13,7 +13,9 @@
     "FormDateGreaterThanToDate": "REPORTSUMMARY.FormDateGreaterThanToDate",
     "DateCannotbeEmpty": "REPORTSUMMARY.DateCannotbeEmpty",
     "WeekInvalidDateRange": "REPORTSUMMARY.WeekInvalidDateRange",
-    "AdvancedDayInvalidDateRange": "REPORTSUMMARY.AdvancedDayInvalidDateRange"
+    "AdvancedDayInvalidDateRange": "REPORTSUMMARY.AdvancedDayInvalidDateRange",
+    "createSuccess": "REPORTSUMMARY.createSuccess",
+    "deleteSuccess": "REPORTSUMMARY.deleteSuccess"
   },
   "LISTGROUP": "LISTGROUP"
 }

@@ -65,12 +65,7 @@ const generateWeekReport = (input, callback) => {
         const groupbyIndex = _.groupBy(StoreData, indexValue => indexValue.index)
         let vals = _.values(groupbyIndex)
         let storesVals = _.flatten(vals)
-        let timeMeasureType = []
-        let timeMeasureObj = {}
-        let timeMeasureArray = []
-        timeMeasureObj.data = storesVals
-        timeMeasureArray.push(timeMeasureObj)
-        data.timeMeasureType = timeMeasureArray
+        data.timeMeasureType = storesVals
         data.totalRecordCount = _.find(repositoryData, totalRecords => totalRecords.TotalRecCount)
         reportData = data
         reportData.status = true
