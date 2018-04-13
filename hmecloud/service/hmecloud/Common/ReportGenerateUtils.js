@@ -1,6 +1,6 @@
 const dateUtils = require('../Common/DateUtils')
 const _ = require('lodash')
-const moment  = require('moment')
+const moment = require('moment')
 const messages = require('../Common/Message')
 
 // This function is used to Prepare Store Details
@@ -19,6 +19,7 @@ const prepareStoreDetails = (daysingleResult, storeData, input) => {
 }
 
 function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, isMinutes, colors) {
+  isMinutes = Number(isMinutes)
   let colorSettings
   if (_.isUndefined(colors[0])) {
     colorSettings = ['N/A', 'N/A', 'N/A']
@@ -358,7 +359,7 @@ const getAllStoresDetails = (result, colors, goalSettings, format) => {
         'group': {'value': items.GroupName},
         'storeId': {'value': items.StoreID},
         'index': items.WeekIndex,
-        'week': {'timeSpan': items.WeekStartDate + (items.StoreNo !== 'Total Week' ? '-' + items.WeekEndDate : " "), 'currentWeekpart': 'OPEN-CLOSE'},
+        'week': {'timeSpan': items.WeekStartDate + (items.StoreNo !== 'Total Week' ? '-' + items.WeekEndDate : ' '), 'currentWeekpart': 'OPEN-CLOSE'},
         'menu': {'value': dateUtils.convertSecondsToMinutes(parseInt(items['Menu Board']), format), 'color': getColor('Menu', items['Menu Board'])},
         'greet': {'value': dateUtils.convertSecondsToMinutes(parseInt(items.Greet), format), 'color': getColor('Greet', items.Greet)},
         'service': {'value': dateUtils.convertSecondsToMinutes(parseInt(items.Service), format), 'color': getColor('Service', items.Service)},
@@ -378,7 +379,7 @@ const getAllStoresDetails = (result, colors, goalSettings, format) => {
         'group': {'value': items.GroupName},
         'storeId': {'value': items.StoreID},
         'index': items.WeekIndex,
-        'week': {'timeSpan': items.WeekStartDate + (items.StoreNo !== 'Total Week' ? '-' + items.WeekEndDate : " "), 'currentWeekpart': 'OPEN-CLOSE'},
+        'week': {'timeSpan': items.WeekStartDate + (items.StoreNo !== 'Total Week' ? '-' + items.WeekEndDate : ' '), 'currentWeekpart': 'OPEN-CLOSE'},
         'menu': {'value': items['Menu Board'], 'color': getColor('Menu', items['Menu Board'])},
         'greet': {'value': items.Greet, 'color': getColor('Greet', items.Greet)},
         'service': {'value': items.Service, 'color': getColor('Service', items.Service)},
