@@ -90,8 +90,8 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
     }
   }
 
-  var prepareGoal = (result, event, property, key, value, isMinutes) => {
-    populate(result, 'goalA', event, property, key, value, isMinutes)
+  var prepareGoal = (result, event, property, key, value) => {
+    populate(result, 'goalA', event, property, key, value)
     populate(result, 'goalB', event, property, key, value)
     populate(result, 'goalC', event, property, key, value)
     populate(result, 'goalD', event, property, key, value)
