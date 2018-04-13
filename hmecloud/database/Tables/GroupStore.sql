@@ -16,15 +16,31 @@
 -- 
 -- ===========================================================
 
-CREATE TABLE [dbo].[GroupStore]
+CREATE TABLE [dbo].[GroupStore](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[GroupId] [int] NOT NULL,
+	[StoreId] [int] NULL,
+ CONSTRAINT [PK_GroupStore] PRIMARY KEY CLUSTERED 
 (
-    [Id]			INT IDENTITY(1,1) NOT NULL,
-    [GroupId]		INT NOT NULL,
-    [ChildGroupId]	INT NULL,
-    [StoreId]		INT NULL,
-    CONSTRAINT [PK_GroupStore] PRIMARY KEY CLUSTERED 
-	(
-		[Id] ASC
-	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+
+ALTER TABLE [dbo].[GroupStore]  WITH CHECK ADD  CONSTRAINT [FK_Group_GroupStore] FOREIGN KEY([GroupId])
+REFERENCES [dbo].[Group] ([Id])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[GroupStore] CHECK CONSTRAINT [FK_Group_GroupStore]
+GO
+
+ALTER TABLE [dbo].[GroupStore]  WITH CHECK ADD  CONSTRAINT [FK_GroupStore_Store] FOREIGN KEY([StoreId])
+REFERENCES [dbo].[tbl_Stores] ([Store_ID])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[GroupStore] CHECK CONSTRAINT [FK_GroupStore_Store]
+GO
+
+
