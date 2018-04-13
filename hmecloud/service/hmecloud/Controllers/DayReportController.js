@@ -58,7 +58,7 @@ const generateDayReport = (request, input, callBack) => {
           prepareMultiStoreResults(daysingleResult, result.data[0], input.ReportTemplate_Format, colors, goalstatisticsDetails)
         }
           
-          if (input.reportType.toLowerCase().trim() === ' csv') {
+        /*  if (input.reportType.toLowerCase().trim() === ' csv') {
               console.log("CSV file genration executed")
              let output = {}
                let csvInput = {}
@@ -77,7 +77,7 @@ const generateDayReport = (request, input, callBack) => {
                   }
 
                   callBack(output)
-              }) */
+              }) 
 
              
               output.data = "CSV file sent successfully"
@@ -86,10 +86,10 @@ const generateDayReport = (request, input, callBack) => {
           } else if (input.reportType && input.reportType.toLowerCase() === 'pdf') {
               console.log("PDF file genration executed")
 
-          } else { 
+          } else { */
               daysingleResult.status = true
               callBack(daysingleResult)
-         }
+         //}
         
       } else {
         callBack(result)
