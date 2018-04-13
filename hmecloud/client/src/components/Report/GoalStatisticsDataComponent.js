@@ -3,63 +3,39 @@ import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './SummaryReport.css'
 import '../../../node_modules/font-awesome/css/font-awesome.min.css'
 
+import t from '../Language/language'
+import * as languageSettings from '../Language/languageSettings'
+
 export default class GoalStatisticsDataComponent extends Component {
   constructor (props) {
-    super(props)
-    this.state = {
-        goalData: {
-            data:
-            [
-                {
-                    title: "<Goal A",
-                    menu: { goal: "1", cars: "1", percentage: "1" },
-                    greet: { goal: "2", cars: "1", percentage: "1" },
-                    service: { goal: "3", cars: "1", percentage: "1" },
-                    laneQueue: { goal: "4", cars: "1", percentage: "1" },
-                    laneTotal: { goal: "5", cars: "1", percentage: "1" }
-                },
-                {
-                    title: "<Goal B",
-                    menu: { goal: "6", cars: "1", percentage: "1" },
-                    greet: { goal: "7", cars: "1", percentage: "1" },
-                    service: { goal: "8", cars: "1", percentage: "1" },
-                    laneQueue: { goal: "9", cars: "1", percentage: "1" },
-                    laneTotal: { goal: "10", cars: "1", percentage: "1" }
-                },
-                {
-                    title: "<Goal C",
-                    menu: { goal: "11", cars: "1", percentage: "1" },
-                    greet: { goal: "12", cars: "1", percentage: "1" },
-                    service: { goal: "13", cars: "1", percentage: "1" },
-                    laneQueue: { goal: "14", cars: "1", percentage: "1" },
-                    laneTotal: { goal: "15", cars: "1", percentage: "1" }
-                },
-            ]
-        }
-    }
+      super(props)
+      this.state = {
+          currentLanguage: languageSettings.getCurrentLanguage(),
+      }
     this.displayGoalStatisticsData = this.displayGoalStatisticsData.bind(this)
     this.displayGoalStatisticsRowData = this.displayGoalStatisticsRowData.bind(this)
   }
 
-  displayGoalStatisticsData (goalData) {
+  displayGoalStatisticsData(goalData) {
+      const language = this.state.currentLanguage
     return (<div>
-        <div className='col-xs-12 goalstatistics-header-text'>Goal Statistics For Daypart</div>
+        <div className='col-xs-12 goalstatistics-header-text'>{t[language].ReportsGoalsStatsFor}</div>
         <div className='col-xs-12 goalstatistics-data-unit'>
           <table className='goalstatistics-table goalstatistics-table-header'>
             <tbody>
               <tr>
                 <th className='blankHeader'/>
                 <th className='tableHeading' colSpan='4'>
-                  <span>AVERAGE TIME</span><span>(min:sec)</span>
+                            <span>{t[language].ReportsAveragePerformancePerEvent}</span><span>(min:sec)</span>
                 </th>
               </tr>
               <tr className='goalstatistics-row-heading'>
                 <th className='reportTableAttributesHeading blank-heading'><span></span></th>
-                <th className='reportTableAttributesHeading'><span>Menu</span></th>
-                <th className='reportTableAttributesHeading'><span>Greet</span></th>
-                <th className='reportTableAttributesHeading'><span>Service</span></th>
-                <th className='reportTableAttributesHeading'><span>Lane Queue</span></th>
-                <th className='reportTableAttributesHeading'><span>Lane Total</span></th>
+                <th className='reportTableAttributesHeading'><span>{t[language].MenuBoard}</span></th>
+                <th className='reportTableAttributesHeading'><span>{t[language].Greet}</span></th>
+                <th className='reportTableAttributesHeading'><span>{t[language].Service}</span></th>
+                <th className='reportTableAttributesHeading'><span>{t[language].LaneQueue}</span></th>
+                <th className='reportTableAttributesHeading'><span>{t[language].LaneTotal}</span></th>
               </tr>
             </tbody>
           </table>
@@ -67,6 +43,7 @@ export default class GoalStatisticsDataComponent extends Component {
           <div className='col-xs-12'>
             {this.displayGoalStatisticsRowData(goalData)}
           </div>
+          <div className="goalNote"> <span className="redFont">* </span>{t[language].ReportsDerivedPerformancetoGoal} </div>
         </div>)
   }
 
