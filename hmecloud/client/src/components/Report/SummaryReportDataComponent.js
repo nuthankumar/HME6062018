@@ -66,7 +66,7 @@ export default class SummaryReportDataComponent extends Component {
   }
 
   displaySummarizedRowData (reportRowData) {
-    this.props.reportData.generate =false
+      this.props.reportData.generate = false
     if (reportRowData.length > 0) {
         return reportRowData.map((reportItem) => {
             let menuColor = reportItem.menu.color
@@ -102,8 +102,6 @@ export default class SummaryReportDataComponent extends Component {
   }
 
   displayLongestTimes() {
-
-      console.log(this.props.reportData);
     if(this.props.reportData.longestTime){
       return(
         <LongestTime LongestTimes = {this.props.reportData.response.LongestTimes} className = {(this.props.reportData.singleStore) ? 'show' : 'hide'}/>

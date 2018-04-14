@@ -840,16 +840,7 @@ class Report extends Component {
         this.setState(this.state)
         isError = true;
       } else {
-          //console.log(this.state.savedTemplates)
-          //if (this.state.savedTemplates.length()) {
-          //    if (this.state.savedTemplates.length >= 10) {
-          //        this.state.errorMessage = t[language].savedtemplatelimit;
-          //        this.setState(this.state);
-          //        isError = true;
-          //    }
-
-          //}
-                        let url = Config.apiBaseUrl + CommonConstants.apiUrls.createTemplate
+              let url = Config.apiBaseUrl + CommonConstants.apiUrls.createTemplate
               this.api.postData(url, template[0], data => {
                   this.state.successMessage = data.data;
                   this.state.errorMessage = "";
@@ -921,7 +912,6 @@ class Report extends Component {
 
   generateRawCarDataReport(template){
     let rawCarData = [];
-    console.log(this.state);
     let selectedStoreIds = this.state.selectedStoreIds
     selectedStoreIds = selectedStoreIds.map(String);
     rawCarData.push(
@@ -963,30 +953,6 @@ class Report extends Component {
   generateDaypartReport(){
     let template = this.state.templateData[0]
     this.state.reportData.generate = true
-
-
-    //{
-    //    "timeMeasure": 3,
-    //        "fromDate": "2018-03-24",
-    //            "toDate": "2018-03-24",
-    //                "openTime": "12:00 AM",
-    //                    "closeTime": "08:00 PM",
-    //                        "open": true,
-    //                            "close": true,
-    //                                "type": 2,
-    //                                    "format": 2,
-    //                                        "selectedStoreIds": [
-    //                                            4
-    //                                        ],
-    //                                            "advancedOptions": true,
-    //                                                "longestTime": true,
-    //                                                    "systemStatistics": true,
-    //                                                        "recordPerPage":4,
-    //                                                            "pageNumber":1
-    //} 
-
-
-
     let request = {
       "timeMeasure": parseInt(template.timeMeasure),
       "fromDate": moment(template.fromDate).format('YYYY-MM-DD'),
@@ -999,18 +965,14 @@ class Report extends Component {
       "include": template.include,
       "format": template.format,
       "selectedStoreIds": template.selectedStoreIds,
-    //  "selectedStoreIds": [ "4"  ],
       "advancedOptions": template.advancedOptions,
       "longestTime": template.longestTime,
       "systemStatistics": template.systemStatistics,
       "recordPerPage": 4,
       "pageNumber": 1
     }
-    console.log(JSON.stringify(request));
     let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
-    console.log(request);
     this.api.postData(url, request, data => {
-        console.log(JSON.stringify(data));
         this.props.history.push({
             pathname: '/summaryreport',
             state: { reportData: this.state.reportData , reportDataResponse : data, reportRequest: request }
