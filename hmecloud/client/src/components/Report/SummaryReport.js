@@ -372,12 +372,21 @@ export default class SummaryReport extends Component {
         })
     }
 
-    downloadPdf(templateData) {
+    downloadPdf(type,e) {
         console.log(this.state.reportData.drillDownRequestData);
         let request = this.state.reportData.drillDownRequestData
-        //console.log(request);
-        let url = Config.baseUrl + CommonConstants.apiUrls.generateReport +'?reportType=csv'
+        let url;
+        if (type == 'CSV')
+        {
+            console.log('CSV')
+            url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=csv';
+        }
+        if (type == 'PDF') {
+            console.log('PDF')
+            url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=csv';
+        }
         this.api.postData(url, request, data => {
+            console.log(data);
             if (data.status) {
                 this.state.errorMessage = ''
                 this.state.pdfEmailMessage = data.data
@@ -401,8 +410,8 @@ export default class SummaryReport extends Component {
                         <div>{t[language].download}</div>
                     </div>
                     <div className={(this.state.showDownloadOptions) ? 'downloadOptions show' : 'downloadOptions hidden'}>
-                        <div onClick={this.downloadPdf.bind(this)}>PDF</div>
-                        <div onClick={this.downloadPdf.bind(this)}>CSV</div>
+                        <div onClick={this.downloadPdf.bind(this,'PDF')}>PDF</div>
+                        <div onClick={this.downloadPdf.bind(this,'CSV')}>CSV</div>
                     </div>
                    
                 </div>
