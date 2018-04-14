@@ -1,19 +1,19 @@
 const dayPartRepository = require('../Repository/DayPartRepository')
 const dateUtils = require('../Common/DateUtils')
-// const csvGeneration = require('../Common/CsvUtils')
+const dataExportUtil = require('../Common/DataExportUtil')
 const _ = require('lodash')
 const moment = require('moment')
 const reportUtil = require('../Common/ReportGenerateUtils')
 const HashMap = require('hashmap')
+const dateFormat = require('dateformat')
 
 /**
- * This Service is used to Generate the Summary reports details for
- *provided details
- * @param request
- * @param response
- *
+ *  This Service is used to Generate the Summary reports details for
+ * @param {*} request
+ * @param {*} input
+ * @param {*} callBack
  */
-const generateDaypartReport = (input, callBack) => {
+const generateDaypartReport = (request, input, callBack) => {
   let reportData = {
     timeMeasure: '',
     selectedStoreIds: [],
@@ -39,13 +39,14 @@ const generateDaypartReport = (input, callBack) => {
   let getGoalTime
   let systemStatisticsLane
   let systemStatisticsGenral
-
   let totalRecordCount = {}
+
+  /**
+   * Configure start time and end time
+   */
   input.ReportTemplate_From_Time = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
   input.ReportTemplate_To_Time = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
 
-  input.ReportTemplate_From_Time = moment(input.ReportTemplate_From_Time).format('YYYY-MM-DD HH:mm:ss')
-  input.ReportTemplate_From_Time = moment(input.ReportTemplate_From_Time).format('YYYY-MM-DD HH:mm:ss')
   dayPartRepository.generateDayPartSummaryReport(input, result => {
     if (result.status === true) {
       if (input.ReportTemplate_StoreIds.length > 1) {
@@ -64,113 +65,124 @@ const generateDaypartReport = (input, callBack) => {
         systemStatisticsLane = result.data[7]
         totalRecordCount = _.last(result.data)
       }
-
-      // Single Store result
-      if (input.ReportTemplate_StoreIds.length < 2) {
-        reportData.totalRecordCount = totalRecordCount[0]
-        let totoalCars = ''
-        let groupByDate = _.groupBy(averageTimeResultSet, 'StoreDate')
-
-        _.mapKeys(groupByDate, function (value, key) {
-          value.forEach(item => {
-            if (item.StoreNo === 'Total Daypart') {
-              totoalCars = item['Total_Car']
-            }
-
-            let dataObject = prepareDayPartObject(item, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
-            data.push(dataObject)
-          })
-        })
-        dayPartObject.data = data
-        singleDayParts.push(dayPartObject)
-        reportData.timeMeasureType = singleDayParts
-        reportUtil.prepareStoreDetails(reportData, storeDetails, input)
-
-        let dataArray = []
-        dataArray = reportUtil.getGoalStatistic(goalsStatistics, getGoalTime, dataArray, totoalCars, input.ReportTemplate_Format, colorSettings)
-        reportData.goalData = dataArray
-
-        if (input.longestTime) {
-          // goal Longest time
-          reportUtil.prepareLongestTimes(reportData, longestTimes, input.ReportTemplate_Format)
+      if (averageTimeResultSet.length > 0) {
+        if (input.reportType.toLowerCase().trim() === 'csv' || input.reportType.toLowerCase().trim() === 'pdf') {
+          generateCSVOrPdfTriggerEmail(request, input, result, callBack)
+        } else {
+          if (input.ReportTemplate_StoreIds.length < 2) {
+            singleStoreResult(reportData, totalRecordCount, averageTimeResultSet, input, colorSettings, goalsStatistics, data, dayPartObject, singleDayParts, storeDetails, getGoalTime, longestTimes, systemStatisticsLane, systemStatisticsGenral, callBack)
+          } else {
+            multiStoreResult(totalRecordCount, input, averageTimeResultSet, colorSettings, goalsStatistics, callBack)
+          }
         }
-        // system statistics
-        if (input.systemStatistics) {
-          reportUtil.prepareStatistics(reportData, systemStatisticsLane, systemStatisticsGenral)
-        }
-
-        reportData.status = true
-        callBack(reportData)
       } else {
-        let reportData = {
-          timeMeasure: '',
-          selectedStoreIds: [],
-          totalRecordCount: ''
-        }
-
-        let groupByStore = {}
-        groupByStore.data = []
-
-        //  Multi store
-        reportData.totalRecordCount = totalRecordCount[0]
-        reportData.timeMeasure = input.ReportTemplate_Time_Measure
-        reportData.selectedStoreIds = input.ReportTemplate_StoreIds
-
-        reportData.timeMeasureType = []
-        let groupByDate
-        groupByDate = _.groupBy(averageTimeResultSet, 'StoreDate')
-
-        let someValue = _.mapKeys(groupByDate, function (value, key) {
-          const dayPartIndexIds = new HashMap()
-          value.forEach(item => {
-            let dayPartIndex = item.DayPartIndex
-
-            if (dayPartIndex && !dayPartIndexIds.has(dayPartIndex)) {
-              let dayPartResultsList = value.filter(function (obj) {
-                return obj.DayPartIndex === dayPartIndex
-              })
-              dayPartIndexIds.set(dayPartIndex, dayPartIndex)
-
-              let multiStoreObj = {}
-              let tempData = []
-              let tempRawCarData = dayPartResultsList[0]
-              multiStoreObj.title = groupByStore.title = moment(tempRawCarData.StoreDate).format('MMM DD')
-              for (let i = 0; i < dayPartResultsList.length; i++) {
-                let storeObj = dayPartResultsList[i]
-                let store = {}
-                
-                if (storeObj.StoreNo === 'SubTotal') {
-                  let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
-
-                  dataObject.groups.value = `${item.GroupName} SubTotal`
-
-                  tempData.push(dataObject)
-                } else if (storeObj.StoreNo === 'Total Daypart') {
-                  let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
-                  dataObject.groups.value = `Total Daypart`
-                  dataObject.groups.const = `(W-Avg)`
-                  dataObject.store = store
-
-                  tempData.push(dataObject)
-                } else if (storeObj.StoreNo !== 'Total Daypart') {
-                  let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
-
-                  tempData.push(dataObject)
-                } 
-              }
-              multiStoreObj.data = tempData
-              console.log('tempData ', tempData)
-              reportData.timeMeasureType.push(multiStoreObj)
-            }
-          })
-        })
-       //  console.log(groupByDate)
-        reportData.status = true
-        callBack(reportData)
+        result = {}
+        result.error = request.t('LISTGROUP.notfound')
+        result.status = false
+        callBack(result)
       }
     } else {
-      callBack(reportData)
+      callBack(result)
     }
+  })
+}
+
+function multiStoreResult (totalRecordCount, input, averageTimeResultSet, colorSettings, goalsStatistics, callBack) {
+  let reportData = {
+    timeMeasure: '',
+    selectedStoreIds: [],
+    totalRecordCount: ''
+  }
+  let groupByStore = {}
+  groupByStore.data = []
+  //  Multi store
+  reportData.totalRecordCount = totalRecordCount[0]
+  reportData.timeMeasure = input.ReportTemplate_Time_Measure
+  reportData.selectedStoreIds = input.ReportTemplate_StoreIds
+  reportData.timeMeasureType = []
+  let groupByDate
+  groupByDate = _.groupBy(averageTimeResultSet, 'StoreDate')
+  _.mapKeys(groupByDate, function (value, key) {
+    const dayPartIndexIds = new HashMap()
+    value.forEach(item => {
+      let dayPartIndex = item.DayPartIndex
+      if (dayPartIndex && !dayPartIndexIds.has(dayPartIndex)) {
+        let dayPartResultsList = value.filter(function (obj) {
+          return obj.DayPartIndex === dayPartIndex
+        })
+        dayPartIndexIds.set(dayPartIndex, dayPartIndex)
+        let multiStoreObj = {}
+        let tempData = []
+        let tempRawCarData = dayPartResultsList[0]
+        multiStoreObj.title = groupByStore.title = moment(tempRawCarData.StoreDate).format('MMM DD')
+        for (let i = 0; i < dayPartResultsList.length; i++) {
+          let storeObj = dayPartResultsList[i]
+          let store = {}
+          if (storeObj.StoreNo === 'SubTotal') {
+            let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
+            dataObject.groups.value = `${item.GroupName} SubTotal`
+            tempData.push(dataObject)
+          } else if (storeObj.StoreNo === 'Total Daypart') {
+            let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
+            dataObject.groups.value = `Total Daypart`
+            dataObject.groups.const = `(W-Avg)`
+            dataObject.store = store
+            tempData.push(dataObject)
+          } else if (storeObj.StoreNo !== 'Total Daypart') {
+            let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
+            tempData.push(dataObject)
+          }
+        }
+        multiStoreObj.data = tempData
+        reportData.timeMeasureType.push(multiStoreObj)
+      }
+    })
+  })
+  reportData.status = true
+  callBack(reportData)
+}
+
+function singleStoreResult (reportData, totalRecordCount, averageTimeResultSet, input, colorSettings, goalsStatistics, data, dayPartObject, singleDayParts, storeDetails, getGoalTime, longestTimes, systemStatisticsLane, systemStatisticsGenral, callBack) {
+  reportData.totalRecordCount = totalRecordCount[0]
+  let totoalCars = ''
+  let groupByDate = _.groupBy(averageTimeResultSet, 'StoreDate')
+  _.mapKeys(groupByDate, function (value, key) {
+    value.forEach(item => {
+      if (item.StoreNo === 'Total Daypart') {
+        totoalCars = item['Total_Car']
+      }
+      let dataObject = prepareDayPartObject(item, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
+      data.push(dataObject)
+    })
+  })
+  dayPartObject.data = data
+  singleDayParts.push(dayPartObject)
+  reportData.timeMeasureType = singleDayParts
+  reportUtil.prepareStoreDetails(reportData, storeDetails, input)
+  let dataArray = []
+
+  dataArray = reportUtil.getGoalStatistic(goalsStatistics, getGoalTime, dataArray, totoalCars, input.ReportTemplate_Format, colorSettings)
+  reportData.goalData = dataArray
+  if (input.longestTime) {
+    // goal Longest time
+    reportUtil.prepareLongestTimes(reportData, longestTimes, input.ReportTemplate_Format)
+  }
+  // system statistics
+  if (input.systemStatistics) {
+    reportUtil.prepareStatistics(reportData, systemStatisticsLane, systemStatisticsGenral)
+  }
+  reportData.status = true
+  callBack(reportData)
+}
+
+function generateCSVOrPdfTriggerEmail (request, input, result, callBack) {
+  let csvInput = {}
+  csvInput.type = request.t('COMMON.CSVTYPE')
+  csvInput.reportName = `${request.t('COMMON.DAYREPORTNAME')} ${dateFormat(new Date(), 'isoDate')}`
+  csvInput.email = input.UserEmail
+  csvInput.subject = `${request.t('COMMON.DAYREPORTTITLE')} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
+  dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput, csvResults => {
+    callBack(csvResults)
   })
 }
 

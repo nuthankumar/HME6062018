@@ -23,6 +23,8 @@ export default class HmeHeader extends React.Component {
             settingsDropdown: false,
             showSubMenu: true,
         }
+
+      //  document.body.addEventListener('click', this.handleOnClick.bind(this)); 
     }
     renderAdminMenuItems(isAdmin) {
         const { language, showSubMenu } = this.state;
@@ -59,7 +61,7 @@ export default class HmeHeader extends React.Component {
     }
     render() {
         const { language, showSubMenu } = this.state;
-        const { isAdmin } = this.props;
+        const { isAdmin, isLogin } = this.props;
         let viewAsUser = 'Manoj VS', loggedInUser = 'Rudra'
         return (
             <div >
@@ -83,7 +85,7 @@ export default class HmeHeader extends React.Component {
                 </header>
                 <nav className='reports-navigation-header'>
                     <div id="Navbar" className="Navbar">
-                        <div className="mainMenu menuBar">
+                        <div className={'mainMenu menuBar ' + (isLogin?'hidden' : 'show')}>
 
                             {
                                 this.renderClientMenuItems(isAdmin)
@@ -94,7 +96,7 @@ export default class HmeHeader extends React.Component {
 
                         </div>
                     </div>
-                    <div className='cogWheelSection'>
+                    <div className={'cogWheelSection ' + (isLogin ? 'hidden' : 'show') }>
                         {/*<a data-tip="<a>HTML tooltip</a> <br/> <a>HTML tooltip</a> <br/> <a>HTML tooltip</a>" data-html={true} data-event='click focus'>  <img className='cogWheel' src={CogWheel} aria-hidden='true' /></a>
             <ReactTooltip html={true} place="right" type="dark" effect="solid" globalEventOff='click' eventOff='click' />*/}
                         <div className="dropdown open">
@@ -117,4 +119,14 @@ export default class HmeHeader extends React.Component {
     redirectUrl(url) {
         console.log(url)
     }
+    //handleOnClick(e) {
+    //    console.log(e)
+    //    let set;
+    //    if (e.target.className == 'cogWheel') {
+    //        this.setState({ settingsDropdown: true });
+    //    }
+    //    else {
+    //        this.setState({ settingsDropdown: false });
+    //    }
+    //}
 }

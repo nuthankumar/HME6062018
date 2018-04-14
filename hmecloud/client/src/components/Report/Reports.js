@@ -971,8 +971,10 @@ class Report extends Component {
       "recordPerPage": 4,
       "pageNumber": 1
     }
+    console.log(JSON.stringify(request))
     let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
     this.api.postData(url, request, data => {
+        console.log(JSON.stringify(data))
         this.props.history.push({
             pathname: '/summaryreport',
             state: { reportData: this.state.reportData , reportDataResponse : data, reportRequest: request }
