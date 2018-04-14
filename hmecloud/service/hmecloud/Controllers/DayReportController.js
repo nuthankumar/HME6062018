@@ -7,6 +7,36 @@ const messages = require('../Common/Message')
 const dataExportUtil = require('../Common/DataExportUtil')
 const dateFormat = require('dateformat')
 
+
+
+
+// This function is used to Generate Day Report based on the given Date Range
+
+/*const generateDayReportByDate = (request, input, callback) => {
+
+    console.log("The Generate Controller invoked")
+    console.log("The page no==" + input.pageNumber)
+    let pageStartDate
+    let pageEndDate
+    let lastPage
+
+    if (input.pageNumber === 0) {
+        pageStartDate = input.ReportTemplate_From_Date
+        pageEndDate = input.ReportTemplate_To_Date
+    } else if (input.ReportTemplate_StoreIds.length > 1) {
+        dateUtils.calculateDatesDifference(input.ReportTemplate_To_Date, input.ReportTemplate_From_Date)
+
+    }
+
+    let output = {}
+    output.status = true
+    callback(output)
+
+
+}*/
+
+
+
 const generateDayReport = (request, input, callback) => {
     let fromDateTime = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
     let toDateTime = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
@@ -41,7 +71,6 @@ const generateDayReport = (request, input, callback) => {
                 } else {
                     let colors
                     let goalstatisticsDetails
-                    let totalRecordCount
                     if (storesLength === 1) {
 
                         reportUtil.prepareStoreDetails(daysingleResult, result.data[3], input)
@@ -52,8 +81,7 @@ const generateDayReport = (request, input, callback) => {
                         if (input.longestTime) {
                             reportUtil.prepareLongestTimes(daysingleResult, result.data[1], input.ReportTemplate_Format)
                         }
-                        totalRecordCount = _.last(result.data)
-                        daysingleResult.totalRecordCount = totalRecordCount[0]
+                        
 
                         getGoalTime = result.data[5]
                         const dayPartTotalObject = _.last(result.data[0])
@@ -74,9 +102,7 @@ const generateDayReport = (request, input, callback) => {
                         // Colours
                         colors = result.data[4]
                         goalstatisticsDetails = result.data[2]
-                        totalRecordCount = _.last(result.data)
-                        daysingleResult.totalRecordCount = totalRecordCount[0]
-
+                        
                         prepareMultiStoreResults(daysingleResult, result.data[0], input.ReportTemplate_Format, colors, goalstatisticsDetails)
                     }
 
@@ -107,7 +133,7 @@ function prepareMultiStoreResults(daysingleResult, daysData, format, colors, goa
             let multiStoreObj = {}
             let tempData = []
             let tempRawCarData = dayResultsList[0]
-            if (tempRawCarData.StoreDate !== 'Total Day') {
+            if (tempRawCarData.StoreNo !== 'Total Day') {
                 multiStoreObj.title = dateUtils.convertMonthDayYear(tempRawCarData.StoreDate) + messages.COMMON.OPENVALUE + " - " + dateUtils.convertMonthDayYear(tempRawCarData.StoreDate) + messages.COMMON.CLOSEVALUE
             }
 
@@ -115,7 +141,7 @@ function prepareMultiStoreResults(daysingleResult, daysData, format, colors, goa
                 let storeObj = dayResultsList[i]
 
                 let store = {}
-                if (storeObj.StoreDate !== 'Total Day') {
+                if (storeObj.StoreNo !== 'Total Day') {
                     let dataObject = prepareDayObject(storeObj, format, colors, goalSettings)
 
                     if (storeObj.StoreNo && !storeObj.StoreNo.includes('Subtotal')) {
@@ -155,8 +181,8 @@ function prepareDayObject(item, format, colors, goalSettings) {
     let storeId = {}
     if (item.StoreNo && item.StoreNo.includes('Subtotal')) {
         groupId.value = item.GroupName + " " + item.StoreNo
-    } else if (item.StoreDate && item.StoreDate === 'Total Day') {
-        groupId.value = item.StoreDate
+    } else if (item.StoreNo && item.StoreNo === 'Total Day') {
+        groupId.value = item.StoreNo
         groupId.timeSpan = messages.COMMON.WAVG
     } else {
         groupId.value = item.GroupName
@@ -199,7 +225,7 @@ function prepareDayResults(daysingleResult, dayData, format, colors, goalSetting
     let dayDataObj = {}
 
     dayData.forEach(item => {
-        if (item.StoreDate !== 'Total Day') {
+        if (item.StoreNo !== 'Total Day') {
             let day = {}
             let dataObject = prepareDayObject(item, format, colors, goalSettings)
 
@@ -223,4 +249,5 @@ function prepareDayResults(daysingleResult, dayData, format, colors, goalSetting
 
 module.exports = {
     generateDayReport
+    //,generateDayReportByDate
 }
