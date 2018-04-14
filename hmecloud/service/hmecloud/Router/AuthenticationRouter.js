@@ -8,7 +8,7 @@ router.get('/login', (request, response) => {
   const userDetails = {
     userId: 1,
     UserName: 'HME Admin',
-    UserEmail: 'jaffersr@nousinfo.com',
+    UserEmail: 'admin@hme.com',
     AccountId: 100,
     Role: 'Admin',
     UserPreferencesValue: 11 // After authentication get the Preference value from itbl_User_Preferences table based on logged in user Id
