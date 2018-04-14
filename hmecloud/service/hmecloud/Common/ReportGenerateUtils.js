@@ -30,44 +30,7 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
   const goalGrades = {
     goalA: {
       title: '<Goal A',
-
-      color: colorSettings[0],
-      menu: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
-      greet: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
-      service: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
-      laneQueue: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
-      laneTotal: { goal: 'N/A', cars: 'N/A', percentage: '0%' }
-    },
-    goalB: {
-      title: '<Goal B',
-      color: colorSettings[1],
-      menu: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
-      greet: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
-      service: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
-      laneQueue: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
-      laneTotal: { goal: 'N/A', cars: 'N/A', percentage: '0%' }
-    },
-    goalC: {
-      title: '<Goal C',
-      color: colorSettings[2],
-      menu: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
-      greet: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
-      service: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
-      laneQueue: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
-      laneTotal: { goal: 'N/A', cars: 'N/A', percentage: '0%' }
-    },
-    goalD: {
-      title: '<Goal D',
-      color: colorSettings[2],
-      menu: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
-      greet: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
-      service: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
-      laneQueue: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
-      laneTotal: { goal: 'N/A', cars: 'N/A', percentage: '0%' }
-    },
-    goalF: {
-      title: 'Goal D',
-      color: colorSettings[2],
+      color: '',
       menu: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
       greet: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
       service: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
@@ -75,6 +38,23 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
       laneTotal: { goal: 'N/A', cars: 'N/A', percentage: '0%' }
     }
   }
+
+  goalGrades.goalA.color = colorSettings[0]
+  goalGrades.goalB = _.clone(goalGrades.goalA)
+  goalGrades.goalB.title = '<Goal B'
+  goalGrades.goalB.color = colorSettings[1]
+
+  goalGrades.goalC = _.clone(goalGrades.goalA)
+  goalGrades.goalC.title = '<Goal C'
+  goalGrades.goalC.color = colorSettings[2]
+
+  goalGrades.goalD = _.clone(goalGrades.goalA)
+  goalGrades.goalD.title = '<Goal D'
+  goalGrades.goalD.color = colorSettings[2]
+
+  goalGrades.goalF = _.clone(goalGrades.goalA)
+  goalGrades.goalF.title = 'Goal D'
+  goalGrades.goalF.color = colorSettings[2]
 
   var populate = (result, goal, event, property, key, value) => {
     if (key.toLowerCase().includes(goal.toLowerCase()) && key.toLowerCase().includes(event.toLowerCase())) {

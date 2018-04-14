@@ -101,6 +101,7 @@ const reportValidator = (request, callback) => {
         output.status = false
         callback(output)
       }
+      console.log('start');
       dayPartReportController.generateDaypartReport(input, result => {
         callback(result)
       })

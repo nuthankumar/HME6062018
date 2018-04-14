@@ -107,7 +107,7 @@ const generateDaypartReport = (input, callBack) => {
           selectedStoreIds: [],
           totalRecordCount: ''
         }
-        let groupByDate
+
         let groupByStore = {}
         groupByStore.data = []
 
@@ -117,61 +117,62 @@ const generateDaypartReport = (input, callBack) => {
         reportData.selectedStoreIds = input.ReportTemplate_StoreIds
 
         reportData.timeMeasureType = []
-
+        let groupByDate
         groupByDate = _.groupBy(averageTimeResultSet, 'StoreDate')
-          .mapKeys(groupByDate, function (value, key) {
-            const dayPartIndexIds = new HashMap()
-            value.forEach(item => {
-              let dayPartIndex = item.DayPartIndex
 
-              if (dayPartIndex && !dayPartIndexIds.has(dayPartIndex)) {
-                let dayPartResultsList = value.filter(function (obj) {
-                  return obj.DayPartIndex === dayPartIndex
-                })
-                dayPartIndexIds.set(dayPartIndex, dayPartIndex)
+        let someValue = _.mapKeys(groupByDate, function (value, key) {
+          const dayPartIndexIds = new HashMap()
+          value.forEach(item => {
+            let dayPartIndex = item.DayPartIndex
 
-                let multiStoreObj = {}
-                let tempData = []
-                let tempRawCarData = dayPartResultsList[0]
-                multiStoreObj.title = groupByStore.title = moment(tempRawCarData.StoreDate).format('MMM DD')
-                for (let i = 0; i < dayPartResultsList.length; i++) {
-                  let storeObj = dayPartResultsList[i]
-                  let store = {}
+            if (dayPartIndex && !dayPartIndexIds.has(dayPartIndex)) {
+              let dayPartResultsList = value.filter(function (obj) {
+                return obj.DayPartIndex === dayPartIndex
+              })
+              dayPartIndexIds.set(dayPartIndex, dayPartIndex)
 
-                  if (item.StoreNo !== 'Total Daypart') {
-                    let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
+              let multiStoreObj = {}
+              let tempData = []
+              let tempRawCarData = dayPartResultsList[0]
+              multiStoreObj.title = groupByStore.title = moment(tempRawCarData.StoreDate).format('MMM DD')
+              for (let i = 0; i < dayPartResultsList.length; i++) {
+                let storeObj = dayPartResultsList[i]
+                let store = {}
+                
+                if (storeObj.StoreNo === 'SubTotal') {
+                  let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
 
-                    tempData.push(dataObject)
-                  } else if (item.StoreNo === 'SubTotal') {
-                    let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
+                  dataObject.groups.value = `${item.GroupName} SubTotal`
 
-                    dataObject.groups.value = `${item.GroupName} ${item.StoreNo}`
+                  tempData.push(dataObject)
+                } else if (storeObj.StoreNo === 'Total Daypart') {
+                  let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
+                  dataObject.groups.value = `Total Daypart`
+                  dataObject.groups.const = `(W-Avg)`
+                  dataObject.store = store
 
-                    tempData.push(dataObject)
-                  } else {
-                    let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
-                    dataObject.groups.value = `${item.StoreNo}`
-                    store.timeSpan = 'W-Avg'
-                    dataObject.store = store
+                  tempData.push(dataObject)
+                } else if (storeObj.StoreNo !== 'Total Daypart') {
+                  let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
 
-                    tempData.push(dataObject)
-                  }
-                }
-                multiStoreObj.data = tempData
-                reportData.timeMeasureType.push(multiStoreObj)
+                  tempData.push(dataObject)
+                } 
               }
-            })
+              multiStoreObj.data = tempData
+              console.log('tempData ', tempData)
+              reportData.timeMeasureType.push(multiStoreObj)
+            }
           })
-
+        })
+       //  console.log(groupByDate)
         reportData.status = true
         callBack(reportData)
       }
     } else {
-      callBack(result)
+      callBack(reportData)
     }
   })
 }
-
 
 function prepareDayPartObject (item, format, input, colors, goalSettings) {
   let menu = {}
