@@ -65,7 +65,9 @@ const generateDaypartReport = (request, input, callBack) => {
         systemStatisticsLane = result.data[7]
         totalRecordCount = _.last(result.data)
       }
+      
       if (averageTimeResultSet.length > 0) {
+        totalRecordCount.NoOfPages = input.pageNumber || 1
         if (input.reportType.toLowerCase().trim() === 'csv' || input.reportType.toLowerCase().trim() === 'pdf') {
           generateCSVOrPdfTriggerEmail(request, input, result, callBack)
         } else {
