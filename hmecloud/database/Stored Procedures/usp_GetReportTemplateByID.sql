@@ -11,8 +11,8 @@
 -- -----------------------------------------------------------
 -- Sl.No.	Date			Developer		Descriptopn
 -- -----------------------------------------------------------
---  1.  	06-APRIL-2018	JAYARAM V	Procedure created
---	2.
+--  1.  	06-APRIL-2018	JAYARAM V		Procedure created
+--	2.		13-April-2018	Selvendran K	modified to actual correct table 		
 -- ===========================================================
 -- EXEC [dbo].[dbo].[usp_GetReportTemplateByID] @Id
 -- ===========================================================
@@ -23,23 +23,28 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT distinct [Id]
-		  ,[AccountId]
-		  ,[Stores]
-		  ,[TimeMeasure]
-		  ,[FromDate]
-		  ,[ToDate]
-		  ,[OpenTime]
-		  ,[CloseTime]
-		  ,[Type]
-		  ,[Open]
-		  ,[Close]
-		  ,[Include]
-		  ,[Format]
-		  ,[TemplateName]
-		  ,[CreatedBy]
-		  ,[UpdatedBy]
-		  ,[CreatedDateTime]
-		  ,[UpdatedDateTime]  from [dbo].[ReportTemplates]
-	WHERE @Id = Id
+	SELECT distinct 
+			ReportTemplate_ID AS [Id]
+		  ,ReportTemplate_UID AS [Uid]
+		  ,ReportTemplate_Time_Measure AS [TimeMeasure]
+		  ,ReportTemplate_From_Date AS [FromDate]
+		  ,ReportTemplate_To_Date AS [ToDate]
+		  ,ReportTemplate_From_Time AS [OpenTime]
+		  ,ReportTemplate_To_Time AS [CloseTime]
+		  ,ReportTemplate_Type AS [Type]
+		  ,ReportTemplate_Open AS [Open]
+		  ,ReportTemplate_Close AS [Close]
+		  ,ReportTemplate_Include_Stats AS [Include]
+		  ,ReportTemplate_Format AS [Format]
+		  ,ReportTemplate_Name AS [TemplateName]
+		  ,ReportTemplate_CreatedBy AS [CreatedBy]
+		  ,ReportTemplate_Session_UID AS SessionUid
+		  ,ReportTemplate_Session_User_UID  AS UserUid
+		  ,ReportTemplate_Device_UID AS Devices
+		  ,ReportTemplate_Advanced_Op AS AdvancedOption
+		  ,ReportTemplate_Include_Longs AS IncludeLongs
+		  ,ReportTemplate_Created_DTS AS CreatedDateTime
+	FROM [dbo].[stbl_ReportTemplates]
+	WHERE ReportTemplate_ID = @Id
 END
+
