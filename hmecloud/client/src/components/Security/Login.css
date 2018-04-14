@@ -1,5 +1,71 @@
 @import url('https://fonts.googleapis.com/css?family=Raleway');
 
+table.user_login {
+    border: 1px solid #b9b9b9;
+    background-color: #ebebeb;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0px;
+    height: 150px;
+    width: 320px;
+}
+.user_login tbody tr th {
+    text-align: center;
+}
+
+
+.user_login tbody tr th label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+    font-weight:lighter;
+}
+
+.forgot_up {
+    text-align: center;
+    color: #D41B3E !important;
+    text-decoration: underline;
+    padding: 0px;
+}
+
+
+
+.user_login tbody tr td {
+    text-align: center;
+}
+
+.forms .user_login {
+    margin-bottom: 25px;
+    margin-top: 47px;
+}
+.col1 {
+    margin-left: auto;
+    margin-right: auto;
+}
+.hmeBody {
+    float: left;
+    width: 100%;
+}
+.loginInputs {
+width:197px;
+}
+.user_login tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+}
+
+.forms .user_login input[type=submit] {
+    background-color: #d41b3e;
+    border: none;
+    float: right;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 10px 25px;
+    margin-right: 19px;
+}
+
 .center {
     font-family: 'Raleway', sans-serif;
     background-color: #1abc9c;

@@ -19,7 +19,7 @@ import Login from './components/Security/Login'
 
 ReactDOM.render(<Router>
     <div>
-        <Route exact path="/" render={(props) => <Layout Params={props}><Route path='/' component={(Reports)} /></Layout>} />
+        <Route exact path="/login" render={(props) => <Layout Params={props}><Route path='/login' component={(Login)} /></Layout>} />
         <Route exact path="/reports" render={(props) => <Layout Params={props}><Route path='/reports' component={(Reports)} /></Layout>} />
         <Route exact path="/groups" render={(props) => <Layout Params={props}><Route path='/groups' component={(ReportGroup)} /></Layout>} />
         <Route exact path="/emailSent" render={(props) => <Layout Params={props}><Route path='/emailSent' component={(EmailAlert)} /></Layout>} />

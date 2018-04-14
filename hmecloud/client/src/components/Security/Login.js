@@ -15,30 +15,34 @@ class Login extends Component {
   }
   render () {
     return (
-      <div className='center'>
-        <div className='card'>
-          <h1>Login</h1>
-          <form onSubmit={this.handleFormSubmit}>
-            <input
-              className='form-item'
-              placeholder='Username goes here...'
-              name='username'
-              type='text'
-              onChange={this.handleChange}
-            />
-            <input
-              className='form-item'
-              placeholder='Password goes here...'
-              name='password'
-              type='password'
-              onChange={this.handleChange}
-            />
-            <input
-              className='form-submit'
-              value='SUBMIT'
-              type='submit'
-            />
-          </form>
+      <div>
+        <div>
+          <div id="Content">
+              <div className="col1">
+                        <div className="forms clear">
+                                   <form action="./?pg=Login&amp;st=Validate" method="post">
+                                        <table className="user_login">
+                                            <tbody>
+                                                <tr>
+                                                      <th><label for="Username" translate="" key="username">Username</label></th>
+                                                      <td><input className='loginInputs' type="text" maxlength="100" name="Username" value=""/></td>
+                          	                    </tr>
+                                          <tr>
+                                               <th><label  for="Password" translate="" key="password">Password</label></th>
+                                              <td><input className='loginInputs' type="password" maxlength="16" name="Password" value=""/>
+		                                      </td>
+	                                      </tr>
+                                          <tr>
+                                              <td></td>
+                                              <td><span className="btn_login"><input type="submit" value="Login" /*style="margin-bottom:15px;"*/ translate="" key="submitBtn"/></span></td>
+	                                      </tr>
+                                                </tbody>
+                                            </table>
+                                  </form>
+                                   <h5 className="forgot_up"><a href="/?pg=ManageAccount&amp;st=rq" translate="" key="forgotpass">I forgot my password</a></h5>
+                                   </div>
+                                 </div>
+                    </div>
         </div>
       </div>
     )
