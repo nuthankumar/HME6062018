@@ -12,28 +12,48 @@ const dateFormat = require('dateformat')
 
 // This function is used to Generate Day Report based on the given Date Range
 
-/*const generateDayReportByDate = (request, input, callback) => {
+const generateDayReportByDate = (request, input, callback) => {
 
-    console.log("The Generate Controller invoked")
-    console.log("The page no==" + input.pageNumber)
-    let pageStartDate
-    let pageEndDate
+    let pageStartDate = input.ReportTemplate_From_Date
+    let pageEndDate = input.ReportTemplate_To_Date
     let lastPage
+    let currentPage = input.pageNumber
 
-    if (input.pageNumber === 0) {
+    if (currentPage === 0) {
         pageStartDate = input.ReportTemplate_From_Date
         pageEndDate = input.ReportTemplate_To_Date
     } else if (input.ReportTemplate_StoreIds.length > 1) {
-        dateUtils.calculateDatesDifference(input.ReportTemplate_To_Date, input.ReportTemplate_From_Date)
+        let daysDiff = dateUtils.dateDifference(input.ReportTemplate_From_Date, input.ReportTemplate_To_Date)
+        lastPage = Math.ceil((daysDiff + 1) / 2)
+        if (currentPage !== 1) {
+            pageStartDate = dateUtils.getAdvancedSelectionMaxDate(((currentPage - 1) * 2), pageStartDate)
+        }
+        pageEndDate = dateUtils.getAdvancedSelectionMaxDate(1, pageStartDate)
+        if (pageEndDate > input.ReportTemplate_To_Date) {
+            pageEndDate = pageStartDate
+        }
+    } else {
+        let daysDiff = dateUtils.dateDifference(input.ReportTemplate_From_Date, input.ReportTemplate_To_Date)
 
+        lastPage = Math.ceil((daysDiff + 1) / 7) 
+        if (currentPage !== 1) {
+            pageStartDate = dateUtils.getAdvancedSelectionMaxDate(((currentPage - 1) * 7), pageStartDate)
+        }
+        pageEndDate = dateUtils.getAdvancedSelectionMaxDate(6, pageStartDate)
+        if (pageEndDate > input.ReportTemplate_To_Date) {
+            pageEndDate = input.ReportTemplate_To_Date
+        }
     }
+    input.ReportTemplate_From_Date = pageStartDate
+    input.ReportTemplate_To_Date = pageEndDate
+    generateDayReport(request, input, result => {
+        let totalRecordCount = {}
+        totalRecordCount.NoOfPages = lastPage
+        result.totalRecordCount = totalRecordCount
+        callback(result)
 
-    let output = {}
-    output.status = true
-    callback(output)
-
-
-}*/
+    })
+}
 
 
 
@@ -57,7 +77,6 @@ const generateDayReport = (request, input, callback) => {
             if (result.status === true) {
                 // Preparing Single Store results
                 // Preparing response for CSV
-
                 if (input.reportType.toLowerCase().trim() === 'csv' || input.reportType.toLowerCase().trim() === 'pdf') {
                     let csvInput = {}
                     csvInput.type = request.t('COMMON.CSVTYPE')
@@ -81,8 +100,6 @@ const generateDayReport = (request, input, callback) => {
                         if (input.longestTime) {
                             reportUtil.prepareLongestTimes(daysingleResult, result.data[1], input.ReportTemplate_Format)
                         }
-                        
-
                         getGoalTime = result.data[5]
                         const dayPartTotalObject = _.last(result.data[0])
                         const totalCars = dayPartTotalObject['Total_Car']
@@ -102,18 +119,14 @@ const generateDayReport = (request, input, callback) => {
                         // Colours
                         colors = result.data[4]
                         goalstatisticsDetails = result.data[2]
-                        
                         prepareMultiStoreResults(daysingleResult, result.data[0], input.ReportTemplate_Format, colors, goalstatisticsDetails)
                     }
-
                     daysingleResult.status = true
                     callback(daysingleResult)
                 }
-
             } else {
                 callback(result)
             }
-
         })
     } else {
         callback(messages.CREATEGROUP.invalidRequestBody)
@@ -248,6 +261,6 @@ function prepareDayResults(daysingleResult, dayData, format, colors, goalSetting
 }
 
 module.exports = {
-    generateDayReport
-    //,generateDayReportByDate
+    generateDayReport,
+    generateDayReportByDate
 }
