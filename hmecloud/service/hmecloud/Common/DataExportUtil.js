@@ -9,15 +9,21 @@ const prepareJsonForExport = (storeData, input, csvInput, callback) => {
     let format = input.ReportTemplate_Format
     storeData.forEach(item => {
         let store = {}
+        console.log("THe results===", item.StoreDate)
         if (item.StoreDate.includes('Total')){
-            store.storeDate = item.StoreDate
+            store.Stores = item.StoreDate
         } else {
-            store.storeDate = dateUtils.convertmmddyyyy(item.StoreDate)
+            store.Day = dateUtils.convertmmddyyyy(item.StoreDate)
         }
         if (input.ReportTemplate_StoreIds.length > 1) {
             store.Groups = item.GroupName
-            store.Stores = item.StoreNo
+            if (item.StoreDate.includes('Total')) {
+                store.Stores = item.StoreDate
+            } else {
+                store.Stores = item.StoreNo
+            }
         }
+       
         store['Menu Board'] = dateUtils.convertSecondsToMinutes(item['Menu Board'], format)
         store.Greet = dateUtils.convertSecondsToMinutes(item.Greet, format)
         store.Service = dateUtils.convertSecondsToMinutes(item.Service, format)
