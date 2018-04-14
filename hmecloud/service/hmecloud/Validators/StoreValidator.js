@@ -102,7 +102,7 @@ const reportValidator = (request, callback) => {
         callback(output)
       }
       console.log('start');
-      dayPartReportController.generateDaypartReport(input, result => {
+      dayPartReportController.generateDaypartReport(request, input, result => {
         callback(result)
       })
       // report time measure week data

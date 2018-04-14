@@ -18,6 +18,15 @@ const prepareStoreDetails = (daysingleResult, storeData, input) => {
   return daysingleResult
 }
 
+/**
+ *  Create Goal Statistic for single Store
+ * @param {*} goalsStatistics
+ * @param {*} getGoalTime
+ * @param {*} dataArray
+ * @param {*} totalCars
+ * @param {*} isMinutes
+ * @param {*} colors
+ */
 function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, isMinutes, colors) {
   isMinutes = Number(isMinutes)
   let colorSettings
@@ -27,15 +36,17 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
     colorSettings = colors[0].ColourCode.split('|')
   }
 
+  // Goal Statistics properties
+  let goalDetails = { goal: 'N/A', cars: 'N/A', percentage: '0%' }
   const goalGrades = {
     goalA: {
       title: '<Goal A',
       color: '',
-      menu: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
-      greet: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
-      service: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
-      laneQueue: { goal: 'N/A', cars: 'N/A', percentage: '0%' },
-      laneTotal: { goal: 'N/A', cars: 'N/A', percentage: '0%' }
+      menu: _.clone(goalDetails),
+      greet: _.clone(goalDetails),
+      service: _.clone(goalDetails),
+      laneQueue: _.clone(goalDetails),
+      laneTotal: _.clone(goalDetails)
     }
   }
 
@@ -62,6 +73,7 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
     }
   }
 
+  // Calculate Percentage details for goal statistics
   var populatePercentage = (result, goal, event, property, key, value, totalCarsCount) => {
     if (key.toLowerCase().includes(goal.toLowerCase()) && key.toLowerCase().includes(event.toLowerCase())) {
       if (value === 0 || value === null || isNaN(value) || _.isUndefined(value) || totalCarsCount === 0) {
@@ -117,8 +129,6 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
     prepareGoalPercentage(goalGrades, 'laneQueue', 'percentage', key, value, totalCars)
     prepareGoalPercentage(goalGrades, 'laneTotal', 'percentage', key, value, totalCars)
 
-    //  goalGrades.goalA.color = getColourCode('Menu Board', item['Menu Board'], color, goalsStatistics)
-
     dataArray.push(goalGrades)
   })
 
@@ -132,7 +142,13 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
 
   return dataArray
 }
-// This function is used to prepare Longest details for Day Report
+
+/**
+ * This function is used to prepare Longest details for Day Report
+ * @param {*} daysingleResult
+ * @param {*} longestData
+ * @param {*} format
+ */
 const prepareLongestTimes = (daysingleResult, longestData, format) => {
   let LongestTimes = []
   let longestObj = {}
@@ -201,7 +217,13 @@ const prepareLongestTimes = (daysingleResult, longestData, format) => {
   daysingleResult.LongestTimes = LongestTimes
   return daysingleResult
 }
-// This function is used to prepare colors with event values
+/**
+ * This function is used to prepare colors with event values
+ * @param {*} result
+ * @param {*} colors
+ * @param {*} goalSettings
+ * @param {*} format
+ */
 const storesDetails = (result, colors, goalSettings, format) => {
   let storeDetails = _.filter(result, (value) => {
     if (value.StoreNo) {
@@ -277,7 +299,13 @@ const storesDetails = (result, colors, goalSettings, format) => {
 
   return storesData
 }
-
+/**
+ * get Color Code details for the Goals
+ * @param {*} event
+ * @param {*} eventValue
+ * @param {*} colors
+ * @param {*} goalSettings
+ */
 const getColourCode = (event, eventValue, colors, goalSettings) => {
   let colorSettings = []
   let color
@@ -382,7 +410,12 @@ const getAllStoresDetails = (result, colors, goalSettings, format) => {
 
   return storesData
 }
-
+/**
+ * Preparing the System statisitics
+ * @param {*} daysingleResult
+ * @param {*} systemStatisticsLane
+ * @param {*} systemStatisticsGenral
+ */
 const prepareStatistics = (daysingleResult, systemStatisticsLane, systemStatisticsGenral) => {
   let displayData = {
     Lane: 0,
