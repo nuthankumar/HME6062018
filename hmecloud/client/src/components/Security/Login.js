@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import './Login.css'
 import AuthenticationService from './AuthenticationService'
-import {Config} from '../../Config'
+import { Config } from '../../Config'
+import t from '../Language/language'
+import * as languageSettings from '../Language/languageSettings'
 
 class Login extends Component {
   constructor () {
@@ -9,11 +11,16 @@ class Login extends Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleFormSubmit = this.handleFormSubmit.bind(this)
     this.Auth = new AuthenticationService()
+    this.state = {
+        language: languageSettings.getCurrentLanguage(),
+     }
   }
   componentWillMount () {
     if (this.Auth.loggedIn()) { this.props.history.replace('/') }
   }
-  render () {
+  render() {
+
+    const { language, showSubMenu } = this.state;
     return (
       <div>
         <div>
@@ -24,22 +31,22 @@ class Login extends Component {
                                         <table className="user_login">
                                             <tbody>
                                                 <tr>
-                                                      <th><label for="Username" translate="" key="username">Username</label></th>
+                                            <th><label for="Username">{t[language].username}</label></th>
                                                       <td><input className='loginInputs' type="text" maxlength="100" name="Username" value=""/></td>
                           	                    </tr>
                                           <tr>
-                                               <th><label  for="Password" translate="" key="password">Password</label></th>
+                                            <th><label for="Password">{t[language].password}</label></th>
                                               <td><input className='loginInputs' type="password" maxlength="16" name="Password" value=""/>
 		                                      </td>
 	                                      </tr>
                                           <tr>
                                               <td></td>
-                                              <td><span className="btn_login"><input type="submit" value="Login" /*style="margin-bottom:15px;"*/ translate="" key="submitBtn"/></span></td>
+                                              <td><span className="btn_login"><input type="submit" value={t[language].submitBtn}/></span></td>
 	                                      </tr>
                                                 </tbody>
                                             </table>
                                   </form>
-                                   <h5 className="forgot_up"><a href="/?pg=ManageAccount&amp;st=rq" translate="" key="forgotpass">I forgot my password</a></h5>
+                                   <h5 className="forgot_up"><a href="/?pg=ManageAccount&amp;st=rq">{t[language].forgotpass}</a></h5>
                                    </div>
                                  </div>
                     </div>
