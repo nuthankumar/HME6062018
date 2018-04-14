@@ -16,6 +16,8 @@ import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './SummaryReport.css'
 import '../../../node_modules/font-awesome/css/font-awesome.min.css'
 // import {config} from '../../config'
+import Loader from '../Alerts/Loader'
+
 
 
 export default class SummaryReport extends Component {
@@ -23,6 +25,7 @@ export default class SummaryReport extends Component {
         super(props)
         this.state = {
             currentLanguage: languageSettings.getCurrentLanguage(),
+            showLoader: false,
             showGoalStats: true,
             showSystemStats: true,
             pageHeading: 'Summarized Report',
@@ -41,7 +44,8 @@ export default class SummaryReport extends Component {
                 weekColumn: false,
                 singleStore: false,
                 curPage: 1,
-                totalPages: 4,
+             //  totalPages: 4,
+                NoOfPages: 0,
                 disablePrevButton: false,
                 disableNextButton: false,
                 longestTime: false,
@@ -241,7 +245,7 @@ export default class SummaryReport extends Component {
                     request.timeMeasure = timeMeasure;
                 }
             }
-         
+
             if (request.timeMeasure < 4) {
                 let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
                 this.api.postData(url, request, data => {
@@ -256,8 +260,8 @@ export default class SummaryReport extends Component {
                     this.setState(this.state)
                 })
             }
-            
-            
+
+
         }
     }
 
@@ -282,6 +286,7 @@ export default class SummaryReport extends Component {
                 this.state.goalData = this.props.history.location.state.reportDataResponse.goalData
             }
             this.state.reportData.drillDownRequestData = this.props.history.location.state.reportRequest
+        //    this.state.reportData.NoOfPages = this.props.history.location.state.reportDataResponse.totalRecordCount.NoOfPages
             this.setState(this.state)
         } else {
             this.state.reportData.generate = false
@@ -317,6 +322,7 @@ export default class SummaryReport extends Component {
             this.state.reportData.disablePrevButton = false
             --curPage
             this.state.reportData.curPage = curPage
+            this.getPageDetails(curPage)
         } else {
             this.state.reportData.disablePrevButton = true
             this.state.reportData.disableNextButton = false
@@ -330,37 +336,18 @@ export default class SummaryReport extends Component {
             this.state.reportData.disableNextButton = false
             ++curPage
             this.state.reportData.curPage = curPage
+            this.state.reportData.drillDownRequestData.curPage = curPage
+            this.getPageDetails(curPage)
         } else {
             this.state.reportData.disableNextButton = true
             this.state.reportData.disablePrevButton = false
         }
         this.setState(this.state)
-        this.getPageDetails(curPage)
     }
 
     getPageDetails(curPage) {
-        let request = {
-            "timeMeasure": parseInt(this.state.reportData.timeMeasure),
-            "fromDate": moment(this.state.reportData.fromDate).format('YYYY-MM-DD'),
-            "toDate": moment(this.state.reportData.toDate).format('YYYY-MM-DD'),
-            "openTime": this.state.reportData.openTime,
-            "closeTime": this.state.reportData.closeTime,
-            "open": this.state.reportData.open,
-            "close": this.state.reportData.close,
-            "type": this.state.reportData.type,
-            "include": this.state.reportData.include,
-            "format": this.state.reportData.format,
-            "pagination": this.state.reportData.pagination,
-            "currentPageNo": this.state.curPage,
-            "offset": "2",
-            //  "selectedStoreIds": template.selectedStoreIds,
-            "selectedStoreIds": ["4"],
-            "advancedOptions": this.state.reportData.advancedOptions,
-            "longestTime": this.state.reportData.longestTime,
-            "systemStatistics": this.state.reportData.systemStatistics
-        }
         let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport
-        this.api.postData(url, request, data => {
+        this.api.postData(url, this.state.reportData.drillDownRequestData, data => {
             this.props.history.push({
                 pathname: '/summaryreport',
                 state: { reportData: this.state.reportData, reportDataResponse: data }
@@ -373,24 +360,22 @@ export default class SummaryReport extends Component {
     }
 
     downloadPdf(type,e) {
-        console.log(this.state.reportData.drillDownRequestData);
-        let request = this.state.reportData.drillDownRequestData
+       let request = this.state.reportData.drillDownRequestData
         let url;
         if (type == 'CSV')
         {
-            console.log('CSV')
             url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=csv';
         }
         if (type == 'PDF') {
-            console.log('PDF')
-            url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=csv';
+           url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=csv';
         }
+        this.setState({ showLoader: true });
         this.api.postData(url, request, data => {
-            console.log(data);
             if (data.status) {
                 this.state.errorMessage = ''
                 this.state.pdfEmailMessage = data.data
                 this.setState(this.state)
+                this.setState({ showLoader: false })
                 this.props.history.push("/emailSent", this.state.pdfEmailMessage);
             }
         }, error => {
@@ -400,43 +385,51 @@ export default class SummaryReport extends Component {
         })
     }
 
+
     render() {
+
+        const { showLoader } = this.state;
         let language = this.state.currentLanguage
         // let reportData = this.state.reportData.data
-        return (<section className='report-summary-page'>
-            <section className='reportsummary-container'>
-                <div className='row download-btn-section downloadOptionsSection'>
-                    <div className='btn btn-default download-summaryreport-btn' onClick={this.toggleDownload.bind(this)}>
-                        <div>{t[language].download}</div>
-                    </div>
-                    <div className={(this.state.showDownloadOptions) ? 'downloadOptions show' : 'downloadOptions hidden'}>
-                        <div onClick={this.downloadPdf.bind(this,'PDF')}>PDF</div>
-                        <div onClick={this.downloadPdf.bind(this,'CSV')}>CSV</div>
-                    </div>
-                   
-                </div>
-                <div className='pdfError'>{this.state.errorMessage}</div>
-                <PageHeader pageHeading={t[language].ReportsSummarizedReport} />
+        return (<section>
+            <Loader showLoader={showLoader} />
+            <div className={showLoader ? 'hidden' : 'show'}>
+                    <section className='report-summary-page'>
+                        <section className='reportsummary-container'>
+                            <div className='row download-btn-section downloadOptionsSection'>
+                                <div className='btn btn-default download-summaryreport-btn' onClick={this.toggleDownload.bind(this)}>
+                                    <div>{t[language].download}</div>
+                               </div>
+                                <div className={(this.state.showDownloadOptions) ? 'downloadOptions show' : 'downloadOptions hidden'}>
+                                    <div onClick={this.downloadPdf.bind(this, 'PDF')}>PDF</div>
+                                    <div onClick={this.downloadPdf.bind(this, 'CSV')}>CSV</div>
+                                </div>
 
-                <div className='row'>
-                    {this.headerDetails()}
-                    <div className={'col-xs-2 left-padding-none ' + (this.state.reportData.pagination ? 'show' : 'hide')}>
-                        <PaginationComponent pagination={this.state.reportData.pagination} totalPages={this.state.reportData.totalPages} curPage={this.state.reportData.curPage} handlePreviousPage={(curPage, totalPages) => this.handlePreviousPage(curPage, totalPages)} handleNextPage={(curPage, totalPages) => this.handleNextPage(curPage, totalPages)} disablePrevButton={this.state.reportData.disablePrevButton} disableNextButton={this.state.reportData.disableNextButton} />
-                    </div>
-                </div>
+                            </div>
+                            <div className='pdfError'>{this.state.errorMessage}</div>
+                            <PageHeader pageHeading={t[language].ReportsSummarizedReport} />
 
-                <div className='row'>
-                    <div className='col-xs-12 show-all-pagination-toggle'>Show: <span className={(this.state.pagination) ? 'inactive-link' : 'active-link'} onClick={() => this.setState({ pagination: false })}>All /</span><span className={(this.state.pagination) ? 'active-link' : 'inactive-link'} onClick={() => this.setState({ pagination: true })}>Pages</span></div>
-                </div>
+                            <div className='row'>
+                                {this.headerDetails()}
+                                <div className={'col-xs-2 left-padding-none ' + (this.state.reportData.pagination ? 'show' : 'hide')}>
+                                    <PaginationComponent pagination={this.state.reportData.pagination} totalPages={this.state.reportData.NoOfPages}  curPage={this.state.reportData.curPage} handlePreviousPage={(curPage, totalPages) => this.handlePreviousPage(curPage, totalPages)} handleNextPage={(curPage, totalPages) => this.handleNextPage(curPage, totalPages)} disablePrevButton={this.state.reportData.disablePrevButton} disableNextButton={this.state.reportData.disableNextButton} />
+                                </div>
+                            </div>
 
-                <div className='row summaryreport-table-section'>
-                    <SummaryReportDataComponent handleDrillDown={(storeId) => this.handleDrillDown(storeId)} reportData={this.state.reportData} drillDownRequestData={this.state.reportData.drillDownRequestData} />
-                </div>
-                {this.displayGoalStatistics()}
-                {this.displaySystemStatistics()}
-            </section>
-        </section>)
-    }
+                            <div className='row'>
+                                <div className='col-xs-12 show-all-pagination-toggle'>Show: <span className={(this.state.pagination) ? 'inactive-link' : 'active-link'} onClick={() => this.setState({ pagination: false })}>All /</span><span className={(this.state.pagination) ? 'active-link' : 'inactive-link'} onClick={() => this.setState({ pagination: true })}>Pages</span></div>
+                            </div>
+
+                            <div className='row summaryreport-table-section'>
+                                <SummaryReportDataComponent handleDrillDown={(storeId) => this.handleDrillDown(storeId)} reportData={this.state.reportData} drillDownRequestData={this.state.reportData.drillDownRequestData} />
+                            </div>
+                            {this.displayGoalStatistics()}
+                            {this.displaySystemStatistics()}
+                        </section>
+                    </section>
+            </div>
+            </section>)
+}
 
     toggleDownload(e) {
         let showDownLoad = this.state.showDownloadOptions
