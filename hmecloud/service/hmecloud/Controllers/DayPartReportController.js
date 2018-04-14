@@ -114,22 +114,25 @@ function multiStoreResult (totalRecordCount, input, averageTimeResultSet, colorS
         let multiStoreObj = {}
         let tempData = []
         let tempRawCarData = dayPartResultsList[0]
-        multiStoreObj.title = groupByStore.title = moment(tempRawCarData.StoreDate).format('MMM DD')
+
+        multiStoreObj.title = groupByStore.title = `${moment(tempRawCarData.StoreDate).format('MMM DD, YYYY')} - DayPart ${tempRawCarData.DayPartIndex}`
         for (let i = 0; i < dayPartResultsList.length; i++) {
           let storeObj = dayPartResultsList[i]
           let store = {}
           if (storeObj.StoreNo === 'SubTotal') {
             let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
-            dataObject.groups.value = `${item.GroupName} SubTotal`
+            dataObject.groupId.value = `${item.GroupName} SubTotal`
             tempData.push(dataObject)
           } else if (storeObj.StoreNo === 'Total Daypart') {
             let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
-            dataObject.groups.value = `Total Daypart`
-            dataObject.groups.const = `(W-Avg)`
-            dataObject.store = store
+            dataObject.groupId.value = `Total Daypart`
+            dataObject.groupId.const = `(W-Avg)`
+            // dataObject.storeId = store
             tempData.push(dataObject)
           } else if (storeObj.StoreNo !== 'Total Daypart') {
             let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
+            store.name = `${storeObj.StoreNo} ${storeObj.Store_Name}`
+            dataObject.store = store
             tempData.push(dataObject)
           }
         }
@@ -179,7 +182,8 @@ function generateCSVOrPdfTriggerEmail (request, input, result, callBack) {
   let csvInput = {}
   csvInput.type = request.t('COMMON.CSVTYPE')
   csvInput.reportName = `${request.t('COMMON.DAYREPORTNAME')} ${dateFormat(new Date(), 'isoDate')}`
-  csvInput.email = input.UserEmail
+
+  csvInput.email = 'jaffersr@nousinfo.com'
   csvInput.subject = `${request.t('COMMON.DAYREPORTTITLE')} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
   dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput, csvResults => {
     callBack(csvResults)
@@ -194,11 +198,9 @@ function prepareDayPartObject (item, format, input, colors, goalSettings) {
   let laneTotal = {}
   let totalCars = {}
   let dataObject = {}
-  let groups = {}
-  let stores = {}
+  let groupId = {}
+  let storeId = {}
   let daypart = {}
-  let date = item['StoreDate']
-  dataObject.date = date
   if (item.StartTime !== null && item.StoreDate !== 'Total Daypart' && item.EndTime !== null && input.ReportTemplate_StoreIds.length < 2) {
     var dateSplit = item['StoreDate'].split('-')
     daypart.timeSpan = `${dateSplit[1]}/${dateSplit[0]}-Daypart${item['DayPartIndex']}`
@@ -206,15 +208,15 @@ function prepareDayPartObject (item, format, input, colors, goalSettings) {
     dataObject.daypart = daypart
   }
 
-  dataObject.dayPartIndex = item.DayPartIndex
-  groups.value = item.GroupName
-  dataObject.groups = groups
+  groupId.value = item.GroupName
+  dataObject.groupId = groupId
   if ((_.isUndefined(item.Store_ID) && _.isUndefined(item.Store_Name)) || (item.Store_ID === null && item.Store_Name === null)) {
-    stores.value = 'N/A'
+    storeId.value = 'N/A'
   } else {
-    stores.value = `${item.Store_ID} - ${item.Store_Name}`
+    storeId.value = `${item.Store_ID} - ${item.Store_Name}`
   }
-  dataObject.stores = stores
+  storeId.value = item.Store_ID
+  dataObject.storeId = storeId
 
   menu.value = dateUtils.convertSecondsToMinutes(item['Menu Board'], format)
   menu.color = reportUtil.getColourCode('Menu Board', item['Menu Board'], colors, goalSettings)
