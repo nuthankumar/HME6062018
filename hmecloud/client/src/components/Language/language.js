@@ -1407,15 +1407,15 @@ const language = [
     'navbarAccounts': 'Accounts',
     'navbarDistributers': 'Distributers',
     'navbarAudioManager': 'Audio Manager',
-    'navbarOptionSettings': 'Display Settings',
+    'navbarOptionSettings': 'Param\u00E8tres d\u2019affichage',
     'navbarOptionLeaderboard': 'Customize Leaderboard',
-    'navbarOptionHelp': 'Help',
+    'navbarOptionHelp': 'Aidez-moi',
     'subNavbarStores': 'Stores',
     'subNavbarUsers': 'Users',
     'subNavbarRoles': 'Roles',
     'subNavbarDashboard': 'Dashboard',
     'subNavbarReports': 'Reports',
-    'subNavbarDeviceSettingsHistory': 'Device Settings History',
+    'subNavbarDeviceSettingsHistory': 'HISTORIQUE DES PARAM\u0201eTRES DE LAPPAREIL',
     'Groups': 'groupes'
   }
 ]
