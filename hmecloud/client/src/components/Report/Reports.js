@@ -968,7 +968,7 @@ class Report extends Component {
       "advancedOptions": template.advancedOptions,
       "longestTime": template.longestTime,
       "systemStatistics": template.systemStatistics,
-      "recordPerPage": 4,
+  //    "recordPerPage": 4,
       "pageNumber": 1
     }
     console.log(JSON.stringify(request))
