@@ -87,7 +87,14 @@ exports.JWT = {
 
 exports.TimeMeasure = {
     Day: 1,
-    1 : 'Day'
+    1: 'Day',
+    Daypart: 2,
+    2: 'Daypart',
+    Week: 3,
+    3: 'Week',
+    'Raw Data Report': 4,
+    4: 'Raw Data Report'
+
 }
 
 exports.Type = {
