@@ -98,7 +98,28 @@
   text-align : center;
 }
 
-.summaryreport-table-section, .goalstatistics-table-section, .systemstatistics-table-section{
+.asterics{
+  color: #D41B3E;
+  font-size: 18px;
+  line-height: 0;
+}
+
+.reports-terms{
+  font-size: 12px;
+  color: #777;
+  margin-top: 16px;
+}
+.show-page-toggle{
+  font-size: 12px;
+  margin-top: 14px;
+  font-weight: bold;
+}
+.show-label{
+  font-weight: bold;
+  color: black;
+}
+
+.goalstatistics-table-section, .systemstatistics-table-section{
       margin-top: 10px;
 }
 
@@ -159,6 +180,7 @@ h2 .report-start-time-value,h2 .report-end-time-value{
   color:#008898;
   margin-bottom: 5px;
   font-size: 12px;
+  margin-bottom: 10px;
 }
 .show-all-pagination-toggle{
   text-align : right;
@@ -186,18 +208,14 @@ h2 .report-start-time-value,h2 .report-end-time-value{
   cursor : pointer;
 }
 .previous-page{
-  position: absolute;
   font-size: 18px !important;
   color: white;
-  left: 88px;
-  top:12px;
+  margin-left: 5px;
 }
 .next-page{
-  position: absolute;
   font-size: 18px !important;
   color: white;
-  left: 109px;
-  top:12px;
+  margin-left: 5px;
 }
 .start-page{
   border: 1px solid #D41B3E;
@@ -214,6 +232,10 @@ h2 .report-start-time-value,h2 .report-end-time-value{
 .inactive-link{
   cursor: pointer;
   color: #D41B3E;
+}
+
+.show-all-multi{
+  margin-right : 40px;
 }
 
 /* Goal Statistics css starts here*/
@@ -537,14 +559,10 @@ span.redFont {
         padding: 5px;
         text-align:center;
     }
-
         .downloadOptions div:hover {
             background-color: #06b1cb;
             color:white;
-        }        
-        
-        
-        
+        }
         .reportsummary-container .download-btn-section {
             width: 200px;
             position: relative;

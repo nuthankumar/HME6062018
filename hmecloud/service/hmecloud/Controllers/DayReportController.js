@@ -238,7 +238,7 @@ function prepareDayResults(daysingleResult, dayData, format, colors, goalSetting
     let dayDataObj = {}
 
     dayData.forEach(item => {
-        if (item.StoreNo !== 'Total Day') {
+        if (item.StoreDate !== 'Total Day') {
             let day = {}
             let dataObject = prepareDayObject(item, format, colors, goalSettings)
 

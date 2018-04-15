@@ -27,42 +27,46 @@ export default class SummaryReportDataComponent extends Component {
 
   displaySummarizedData(reportData) {
      let language = this.state.currentLanguage
-    if (reportData.response.timeMeasureType.length > 0) {
-      return reportData.response.timeMeasureType.map((reportItem) => {
-        return (
-            <div className='col-xs-12 report-data-unit'>
-                <div className={'col-xs-12 from-to-detail ' + this.dynamicColumnData.showFromToTime}><span>{reportItem.startTime}</span> <span>{t[language].OPEN} - </span> <span>{reportItem.endTime}</span> <span>{t[language].ReportsClose}</span></div>
-            <table className='summaryreport-table'>
-              <tbody>
-                <tr>
-                  <th className='blankHeader' />
-                  <th className='tableHeading' colSpan='4'>
-                     <span>{t[language].ReportsAverageTime}</span><span>(min:sec)</span>
-                  </th>
-                </tr>
-                <tr>
-                    <th className={'groupsColHeader ' + this.dynamicColumnData.showGroupsStores}><span>{t[language].Groups}</span></th>
-                    <th className={'storesColHeader ' + this.dynamicColumnData.showGroupsStores}><span>{t[language].stores}</span></th>
-                    <th className={'reporttable-attributes-heading-dynamic ' + this.dynamicColumnData.showDayColumn}><span>{t[language].Day}</span></th>
-                    <th className={'reporttable-attributes-heading-dynamic ' + this.dynamicColumnData.showDayPartColumn}><span>{t[language].daypart}</span></th>
-                    <th className={'reporttable-attributes-heading-dynamic ' + this.dynamicColumnData.showWeekColumn}><span>{t[language].Week}</span></th>
-                    <th className='reportTableAttributesHeading'><span>{t[language].MenuBoard}</span></th>
-                    <th className='reportTableAttributesHeading'><span>{t[language].Greet}</span></th>
-                    <th className='reportTableAttributesHeading'><span>{t[language].Service}</span></th>
-                    <th className='reportTableAttributesHeading'><span>{t[language].LaneQueue}</span></th>
-                    <th className='reportTableAttributesHeading'><span>{t[language].LaneTotal}</span></th>
-                    <th className='reportTableAttributesHeading'><span>{t[language].ReportsTotalCars}</span></th>
-                </tr>
-                {this.displaySummarizedRowData(reportItem.data)}
-              </tbody>
-            </table>
-            {this.displayLongestTimes()}
-          </div>
-        )
-      })
-    } else {
-      return <div>No records found</div>
-    }
+      if(reportData.response.status === true){
+        if (reportData.response.timeMeasureType.length > 0) {
+          return reportData.response.timeMeasureType.map((reportItem) => {
+            return (
+                <div className='col-xs-12 report-data-unit'>
+                    <div className={'col-xs-12 from-to-detail ' + this.dynamicColumnData.showFromToTime}><span>{reportItem.title}</span></div>
+                <table className='summaryreport-table'>
+                  <tbody>
+                    <tr>
+                      <th className='blankHeader' />
+                      <th className='tableHeading' colSpan='4'>
+                         <span>{t[language].ReportsAverageTime}</span><span>(min:sec)</span>
+                      </th>
+                    </tr>
+                    <tr>
+                        <th className={'groupsColHeader ' + this.dynamicColumnData.showGroupsStores}><span>{t[language].Groups}</span></th>
+                        <th className={'storesColHeader ' + this.dynamicColumnData.showGroupsStores}><span>{t[language].stores}</span></th>
+                        <th className={'reporttable-attributes-heading-dynamic ' + this.dynamicColumnData.showDayColumn}><span>{t[language].Day}</span></th>
+                        <th className={'reporttable-attributes-heading-dynamic ' + this.dynamicColumnData.showDayPartColumn}><span>{t[language].daypart}</span></th>
+                        <th className={'reporttable-attributes-heading-dynamic ' + this.dynamicColumnData.showWeekColumn}><span>{t[language].Week}</span></th>
+                        <th className='reportTableAttributesHeading'><span>{t[language].MenuBoard}</span></th>
+                        <th className='reportTableAttributesHeading'><span>{t[language].Greet}</span></th>
+                        <th className='reportTableAttributesHeading'><span>{t[language].Service}</span></th>
+                        <th className='reportTableAttributesHeading'><span>{t[language].LaneQueue}</span></th>
+                        <th className='reportTableAttributesHeading'><span>{t[language].LaneTotal}</span></th>
+                        <th className='reportTableAttributesHeading'><span>{t[language].ReportsTotalCars}</span></th>
+                    </tr>
+                    {this.displaySummarizedRowData(reportItem.data)}
+                  </tbody>
+                </table>
+                {this.displayLongestTimes()}
+              </div>
+            )
+          })
+        } else {
+          return <div>No records found</div>
+        }
+      }else{
+        return <div>{reportData.response.error}</div>
+      }
   }
 
   displaySummarizedRowData (reportRowData) {
@@ -124,4 +128,3 @@ export default class SummaryReportDataComponent extends Component {
     return (<div>{this.displaySummarizedData(reportData)}</div>)
   }
 }
-
