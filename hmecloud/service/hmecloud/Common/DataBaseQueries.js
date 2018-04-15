@@ -25,16 +25,14 @@ const sqlQueries = {
                 ,@CarDataRecordType_IDs=:ReportTemplate_Type
                 ,@ReportType =:ReportType
                 ,@LaneConfig_ID=:LaneConfig_ID`,
-    'weekReport': ` EXEC usp_HME_Cloud_Get_Report_By_Week  @StoreIDs =:StoreIDs,
+      'weekReport': ` EXEC usp_HME_Cloud_Get_Report_By_Week_Details  @StoreIDs =:StoreIDs,
                   @StoreStartDate =:StoreStartDate,
                   @StoreEndDate =:StoreEndDate,
                   @StartDateTime =:StartDateTime,
                   @EndDateTime =:EndDateTime,
                   @CarDataRecordType_ID =:CarDataRecordType_ID,
                   @ReportType =:ReportType,
-                  @LaneConfig_ID =:LaneConfig_ID,
-                  @RecordPerPage =:RecordPerPage,
-                   @PageNumber =:PageNumber`
+                  @LaneConfig_ID =:LaneConfig_ID`
   }
 }
 
