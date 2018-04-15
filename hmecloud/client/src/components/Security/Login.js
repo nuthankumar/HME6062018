@@ -19,12 +19,17 @@ class Login extends Component {
         path:''
      }
     this.api = new Api()
-   // console.log(window.location.pathname);
-    //const { Params } = this.props;
-    //this.setState({ path: path });
   }
   componentWillMount () {
-    if (this.Auth.loggedIn()) { this.props.history.replace('/') }
+      //  if (this.Auth.loggedIn()) { this.props.history.replace('/') }
+      console.log(UserContext.isLoggedIn());
+      let isLoggedIn = UserContext.isLoggedIn() 
+
+      if (isLoggedIn) 
+      {
+          this.props.history.push("/grouphierarchy");
+      }
+
   }
   render() {
 
@@ -76,9 +81,6 @@ class Login extends Component {
 
   submit (e) {
     e.preventDefault()
-
-
-
     let url = Config.apiBaseUrl + CommonConstants.apiUrls.auth
     this.api.getData(url, data => {
         localStorage.setItem("token", data.token);

@@ -2,7 +2,7 @@ const Sequelize = require('sequelize')
 const sql = require('mssql')
 
 const db = new Sequelize('hmeCloud', 'sa', 'nous@123', {
-    host: '192.168.27.87',
+  host: 'NIBC1329',
   dialect: 'mssql',
   operatorsAliases: false
   // multipleStatements: true
@@ -11,13 +11,13 @@ const db = new Sequelize('hmeCloud', 'sa', 'nous@123', {
 const sqlConfig = {
   user: 'sa',
   password: 'nous@123',
-  server: '192.168.27.87',
+  server: 'NIBC1329',
   database: 'hmeCloud',
   options: {
     encrypt: true // Use this if you're on Windows Azure
   }
 }
 
-module.exports = {db, sqlConfig}
+module.exports = { db: db, sqlConfig: sqlConfig }
 
 // module.exports = db
