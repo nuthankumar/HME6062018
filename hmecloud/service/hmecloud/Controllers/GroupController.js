@@ -23,13 +23,19 @@ const createGroup = (request, input, callback) => {
 
 const updateGroup = (request, input, callback) => {
   let output = {}
-  groupRepository.updateGroup(input, result => {
+    groupRepository.updateGroup(input, result => {
     if (result.length > 0) {
-      let isGroupUpdated = result[0]
-      if (isGroupUpdated.hasOwnProperty('groupId') && isGroupUpdated.groupId) {
-        output.data = request.t('CREATEGROUP.groupSuccess1') + input.name + request.t('CREATEGROUP.groupUpdatesSuccess')
-        output.status = true
-      } else {
+        let isGroupUpdated = result[0]
+        let isGroupexist = result[1]
+       
+        if (isGroupexist.hasOwnProperty('IsGroupAlreadyExist') && isGroupexist.IsGroupAlreadyExist) {
+            output.data = "Group Already exist " + input.name
+            output.status = false
+        } else if (isGroupUpdated.hasOwnProperty('groupId') && isGroupUpdated.groupId)
+        {
+            output.data = request.t('CREATEGROUP.groupSuccess1') + input.name + request.t('CREATEGROUP.groupUpdatesSuccess')
+            output.status = true
+      }else{
         output.data = request.t('CREATEGROUP.noDataForGivenName') + input.name
         output.status = false
       }

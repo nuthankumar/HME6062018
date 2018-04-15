@@ -50,6 +50,10 @@
     "OPENVALUE": " OPEN",
     "CLOSEVALUE": " CLOSE",
     "DAYREPORTNAME": "summarizedDayReport",
-    "DAYREPORTTITLE": " CSV Day Report"
+    "DAYPARTREPORTNAME": "summarizedDayPartReport",
+    "WEEKREPORTNAME": "summarizedWeeklyReport",
+    "DAYREPORTTITLE": " CSV Day Report",
+    "DAYPARTREPORTTITLE": " CSV Daypart Report",
+    "WEEKREPORTTITLE": " CSV Weekly Report"
   }
 }

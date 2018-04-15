@@ -11,95 +11,79 @@
 -- -----------------------------------------------------------
 -- Sl.No.	Date			Developer		Descriptopn   
 -- -----------------------------------------------------------
---  1.  	06-APRIL-2018	JAYARAM V	Procedure created
---	2.
+--  1.  	06-APRIL-2018	JAYARAM V		Procedure created
+--	2.		13-April-2018	Selvendran K	modified to actual correct table
 -- ===========================================================
 -- EXEC [dbo].[usp_InsertReportTemplate] @AccountId = 100
 -- ===========================================================
 
 CREATE PROCEDURE [dbo].[usp_InsertReportTemplate]
-	@AccountId			INT,
-	@Stores				VARCHAR(MAX),
-	@TimeMeasure		INT,
+	@Uid				VARCHAR(32),
+	@TemplateName		VARCHAR(MAX),
+	@SessionUid			VARCHAR(32),
+	@UserUid			VARCHAR(32),
+	@Devices			VARCHAR(MAX),
+	@TimeMeasure		VARCHAR(50),
 	@FromDate			DATE,
+	@OpenTime			TIME(7),
 	@ToDate				DATE,
-	@OpenTime			VARCHAR(50),
-	@CloseTime			VARCHAR(50),
-	@Type				INT,
-	@Open				BIT,
-	@Close				BIT,
-	@Include			VARCHAR(MAX),
-	@Format				INT,
-	@TemplateName		VARCHAR(50),
-	@CreatedBy			INT,
-	@UpdatedBy			INT,
+	@CloseTime			TIME(7),
+	@Open				TINYINT,
+	@Close				TINYINT,
+	@Type				VARCHAR(50),
+	@AdvancedOption		TINYINT,
+	@IncludeStats		TINYINT,
+	@IncludeLongs		TINYINT,
+	@Format				VARCHAR(50),
 	@CreatedDateTime	DATETIME,
-	@UpdatedDateTime	DATETIME
+	@CreatedBy			VARCHAR(50)
 AS 
 BEGIN
-DECLARE @IsTemplateExist int
-DECLARE @InsertedTemplate int
+ INSERT INTO [dbo].[stbl_ReportTemplates] (
+	
+	ReportTemplate_UID
+	,ReportTemplate_Name
+	,ReportTemplate_Session_UID
+	,ReportTemplate_Session_User_UID 
+	,ReportTemplate_Device_UID 
+	,ReportTemplate_Time_Measure 
+	,ReportTemplate_From_Date 
+	,ReportTemplate_From_Time 
+	,ReportTemplate_To_Date 
+	,ReportTemplate_To_Time 
+	,ReportTemplate_Open 
+	,ReportTemplate_Close 
+	,ReportTemplate_Type 
+	,ReportTemplate_Advanced_Op 
+	,ReportTemplate_Include_Stats 
+	,ReportTemplate_Include_Longs 
+	,ReportTemplate_Format 
+	,ReportTemplate_Created_DTS 
+	,ReportTemplate_CreatedBy
 
-	SET @IsTemplateExist = 
-	( SELECT 
-		count(*) 
-	FROM 
-		[ReportTemplates] 
-	WHERE 
-		TemplateName = @TemplateName 
-	AND 
-		AccountId = @AccountId 
-	AND CreatedBy = @CreatedBy
-	);
-if(@IsTemplateExist > 1)
-BEGIN
-	SELECT 
-		@IsTemplateExist as TemplateExist
- END
- ELSE
- BEGIN
- INSERT INTO [dbo].[ReportTemplates] (
-	AccountId ,
-	Stores,
-	TimeMeasure,
-	FromDate,
-	ToDate ,
-	OpenTime ,
-	CloseTime,
-	[Type],
-	[Open],
-	[Close],
-	[Include],
-	[Format],
-	TemplateName,
-	CreatedBy,
-	UpdatedBy,
-	CreatedDateTime,
-	UpdatedDateTime) 
+	) 
 	 VALUES 
 	 (
-	@AccountId ,
-	@Stores,
-	@TimeMeasure,
-	@FromDate,
-	@ToDate ,
-	@OpenTime ,
-	@CloseTime,
-	@Type,
-	@Open,
-	@Close,
-	@Include,
-	@Format,
-	@TemplateName,
-	@CreatedBy,
-	@UpdatedBy,
-	@CreatedDateTime,
-	@UpdatedDateTime
+		@Uid,
+		@TemplateName,
+		@SessionUid,
+		@UserUid,
+		@Devices,
+		@TimeMeasure,
+		@FromDate,
+		@OpenTime,
+		@ToDate,	
+		@CloseTime,
+		@Open,
+		@Close,
+		@Type,
+		@AdvancedOption,
+		@IncludeStats,
+		@IncludeLongs,
+		@Format,	
+		@CreatedDateTime,
+		@CreatedBy
 	 )
-	 SET @InsertedTemplate = @@IDENTITY
-	 SELECT @InsertedTemplate AS TemplateID
 END
-END
-GO
 
 

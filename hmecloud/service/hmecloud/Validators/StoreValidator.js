@@ -83,7 +83,7 @@ const reportValidator = (request, callback) => {
         output.status = false
         callback(output)
       }
-        dayReportController.generateDayReport(request, input, result => {
+        dayReportController.generateDayReportByDate(request, input, result => {
         callback(result)
       })
       // report time measure day part data
@@ -101,7 +101,8 @@ const reportValidator = (request, callback) => {
         output.status = false
         callback(output)
       }
-      dayPartReportController.generateDaypartReport(input, result => {
+      console.log('start');
+      dayPartReportController.generateDaypartReport(request, input, result => {
         callback(result)
       })
       // report time measure week data
@@ -120,7 +121,7 @@ const reportValidator = (request, callback) => {
         output.status = false
         callback(output)
       }
-      weekReportController.generateWeekReport(input, result => {
+        weekReportController.generateWeekReportByDate(input, result => {
         callback(result)
       })
       // report time measure raw car data

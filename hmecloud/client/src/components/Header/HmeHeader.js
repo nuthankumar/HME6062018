@@ -11,6 +11,8 @@ import Api from '../../Api'
 import AuthenticationService from '../Security/AuthenticationService'
 
 const ProductLogo = require('../../images/ProductLogo-1.png')
+
+const AdminProductLogo = require('../../images/ProductLogo-2.png')
 const HMELogo = require('../../images/HMELogo.png')
 const CogWheel = require("../../images/Cog.png");
 
@@ -57,14 +59,18 @@ export default class HmeHeader extends React.Component {
     }
 
     renderAdminMenuItems(isAdmin) {
+        //  document.body.addEventListener('click', this.handleOnClick.bind(this)); 
+    }
+    renderAdminMenuItems(isAdmin, isLoggedIn) {
+
         const { language, showSubMenu } = this.state;
-        if (isAdmin) {
+        if (isAdmin && isLoggedIn) {
             return (
                 <ul>
                     <li><a className="headerMenu" href={Config.coldFusionUrl}>{t[language].navbarStores}</a></li>
                     <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsStores&amp;path=Main"}>{t[language].navbarSystems}</a></li>
                     <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsDevices&amp;path=Main"}>{t[language].navbarSystems}</a></li>
-                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=pg=SettingsUsers&amp;path=Main"}>{t[language].navbarUsers}</a></li>
+                    <li><a className="headerMenu active_tab" href={Config.coldFusionUrl + "?pg=pg=SettingsUsers&amp;path=Main"}>{t[language].navbarUsers}</a></li>
                     <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsAccounts"}>{t[language].navbarAccounts}</a></li>
                     <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsDistributors"}>{t[language].navbarDistributers}</a></li>
                 </ul>
@@ -73,9 +79,9 @@ export default class HmeHeader extends React.Component {
             return '';
         }
     }
-    renderClientMenuItems(isAdmin) {
+    renderClientMenuItems(isAdmin, isLoggedIn) {
         const { language, showSubMenu } = this.state;
-        if (!isAdmin) {
+        if (!isAdmin && isLoggedIn) {
             return (
                 <ul>
                     <li><a className="headerMenu" href={Config.coldFusionUrl}>{t[language].navbarWelcome}</a></li>
@@ -91,12 +97,15 @@ export default class HmeHeader extends React.Component {
     }
     render() {
         const { language, showSubMenu, contextUser, loggedInUser } = this.state;
-        const { isAdmin } = this.props;
+        const { isAdmin, isLoggedIn, adminLogo } = this.props;
         // let loggedInUser = 'Rudra'
         return (
             <div >
                 <header className='reports-page-header'>
-                    <div> <a href={Config.coldFusionUrl}> <img className='logOutIcon' src={ProductLogo} aria-hidden='true' /> </a></div>
+                    <div> <a href={Config.coldFusionUrl}>
+                        <img className={adminLogo ? 'hidden' : 'show'} src={ProductLogo} aria-hidden='true' />
+                        <img className={'adminImage ' + (adminLogo ? 'show' : 'hidden')} src={AdminProductLogo} aria-hidden='true' />
+                    </a></div>
                     <div className='user-info-section'>
 
                         <span>
@@ -111,21 +120,26 @@ export default class HmeHeader extends React.Component {
                 </header>
                 <nav className='reports-navigation-header'>
                     <div id="Navbar" className="Navbar">
-                        <div className="mainMenu menuBar">
-                            {this.renderClientMenuItems(isAdmin)}
+
+                        <div className={'mainMenu menuBar ' + (isLoggedIn ? 'show' : 'hidden')}>
+
+                            {
+                                this.renderClientMenuItems(isAdmin, isLoggedIn)
+                            }
 
                             {/* admin menu */}
-                            {this.renderAdminMenuItems(isAdmin)}
+                            {this.renderAdminMenuItems(isAdmin, isLoggedIn)}
+
                         </div>
                     </div>
-                    <div className='cogWheelSection'>
+                    <div className={'cogWheelSection ' + (isLoggedIn ? 'hidden' : 'show')}>
                         {/*<a data-tip="<a>HTML tooltip</a> <br/> <a>HTML tooltip</a> <br/> <a>HTML tooltip</a>" data-html={true} data-event='click focus'>  <img className='cogWheel' src={CogWheel} aria-hidden='true' /></a>
             <ReactTooltip html={true} place="right" type="dark" effect="solid" globalEventOff='click' eventOff='click' />*/}
                         <div className="dropdown open">
                             <a href="javascript:void(0);" className="dropdown-toggle" onClick={this.toggle.bind(this)}><img className='cogWheel' src={CogWheel} aria-hidden='true' /></a>
                             <ul className={'dropdown-menu dropdown-menu-right ' + (this.state.settingsDropdown ? 'show' : 'hide')}>
                                 <li><a href={Config.coldFusionUrl + "?pg=Settings"}>{t[language].navbarOptionSettings}</a></li>
-                                <li><a href={Config.coldFusionUrl + "?pg=Leaderboard&amp;st=Edit"}>{t[language].navbarOptionLeaderboard}</a></li>
+                                <li><a href={Config.coldFusionUrl + "?pg=Leaderboard&amp;st=Edit"}>{t[language].customizeleaderboard}</a></li>
                                 <li><a href={Config.coldFusionUrl + "?pg=Help"}>{t[language].navbarOptionHelp}</a></li>
                             </ul>
                         </div>
@@ -141,4 +155,14 @@ export default class HmeHeader extends React.Component {
     redirectUrl(url) {
         console.log(url)
     }
+    //handleOnClick(e) {
+    //    console.log(e)
+    //    let set;
+    //    if (e.target.className == 'cogWheel') {
+    //        this.setState({ settingsDropdown: true });
+    //    }
+    //    else {
+    //        this.setState({ settingsDropdown: false });
+    //    }
+    //}
 }

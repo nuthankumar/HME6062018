@@ -935,7 +935,6 @@ class Report extends Component {
     this.setState({
         rawCarRequest: rawCarData[0]
     });
-
     let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
     this.api.postData(url, rawCarData[0], data => {
       //  this.props.history.push("/rawcardatareport", this.state.rawCarData);
@@ -968,11 +967,13 @@ class Report extends Component {
       "advancedOptions": template.advancedOptions,
       "longestTime": template.longestTime,
       "systemStatistics": template.systemStatistics,
-      "recordPerPage": 4,
+  //    "recordPerPage": 4,
       "pageNumber": 1
     }
+    console.log(JSON.stringify(request))
     let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
     this.api.postData(url, request, data => {
+        console.log(JSON.stringify(data))
         this.props.history.push({
             pathname: '/summaryreport',
             state: { reportData: this.state.reportData , reportDataResponse : data, reportRequest: request }

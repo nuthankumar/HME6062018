@@ -82,3 +82,7 @@ font-weight:bold;
 .headerLink span.username:hover{
     text-decoration: underline !important;
 }
+
+.adminImage {
+    margin-left: 30px;
+}

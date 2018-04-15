@@ -13,15 +13,18 @@ export default class AdminSubHeader extends React.Component {
     }
     render() {
         const { language } = this.state;
-        const { isAdmin, pathName } = this.props;
+        const { isAdmin, pathName, isLoggedIn } = this.props;
+        console.log('subHeader');
+        console.log(isAdmin);
+        console.log(isLoggedIn);
         return (
-            <div className={"subMenu menuBar " + (isAdmin ? 'show' : 'hidden')}>
+            <div className={"subMenu menuBar " + (isAdmin && isLoggedIn  ? 'show' : 'hidden')}>
                 <ul>
-                    <li><a className="headerMenu" href={Config.coldFusionUrl +"?pg=SettingsStores&amp;uuid=2IK3Z0P0GO2X1OLU60QCIILD3RJZK1XV&amp;path=Users"}>{t[language].subNavbarStores}</a></li>
-                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsUsers&amp;uuid=2IK3Z0P0GO2X1OLU60QCIILD3RJZK1XV&amp;path=Users"}>{t[language].subNavbarUsers}</a></li>
-                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsRoles&amp;uuid=2IK3Z0P0GO2X1OLU60QCIILD3RJZK1XV&amp;path=Users"}>{t[language].subNavbarRoles}</a></li>
+                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsStores&amp;uuid=2IK3Z0P0GO2X1OLU60QCIILD3RJZK1XV&amp;path=Users"}>{t[language].stores}</a></li>
+                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsUsers&amp;uuid=2IK3Z0P0GO2X1OLU60QCIILD3RJZK1XV&amp;path=Users"}>{t[language].users}</a></li>
+                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsRoles&amp;uuid=2IK3Z0P0GO2X1OLU60QCIILD3RJZK1XV&amp;path=Users"}>{t[language].roles}</a></li>
                     <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=Dashboard&amp;uuid=2IK3Z0P0GO2X1OLU60QCIILD3RJZK1XV&amp;path=Users"}>{t[language].subNavbarDashboard}</a></li>
-                    <li class="active_tab"><a className="active_tab headerMenu" href='/reports'>{t[language].subNavbarReports}</a></li>
+                    <li class="active_tab"><a className="active_tab headerMenu" href='/reports'>{t[language].navbarReports}</a></li>
                     <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsStores"}>{t[language].subNavbarDeviceSettingsHistory}</a></li>
                 </ul>
             </div>

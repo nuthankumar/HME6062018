@@ -11,8 +11,8 @@
 -- -----------------------------------------------------------
 -- Sl.No.	Date			Developer		Descriptopn
 -- -----------------------------------------------------------
---  1.  	06-APRIL-2018	JAYARAM V	Procedure created
---	2.
+--  1.  	06-APRIL-2018	JAYARAM V	      Procedure created
+--  2.	13-April-2018	Selvendran K	modified to actual correct table
 -- ===========================================================
 -- EXEC [dbo].[usp_DeleteReportTemplate] @Id = 1
 -- ===========================================================
@@ -21,5 +21,5 @@ CREATE PROCEDURE [dbo].[usp_DeleteReportTemplates]
 	@Id INT
 AS
 
-DELETE FROM [dbo].[ReportTemplates]
-      WHERE @Id = Id
+DELETE FROM [dbo].[stbl_ReportTemplates]
+      WHERE ReportTemplate_ID=@Id

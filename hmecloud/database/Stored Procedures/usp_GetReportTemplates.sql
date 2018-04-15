@@ -11,8 +11,9 @@
 -- -----------------------------------------------------------
 -- Sl.No.	Date			Developer		Descriptopn
 -- -----------------------------------------------------------
---  1.  	06-APRIL-2018	JAYARAM V	Procedure created
---	2.      08-APRIL-2018   JAYARAM V	Changed the Query
+--  1.  	06-APRIL-2018	JAYARAM V		Procedure created
+--	2.      08-APRIL-2018   JAYARAM V		Changed the Query
+--	3.		13-April-2018	Selvendran K	modified to actual correct table
 -- ===========================================================
 -- EXEC [dbo].[dbo].[usp_GetReportTemplates] @AccountId and
 -- @createdBy
@@ -20,14 +21,15 @@
 
 
 CREATE PROCEDURE [dbo].[usp_GetReportTemplates]
-	@AccountId INT,
-	@CreatedBy INT
+	 @UserUid VARCHAR(32)
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT DISTINCT[Id]
-		  ,[TemplateName]
-		   from [dbo].[ReportTemplates]
-	WHERE AccountId = @AccountId and  CreatedBy = @CreatedBy
+	SELECT
+		ReportTemplate_ID [Id]
+		,ReportTemplate_UID AS [Uid]
+		,ReportTemplate_Name AS [TemplateName]
+	FROM [dbo].[stbl_ReportTemplates]
+	WHERE ReportTemplate_Session_User_UID = @UserUid
 END
