@@ -29,7 +29,8 @@ export default class Layout extends React.Component {
             isAdmin = true
         }
         else {
-            isAdmin = UserContext.isAdmin() === 'true' ? true : false;
+            isAdmin = UserContext.isAdmin() === 'true' ? true:false ;
+            console.log(UserContext.isAdmin());
             if (isAdmin == true) {
                 isAdmin = true
             } else {
