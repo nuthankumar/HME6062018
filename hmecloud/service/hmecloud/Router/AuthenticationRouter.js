@@ -6,7 +6,7 @@ const router = express.Router()
 // JWT token creation
 router.get('/login', (request, response) => {
   const userDetails = {
-    userId: 1,
+      userId: 'XD2J8Q7KQ7HO3TLQXTGIPWSVSQZK5ZBH',
     UserName: 'HME Admin',
     UserEmail: 'admin@hme.com',
     AccountId: 1311,

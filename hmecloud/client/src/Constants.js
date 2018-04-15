@@ -10,7 +10,8 @@ export const CommonConstants = {
     'getAvailableGroups': 'api/group/availabledetails',
     'editGroupDetails': 'api/group/editgroup',
     'addNewGroup': 'api/group/creategroup',
-    'deleteGroup': 'api/group/deletegroup'
+    'deleteGroup': 'api/group/deletegroup',
+    'auth': 'api/auth/login'
     },
   'TimeMeasureValidations': {
       'TwoMonths': 62,

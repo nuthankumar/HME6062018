@@ -184,11 +184,18 @@ h2 .report-start-time-value,h2 .report-end-time-value{
 }
 .show-all-pagination-toggle{
   text-align : right;
+  font-size: 12px;
+  margin-top: 14px;
+  font-weight: bold;
 }
 .left-padding-none{
   padding-left : 0px;
 }
-
+.show-all-single{
+  margin-top: -32px;
+  text-align: right;
+  margin-right: 40px;
+}
 #page-navigations{
   color: #D41B3E;
   margin-top:12px;
@@ -198,6 +205,7 @@ h2 .report-start-time-value,h2 .report-end-time-value{
   float:left;
   margin-right: 2px;
 }
+
 .previous-link, .next-link{
   float: left;
   border: 1px solid white;

@@ -7,7 +7,7 @@ const handelResult = (result, response) => {
   if (result.status === true) {
     response.status(200).send(result)
   } else {
-    response.status(400).send(result)
+    response.status(204).send(result)
   }
 }
 /**

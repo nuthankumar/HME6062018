@@ -64,7 +64,11 @@ exports.Events = {
 
 exports.TimeFormat = {
   Seconds: 1,
-  MINUTES: 2
+    MINUTES: 2,
+    2: 'Minutes',
+    1: 'Seconds',
+    Minutes : 2
+    
 }
 exports.COMMON = {
     CSVTYPE: 'CSV',
@@ -79,4 +83,23 @@ exports.COMMON = {
 exports.JWT = {
   TOKENMISS: 'No token provided',
   JWTFAIL: 'Failed to authenticate token'
+}
+
+exports.TimeMeasure = {
+    Day: 1,
+    1: 'Day',
+    Daypart: 2,
+    2: 'Daypart',
+    Week: 3,
+    3: 'Week',
+    'Raw Data Report': 4,
+    4: 'Raw Data Report'
+
+}
+
+exports.Type = {
+    Cumulative: 2,
+    'Time Slice': 1,
+    2: 'Cumulative',
+    1: 'Time Slice'
 }

@@ -83,6 +83,7 @@ const generateDaypartReport = (request, input, callBack) => {
         result.status = false
         callBack(result)
       }
+      
     } else {
       callBack(result)
     }
@@ -170,7 +171,8 @@ function singleStoreResult (reportData, totalRecordCount, averageTimeResultSet, 
   reportData.goalData = dataArray
   if (input.longestTime) {
     // goal Longest time
-    reportUtil.prepareLongestTimes(reportData, longestTimes, input.ReportTemplate_Format)
+    
+     reportUtil.prepareLongestTimes(reportData, longestTimes, input.ReportTemplate_Format)
   }
   // system statistics
   if (input.systemStatistics) {
@@ -183,10 +185,10 @@ function singleStoreResult (reportData, totalRecordCount, averageTimeResultSet, 
 function generateCSVOrPdfTriggerEmail (request, input, result, callBack) {
   let csvInput = {}
   csvInput.type = request.t('COMMON.CSVTYPE')
-  csvInput.reportName = `${request.t('COMMON.DAYREPORTNAME')} ${dateFormat(new Date(), 'isoDate')}`
+  csvInput.reportName = `${request.t('COMMON.DAYPARTREPORTNAME')} ${dateFormat(new Date(), 'isoDate')}`
 
   csvInput.email = input.UserEmail
-  csvInput.subject = `${request.t('COMMON.DAYREPORTTITLE')} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
+  csvInput.subject = `${request.t('COMMON.DAYPARTREPORTTITLE')} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
   dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput, csvResults => {
     callBack(csvResults)
   })
@@ -205,7 +207,7 @@ function prepareDayPartObject (item, format, input, colors, goalSettings) {
   let daypart = {}
   if (item.StartTime !== null && item.StoreDate !== 'Total Daypart' && item.EndTime !== null && input.ReportTemplate_StoreIds.length < 2) {
     var dateSplit = item['StoreDate'].split('-')
-    daypart.timeSpan = `${dateSplit[1]}/${dateSplit[0]}-Daypart${item['DayPartIndex']}`
+    daypart.timeSpan = `${dateSplit[1]}/${dateSplit[2]}-Daypart${item['DayPartIndex']}`
     daypart.currentDaypart = `${dateUtils.converthhmmsstt(item.StartTime)}-${dateUtils.converthhmmsstt(item.EndTime)}`
     dataObject.daypart = daypart
   }

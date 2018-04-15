@@ -17,8 +17,5 @@
     "createSuccess": "REPORTSUMMARY.createSuccess",
     "deleteSuccess": "REPORTSUMMARY.deleteSuccess"
   },
-  "LISTGROUP": {
-    "createdBy": "LISTGROUP.createdBy",
-    "accountId": "LISTGROUP.accountId"
-  }
+  "LISTGROUP": "LISTGROUP"
 }

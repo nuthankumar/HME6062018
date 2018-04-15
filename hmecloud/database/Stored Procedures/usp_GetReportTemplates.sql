@@ -27,9 +27,9 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-		ReportTemplate_ID [Id]
-		,ReportTemplate_UID AS [Uid]
-		,ReportTemplate_Name AS [TemplateName]
+		ReportTemplate_ID [id]
+		,ReportTemplate_UID AS [uid]
+		,ReportTemplate_Name AS [templateName]
 	FROM [dbo].[stbl_ReportTemplates]
 	WHERE ReportTemplate_Session_User_UID = @UserUid
 END

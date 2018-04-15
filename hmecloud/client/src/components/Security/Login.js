@@ -4,19 +4,32 @@ import AuthenticationService from './AuthenticationService'
 import { Config } from '../../Config'
 import t from '../Language/language'
 import * as languageSettings from '../Language/languageSettings'
+import { CommonConstants } from '../../Constants'
+import * as UserContext from '../Common/UserContext'
+import Api from '../../Api'
 
 class Login extends Component {
   constructor () {
     super()
     this.handleChange = this.handleChange.bind(this)
-    this.handleFormSubmit = this.handleFormSubmit.bind(this)
+    //this.handleFormSubmit = this.handleFormSubmit.bind(this)
     this.Auth = new AuthenticationService()
     this.state = {
         language: languageSettings.getCurrentLanguage(),
+        path:''
      }
+    this.api = new Api()
   }
   componentWillMount () {
-    if (this.Auth.loggedIn()) { this.props.history.replace('/') }
+      //  if (this.Auth.loggedIn()) { this.props.history.replace('/') }
+      console.log(UserContext.isLoggedIn());
+      let isLoggedIn = UserContext.isLoggedIn() 
+
+      if (isLoggedIn) 
+      {
+          this.props.history.push("/grouphierarchy");
+      }
+
   }
   render() {
 
@@ -32,16 +45,16 @@ class Login extends Component {
                                             <tbody>
                                                 <tr>
                                             <th><label for="Username">{t[language].username}</label></th>
-                                                      <td><input className='loginInputs' type="text" maxlength="100" name="Username" value=""/></td>
+                                                      <td><input className='loginInputs' type="text" maxlength="100" name="Username"/></td>
                           	                    </tr>
                                           <tr>
                                             <th><label for="Password">{t[language].password}</label></th>
-                                              <td><input className='loginInputs' type="password" maxlength="16" name="Password" value=""/>
+                                              <td><input className='loginInputs' type="password" maxlength="16" name="Password"/>
 		                                      </td>
 	                                      </tr>
                                           <tr>
                                               <td></td>
-                                              <td><span className="btn_login"><input type="submit" value={t[language].submitBtn}/></span></td>
+                                              <td><span className="btn_login"><input type="submit" value={t[language].submitBtn} onClick={this.submit.bind(this)}/></span></td>
 	                                      </tr>
                                                 </tbody>
                                             </table>
@@ -62,22 +75,26 @@ class Login extends Component {
       }
     )
   }
-  handleFormSubmit (e) {
+
+
+
+
+  submit (e) {
     e.preventDefault()
-    this.Auth.login(this.state.username, this.state.password)
-      .then(token => {
-        this.setState(
-          {
-            token: token
-          })
-        const url = Config.jwtUrl + token
-        // window.location.href('url');
-        window.location.assign(url)
-        this.props.history.replace(url)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    let url = Config.apiBaseUrl + CommonConstants.apiUrls.auth
+    this.api.getData(url, data => {
+        localStorage.setItem("token", data.token);
+
+        if (UserContext.isLoggedIn()) {
+            let path = window.location.pathname;
+            if (path == '/admin') {
+                localStorage.setItem("isAdmin", true)
+            } else {
+                localStorage.setItem("isAdmin", false)
+            } 
+            this.props.history.push("/grouphierarchy");
+        }
+     })
   }
 }
 

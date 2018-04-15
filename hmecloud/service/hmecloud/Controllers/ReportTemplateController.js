@@ -1,6 +1,8 @@
 
 const messages = require('../Common/Message')
 const repository = require('../Repository/ReportTemplateRepository')
+const dateUtils = require('../Common/DateUtils')
+const uuidv4 = require('uuid/v4');
 
 /**
  * The method can be used to execute handel errors and return to routers.
@@ -22,26 +24,30 @@ const errorHandler = (message, status, request) => {
  * @public
  */
 const create = (reportTemplate, callback) => {
-  let output = {}
+    let output = {}
   const values = {
-    AccountId: reportTemplate.AccountId,
-    Stores: (reportTemplate.body.selectedList).toString(),
-    TimeMeasure: reportTemplate.body.timeMeasure,
+    Stores: reportTemplate.body.selectedStoreIds.toString(),
+    Uid: uuidv4(), 
+    TimeMeasure: messages.TimeMeasure[reportTemplate.body.timeMeasure],
     FromDate: reportTemplate.body.fromDate,
     ToDate: reportTemplate.body.toDate,
     OpenTime: reportTemplate.body.openTime,
     CloseTime: reportTemplate.body.closeTime,
-    Type: reportTemplate.body.type,
-    Open: reportTemplate.body.open,
-    Close: reportTemplate.body.close,
-    Include: (reportTemplate.body.include).toString(),
-    Format: reportTemplate.body.format,
+    Type: messages.Type[reportTemplate.body.type],
+    Open: (reportTemplate.body.open === true ? 1 : 0),
+      Close: (reportTemplate.body.close === true ? 1 : 0),
+      SystemStatistics: (reportTemplate.body.systemStatistics === true ? 1 : 0),
+      Format: messages.TimeFormat[reportTemplate.body.format],
     TemplateName: reportTemplate.body.templateName,
-    CreatedBy: reportTemplate.AccountId,
-    UpdatedBy: reportTemplate.AccountId,
-    CreatedDateTime: reportTemplate.body.CreatedDateTime,
-    UpdatedDateTime: reportTemplate.body.UpdatedDateTime
-  }
+    SessionUid: uuidv4(),  // To be updated with actual
+    UserUid: reportTemplate.userId,
+    CreatedBy: reportTemplate.UserEmail,
+      AdvancedOption: (reportTemplate.body.advancedOption === true ? 1 : 0),
+      LongestTime: (reportTemplate.body.longestTime === true ? 1 : 0),
+    CreatedDateTime: reportTemplate.body.createdDateTime
+    }
+
+    console.log("The final input", values)
   repository.create(values, (result) => {
     if (result) {
       output.data = reportTemplate.t('REPORTSUMMARY.createSuccess')
@@ -63,15 +69,26 @@ const create = (reportTemplate, callback) => {
  */
 const get = (reportTemplate, request, callback) => {
   let output = {}
-  repository.get(reportTemplate, (result) => {
-    if (result) {
-      const Stores = result.Stores.split(',')
-      const Include = result.Include.split(',')
-      output.data = result
-      output.data.SelectedList = Stores
-      output.data.Include = Include
-      output.status = true
-      callback(output)
+    repository.get(reportTemplate, (result) => {
+        if (result) {
+         let reportTemplate = result
+         reportTemplate.fromDate = dateUtils.convertYYYYMMDD(reportTemplate.fromDate)
+         reportTemplate.toDate = dateUtils.convertYYYYMMDD(reportTemplate.toDate)
+         reportTemplate.openTime = dateUtils.converthhmmsstt(reportTemplate.openTime)
+         reportTemplate.closeTime = dateUtils.converthhmmsstt(reportTemplate.closeTime)
+         reportTemplate.timeMeasure = messages.TimeMeasure[reportTemplate.timeMeasure]
+         reportTemplate.type = messages.Type[reportTemplate.type]
+         reportTemplate.format = messages.TimeFormat[reportTemplate.format]
+         reportTemplate.selectedStoreIds = reportTemplate.devices.split(',')
+         reportTemplate.advancedOption = (reportTemplate.advancedOption === 1 ? true : false)
+         reportTemplate.longestTime = (reportTemplate.longestTime === 1 ? true : false)
+         reportTemplate.systemStatistics = (reportTemplate.systemStatistics === 1 ? true : false)
+         reportTemplate.close = (reportTemplate.close === 1 ? true : false)
+         reportTemplate.open= (reportTemplate.open === 1 ? true : false)
+
+         output.data = reportTemplate
+         output.status = true
+         callback(output)
     } else {
       output.error = request.t('LISTGROUP.notfound')
       output.status = false
@@ -89,7 +106,8 @@ const get = (reportTemplate, request, callback) => {
  */
 const getAll = (input, request, callback) => {
   let output = {}
-  repository.getAll(input.AccountId, input.CreatedBy, (result) => {
+    repository.getAll(input.UserUid, (result) => {
+        console.log("The result==", JSON.stringify(result))
     if (result.length > 0) {
       output.data = result
       output.status = true

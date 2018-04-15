@@ -315,7 +315,7 @@ export default class SummaryReport extends Component {
         if (this.props.history.location.state) {
             if (this.props.history.location.state.reportDataResponse && this.props.history.location.state.reportDataResponse.goalData && this.state.reportData.singleStore) {
                 return (<div className='row goalstatistics-table-section'>
-                    <GoalStatisticsDataComponent goalData={this.state.goalData} />
+                    <GoalStatisticsDataComponent reportData = {this.state.reportData} goalData={this.state.goalData} />
                 </div>)
             } else {
                 return <div />
@@ -436,19 +436,22 @@ export default class SummaryReport extends Component {
                             <div onClick={this.downloadPdf.bind(this, 'PDF')}>PDF</div>
                             <div onClick={this.downloadPdf.bind(this, 'CSV')}>CSV</div>
                         </div>
-
                     </div>
                     <div className='pdfError'>{this.state.errorMessage}</div>
                     <PageHeader pageHeading={t[language].ReportsSummarizedReport} />
 
                     <div className='row'>
                         {this.headerDetails()}
-                        <div className={'col-xs-2 left-padding-none ' + (this.state.reportData.pagination ? 'show' : 'hide')}>
-                            <PaginationComponent pagination={this.state.reportData.pagination} totalPages={this.state.reportData.NoOfPages}  curPage={this.state.reportData.curPage} handlePreviousPage={(curPage, totalPages) => this.handlePreviousPage(curPage, totalPages)} handleNextPage={(curPage, totalPages) => this.handleNextPage(curPage, totalPages)} disablePrevButton={this.state.reportData.disablePrevButton} disableNextButton={this.state.reportData.disableNextButton} />
+                        <div className={'col-xs-2 show-all-pagination-toggle show-page-toggle pull-right show-all-single ' + (this.state.reportData.singleStore ? 'show' : 'hide')}>Show: <span className={(this.state.reportData.pagination) ? 'inactive-link' : 'active-link'} onClick={() => this.switchAllPage("all")}>All /</span><span className={(this.state.reportData.pagination) ? 'active-link' : 'inactive-link'} onClick={() => this.switchAllPage("pages")}>Pages</span></div>
+                        <div className={'col-xs-2  pagination-single pull-right ' + (this.state.reportData.pagination &&  this.state.reportData.singleStore ? 'show' : 'hide')}>
+                          <PaginationComponent pagination= {this.state.reportData.pagination} totalPages={this.state.reportData.NoOfPages}  curPage={this.state.reportData.curPage} handlePreviousPage={(curPage, totalPages) => this.handlePreviousPage(curPage, totalPages)} handleNextPage={(curPage, totalPages) => this.handleNextPage(curPage, totalPages)} disablePrevButton={this.state.reportData.disablePrevButton} disableNextButton={this.state.reportData.disableNextButton} />
+                        </div>
+                        <div className={'col-xs-2 pagination-multi pull-right ' + (this.state.reportData.pagination && !this.state.reportData.singleStore ? 'show' : 'hide')}>
+                          <PaginationComponent pagination= {this.state.reportData.pagination} totalPages={this.state.reportData.NoOfPages}  curPage={this.state.reportData.curPage} handlePreviousPage={(curPage, totalPages) => this.handlePreviousPage(curPage, totalPages)} handleNextPage={(curPage, totalPages) => this.handleNextPage(curPage, totalPages)} disablePrevButton={this.state.reportData.disablePrevButton} disableNextButton={this.state.reportData.disableNextButton} />
                         </div>
                     </div>
 
-                    <div className='row show-all-multi'>
+                    <div className={'row show-all-multi ' + (this.state.reportData.singleStore ? 'hide' : 'show')}>
                         <div className='col-xs-12 show-all-pagination-toggle'>Show: <span className={(this.state.reportData.pagination) ? 'inactive-link' : 'active-link'} onClick={() => this.switchAllPage("all")}>All /</span><span className={(this.state.reportData.pagination) ? 'active-link' : 'inactive-link'} onClick={() => this.switchAllPage("pages")}>Pages</span></div>
                     </div>
 
@@ -457,10 +460,13 @@ export default class SummaryReport extends Component {
                     </div>
 
                     <div className='row'>
-                      <div className={'col-xs-4 pull-left show-page-toggle ' + (this.state.reportData.singleStore ? 'hide' : 'show' )}> <span className='show-label'>Show:</span> <span className={(this.state.pagination) ? 'inactive-link' : 'active-link'} onClick={() => this.setState({ pagination: false })}>All /</span><span className={(this.state.pagination) ? 'active-link' : 'inactive-link'} onClick={() => this.setState({ pagination: true })}>Pages</span></div>
-                      <div className={'col-xs-6 reports-terms ' + (this.state.reportData.singleStore ? 'multiStore' : 'show')}> <span className= 'asterics'>*</span>Derived performance to goal (Lane Queue goal = Lane Total goal - Menu goal - Service goal)</div>
-                      <div className={'col-xs-2 pull-right ' + (this.state.reportData.pagination && !this.state.reportData.singleStore ? 'show' : 'hide')}>
-                        <PaginationComponent pagination={this.state.reportData.pagination} totalPages={this.state.reportData.NoOfPages}  curPage={this.state.reportData.curPage} handlePreviousPage={(curPage, totalPages) => this.handlePreviousPage(curPage, totalPages)} handleNextPage={(curPage, totalPages) => this.handleNextPage(curPage, totalPages)} disablePrevButton={this.state.reportData.disablePrevButton} disableNextButton={this.state.reportData.disableNextButton} />
+                      <div className={'col-xs-4 pull-left show-page-toggle ' + (this.state.reportData.singleStore ? 'hide' : 'show' )}> <span className='show-label'>Show:</span> <span className={(this.state.reportData.pagination) ? 'inactive-link' : 'active-link'} onClick={() => this.switchAllPage("all")}>All /</span><span className={(this.state.reportData.pagination) ? 'active-link' : 'inactive-link'} onClick={() => this.switchAllPage("pages")}>Pages</span></div>
+                      <div className={'col-xs-6 reports-terms ' + (this.state.reportData.singleStore ? 'hide' : 'show')}> <span className= 'asterics'>*</span>Derived performance to goal (Lane Queue goal = Lane Total goal - Menu goal - Service goal)</div>
+                      <div className={'col-xs-2 left-padding-none pull-right ' + (this.state.reportData.pagination &&  this.state.reportData.singleStore ? 'show' : 'hide')}>
+                          <PaginationComponent pagination={this.state.reportData.pagination} totalPages={this.state.reportData.NoOfPages}  curPage={this.state.reportData.curPage} handlePreviousPage={(curPage, totalPages) => this.handlePreviousPage(curPage, totalPages)} handleNextPage={(curPage, totalPages) => this.handleNextPage(curPage, totalPages)} disablePrevButton={this.state.reportData.disablePrevButton} disableNextButton={this.state.reportData.disableNextButton} />
+                      </div>
+                      <div className={'col-xs-2 left-padding-none ' + (this.state.reportData.pagination && !this.state.reportData.singleStore ? 'show' : 'hide')}>
+                          <PaginationComponent pagination={this.state.reportData.pagination} totalPages={this.state.reportData.NoOfPages}  curPage={this.state.reportData.curPage} handlePreviousPage={(curPage, totalPages) => this.handlePreviousPage(curPage, totalPages)} handleNextPage={(curPage, totalPages) => this.handleNextPage(curPage, totalPages)} disablePrevButton={this.state.reportData.disablePrevButton} disableNextButton={this.state.reportData.disableNextButton} />
                       </div>
                     </div>
                     {this.displayGoalStatistics()}
