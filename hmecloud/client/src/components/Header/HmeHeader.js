@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom'
 import MasqueradeHeader from '../Header/masqueradeHeader';
 import Api from '../../Api'
 import AuthenticationService from '../Security/AuthenticationService'
+import * as UserContext from '../Common/UserContext'
 
 const ProductLogo = require('../../images/ProductLogo-1.png')
 
@@ -28,7 +29,8 @@ export default class HmeHeader extends React.Component {
             contextUser: {
                 User_EmailAddress: ''
             },
-            loggedInUser: {}
+            loggedInUser: {},
+            token: UserContext.getToken()
         }
 
         this.apiMediator = new Api()
@@ -63,16 +65,16 @@ export default class HmeHeader extends React.Component {
     }
     renderAdminMenuItems(isAdmin, isLoggedIn) {
 
-        const { language, showSubMenu } = this.state;
+        const { language, showSubMenu, token } = this.state;
         if (isAdmin && isLoggedIn) {
             return (
                 <ul>
-                    <li><a className="headerMenu" href={Config.coldFusionUrl}>{t[language].navbarStores}</a></li>
-                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsStores&amp;path=Main"}>{t[language].navbarSystems}</a></li>
-                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsDevices&amp;path=Main"}>{t[language].navbarSystems}</a></li>
-                    <li><a className="headerMenu active_tab" href={Config.coldFusionUrl + "?pg=pg=SettingsUsers&amp;path=Main"}>{t[language].navbarUsers}</a></li>
-                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsAccounts"}>{t[language].navbarAccounts}</a></li>
-                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsDistributors"}>{t[language].navbarDistributers}</a></li>
+                    <li><a className="headerMenu" href={Config.coldFusionUrl+"?token="+token}>{t[language].navbarStores}</a></li>
+                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsStores&amp;path=Main;token="+token}>{t[language].navbarSystems}</a></li>
+                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsDevices&amp;path=Main;token=" + token}>{t[language].navbarSystems}</a></li>
+                    <li><a className="headerMenu active_tab" href={Config.coldFusionUrl + "?pg=pg=SettingsUsers&amp;path=Main;token=" + token}>{t[language].navbarUsers}</a></li>
+                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsAccounts;token=" + token}>{t[language].navbarAccounts}</a></li>
+                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsDistributors;token=" + token}>{t[language].navbarDistributers}</a></li>
                 </ul>
             );
         } else {
@@ -80,15 +82,15 @@ export default class HmeHeader extends React.Component {
         }
     }
     renderClientMenuItems(isAdmin, isLoggedIn) {
-        const { language, showSubMenu } = this.state;
+        const { language, showSubMenu, token } = this.state;
         if (!isAdmin && isLoggedIn) {
             return (
                 <ul>
-                    <li><a className="headerMenu" href={Config.coldFusionUrl}>{t[language].navbarWelcome}</a></li>
-                    <li id="zoomLabel"><a className="headerMenu" href={Config.coldFusionUrl + "?pg=Dashboards"}>{t[language].navbarDashboard}</a></li>
+                    <li><a className="headerMenu" href={Config.coldFusionUrl+"?token="+token}>{t[language].navbarWelcome}</a></li>
+                    <li id="zoomLabel"><a className="headerMenu" href={Config.coldFusionUrl + "?pg=Dashboards;token=" + token}>{t[language].navbarDashboard}</a></li>
                     <li id="zoomLabel"><Link className="active_tab headerMenu" to='/reports'>{t[language].navbarReports}</Link></li>
-                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsAccount"}>{t[language].navbarMyAccount}</a></li>
-                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsStores"}>{t[language].navbarSettings}</a></li>
+                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsAccount;token=" + token}>{t[language].navbarMyAccount}</a></li>
+                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsStores;token=" + token}>{t[language].navbarSettings}</a></li>
                 </ul>
             );
         } else {
@@ -96,25 +98,22 @@ export default class HmeHeader extends React.Component {
         }
     }
     render() {
-        const { language, showSubMenu, contextUser, loggedInUser } = this.state;
+        const { language, showSubMenu, contextUser, loggedInUser , token } = this.state;
         const { isAdmin, isLoggedIn, adminLogo } = this.props;
         // let loggedInUser = 'Rudra'
         return (
             <div >
                 <header className='reports-page-header'>
-                    <div> <a href={Config.coldFusionUrl}>
+                    <div> <a href={Config.coldFusionUrl+"?token="+token}>
                         <img className={adminLogo ? 'hidden' : 'show'} src={ProductLogo} aria-hidden='true' />
                         <img className={'adminImage ' + (adminLogo ? 'show' : 'hidden')} src={AdminProductLogo} aria-hidden='true' />
                     </a></div>
                     <div className='user-info-section'>
                         <span className={(isLoggedIn ? 'show' : 'hidden')}>
-                        <a className="black_link headerLink" href={Config.coldFusionUrl + "?pg=SettingsAccount"}><span> {t[language].headerLoggedInAs} </span> <span className="username">{loggedInUser.name}</span></a> 
+                            <a className="black_link headerLink" href={Config.coldFusionUrl + "?pg=SettingsAccount;token=" + token}><span> {t[language].headerLoggedInAs} </span> <span className="username">{loggedInUser.name}</span></a> 
                             <MasqueradeHeader isAdmin={isAdmin} viewAsUser={this.state.contextUser} />
-                        
                         </span>                        
-                        
-                        <button className={'logout '+(isLoggedIn ? 'show' : 'hidden')}> <a className="black_link" href={Config.coldFusionUrl + "?pg=Logout"}> {t[language].headerSignOut}</a></button>
-
+                        <button className={'logout ' + (isLoggedIn ? 'show' : 'hidden')}> <a className="black_link" href={Config.coldFusionUrl + "?pg=Logout;token=" + token}> {t[language].headerSignOut}</a></button>
                         <img className='logOutIcon' src={HMELogo} aria-hidden='true' />
                     </div>
                 </header>
@@ -138,9 +137,9 @@ export default class HmeHeader extends React.Component {
                         <div className="dropdown open">
                             <a href="javascript:void(0);" className="dropdown-toggle" onClick={this.toggle.bind(this)}><img className='cogWheel' src={CogWheel} aria-hidden='true' /></a>
                             <ul className={'dropdown-menu dropdown-menu-right ' + (this.state.settingsDropdown ? 'show' : 'hide')}>
-                                <li><a href={Config.coldFusionUrl + "?pg=Settings"}>{t[language].navbarOptionSettings}</a></li>
-                                <li><a href={Config.coldFusionUrl + "?pg=Leaderboard&amp;st=Edit"}>{t[language].customizeleaderboard}</a></li>
-                                <li><a href={Config.coldFusionUrl + "?pg=Help"}>{t[language].navbarOptionHelp}</a></li>
+                                <li><a href={Config.coldFusionUrl + "?pg=Settings;token=" + token}>{t[language].navbarOptionSettings}</a></li>
+                                <li><a href={Config.coldFusionUrl + "?pg=Leaderboard&amp;st=Edit;token=" + token}>{t[language].customizeleaderboard}</a></li>
+                                <li><a href={Config.coldFusionUrl + "?pg=Help;token=" + token}>{t[language].navbarOptionHelp}</a></li>
                             </ul>
                         </div>
                     </div>
