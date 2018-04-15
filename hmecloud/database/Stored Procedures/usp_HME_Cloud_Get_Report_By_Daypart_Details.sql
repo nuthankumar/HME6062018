@@ -12,12 +12,9 @@
 -- -----------------------------------------------------------
 -- 1.
 -- ===========================================================
--- exec usp_HME_Cloud_Get_Report_By_Daypart_Details_WithSubTotal @StoreIDs='3,4',@StoreStartDate='2018-03-23',@StoreEndDate='2018-03-24',@InputStartDateTime=N'2018-03-23 00:00:00',@InputEndDateTime=N'2018-03-24 10:30:00',@CarDataRecordType_ID='11',@ReportType='TC',@LaneConfig_ID=1,@PageNumber=1
--- exec usp_HME_Cloud_Get_Report_By_Daypart_Details_WithSubTotal @StoreIDs='4',@StoreStartDate='2018-03-23',@StoreEndDate='2018-03-24',@InputStartDateTime=N'2018-03-23 00:00:00',@InputEndDateTime=N'2018-03-24 10:30:00',@CarDataRecordType_ID='11',@ReportType='AC',@LaneConfig_ID=1,@PageNumber=1
-
 -- ===========================================================
 
-CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details]
+ALTER PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details]
 (
 	@StoreIDs varchar(500),
 	@StoreStartDate date,
@@ -27,7 +24,6 @@ CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details]
 	@CarDataRecordType_ID varchar(255) = '11',
 	@ReportType char(2) = 'AC',   -- AC: cumulative  TC: Time Slice
 	@LaneConfig_ID tinyint = 1,
-	--@RecordPerPage smallint = 4,
 	@PageNumber smallint = 0
 )
 AS
@@ -36,7 +32,7 @@ BEGIN
 		Copyright (c) 2014 HME, Inc.
 
 		Author:
-			Wells Wang (2014-08-10)
+			Jaffer sherif (2018-04-15)
 
 		Description:
 			This proc is used for Cloud Reporting of daypart report.
@@ -53,7 +49,7 @@ BEGIN
 			@LaneConfig_ID optional. default to 1
 
 		Usage:
-			EXECUTE dbo.usp_HME_Cloud_Get_Report_By_Daypart @Device_IDs, @StoreStartDate, @StoreEndDate, @StartDateTime, @EndDateTime, @CarDataRecordType_ID, @ReportType, @LaneConfig_ID
+			exec usp_HME_Cloud_Get_Report_By_Daypart_Details_WithSubTotal @StoreIDs='3,4',@StoreStartDate='2018-03-23',@StoreEndDate='2018-03-24',@InputStartDateTime=N'2018-03-23 00:00:00',@InputEndDateTime=N'2018-03-24 10:30:00',@CarDataRecordType_ID='11',@ReportType='TC',@LaneConfig_ID=1,@PageNumber=1
 
 		Documentation:
 			This report is used for both single and multiple stores. The logic is slightly different with each type.
@@ -162,9 +158,6 @@ BEGIN
 	 FROM tbl_DeviceInfo AS dinf INNER JOIN tbl_Stores strs ON dinf.Device_Store_ID = strs.Store_ID 
 	 WHERE dinf.Device_Store_ID IN (Select cValue FROM dbo.split(@StoreIDs,','))
 
-	 --SELECT dinf.Device_ID
-	 --FROM tbl_DeviceInfo AS dinf INNER JOIN tbl_Stores strs ON dinf.Device_Store_ID = strs.Store_ID 
-	 --WHERE dinf.Device_Store_ID IN (3,4)
 
 	IF LEN(@Device_IDs)>0 
 		SET @Device_IDs = LEFT(@Device_IDs, LEN(@Device_IDs)-1)
@@ -179,9 +172,10 @@ BEGIN
 
 	INSERT INTO #GroupDetails(GroupName, Store_ID)
 	SELECT DISTINCT g.GroupName,ts.Store_ID 
-	FROM [Group] g INNER JOIN GroupStore gs ON g.ID = gs.GroupID
-	INNER JOIN  tbl_Stores ts ON gs.StoreID = ts.Store_ID 
+	FROM tbl_Stores ts LEFT JOIN GroupStore gs ON gs.StoreID = ts.Store_ID
+	INNER JOIN [Group]g ON g.ID = gs.GroupID
 	WHERE gs.StoreID in (SELECT cValue FROM dbo.split(@StoreIDs,','))
+
 	
 	-- determine whether it's multi store or single store
 	-- for single stores, the column names would be its event name
@@ -225,6 +219,7 @@ BEGIN
 						LEFT JOIN #raw_data r ON d.Store_id = r.Store_id
 							AND	d.DayPartIndex = r.Daypart_ID 
 							AND d.StoreDate = r.StoreDate
+						WHERE ts.GroupName IS NOT NULL
 					GROUP BY 
 						DayPartIndex, ts.GroupName, CAST(d.StoreDate AS varchar(25)),
 						r.EventType_Category
@@ -312,32 +307,32 @@ BEGIN
 
 	-- for time slice reports, remove the dayparts of each day that fall out of the range
 	IF @ReportType = 'TC' 
-	BEGIN
-		DELETE FROM #DayPart
-		WHERE	StartTime >= CAST(@EndDateTime AS time)
-		OR		EndTime <= CAST(@StartDateTime AS time)
+		BEGIN
+			DELETE FROM #DayPart
+			WHERE	StartTime >= CAST(@EndDateTime AS time)
+			OR		EndTime <= CAST(@StartDateTime AS time)
 
-		INSERT INTO #DayPartWithDate(StoreDate, DayPartIndex, StartTime, EndTime)
-		SELECT	d.ThisDate, dp.DayPartIndex, dp.StartTime, dp.EndTime
-		FROM	dbo.uf_GetDatesByRange(CAST(@StoreStartDate AS varchar(25)), CAST(@StoreEndDate AS varchar(25))) d
-				CROSS JOIN #DayPart dp
+			INSERT INTO #DayPartWithDate(StoreDate, DayPartIndex, StartTime, EndTime)
+			SELECT	d.ThisDate, dp.DayPartIndex, dp.StartTime, dp.EndTime
+			FROM	dbo.uf_GetDatesByRange(CAST(@StoreStartDate AS varchar(25)), CAST(@StoreEndDate AS varchar(25))) d
+					CROSS JOIN #DayPart dp
 	END 
 	-- for cumulative reports, remove the dayparts for the first and last day that fall out of the range
 	ELSE
-	BEGIN
-		INSERT INTO #DayPartWithDate(StoreDate, DayPartIndex, StartTime, EndTime)
-		SELECT	d.ThisDate, dp.DayPartIndex, dp.StartTime, dp.EndTime
-		FROM	dbo.uf_GetDatesByRange(CAST(@StoreStartDate AS varchar(25)), CAST(@StoreEndDate AS varchar(25))) d
-				CROSS JOIN #DayPart dp
+		BEGIN
+			INSERT INTO #DayPartWithDate(StoreDate, DayPartIndex, StartTime, EndTime)
+			SELECT	d.ThisDate, dp.DayPartIndex, dp.StartTime, dp.EndTime
+			FROM	dbo.uf_GetDatesByRange(CAST(@StoreStartDate AS varchar(25)), CAST(@StoreEndDate AS varchar(25))) d
+					CROSS JOIN #DayPart dp
 
-		DELETE FROM #DayPartWithDate 
-		WHERE	StoreDate = @StoreStartDate
-		AND		EndTime < CAST(@StartDateTime AS time)
+			DELETE FROM #DayPartWithDate 
+			WHERE	StoreDate = @StoreStartDate
+			AND		EndTime < CAST(@StartDateTime AS time)
 
-		DELETE FROM #DayPartWithDate 
-		WHERE	StoreDate = @StoreEndDate
-		AND		StartTime > CAST(@EndDateTime AS time)
-	END
+			DELETE FROM #DayPartWithDate 
+			WHERE	StoreDate = @StoreEndDate
+			AND		StartTime > CAST(@EndDateTime AS time)
+		END
 
 	SELECT	dp.StoreDate,
 					dp.DayPartIndex,
@@ -352,8 +347,6 @@ BEGIN
 					INNER JOIN tbl_Stores e ON d.Device_Store_ID = e.Store_ID
 					CROSS JOIN #DayPartWithDate dp
 			WHERE	EXISTS(SELECT 1 FROM dbo.Split(@Device_IDs, ',') AS Devices WHERE CAST(Devices.cValue AS int) = d.Device_ID)
-	
-
 	
 	-- roll up records into each store date and daypart
 	-- for single stores, generate a single summary row for all dayparts
@@ -370,12 +363,12 @@ BEGIN
 				CAST(d.StoreDate AS varchar(25)),
 				d.Device_ID,
 				ts.GroupName, 
-				ts.Store_ID,' +
+				d.Store_ID,' +
 				@headerSourceCol + ',
 				AVG(r.DetectorTime),
 				COUNT(r.CarDataRecord_ID)
 		FROM	#StoreWithDatePart d
-				INNER JOIN #GroupDetails ts ON d.Store_ID = ts.Store_ID
+				LEFT JOIN #GroupDetails ts ON d.Store_ID = ts.Store_ID
 				LEFT JOIN #raw_data r ON d.Store_id = r.Store_id
 					AND	d.DayPartIndex = r.Daypart_ID 
 					AND d.StoreDate = r.StoreDate
@@ -388,19 +381,18 @@ BEGIN
 				CAST(d.StoreDate AS varchar(25)),
 				d.Device_ID,
 				ts.GroupName, 
-				ts.Store_ID,' +
+				d.Store_ID,' +
 				@headerSourceCol + '
 			
 		--UNION ALL ' --+ @sum_query
 		
-	PRINT @query
 	-- execute above query to populate #rollup_data table
 	EXECUTE(@query);
 	SET @query = '';
-
+	PRINT @sum_query
 	EXECUTE(@sum_query);
 	SET @sum_query = '';
-	
+
 	SELECT * INTO #rollup_data_all 
 	FROM #rollup_data;
 
@@ -438,8 +430,7 @@ BEGIN
 		FROM #rollup_data_all 
 	END;
 	
-	--INSERT INTO #rollup_data (DayPartIndex, StartTime, EndTime, StoreNo, Device_UID, StoreDate, Device_ID, GroupName, Store_ID, Category, AVG_DetectorTime, Total_Car)
-	--EXEC (@sum_query);
+	
 	
 	-- below is a hack!!
 	-- when a single store has change of config (for instanc: menu board, service... to pre loop, menu board, service...) 
@@ -462,23 +453,27 @@ BEGIN
 
 
 	-- pivot table to display avg time by event/category name for each daypart
-	SET @query = N'
-	SELECT	*
-	FROM	#rollup_data
-	PIVOT(
-		AVG(AVG_DetectorTime)
-		FOR Category IN (' + @cols + ')
-	) AS p
-	ORDER BY StoreDate, ID, SortOrder, DayPartIndex, StoreNo;'
+	IF(ISNULL(@cols,'')<>'')
+		SET @query = N'
+		SELECT	*
+		FROM	#rollup_data
+		PIVOT(
+			AVG(AVG_DetectorTime)
+			FOR Category IN (' + @cols + ')
+		) AS p
+		ORDER BY StoreDate, ID, SortOrder, DayPartIndex, StoreNo;'
+	ELSE
+		SET @query = N'
+		SELECT	*
+		FROM	#rollup_data'
 
 
 	/***********************************
 		step 3. return result sets
 	***********************************/
-
 	-- return avg time report
 	EXECUTE(@query)
-
+	
 	SELECT Preferences_Preference_Value as ColourCode FROM itbl_Leaderboard_Preferences WHERE 
 			Preferences_Company_ID=1271 AND Preferences_Preference_ID=5
 
@@ -617,3 +612,7 @@ BEGIN
 		SELECT @TotalRecCount TotalRecCount, @TotalRecCount NoOfPages
 	RETURN(0)
 END
+
+
+-- exec usp_HME_Cloud_Get_Report_By_Daypart_Details_WithSubTotal @StoreIDs='3,4',@StoreStartDate='2018-03-23',@StoreEndDate='2018-03-24',@InputStartDateTime=N'2018-03-23 00:00:00',@InputEndDateTime=N'2018-03-24 10:30:00',@CarDataRecordType_ID='11',@ReportType='TC',@LaneConfig_ID=1,@PageNumber=1
+-- exec usp_HME_Cloud_Get_Report_By_Daypart_Details_WithSubTotal @StoreIDs='4',@StoreStartDate='2018-03-23',@StoreEndDate='2018-03-24',@InputStartDateTime=N'2018-03-23 00:00:00',@InputEndDateTime=N'2018-03-24 10:30:00',@CarDataRecordType_ID='11',@ReportType='AC',@LaneConfig_ID=1,@PageNumber=1
