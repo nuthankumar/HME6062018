@@ -27,7 +27,6 @@ class Login extends Component {
 
       if (isLoggedIn) 
       {
-
           this.props.history.push("/grouphierarchy");
       }
 
