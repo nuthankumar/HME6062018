@@ -43,7 +43,7 @@ export default class GoalStatisticsDataComponent extends Component {
           <div className='col-xs-12'>
             {this.displayGoalStatisticsRowData(goalData)}
           </div>
-          <div className="goalNote"> <span className="redFont">* </span>{t[language].ReportsDerivedPerformancetoGoal} </div>
+          <div className={'goalNote ' +(this.props.reportData.singleStore ? 'show' : 'hide')}> <span className="redFont">* </span>{t[language].ReportsDerivedPerformancetoGoal} </div>
         </div>)
   }
 
