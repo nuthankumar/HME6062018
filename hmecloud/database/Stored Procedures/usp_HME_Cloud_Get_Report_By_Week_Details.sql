@@ -13,10 +13,10 @@
 -- -----------------------------------------------------------
 -- 1.		13/04/2018		Swathi Kumar	Added Subtotal calculation
 -- ===========================================================
--- EXEC [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details] '4', '2018-03-24', '2018-03-24'
+-- EXEC [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details] '3,4','2018-03-24','2018-03-26',N'2018-03-24 00:00:00',N'2018-03-26 10:30:00','11','AC',1
 -- ===========================================================
 
-CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details](
+ALTER PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details](
 	@StoreIDs varchar(500),
 	@StoreStartDate date,
 	@StoreEndDate date,
@@ -24,9 +24,7 @@ CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details](
 	@EndDateTime datetime = '3000-01-01 23:59:59',
 	@CarDataRecordType_ID varchar(255) = '11',
 	@ReportType char(2) = 'AC',   -- AC: cumulative  TC: Time Slice
-	@LaneConfig_ID tinyint = 1,
-	@RecordPerPage smallint = 4,
-	@PageNumber smallint = 0
+	@LaneConfig_ID tinyint = 1
 )
 AS
 BEGIN
@@ -44,8 +42,6 @@ BEGIN
 	DECLARE @header TABLE(headerName varchar(25), headerID smallint, Detector_ID smallint, sort smallint)
 	DECLARE @headerSourceCol varchar(50)
 	DECLARE @TheDevice_ID int
-	DECLARE @TotalRecCount smallint
-	DECLARE @NoOfPages smallint
 	DECLARE @isMultiStore bit = 0
 	DECLARE @Device_IDs varchar(500)
 
@@ -107,7 +103,6 @@ BEGIN
 	)
 
 	CREATE TABLE #rollup_data(
-		ID smallint ,
 		WeekIndex smallint,
 		WeekStartDate char(10),
 		WeekEndDate char(10),
@@ -144,10 +139,14 @@ BEGIN
 	SET @Device_IDs = CASE WHEN LEN(@Device_IDs)>0 THEN LEFT(@Device_IDs, LEN(@Device_IDs)-1) ELSE @Device_IDs END
 	
 	INSERT INTO #GroupDetails(GroupName, Store_ID, Store_Name)
-	SELECT DISTINCT g.GroupName, ts.Store_ID, ts.Store_Name 
-		FROM [Group] g INNER JOIN GroupStore gs ON g.ID = gs.GroupID
-		INNER JOIN  tbl_Stores ts ON gs.StoreID = ts.Store_ID 
-		WHERE gs.StoreID in (SELECT cValue FROM dbo.split(@StoreIDs,','))
+	SELECT DISTINCT g.GroupName,ts.Store_ID, ts.Store_Name 
+	FROM tbl_Stores ts LEFT JOIN GroupStore gs ON gs.StoreID = ts.Store_ID
+	INNER JOIN [Group] g ON g.ID = gs.GroupID
+	WHERE gs.StoreID in (SELECT cValue FROM dbo.split(@StoreIDs,','))
+	--SELECT DISTINCT g.GroupName, ts.Store_ID, ts.Store_Name 
+	--	FROM [Group] g INNER JOIN GroupStore gs ON g.ID = gs.GroupID
+	--	INNER JOIN  tbl_Stores ts ON gs.StoreID = ts.Store_ID 
+	--	WHERE gs.StoreID in (SELECT cValue FROM dbo.split(@StoreIDs,','))
 
 
 	/*************************************
@@ -219,28 +218,37 @@ BEGIN
 							COUNT(r.CarDataRecord_ID) Total_Car
 					FROM	#raw_data r
 					INNER JOIN #week w ON w.StoreDate = r.StoreDate
-					LEFT JOIN #GroupDetails ts ON r.Store_ID = ts.Store_ID
+					LEFT JOIN tbl_Stores s ON r.Store_ID = s.Store_ID
+					LEFT JOIN #GroupDetails ts ON ts.Store_ID = s.Store_ID
+					WHERE ts.GroupName IS NOT NULL 
 					GROUP BY WeekIndex,
 							w.WeekStartDate,
 							w.WeekEndDate,
 							ts.GroupName,
 							r.EventType_Category
-					HAVING COUNT(*)>1
+					HAVING COUNT(DISTINCT r.Store_ID)>1
 					UNION ALL
-					SELECT	NULL WeekIndex,
-							NULL WeekStartDate,
-							NULL WeekEndDate,
+					SELECT	w.WeekIndex,
+							w.WeekStartDate,
+							w.WeekEndDate,
 							''Total Week'' StoreNo,
-							NULL Store_Name, 
+							NULL Store_Name,
 							NULL Device_UID, 
 							NULL Device_ID,
 							NULL GroupName,
 							NULL StoreID,
-							EventType_Category Category,
-							AVG(DetectorTime) AVG_DetectorTime,
-							COUNT(CarDataRecord_ID) Total_Car
-					FROM	#raw_data
-					GROUP BY EventType_Category
+							r.EventType_Category Category,
+							AVG(r.DetectorTime) AVG_DetectorTime,
+							COUNT(r.CarDataRecord_ID) Total_Car
+					FROM	#raw_data r
+					INNER JOIN #week w ON w.StoreDate = r.StoreDate
+					LEFT JOIN tbl_Stores s ON r.Store_ID = s.Store_ID
+					LEFT JOIN #GroupDetails ts ON ts.Store_ID = s.Store_ID
+					GROUP BY WeekIndex,
+							w.WeekStartDate,
+							w.WeekEndDate,
+							r.EventType_Category
+
 					) A'
 				
 		END
@@ -284,38 +292,40 @@ BEGIN
 		SELECT	w.WeekIndex,
 				CAST(w.WeekStartDate AS char(10)),
 				CAST(w.WeekEndDate AS char(10)),
-				Store_Number,
-				ts.Store_Name,
+				r.Store_Number,
+				s.Store_Name,
 				Device_UID,
 				Device_ID,
 				ts.GroupName,
-				ts.Store_ID,' +
+				s.Store_ID,' +
 				@headerSourceCol + ',
 				AVG(DetectorTime),
 				COUNT(CarDataRecord_ID)
 		FROM	#raw_data r
 				LEFT JOIN #week w ON w.StoreDate = r.StoreDate
-				LEFT JOIN #GroupDetails ts ON r.Store_ID = ts.Store_ID
+				LEFT JOIN tbl_Stores s ON r.Store_ID = s.Store_ID
+				LEFT JOIN #GroupDetails ts ON ts.Store_ID = s.Store_ID
+
 		GROUP BY w.WeekIndex,
 				w.WeekStartDate,
 				w.WeekEndDate,' +
 				@headerSourceCol + ',
-				Store_Number,
-				ts.Store_Name,
+				r.Store_Number,
+				s.Store_Name,
 				Device_UID,
 				Device_ID,
 				ts.GroupName,
-				ts.Store_ID
+				s.Store_ID
 		ORDER BY w.WeekIndex,
 				w.WeekStartDate,
 				w.WeekEndDate,' +
 				@headerSourceCol + ',
-				Store_Number,
-				ts.Store_Name,
+				r.Store_Number,
+				s.Store_Name,
 				Device_UID,
 				Device_ID,
 				ts.GroupName,
-				ts.Store_ID
+				s.Store_ID
 		' 
 
 	-- execute above query to populate #rollup_data table
@@ -324,35 +334,6 @@ BEGIN
 	
 	INSERT INTO #rollup_data (WeekIndex, WeekStartDate, WeekEndDate, StoreNo, Store_Name, Device_UID, Device_ID, GroupName, StoreID, Category, AVG_DetectorTime, Total_Car)
 	EXEC (@sum_query);
-
-	SELECT * INTO #rollup_data_all FROM #rollup_data
-
-	SELECT IDENTITY(Smallint, 1,1) ID, WeekIndex INTO #WeekIndex FROM #rollup_data_all
-	GROUP BY WeekIndex
-	ORDER BY WeekIndex
-
-	UPDATE t SET t.ID = w.ID
-	FROM #rollup_data_all t INNER JOIN #WeekIndex w ON t.WeekIndex = w.WeekIndex
-
-	SELECT @TotalRecCount = MAX(ID) FROM #rollup_data_all WHERE WeekIndex <10000
-	SET @NoOfPages = CEILING (CASE WHEN @RecordPerPage <>0 THEN CONVERT(Float, @TotalRecCount)/CONVERT(Float, @RecordPerPage) ELSE 1.0 END)
-	
-	TRUNCATE TABLE #rollup_data
-
-	IF (@PageNumber >0 )
-	BEGIN
-		INSERT INTO #rollup_data(ID, WeekIndex, WeekStartDate, WeekEndDate, StoreNo, Store_Name, Device_UID, Device_ID, GroupName, StoreID, Category, AVG_DetectorTime, Total_Car)
-		SELECT ID, WeekIndex, WeekStartDate, WeekEndDate, StoreNo, Store_Name, Device_UID, Device_ID, GroupName, StoreID, Category, AVG_DetectorTime, Total_Car 
-		FROM #rollup_data_all WHERE ID BETWEEN (@RecordPerPage*(@PageNumber-1))+1 AND  (@RecordPerPage*@PageNumber)
-	END
-	ELSE
-	BEGIN
-		INSERT INTO #rollup_data(ID, WeekIndex, WeekStartDate, WeekEndDate, StoreNo, Store_Name, Device_UID, Device_ID, GroupName, StoreID, Category, AVG_DetectorTime, Total_Car)
-		SELECT ID, WeekIndex, WeekStartDate, WeekEndDate, StoreNo, Store_Name, Device_UID, Device_ID, GroupName, StoreID, Category, AVG_DetectorTime, Total_Car 
-		FROM #rollup_data_all 
-	END;
-
-
 
 	-- below is a hack!!
 	-- when a single store has change of config (for instanc: menu board, service... to pre loop, menu board, service...) 
@@ -520,10 +501,8 @@ BEGIN
 		EXEC GetDeviceSystemStatisticsLane  @Device_IDs,@StoreEndDate,@StoreStartDate, @includePullins 
 		EXECUTE(@query);
 		END
-	SELECT @TotalRecCount TotalRecCount, @NoOfPages NoOfPages
+	
 	RETURN(0)
 END
-
-GO
 
 

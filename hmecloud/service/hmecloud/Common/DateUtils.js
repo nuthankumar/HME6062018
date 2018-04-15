@@ -69,6 +69,14 @@ const dateDifference = (fromDate, toDate) => {
   let diffent = date2.diff(date1, 'days')
   return diffent
 }
+
+const dateDifferenceMonths = (fromDate, toDate) => {
+    const date1 = moment(fromDate)
+    const date2 = moment(toDate)
+    let diffent = date2.diff(date1, 'months')
+    return diffent
+}
+
 const convertMMMddMM = (dateVal) => {
     return moment(dateVal).format('MMM MM/DD')
 }
@@ -91,6 +99,10 @@ const convertMonthDayYear = (dateVal) => {
 const getAdvancedSelectionMaxDate = (noOfDays, dateValue) => {
      return moment(dateValue).add(noOfDays, 'day').format('YYYY-MM-DD')
 }
+
+const getAdvancedSelectionMaxMonth = (noOfDays, dateValue) => {
+    return moment(dateValue).add(noOfDays, 'month').format('YYYY-MM-DD')
+}
 module.exports = {
   convertSecondsToMinutes,
   dayPartTime,
@@ -104,5 +116,7 @@ module.exports = {
     convertmmddyyyy,
     monthDifference,
     convertMonthDayYear,
-    getAdvancedSelectionMaxDate
+    getAdvancedSelectionMaxDate,
+    getAdvancedSelectionMaxMonth,
+    dateDifferenceMonths
 }

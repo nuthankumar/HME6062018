@@ -16,7 +16,7 @@
 -- 	-- exec [usp_HME_Cloud_Get_Report_By_Date_Details] '4', '2018-03-24', '2018-03-24', '2018-03-24 00:00:00' , '2018-03-24 12:00:00', 11, 'AC'
 -- ===========================================================
 
-
+--exec usp_HME_Cloud_Get_Report_By_Date_Details '3,4','2018-03-20','2018-03-26',N'2018-03-20 00:00:00',N'2018-03-26 10:30:00','11','AC',1
 CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details](
 	@StoreIDs varchar(500),
 	@StoreStartDate date,
@@ -25,9 +25,7 @@ CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details](
 	@EndDateTime datetime = '3000-01-01 23:59:59',
 	@CarDataRecordType_ID varchar(255) = '11',
 	@ReportType char(2) = 'AC',   -- AC: cumulative  TC: Time Slice
-	@LaneConfig_ID tinyint = 1,
-	@RecordPerPage smallint = 4,
-	@PageNumber smallint = 0
+	@LaneConfig_ID tinyint = 1
 )
 AS
 BEGIN
@@ -44,9 +42,7 @@ BEGIN
 	DECLARE @headerSourceCol varchar(50)
 	DECLARE @isMultiStore bit = 0
 	DECLARE @Device_IDs varchar(500)
-	DECLARE @TotalRecCount smallint
-	DECLARE @NoOfPages smallint
-
+	
 	IF @StartDateTime IS NULL 
 		SET @StartDateTime = '1900-01-01 00:00:00'
 
@@ -140,12 +136,15 @@ BEGIN
 	INSERT INTO #raw_data
 	EXECUTE dbo.usp_HME_Cloud_Get_Report_Raw_Data @Device_IDs, @StoreStartDate, @StoreEndDate, @StartDateTime, @EndDateTime, @CarDataRecordType_ID, @ReportType, @LaneConfig_ID
 
-
 	INSERT INTO #GroupDetails(GroupName, Store_ID, Store_Name)
-		SELECT DISTINCT g.GroupName,ts.Store_ID, ts.Store_Name
-		FROM [Group] g INNER JOIN GroupStore gs ON g.ID = gs.GroupID
-		INNER JOIN  tbl_Stores ts ON gs.StoreID = ts.Store_ID 
-		WHERE gs.StoreID in (SELECT cValue FROM dbo.split(@StoreIDs,','))
+	SELECT DISTINCT g.GroupName,ts.Store_ID, ts.Store_Name 
+	FROM tbl_Stores ts LEFT JOIN GroupStore gs ON gs.StoreID = ts.Store_ID
+	INNER JOIN [Group] g ON g.ID = gs.GroupID
+	WHERE gs.StoreID in (SELECT cValue FROM dbo.split(@StoreIDs,','))
+		--SELECT DISTINCT g.GroupName,ts.Store_ID, ts.Store_Name
+		--FROM [Group] g INNER JOIN GroupStore gs ON g.ID = gs.GroupID
+		--INNER JOIN  tbl_Stores ts ON gs.StoreID = ts.Store_ID 
+		--WHERE gs.StoreID in (SELECT cValue FROM dbo.split(@StoreIDs,','))
 
 	-- determine whether it's multi store or single store
 	-- for single stores, the column names would be its event name
@@ -177,23 +176,25 @@ BEGIN
 							d.EventType_Category Category,
 							AVG(d.DetectorTime) AVG_DetectorTime,
 							COUNT(d.CarDataRecord_ID) Total_Car
-						FROM	#raw_data d LEFT JOIN #GroupDetails g ON d.Store_ID = g.Store_ID
-						GROUP BY d.StoreDate, g.GroupName, d.EventType_Category
-						HAVING COUNT(*)>1
+						FROM	#raw_data d LEFT JOIN tbl_Stores s ON d.Store_ID = s.Store_ID
+						INNER JOIN #GroupDetails g ON g.Store_ID = s.Store_ID
+						WHERE g.GroupName IS NOT NULL AND d.Store_ID IS NOT NULL
+						GROUP BY CAST(d.StoreDate AS varchar(25)), g.GroupName, d.EventType_Category
+						HAVING COUNT(DISTINCT d.Store_ID)>1
 						
 						UNION ALL
-						SELECT	NULL StoreNo,
+						SELECT	''Total Day''  StoreNo,
 							NULL Store_Name,
 							NULL Device_UID,
-							''Total Day'' StoreDate,
+							StoreDate,
 							NULL Device_ID,
 							NULL GroupName,
 							NULL Store_ID,
-							EventType_Name Category,
+							EventType_Category Category,
 							AVG(DetectorTime) AVG_DetectorTime,
 							COUNT(CarDataRecord_ID) Total_Car
 						FROM	#raw_data
-						GROUP BY EventType_Name
+						GROUP BY StoreDate, EventType_Category
 					) A'
 		END
 	ELSE
@@ -220,7 +221,7 @@ BEGIN
 					AVG(DetectorTime) AVG_DetectorTime,
 					COUNT(CarDataRecord_ID) Total_Car
 				FROM	#raw_data
-				GROUP BY Store_Number, EventType_Name'
+				GROUP BY  EventType_Name'
 		END
 
 
@@ -230,31 +231,32 @@ BEGIN
 	SET @query = N'
 		INSERT INTO	#rollup_data(StoreNo, Store_Name, Device_UID, StoreDate, Device_ID, GroupName, Store_ID, Category, AVG_DetectorTime , Total_Car )
 		SELECT	d.Store_Number,
-				ts.Store_Name,
+				s.Store_Name,
 				d.Device_UID,
 				CAST(d.StoreDate AS varchar(25)),
 				d.Device_ID,
 				ts.GroupName,
-				ts.Store_ID,' +
+				d.Store_ID,' +
 				@headerSourceCol + ',
 				AVG(d.DetectorTime),
 				COUNT(d.CarDataRecord_ID)
 		FROM	#raw_data d LEFT JOIN #GroupDetails ts ON d.Store_ID = ts.Store_ID
+		LEFT JOIN tbl_Stores s ON d.Store_ID = s.Store_ID
 		GROUP BY d.StoreDate,' +
 				@headerSourceCol + ',
 				d.Store_Number,
-				ts.Store_Name,
+				s.Store_Name,
 				d.Device_UID,
 				d.Device_ID,
 				ts.GroupName,
-				ts.Store_ID
+				d.Store_ID
 		ORDER BY d.StoreDate,' +
 				@headerSourceCol + ',
 				d.Store_Number,
 				d.Device_UID,
 				d.Device_ID,
 				ts.GroupName,
-				ts.Store_ID
+				d.Store_ID
 		--UNION ALL ' --+ @sum_query
 
 	-- execute above query to populate #rollup_data table
@@ -265,36 +267,6 @@ BEGIN
 	EXECUTE(@sum_query);
 	SET @sum_query = '';
 
-	SELECT * INTO #rollup_data_all FROM #rollup_data;
-
-	SELECT IDENTITY(Smallint, 1,1) ID, StoreDate INTO #DayIndex FROM #rollup_data_all
-	GROUP BY StoreDate
-	ORDER BY StoreDate
-
-	UPDATE t SET t.ID = w.ID
-	FROM #rollup_data_all t INNER JOIN #DayIndex w ON t.StoreDate = w.StoreDate
-
-	SELECT @TotalRecCount = MAX(ID) FROM #rollup_data_all 
-	SET @NoOfPages = CEILING (CASE WHEN @RecordPerPage <>0 THEN CONVERT(Float, @TotalRecCount)/CONVERT(Float, @RecordPerPage) ELSE 1.0 END)
-
-	TRUNCATE TABLE #rollup_data
-	
-	IF (@PageNumber >0 )
-	BEGIN
-		INSERT INTO #rollup_data(ID, StoreNo, Store_Name, Device_UID, StoreDate, Device_ID, GroupName, Store_ID, Category, AVG_DetectorTime , Total_Car)
-		SELECT ID, StoreNo, Store_Name, Device_UID, StoreDate, Device_ID, GroupName, Store_ID, Category, AVG_DetectorTime , Total_Car 
-		FROM #rollup_data_all WHERE ID BETWEEN (@RecordPerPage*(@PageNumber-1))+1 AND  (@RecordPerPage*@PageNumber)
-	END
-	ELSE
-	BEGIN
-		INSERT INTO #rollup_data(ID, StoreNo, Store_Name, Device_UID, StoreDate, Device_ID, GroupName, Store_ID, Category, AVG_DetectorTime , Total_Car)
-		SELECT ID, StoreNo, Store_Name, Device_UID, StoreDate, Device_ID, GroupName, Store_ID, Category, AVG_DetectorTime , Total_Car
-		FROM #rollup_data_all 
-	END;
-
-	--INSERT INTO #rollup_data (StoreNo, Device_UID, StoreDate, Device_ID, GroupName, Store_ID, Category, AVG_DetectorTime , Total_Car)
-	--EXEC (@sum_query);
-	
 	-- below is a hack!!
 	-- when a single store has change of config (for instanc: menu board, service... to pre loop, menu board, service...) 
 	-- or when multi store don't have the same config for each store
@@ -321,7 +293,7 @@ BEGIN
 		AVG(AVG_DetectorTime)
 		FOR Category IN (' + @cols + ')
 	) AS p
-	ORDER BY StoreDate, StoreNo;'
+	ORDER BY StoreDate, ID, StoreNo;'
 
 
 	/***********************************
@@ -477,11 +449,8 @@ BEGIN
 		EXECUTE(@query);
 	END
 
-	SELECT @TotalRecCount TotalRecCount, @NoOfPages NoOfPages
+	
 	RETURN(0)
-
-
-	-- exec [usp_HME_Cloud_Get_Report_By_Date_Details] '4', '2018-03-24', '2018-03-24', '2018-03-24 00:00:00' , '2018-03-24 12:00:00', 11, 'AC'
 
 END
 
