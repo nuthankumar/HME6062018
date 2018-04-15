@@ -3,6 +3,8 @@ const reportGenerate = require('../Common/ReportGenerateUtils')
 const _ = require('lodash')
 const moment = require('moment')
 const repository = require('../Repository/StoresRepository')
+const dataExportUtil = require('../Common/DataExportUtil')
+const dateFormat = require('dateformat')
 
 const generateWeekReport = (input, callback) => {
   let fromDateTime = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
@@ -30,7 +32,9 @@ const generateWeekReport = (input, callback) => {
       data.stopTime = moment(toDateTime).format('LL')
       let colors = _.filter(repositoryData, val => val.ColourCode)
       // Single Store
-      if (input.ReportTemplate_StoreIds.length === 1) {
+      if (input.reportType.toLowerCase().trim() === 'csv' || input.reportType.toLowerCase().trim() === 'pdf') {
+        generateCSVOrPdfTriggerEmail(request, input, result, callBack)
+      } else if (input.ReportTemplate_StoreIds.length === 1) {
         let goalSettings = _.filter(repositoryData, group => group['Menu Board - GoalA'])
         const StoreData = reportGenerate.getAllStoresDetails(repositoryData, colors, goalSettings, input.ReportTemplate_Format)
         const groupbyIndex = _.groupBy(StoreData, indexValue => indexValue.index)
@@ -95,6 +99,18 @@ const carTotal = (StoreData) => {
   const getCarsTotal = _.last(StoreData)
   const totalCars = getCarsTotal.totalCars
   return totalCars.value
+}
+
+function generateCSVOrPdfTriggerEmail (request, input, result, callBack) {
+  let csvInput = {}
+  csvInput.type = request.t('COMMON.CSVTYPE')
+  csvInput.reportName = `${request.t('COMMON.WEEKREPORTNAME')} ${dateFormat(new Date(), 'isoDate')}`
+
+  csvInput.email = input.UserEmail
+  csvInput.subject = `${request.t('COMMON.WEEKREPORTTITLE')} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
+  dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput, csvResults => {
+    callBack(csvResults)
+  })
 }
 
 module.exports = {
