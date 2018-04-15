@@ -9,8 +9,26 @@ const sqlQueries = {
     'updateGroup': 'exec usp_UpdateGroup :groupId, :groupName, :description, :accountId, :userName, :groups, :stores'
   },
   'ReportTemplates': {
-    'createReportTemplate': 'exec [dbo].[usp_InsertReportTemplate] @AccountId  =:AccountId  ,@Stores = :Stores,@TimeMeasure = :TimeMeasure ,@FromDate =:FromDate,@ToDate =:FromDate ,@OpenTime=:OpenTime ,@CloseTime =:CloseTime,@Type=:Type,@Open=:Open, @Close=:Close,@Include=:Include,@Format=:Format,@TemplateName=:TemplateName,@CreatedBy=:CreatedBy,@UpdatedBy=:UpdatedBy,@CreatedDateTime=:CreatedDateTime, @UpdatedDateTime=:UpdatedDateTime',
-    'getAllReportsTemplates': 'exec [dbo].[usp_GetReportTemplates] @AccountId =:AccountId, @CreatedBy =:CreatedBy',
+        'createReportTemplate': `exec [dbo].[usp_InsertReportTemplate] 
+      @AccountId  =: AccountId,
+          @Stores = : Stores,
+         @TimeMeasure = : TimeMeasure,
+         @FromDate =: FromDate,
+         @ToDate =: FromDate,
+         @OpenTime=: OpenTime,
+         @CloseTime =: CloseTime,
+         @Type=: Type,
+         @Open=: Open, 
+         @Close=: Close,
+         @Include=: Include,
+         @Format=: Format,
+         @TemplateName=: TemplateName,
+         @CreatedBy=: CreatedBy,
+         @UpdatedBy=: UpdatedBy,
+         @CreatedDateTime=: CreatedDateTime, 
+         @UpdatedDateTime=: UpdatedDateTime'`,
+
+'getAllReportsTemplates': 'exec [dbo].[usp_GetReportTemplates] @UserUid = :UserUid',
     'getReportsTemplate': 'exec [dbo].[usp_GetReportTemplateByID]  @Id = :id',
     'deleteTemplate': 'exec [dbo].[usp_DeleteReportTemplate]  @Id = :id'
   },

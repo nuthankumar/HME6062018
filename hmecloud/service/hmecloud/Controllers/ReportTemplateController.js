@@ -1,6 +1,7 @@
 
 const messages = require('../Common/Message')
 const repository = require('../Repository/ReportTemplateRepository')
+const dateUtils = require('../Common/DateUtils')
 
 /**
  * The method can be used to execute handel errors and return to routers.
@@ -63,15 +64,21 @@ const create = (reportTemplate, callback) => {
  */
 const get = (reportTemplate, request, callback) => {
   let output = {}
-  repository.get(reportTemplate, (result) => {
-    if (result) {
-      const Stores = result.Stores.split(',')
-      const Include = result.Include.split(',')
-      output.data = result
-      output.data.SelectedList = Stores
-      output.data.Include = Include
-      output.status = true
-      callback(output)
+    repository.get(reportTemplate, (result) => {
+        if (result) {
+         let reportTemplate = result
+         reportTemplate.fromDate = dateUtils.convertYYYYMMDD(reportTemplate.fromDate)
+         reportTemplate.toDate = dateUtils.convertYYYYMMDD(reportTemplate.toDate)
+         reportTemplate.openTime = dateUtils.converthhmmsstt(reportTemplate.openTime)
+         reportTemplate.closeTime = dateUtils.converthhmmsstt(reportTemplate.closeTime)
+         reportTemplate.timeMeasure = messages.TimeMeasure[reportTemplate.timeMeasure]
+         reportTemplate.type = messages.Type[reportTemplate.type]
+         reportTemplate.format = messages.Type[reportTemplate.format]
+         reportTemplate.selectedStoreIds = reportTemplate.devices.split(',')
+
+        output.data = reportTemplate
+        output.status = true
+        callback(output)
     } else {
       output.error = request.t('LISTGROUP.notfound')
       output.status = false
@@ -89,7 +96,8 @@ const get = (reportTemplate, request, callback) => {
  */
 const getAll = (input, request, callback) => {
   let output = {}
-  repository.getAll(input.AccountId, input.CreatedBy, (result) => {
+    repository.getAll(input.UserUid, (result) => {
+        console.log("The result==", JSON.stringify(result))
     if (result.length > 0) {
       output.data = result
       output.status = true

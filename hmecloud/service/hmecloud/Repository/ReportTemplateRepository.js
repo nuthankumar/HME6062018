@@ -36,9 +36,9 @@ const get = (reportTemplateId, callback) => {
  * @param  {funct} callback Function will be called once the input executed.
  * @public
  */
-const getAll = (accountId, createdById, callback) => {
+const getAll = (UserUid, callback) => {
   repository.execute(sqlQuery.ReportTemplates.getAllReportsTemplates, {
-    replacements: { AccountId: accountId, CreatedBy: createdById },
+      replacements: {UserUid: UserUid },
     type: dataBase.QueryTypes.SELECT
   }, callback)
 }
