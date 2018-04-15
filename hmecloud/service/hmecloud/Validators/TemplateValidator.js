@@ -27,6 +27,7 @@ const create = (request, callback) => {
  * @public
  */
 const get = (request, callback) => {
+  console.log('REQUEST', request)
   let output = {}
   const templateId = validate.isNumeric(request.query.templateId)
   if (templateId) {
@@ -54,14 +55,14 @@ const getAll = (input, callback) => {
     output.status = false
     callback(output)
   }
- 
+
   if (input.AccountId) {
     values.AccountId = input.AccountId
-      values.CreatedBy = input.AccountId
+    values.CreatedBy = input.AccountId
     templateController.getAll(values, input, (result) => {
       callback(result)
     })
-  }  else {
+  } else {
     output.error = input.t('CREATEGROUP.invalidInput')
     output.status = false
   }
