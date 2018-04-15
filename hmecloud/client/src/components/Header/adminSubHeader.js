@@ -13,9 +13,9 @@ export default class AdminSubHeader extends React.Component {
     }
     render() {
         const { language } = this.state;
-        const { isAdmin, pathName, isLogin} = this.props;
+        const { isAdmin, pathName, isLoggedIn} = this.props;
         return (
-            <div className={"subMenu menuBar " + (isAdmin && !isLogin  ? 'show' : 'hidden')}>
+            <div className={"subMenu menuBar " + (isAdmin && !isLoggedIn  ? 'show' : 'hidden')}>
                 <ul>
                     <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsStores&amp;uuid=2IK3Z0P0GO2X1OLU60QCIILD3RJZK1XV&amp;path=Users"}>{t[language].stores}</a></li>
                     <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsUsers&amp;uuid=2IK3Z0P0GO2X1OLU60QCIILD3RJZK1XV&amp;path=Users"}>{t[language].users}</a></li>
