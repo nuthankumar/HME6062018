@@ -107,14 +107,14 @@ export default class HmeHeader extends React.Component {
                         <img className={'adminImage ' + (adminLogo ? 'show' : 'hidden')} src={AdminProductLogo} aria-hidden='true' />
                     </a></div>
                     <div className='user-info-section'>
-
-                        <span>
-                            <a className="black_link headerLink" href={Config.coldFusionUrl + "?pg=SettingsAccount"}><span> {t[language].headerLoggedInAs} </span> <span className="username">{loggedInUser.name}</span></a>
-                            <a className="view-as" href={Config.coldFusionUrl + "?pg=SettingsAccount"}><i className='fa fa-window-close-o' />
-                            </a>
+                        <span className={(isLoggedIn ? 'show' : 'hidden')}>
+                        <a className="black_link headerLink" href={Config.coldFusionUrl + "?pg=SettingsAccount"}><span> {t[language].headerLoggedInAs} </span> <span className="username">{loggedInUser.name}</span></a> 
                             <MasqueradeHeader isAdmin={isAdmin} viewAsUser={this.state.contextUser} />
-                        </span>
-                        <button className='logout'> <a className="black_link" href={Config.coldFusionUrl + "?pg=Logout"}> {t[language].headerSignOut}</a></button>
+                        
+                        </span>                        
+                        
+                        <button className={'logout '+(isLoggedIn ? 'show' : 'hidden')}> <a className="black_link" href={Config.coldFusionUrl + "?pg=Logout"}> {t[language].headerSignOut}</a></button>
+
                         <img className='logOutIcon' src={HMELogo} aria-hidden='true' />
                     </div>
                 </header>
