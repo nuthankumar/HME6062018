@@ -26,9 +26,9 @@ export default class HmeHeader extends React.Component {
 
       //  document.body.addEventListener('click', this.handleOnClick.bind(this)); 
     }
-    renderAdminMenuItems(isAdmin) {
+    renderAdminMenuItems(isAdmin, isLoggedIn) {
         const { language, showSubMenu } = this.state;
-        if (isAdmin) {
+        if (isAdmin && isLoggedIn) {
             return (
                 <ul>
                     <li><a className="headerMenu" href={Config.coldFusionUrl}>{t[language].navbarStores}</a></li>
@@ -43,9 +43,9 @@ export default class HmeHeader extends React.Component {
             return '';
         }
     }
-    renderClientMenuItems(isAdmin) {
+    renderClientMenuItems(isAdmin, isLoggedIn) {
         const { language, showSubMenu } = this.state;
-        if (!isAdmin) {
+        if (!isAdmin && isLoggedIn ) {
             return (
                 <ul>
                     <li><a className="headerMenu" href={Config.coldFusionUrl}>{t[language].navbarWelcome}</a></li>
@@ -61,14 +61,14 @@ export default class HmeHeader extends React.Component {
     }
     render() {
         const { language, showSubMenu } = this.state;
-        const { isAdmin, isLogin } = this.props;
+        const { isAdmin, isLoggedIn, adminLogo } = this.props;
         let viewAsUser = 'Manoj VS', loggedInUser = 'Rudra'
         return (
             <div >
                 <header className='reports-page-header'>
                     <div> <a href={Config.coldFusionUrl}>
-                        <img className={isAdmin?'hidden':'show'} src={ProductLogo} aria-hidden='true' />
-                        <img className={'adminImage '+(isAdmin ?'show' :'hidden')} src={AdminProductLogo} aria-hidden='true' />
+                        <img className={adminLogo?'hidden':'show'} src={ProductLogo} aria-hidden='true' />
+                        <img className={'adminImage ' + (adminLogo ?'show' :'hidden')} src={AdminProductLogo} aria-hidden='true' />
                     </a></div>
                     <div className='user-info-section'>
                         <span>
@@ -85,18 +85,18 @@ export default class HmeHeader extends React.Component {
                 </header>
                 <nav className='reports-navigation-header'>
                     <div id="Navbar" className="Navbar">
-                        <div className={'mainMenu menuBar ' + (isLogin?'hidden' : 'show')}>
+                        <div className={'mainMenu menuBar ' + (isLoggedIn?'hidden' : 'show')}>
 
                             {
-                                this.renderClientMenuItems(isAdmin)
+                                this.renderClientMenuItems(isAdmin, isLoggedIn)
                             }
 
                             {/* admin menu */}
-                            {this.renderAdminMenuItems(isAdmin)}
+                            {this.renderAdminMenuItems(isAdmin, isLoggedIn)}
 
                         </div>
                     </div>
-                    <div className={'cogWheelSection ' + (isLogin ? 'hidden' : 'show') }>
+                    <div className={'cogWheelSection ' + (isLoggedIn ? 'hidden' : 'show') }>
                         {/*<a data-tip="<a>HTML tooltip</a> <br/> <a>HTML tooltip</a> <br/> <a>HTML tooltip</a>" data-html={true} data-event='click focus'>  <img className='cogWheel' src={CogWheel} aria-hidden='true' /></a>
             <ReactTooltip html={true} place="right" type="dark" effect="solid" globalEventOff='click' eventOff='click' />*/}
                         <div className="dropdown open">
