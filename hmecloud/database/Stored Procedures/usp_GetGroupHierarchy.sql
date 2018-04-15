@@ -12,7 +12,7 @@
 -- Sl.No.	Date			Developer		Descriptopn   
 -- -----------------------------------------------------------
 --  1.  	30-March-2018	Selvendran K	Procedure created
---	2.
+--	2.		15-April-2018	Swathi Kumar	Modified to get the Store Number and Brand Name
 -- ===========================================================
 -- EXEC [dbo].[usp_GetGroupHierarchy] @AccountId = 100
 -- ===========================================================
@@ -43,7 +43,9 @@ SELECT
 	[Id] ,
 	[GroupName] [Name],
 	[Level],
-	'group' AS [Type]
+	'group' AS [Type],
+	NULL Store_Number,
+	NULL Brand_Description
 FROM GroupHierarchy 
 UNION ALL 
 SELECT 
@@ -51,12 +53,16 @@ SELECT
 	store.Store_ID,  
 	store.Store_Name ,
 	ISNULL(GH.[Level],8)+1,
-	'store' AS [Type]
+	'store' AS [Type],
+	store.Store_Number Store_Number,
+	brand.Brand_Name Brand_Name
 FROM GroupHierarchy AS GH
 INNER JOIN GroupStore gs ON GH.Id = gs.GroupId 
 RIGHT JOIN tbl_Stores AS store ON store.Store_ID = gs.StoreId
+LEFT JOIN ltbl_Brands AS brand ON brand.Brand_ID = store.Store_Brand_ID
 
 ORDER BY [Level],[Name]  
+
 GO
 
 
