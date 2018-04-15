@@ -160,18 +160,18 @@ const prepareLongestTimes = (daysingleResult, longestData, format) => {
       timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
       timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
       timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
-      if (!_.isUndefined(LongestTimes[k])) {
-        longestObj.Menu = timeObj
-      }
+      // if (!_.isUndefined(LongestTimes[k])) {
+      longestObj.Menu = timeObj
+      // }
       LongestTimes.push(longestObj)
     } else if (tempTimeObj.headerName.includes(messages.EventName.GREET)) {
       let timeObj = {}
       timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
       timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
       timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
-      if (!_.isUndefined(LongestTimes[k])) {
-        LongestTimes[k].Greet = timeObj
-      }
+      // if (!_.isUndefined(LongestTimes[k])) {
+      LongestTimes[k].Greet = timeObj
+      // }
       k = k + 1
       if (k === 2) {
         k = 0
@@ -193,9 +193,9 @@ const prepareLongestTimes = (daysingleResult, longestData, format) => {
       timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
       timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
       timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
-      if (!_.isUndefined(LongestTimes[k])) {
-        LongestTimes[k].LaneQueue = timeObj
-      }
+      // if (!_.isUndefined(LongestTimes[k])) {
+      LongestTimes[k].LaneQueue = timeObj
+      // }
       k = k + 1
       if (k === 2) {
         k = 0
@@ -205,6 +205,7 @@ const prepareLongestTimes = (daysingleResult, longestData, format) => {
       timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
       timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
       timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
+      console.log(timeObj)
       if (!_.isUndefined(LongestTimes[k])) {
         LongestTimes[k].LaneTotal = timeObj
       }
