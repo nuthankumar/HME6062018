@@ -27,8 +27,10 @@ module.exports = function (context, req) {
         ,[User_OwnerAccount_ID]
         ,[User_Company_ID]
         ,[User_EmailAddress]
-    FROM [hmeCloud].[dbo].[tbl_Users] 
-    WHERE [User_IsActive] = 1 AND [User_EmailAddress] = '${email}'`, (err, result) => {
+        ,[User_FirstName]
+        ,[User_LastName]
+        FROM [hmeCloud].[dbo].[tbl_Users] 
+        WHERE [User_IsActive] = 1 AND [User_EmailAddress] = '${email}'`, (err, result) => {
           if (err) {
             context.res = {
               status: 404,
@@ -38,15 +40,18 @@ module.exports = function (context, req) {
           if (result && result.recordsets) {
             let user = result.recordset[0]
             let jwtToken = jwt.sign(user, config.secret, {
-              expiresIn: 3599 // expires in 60 mins
+              expiresIn: '24h' // expires in 60 mins
             }, (err, token) => {
               context.res = {
                 status: 200,
                 body: {
                   tokenType: 'Bearer',
-                  expiresIn: 3599,
+                  expiresIn: '24h',
                   accessToken: token,
-                  // refreshToken: token,
+                  refreshToken: token,
+                  userId: user.User_EmailAddress,
+                  familyName: user.User_LastName,
+                  givenName: user.User_FirstName
                 }
               }
               context.done()
