@@ -120,6 +120,8 @@ const addToHierarchy = (hierarchy, inputItem) => {
       Id: inputItem.Id,
       Name: inputItem.Name,
       Type: inputItem.Type,
+      StoreNumber: inputItem.Store_Number,
+      Brand: inputItem.Brand_Description,
       Children: []
     })
   } else {
@@ -128,7 +130,8 @@ const addToHierarchy = (hierarchy, inputItem) => {
       parent.Children.push({
         Id: inputItem.Id,
         Name: inputItem.Name,
-        Type: inputItem.Type,
+        StoreNumber: inputItem.Store_Number,
+        Brand: inputItem.Brand_Description,
         Children: []
       })
     }
@@ -137,7 +140,7 @@ const addToHierarchy = (hierarchy, inputItem) => {
 
 const getAll = (request, input, callback) => {
   const output = {}
-  groupRepository.getAll(input.accountId, result => {
+    groupRepository.getAll(input.accountId, result => {
     if (result) {
       let hierarchy = []
       result.forEach((item) => {
