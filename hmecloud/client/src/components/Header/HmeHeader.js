@@ -132,7 +132,7 @@ export default class HmeHeader extends React.Component {
 
                         </div>
                     </div>
-                    <div className={'cogWheelSection ' + (isLoggedIn ? 'hidden' : 'show')}>
+                    <div className={'cogWheelSection ' + (isLoggedIn ? 'show' : 'hidden')}>
                         {/*<a data-tip="<a>HTML tooltip</a> <br/> <a>HTML tooltip</a> <br/> <a>HTML tooltip</a>" data-html={true} data-event='click focus'>  <img className='cogWheel' src={CogWheel} aria-hidden='true' /></a>
             <ReactTooltip html={true} place="right" type="dark" effect="solid" globalEventOff='click' eventOff='click' />*/}
                         <div className="dropdown open">
