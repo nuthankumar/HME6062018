@@ -12,11 +12,12 @@ export default class AuthenticationService {
   // Initializing important variablescls
 
   constructor (domain) {
-    this.domain = domain // || Config.authUrl // API server domain
+    this.domain = domain || Config.authBaseUrl // API server domain
     this.fetch = this.fetch.bind(this) // React binding stuff
-    this.login = this.login.bind(this)
+    // this.login = this.login.bind(this)
     this.getProfile = this.getProfile.bind(this)
   }
+  /*
   login (username, password) {
     const data = {
       name: 'Nandish',
@@ -44,6 +45,7 @@ export default class AuthenticationService {
     //     return Promise.resolve(res);
     // })
   }
+*/
 
   loggedIn () {
     // Checks if there is a saved token and it's still valid
@@ -64,17 +66,22 @@ export default class AuthenticationService {
 
   setToken (idToken) {
     // Saves user token to localStorage
-    localStorage.setItem('id_token', idToken)
+    localStorage.setItem('ctx_token', idToken)
   }
 
   getToken () {
     // Retrieves the user token from localStorage
-    return localStorage.getItem('id_token')
+    return localStorage.getItem('ctx_token')
   }
 
   logout () {
     // Clear user token and profile data from localStorage
-    localStorage.removeItem('id_token')
+    localStorage.removeItem('ctx_token')
+  }
+
+  getLoggedInProfile () {
+    // Using jwt-decode npm package to decode the token
+    return decode(localStorage.getItem('id_token'))
   }
 
   getProfile () {

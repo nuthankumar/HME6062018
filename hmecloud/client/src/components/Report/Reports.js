@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { I18n, Trans } from 'react-i18next';
 import "../Security/Login.css";
-import AuthService from "../Security/AuthenticationService";
+// import AuthService from "../Security/AuthenticationService";
 import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
 import Tree, { TreeNode } from "rc-tree";
@@ -102,8 +102,8 @@ class Report extends Component {
     };
     this.api = new Api()
     this.getSavedReports();
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    this.Auth = new AuthService()
+    // this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    // this.Auth = new AuthService()
     this.getTreeHierarchy()
 
   }
@@ -117,7 +117,7 @@ class Report extends Component {
   }
 
   componentWillMount() {
-    if (this.Auth.loggedIn()) this.props.history.replace("/");
+    // if (this.Auth.loggedIn()) this.props.history.replace("/");
   }
   onCheck(checkedKeys, node) {
     this.state.selectedList = checkedKeys;
@@ -518,19 +518,19 @@ class Report extends Component {
   handleFormSubmit(e) {
     e.preventDefault();
 
-    this.Auth.login(this.state.username, this.state.password)
-      .then(token => {
-        this.setState({
-          token: token
-        });
-        const url = Config.jwtUrl + token;
-        //window.location.href('url');
-        window.location.assign(url);
-        this.props.history.replace(url);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    // this.Auth.login(this.state.username, this.state.password)
+    //   .then(token => {
+    //     this.setState({
+    //       token: token
+    //     });
+    //     const url = Config.jwtUrl + token;
+    //     //window.location.href('url');
+    //     window.location.assign(url);
+    //     this.props.history.replace(url);
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
   }
 
   showAdvanced(e) {
@@ -935,7 +935,6 @@ class Report extends Component {
     this.setState({
         rawCarRequest: rawCarData[0]
     });
-
     let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
     this.api.postData(url, rawCarData[0], data => {
       //  this.props.history.push("/rawcardatareport", this.state.rawCarData);

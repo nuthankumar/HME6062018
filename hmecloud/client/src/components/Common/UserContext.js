@@ -1,5 +1,11 @@
 export function isAdmin() {
-    return localStorage.getItem("isAdmin") ? localStorage.getItem("isAdmin"): false;
+    if (localStorage.getItem("isAdmin")){
+        return localStorage.getItem("isAdmin");
+    }
+    else {
+        return false;
+    }
+
 }
 
 export function isLoggedIn() {

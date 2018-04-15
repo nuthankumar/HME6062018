@@ -112,6 +112,11 @@ const getAdvancedSelectionMaxDate = (noOfDays, dateValue) => {
 const getAdvancedSelectionMaxMonth = (noOfDays, dateValue) => {
     return moment(dateValue).add(noOfDays, 'month').format('YYYY-MM-DD')
 }
+
+const convertYYYYMMDD = (dateValue) => {
+
+    return moment(dateValue).format('YYYY-MM-DD')
+}
 module.exports = {
     convertSecondsToMinutes,
     dayPartTime,
@@ -127,5 +132,6 @@ module.exports = {
     convertMonthDayYear,
     getAdvancedSelectionMaxDate,
     getAdvancedSelectionMaxMonth,
-    dateDifferenceMonths
+    dateDifferenceMonths,
+    convertYYYYMMDD
 }
