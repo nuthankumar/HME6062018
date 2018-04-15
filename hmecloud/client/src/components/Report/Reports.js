@@ -548,7 +548,7 @@ class Report extends Component {
   getSavedReports() {
       let url = Config.apiBaseUrl + CommonConstants.apiUrls.getSavedTemplates
       this.api.getData(url, data => {
-
+console.log(data);
           this.state.savedTemplates = []
           this.setState({
           savedTemplates: data.data
@@ -563,13 +563,13 @@ class Report extends Component {
   if (savedTemplates) {
       let renderSavedTemplates = savedTemplates.map((report, index) => {
         return (
-          <div className='templateRow' key={index} title={report.TemplateName}>
-                <div className={"col-md-10 savedName " +(index % 2 === 0 ? "even" : "odd")} id={report.Id} onClick={this.apply.bind(this)}>
-                   {report.TemplateName}
+          <div className='templateRow' key={index} title={report.templateName}>
+                <div className={"col-md-10 savedName " +(index % 2 === 0 ? "even" : "odd")} id={report.id} onClick={this.apply.bind(this)}>
+                   {report.templateName}
                 </div>
-            <div className={"col-md-2 delete-icon " +(index % 2 === 0 ? "even" : "odd")} id={report.Id} onClick={this.delete.bind(this)}>
-              <span id={report.Id}>
-                <img className="logOutIcon" id={report.Id} src={Delete} aria-hidden="true"/>
+            <div className={"col-md-2 delete-icon " +(index % 2 === 0 ? "even" : "odd")} id={report.id} onClick={this.delete.bind(this)}>
+              <span id={report.id}>
+                <img className="logOutIcon" id={report.id} src={Delete} aria-hidden="true"/>
               </span>
             </div>
           </div>
@@ -705,6 +705,7 @@ class Report extends Component {
     this.setState({ errorMessage: "" });
     let isError = false;
     let template = [];
+    let createTemplateData = []
     this.openTime = moment(this.state.openTime).format("HH:mm a")
     this.closeTime = moment(this.state.closeTime).format("HH:mm a")
     if(this.openTime === 'Invalid date'){
@@ -724,6 +725,15 @@ class Report extends Component {
       type: this.state.type, include: this.state.include, format: this.state.format, selectedStoreIds: this.state.selectedStoreIds,
       CreatedDateTime: moment().format("YYYY-MM-DD HH:mm:ss a"), UpdatedDateTime: moment().format("YYYY-MM-DD HH:mm:ss a"),
       advancedOptions: (!this.state.open || !this.state.close), longestTime: _.contains(this.state.include, "1"),systemStatistics: _.contains(this.state.include, "2"),
+    });
+
+    createTemplateData.push({
+      selectedList: this.state.selectedList,timeMeasure: this.state.timeMeasure,fromDate: this.state.fromDate,toDate: this.state.toDate,
+      openTime: this.openTime,closeTime: this.closeTime,
+      templateName: this.state.templateName, open: this.state.open, close: this.state.close,
+      type: this.state.type, include: this.state.include, format: this.state.format, selectedStoreIds: this.state.selectedStoreIds,
+      createdDateTime: moment().format("YYYY-MM-DD HH:mm:ss a"),
+      advancedOption: (!this.state.open || !this.state.close), longestTime: _.contains(this.state.include, "1"),systemStatistics: _.contains(this.state.include, "2"),
     });
 
     if(template[0].longestTime){
@@ -841,7 +851,9 @@ class Report extends Component {
         isError = true;
       } else {
               let url = Config.apiBaseUrl + CommonConstants.apiUrls.createTemplate
-              this.api.postData(url, template[0], data => {
+              console.log(JSON.stringify(createTemplateData))
+
+              this.api.postData(url, createTemplateData[0], data => {
                   this.state.successMessage = data.data;
                   this.state.errorMessage = "";
                   this.setState(this.state);
