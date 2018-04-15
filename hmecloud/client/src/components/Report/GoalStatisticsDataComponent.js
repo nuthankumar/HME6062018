@@ -43,7 +43,7 @@ export default class GoalStatisticsDataComponent extends Component {
           <div className='col-xs-12'>
             {this.displayGoalStatisticsRowData(goalData)}
           </div>
-          <div className={'goalNote ' +(this.props.reportData.singleStore ? 'show' : 'hide')}> <span className="redFont">* </span>{t[language].ReportsDerivedPerformancetoGoal} </div>
+          <div className={'goalNote ' +(this.props.reportData.singleStore ? 'show' : '')}> <span className="redFont">* </span>{t[language].ReportsDerivedPerformancetoGoal} </div>
         </div>)
   }
 
@@ -52,34 +52,24 @@ export default class GoalStatisticsDataComponent extends Component {
       //let goalRowData = this.state.goalData;
       if (goalRowData) {
       return goalRowData.map((goalItem) => {
-        /*return (<table className='goalstatistics-table'>
-        <tbody>
-        {this.getStatisticsRow(goalItem,"goal",goalItem.title)}
-        {this.getStatisticsRow(goalItem,"cars","Cars")}
-        {this.getStatisticsRow(goalItem,"percentage","%")}
-        </tbody>
-        </table>
-        )
-      }) */
-
-      return (
-            <table className='goalstatistics-table goalstatistics-table-content'>
-              <tbody>
-              {this.getStatisticsRow(goalItem, "goal", goalItem.title, goalItem.color)}
-              {this.getStatisticsRow(goalItem,"cars","Cars")}
-              {this.getStatisticsRow(goalItem,"percentage","%")}
+      let color = '#ffffff'
+      return (<table className='goalstatistics-table goalstatistics-table-content'>
+          <tbody>
+          {this.getStatisticsRow(goalItem, "goal", goalItem.title, goalItem.color,color)}
+          {this.getStatisticsRow(goalItem,"cars","Cars")}
+          {this.getStatisticsRow(goalItem,"percentage","%")}
           </tbody>
-        </table>
-  )
-})
-} else {
-  return <div>No records found</div>
-}
-}
+        </table>)
+      })
+      } else {
+        return <div>No records found</div>
+      }
+      }
 
-getStatisticsRow(goalItem,type,title,color){
+getStatisticsRow(goalItem,type,title,color,fontcolor){
   var Style = {
-      backgroundColor: color
+      backgroundColor: color,
+      color: fontcolor
   };
   return <tr style={Style}>
         <td>{title}</td>

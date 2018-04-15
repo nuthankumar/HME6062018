@@ -72,17 +72,18 @@ export default class SummaryReportDataComponent extends Component {
   displaySummarizedRowData (reportRowData) {
       this.props.reportData.generate = false
     if (reportRowData.length > 0) {
+        let dataColour = '#ffffff'
         return reportRowData.map((reportItem) => {
             let menuColor = reportItem.menu.color
-            let menuStyle = { backgroundColor: menuColor };
+            let menuStyle = { backgroundColor: menuColor,color: dataColour };
             let greetColor = reportItem.greet.color
-            let greetStyle = { backgroundColor: greetColor };
+            let greetStyle = { backgroundColor: greetColor,color: dataColour };
             let serviceColor = reportItem.service.color
-            let serviceStyle = { backgroundColor: serviceColor };
+            let serviceStyle = { backgroundColor: serviceColor,color: dataColour };
             let laneQueueColor = reportItem.laneQueue.color
-            let laneQueueStyle = { backgroundColor: laneQueueColor };
+            let laneQueueStyle = { backgroundColor: laneQueueColor,color: dataColour };
             let laneTotalColor = reportItem.laneTotal.color
-            let laneTotalStyle = { backgroundColor: laneTotalColor };
+            let laneTotalStyle = { backgroundColor: laneTotalColor,color: dataColour };
 
         return (
           <tr>
@@ -101,6 +102,7 @@ export default class SummaryReportDataComponent extends Component {
         )
       })
     }else {
+      this.props.reportData.pagination = false
       return <div>No records found</div>
     }
   }
