@@ -93,22 +93,6 @@ class Login extends Component {
             this.props.history.push("/grouphierarchy");
         }
      })
-
-
-    //this.Auth.login(this.state.username, this.state.password)
-    //  .then(token => {
-    //    this.setState(
-    //      {
-    //        token: token
-    //      })
-    //    const url = Config.jwtUrl + token
-    //    // window.location.href('url');
-    //    window.location.assign(url)
-    //    this.props.history.replace(url)
-    //  })
-    //  .catch(err => {
-    //    console.log(err)
-    //  })
   }
 }
 

@@ -85,7 +85,7 @@ export default class HmeHeader extends React.Component {
                 </header>
                 <nav className='reports-navigation-header'>
                     <div id="Navbar" className="Navbar">
-                        <div className={'mainMenu menuBar ' + (isLoggedIn?'hidden' : 'show')}>
+                        <div className={'mainMenu menuBar ' + (isLoggedIn ?'show' : 'hidden')}>
 
                             {
                                 this.renderClientMenuItems(isAdmin, isLoggedIn)
