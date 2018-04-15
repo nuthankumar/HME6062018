@@ -4,23 +4,21 @@ const aad = require('azure-ad-jwt');
 
 function verifyToken(request, response, next) {
 
-    const authorization = request.headers['authorization']
-    /*
+  const authorization = request.headers['authorization']
   if (!authorization) {
     return response.status(403).send({
-      auth: true,
+      auth: false,
       message: 'authorization header is missing.'
     })
   }
-*/
-/*
+
   if (authorization) {
     var bearer = authorization.split(" ");
     var jwtToken = bearer[1];
 
     if (!jwtToken) {
       return response.status(403).send({
-        auth: true,
+        auth: false,
         message: 'token is missing.'
       })
     }
@@ -35,30 +33,29 @@ function verifyToken(request, response, next) {
         }
       });
     }
-    
     */
     // let encodeToken = Buffer.from(jwtToken, 'base64')
     // let token = encodeToken.toString('ascii')
-    //jwt.verify(jwtToken, config.secret, function (err, decoded) {
-    //  console.log('err: ', err)
+    jwt.verify(jwtToken, config.secret, function (err, decoded) {
+      console.log('err: ', err)
       
-    //  if (err) {
-    //    return response
-    //      .status(500)
-    //      .send({
-    //        auth: false,
-    //        message: 'Failed to authenticate token.'
-    //      })
-    //  }
+      if (err) {
+        return response
+          .status(500)
+          .send({
+            auth: false,
+            message: 'Failed to authenticate token.'
+          })
+      }
       
-    request.userId = '5KAQK1N8EUOG2OJBH3MZ8LKMXY391DL9'
-      request.UserEmail = 'hmeadmin@hme.com' //decoded.User_EmailAddress
-      request.UserName = 'Hme Admin' //`${decoded.User_LastName}, ${decoded.User_FirstName}`
+      request.userId = decoded.User_UID
+      request.UserEmail = decoded.User_EmailAddress
+      request.UserName = `${decoded.User_LastName}, ${decoded.User_FirstName}`
       // request.Role = decoded.Role
-      request.AccountId = 100 //decoded.User_OwnerAccount_ID
+      request.AccountId = decoded.User_OwnerAccount_ID
       // request.UserPreferenceValue = decoded.UserPreferencesValue
       next()
-   // })
+    })
   }
   /*
   // check header or url parameters or post parameters for token
@@ -92,6 +89,6 @@ function verifyToken(request, response, next) {
     next()
   })
   */
-//}
+}
 
 module.exports = verifyToken
