@@ -13,13 +13,25 @@ export default class Layout extends React.Component {
         const { Params, children } = this.props;
         let pathName = Params.location.pathname;
       
-        let isAdmin, isLoggedIn = false;
+        let isLoggedIn = false;
+        let isAdmin;
         let adminLogo = false
-        if (UserContext.isAdmin()) {
+
+        if (window.location.pathname == '/admin') {
             isAdmin = true
-        } else {
-            isAdmin = false
         }
+        else {
+            isAdmin = UserContext.isAdmin() === 'true' ? true:false ;
+            if (isAdmin == true) {
+                isAdmin = true
+            } else {
+                isAdmin = false
+            }
+        }
+
+
+        console.log(UserContext.isAdmin());
+        
         if (UserContext.isLoggedIn()) {
             isLoggedIn = true
         } else {
@@ -29,6 +41,9 @@ export default class Layout extends React.Component {
         if ((!isLoggedIn && window.location.pathname == '/admin') || isAdmin ) {
             adminLogo = true
         }
+
+        console.log(isAdmin);
+        console.log(isLoggedIn);
      return (
             <div>
              <HmeHeader isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn}/>

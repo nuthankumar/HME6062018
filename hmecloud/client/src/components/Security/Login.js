@@ -19,9 +19,6 @@ class Login extends Component {
         path:''
      }
     this.api = new Api()
-   // console.log(window.location.pathname);
-    //const { Params } = this.props;
-    //this.setState({ path: path });
   }
   componentWillMount () {
     if (this.Auth.loggedIn()) { this.props.history.replace('/') }

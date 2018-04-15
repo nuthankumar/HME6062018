@@ -935,7 +935,6 @@ class Report extends Component {
     this.setState({
         rawCarRequest: rawCarData[0]
     });
-
     let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
     this.api.postData(url, rawCarData[0], data => {
       //  this.props.history.push("/rawcardatareport", this.state.rawCarData);
