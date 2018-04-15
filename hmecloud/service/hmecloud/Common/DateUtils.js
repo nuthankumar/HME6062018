@@ -2,7 +2,7 @@ const moment = require('moment')
 const messages = require('../Common/Message')
 const momentDurationFormatSetup = require('moment-duration-format')
 const dateFormat = require('dateformat')
-
+const _ = require('lodash')
 const defaultFromTime = '00:00:00'
 const defaultEndTime = '23:59:59'
 
@@ -69,39 +69,35 @@ const dateDifference = (fromDate, toDate) => {
   let diffent = date2.diff(date1, 'days')
   return diffent
 }
-
-const dateDifferenceMonths = (fromDate, toDate) => {
-    const date1 = moment(fromDate)
-    const date2 = moment(toDate)
-    let diffent = date2.diff(date1, 'months')
-    return diffent
-}
-
 const convertMMMddMM = (dateVal) => {
+  if (dateVal !== null || (_.isUndefined(dateVal))) {
     return moment(dateVal).format('MMM MM/DD')
+  } else {
+    return 'N/A'
+  }
 }
 
 const converthhmmsstt = (dateVal) => {
+  if (dateVal !== null || (_.isUndefined(dateVal))) {
     return moment(dateVal).format('hh:mm:ss A')
+  } else {
+    return 'N/A'
+  }
 }
 
 const monthDifference = (fromDate, toDate) => {
-    const date1 = moment(fromDate)
-    const date2 = moment(toDate)
-    let diffent = date2.diff(date1, 'months')
-    return diffent
+  const date1 = moment(fromDate)
+  const date2 = moment(toDate)
+  let diffent = date2.diff(date1, 'months')
+  return diffent
 }
 
 const convertMonthDayYear = (dateVal) => {
-    return moment(dateVal).format('LL')
+  return moment(dateVal).format('LL')
 }
 
 const getAdvancedSelectionMaxDate = (noOfDays, dateValue) => {
-     return moment(dateValue).add(noOfDays, 'day').format('YYYY-MM-DD')
-}
-
-const getAdvancedSelectionMaxMonth = (noOfDays, dateValue) => {
-    return moment(dateValue).add(noOfDays, 'month').format('YYYY-MM-DD')
+  return moment(dateValue).add(noOfDays, 'day').format('YYYY-MM-DD')
 }
 module.exports = {
   convertSecondsToMinutes,
@@ -110,13 +106,11 @@ module.exports = {
   toTime,
   currentDate,
   currentTime,
-    dateDifference,
-    convertMMMddMM,
-    converthhmmsstt,
-    convertmmddyyyy,
-    monthDifference,
-    convertMonthDayYear,
-    getAdvancedSelectionMaxDate,
-    getAdvancedSelectionMaxMonth,
-    dateDifferenceMonths
+  dateDifference,
+  convertMMMddMM,
+  converthhmmsstt,
+  convertmmddyyyy,
+  monthDifference,
+  convertMonthDayYear,
+  getAdvancedSelectionMaxDate
 }

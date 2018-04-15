@@ -170,7 +170,8 @@ function singleStoreResult (reportData, totalRecordCount, averageTimeResultSet, 
   reportData.goalData = dataArray
   if (input.longestTime) {
     // goal Longest time
-    reportUtil.prepareLongestTimes(reportData, longestTimes, input.ReportTemplate_Format)
+    
+     reportUtil.prepareLongestTimes(reportData, longestTimes, input.ReportTemplate_Format)
   }
   // system statistics
   if (input.systemStatistics) {
@@ -205,7 +206,7 @@ function prepareDayPartObject (item, format, input, colors, goalSettings) {
   let daypart = {}
   if (item.StartTime !== null && item.StoreDate !== 'Total Daypart' && item.EndTime !== null && input.ReportTemplate_StoreIds.length < 2) {
     var dateSplit = item['StoreDate'].split('-')
-    daypart.timeSpan = `${dateSplit[1]}/${dateSplit[0]}-Daypart${item['DayPartIndex']}`
+    daypart.timeSpan = `${dateSplit[1]}/${dateSplit[2]}-Daypart${item['DayPartIndex']}`
     daypart.currentDaypart = `${dateUtils.converthhmmsstt(item.StartTime)}-${dateUtils.converthhmmsstt(item.EndTime)}`
     dataObject.daypart = daypart
   }
