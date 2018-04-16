@@ -7,10 +7,8 @@ GET, POST and DELETE api methods to be called from different components across t
 
 class Api {
   /* Method for POST API calls */
-
-    postData(url, data, callback) {
-
-        let token = UserContext.getToken()
+  postData(url, data, callback) {
+    let token = UserContext.getToken()
     fetch(url, {
       method: 'POST',
       headers: {
@@ -33,10 +31,12 @@ class Api {
 
   /* Method for GET API calls */
   getData(url, callback) {
+      let token = UserContext.getToken()
     fetch(url, {
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + Config.ctxToken
+          'Content-Type': 'application/json',
+          'x-access-token': token
+        //'Authorization': 'Bearer ' + Config.ctxToken
         // 'x-access-token': Config.token
       }
     // getData(url, callback) {
