@@ -35,8 +35,8 @@ class Api {
     fetch(url, {
       headers: {
           'Content-Type': 'application/json',
-          'x-access-token': token
-        //'Authorization': 'Bearer ' + Config.ctxToken
+          // 'x-access-token': token
+        'Authorization': 'Bearer ' + Config.ctxToken
         // 'x-access-token': Config.token
       }
     // getData(url, callback) {

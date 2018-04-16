@@ -17,10 +17,10 @@ export default class Layout extends React.Component {
 
         localStorage.setItem('id_token', Config.token)
         let idToken = localStorage.getItem('id_token')
-        let isAdmin = (idToken) ? true : false;
+        let isAdministrator = (idToken) ? true : false;
 
         // return (
-
+        let isAdmin = false
         let isLoggedIn = false;
         // let isAdmin;
         let adminLogo = false
@@ -29,7 +29,7 @@ export default class Layout extends React.Component {
             isAdmin = true
         }
         else {
-            isAdmin = UserContext.isAdmin() === 'true' ? true:false ;
+            isAdmin = UserContext.isAdmin() === 'true' ? true : false;
             console.log(UserContext.isAdmin());
             if (isAdmin == true) {
                 isAdmin = true
@@ -54,7 +54,7 @@ export default class Layout extends React.Component {
         // console.log(isLoggedIn);
         return (
             <div>
-                <HmeHeader isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} />
+                <HmeHeader isAdministrator={isAdministrator} isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} />
                 <AdminSubHeader isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} pathName={pathName} />
                 <div className="hmeBody">
                     {children}

@@ -50,6 +50,8 @@ export default class HmeHeader extends React.Component {
             if (ctxUser) {
                 this.state.contextUser = ctxUser
             }
+            console.log('ctxUser: ', ctxUser)
+
         }
 
         let loggedInUser = this.authService.getLoggedInProfile()
@@ -57,6 +59,7 @@ export default class HmeHeader extends React.Component {
         if (loggedInUser) {
             this.state.loggedInUser = loggedInUser
         }
+        console.log('loggedInUser: ', loggedInUser)
         this.setState(this.state)
     }
 
@@ -69,8 +72,8 @@ export default class HmeHeader extends React.Component {
         if (isAdmin && isLoggedIn) {
             return (
                 <ul>
-                    <li><a className="headerMenu" href={Config.coldFusionUrl+"?token="+token}>{t[language].navbarStores}</a></li>
-                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsStores&amp;path=Main;token="+token}>{t[language].navbarSystems}</a></li>
+                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?token=" + token}>{t[language].navbarStores}</a></li>
+                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsStores&amp;path=Main;token=" + token}>{t[language].navbarSystems}</a></li>
                     <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsDevices&amp;path=Main;token=" + token}>{t[language].navbarSystems}</a></li>
                     <li><a className="headerMenu active_tab" href={Config.coldFusionUrl + "?pg=pg=SettingsUsers&amp;path=Main;token=" + token}>{t[language].navbarUsers}</a></li>
                     <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsAccounts;token=" + token}>{t[language].navbarAccounts}</a></li>
@@ -86,7 +89,7 @@ export default class HmeHeader extends React.Component {
         if (!isAdmin && isLoggedIn) {
             return (
                 <ul>
-                    <li><a className="headerMenu" href={Config.coldFusionUrl+"?token="+token}>{t[language].navbarWelcome}</a></li>
+                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?token=" + token}>{t[language].navbarWelcome}</a></li>
                     <li id="zoomLabel"><a className="headerMenu" href={Config.coldFusionUrl + "?pg=Dashboards;token=" + token}>{t[language].navbarDashboard}</a></li>
                     <li id="zoomLabel"><Link className="active_tab headerMenu" to='/reports'>{t[language].navbarReports}</Link></li>
                     <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsAccount;token=" + token}>{t[language].navbarMyAccount}</a></li>
@@ -98,21 +101,23 @@ export default class HmeHeader extends React.Component {
         }
     }
     render() {
-        const { language, showSubMenu, contextUser, loggedInUser , token } = this.state;
-        const { isAdmin, isLoggedIn, adminLogo } = this.props;
+        const { language, showSubMenu, contextUser, loggedInUser, token } = this.state;
+        const { isAdministrator, isAdmin, isLoggedIn, adminLogo } = this.props;
         // let loggedInUser = 'Rudra'
         return (
             <div >
                 <header className='reports-page-header'>
-                    <div> <a href={Config.coldFusionUrl+"?token="+token}>
+                    <div> <a href={Config.coldFusionUrl + "?token=" + token}>
                         <img className={adminLogo ? 'hidden' : 'show'} src={ProductLogo} aria-hidden='true' />
                         <img className={'adminImage ' + (adminLogo ? 'show' : 'hidden')} src={AdminProductLogo} aria-hidden='true' />
                     </a></div>
                     <div className='user-info-section'>
-                        <span className={(isLoggedIn ? 'show' : 'hidden')}>
-                            <a className="black_link headerLink" href={Config.coldFusionUrl + "?pg=SettingsAccount;token=" + token}><span> {t[language].headerLoggedInAs} </span> <span className="username">{loggedInUser.name}</span></a> 
-                            <MasqueradeHeader isAdmin={isAdmin} viewAsUser={this.state.contextUser} />
-                        </span>                        
+                        {/* <span className={(isLoggedIn ? 'show' : 'hidden')}> */}
+                        <span className={(isAdministrator ? 'show' : 'hidden')}>
+                            <a className="black_link headerLink" href={Config.coldFusionUrl + "?pg=SettingsAccount;token=" + token}><span> {t[language].headerLoggedInAs} </span> <span className="username">{loggedInUser.name}</span></a>
+                            <MasqueradeHeader isAdministrator={isAdministrator} viewAsUser={this.state.contextUser} />
+                            {/* <MasqueradeHeader isAdmin="true" viewAsUser={this.state.contextUser} /> */}
+                        </span>
                         <button className={'logout ' + (isLoggedIn ? 'show' : 'hidden')}> <a className="black_link" href={Config.coldFusionUrl + "?pg=Logout;token=" + token} onClick={this.logout.bind(this)}> {t[language].headerSignOut}</a></button>
                         <img className='logOutIcon' src={HMELogo} aria-hidden='true' />
                     </div>
@@ -135,15 +140,15 @@ export default class HmeHeader extends React.Component {
                         {/*<a data-tip="<a>HTML tooltip</a> <br/> <a>HTML tooltip</a> <br/> <a>HTML tooltip</a>" data-html={true} data-event='click focus'>  <img className='cogWheel' src={CogWheel} aria-hidden='true' /></a>
             <ReactTooltip html={true} place="right" type="dark" effect="solid" globalEventOff='click' eventOff='click' />*/}
                         <div className="cogWheelSection">
-                        <div className="dropdown open">
-                            <a href="javascript:void(0);" className="dropdown-toggle" onClick={this.toggle.bind(this)}><img className='cogWheel' src={CogWheel} aria-hidden='true' /></a>
-                            <ul className={'dropdown-menu dropdown-menu-right ' + (this.state.settingsDropdown ? 'show' : 'hide')}>
-                                <li><a href={Config.coldFusionUrl + "?pg=Settings;token=" + token}>{t[language].navbarOptionSettings}</a></li>
-                                <li><a href={Config.coldFusionUrl + "?pg=Leaderboard&amp;st=Edit;token=" + token}>{t[language].customizeleaderboard}</a></li>
-                                <li><a href={Config.coldFusionUrl + "?pg=Help;token=" + token}>{t[language].navbarOptionHelp}</a></li>
-                            </ul>
+                            <div className="dropdown open">
+                                <a href="javascript:void(0);" className="dropdown-toggle" onClick={this.toggle.bind(this)}><img className='cogWheel' src={CogWheel} aria-hidden='true' /></a>
+                                <ul className={'dropdown-menu dropdown-menu-right ' + (this.state.settingsDropdown ? 'show' : 'hide')}>
+                                    <li><a href={Config.coldFusionUrl + "?pg=Settings;token=" + token}>{t[language].navbarOptionSettings}</a></li>
+                                    <li><a href={Config.coldFusionUrl + "?pg=Leaderboard&amp;st=Edit;token=" + token}>{t[language].customizeleaderboard}</a></li>
+                                    <li><a href={Config.coldFusionUrl + "?pg=Help;token=" + token}>{t[language].navbarOptionHelp}</a></li>
+                                </ul>
+                            </div>
                         </div>
-                      </div>
                     </div>
                 </nav>
             </div>)
@@ -152,8 +157,8 @@ export default class HmeHeader extends React.Component {
     toggle(e) {
         this.state.settingsDropdown ? this.setState({ settingsDropdown: false }) : this.setState({ settingsDropdown: true })
     }
-    logout(e){
-    UserContext.clearToken();
+    logout(e) {
+        UserContext.clearToken();
     }
 
     redirectUrl(url) {
@@ -170,4 +175,3 @@ export default class HmeHeader extends React.Component {
     //    }
     //}
 }
-    
