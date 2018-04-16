@@ -19,6 +19,7 @@ class Api {
       headers: {
         'Content-Type': 'application/json',
         // 'x-access-token': token
+        'Authorization': 'Bearer ' + this.authService.getToken()
       },
       body: JSON.stringify(data)
     })
@@ -60,7 +61,8 @@ class Api {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'x-access-token': token
+        // 'x-access-token': token
+        'Authorization': 'Bearer ' + this.authService.getToken()
       }
     })
       .then((response) => response.json())
