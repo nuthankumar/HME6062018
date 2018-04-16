@@ -73,11 +73,9 @@ const generateDayReport = (request, input, callback) => {
 
     }
 
-    console.log("The input====", datReportqueryTemplate)
     if (input !== null) {
         let daysingleResult = {}
         stores.getDayDataReport(datReportqueryTemplate, result => {
-            console.log("The REsult Object===", JSON.stringify(result))
             if (result.status === true) {
                 // Preparing Single Store results
                 // Preparing response for CSV
@@ -196,6 +194,9 @@ function prepareDayObject(item, format, colors, goalSettings) {
     let dataObject = {}
     let groupId = {}
     let storeId = {}
+    let deviceId = {}
+    let deviceUid = {}
+
     if (item.StoreNo && item.StoreNo.includes('Subtotal')) {
         groupId.value = item.GroupName + " " + item.StoreNo
     } else if (item.StoreNo && item.StoreNo === 'Total Day') {
@@ -231,6 +232,13 @@ function prepareDayObject(item, format, colors, goalSettings) {
 
     totalCars.value = item['Total_Car']
     dataObject.totalCars = totalCars
+
+    deviceId.value = item.Device_ID
+    dataObject.deviceId = deviceId
+
+    deviceUid.value = item.Device_UID
+    dataObject.deviceUid = deviceUid
+
     return dataObject
 }
 
