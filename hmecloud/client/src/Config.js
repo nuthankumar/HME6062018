@@ -1,3 +1,4 @@
+// to-do: move to process.env
 export const Config = {
   coldFusionUrl: 'https://uat.hmedtcloud.com/',
   apiBaseUrl: 'http://localhost:7071',

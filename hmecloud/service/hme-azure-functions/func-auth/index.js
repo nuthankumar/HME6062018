@@ -13,7 +13,8 @@ module.exports = function (context, req) {
     name = email.substring(0, email.lastIndexOf("@")),
     domain = email.substring(email.lastIndexOf("@") + 1)
 
-  if (domain !== config.domain) {
+  // if (domain !== config.domain) {
+  if (!params.isAdmin) { // to-do: add validations
     const sqlPool = new sql.ConnectionPool(config.sqlConfig, err => {
       if (err) {
         output.data = err

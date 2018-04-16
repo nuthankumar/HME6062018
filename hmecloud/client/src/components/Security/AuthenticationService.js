@@ -47,6 +47,11 @@ export default class AuthenticationService {
   }
 */
 
+  isAdmin() {
+    let path = window.location.pathname;
+    return (path == '/admin')
+  }
+  
   loggedIn() {
     // Checks if there is a saved token and it's still valid
     const token = this.getToken() // GEtting token from localstorage
@@ -69,6 +74,9 @@ export default class AuthenticationService {
     if (isAdmin)
       localStorage.setItem('id_token', idToken)
     else localStorage.setItem('ctx_token', idToken)
+
+    localStorage.setItem("token", idToken) //to-do: remove this post testing
+    localStorage.setItem("isAdmin", isAdmin)
   }
 
   getToken() {

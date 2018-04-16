@@ -12,12 +12,13 @@ class Api {
   }
   /* Method for POST API calls */
   postData(url, data, callback) {
-    let token = UserContext.getToken()
+    console.log('data: ', data)
+    // let token = UserContext.getToken()
     fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-access-token': token
+        // 'x-access-token': token
       },
       body: JSON.stringify(data)
     })
