@@ -6,7 +6,7 @@ const repository = require('../Repository/StoresRepository')
 const dataExportUtil = require('../Common/DataExportUtil')
 const dateFormat = require('dateformat')
 
-const generateWeekReportByDate = (input, callback) => {
+const generateWeekReportByDate = (request, input, callback) => {
   let pageStartDate = input.ReportTemplate_From_Date
   let pageEndDate = input.ReportTemplate_To_Date
   let lastPage
@@ -38,14 +38,13 @@ const generateWeekReportByDate = (input, callback) => {
   }
   input.ReportTemplate_From_Date = pageStartDate
   input.ReportTemplate_To_Date = pageEndDate
-  generateWeekReport(input, result => {
+  generateWeekReport(request,input, result => {
     let totalRecordCount = {}
     totalRecordCount.NoOfPages = lastPage
     result.totalRecordCount = totalRecordCount
     callback(result)
   })
 }
-
 const generateWeekReport = (request, input, callback) => {
   let fromDateTime = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
   let toDateTime = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
@@ -57,8 +56,14 @@ const generateWeekReport = (request, input, callback) => {
     EndDateTime: toDateTime,
     CarDataRecordType_ID: input.CarDataRecordType_ID,
     ReportType: input.ReportTemplate_Type,
-    LaneConfig_ID: 1
+    LaneConfig_ID: 1,
+    longestTime: input.longestTime,
+    systemStatistics: input.systemStatistics,
+    UserUID: request.userUid,
+    UserEmail: request.UserEmail,
   }
+  console.log("INPUT",inputDate)
+
   repository.getWeekReport(inputDate, (result) => {
     if (result.length > 0) {
       const repositoryData = result
@@ -70,8 +75,29 @@ const generateWeekReport = (request, input, callback) => {
       data.stopTime = moment(toDateTime).format('LL')
       let colors = _.filter(repositoryData, val => val.ColourCode)
       // Single Store
-      if (input.reportType.toLowerCase().trim() === 'csv') {
-        generateCSVOrPdfTriggerEmail(request, input, result, callback)
+      if (input.reportType.toLowerCase().trim() === 'csv' || input.reportType.toLowerCase().trim() === 'pdf') {
+        if (input.reportType.toLowerCase().trim() === 'csv') {
+          generateCSVOrPdfTriggerEmail(request, input, result)
+        } else {
+          let pdfInput = {}
+          pdfInput.type = request.t('COMMON.CSVTYPE')
+          pdfInput.reportName = `${request.t('COMMON.WEEKREPORTNAME')} ${dateFormat(new Date(), 'isoDate')}`
+
+          pdfInput.email = input.UserEmail
+          pdfInput.subject = `${request.t('COMMON.WEEKREPORTTITLE')} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
+          let reportName = 'Week'
+          const pdf = pdfgeneration(data, input, result, reportName, pdfInput)
+          if (pdf) {
+            let output = {}
+            output.data = input.UserEmail
+            output.status = true
+            callback(output)
+          } else {
+            let output = {}
+            output.status = false
+            callback(output)
+          }
+        }
       } else if (input.ReportTemplate_StoreIds.length === 1) {
         let goalSettings = _.filter(repositoryData, group => group['Menu Board - GoalA'])
         const StoreData = reportGenerate.getAllStoresDetails(repositoryData, colors, goalSettings, input.ReportTemplate_Format)
@@ -160,6 +186,10 @@ function generateCSVOrPdfTriggerEmail (request, input, result, callBack) {
   dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput, csvResults => {
     callBack(csvResults)
   })
+
+}
+const pdfgeneration = (data, input, result, reportName, pdfInput) => {
+  return dataExportUtil.prepareJsonForPDF(data, input, result, reportName, pdfInput)
 }
 
 module.exports = {
