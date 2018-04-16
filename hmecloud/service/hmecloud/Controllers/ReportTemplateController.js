@@ -26,7 +26,7 @@ const errorHandler = (message, status, request) => {
 const create = (reportTemplate, callback) => {
     let output = {}
   const values = {
-    Stores: reportTemplate.body.selectedStoreIds.toString(),
+    DeviceUUIds: reportTemplate.body.deviceUUIds.toString(),
     Uid: uuidv4(), 
     TimeMeasure: messages.TimeMeasure[reportTemplate.body.timeMeasure],
     FromDate: reportTemplate.body.fromDate,
@@ -85,7 +85,7 @@ const get = (reportTemplate, request, callback) => {
          reportTemplate.timeMeasure = messages.TimeMeasure[reportTemplate.timeMeasure]
          reportTemplate.type = messages.Type[reportTemplate.type]
          reportTemplate.format = messages.TimeFormat[reportTemplate.format]
-         reportTemplate.selectedStoreIds = reportTemplate.devices.split(',')
+            reportTemplate.deviceUUIds = reportTemplate.devices.split(',')
          reportTemplate.advancedOption = (reportTemplate.advancedOption === 1 ? true : false)
          reportTemplate.longestTime = (reportTemplate.longestTime === 1 ? true : false)
          reportTemplate.systemStatistics = (reportTemplate.systemStatistics === 1 ? true : false)

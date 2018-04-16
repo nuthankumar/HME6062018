@@ -60,7 +60,7 @@ export default class ReportGroupHierarchy extends React.Component {
           return <TreeNode className='treeNode' title={item.Name}
             key={item.Id} type={item.Type}>{loop(item.Children)}</TreeNode>
         }
-        return <TreeNode className='treeNode' title={item.Name} key={item.Id}/>
+        return <TreeNode className='treeNode' title={item.Name} key={item.Id} type={item.Type}/>
       })
     }
     return (<section className='groupManagementSection'>

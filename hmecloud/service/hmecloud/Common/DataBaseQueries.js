@@ -14,7 +14,7 @@ const sqlQueries = {
 @TemplateName = :TemplateName,
 @SessionUid = :SessionUid,
 @UserUid = :UserUid,
-@Devices = :Stores,
+@Devices = :DeviceUUIds,
 @TimeMeasure = :TimeMeasure,
 @FromDate = :FromDate,
 @OpenTime = :OpenTime,
@@ -54,7 +54,7 @@ const sqlQueries = {
                   @CarDataRecordType_ID =11,
                   @ReportType =:ReportType,
                   @LaneConfig_ID =:LaneConfig_ID,
-                  @UserUID =:userUid`
+                  @UserUID = :UserUID`
   }
 }
 
