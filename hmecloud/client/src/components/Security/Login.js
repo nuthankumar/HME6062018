@@ -107,7 +107,7 @@ class Login extends Component {
               })
           */}
 
-    let url = Config.apiBaseUrl + CommonConstants.apiUrls.auth
+    let url = Config.apiBaseUrl + Config.tokenPath
     this.api.getData(url, data => {
         localStorage.setItem("token", data.token);
         this.authService.setToken(data.token, true)
