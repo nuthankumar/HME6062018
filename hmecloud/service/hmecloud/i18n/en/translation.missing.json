@@ -3,7 +3,9 @@
     "groupNameEmpty": "CREATEGROUP.groupNameEmpty",
     "groupSuccess1": "CREATEGROUP.groupSuccess1",
     "invalidInput": "CREATEGROUP.invalidInput",
-    "groupId": "CREATEGROUP.groupId"
+    "groupId": "CREATEGROUP.groupId",
+    "noDataForGivenName": "CREATEGROUP.noDataForGivenName",
+    "groupSuccess2": "CREATEGROUP.groupSuccess2"
   },
   "REPORTSUMMARY": {
     "InvalidStoreId": "REPORTSUMMARY.InvalidStoreId",

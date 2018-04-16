@@ -1,7 +1,7 @@
 // to-do: move to process.env
 export const Config = {
   coldFusionUrl: 'https://uat.hmedtcloud.com/',
-  apiBaseUrl: 'http://localhost:7071',
+  apiBaseUrl: 'http://localhost:7071/',
   authBaseUrl: 'http://localhost:7072',
   tokenPath: '/api/func-auth',
   // apiBaseUrl: 'https://hme-dev-public-cloud-func.azurewebsites.net/',
