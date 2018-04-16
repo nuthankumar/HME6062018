@@ -35,6 +35,7 @@ const getDayDataReport = (input, callback) => {
       .input('EndDateTime', sql.DateTime2, input.ToDateTime)
       .input('CarDataRecordType_ID', sql.SmallInt, input.CarDataRecordType_ID)
       .input('ReportType', sql.Char, input.ReportTemplate_Type)
+      .input('UserUID', sql.NVarChar(50), input.userUid)
       .execute('usp_HME_Cloud_Get_Report_By_Date_Details', (err, result) => {
         if (err) {
           output.data = err
