@@ -324,7 +324,7 @@ export default class SummaryReport extends Component {
     }
 
     displaySystemStatistics() {
-        if (this.state.reportData.systemStatistics && this.state.reportData.singleStore) {
+        if (this.state.reportData.systemStatistics && this.state.reportData.singleStore && this.props.history.location.state.reportDataResponse.systemStatistics) {
             return (<div className='row systemstatistics-table-section'>
                 <SystemStatistics systemStats={this.props.history.location.state.reportDataResponse.systemStatistics} />
             </div>)
