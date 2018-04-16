@@ -57,10 +57,10 @@ export default class ReportGroupHierarchy extends React.Component {
       return data.map((item) => {
         // item.Children = [];
         if (item.Children && item.Children.length) {
-          return <TreeNode className='treeNode' title={item.Name}
+          return <TreeNode className='treeNode' title={item.Type === 'group' ? item.Name : item.Name ? item.StoreNumber + '-' + item.Name : item.StoreNumber}
             key={item.Id} type={item.Type}>{loop(item.Children)}</TreeNode>
         }
-        return <TreeNode className='treeNode' title={item.Name} key={item.Id} type={item.Type}/>
+        return <TreeNode className='treeNode' title={item.Type === 'group' ? item.Name : item.Name ? item.StoreNumber + '-' + item.Name : item.StoreNumber} key={item.Id} type={item.Type}/>
       })
     }
     return (<section className='groupManagementSection'>
