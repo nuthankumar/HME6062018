@@ -22,7 +22,7 @@ const generateDayReportByDate = (request, input, callback) => {
     if (currentPage === 0) {
         pageStartDate = input.ReportTemplate_From_Date
         pageEndDate = input.ReportTemplate_To_Date
-    } else if (input.ReportTemplate_StoreIds.length > 1) {
+    } else if (input.ReportTemplate_DeviceIds.length > 1) {
         let daysDiff = dateUtils.dateDifference(input.ReportTemplate_From_Date, input.ReportTemplate_To_Date)
         lastPage = Math.ceil((daysDiff + 1) / 2)
         if (currentPage !== 1) {
@@ -60,15 +60,17 @@ const generateDayReportByDate = (request, input, callback) => {
 const generateDayReport = (request, input, callback) => {
     let fromDateTime = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
     let toDateTime = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
-    let storesLength = input.ReportTemplate_StoreIds.length
+    let storesLength = input.ReportTemplate_DeviceIds.length
     const datReportqueryTemplate = {
-        ReportTemplate_StoreIds: input.ReportTemplate_StoreIds,
+        ReportTemplate_DeviceIds: input.ReportTemplate_DeviceIds,
         ReportTemplate_From_Date: input.ReportTemplate_From_Date,
         ReportTemplate_To_Date: input.ReportTemplate_To_Date,
         FromDateTime: fromDateTime,
         ToDateTime: toDateTime,
         ReportTemplate_Type: input.reportType,
-        CarDataRecordType_ID: input.CarDataRecordType_ID
+        CarDataRecordType_ID: 11, //input.CarDataRecordType_ID
+        UserUID: input.userUid
+
     }
 
     if (input !== null) {
@@ -192,6 +194,9 @@ function prepareDayObject(item, format, colors, goalSettings) {
     let dataObject = {}
     let groupId = {}
     let storeId = {}
+    let deviceId = {}
+    let deviceUid = {}
+
     if (item.StoreNo && item.StoreNo.includes('Subtotal')) {
         groupId.value = item.GroupName + " " + item.StoreNo
     } else if (item.StoreNo && item.StoreNo === 'Total Day') {
@@ -227,6 +232,13 @@ function prepareDayObject(item, format, colors, goalSettings) {
 
     totalCars.value = item['Total_Car']
     dataObject.totalCars = totalCars
+
+    deviceId.value = item.Device_ID
+    dataObject.deviceId = deviceId
+
+    deviceUid.value = item.Device_UID
+    dataObject.deviceUid = deviceUid
+
     return dataObject
 }
 

@@ -85,7 +85,7 @@ const get = (reportTemplate, request, callback) => {
          reportTemplate.timeMeasure = messages.TimeMeasure[reportTemplate.timeMeasure]
          reportTemplate.type = messages.Type[reportTemplate.type]
          reportTemplate.format = messages.TimeFormat[reportTemplate.format]
-            reportTemplate.deviceUUIds = reportTemplate.devices.split(',')
+         reportTemplate.deviceUUIds = reportTemplate.devices.split(',')
          reportTemplate.advancedOption = (reportTemplate.advancedOption === 1 ? true : false)
          reportTemplate.longestTime = (reportTemplate.longestTime === 1 ? true : false)
          reportTemplate.systemStatistics = (reportTemplate.systemStatistics === 1 ? true : false)

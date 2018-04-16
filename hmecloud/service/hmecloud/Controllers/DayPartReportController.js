@@ -49,7 +49,7 @@ const generateDaypartReport = (request, input, callBack) => {
 
   dayPartRepository.generateDayPartSummaryReport(input, result => {
     if (result.status === true) {
-      if (input.ReportTemplate_StoreIds.length > 1) {
+      if (input.ReportTemplate_DeviceIds.length > 1) {
         averageTimeResultSet = result.data[0]
         colorSettings = result.data[1]
         goalsStatistics = result.data[2]
@@ -65,13 +65,13 @@ const generateDaypartReport = (request, input, callBack) => {
         systemStatisticsLane = result.data[7]
         totalRecordCount = _.last(result.data)
       }
-      
+
       if (averageTimeResultSet.length > 0) {
         totalRecordCount.NoOfPages = input.pageNumber || 1
-        if (input.reportType.toLowerCase().trim() === 'csv') {
+        if (!_.isUndefined(input.reportType) && input.reportType.toLowerCase().trim() === 'csv') {
           generateCSVOrPdfTriggerEmail(request, input, result, callBack)
         } else {
-          if (input.ReportTemplate_StoreIds.length < 2) {
+          if (input.ReportTemplate_DeviceIds.length < 2) {
             singleStoreResult(reportData, totalRecordCount, averageTimeResultSet, input, colorSettings, goalsStatistics, data, dayPartObject, singleDayParts, storeDetails, getGoalTime, longestTimes, systemStatisticsLane, systemStatisticsGenral, callBack)
           } else {
             multiStoreResult(totalRecordCount, input, averageTimeResultSet, colorSettings, goalsStatistics, callBack)
@@ -83,7 +83,6 @@ const generateDaypartReport = (request, input, callBack) => {
         result.status = false
         callBack(result)
       }
-      
     } else {
       callBack(result)
     }
@@ -101,7 +100,7 @@ function multiStoreResult (totalRecordCount, input, averageTimeResultSet, colorS
   //  Multi store
   reportData.totalRecordCount = totalRecordCount[0]
   reportData.timeMeasure = input.ReportTemplate_Time_Measure
-  reportData.selectedStoreIds = input.ReportTemplate_StoreIds
+  reportData.selectedStoreIds = input.ReportTemplate_DeviceIds
   reportData.timeMeasureType = []
   let groupByDate
   groupByDate = _.groupBy(averageTimeResultSet, 'StoreDate')
@@ -171,8 +170,8 @@ function singleStoreResult (reportData, totalRecordCount, averageTimeResultSet, 
   reportData.goalData = dataArray
   if (input.longestTime) {
     // goal Longest time
-    
-     reportUtil.prepareLongestTimes(reportData, longestTimes, input.ReportTemplate_Format)
+
+    reportUtil.prepareLongestTimes(reportData, longestTimes, input.ReportTemplate_Format)
   }
   // system statistics
   if (input.systemStatistics) {
@@ -205,7 +204,10 @@ function prepareDayPartObject (item, format, input, colors, goalSettings) {
   let groupId = {}
   let storeId = {}
   let daypart = {}
-  if (item.StartTime !== null && item.StoreDate !== 'Total Daypart' && item.EndTime !== null && input.ReportTemplate_StoreIds.length < 2) {
+  let deviceId = {}
+  let deviceUid = {}
+
+  if (item.StartTime !== null && item.StoreDate !== 'Total Daypart' && item.EndTime !== null && input.ReportTemplate_DeviceIds.length < 2) {
     var dateSplit = item['StoreDate'].split('-')
     daypart.timeSpan = `${dateSplit[1]}/${dateSplit[2]}-Daypart${item['DayPartIndex']}`
     daypart.currentDaypart = `${dateUtils.converthhmmsstt(item.StartTime)}-${dateUtils.converthhmmsstt(item.EndTime)}`
@@ -214,6 +216,13 @@ function prepareDayPartObject (item, format, input, colors, goalSettings) {
 
   groupId.value = item.GroupName
   dataObject.groupId = groupId
+
+  deviceId.value = item.Device_ID
+  dataObject.deviceId = deviceId
+
+  deviceUid.value = item.Device_UID
+  dataObject.deviceUid = deviceUid
+
   if ((_.isUndefined(item.Store_ID) && _.isUndefined(item.Store_Name)) || (item.Store_ID === null && item.Store_Name === null)) {
     storeId.value = 'N/A'
   } else {
