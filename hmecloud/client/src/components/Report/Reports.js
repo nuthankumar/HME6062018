@@ -182,16 +182,9 @@ class Report extends Component {
               <div className="reports-pane">
                 <div className="checkbox-sections-advanced">
                   <div className="timings">
-
-                    <input
-                      type="checkbox"
-                      checked={this.state.selectAll}
-                      onChange={this.selectAll.bind(this)}
-                    />
-                    <span className="span-heading">
-                                        <span> {t[language].selectall} </span>
-
-                    </span>
+                    <input type="checkbox" id="includeTime"  checked={this.state.selectAll}
+                      onChange={this.selectAll.bind(this)}/>
+								<label className="label-heading" for="includeTime">{t[language].selectall}</label>
                   </div>
                   <div className="timings">
                                     <span> {t[language].brand} </span>
@@ -331,7 +324,7 @@ class Report extends Component {
                           <ReactTooltip place="right" type="dark" effect="solid" /> </span>
                       </div>
                       <div className="timings">
-                        <input
+                       <input
                           name="close"
                           type="checkbox"
                           checked={this.state.close}

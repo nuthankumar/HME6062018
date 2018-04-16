@@ -7,7 +7,6 @@ import * as languageSettings from '../Language/languageSettings'
 import { CommonConstants } from '../../Constants'
 import * as UserContext from '../Common/UserContext'
 import Api from '../../Api'
-
 class Login extends Component {
   constructor () {
     super()

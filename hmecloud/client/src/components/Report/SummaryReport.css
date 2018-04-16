@@ -597,3 +597,10 @@ span.redFont {
     border-radius: 0;
 }
 
+.label-heading{
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 0 !important;
+    font-weight: normal;
+    margin-left: 7px;
+}
