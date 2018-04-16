@@ -50,8 +50,8 @@ const reportValidator = (request, callback) => {
       if (input.ReportTemplate_Type === 1) {
         input.ReportTemplate_Type = 'TC'
       }
-      input.longestTime = false
-      input.systemStatistics = false
+      // input.longestTime = false
+      // input.systemStatistics = false
     }
     if (input.ReportTemplate_Type === 2) {
       input.ReportTemplate_Type = 'AC'
@@ -121,7 +121,7 @@ const reportValidator = (request, callback) => {
         output.status = false
         callback(output)
       }
-        weekReportController.generateWeekReportByDate(input, result => {
+        weekReportController.generateWeekReportByDate(request,input, result => {
         callback(result)
       })
       // report time measure raw car data

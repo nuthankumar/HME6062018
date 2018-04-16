@@ -18,10 +18,10 @@ const generateCsvAndEmail = (input, callback) => {
             }
         })
     }
-   
+
   })
 
-    
+
 }
 
 module.exports = {

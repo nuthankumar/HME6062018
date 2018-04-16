@@ -1,9 +1,11 @@
 const fs = require('fs')
 const moment = require('moment')
 const PdfBuffer = require('dynamic-html-pdf')
+const mail = require('../Common/EmailUtil')
 
-const mutipleStore = (reportData, callback) => {
-  const html = fs.readFileSync(__dirname + '/Multiple.html', 'utf8')
+const mutipleStore = (reportData,pdfInput, callback) => {
+  const html = fs.readFileSync(__dirname + '/MultipleStore.html', 'utf8')
+  const reportName = reportData.reportName
   const options = {
     format: 'Letter',
     orientation: 'landscape',
@@ -15,7 +17,7 @@ const mutipleStore = (reportData, callback) => {
     template: html,
     context: {
       details: {
-        reportName: reportData.reportName,
+        reportName: reportName,
         startTime: reportData.startTime,
         stopTime: reportData.stopTime,
         printDate: moment().format('LL'),
@@ -26,14 +28,33 @@ const mutipleStore = (reportData, callback) => {
   }
   PdfBuffer.create(document, options)
     .then(response => {
-      callback(response)
+      if (response) {
+        console.log(response)
+        const attachment = [{
+          filename: reportName + '.pdf',
+          contents: response.toString('base64'),
+          contentType: 'application/pdf; charset=ISO-8859-1'
+        }]
+        mail.send('jayaramv@nousinfo.com', pdfInput.subject, attachment, isMailSent => {
+          let output = {}
+          if (isMailSent) {
+            output.status = true
+            return output
+          } else {
+            output.status = false
+            return output
+          }
+        })
+      }
     })
     .catch(error => {
-      callback(response)
+      let output = {}
+      output.error = error
+      return output
     })
 }
 
-const singleStore = (reportData, callback) => {
+const singleStore = (reportData, pdfInput, callback) => {
   var html = fs.readFileSync(__dirname + '/SingleStore.html', 'utf8')
   var options = {
     format: 'Letter',
@@ -72,7 +93,7 @@ const singleStore = (reportData, callback) => {
         stopTime: reportData.stopTime,
         printDate: moment().format('LL'),
         reportPrintTime: moment().format('LT'),
-        storeDetails: reportData.timeMeasureType,
+        storeDetails: reportData.storeDetails,
         isLongTime: isLongTime,
         longTime: reportData.LongestTimes,
         isgoalData: isgoalData,
@@ -84,10 +105,29 @@ const singleStore = (reportData, callback) => {
   }
   PdfBuffer.create(document, options)
     .then(response => {
-      callback(response)
+      console.log(response)
+      if (response) {
+        var attachment = [{
+          filename: reportData.reportName + '.pdf',
+          contents: response.toString('base64'),
+          contentType: 'application/pdf; charset=ISO-8859-1'
+        }]
+        mail.send(pdfInput.email, pdfInput.subject, attachment, isMailSent => {
+          let output = {}
+          if (isMailSent) {
+            output.status = true
+            return output
+          } else {
+            output.status = false
+            return output
+          }
+        })
+      }
     })
     .catch(error => {
-      callback(response)
+      let output = {}
+      output.error = error
+      return output
     })
 }
 

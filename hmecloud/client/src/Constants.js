@@ -12,12 +12,12 @@ export const CommonConstants = {
     'addNewGroup': 'api/group/creategroup',
     'deleteGroup': 'api/group/deletegroup',
     'auth': 'api/auth/login'
-    },
-  'TimeMeasureValidations': {
-      'TwoMonths': 62,
-      'Month' : 31,
-      'TwoWeeks': 14,
-      'Today':0 ,
   },
-  'Drilldown': [2,4,1]
-  }
+  'TimeMeasureValidations': {
+    'TwoMonths': 62,
+    'Month': 31,
+    'TwoWeeks': 14,
+    'Today': 0,
+  },
+  'Drilldown': [2, 4, 1]
+}

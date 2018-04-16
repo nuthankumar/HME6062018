@@ -43,15 +43,13 @@ export default class HmeHeader extends React.Component {
     }
 
     setUserContext() {
-        this.authService.setToken(Config.ctxToken)
+        this.authService.setToken(Config.ctxToken, false)
         let ctxToken = this.authService.getToken()
         if (ctxToken) {
             let ctxUser = this.authService.getProfile()
             if (ctxUser) {
                 this.state.contextUser = ctxUser
             }
-            console.log('ctxUser: ', ctxUser)
-
         }
 
         let loggedInUser = this.authService.getLoggedInProfile()
@@ -59,7 +57,6 @@ export default class HmeHeader extends React.Component {
         if (loggedInUser) {
             this.state.loggedInUser = loggedInUser
         }
-        console.log('loggedInUser: ', loggedInUser)
         this.setState(this.state)
     }
 

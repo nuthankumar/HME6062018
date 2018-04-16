@@ -4,7 +4,7 @@
   "description": "azure function for hme-oauth",
   "main": "index.js",
   "scripts": {
-    "start": "func host start func-auth -p 7072 -n 5859",
+    "start": "func host start func-auth -p 7072 -n 5859 --cors *",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Manoj V S <manojvelayudhan@nousinfo.com>",

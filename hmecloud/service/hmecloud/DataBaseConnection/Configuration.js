@@ -2,7 +2,7 @@ const Sequelize = require('sequelize')
 const sql = require('mssql')
 
 const db = new Sequelize('hmeCloud', 'sa', 'nous@123', {
-  host: 'NIBC1329',
+  host: '192.168.27.87',
   dialect: 'mssql',
   operatorsAliases: false
   // multipleStatements: true
