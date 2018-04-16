@@ -153,7 +153,8 @@ class Report extends Component {
     const language = this.state.currentLanguage
     const { date, format, mode, inputFormat } = this.state;
     const loop = data => {
-      return data.map(item => {
+      console.log(data); 
+        return data.map(item => {
         if (item.Children && item.Children.length) {
           return (
             <TreeNode title={item.Name} key={item.Id} value={item.Id} type={item.Type}>
@@ -426,7 +427,7 @@ class Report extends Component {
                 <div className="saved-reports">{this.savedReports()}</div>
                 <span>{t[language].criteria} </span>
                 <div className="container criteria">
-                  <div className="col-md-12">
+                  <div className="col-md-12 storeWrap">
 
                                     <span className="criteriaHeading">{t[language].stores} :</span>
                     {this.state.stores.length ? this.renderStores() : "Select a Store"}
@@ -642,7 +643,7 @@ console.log(data);
     e.target.id;
     this.api.getData (url,data => {
         let template = data.data;
-        this.setState({ tempStore: template.SelectedList });
+//        this.setState({ tempStore: template.SelectedList });
         this.setState({ format: template.Format });
         this.setState({ type: template.Type });
         this.setState({ open: template.Open });
@@ -652,25 +653,53 @@ console.log(data);
         this.setState({ fromDate: fromDate });
         let toDate = moment(template.ToDate).format("MM/DD/YYYY");
         this.setState({ toDate: toDate });
-        this.setState({ defaultCheckedKeys: template.SelectedList });
-        let selectedStoreIds = []
-        this.setState({
-          stores: this.findMatch(this.state.treeData, item => {
-            if(item.Type === "store" && template.SelectedList.indexOf(item.Id.toString()) > -1){
-              selectedStoreIds.push(item.Id);
-            }
-            return (
-              item.Type === "store" &&
-              template.SelectedList.indexOf(item.Id.toString()) > -1
-            );
-          })
-        });
-        this.setState({
-          selectedStoreIds : selectedStoreIds
+        this.setState({ defaultCheckedKeys: template.SelectedStoreIds });
+        // let selectedStoreIds = []
+        // this.setState({
+        //   stores: this.findMatch(this.state.treeData, item => {
+        //     if(item.Type === "store" && template.SelectedList.indexOf(item.Id.toString()) > -1){
+        //       selectedStoreIds.push(item.Id);
+        //     }
+        //     return (
+        //       item.Type === "store" &&
+        //       template.SelectedList.indexOf(item.Id.toString()) > -1
+        //     );
+        //   })
+        // });
+        //  this.setState({
+        //    selectedStoreIds : selectedStoreIds
+        //  })
+          this.setState({
+           stores: this.findMatch(this.state.treeData, item => {
+             return (
+               item.Type === "store" &&
+               template.SelectedStoreIds.indexOf(item.Id.toString()) > -1
+             );
+           })
+         });
+         this.setState({
+          selectedStoreIds :  template.SelectedStoreIds
         })
-        _.contains(template.Include, "1") ? document.getElementById("longestTime").checked = true : ''
-        _.contains(template.Include, "2") ? document.getElementById("systemStatistics").checked = true:''
-        this.setState({ include: template.Include });
+        let include = []
+        if(template.LongestTime){
+          document.getElementById("longestTime").checked = true;
+          include.push('1')
+        }
+        else{
+          document.getElementById("longestTime").checked = false;
+        }
+        if(template.SystemStatistics){
+          
+          document.getElementById("systemStatistics").checked = true;
+          include.push('2')
+        }
+        else{
+          document.getElementById("systemStatistics").checked = false;
+        }
+        this.setState({ include: include });
+        // _.contains(template.Include, "1") ? document.getElementById("longestTime").checked = true : ''
+        // _.contains(template.Include, "2") ? document.getElementById("systemStatistics").checked = true:''
+         //this.setState({ include: template.Include });
         if (template.Open == false) {
           this.state.openTime = moment(template.OpenTime, "HH:mm a");
           this.setState(this.state);

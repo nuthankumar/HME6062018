@@ -114,20 +114,20 @@ export default class SummaryReport extends Component {
                 <div className='col-xs-3 left-padding-none'>
                     <h2 className='report-start-time-header'>
                         <span className='report-start-time'>{t[language].ReportsStart}:</span>
-                        <span className='report-start-time-value'>MAR 31,2018 {t[language].OPEN}</span>
+                        <span className='report-start-time-value'>{moment(this.state.reportData.drillDownRequestData.fromDate).format("MMM D YYYY")} {t[language].OPEN}</span>
                     </h2>
                 </div>
                 <div className='col-xs-3 left-padding-none'>
                     <h2 className='report-end-time-header'>
                         <span className='report-end-time'>End Time:</span>
-                        <span className='report-end-time-value'>MAR 31,2018 {t[language].CLOSE}</span>
+                        <span className='report-end-time-value'>{moment(this.state.reportData.drillDownRequestData.toDate).format("MMM D YYYY")} {t[language].CLOSE}</span>
                     </h2>
                 </div>
 
                 <div className='col-xs-4 left-padding-none'>
                     <h2 className='report-print-time-header'>
                         <span className='report-print-time'> {t[language].ReportsPrintTime}</span>
-                        <span className='report-print-time-value'> APR2, 2019 4:08 AM</span>
+                        <span className='report-print-time-value'> {moment(new Date()).format("MMM D YYYY hh:mm")}</span>
                     </h2>
                 </div>
             </div>)

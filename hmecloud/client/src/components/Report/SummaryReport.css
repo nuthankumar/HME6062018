@@ -575,10 +575,19 @@ span.redFont {
             width: 200px;
             position: relative;
         }
+
+        .storeWrap {
+          width: 300px;
+          white-space: nowrap;
+          overflow: hidden;
+          color:red;
+          text-overflow: ellipsis;
+        }
+        
 .download-summaryreport-btn {
     background-color: #06b1cb;
     text-align: center;
-    bottom-border: none;
+    border-bottom: none;
     color: #ffffff;
     cursor: pointer;
     padding: 10px 10px;
@@ -587,3 +596,4 @@ span.redFont {
     width: 130px;
     border-radius: 0;
 }
+
