@@ -93,7 +93,9 @@ module.exports = function (context, req) {
               refreshToken: tokenResponse.refreshToken,
               userId: tokenResponse.userId,
               familyName: tokenResponse.familyName,
-              givenName: tokenResponse.givenName
+              givenName: tokenResponse.givenName,
+              name: tokenResponse.name,
+              uid: tokenResponse.puid
             }
           }
         }
