@@ -24,7 +24,7 @@ export default class Layout extends React.Component {
         let isLoggedIn = false;
         // let isAdmin;
         let adminLogo = false
-/*
+
         if (window.location.pathname == '/admin') {
             isAdmin = true
         }
@@ -45,7 +45,7 @@ export default class Layout extends React.Component {
         } else {
             isLoggedIn = false
         }
-*/
+
         if ((!isLoggedIn && window.location.pathname == '/admin') || isAdmin) {
             adminLogo = true
         }
