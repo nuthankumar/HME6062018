@@ -22,7 +22,7 @@ const generateDayReportByDate = (request, input, callback) => {
     if (currentPage === 0) {
         pageStartDate = input.ReportTemplate_From_Date
         pageEndDate = input.ReportTemplate_To_Date
-    } else if (input.ReportTemplate_StoreIds.length > 1) {
+    } else if (input.ReportTemplate_DeviceIds.length > 1) {
         let daysDiff = dateUtils.dateDifference(input.ReportTemplate_From_Date, input.ReportTemplate_To_Date)
         lastPage = Math.ceil((daysDiff + 1) / 2)
         if (currentPage !== 1) {
@@ -60,20 +60,24 @@ const generateDayReportByDate = (request, input, callback) => {
 const generateDayReport = (request, input, callback) => {
     let fromDateTime = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
     let toDateTime = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
-    let storesLength = input.ReportTemplate_StoreIds.length
+    let storesLength = input.ReportTemplate_DeviceIds.length
     const datReportqueryTemplate = {
-        ReportTemplate_StoreIds: input.ReportTemplate_StoreIds,
+        ReportTemplate_DeviceIds: input.ReportTemplate_DeviceIds,
         ReportTemplate_From_Date: input.ReportTemplate_From_Date,
         ReportTemplate_To_Date: input.ReportTemplate_To_Date,
         FromDateTime: fromDateTime,
         ToDateTime: toDateTime,
         ReportTemplate_Type: input.reportType,
-        CarDataRecordType_ID: input.CarDataRecordType_ID
+        CarDataRecordType_ID: 11, //input.CarDataRecordType_ID
+        UserUID: input.userUid
+
     }
 
+    console.log("The input====", datReportqueryTemplate)
     if (input !== null) {
         let daysingleResult = {}
         stores.getDayDataReport(datReportqueryTemplate, result => {
+            console.log("The REsult Object===", JSON.stringify(result))
             if (result.status === true) {
                 // Preparing Single Store results
                 // Preparing response for CSV
