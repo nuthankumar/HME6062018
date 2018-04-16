@@ -50,8 +50,6 @@ export default class HmeHeader extends React.Component {
             if (ctxUser) {
                 this.state.contextUser = ctxUser
             }
-            console.log('ctxUser: ', ctxUser)
-
         }
 
         let loggedInUser = this.authService.getLoggedInProfile()
@@ -59,7 +57,6 @@ export default class HmeHeader extends React.Component {
         if (loggedInUser) {
             this.state.loggedInUser = loggedInUser
         }
-        console.log('loggedInUser: ', loggedInUser)
         this.setState(this.state)
     }
 
