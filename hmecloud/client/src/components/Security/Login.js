@@ -7,7 +7,6 @@ import * as languageSettings from '../Language/languageSettings'
 import { CommonConstants } from '../../Constants'
 import * as UserContext from '../Common/UserContext'
 import Api from '../../Api'
-
 class Login extends Component {
   constructor () {
     super()
@@ -16,7 +15,9 @@ class Login extends Component {
     this.Auth = new AuthenticationService()
     this.state = {
         language: languageSettings.getCurrentLanguage(),
-        path:''
+        path:'', 
+        username:'',
+        password:''
      }
     this.api = new Api()
   }
@@ -45,11 +46,11 @@ class Login extends Component {
                                             <tbody>
                                                 <tr>
                                             <th><label for="Username">{t[language].username}</label></th>
-                                                      <td><input className='loginInputs' type="text" maxlength="100" name="Username"/></td>
+                                                      <td><input className='loginInputs' type="text" maxlength="100" name="username" onChange={this.handleChange.bind(this)}/></td>
                           	                    </tr>
                                           <tr>
                                             <th><label for="Password">{t[language].password}</label></th>
-                                              <td><input className='loginInputs' type="password" maxlength="16" name="Password"/>
+                                              <td><input className='loginInputs' type="password" maxlength="16" name="password" onChange={this.handleChange.bind(this)} />
 		                                      </td>
 	                                      </tr>
                                           <tr>
@@ -80,7 +81,30 @@ class Login extends Component {
 
 
   submit (e) {
+  
+
     e.preventDefault()
+      console.log(this.state.username)
+      console.log(this.state.password)
+      let user= {
+                "username": "nous-selva@hme.com",
+                "password": "ChangeMe124!"
+                }
+          {/*
+           let url = Config.apiBaseUrl + CommonConstants.apiUrls.auth
+           this.api.postData(url, createTemplateData[0], data => {
+                       localStorage.setItem("token", data.token);
+                  //this.state.successMessage = data.data;
+                  //this.state.errorMessage = "";
+                  //this.setState(this.state);
+                  //this.getSavedReports();
+              }, error => {
+                  //this.state.errorMessage = "ERROR";
+                  //this.state.successMessage = "";
+                  //this.setState(this.state);
+              })
+          */}
+
     let url = Config.apiBaseUrl + CommonConstants.apiUrls.auth
     this.api.getData(url, data => {
         localStorage.setItem("token", data.token);

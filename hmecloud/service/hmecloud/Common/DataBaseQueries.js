@@ -53,7 +53,8 @@ const sqlQueries = {
                   @EndDateTime =:EndDateTime,
                   @CarDataRecordType_ID =11,
                   @ReportType =:ReportType,
-                  @LaneConfig_ID =:LaneConfig_ID`
+                  @LaneConfig_ID =:LaneConfig_ID,
+                  @UserUID =:userUid`
   }
 }
 

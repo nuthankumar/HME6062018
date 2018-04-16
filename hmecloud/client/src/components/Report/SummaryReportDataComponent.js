@@ -88,7 +88,7 @@ export default class SummaryReportDataComponent extends Component {
         return (
           <tr>
             <td className={this.dynamicColumnData.showGroupsStores}> {reportItem.groupId ? reportItem.groupId.value : '' }</td>
-            <td className={this.dynamicColumnData.showGroupsStores}> <a href='#' className='' onClick={() => this.props.handleDrillDown(reportItem.storeId)}>{reportItem.storeId ? reportItem.storeId.value : ''} </a></td>
+            <td className={this.dynamicColumnData.showGroupsStores}> <a href='#' className='' onClick={() => this.props.handleDrillDown(reportItem.storeId)}>{reportItem.store ? reportItem.store.name : ''} </a></td>
             <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayColumn} onClick={() => this.props.handleDrillDown(reportItem.storeId)}><span className='timeSpan'>{reportItem.day? reportItem.day.timeSpan : '' }</span><br/><span className='currentMeasure'>{reportItem.day  ? reportItem.day.currentDaypart :''}</span></td>
             <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayPartColumn} onClick={() => this.props.handleDrillDown(reportItem.storeId)}><span className='timeSpan'>{reportItem.daypart? reportItem.daypart.timeSpan : ''}</span><br/><span className='currentMeasure'>{reportItem.daypart ? reportItem.daypart.currentDaypart : ''}</span></td>
             <td className={'timeMeasureColumn ' + this.dynamicColumnData.showWeekColumn} onClick={() => this.props.handleDrillDown(reportItem.storeId)}><span>{reportItem.week? reportItem.week.timeSpan : ''}</span> <span className='currentMeasure'>{reportItem.week ? reportItem.week.currentDaypart : ''}</span></td>

@@ -50,10 +50,10 @@ const get = (request, callback) => {
 const getAll = (input, callback) => {
   let output = {}
   let values = {}
-  console.log('The logged in user Id', input.userId)
+  console.log('The logged in user Uid', input.userUid)
 
-  if (input.userId) {
-    values.UserUid = input.userId
+  if (input.userUid) {
+    values.UserUid = input.userUid
     templateController.getAll(values, input, (result) => {
       callback(result)
     })

@@ -40,7 +40,7 @@ const create = (reportTemplate, callback) => {
       Format: messages.TimeFormat[reportTemplate.body.format],
     TemplateName: reportTemplate.body.templateName,
     SessionUid: uuidv4(),  // To be updated with actual
-    UserUid: reportTemplate.userId,
+    UserUid: reportTemplate.userUid,
     CreatedBy: reportTemplate.UserEmail,
       AdvancedOption: (reportTemplate.body.advancedOption === true ? 1 : 0),
       LongestTime: (reportTemplate.body.longestTime === true ? 1 : 0),

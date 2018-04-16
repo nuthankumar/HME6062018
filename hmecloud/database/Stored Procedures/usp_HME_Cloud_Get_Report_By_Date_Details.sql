@@ -25,7 +25,8 @@ CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details](
 	@EndDateTime datetime = '3000-01-01 23:59:59',
 	@CarDataRecordType_ID varchar(255) = '11',
 	@ReportType char(2) = 'AC',   -- AC: cumulative  TC: Time Slice
-	@LaneConfig_ID tinyint = 1
+	@LaneConfig_ID tinyint = 1,
+	@UserUID NVARCHAR(50)
 )
 AS
 BEGIN
@@ -413,22 +414,21 @@ BEGIN
 		SELECT 1
 
 		SET @query = '';
-		SELECT 
-			Preferences_Preference_Value as ColourCode 
-		FROM 
-			itbl_Leaderboard_Preferences 
-		WHERE 
-			Preferences_Company_ID=1271 
-		AND 
-			Preferences_Preference_ID=5
+
+		SELECT Preferences_Preference_Value as ColourCode FROM itbl_Leaderboard_Preferences WHERE 
+			Preferences_Company_ID=(select User_Company_ID  
+			from  tbl_Users where User_UID = @UserUID ) AND Preferences_Preference_ID=5
 
 	EXECUTE(@query);
 		SET @query = '';	
-			INSERT INTO @getGoalTime  VALUES(15,30,60,90,120,5,10,15,20,30,60,90,120,30,60,90,120,30,30,120,180,90,150,300,420)
-			SELECT * 
-			FROM 
-			@getGoalTime;
 
+			--INSERT INTO @getGoalTime  VALUES(15,30,60,90,120,5,10,15,20,30,60,90,120,30,60,90,120,30,30,120,180,90,150,300,420)
+		--	SELECT * 
+		--	FROM 
+		--	@getGoalTime;
+		-- get Gaols time in seconds
+			EXEC usp_HME_Cloud_Get_Device_Goals @Device_IDs
+			
 			EXECUTE(@query);
 			-- Changes for System Statistics
 	IF (@isMultiStore = 0)
@@ -453,7 +453,4 @@ BEGIN
 	RETURN(0)
 
 END
-
-GO
-
 

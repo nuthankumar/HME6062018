@@ -25,7 +25,7 @@ function verifyToken (request, response, next) {
           message: message.JWT.TOKENMISS
         })
     }
-    request.userId = decoded.userId
+    request.userUid = decoded.userUid
     request.UserEmail = decoded.UserEmail
     request.UserName = decoded.UserName
     request.Role = decoded.Role

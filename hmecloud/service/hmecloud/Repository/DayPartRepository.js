@@ -22,6 +22,7 @@ const generateDayPartSummaryReport = (input, callback) => {
       .input('LaneConfig_ID', sql.TinyInt, '1')
       // .input('RecordPerPage', sql.SmallInt, input.recordPerPage)
       .input('PageNumber', sql.SmallInt, input.pageNumber)
+      .input('UserUID', sql.NVarChar(50), input.userUid)
       .execute('usp_HME_Cloud_Get_Report_By_Daypart_Details', (err, result) => {
         if (err) {
           output.data = err

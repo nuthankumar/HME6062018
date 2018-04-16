@@ -24,6 +24,7 @@ const reportValidator = (request, callback) => {
       systemStatistics: request.body.systemStatistics, // boolean
       ReportTemplate_Format: request.body.format, // number
       reportType: request.query.reportType,
+      userUid: request.userUid,
       UserEmail: request.UserEmail,
       CarDataRecordType_ID: request.UserPreferenceValue,
       recordPerPage: request.body.recordPerPage,
