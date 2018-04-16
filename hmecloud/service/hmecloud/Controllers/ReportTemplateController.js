@@ -74,8 +74,8 @@ const get = (reportTemplate, request, callback) => {
          let reportTemplate = result
          reportTemplate.fromDate = dateUtils.convertYYYYMMDD(reportTemplate.fromDate)
          reportTemplate.toDate = dateUtils.convertYYYYMMDD(reportTemplate.toDate)
-         reportTemplate.openTime = dateUtils.converthhmmsstt(reportTemplate.openTime)
-         reportTemplate.closeTime = dateUtils.converthhmmsstt(reportTemplate.closeTime)
+            reportTemplate.openTime = dateUtils.converthhmmtt(reportTemplate.openTime)
+            reportTemplate.closeTime = dateUtils.converthhmmtt(reportTemplate.closeTime)
          reportTemplate.timeMeasure = messages.TimeMeasure[reportTemplate.timeMeasure]
          reportTemplate.type = messages.Type[reportTemplate.type]
          reportTemplate.format = messages.TimeFormat[reportTemplate.format]
