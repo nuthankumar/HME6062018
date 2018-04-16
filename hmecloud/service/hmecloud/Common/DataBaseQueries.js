@@ -38,7 +38,7 @@ const sqlQueries = {
   'SummarizedReport': {
     'getRawData':
             `exec [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details]
-                 @StoreId  =:ReportTemplate_StoreIds
+                 @Device_IDs  =:ReportTemplate_DeviceIds
                 ,@StoreStartDate = :ReportTemplate_From_Date
                 ,@StoreEndDate = :ReportTemplate_To_Date
                 ,@StartDateTime =:fromDateTime

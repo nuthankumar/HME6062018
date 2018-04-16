@@ -34,17 +34,17 @@ const getRawCarDataReport = (input, callBack) => {
   let fromDateTime = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
 
   let toDateTime = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
-
+    
   const rawCarDataqueryTemplate = {
-    ReportTemplate_StoreIds: input.ReportTemplate_StoreIds,
+    ReportTemplate_DeviceIds: input.ReportTemplate_DeviceIds,
     ReportTemplate_From_Date: input.ReportTemplate_From_Date,
     ReportTemplate_To_Date: input.ReportTemplate_To_Date,
     fromDateTime: fromDateTime,
     toDateTime: toDateTime,
-    ReportTemplate_Type: input.CarDataRecordType_ID,
+    ReportTemplate_Type: 11, //input.CarDataRecordType_ID,
     ReportType: input.ReportTemplate_Type,
     LaneConfig_ID: 1
-  }
+    }
   const rawCarDataList = []
   const rawCarData = {}
   const departTimeStampMap = new HashMap()
