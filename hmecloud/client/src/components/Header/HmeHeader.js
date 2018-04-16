@@ -131,9 +131,10 @@ export default class HmeHeader extends React.Component {
 
                         </div>
                     </div>
-                    <div className={'cogWheelSection ' + (isLoggedIn ? 'show' : 'hidden')}>
+                    <div className={(isLoggedIn ? 'show' : 'hidden')}>
                         {/*<a data-tip="<a>HTML tooltip</a> <br/> <a>HTML tooltip</a> <br/> <a>HTML tooltip</a>" data-html={true} data-event='click focus'>  <img className='cogWheel' src={CogWheel} aria-hidden='true' /></a>
             <ReactTooltip html={true} place="right" type="dark" effect="solid" globalEventOff='click' eventOff='click' />*/}
+                        <div className="cogWheelSection">
                         <div className="dropdown open">
                             <a href="javascript:void(0);" className="dropdown-toggle" onClick={this.toggle.bind(this)}><img className='cogWheel' src={CogWheel} aria-hidden='true' /></a>
                             <ul className={'dropdown-menu dropdown-menu-right ' + (this.state.settingsDropdown ? 'show' : 'hide')}>
@@ -142,6 +143,7 @@ export default class HmeHeader extends React.Component {
                                 <li><a href={Config.coldFusionUrl + "?pg=Help;token=" + token}>{t[language].navbarOptionHelp}</a></li>
                             </ul>
                         </div>
+                      </div>
                     </div>
                 </nav>
             </div>)
@@ -165,3 +167,4 @@ export default class HmeHeader extends React.Component {
     //    }
     //}
 }
+    
