@@ -68,7 +68,7 @@ const generateDaypartReport = (request, input, callBack) => {
       
       if (averageTimeResultSet.length > 0) {
         totalRecordCount.NoOfPages = input.pageNumber || 1
-        if (input.reportType.toLowerCase().trim() === 'csv' || input.reportType.toLowerCase().trim() === 'pdf') {
+        if (input.reportType.toLowerCase().trim() === 'csv') {
           generateCSVOrPdfTriggerEmail(request, input, result, callBack)
         } else {
           if (input.ReportTemplate_StoreIds.length < 2) {

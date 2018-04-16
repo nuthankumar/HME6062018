@@ -6,51 +6,47 @@ const repository = require('../Repository/StoresRepository')
 const dataExportUtil = require('../Common/DataExportUtil')
 const dateFormat = require('dateformat')
 
-const generateWeekReportByDate = (input, callback) =>{
+const generateWeekReportByDate = (input, callback) => {
+  let pageStartDate = input.ReportTemplate_From_Date
+  let pageEndDate = input.ReportTemplate_To_Date
+  let lastPage
+  let currentPage = input.pageNumber
 
-    let pageStartDate = input.ReportTemplate_From_Date
-    let pageEndDate = input.ReportTemplate_To_Date
-    let lastPage
-    let currentPage = input.pageNumber
-
-    if (currentPage === 0) {
-        pageStartDate = input.ReportTemplate_From_Date
-        pageEndDate = input.ReportTemplate_To_Date
-    } else if (input.ReportTemplate_StoreIds.length > 1) {
-        let daysDiff = dateUtils.dateDifference(input.ReportTemplate_From_Date, input.ReportTemplate_To_Date)
-        lastPage = Math.ceil((daysDiff + 1) / 14)
-        if (currentPage !== 1) {
-            pageStartDate = dateUtils.getAdvancedSelectionMaxDate(((currentPage - 1) * 14), pageStartDate)
-        }
-        pageEndDate = dateUtils.getAdvancedSelectionMaxDate(13, pageStartDate)
-        if (pageEndDate > input.ReportTemplate_To_Date) {
-            pageEndDate = dateUtils.getAdvancedSelectionMaxDate(6, pageStartDate)
-        }
-    } else {
-        let daysDiff = dateUtils.dateDifferenceMonths(input.ReportTemplate_From_Date, input.ReportTemplate_To_Date)
-        lastPage = Math.ceil((daysDiff + 1))
-        if (currentPage !== 1) {
-            pageStartDate = dateUtils.getAdvancedSelectionMaxDate(((currentPage - 1) * 31), pageStartDate)
-        }
-        pageEndDate = dateUtils.getAdvancedSelectionMaxDate(27, pageStartDate)
-        if (pageEndDate > input.ReportTemplate_To_Date) {
-            pageEndDate = input.ReportTemplate_To_Date
-        }
+  if (currentPage === 0) {
+    pageStartDate = input.ReportTemplate_From_Date
+    pageEndDate = input.ReportTemplate_To_Date
+  } else if (input.ReportTemplate_StoreIds.length > 1) {
+    let daysDiff = dateUtils.dateDifference(input.ReportTemplate_From_Date, input.ReportTemplate_To_Date)
+    lastPage = Math.ceil((daysDiff + 1) / 14)
+    if (currentPage !== 1) {
+      pageStartDate = dateUtils.getAdvancedSelectionMaxDate(((currentPage - 1) * 14), pageStartDate)
     }
-    input.ReportTemplate_From_Date = pageStartDate
-    input.ReportTemplate_To_Date = pageEndDate
-    generateWeekReport(input, result => {
-        let totalRecordCount = {}
-        totalRecordCount.NoOfPages = lastPage
-        result.totalRecordCount = totalRecordCount
-        callback(result)
-
-    })
-
+    pageEndDate = dateUtils.getAdvancedSelectionMaxDate(13, pageStartDate)
+    if (pageEndDate > input.ReportTemplate_To_Date) {
+      pageEndDate = dateUtils.getAdvancedSelectionMaxDate(6, pageStartDate)
+    }
+  } else {
+    let daysDiff = dateUtils.dateDifferenceMonths(input.ReportTemplate_From_Date, input.ReportTemplate_To_Date)
+    lastPage = Math.ceil((daysDiff + 1))
+    if (currentPage !== 1) {
+      pageStartDate = dateUtils.getAdvancedSelectionMaxDate(((currentPage - 1) * 31), pageStartDate)
+    }
+    pageEndDate = dateUtils.getAdvancedSelectionMaxDate(27, pageStartDate)
+    if (pageEndDate > input.ReportTemplate_To_Date) {
+      pageEndDate = input.ReportTemplate_To_Date
+    }
+  }
+  input.ReportTemplate_From_Date = pageStartDate
+  input.ReportTemplate_To_Date = pageEndDate
+  generateWeekReport(input, result => {
+    let totalRecordCount = {}
+    totalRecordCount.NoOfPages = lastPage
+    result.totalRecordCount = totalRecordCount
+    callback(result)
+  })
 }
 
-
-const generateWeekReport = (input, callback) => {
+const generateWeekReport = (request, input, callback) => {
   let fromDateTime = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
   let toDateTime = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
   const inputDate = {
@@ -74,8 +70,8 @@ const generateWeekReport = (input, callback) => {
       data.stopTime = moment(toDateTime).format('LL')
       let colors = _.filter(repositoryData, val => val.ColourCode)
       // Single Store
-      if (input.reportType.toLowerCase().trim() === 'csv' || input.reportType.toLowerCase().trim() === 'pdf') {
-        generateCSVOrPdfTriggerEmail(request, input, result, callBack)
+      if (input.reportType.toLowerCase().trim() === 'csv') {
+        generateCSVOrPdfTriggerEmail(request, input, result, callback)
       } else if (input.ReportTemplate_StoreIds.length === 1) {
         let goalSettings = _.filter(repositoryData, group => group['Menu Board - GoalA'])
         const StoreData = reportGenerate.getAllStoresDetails(repositoryData, colors, goalSettings, input.ReportTemplate_Format)
@@ -94,22 +90,22 @@ const generateWeekReport = (input, callback) => {
         let goalTimes = _.filter(repositoryData, group => group['Cashier_GoalA'])
         const getGoalsData = reportGenerate.getGoalStatistic(goalSettings, goalTimes, daysingleResult, carTotals, input.ReportTemplate_Format, colors)
         const goalsData = goalData(repositoryData)
-          if (input.longestTime) {
-              data.LongestTimes = {}
-              const longData = reportGenerate.prepareLongestTimes(data, goalsData, input.ReportTemplate_Format)
+        if (input.longestTime) {
+          data.LongestTimes = {}
+          const longData = reportGenerate.prepareLongestTimes(data, goalsData, input.ReportTemplate_Format)
+        }
+        if (input.systemStatistics) {
+          let resultsLength = repositoryData.length
+          if (resultsLength > 0) {
+            let systemStatisticsLane = []
+            let systemStatisticsGenral = []
+            systemStatisticsLane[0] = repositoryData[resultsLength - 1]
+            systemStatisticsGenral[0] = repositoryData[resultsLength - 2]
+            reportGenerate.prepareStatistics(data, systemStatisticsLane, systemStatisticsGenral)
           }
-              if (input.systemStatistics) {
-              let resultsLength = repositoryData.length
-              if (resultsLength > 0) {
-                  let systemStatisticsLane = []
-                  let systemStatisticsGenral = []
-                  systemStatisticsLane[0] = repositoryData[resultsLength - 1]
-                  systemStatisticsGenral[0] = repositoryData[resultsLength - 2]
-                  reportGenerate.prepareStatistics(data, systemStatisticsLane, systemStatisticsGenral)
-              }
-          }
+        }
 
-          // Group Goals
+        // Group Goals
         let goalsGroup = []
         goalsGroup = getGoalsData
         data.goalData = goalsGroup
@@ -167,6 +163,6 @@ function generateCSVOrPdfTriggerEmail (request, input, result, callBack) {
 }
 
 module.exports = {
-    generateWeekReport,
-    generateWeekReportByDate
+  generateWeekReport,
+  generateWeekReportByDate
 }

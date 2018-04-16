@@ -313,26 +313,18 @@ class Report extends Component {
 
                     <div className="checkbox-sections-advanced">
                       <div className="alignCenter timings">
-                          <input
-                              name="open"
-                              type="checkbox"
-                              checked={this.state.open}
-                              onChange={this.check.bind(this, this.state.open)}
-                          />
-                          <span className="textPaddingSmall">  {t[language].open}
-                                       <a data-tip={t[language].leavetheopencloseboxes}><span className="tip openTip">?</span></a>
+                      <input type="checkbox" id="open"   name="open"  checked={this.state.open}
+                              onChange={this.check.bind(this, this.state.open)}/>
+								<label className="label-heading" for="open"> {t[language].open}</label>
+                                   <span> <a data-tip={t[language].leavetheopencloseboxes}><span className="tip openTip">?</span></a>
                           <ReactTooltip place="right" type="dark" effect="solid" /> </span>
                       </div>
                       <div className="timings">
-                       <input
-                          name="close"
-                          type="checkbox"
-                          checked={this.state.close}
-                          onChange={this.check.bind(this, this.state.close)}
-                        />
-                        <span className="span-heading">
-                                                <span> {t[language].close} </span>
-                                                <a data-tip={t[language].leavetheopencloseboxes}><span className="tip openTip">?</span></a>
+                       <input type="checkbox" id="close"   name="close"   checked={this.state.close}
+                          onChange={this.check.bind(this, this.state.close)}/>
+								<label className="label-heading" for="close">  {t[language].close}</label>
+                         <span>
+                          <a data-tip={t[language].leavetheopencloseboxes}><span className="tip openTip">?</span></a>
                           <ReactTooltip place="right" type="dark" effect="solid" />
                         </span>
                       </div>
@@ -340,23 +332,21 @@ class Report extends Component {
                     <span>{t[language].type}</span>
                     <div className="checkbox-sections">
                       <div className="type-sub-section">
-                        <input
-                          type="radio"
-                          name="type"
-                          checked={this.state.type == 1 ? true : false}
-                          onChange={this.handleOnChange.bind(this)}
-                          value={1}
-                        />
-                        <span className="span-heading">
-                                                <span> {t[language].timeslice}</span>
-                          <a data-tip={t[language].choosetimeslice}><span className="tip openTip">?</span></a>
+                       
+                         <input type="radio" id="type1"   name="type"     checked={this.state.type == 1 ? true : false}
+                          onChange={this.handleOnChange.bind(this)} value={1}/>
+								<label className="label-heading" for="type1">   {t[language].timeslice}</label>                     
+                                 <span>
+                                                  <a data-tip={t[language].choosetimeslice}><span className="tip openTip">?</span></a>
                           <ReactTooltip place="right" type="dark" effect="solid" />
                         </span>
                       </div>
                       <div className="type-sub-section">
-                        <input type="radio" name="type" checked={this.state.type == 2 ? true : false} onChange={this.handleOnChange.bind(this)} value={2}/>
-                        <span className="span-heading">
-                                                <span> {t[language].cumulative} </span>
+
+                                            
+                         <input type="radio" id="type2"   name="type"   checked={this.state.type == 2 ? true : false} onChange={this.handleOnChange.bind(this)} value={2}/>
+								<label className="label-heading" for="type2">   {t[language].cumulative}</label>     
+                                            <span>
                           <a data-tip={t[language].choosecumulative}><span className="tip openTip">?</span></a>
                           <ReactTooltip place="right" type="dark" effect="solid" />
                         </span>
@@ -369,17 +359,17 @@ class Report extends Component {
                 <div className="checkbox-sections">
                           <div className="alignCenter">
                                     <input type="checkbox" id="longestTime" disabled={this.state.showAdvancedOptions || this.state.disableIncludes} value={1} onChange={this.include.bind(this)}/>
-                                      <span className="textPaddingSmall"> {t[language].longesttimes} </span>
-                                  </div>
+                                    <label className="label-heading" for="longestTime">   {t[language].longesttimes}</label>     
+                                   </div>
                                   <div className="alignCenter">
-                                      <input
+                                    <input
                                           type="checkbox"
                                         id="systemStatistics"
                                         disabled={this.state.showAdvancedOptions || this.state.disableIncludes}
                                           value={2}
                                           onChange={this.include.bind(this)}
                                       />
-                                      <span className="textPaddingSmall">  {t[language].systemstats} </span>
+                                              <label className="label-heading" for="systemStatistics">   {t[language].systemstats}</label>   
                                   </div>
                                  </div>
                 <span className="span-heading">
@@ -390,24 +380,26 @@ class Report extends Component {
                 </span>
                 <div className="checkbox-sections">
                                   <div className="alignCenter">
-                                      <input
+                                    <input
                                           type="radio"
+                                          id="format1"
                                           name="format"
                                           checked={this.state.format == 1 ? true : false}
                                           onChange={this.handleOnChange.bind(this)}
                                           value={1}
                                       />
-                                      <span className="textPaddingSmall"> {t[language].secondswformat} </span>
+                                    	<label className="label-heading" for="format1">   {t[language].secondswformat}</label>  
                                   </div>
                                   <div className="alignCenter">
-                                      <input
+                                    <input
                                           type="radio"
+                                          id="format2"
                                           name="format"
                                           checked={this.state.format == 2 ? true : false}
                                           onChange={this.handleOnChange.bind(this)}
                                           value={2}
                                       />
-                                      <span className="textPaddingSmall"> {t[language].minuteswformat}  </span>
+                                    <label className="label-heading" for="format2">   {t[language].minuteswformat}</label>  
                                   </div>
                 </div>
               </div>

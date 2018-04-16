@@ -205,7 +205,6 @@ const prepareLongestTimes = (daysingleResult, longestData, format) => {
       timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
       timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
       timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
-      console.log(timeObj)
       if (!_.isUndefined(LongestTimes[k])) {
         LongestTimes[k].LaneTotal = timeObj
       }
