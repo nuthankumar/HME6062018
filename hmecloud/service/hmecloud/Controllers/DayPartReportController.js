@@ -65,7 +65,7 @@ const generateDaypartReport = (request, input, callBack) => {
         systemStatisticsLane = result.data[7]
         totalRecordCount = _.last(result.data)
       }
-      
+
       if (averageTimeResultSet.length > 0) {
         totalRecordCount.NoOfPages = input.pageNumber || 1
         if (!_.isUndefined(input.reportType) && input.reportType.toLowerCase().trim() === 'csv') {
@@ -83,7 +83,6 @@ const generateDaypartReport = (request, input, callBack) => {
         result.status = false
         callBack(result)
       }
-      
     } else {
       callBack(result)
     }
@@ -171,8 +170,8 @@ function singleStoreResult (reportData, totalRecordCount, averageTimeResultSet, 
   reportData.goalData = dataArray
   if (input.longestTime) {
     // goal Longest time
-    
-     reportUtil.prepareLongestTimes(reportData, longestTimes, input.ReportTemplate_Format)
+
+    reportUtil.prepareLongestTimes(reportData, longestTimes, input.ReportTemplate_Format)
   }
   // system statistics
   if (input.systemStatistics) {
@@ -205,6 +204,9 @@ function prepareDayPartObject (item, format, input, colors, goalSettings) {
   let groupId = {}
   let storeId = {}
   let daypart = {}
+  let deviceId = {}
+  let deviceUid = {}
+
   if (item.StartTime !== null && item.StoreDate !== 'Total Daypart' && item.EndTime !== null && input.ReportTemplate_DeviceIds.length < 2) {
     var dateSplit = item['StoreDate'].split('-')
     daypart.timeSpan = `${dateSplit[1]}/${dateSplit[2]}-Daypart${item['DayPartIndex']}`
@@ -214,6 +216,13 @@ function prepareDayPartObject (item, format, input, colors, goalSettings) {
 
   groupId.value = item.GroupName
   dataObject.groupId = groupId
+
+  deviceId.value = item.Device_ID
+  dataObject.deviceId = deviceId
+
+  deviceUid.value = item.Device_UID
+  dataObject.deviceUid = deviceUid
+
   if ((_.isUndefined(item.Store_ID) && _.isUndefined(item.Store_Name)) || (item.Store_ID === null && item.Store_Name === null)) {
     storeId.value = 'N/A'
   } else {
