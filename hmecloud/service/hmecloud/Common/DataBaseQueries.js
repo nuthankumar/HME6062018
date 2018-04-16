@@ -9,7 +9,7 @@ const sqlQueries = {
     'updateGroup': 'exec usp_UpdateGroup :groupId, :groupName, :description, :accountId, :userName, :groups, :stores'
   },
   'ReportTemplates': {
-        'createReportTemplate': `exec [dbo].[usp_InsertReportTemplate] 
+    'createReportTemplate': `exec [dbo].[usp_InsertReportTemplate]
 	@Uid = :Uid,
 @TemplateName = :TemplateName,
 @SessionUid = :SessionUid,
@@ -31,7 +31,7 @@ const sqlQueries = {
 @CreatedBy = :CreatedBy
 `,
 
-'getAllReportsTemplates': 'exec [dbo].[usp_GetReportTemplates] @UserUid = :UserUid',
+    'getAllReportsTemplates': 'exec [dbo].[usp_GetReportTemplates] @UserUid = :UserUid',
     'getReportsTemplate': 'exec [dbo].[usp_GetReportTemplateByID]  @Id = :id',
     'deleteTemplate': 'exec [dbo].[usp_DeleteReportTemplate]  @Id = :id'
   },
@@ -46,20 +46,14 @@ const sqlQueries = {
                 ,@CarDataRecordType_IDs=:ReportTemplate_Type
                 ,@ReportType =:ReportType
                 ,@LaneConfig_ID=:LaneConfig_ID`,
-      'weekReport': ` EXEC usp_HME_Cloud_Get_Report_By_Week_Details  @StoreIDs =:StoreIDs,
+    'weekReport': ` EXEC usp_HME_Cloud_Get_Report_By_Week_Details  @StoreIDs =:StoreIDs,
                   @StoreStartDate =:StoreStartDate,
                   @StoreEndDate =:StoreEndDate,
                   @StartDateTime =:StartDateTime,
                   @EndDateTime =:EndDateTime,
                   @CarDataRecordType_ID =:CarDataRecordType_ID,
                   @ReportType =:ReportType,
-<<<<<<< HEAD
-                  @LaneConfig_ID =:LaneConfig_ID,
-                  @RecordPerPage =:RecordPerPage,
-                  @PageNumber =:PageNumber`
-=======
                   @LaneConfig_ID =:LaneConfig_ID`
->>>>>>> b19199fa8550b13d87b855d8f5964b6c4e4c1735
   }
 }
 
