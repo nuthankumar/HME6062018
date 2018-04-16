@@ -33,19 +33,21 @@ class LongestTime extends Component {
 
 
     renderLongestTimes() {
-      //  let renderStores;
+       // let renderStores;
+      // let renderLongestTimes = null;
         let LongestTimes = this.props.LongestTimes;
-        LongestTimes.map(function (LongestTimes, index) {
+        console.log(LongestTimes);
+         return LongestTimes.map(function (LongestTimes, index) {
           return (<tr>
-                    <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{LongestTimes.Menu ? LongestTimes.Menu.Value : '' }</span><br /><span className="longtime-timeSpan">{LongestTimes.Menu ? LongestTimes.Menu.Date : ''}<br />{LongestTimes.Menu ? LongestTimes.Menu.Time : 'N/A'}</span></td>
-                    <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{LongestTimes.Greet ? LongestTimes.Greet.Value : ''}</span><br /><span className="longtime-timeSpan">{LongestTimes.Greet ? LongestTimes.Greet.Date : ''}<br />{LongestTimes.Greet ? LongestTimes.Menu.Time : 'N/A'}</span></td>
-                    <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{LongestTimes.Service ? LongestTimes.Service.Value : ''}</span><br /><span className="longtime-timeSpan">{LongestTimes.Service ? LongestTimes.Service.Date : ''}<br />{LongestTimes.Service ? LongestTimes.Service.Time : 'N/A'}</span></td>
-                    <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{LongestTimes.LaneQueue ? LongestTimes.LaneQueue.Value : ''}</span><br /><span className="longtime-timeSpan">{LongestTimes.LaneQueue ? LongestTimes.LaneQueue.Date : ''}<br />{LongestTimes.LaneQueue ? LongestTimes.LaneQueue.Time : 'N/A'}</span></td>
-                    <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{LongestTimes.LaneTotal ?  LongestTimes.LaneTotal.Value : ''}</span><br /><span className="longtime-timeSpan">{LongestTimes.LaneTotal ? LongestTimes.LaneTotal.Date : ''}<br />{LongestTimes.LaneTotal ? LongestTimes.LaneTotal.Time : 'N/A'}</span></td>
+                    <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{(LongestTimes.Menu ? LongestTimes.Menu.Value : 'N/A' )}</span><br /><span className="longtime-timeSpan">{(LongestTimes.Menu ? LongestTimes.Menu.Date : 'N/A')}<br />{(LongestTimes.Menu ? LongestTimes.Menu.Time : 'N/A')}</span></td>
+                    <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{(LongestTimes.Greet ? LongestTimes.Greet.Value : 'N/A')}</span><br /><span className="longtime-timeSpan">{(LongestTimes.Greet ? LongestTimes.Greet.Date : 'N/A')}<br />{(LongestTimes.Greet ? LongestTimes.Menu.Time : 'N/A')}</span></td>
+                    <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{(LongestTimes.Service ? LongestTimes.Service.Value : 'N/A')}</span><br /><span className="longtime-timeSpan">{(LongestTimes.Service ? LongestTimes.Service.Date : 'N/A')}<br />{(LongestTimes.Service ? LongestTimes.Service.Time : 'N/A')}</span></td>
+                    <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{(LongestTimes.LaneQueue ? LongestTimes.LaneQueue.Value : 'N/A')}</span><br /><span className="longtime-timeSpan">{(LongestTimes.LaneQueue ? LongestTimes.LaneQueue.Date : 'N/A')}<br />{(LongestTimes.LaneQueue ? LongestTimes.LaneQueue.Time : 'N/A')}</span></td>
+                    <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{(LongestTimes.LaneTotal ?  LongestTimes.LaneTotal.Value : 'N/A')}</span><br /><span className="longtime-timeSpan">{(LongestTimes.LaneTotal ? LongestTimes.LaneTotal.Date : 'N/A')}<br />{(LongestTimes.LaneTotal ? LongestTimes.LaneTotal.Time : 'N/A')}</span></td>
                     <td className='lastTd'></td>
  				          </tr>);
         });
-      //  return renderLongestTimes;
+     //   return renderLongestTimes;
     }
 
 
