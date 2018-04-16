@@ -113,7 +113,7 @@ export default class HmeHeader extends React.Component {
                             <a className="black_link headerLink" href={Config.coldFusionUrl + "?pg=SettingsAccount;token=" + token}><span> {t[language].headerLoggedInAs} </span> <span className="username">{loggedInUser.name}</span></a> 
                             <MasqueradeHeader isAdmin={isAdmin} viewAsUser={this.state.contextUser} />
                         </span>                        
-                        <button className={'logout ' + (isLoggedIn ? 'show' : 'hidden')}> <a className="black_link" href={Config.coldFusionUrl + "?pg=Logout;token=" + token}> {t[language].headerSignOut}</a></button>
+                        <button className={'logout ' + (isLoggedIn ? 'show' : 'hidden')}> <a className="black_link" href={Config.coldFusionUrl + "?pg=Logout;token=" + token} onClick={this.logout.bind(this)}> {t[language].headerSignOut}</a></button>
                         <img className='logOutIcon' src={HMELogo} aria-hidden='true' />
                     </div>
                 </header>
@@ -151,6 +151,9 @@ export default class HmeHeader extends React.Component {
 
     toggle(e) {
         this.state.settingsDropdown ? this.setState({ settingsDropdown: false }) : this.setState({ settingsDropdown: true })
+    }
+    logout(e){
+    UserContext.clearToken();
     }
 
     redirectUrl(url) {
