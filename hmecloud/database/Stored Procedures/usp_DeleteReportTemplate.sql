@@ -17,7 +17,7 @@
 -- EXEC [dbo].[usp_DeleteReportTemplate] @Id = 1
 -- ===========================================================
 
-CREATE PROCEDURE [dbo].[usp_DeleteReportTemplates]
+CREATE PROCEDURE [dbo].[usp_DeleteReportTemplate]
 	@Id INT
 AS
 

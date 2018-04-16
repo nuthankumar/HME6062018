@@ -48,10 +48,16 @@ const create = (reportTemplate, callback) => {
     }
 
     console.log("The final input", values)
-  repository.create(values, (result) => {
-    if (result) {
-      output.data = reportTemplate.t('REPORTSUMMARY.createSuccess')
-      output.status = true
+    repository.create(values, (result) => {
+        if (result.length > 0) {
+            let isTemplateCreated = result[0]
+            if (isTemplateCreated.IsRecordInserted === 1) {
+                output.data = reportTemplate.t('REPORTSUMMARY.ReportTemplateAlreadyExist')
+                output.status = true
+            } else if (isTemplateCreated.IsRecordInserted > 1) {
+                output.data = reportTemplate.t('REPORTSUMMARY.createSuccess')
+                output.status = true
+            }
       callback(output)
     } else {
       output.error = reportTemplate.t('REPORTSUMMARY.createFail')
