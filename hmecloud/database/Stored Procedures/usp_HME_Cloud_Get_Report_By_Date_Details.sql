@@ -422,10 +422,6 @@ BEGIN
 	EXECUTE(@query);
 		SET @query = '';	
 
-			--INSERT INTO @getGoalTime  VALUES(15,30,60,90,120,5,10,15,20,30,60,90,120,30,60,90,120,30,30,120,180,90,150,300,420)
-		--	SELECT * 
-		--	FROM 
-		--	@getGoalTime;
 		-- get Gaols time in seconds
 			EXEC usp_HME_Cloud_Get_Device_Goals @Device_IDs
 			
