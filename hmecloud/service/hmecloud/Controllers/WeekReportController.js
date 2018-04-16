@@ -15,7 +15,7 @@ const generateWeekReportByDate = (request, input, callback) => {
   if (currentPage === 0) {
     pageStartDate = input.ReportTemplate_From_Date
     pageEndDate = input.ReportTemplate_To_Date
-  } else if (input.ReportTemplate_StoreIds.length > 1) {
+  } else if (input.ReportTemplate_DeviceIds.length > 1) {
     let daysDiff = dateUtils.dateDifference(input.ReportTemplate_From_Date, input.ReportTemplate_To_Date)
     lastPage = Math.ceil((daysDiff + 1) / 14)
     if (currentPage !== 1) {
@@ -38,7 +38,7 @@ const generateWeekReportByDate = (request, input, callback) => {
   }
   input.ReportTemplate_From_Date = pageStartDate
   input.ReportTemplate_To_Date = pageEndDate
-  generateWeekReport(request,input, result => {
+  generateWeekReport(request, input, result => {
     let totalRecordCount = {}
     totalRecordCount.NoOfPages = lastPage
     result.totalRecordCount = totalRecordCount
@@ -49,7 +49,7 @@ const generateWeekReport = (request, input, callback) => {
   let fromDateTime = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
   let toDateTime = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
   const inputDate = {
-    StoreIDs: (input.ReportTemplate_StoreIds).toString(),
+    Device_IDs: (input.ReportTemplate_DeviceIds).toString(),
     StoreStartDate: input.ReportTemplate_From_Date,
     StoreEndDate: input.ReportTemplate_To_Date,
     StartDateTime: fromDateTime,
@@ -60,9 +60,9 @@ const generateWeekReport = (request, input, callback) => {
     longestTime: input.longestTime,
     systemStatistics: input.systemStatistics,
     UserUID: request.userUid,
-    UserEmail: request.UserEmail,
+    UserEmail: request.UserEmail
   }
-  console.log("INPUT",inputDate)
+  console.log('INPUT', inputDate)
 
   repository.getWeekReport(inputDate, (result) => {
     if (result.length > 0) {
@@ -70,15 +70,15 @@ const generateWeekReport = (request, input, callback) => {
       let reportData = {}
       let data = {}
       data.timeMeasure = 3
-      data.selectedStoreIds = input.ReportTemplate_StoreIds
+      data.selectedStoreIds = input.ReportTemplate_DeviceIds
       data.startTime = moment(fromDateTime).format('LL')
       data.stopTime = moment(toDateTime).format('LL')
       let colors = _.filter(repositoryData, val => val.ColourCode)
       // Single Store
-      if (input.reportType.toLowerCase().trim() === 'csv' || input.reportType.toLowerCase().trim() === 'pdf') {
+      if (!_.isUndefined(input.reportType) && input.reportType.toLowerCase().trim() === 'csv') {
         if (input.reportType.toLowerCase().trim() === 'csv') {
           generateCSVOrPdfTriggerEmail(request, input, result)
-        } else {
+        } else if (!_.isUndefined(input.reportType) && input.reportType.toLowerCase().trim() === 'pdf') {
           let pdfInput = {}
           pdfInput.type = request.t('COMMON.CSVTYPE')
           pdfInput.reportName = `${request.t('COMMON.WEEKREPORTNAME')} ${dateFormat(new Date(), 'isoDate')}`
@@ -98,7 +98,7 @@ const generateWeekReport = (request, input, callback) => {
             callback(output)
           }
         }
-      } else if (input.ReportTemplate_StoreIds.length === 1) {
+      } else if (input.ReportTemplate_DeviceIds.length === 1) {
         let goalSettings = _.filter(repositoryData, group => group['Menu Board - GoalA'])
         const StoreData = reportGenerate.getAllStoresDetails(repositoryData, colors, goalSettings, input.ReportTemplate_Format)
         const groupbyIndex = _.groupBy(StoreData, indexValue => indexValue.index)
@@ -138,7 +138,7 @@ const generateWeekReport = (request, input, callback) => {
         reportData = data
         reportData.status = true
         callback(reportData)
-      } else if (input.ReportTemplate_StoreIds.length > 1) {
+      } else if (input.ReportTemplate_DeviceIds.length > 1) {
         let goalSettings = _.filter(repositoryData, group => group['Menu Board - GoalA'])
         const StoreData = reportGenerate.storesDetails(repositoryData, colors, goalSettings, input.ReportTemplate_Format)
         const groupbyIndex = _.groupBy(StoreData, indexValue => indexValue.index)
@@ -186,7 +186,6 @@ function generateCSVOrPdfTriggerEmail (request, input, result, callBack) {
   dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput, csvResults => {
     callBack(csvResults)
   })
-
 }
 const pdfgeneration = (data, input, result, reportName, pdfInput) => {
   return dataExportUtil.prepareJsonForPDF(data, input, result, reportName, pdfInput)
