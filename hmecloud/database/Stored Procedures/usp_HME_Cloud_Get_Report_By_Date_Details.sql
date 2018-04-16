@@ -13,12 +13,12 @@
 -- -----------------------------------------------------------
 -- 1.		13/04/2018		Swathi Kumar	Added Subtotal calculation
 -- ===========================================================
--- 	-- exec [usp_HME_Cloud_Get_Report_By_Date_Details] '4', '2018-03-24', '2018-03-24', '2018-03-24 00:00:00' , '2018-03-24 12:00:00', 11, 'AC'
+-- exec [usp_HME_Cloud_Get_Report_By_Date_Details_Device] '15', '2018-03-24', '2018-03-24', '2018-03-24 00:00:00' , '2018-03-24 12:00:00', 11, 'AC',1, '68LKBP85C1SKH1FI3M7X40CJHKGU07FZ'
 -- ===========================================================
 
 --exec usp_HME_Cloud_Get_Report_By_Date_Details '3,4','2018-03-20','2018-03-26',N'2018-03-20 00:00:00',N'2018-03-26 10:30:00','11','AC',1
 CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details](
-	@StoreIDs varchar(500),
+	@Device_IDs varchar(500),
 	@StoreStartDate date,
 	@StoreEndDate date,
 	@StartDateTime datetime = '1900-01-01 00:00:00',
@@ -42,7 +42,7 @@ BEGIN
 	DECLARE @header TABLE(headerName varchar(25), headerID smallint, Detector_ID smallint, sort smallint)
 	DECLARE @headerSourceCol varchar(50)
 	DECLARE @isMultiStore bit = 0
-	DECLARE @Device_IDs varchar(500)
+	--DECLARE @Device_IDs varchar(500)
 	
 	IF @StartDateTime IS NULL 
 		SET @StartDateTime = '1900-01-01 00:00:00'
@@ -89,16 +89,17 @@ BEGIN
 		(
 			GroupName varchar(200),
 			Store_ID int,
-			Store_Name varchar(50)
+			Store_Name varchar(50),
+			Device_ID int
 		)
 
-		SET @Device_IDs = ''
-		SELECT @Device_IDs = CONVERT(varchar,dinf.Device_ID) + ',' + @Device_IDs 
-		 FROM tbl_DeviceInfo AS dinf INNER JOIN tbl_Stores strs ON dinf.Device_Store_ID = strs.Store_ID 
-		 WHERE dinf.Device_Store_ID IN (Select cValue FROM dbo.split(@StoreIDs,','))
+		--SET @Device_IDs = ''
+		--SELECT @Device_IDs = CONVERT(varchar,dinf.Device_ID) + ',' + @Device_IDs 
+		-- FROM tbl_DeviceInfo AS dinf INNER JOIN tbl_Stores strs ON dinf.Device_Store_ID = strs.Store_ID 
+		-- WHERE dinf.Device_Store_ID IN (Select cValue FROM dbo.split(@StoreIDs,','))
 
-		IF LEN(@Device_IDs)>0 
-			SET @Device_IDs = LEFT(@Device_IDs, LEN(@Device_IDs)-1)
+		--IF LEN(@Device_IDs)>0 
+		--	SET @Device_IDs = LEFT(@Device_IDs, LEN(@Device_IDs)-1)
 
 	-- This is table is created temporarly. Once we get the data it needs to be removed
 	DECLARE  @getGoalTime TABLE (
@@ -137,11 +138,12 @@ BEGIN
 	INSERT INTO #raw_data
 	EXECUTE dbo.usp_HME_Cloud_Get_Report_Raw_Data @Device_IDs, @StoreStartDate, @StoreEndDate, @StartDateTime, @EndDateTime, @CarDataRecordType_ID, @ReportType, @LaneConfig_ID
 
-	INSERT INTO #GroupDetails(GroupName, Store_ID, Store_Name)
-	SELECT DISTINCT g.GroupName,ts.Store_ID, ts.Store_Name 
-	FROM tbl_Stores ts LEFT JOIN GroupStore gs ON gs.StoreID = ts.Store_ID
+	INSERT INTO #GroupDetails(GroupName, Store_ID, Store_Name, Device_ID)
+	SELECT DISTINCT g.GroupName,ts.Store_ID, ts.Store_Name , td.Device_ID
+	FROM tbl_Stores ts INNER JOIN tbl_DeviceInfo td ON ts.Store_ID = td.Device_Store_ID
+	LEFT JOIN GroupStore gs ON gs.StoreID = ts.Store_ID
 	INNER JOIN [Group] g ON g.ID = gs.GroupID
-	WHERE gs.StoreID in (SELECT cValue FROM dbo.split(@StoreIDs,','))
+	WHERE td.Device_ID in (SELECT cValue FROM dbo.split(@Device_IDs,','))
 		--SELECT DISTINCT g.GroupName,ts.Store_ID, ts.Store_Name
 		--FROM [Group] g INNER JOIN GroupStore gs ON g.ID = gs.GroupID
 		--INNER JOIN  tbl_Stores ts ON gs.StoreID = ts.Store_ID 
@@ -177,8 +179,8 @@ BEGIN
 							d.EventType_Category Category,
 							AVG(d.DetectorTime) AVG_DetectorTime,
 							COUNT(d.CarDataRecord_ID) Total_Car
-						FROM	#raw_data d LEFT JOIN tbl_Stores s ON d.Store_ID = s.Store_ID
-						INNER JOIN #GroupDetails g ON g.Store_ID = s.Store_ID
+						FROM	#raw_data d INNER JOIN tbl_DeviceInfo ts ON d.Device_ID = ts.Device_ID
+						LEFT JOIN #GroupDetails g ON ts.Device_Store_ID = g.Store_ID
 						WHERE g.GroupName IS NOT NULL AND d.Store_ID IS NOT NULL
 						GROUP BY CAST(d.StoreDate AS varchar(25)), g.GroupName, d.EventType_Category
 						HAVING COUNT(DISTINCT d.Store_ID)>1
@@ -242,7 +244,7 @@ BEGIN
 				AVG(d.DetectorTime),
 				COUNT(d.CarDataRecord_ID)
 		FROM	#raw_data d LEFT JOIN #GroupDetails ts ON d.Store_ID = ts.Store_ID
-		LEFT JOIN tbl_Stores s ON d.Store_ID = s.Store_ID
+		LEFT JOIN tbl_Stores s ON d.Store_ID = s.Store_ID	
 		GROUP BY d.StoreDate,' +
 				@headerSourceCol + ',
 				d.Store_Number,
@@ -414,15 +416,12 @@ BEGIN
 		SELECT 1
 
 		SET @query = '';
-
-		SELECT Preferences_Preference_Value as ColourCode FROM itbl_Leaderboard_Preferences WHERE 
-			Preferences_Company_ID=(select User_Company_ID  
-			from  tbl_Users where User_UID = @UserUID ) AND Preferences_Preference_ID=5
+		SELECT Preferences_Preference_Value AS ColourCode FROM itbl_Leaderboard_Preferences WHERE 
+			Preferences_Company_ID=(SELECT User_Company_ID FROM  tbl_Users WHERE User_UID = @UserUID ) AND Preferences_Preference_ID=5
 
 	EXECUTE(@query);
 		SET @query = '';	
 
-		-- get Gaols time in seconds
 			EXEC usp_HME_Cloud_Get_Device_Goals @Device_IDs
 			
 			EXECUTE(@query);
@@ -449,4 +448,6 @@ BEGIN
 	RETURN(0)
 
 END
+GO
+
 
