@@ -16,7 +16,7 @@
 
 ALTER PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details]
 (
-	@StoreIDs varchar(500),
+	@Device_IDs varchar(500),
 	@StoreStartDate date,
 	@StoreEndDate date,
 	@InputStartDateTime NVARCHAR(50) = '1900-01-01 00:00:00',  -- 2018-04-09 20:00:00
@@ -72,7 +72,7 @@ BEGIN
 
 	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 	SET NOCOUNT ON
-	DECLARE @Device_IDs varchar(500)
+	--DECLARE @Device_IDs varchar(500)
 	DECLARE @cols NVARCHAR(2000)
 	DECLARE @query NVARCHAR(4000)
 	DECLARE @sum_query NVARCHAR(2000)
@@ -81,7 +81,6 @@ BEGIN
 	DECLARE @TheDevice_ID int
 	DECLARE @isMultiStore bit = 0
 	DECLARE @TotalRecCount smallint
-	--DECLARE @NoOfPages smallint
 	DECLARE @StartDateTime DATETIME 
 	DECLARE @EndDateTime DATETIME 
 	SELECT @StartDateTime = CONVERT(DATETIME,  @InputStartDateTime);
@@ -153,19 +152,20 @@ BEGIN
 	CREATE TABLE #GroupDetails
 	(
 		GroupName varchar(200),
-		Store_ID int
+		Store_ID int,
+		Device_ID int
 	)
-	SET @Device_IDs = ''
-	SELECT @Device_IDs = CONVERT(varchar,dinf.Device_ID) + ',' + @Device_IDs 
-	 FROM tbl_DeviceInfo AS dinf INNER JOIN tbl_Stores strs ON dinf.Device_Store_ID = strs.Store_ID 
-	 WHERE dinf.Device_Store_ID IN (Select cValue FROM dbo.split(@StoreIDs,','))
+	--SET @Device_IDs = ''
+	--SELECT @Device_IDs = CONVERT(varchar,dinf.Device_ID) + ',' + @Device_IDs 
+	-- FROM tbl_DeviceInfo AS dinf INNER JOIN tbl_Stores strs ON dinf.Device_Store_ID = strs.Store_ID 
+	-- WHERE dinf.Device_Store_ID IN (Select cValue FROM dbo.split(@StoreIDs,','))
 
 	 --SELECT dinf.Device_ID
 	 --FROM tbl_DeviceInfo AS dinf INNER JOIN tbl_Stores strs ON dinf.Device_Store_ID = strs.Store_ID 
 	 --WHERE dinf.Device_Store_ID IN (3,4)
 
-	IF LEN(@Device_IDs)>0 
-		SET @Device_IDs = LEFT(@Device_IDs, LEN(@Device_IDs)-1)
+	--IF LEN(@Device_IDs)>0 
+	--	SET @Device_IDs = LEFT(@Device_IDs, LEN(@Device_IDs)-1)
 		
 	/*************************************
 	 step 2. populate, then roll up data
@@ -175,11 +175,12 @@ BEGIN
 	INSERT INTO #raw_data
 	EXECUTE dbo.usp_HME_Cloud_Get_Report_Raw_Data @Device_IDs, @StoreStartDate, @StoreEndDate, @StartDateTime, @EndDateTime, @CarDataRecordType_ID, @ReportType, @LaneConfig_ID
 
-	INSERT INTO #GroupDetails(GroupName, Store_ID)
-	SELECT DISTINCT g.GroupName,ts.Store_ID 
-	FROM tbl_Stores ts LEFT JOIN GroupStore gs ON gs.StoreID = ts.Store_ID
-	INNER JOIN [Group]g ON g.ID = gs.GroupID
-	WHERE gs.StoreID in (SELECT cValue FROM dbo.split(@StoreIDs,','))
+	INSERT INTO #GroupDetails(GroupName, Store_ID, Device_ID)
+	SELECT DISTINCT g.GroupName, ts.Store_ID , td.Device_ID
+	FROM tbl_DeviceInfo td INNER JOIN tbl_Stores ts ON td.Device_Store_ID = ts.Store_ID 
+	LEFT JOIN GroupStore gs ON gs.StoreID = ts.Store_ID
+	INNER JOIN [Group] g ON g.ID = gs.GroupID
+	WHERE td.Device_ID in (SELECT cValue FROM dbo.split(@Device_IDs,','))
 
 	--SELECT DISTINCT g.GroupName,ts.Store_ID 
 	--FROM [Group] g LEFT JOIN GroupStore gs ON g.ID = gs.GroupID
@@ -224,15 +225,15 @@ BEGIN
 						AVG(r.DetectorTime) AVG_DetectorTime,
 						COUNT(r.CarDataRecord_ID) Total_Car
 					FROM	#StoreWithDatePart d
-						LEFT JOIN #GroupDetails ts ON d.Store_ID = ts.Store_ID
-						LEFT JOIN #raw_data r ON d.Store_id = r.Store_id
+						LEFT JOIN #GroupDetails ts ON d.Device_ID = ts.Device_ID
+						LEFT JOIN #raw_data r ON d.Device_ID = r.Device_ID
 							AND	d.DayPartIndex = r.Daypart_ID 
 							AND d.StoreDate = r.StoreDate
 						WHERE ts.GroupName IS NOT NULL
 					GROUP BY 
 						DayPartIndex, ts.GroupName, CAST(d.StoreDate AS varchar(25)),
 						r.EventType_Category
-					HAVING COUNT(*)>1
+					HAVING COUNT(DISTINCT d.Store_ID)>1
 					UNION ALL
 					SELECT	DayPartIndex,
 						NULL StartTime,
@@ -254,7 +255,7 @@ BEGIN
 					GROUP BY 
 						DayPartIndex, CAST(d.StoreDate AS varchar(25)),
 						r.EventType_Category
-					HAVING COUNT(*)>1
+					HAVING COUNT(d.Device_ID)>1
 				) A'
 		END
 	ELSE
@@ -287,14 +288,14 @@ BEGIN
 						AVG(r.DetectorTime) AVG_DetectorTime,
 						COUNT(r.CarDataRecord_ID) Total_Car
 					FROM	#StoreWithDatePart d
-						LEFT JOIN #GroupDetails ts ON d.Store_ID = ts.Store_ID
-						LEFT JOIN #raw_data r ON d.Store_id = r.Store_id
+						LEFT JOIN #GroupDetails ts ON d.Device_ID = ts.Device_ID
+						LEFT JOIN #raw_data r ON d.Device_ID = r.Device_ID
 							AND	d.DayPartIndex = r.Daypart_ID 
 							AND d.StoreDate = r.StoreDate
 					GROUP BY 
 						CAST(d.StoreDate AS varchar(25)),
 						r.EventType_Name
-					HAVING COUNT(*)>1
+					HAVING COUNT(d.Device_ID)>1
 				'
 		END
 
@@ -357,6 +358,7 @@ BEGIN
 					CROSS JOIN #DayPartWithDate dp
 			WHERE	EXISTS(SELECT 1 FROM dbo.Split(@Device_IDs, ',') AS Devices WHERE CAST(Devices.cValue AS int) = d.Device_ID)
 	
+	
 	-- roll up records into each store date and daypart
 	-- for single stores, generate a single summary row for all dayparts
 	-- for multip stores, generate a summary row for each daypart
@@ -377,8 +379,8 @@ BEGIN
 				AVG(r.DetectorTime),
 				COUNT(r.CarDataRecord_ID)
 		FROM	#StoreWithDatePart d
-				LEFT JOIN #GroupDetails ts ON d.Store_ID = ts.Store_ID
-				LEFT JOIN #raw_data r ON d.Store_id = r.Store_id
+				LEFT JOIN #GroupDetails ts ON d.Device_ID = ts.Device_ID
+				LEFT JOIN #raw_data r ON d.Device_ID = r.Device_ID
 					AND	d.DayPartIndex = r.Daypart_ID 
 					AND d.StoreDate = r.StoreDate
 		GROUP BY d.DayPartIndex,
