@@ -158,7 +158,7 @@ function prepareMultiStoreResults(daysingleResult, daysData, format, colors, goa
                     let dataObject = prepareDayObject(storeObj, format, colors, goalSettings)
 
                     if (storeObj.StoreNo && !storeObj.StoreNo.includes('Subtotal')) {
-                        store.name = storeObj.StoreNo + " - " + storeObj.Store_Name
+                        store.name = storeObj.StoreNo + (storeObj.Store_Name ? " - " + storeObj.Store_Name : "")
                         dataObject.store = store
                     } else {
                         store.name = " "
