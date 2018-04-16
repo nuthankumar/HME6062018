@@ -39,7 +39,7 @@ export default class HmeHeader extends React.Component {
     }
 
     componentDidMount() {
-        this.setUserContext() // to-do: remove this once its set @ cfm-app
+      //  this.setUserContext() // to-do: remove this once its set @ cfm-app
     }
 
     setUserContext() {
@@ -70,11 +70,11 @@ export default class HmeHeader extends React.Component {
             return (
                 <ul>
                     <li><a className="headerMenu" href={Config.coldFusionUrl + "?token=" + token}>{t[language].navbarStores}</a></li>
-                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsStores&amp;path=Main;token=" + token}>{t[language].navbarSystems}</a></li>
-                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsDevices&amp;path=Main;token=" + token}>{t[language].navbarSystems}</a></li>
-                    <li><a className="headerMenu active_tab" href={Config.coldFusionUrl + "?pg=pg=SettingsUsers&amp;path=Main;token=" + token}>{t[language].navbarUsers}</a></li>
-                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsAccounts;token=" + token}>{t[language].navbarAccounts}</a></li>
-                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsDistributors;token=" + token}>{t[language].navbarDistributers}</a></li>
+                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsStores&amp;path=Main&amp;token=" + token}>{t[language].navbarSystems}</a></li>
+                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsDevices&amp;path=Main&amp;token=" + token}>{t[language].navbarSystems}</a></li>
+                    <li><a className="headerMenu active_tab" href={Config.coldFusionUrl + "?pg=pg=SettingsUsers&amp;path=Main&amp;token=" + token}>{t[language].navbarUsers}</a></li>
+                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsAccounts&amp;token=" + token}>{t[language].navbarAccounts}</a></li>
+                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsDistributors&amp;token=" + token}>{t[language].navbarDistributers}</a></li>
                 </ul>
             );
         } else {
@@ -87,10 +87,10 @@ export default class HmeHeader extends React.Component {
             return (
                 <ul>
                     <li><a className="headerMenu" href={Config.coldFusionUrl + "?token=" + token}>{t[language].navbarWelcome}</a></li>
-                    <li id="zoomLabel"><a className="headerMenu" href={Config.coldFusionUrl + "?pg=Dashboards;token=" + token}>{t[language].navbarDashboard}</a></li>
+                    <li id="zoomLabel"><a className="headerMenu" href={Config.coldFusionUrl + "?pg=Dashboards&amp&amp;token=" + token}>{t[language].navbarDashboard}</a></li>
                     <li id="zoomLabel"><Link className="active_tab headerMenu" to='/reports'>{t[language].navbarReports}</Link></li>
-                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsAccount;token=" + token}>{t[language].navbarMyAccount}</a></li>
-                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsStores;token=" + token}>{t[language].navbarSettings}</a></li>
+                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsAccount&amp;token=" + token}>{t[language].navbarMyAccount}</a></li>
+                    <li><a className="headerMenu" href={Config.coldFusionUrl + "?pg=SettingsStores&amp;token=" + token}>{t[language].navbarSettings}</a></li>
                 </ul>
             );
         } else {
@@ -111,11 +111,11 @@ export default class HmeHeader extends React.Component {
                     <div className='user-info-section'>
                         {/* <span className={(isLoggedIn ? 'show' : 'hidden')}> */}
                         <span className={(isAdministrator ? 'show' : 'hidden')}>
-                            <a className="black_link headerLink" href={Config.coldFusionUrl + "?pg=SettingsAccount;token=" + token}><span> {t[language].headerLoggedInAs} </span> <span className="username">{loggedInUser.name}</span></a>
+                            <a className="black_link headerLink" href={Config.coldFusionUrl + "?pg=SettingsAccount&amp;token=" + token}><span> {t[language].headerLoggedInAs} </span> <span className="username">{loggedInUser.name}</span></a>
                             <MasqueradeHeader isAdministrator={isAdministrator} viewAsUser={this.state.contextUser} />
                             {/* <MasqueradeHeader isAdmin="true" viewAsUser={this.state.contextUser} /> */}
                         </span>
-                        <button className={'logout ' + (isLoggedIn ? 'show' : 'hidden')}> <a className="black_link" href={Config.coldFusionUrl + "?pg=Logout;token=" + token} onClick={this.logout.bind(this)}> {t[language].headerSignOut}</a></button>
+                        <button className={'logout ' + (isLoggedIn ? 'show' : 'hidden')}> <a className="black_link" href={Config.coldFusionUrl + "?pg=Logout&amp;token=" + token} onClick={this.logout.bind(this)}> {t[language].headerSignOut}</a></button>
                         <img className='logOutIcon' src={HMELogo} aria-hidden='true' />
                     </div>
                 </header>
@@ -140,9 +140,9 @@ export default class HmeHeader extends React.Component {
                             <div className="dropdown open">
                                 <a href="javascript:void(0);" className="dropdown-toggle" onClick={this.toggle.bind(this)}><img className='cogWheel' src={CogWheel} aria-hidden='true' /></a>
                                 <ul className={'dropdown-menu dropdown-menu-right ' + (this.state.settingsDropdown ? 'show' : 'hide')}>
-                                    <li><a href={Config.coldFusionUrl + "?pg=Settings;token=" + token}>{t[language].navbarOptionSettings}</a></li>
-                                    <li><a href={Config.coldFusionUrl + "?pg=Leaderboard&amp;st=Edit;token=" + token}>{t[language].customizeleaderboard}</a></li>
-                                    <li><a href={Config.coldFusionUrl + "?pg=Help;token=" + token}>{t[language].navbarOptionHelp}</a></li>
+                                    <li><a href={Config.coldFusionUrl + "?pg=Settings&amp;token=" + token}>{t[language].navbarOptionSettings}</a></li>
+                                    <li><a href={Config.coldFusionUrl + "?pg=Leaderboard&amp;st=Edit&amp;token=" + token}>{t[language].customizeleaderboard}</a></li>
+                                    <li><a href={Config.coldFusionUrl + "?pg=Help&amp;token=" + token}>{t[language].navbarOptionHelp}</a></li>
                                 </ul>
                             </div>
                         </div>
