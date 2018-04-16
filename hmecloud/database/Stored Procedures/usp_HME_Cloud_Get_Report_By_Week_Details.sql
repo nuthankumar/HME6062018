@@ -13,11 +13,13 @@
 -- -----------------------------------------------------------
 -- 1.		13/04/2018		Swathi Kumar	Added Subtotal calculation
 -- ===========================================================
--- EXEC [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details] '3,4','2018-03-24','2018-03-26',N'2018-03-24 00:00:00',N'2018-03-26 10:30:00','11','AC',1
+-- EXEC [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details] '15','2018-03-24','2018-03-26',N'2018-03-24 00:00:00',N'2018-03-26 10:30:00','11','AC',1,N'68LKBP85C1SKH1FI3M7X40CJHKGU07FZ'
 -- ===========================================================
 
-ALTER PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details](
-	@StoreIDs varchar(500),
+-- use the below UserUid for testing in local data base
+-- --,@UserUID=N'68LKBP85C1SKH1FI3M7X40CJHKGU07FZ'
+CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details](
+	@Device_IDs varchar(500),
 	@StoreStartDate date,
 	@StoreEndDate date,
 	@StartDateTime datetime = '1900-01-01 00:00:00',
@@ -44,7 +46,7 @@ BEGIN
 	DECLARE @headerSourceCol varchar(50)
 	DECLARE @TheDevice_ID int
 	DECLARE @isMultiStore bit = 0
-	DECLARE @Device_IDs varchar(500)
+	--DECLARE @Device_IDs varchar(500)
 
 	IF @StartDateTime IS NULL 
 		SET @StartDateTime = '1900-01-01 00:00:00'
@@ -131,19 +133,22 @@ BEGIN
 			GroupName varchar(200),
 			Store_ID int,
 			Store_Name varchar(50),
+			Device_ID int
 		)
 
-	SET @Device_IDs = ''
-	SELECT @Device_IDs = CONVERT(varchar,dinf.Device_ID) + ',' + @Device_IDs 
-		FROM tbl_DeviceInfo AS dinf INNER JOIN tbl_Stores strs ON dinf.Device_Store_ID = strs.Store_ID 
-		WHERE dinf.Device_Store_ID IN (Select cValue FROM dbo.split(@StoreIDs,','))
-	SET @Device_IDs = CASE WHEN LEN(@Device_IDs)>0 THEN LEFT(@Device_IDs, LEN(@Device_IDs)-1) ELSE @Device_IDs END
+	--SET @Device_IDs = ''
+	--SELECT @Device_IDs = CONVERT(varchar,dinf.Device_ID) + ',' + @Device_IDs 
+	--	FROM tbl_DeviceInfo AS dinf INNER JOIN tbl_Stores strs ON dinf.Device_Store_ID = strs.Store_ID 
+	--	WHERE dinf.Device_Store_ID IN (Select cValue FROM dbo.split(@StoreIDs,','))
+	--SET @Device_IDs = CASE WHEN LEN(@Device_IDs)>0 THEN LEFT(@Device_IDs, LEN(@Device_IDs)-1) ELSE @Device_IDs END
 	
-	INSERT INTO #GroupDetails(GroupName, Store_ID, Store_Name)
-	SELECT DISTINCT g.GroupName,ts.Store_ID, ts.Store_Name 
-	FROM tbl_Stores ts LEFT JOIN GroupStore gs ON gs.StoreID = ts.Store_ID
+	INSERT INTO #GroupDetails(GroupName, Store_ID, Store_Name, Device_ID)
+	SELECT DISTINCT g.GroupName,ts.Store_ID, ts.Store_Name , td.Device_ID
+	FROM tbl_Stores ts INNER JOIN tbl_DeviceInfo td ON ts.Store_ID = td.Device_Store_ID
+	LEFT JOIN GroupStore gs ON gs.StoreID = ts.Store_ID
 	INNER JOIN [Group] g ON g.ID = gs.GroupID
-	WHERE gs.StoreID in (SELECT cValue FROM dbo.split(@StoreIDs,','))
+	WHERE td.Device_ID in (SELECT cValue FROM dbo.split(@Device_IDs,','))
+
 	--SELECT DISTINCT g.GroupName, ts.Store_ID, ts.Store_Name 
 	--	FROM [Group] g INNER JOIN GroupStore gs ON g.ID = gs.GroupID
 	--	INNER JOIN  tbl_Stores ts ON gs.StoreID = ts.Store_ID 
@@ -295,8 +300,8 @@ BEGIN
 				CAST(w.WeekEndDate AS char(10)),
 				r.Store_Number,
 				s.Store_Name,
-				Device_UID,
-				Device_ID,
+				r.Device_UID,
+				r.Device_ID,
 				ts.GroupName,
 				s.Store_ID,' +
 				@headerSourceCol + ',
@@ -306,15 +311,14 @@ BEGIN
 				LEFT JOIN #week w ON w.StoreDate = r.StoreDate
 				LEFT JOIN tbl_Stores s ON r.Store_ID = s.Store_ID
 				LEFT JOIN #GroupDetails ts ON ts.Store_ID = s.Store_ID
-
 		GROUP BY w.WeekIndex,
 				w.WeekStartDate,
 				w.WeekEndDate,' +
 				@headerSourceCol + ',
 				r.Store_Number,
 				s.Store_Name,
-				Device_UID,
-				Device_ID,
+				r.Device_UID,
+				r.Device_ID,
 				ts.GroupName,
 				s.Store_ID
 		ORDER BY w.WeekIndex,
@@ -323,8 +327,8 @@ BEGIN
 				@headerSourceCol + ',
 				r.Store_Number,
 				s.Store_Name,
-				Device_UID,
-				Device_ID,
+				r.Device_UID,
+				r.Device_ID,
 				ts.GroupName,
 				s.Store_ID
 		' 
@@ -474,8 +478,12 @@ BEGIN
 	EXECUTE(@query);
 
 		SET @query = '';	
-
-		EXEC usp_HME_Cloud_Get_Device_Goals @Device_IDs
+			--INSERT INTO @getGoalTime  VALUES(15,30,60,90,120,5,10,15,20,30,60,90,120,30,60,90,120,30,30,120,180,90,150,300,420)
+			--SELECT * 
+			--FROM 
+		--	@getGoalTime;
+		-- get Gaols time in seconds
+			EXEC usp_HME_Cloud_Get_Device_Goals @Device_IDs
 
 			EXECUTE(@query);
 			-- Changes for System Statistics
@@ -499,5 +507,7 @@ BEGIN
 	
 	RETURN(0)
 END
+
+GO
 
 
