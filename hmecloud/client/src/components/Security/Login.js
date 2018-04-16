@@ -7,12 +7,13 @@ import * as languageSettings from '../Language/languageSettings'
 import { CommonConstants } from '../../Constants'
 import * as UserContext from '../Common/UserContext'
 import Api from '../../Api'
+
 class Login extends Component {
   constructor () {
     super()
     this.handleChange = this.handleChange.bind(this)
     //this.handleFormSubmit = this.handleFormSubmit.bind(this)
-    this.Auth = new AuthenticationService()
+    // this.Auth = new AuthenticationService()
     this.state = {
         language: languageSettings.getCurrentLanguage(),
         path:'', 
@@ -20,6 +21,7 @@ class Login extends Component {
         password:''
      }
     this.api = new Api()
+    this.authService = new AuthenticationService(Config.authBaseUrl)
   }
   componentWillMount () {
       //  if (this.Auth.loggedIn()) { this.props.history.replace('/') }
@@ -108,6 +110,7 @@ class Login extends Component {
     let url = Config.apiBaseUrl + CommonConstants.apiUrls.auth
     this.api.getData(url, data => {
         localStorage.setItem("token", data.token);
+        this.authService.setToken(data.token, true)
 
         if (UserContext.isLoggedIn()) {
             let path = window.location.pathname;

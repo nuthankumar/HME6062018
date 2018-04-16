@@ -43,7 +43,7 @@ export default class HmeHeader extends React.Component {
     }
 
     setUserContext() {
-        this.authService.setToken(Config.ctxToken)
+        this.authService.setToken(Config.ctxToken, false)
         let ctxToken = this.authService.getToken()
         if (ctxToken) {
             let ctxUser = this.authService.getProfile()
