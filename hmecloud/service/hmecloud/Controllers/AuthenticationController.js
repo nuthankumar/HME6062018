@@ -48,7 +48,7 @@ function verifyToken(request, response, next) {
           })
       }
       
-      request.userId = decoded.User_UID
+      request.userUid = decoded.User_UID
       request.UserEmail = decoded.User_EmailAddress
       request.UserName = `${decoded.User_LastName}, ${decoded.User_FirstName}`
       // request.Role = decoded.Role

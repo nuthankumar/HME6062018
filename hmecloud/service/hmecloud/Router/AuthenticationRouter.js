@@ -6,7 +6,7 @@ const router = express.Router()
 // JWT token creation
 router.get('/login', (request, response) => {
   const userDetails = {
-      userId: 'XD2J8Q7KQ7HO3TLQXTGIPWSVSQZK5ZBH',
+    userUid: 'XD2J8Q7KQ7HO3TLQXTGIPWSVSQZK5ZBH',
     UserName: 'HME Admin',
     UserEmail: 'admin@hme.com',
     AccountId: 1311,
@@ -27,7 +27,7 @@ router.get('/login', (request, response) => {
 // check the JWT token
 router.post('/verifyJWT', authVerfiy, (request, response, next) => {
   if (authVerfiy) {
-    console.log('UserID', request.userId)
+    console.log('userUid', request.userUid)
   }
   // response.send(Actual functionality )
 })
