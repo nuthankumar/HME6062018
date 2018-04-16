@@ -119,6 +119,8 @@ const addToHierarchy = (hierarchy, inputItem) => {
             Id: inputItem.Id,
             Name: inputItem.Name,
             Type: inputItem.Type,
+            StoreNumber: inputItem.Store_Number,
+            Brand: inputItem.Brand_Description,
             Children: []
         })
     } else {
@@ -128,6 +130,8 @@ const addToHierarchy = (hierarchy, inputItem) => {
                 Id: inputItem.Id,
                 Name: inputItem.Name,
                 Type: inputItem.Type,
+                StoreNumber: inputItem.Store_Number,
+                Brand: inputItem.Brand_Description,
                 Children: []
             })
         }
