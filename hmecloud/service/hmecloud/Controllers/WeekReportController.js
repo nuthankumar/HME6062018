@@ -49,7 +49,7 @@ const generateWeekReport = (request, input, callback) => {
   let fromDateTime = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
   let toDateTime = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
   const inputDate = {
-    StoreIDs: (input.ReportTemplate_StoreIds).toString(),
+    Device_IDs: (input.ReportTemplate_DeviceIds).toString(),
     StoreStartDate: input.ReportTemplate_From_Date,
     StoreEndDate: input.ReportTemplate_To_Date,
     StartDateTime: fromDateTime,
@@ -98,7 +98,7 @@ const generateWeekReport = (request, input, callback) => {
             callback(output)
           }
         }
-      } else if (input.ReportTemplate_StoreIds.length === 1) {
+      } else if (input.ReportTemplate_DeviceIds.length === 1) {
         let goalSettings = _.filter(repositoryData, group => group['Menu Board - GoalA'])
         const StoreData = reportGenerate.getAllStoresDetails(repositoryData, colors, goalSettings, input.ReportTemplate_Format)
         const groupbyIndex = _.groupBy(StoreData, indexValue => indexValue.index)
@@ -138,7 +138,7 @@ const generateWeekReport = (request, input, callback) => {
         reportData = data
         reportData.status = true
         callback(reportData)
-      } else if (input.ReportTemplate_StoreIds.length > 1) {
+      } else if (input.ReportTemplate_DeviceIds.length > 1) {
         let goalSettings = _.filter(repositoryData, group => group['Menu Board - GoalA'])
         const StoreData = reportGenerate.storesDetails(repositoryData, colors, goalSettings, input.ReportTemplate_Format)
         const groupbyIndex = _.groupBy(StoreData, indexValue => indexValue.index)
