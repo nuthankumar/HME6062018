@@ -96,7 +96,7 @@ const prepareJsonForPDF = (data, input, result, reportName, pdfInput) => {
     pdfData.goalData = goalsGroup
     const isEmailSent = Pdfmail.mutipleStore(pdfData, pdfInput)
     return isEmailSent
-  } else if (input.data.ReportTemplate_StoreIds.length > 1) {
+  } else if (input.ReportTemplate_StoreIds.length > 1) {
     let goalSettings = _.filter(result, group => group['Menu Board - GoalA'])
     const StoreData = reportGenerate.storesDetails(result, colors, goalSettings, input.ReportTemplate_Format)
     const groupbyIndex = _.groupBy(StoreData, indexValue => indexValue.index)
