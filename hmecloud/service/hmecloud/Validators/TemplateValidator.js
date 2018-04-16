@@ -29,9 +29,9 @@ const create = (request, callback) => {
 const get = (request, callback) => {
   console.log('REQUEST', request)
   let output = {}
-    const templateId = request.query.templetId//validate.isNumeric(request.query.templateId)
-    if (templateId) {
-        templateController.get(templateId, request, (result) => {
+  const templateId = request.query.templetId// validate.isNumeric(request.query.templateId)
+  if (templateId) {
+    templateController.get(templateId, request, (result) => {
       callback(result)
     })
   } else {
@@ -50,22 +50,10 @@ const get = (request, callback) => {
 const getAll = (input, callback) => {
   let output = {}
   let values = {}
-<<<<<<< HEAD
-  if (!input.AccountId) {
-    output.error = input.t('LISTGROUP.accountId')
-    output.status = false
-    callback(output)
-  }
+  console.log('The logged in user Id', input.userId)
 
-  if (input.AccountId) {
-    values.AccountId = input.AccountId
-    values.CreatedBy = input.AccountId
-=======
-    console.log("The logged in user Id", input.userId)
- 
-    if (input.userId) {
-        values.UserUid = input.userId
->>>>>>> b19199fa8550b13d87b855d8f5964b6c4e4c1735
+  if (input.userId) {
+    values.UserUid = input.userId
     templateController.getAll(values, input, (result) => {
       callback(result)
     })
