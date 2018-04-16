@@ -30,7 +30,7 @@ module.exports = function (context, req) {
         ,[User_EmailAddress]
         ,[User_FirstName]
         ,[User_LastName]
-        FROM [hmeCloud].[dbo].[tbl_Users] 
+        FROM [dbo].[tbl_Users] 
         WHERE [User_IsActive] = 1 AND [User_EmailAddress] = '${email}'`, (err, result) => {
           if (err) {
             context.res = {
@@ -93,7 +93,9 @@ module.exports = function (context, req) {
               refreshToken: tokenResponse.refreshToken,
               userId: tokenResponse.userId,
               familyName: tokenResponse.familyName,
-              givenName: tokenResponse.givenName
+              givenName: tokenResponse.givenName,
+              name: tokenResponse.name,
+              uid: tokenResponse.puid
             }
           }
         }
