@@ -24,7 +24,9 @@ ALTER PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details]
 	@CarDataRecordType_ID varchar(255) = '11',
 	@ReportType char(2) = 'AC',   -- AC: cumulative  TC: Time Slice
 	@LaneConfig_ID tinyint = 1,
-	@PageNumber smallint = 0
+	--@RecordPerPage smallint = 4,
+	@PageNumber smallint = 0,
+	@UserUID NVARCHAR(50)
 )
 AS
 BEGIN
@@ -32,7 +34,7 @@ BEGIN
 		Copyright (c) 2014 HME, Inc.
 
 		Author:
-			Jaffer sherif (2018-04-15)
+			Wells Wang (2014-08-10)
 
 		Description:
 			This proc is used for Cloud Reporting of daypart report.
@@ -49,7 +51,7 @@ BEGIN
 			@LaneConfig_ID optional. default to 1
 
 		Usage:
-			exec usp_HME_Cloud_Get_Report_By_Daypart_Details_WithSubTotal @StoreIDs='3,4',@StoreStartDate='2018-03-23',@StoreEndDate='2018-03-24',@InputStartDateTime=N'2018-03-23 00:00:00',@InputEndDateTime=N'2018-03-24 10:30:00',@CarDataRecordType_ID='11',@ReportType='TC',@LaneConfig_ID=1,@PageNumber=1
+			EXECUTE dbo.usp_HME_Cloud_Get_Report_By_Daypart @Device_IDs, @StoreStartDate, @StoreEndDate, @StartDateTime, @EndDateTime, @CarDataRecordType_ID, @ReportType, @LaneConfig_ID
 
 		Documentation:
 			This report is used for both single and multiple stores. The logic is slightly different with each type.
@@ -158,6 +160,9 @@ BEGIN
 	 FROM tbl_DeviceInfo AS dinf INNER JOIN tbl_Stores strs ON dinf.Device_Store_ID = strs.Store_ID 
 	 WHERE dinf.Device_Store_ID IN (Select cValue FROM dbo.split(@StoreIDs,','))
 
+	 --SELECT dinf.Device_ID
+	 --FROM tbl_DeviceInfo AS dinf INNER JOIN tbl_Stores strs ON dinf.Device_Store_ID = strs.Store_ID 
+	 --WHERE dinf.Device_Store_ID IN (3,4)
 
 	IF LEN(@Device_IDs)>0 
 		SET @Device_IDs = LEFT(@Device_IDs, LEN(@Device_IDs)-1)
@@ -176,6 +181,10 @@ BEGIN
 	INNER JOIN [Group]g ON g.ID = gs.GroupID
 	WHERE gs.StoreID in (SELECT cValue FROM dbo.split(@StoreIDs,','))
 
+	--SELECT DISTINCT g.GroupName,ts.Store_ID 
+	--FROM [Group] g LEFT JOIN GroupStore gs ON g.ID = gs.GroupID
+	--INNER JOIN  tbl_Stores ts ON gs.StoreID = ts.Store_ID 
+	--WHERE gs.StoreID in (SELECT cValue FROM dbo.split(@StoreIDs,','))
 	
 	-- determine whether it's multi store or single store
 	-- for single stores, the column names would be its event name
@@ -430,7 +439,8 @@ BEGIN
 		FROM #rollup_data_all 
 	END;
 	
-	
+	--INSERT INTO #rollup_data (DayPartIndex, StartTime, EndTime, StoreNo, Device_UID, StoreDate, Device_ID, GroupName, Store_ID, Category, AVG_DetectorTime, Total_Car)
+	--EXEC (@sum_query);
 	
 	-- below is a hack!!
 	-- when a single store has change of config (for instanc: menu board, service... to pre loop, menu board, service...) 
@@ -475,7 +485,11 @@ BEGIN
 	EXECUTE(@query)
 	
 	SELECT Preferences_Preference_Value as ColourCode FROM itbl_Leaderboard_Preferences WHERE 
-			Preferences_Company_ID=1271 AND Preferences_Preference_ID=5
+			Preferences_Company_ID=(select User_Company_ID  
+			from  tbl_Users where User_UID = @UserUID ) AND Preferences_Preference_ID=5
+
+
+
 
 	-- return top 3 longest times
 	IF (@isMultiStore = 0 AND @PageNumber >0)
@@ -612,7 +626,6 @@ BEGIN
 		SELECT @TotalRecCount TotalRecCount, @TotalRecCount NoOfPages
 	RETURN(0)
 END
-
 
 -- exec usp_HME_Cloud_Get_Report_By_Daypart_Details_WithSubTotal @StoreIDs='3,4',@StoreStartDate='2018-03-23',@StoreEndDate='2018-03-24',@InputStartDateTime=N'2018-03-23 00:00:00',@InputEndDateTime=N'2018-03-24 10:30:00',@CarDataRecordType_ID='11',@ReportType='TC',@LaneConfig_ID=1,@PageNumber=1
 -- exec usp_HME_Cloud_Get_Report_By_Daypart_Details_WithSubTotal @StoreIDs='4',@StoreStartDate='2018-03-23',@StoreEndDate='2018-03-24',@InputStartDateTime=N'2018-03-23 00:00:00',@InputEndDateTime=N'2018-03-24 10:30:00',@CarDataRecordType_ID='11',@ReportType='AC',@LaneConfig_ID=1,@PageNumber=1
