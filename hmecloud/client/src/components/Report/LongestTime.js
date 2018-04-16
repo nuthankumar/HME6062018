@@ -33,19 +33,19 @@ class LongestTime extends Component {
 
 
     renderLongestTimes() {
-        let renderStores;
+      //  let renderStores;
         let LongestTimes = this.props.LongestTimes;
-        let renderLongestTimes = LongestTimes.map(function (LongestTimes, index) {
+        LongestTimes.map(function (LongestTimes, index) {
           return (<tr>
-                    <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{LongestTimes.Menu.Value}</span><br /><span className="longtime-timeSpan">{LongestTimes.Menu.Date}<br />{LongestTimes.Menu.Time}</span></td>
-                    <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{LongestTimes.Greet.Value}</span><br /><span className="longtime-timeSpan">{LongestTimes.Greet.Date}<br />{LongestTimes.Greet.Time}</span></td>
-                    <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{LongestTimes.Service.Value}</span><br /><span className="longtime-timeSpan">{LongestTimes.Service.Date}<br />{LongestTimes.Service.Time}</span></td>
-                    <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{LongestTimes.LaneQueue.Value}</span><br /><span className="longtime-timeSpan">{LongestTimes.LaneQueue.Date}<br />{LongestTimes.LaneQueue.Time}</span></td>
-                    <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{LongestTimes.LaneTotal.Value}</span><br /><span className="longtime-timeSpan">{LongestTimes.LaneTotal.Date}<br />{LongestTimes.LaneTotal.Time}</span></td>
+                    <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{LongestTimes.Menu ? LongestTimes.Menu.Value : '' }</span><br /><span className="longtime-timeSpan">{LongestTimes.Menu ? LongestTimes.Menu.Date : ''}<br />{LongestTimes.Menu ? LongestTimes.Menu.Time : 'N/A'}</span></td>
+                    <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{LongestTimes.Greet ? LongestTimes.Greet.Value : ''}</span><br /><span className="longtime-timeSpan">{LongestTimes.Greet ? LongestTimes.Greet.Date : ''}<br />{LongestTimes.Greet ? LongestTimes.Menu.Time : 'N/A'}</span></td>
+                    <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{LongestTimes.Service ? LongestTimes.Service.Value : ''}</span><br /><span className="longtime-timeSpan">{LongestTimes.Service ? LongestTimes.Service.Date : ''}<br />{LongestTimes.Service ? LongestTimes.Service.Time : 'N/A'}</span></td>
+                    <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{LongestTimes.LaneQueue ? LongestTimes.LaneQueue.Value : ''}</span><br /><span className="longtime-timeSpan">{LongestTimes.LaneQueue ? LongestTimes.LaneQueue.Date : ''}<br />{LongestTimes.LaneQueue ? LongestTimes.LaneQueue.Time : 'N/A'}</span></td>
+                    <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{LongestTimes.LaneTotal ?  LongestTimes.LaneTotal.Value : ''}</span><br /><span className="longtime-timeSpan">{LongestTimes.LaneTotal ? LongestTimes.LaneTotal.Date : ''}<br />{LongestTimes.LaneTotal ? LongestTimes.LaneTotal.Time : 'N/A'}</span></td>
                     <td className='lastTd'></td>
  				          </tr>);
         });
-        return renderLongestTimes;
+      //  return renderLongestTimes;
     }
 
 
