@@ -92,11 +92,11 @@ export default class SummaryReportDataComponent extends Component {
             <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayColumn} onClick={() => this.props.handleDrillDown(reportItem.storeId)}><span className='timeSpan'>{reportItem.day? reportItem.day.timeSpan : '' }</span><br/><span className='currentMeasure'>{reportItem.day  ? reportItem.day.currentDaypart :''}</span></td>
             <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayPartColumn} onClick={() => this.props.handleDrillDown(reportItem.storeId)}><span className='timeSpan'>{reportItem.daypart? reportItem.daypart.timeSpan : ''}</span><br/><span className='currentMeasure'>{reportItem.daypart ? reportItem.daypart.currentDaypart : ''}</span></td>
             <td className={'timeMeasureColumn ' + this.dynamicColumnData.showWeekColumn} onClick={() => this.props.handleDrillDown(reportItem.storeId)}><span>{reportItem.week? reportItem.week.timeSpan : ''}</span> <span className='currentMeasure'>{reportItem.week ? reportItem.week.currentDaypart : ''}</span></td>
-            <td style={menuStyle}>{reportItem.menu.value}</td>
-            <td style={greetStyle}>{reportItem.greet.value}</td>
-            <td style={serviceStyle}>{reportItem.service.value}</td>
-            <td style={laneQueueStyle}>{reportItem.laneQueue.value}</td>
-            <td style={laneTotalStyle}>{reportItem.laneTotal.value}</td>
+            <td style={menuStyle} className={(reportItem.menu.value === "N/A" ? "background-NA" : "")}>{reportItem.menu.value}</td>
+            <td style={greetStyle} className={(reportItem.menu.value === "N/A" ? "background-NA" : "")}>{reportItem.greet.value}</td>
+            <td style={serviceStyle} className={(reportItem.menu.value === "N/A" ? "background-NA" : "")}>{reportItem.service.value}</td>
+            <td style={laneQueueStyle} className={(reportItem.menu.value === "N/A" ? "background-NA" : "")}>{reportItem.laneQueue.value}</td>
+            <td style={laneTotalStyle} className={(reportItem.menu.value === "N/A" ? "background-NA" : "")}>{reportItem.laneTotal.value}</td>
             <td>{reportItem.totalCars.value}</td>
           </tr>
         )

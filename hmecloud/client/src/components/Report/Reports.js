@@ -153,7 +153,6 @@ class Report extends Component {
     const language = this.state.currentLanguage
     const { date, format, mode, inputFormat } = this.state;
     const loop = data => {
-      console.log(data); 
         return data.map(item => {
         if (item.Children && item.Children.length) {
             return (
@@ -534,7 +533,6 @@ class Report extends Component {
   getSavedReports() {
       let url = Config.apiBaseUrl + CommonConstants.apiUrls.getSavedTemplates
       this.api.getData(url, data => {
-console.log(data);
           this.state.savedTemplates = []
           this.setState({
           savedTemplates: data.data
@@ -665,7 +663,7 @@ console.log(data);
 
   apply(e) {
 
-      let url = Config.apiBaseUrl + CommonConstants.apiUrls.getSavedTemplateData + '?templateId=' +
+      let url = Config.apiBaseUrl + CommonConstants.apiUrls.getSavedTemplateData + '?templetId=' +
     e.target.id;
     this.api.getData (url,data => {
         let template = data.data;
@@ -679,7 +677,7 @@ console.log(data);
         this.setState({ fromDate: fromDate });
         let toDate = moment(template.ToDate).format("MM/DD/YYYY");
         this.setState({ toDate: toDate });
-        this.setState({ defaultCheckedKeys: template.SelectedStoreIds });
+        this.setState({ defaultCheckedKeys: template.DeviceUUIds });
         // let deviceUIds = []
         // this.setState({
         //   stores: this.findMatch(this.state.treeData, item => {
@@ -695,17 +693,17 @@ console.log(data);
         //  this.setState({
         //    deviceUIds : deviceUIds
         //  })
-          this.setState({
-           stores: this.findMatch(this.state.treeData, item => {
-             return (
-               item.Type === "store" &&
-               template.SelectedStoreIds.indexOf(item.Id.toString()) > -1
-             );
-           })
-         });
-         this.setState({
-          deviceUIds :  template.SelectedStoreIds
-        })
+        this.setState({
+          stores: this.findMatchedClassName(this.state.treeData, item => {
+            return (
+              item.Type === "store" &&
+              template.DeviceUUIds.indexOf(item.DeviceUID.toString()) > -1
+            );
+          })
+        });
+        this.setState({
+         deviceUIds :  template.DeviceUUIds
+       })
         let include = []
         if(template.LongestTime){
           document.getElementById("longestTime").checked = true;
@@ -909,7 +907,6 @@ console.log(data);
         isError = true;
       } else {
               let url = Config.apiBaseUrl + CommonConstants.apiUrls.createTemplate
-              console.log(JSON.stringify(createTemplateData))
 
               this.api.postData(url, createTemplateData[0], data => {
                   this.state.successMessage = data.data;
@@ -996,7 +993,7 @@ console.log(data);
             "type": this.state.type,
             "include": this.state.include,
             "format": this.state.format,
-            "deviceIds": template.deviceIds,
+            "deviceIds": template[0].deviceIds,
             "advancedOptions": template[0].advancedOptions,
             "longestTime": template[0].longestTime,
             "systemStatistics":template[0].systemStatistics
@@ -1057,10 +1054,8 @@ console.log(data);
   //    "recordPerPage": 4,
       "pageNumber": 1
     }
-    console.log(JSON.stringify(request))
     let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
     this.api.postData(url, request, data => {
-        console.log(JSON.stringify(data))
         this.props.history.push({
             pathname: '/summaryreport',
             state: { reportData: this.state.reportData , reportDataResponse : data, reportRequest: request }
