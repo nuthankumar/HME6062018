@@ -50,7 +50,7 @@ export default class SummaryReportDataComponent extends Component {
                         <th className='reportTableAttributesHeading'><span>{t[language].MenuBoard}</span></th>
                         <th className='reportTableAttributesHeading'><span>{t[language].Greet}</span></th>
                         <th className='reportTableAttributesHeading'><span>{t[language].Service}</span></th>
-                        <th className='reportTableAttributesHeading'><span>{t[language].LaneQueue}</span></th>
+                        <th className='reportTableAttributesHeading'><span>{t[language].LaneQueue}*</span></th>
                         <th className='reportTableAttributesHeading'><span>{t[language].LaneTotal}</span></th>
                         <th className='reportTableAttributesHeading'><span>{t[language].ReportsTotalCars}</span></th>
                     </tr>

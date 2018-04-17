@@ -375,7 +375,7 @@ class Report extends Component {
                 <span className="span-heading">
                                 <span> {t[language].format}  </span>
 
-                                <a data-tip={t[language].selectonestore}><span className="tip openTip">?</span></a>
+                                <a data-tip={t[language].chooseseconds}><span className="tip openTip">?</span></a>
                                   <ReactTooltip place="right" type="dark" effect="solid" />
                 </span>
                 <div className="checkbox-sections">
@@ -743,14 +743,14 @@ console.log(data);
       let url = Config.apiBaseUrl + CommonConstants.apiUrls.deleteTemplate + '?templateId=' +
       e.target.id;
     this.api.deleteData (url,data => {
-      this.state.successMessage = data.data;
-      this.state.errorMessage = "";
-      this.setState(this.state);
+      //this.state.successMessage = data.data;
+      //this.state.errorMessage = "";
+      //this.setState(this.state);
       this.getSavedReports();
     }, error => {
-      this.state.errorMessage = "ERROR";
-      this.state.successMessage = "";
-      this.setState(this.state);
+      //this.state.errorMessage = "ERROR";
+      //this.state.successMessage = "";
+      //this.setState(this.state);
     })
   }
 
