@@ -4,21 +4,36 @@ import * as ReactDOM from 'react-dom';
 import HmeHeader from '../Header/HmeHeader';
 import AdminSubHeader from '../Header/adminSubHeader'
 import Footer from '../Footer/Footer';
-import AutoSignOut from '../Security/AutoSignOut';
-
 import { Config } from '../../Config'
 import Authenticate from '../Security/Authentication'
 import * as UserContext from '../Common/UserContext'
+import AutoSignOut from '../Security/AutoSignOut'
+import AuthenticationService from '../Security/AuthenticationService'
 
 export default class Layout extends React.Component {
-    render() {
+    constructor() {
+        super()
+        this.authService = new AuthenticationService(Config.authBaseUrl)
+    }
+     render() {
         const { Params, children } = this.props;
         let pathName = Params.location.pathname;
+        var url_string = window.location.href
+        var url = new URL(url_string);
+        let token = url.searchParams.get("token");
+        let isAdminParam = url.searchParams.get("a");
 
+        if (token) {
+            this.authService.setToken(token, isAdminParam)
+            UserContext.isLoggedIn()
+            let path = window.location.pathname;
+            window.location.href = path;
+        }
         localStorage.setItem('id_token', Config.token)
         let idToken = localStorage.getItem('id_token')
         let isAdministrator = (idToken) ? true : false;
-
+         
+        isAdministrator = true;
         // return (
         let isAdmin = false
         let isLoggedIn = false;
@@ -50,10 +65,11 @@ export default class Layout extends React.Component {
             adminLogo = true
         }
 
-        // console.log(isAdmin);
-        // console.log(isLoggedIn);
+         console.log(isAdmin);
+         console.log(isLoggedIn);
         return (
             <div>
+                <AutoSignOut showToast={isAdministrator}/>
                 <HmeHeader isAdministrator={isAdministrator} isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} />
                 <AdminSubHeader isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} pathName={pathName} />
                 <div className="hmeBody">

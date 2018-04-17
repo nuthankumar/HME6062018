@@ -42,7 +42,8 @@ class Api {
       headers: {
         'Content-Type': 'application/json',
         // 'x-access-token': token
-        'Authorization': 'Bearer ' + this.authService.getToken()
+        //'Authorization': 'Bearer ' + this.authService.getToken()
+        'Authorization': 'Bearer ' + UserContext.getToken()
       }
     })
       .then((response) => response.json())

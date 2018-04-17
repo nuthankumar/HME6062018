@@ -626,6 +626,7 @@ span.StoreBrand {
 .saved-reports .rc-tree-node-content-wrapper {
     width: 220px !important;
 }
+
 .storeTree {
     display: inline-flex;
     width: 100%;
@@ -633,7 +634,13 @@ span.StoreBrand {
     justify-content: space-between;
 }
 
+.copyright .black_link {
+    padding: 0px 5px;
+    color: #d41b3e !important;
+    font-weight: bold;
+    text-decoration: underline;
+}
 
-.background-NA{
-  background-color: grey;
+.background-NA {
+    background-color: grey;
 }

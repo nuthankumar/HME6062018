@@ -1,5 +1,6 @@
 // to-do: move to process.env
 export const Config = {
+    adminColdFusionUrl: 'http://devcloudadmin.hme.com/',
     coldFusionUrl: 'https://engdev.hmedtcloud.com/',
   //apiBaseUrl: 'http://localhost:7071/', // 'https://hme-dev-public-cloud-func.azurewebsites.net/',
   //authBaseUrl: 'http://localhost:7072', //https://hme-dev-public-cloud-func.azurewebsites.net

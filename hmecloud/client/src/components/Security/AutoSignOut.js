@@ -10,14 +10,26 @@ class AutoSignOut extends Component {
     }
     componentWillMount() {
     }
-    notify = () => this.toastId = toast(`You are currently viewing the site as another User`
-    , { type: toast.TYPE.INFO, autoClose: 5000 });
+    notify = (Msg,e) => this.toastId = toast( Msg
+    , { type: toast.TYPE.INFO, autoClose: false });
 
+
+    componentDidMount() {
+        
+    }
     render() {
-        return (
+        const { isAdministrator } = this.props
+        const Msg = ({ closeToast }) => (
             <div>
-                <a onClick={this.notify}>Timer</a>
-                <ToastContainer />
+                You are currently viewing the site as another User <span> logout </span>
+                <button onClick={closeToast}>Logout</button>
+                <button onClick={closeToast}>Continue</button>
+            </div>
+        )
+        this.notify.bind(this, Msg);
+        return (
+            <div className={isAdministrator ? 'show' : 'hidden'}>
+                <ToastContainer autoClose={false} />
             </div>
         )
     }

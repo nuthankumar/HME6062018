@@ -24,19 +24,8 @@ export default function authenticate (AuthenticationComponent) {
         }
 
         else {
-
             this.setState({ isLoggedIn: true })
-            //  try {
-            //    const profile = authenticationService.getProfile()
-            //    this.setState({
-            //      user: profile
-            //    })
-            //  } catch (err) {
-            //    authenticationService.logout()
-            //    this.props.history.replace('/login')
-            //  }
-            //}
-        }
+             }
     }
     render () {
         if (this.state.isLoggedIn) {
