@@ -221,7 +221,7 @@ export default class SummaryReport extends Component {
             let currentStoreIds = request.deviceIds
             if (request.deviceIds.length > 1) {
                 let array = []
-                array.push(storeId.value)
+                array.push(storeId)
                 request.deviceIds = array;
             }
              this.setState(this.state)
@@ -242,10 +242,7 @@ export default class SummaryReport extends Component {
             }
 
             if (request.timeMeasure < 4) {
-                if (currentStoreIds.length > 1) {
-
-                }
-                else if (currentStoreIds.length == 1) {
+                if (currentStoreIds.length == 1) {
                     let timeMeasure = CommonConstants.Drilldown[parseInt(request.timeMeasure) - 1]
                     request.timeMeasure = timeMeasure;
                 }

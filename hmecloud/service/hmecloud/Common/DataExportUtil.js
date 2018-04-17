@@ -48,19 +48,19 @@ const prepareJsonForExport = (storeData, input, csvInput, callback) => {
   })
 }
 
-const prepareJsonForPDF = (data, input, result, reportName, pdfInput) => {
+const prepareJson = (data, input, result, reportName, pdfInput, isMethod) => {
   const pdfData = {}
   pdfData.reportName = reportName
   pdfData.startTime = data.startTime
   pdfData.stopTime = data.stopTime
   let colors = _.filter(result, val => val.ColourCode)
   // Single
-    if (input.ReportTemplate_DeviceIds.length === 1) {
+  if (input.ReportTemplate_DeviceIds.length === 1) {
     pdfData.reportName = reportName
     pdfData.Store_Name = result[0].Store_Name
     pdfData.startTime = data.startTime
     pdfData.stopTime = data.stopTime
-    let goalSettings = _.filter(result, group => group['Menu Board - GoalA'])
+    const goalSettings = _.filter(result, group => group['Menu Board - GoalA'])
     const StoreData = reportGenerate.getAllStoresDetails(result, colors, goalSettings, input.ReportTemplate_Format)
     const groupbyIndex = _.groupBy(StoreData, indexValue => indexValue.index)
     let vals = _.values(groupbyIndex)
@@ -70,12 +70,17 @@ const prepareJsonForPDF = (data, input, result, reportName, pdfInput) => {
     let timeMeasureArray = []
     timeMeasureObj.data = storesVals
     timeMeasureArray.push(timeMeasureObj)
-    pdfData.storeDetails = timeMeasureArray
+    if (isMethod === 'PDF') {
+      pdfData.storeDetails = timeMeasureArray
+    } else {
+      pdfData.timeMeasure = timeMeasureArray
+    }
     const carTotals = carTotal(StoreData)
     // goal setings
     let daysingleResult = []
-    let goalTimes = _.filter(result, group => group['Cashier_GoalA'])
-    const getGoalsData = reportGenerate.getGoalStatistic(goalSettings, goalTimes, daysingleResult, carTotals, input.ReportTemplate_Format, colors)
+    let goalTimes = _.filter(result, group => group['Menu Board - GoalA'])
+    let goal = []
+    const getGoalsData = reportGenerate.getGoalStatistic(goalSettings, goal, daysingleResult, carTotals, input.ReportTemplate_Format, colors)
     const goalsData = goalData(result)
     if (input.longestTime) {
       pdfData.LongestTimes = {}
@@ -94,17 +99,29 @@ const prepareJsonForPDF = (data, input, result, reportName, pdfInput) => {
     let goalsGroup = []
     goalsGroup = getGoalsData
     pdfData.goalData = goalsGroup
-    const isEmailSent = Pdfmail.mutipleStore(pdfData, pdfInput)
-    return isEmailSent
-    } else if (input.ReportTemplate_DeviceIds.length > 1) {
+    if (isMethod === 'PDF') {
+      const isEmailSent = Pdfmail.singleStore(pdfData, pdfInput)
+      return isEmailSent
+    } else if (isMethod === 'singleReport') {
+      return pdfData
+    }
+  } else if (input.ReportTemplate_DeviceIds.length > 1) {
     let goalSettings = _.filter(result, group => group['Menu Board - GoalA'])
     const StoreData = reportGenerate.storesDetails(result, colors, goalSettings, input.ReportTemplate_Format)
     const groupbyIndex = _.groupBy(StoreData, indexValue => indexValue.index)
     let vals = _.values(groupbyIndex)
     let storesVals = _.flatten(vals)
-    pdfData.storeDetails = storesVals
-    const isEmailSent = Pdfmail.singleStore(pdfData, pdfInput)
-    return isEmailSent
+    if (isMethod === 'PDF') {
+      pdfData.storeDetails = storesVals
+    } else {
+      pdfData.timeMeasure = storesVals
+    }
+    if (isMethod === 'PDF') {
+      const isEmailSent = Pdfmail.singleStore(pdfData, pdfInput)
+      return isEmailSent
+    } else if (isMethod === 'multipleReport') {
+      return pdfData
+    }
   }
 }
 
@@ -127,5 +144,5 @@ const carTotal = (StoreData) => {
 
 module.exports = {
   prepareJsonForExport,
-  prepareJsonForPDF
+  prepareJson
 }
