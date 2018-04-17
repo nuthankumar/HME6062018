@@ -26,8 +26,8 @@ const errorHandler = (message, status, request) => {
 const create = (reportTemplate, callback) => {
     let output = {}
   const values = {
-    DeviceUUIds: reportTemplate.body.deviceUUIds.toString(),
-    Uid: uuidv4(), 
+      DeviceUUIds: reportTemplate.body.deviceUUIds.toString(),
+      Uid: uuidv4().toUpperCase(), 
     TimeMeasure: messages.TimeMeasure[reportTemplate.body.timeMeasure],
     FromDate: reportTemplate.body.fromDate,
     ToDate: reportTemplate.body.toDate,
@@ -39,15 +39,15 @@ const create = (reportTemplate, callback) => {
       SystemStatistics: (reportTemplate.body.systemStatistics === true ? 1 : 0),
       Format: messages.TimeFormat[reportTemplate.body.format],
     TemplateName: reportTemplate.body.templateName,
-    SessionUid: uuidv4(),  // To be updated with actual
+      // Session Id is reading dtbl_User_Session table in 
+      //the Procedure while creating template
+      SessionUid: " ",  
     UserUid: reportTemplate.userUid,
     CreatedBy: reportTemplate.UserEmail,
       AdvancedOption: (reportTemplate.body.advancedOption === true ? 1 : 0),
       LongestTime: (reportTemplate.body.longestTime === true ? 1 : 0),
     CreatedDateTime: reportTemplate.body.createdDateTime
     }
-
-    console.log("The final input", values)
     repository.create(values, (result) => {
         if (result.length > 0) {
             let isTemplateCreated = result[0]
@@ -78,19 +78,19 @@ const get = (reportTemplate, request, callback) => {
     repository.get(reportTemplate, (result) => {
         if (result) {
          let reportTemplate = result
-         reportTemplate.fromDate = dateUtils.convertYYYYMMDD(reportTemplate.fromDate)
-         reportTemplate.toDate = dateUtils.convertYYYYMMDD(reportTemplate.toDate)
-            reportTemplate.openTime = dateUtils.converthhmmtt(reportTemplate.openTime)
-            reportTemplate.closeTime = dateUtils.converthhmmtt(reportTemplate.closeTime)
-         reportTemplate.timeMeasure = messages.TimeMeasure[reportTemplate.timeMeasure]
-         reportTemplate.type = messages.Type[reportTemplate.type]
-         reportTemplate.format = messages.TimeFormat[reportTemplate.format]
-         reportTemplate.deviceUUIds = reportTemplate.devices.split(',')
-         reportTemplate.advancedOption = (reportTemplate.advancedOption === 1 ? true : false)
-         reportTemplate.longestTime = (reportTemplate.longestTime === 1 ? true : false)
-         reportTemplate.systemStatistics = (reportTemplate.systemStatistics === 1 ? true : false)
-         reportTemplate.close = (reportTemplate.close === 1 ? true : false)
-         reportTemplate.open= (reportTemplate.open === 1 ? true : false)
+         reportTemplate.FromDate = dateUtils.convertYYYYMMDD(reportTemplate.FromDate)
+         reportTemplate.ToDate = dateUtils.convertYYYYMMDD(reportTemplate.ToDate)
+         reportTemplate.OpenTime = dateUtils.converthhmmtt(reportTemplate.OpenTime)
+         reportTemplate.CloseTime = dateUtils.converthhmmtt(reportTemplate.CloseTime)
+         reportTemplate.TimeMeasure = messages.TimeMeasure[reportTemplate.TimeMeasure]
+         reportTemplate.Type = messages.Type[reportTemplate.Type]
+         reportTemplate.Format = messages.TimeFormat[reportTemplate.Format]
+         reportTemplate.DeviceUUIds = reportTemplate.Devices.split(',')
+         reportTemplate.AdvancedOption = (reportTemplate.AdvancedOption === 1 ? true : false)
+         reportTemplate.LongestTime = (reportTemplate.LongestTime === 1 ? true : false)
+         reportTemplate.SystemStatistics = (reportTemplate.SystemStatistics === 1 ? true : false)
+         reportTemplate.Close = (reportTemplate.Close === 1 ? true : false)
+         reportTemplate.Open= (reportTemplate.Open === 1 ? true : false)
 
          output.data = reportTemplate
          output.status = true

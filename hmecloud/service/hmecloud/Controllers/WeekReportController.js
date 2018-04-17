@@ -62,7 +62,7 @@ const generateWeekReport = (request, input, callback) => {
     UserUID: request.userUid,
     UserEmail: request.UserEmail
   }
-  console.log("PDF",input.reportType)
+  console.log('INPUT', inputDate)
 
   repository.getWeekReport(inputDate, (result) => {
     if (result.length > 0) {
@@ -75,11 +75,10 @@ const generateWeekReport = (request, input, callback) => {
       data.stopTime = moment(toDateTime).format('LL')
       let colors = _.filter(repositoryData, val => val.ColourCode)
       // Single Store
-      if (input.reportType.toLowerCase().trim() === 'csv' || input.reportType.toLowerCase().trim() === 'pdf') {
+      if (!_.isUndefined(input.reportType) && input.reportType.toLowerCase().trim() === 'csv') {
         if (input.reportType.toLowerCase().trim() === 'csv') {
           generateCSVOrPdfTriggerEmail(request, input, result)
-         }else{
-          console.log("PDF",input.reportType)
+        } else if (!_.isUndefined(input.reportType) && input.reportType.toLowerCase().trim() === 'pdf') {
           let pdfInput = {}
           pdfInput.type = request.t('COMMON.CSVTYPE')
           pdfInput.reportName = `${request.t('COMMON.WEEKREPORTNAME')} ${dateFormat(new Date(), 'isoDate')}`

@@ -55,7 +55,7 @@ const prepareJsonForPDF = (data, input, result, reportName, pdfInput) => {
   pdfData.stopTime = data.stopTime
   let colors = _.filter(result, val => val.ColourCode)
   // Single
-  if (input.ReportTemplate_DeviceIds.length === 1) {
+    if (input.ReportTemplate_DeviceIds.length === 1) {
     pdfData.reportName = reportName
     pdfData.Store_Name = result[0].Store_Name
     pdfData.startTime = data.startTime
@@ -96,7 +96,7 @@ const prepareJsonForPDF = (data, input, result, reportName, pdfInput) => {
     pdfData.goalData = goalsGroup
     const isEmailSent = Pdfmail.mutipleStore(pdfData, pdfInput)
     return isEmailSent
-  } else if (input.ReportTemplate_DeviceIds.length > 1) {
+    } else if (input.ReportTemplate_DeviceIds.length > 1) {
     let goalSettings = _.filter(result, group => group['Menu Board - GoalA'])
     const StoreData = reportGenerate.storesDetails(result, colors, goalSettings, input.ReportTemplate_Format)
     const groupbyIndex = _.groupBy(StoreData, indexValue => indexValue.index)

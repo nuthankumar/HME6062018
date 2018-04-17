@@ -22,6 +22,7 @@ const generateDayReportByDate = (request, input, callback) => {
     if (currentPage === 0) {
         pageStartDate = input.ReportTemplate_From_Date
         pageEndDate = input.ReportTemplate_To_Date
+        lastPage = 0
     } else if (input.ReportTemplate_DeviceIds.length > 1) {
         let daysDiff = dateUtils.dateDifference(input.ReportTemplate_From_Date, input.ReportTemplate_To_Date)
         lastPage = Math.ceil((daysDiff + 1) / 2)

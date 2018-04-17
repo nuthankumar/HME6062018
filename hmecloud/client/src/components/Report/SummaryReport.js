@@ -142,7 +142,7 @@ export default class SummaryReport extends Component {
         switch (templateData.timeMeasure.toString()) {
 
             case '1': this.state.reportData.dailyData = true
-                if (templateData.selectedStoreIds.length === 1) {
+                if (templateData.deviceIds.length === 1) {
                     this.state.reportData.dayColumn = true
                     this.state.reportData.dayPartColumn = false
                     this.state.reportData.weekColumn = false
@@ -159,7 +159,7 @@ export default class SummaryReport extends Component {
                 break
 
             case '2': this.state.reportData.dayPartData = true
-                if (templateData.selectedStoreIds.length === 1) {
+                if (templateData.deviceIds.length === 1) {
                     this.state.reportData.dayPartColumn = true
                     this.state.reportData.weekColumn = false
                     this.state.reportData.dayColumn = false
@@ -177,7 +177,7 @@ export default class SummaryReport extends Component {
                 break
 
             case '3': this.state.reportData.weeklyData = true
-                if (templateData.selectedStoreIds.length === 1) {
+                if (templateData.deviceIds.length === 1) {
                     this.state.reportData.weekColumn = true
                     this.state.reportData.dayPartColumn = true
                     this.state.reportData.dayColumn = false
@@ -218,11 +218,11 @@ export default class SummaryReport extends Component {
             let request = this.state.reportData.drillDownRequestData
             // during drill down updating the store id in template request
 
-            let currentStoreIds = request.selectedStoreIds
-            if (request.selectedStoreIds.length > 1) {
+            let currentStoreIds = request.deviceIds
+            if (request.deviceIds.length > 1) {
                 let array = []
                 array.push(storeId.value)
-                request.selectedStoreIds = array;
+                request.deviceIds = array;
             }
              this.setState(this.state)
              this.setTimeMeasures(request)
@@ -254,7 +254,7 @@ export default class SummaryReport extends Component {
             if (request.timeMeasure < 4) {
                 let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
                 this.api.postData(url, request, data => {
-                    request.selectedStoreIds = data.selectedStoreIds;
+                    request.deviceIds = data.deviceIds;
                     this.setTimeMeasures(request)
                     this.state.reportData.response = data
                     this.state.reportData.NoOfPages = data.totalRecordCount.NoOfPages

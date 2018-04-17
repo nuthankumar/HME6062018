@@ -22,7 +22,7 @@ export default class CheckBoxList extends React.Component {
               this.props.items.map(item =>
                 <li className='' key={item.Id}>
                   <label><input type='checkbox' name='availableItem' checked={item.selected} onChange={(e) => this.props.toggle(item)} />
-                  </label> {item.Type === 'group' ? item.GroupName : item.GroupName ? item.Store_Number + '-' + item.GroupName :  item.Store_Number  } </li>)
+                  </label> {item.GroupName} </li>)
             }
           </ul>
         </div>

@@ -1,4 +1,4 @@
-	-- ===========================================================
+-- ===========================================================
 	--      Copyright © 2018, HME, All Rights Reserved
 	-- ===========================================================
 	-- Name			:	usp_InsertReportTemplate
@@ -40,6 +40,7 @@
 AS 
 BEGIN
 DECLARE @IsTemplateExist int = 0
+DECLARE @UserSessionUID VARCHAR(32)
 
 IF EXISTS ( SELECT 1
 		FROM 
@@ -50,11 +51,23 @@ IF EXISTS ( SELECT 1
 			ReportTemplate_CreatedBy = @CreatedBy
 		)
 	BEGIN
-		SET @IsTemplateExist =1 
+		SET @IsTemplateExist =1
+		
 	END
 Else
 	BEGIN
-
+	SET @UserSessionUID = 
+	(SELECT 
+	TOP 1 
+		User_Session_UID 
+	FROM 
+		dtbl_User_Session sess 
+	WHERE 
+		User_UID = @UserUid 
+	ORDER BY 
+	User_Session_ID 
+	DESC)
+	 
 	 INSERT INTO [dbo].[stbl_ReportTemplates] (
 	
 		ReportTemplate_UID
@@ -82,7 +95,7 @@ Else
 		 (
 			@Uid,
 			@TemplateName,
-			@SessionUid,
+			@UserSessionUID,
 			@UserUid,
 			@Devices,
 			@TimeMeasure,
@@ -104,6 +117,3 @@ Else
 	END
 	SElECT @IsTemplateExist IsRecordInserted 
 END
-GO
-
-

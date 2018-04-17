@@ -13,12 +13,10 @@
 -- -----------------------------------------------------------
 -- 1.		13/04/2018		Swathi Kumar	Added Subtotal calculation
 -- ===========================================================
--- EXEC [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details] '15','2018-03-24','2018-03-26',N'2018-03-24 00:00:00',N'2018-03-26 10:30:00','11','AC',1,N'68LKBP85C1SKH1FI3M7X40CJHKGU07FZ'
+-- EXEC [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details] '3,4','2018-03-24','2018-03-26',N'2018-03-24 00:00:00',N'2018-03-26 10:30:00','11','AC',1
 -- ===========================================================
 
--- use the below UserUid for testing in local data base
--- --,@UserUID=N'68LKBP85C1SKH1FI3M7X40CJHKGU07FZ'
-CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details](
+ALTER PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details](
 	@Device_IDs varchar(500),
 	@StoreStartDate date,
 	@StoreEndDate date,
@@ -507,7 +505,4 @@ BEGIN
 	
 	RETURN(0)
 END
-
-GO
-
 
