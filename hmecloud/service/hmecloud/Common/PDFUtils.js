@@ -3,7 +3,7 @@ const moment = require('moment')
 const PdfBuffer = require('dynamic-html-pdf')
 const mail = require('../Common/EmailUtil')
 
-const mutipleStore = (reportData,pdfInput, callback) => {
+const mutipleStore = (reportData, pdfInput, callback) => {
   const html = fs.readFileSync(__dirname + '/MultipleStore.html', 'utf8')
   const reportName = reportData.reportName
   const options = {
@@ -26,16 +26,16 @@ const mutipleStore = (reportData,pdfInput, callback) => {
       }
     }
   }
+
   PdfBuffer.create(document, options)
     .then(response => {
       if (response) {
-        console.log(response)
         const attachment = [{
           filename: reportName + '.pdf',
-          contents: response.toString('base64'),
-          contentType: 'application/pdf; charset=ISO-8859-1'
+          content: Buffer.from(response, 'base64'),
+          contentType: 'application/pdf'
         }]
-        mail.send('jayaramv@nousinfo.com', pdfInput.subject, attachment, isMailSent => {
+        mail.send(pdfInput.email, pdfInput.subject, attachment, isMailSent => {
           let output = {}
           if (isMailSent) {
             output.status = true
@@ -105,12 +105,13 @@ const singleStore = (reportData, pdfInput, callback) => {
   }
   PdfBuffer.create(document, options)
     .then(response => {
-      console.log(response)
+      console.log('BUFFERSTREAM', Buffer.from(response, 'base64'))
+
       if (response) {
-        var attachment = [{
+        const attachment = [{
           filename: reportData.reportName + '.pdf',
-          contents: response.toString('base64'),
-          contentType: 'application/pdf; charset=ISO-8859-1'
+          content: Buffer.from(response, 'base64'),
+          contentType: 'application/pdf'
         }]
         mail.send(pdfInput.email, pdfInput.subject, attachment, isMailSent => {
           let output = {}
