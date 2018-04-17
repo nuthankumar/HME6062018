@@ -36,12 +36,12 @@ const getRawCarDataReport = (input, callBack) => {
   let toDateTime = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
 
   const rawCarDataqueryTemplate = {
-    ReportTemplate_StoreIds: input.ReportTemplate_StoreIds,
+      ReportTemplate_DeviceIds: input.ReportTemplate_DeviceIds,
     ReportTemplate_From_Date: input.ReportTemplate_From_Date,
     ReportTemplate_To_Date: input.ReportTemplate_To_Date,
     fromDateTime: fromDateTime,
     toDateTime: toDateTime,
-    ReportTemplate_Type: input.CarDataRecordType_ID,
+    ReportTemplate_Type: 11, //input.CarDataRecordType_ID,
     ReportType: input.ReportTemplate_Type,
     LaneConfig_ID: 1
   }
@@ -52,7 +52,6 @@ const getRawCarDataReport = (input, callBack) => {
   if (input.reportType === 'rr1' || input.reportType === 'rrcsv1') {
     stores.getRawCarDataReport(rawCarDataqueryTemplate, result => {
       if (result) {
-        console.log('The result===' + JSON.stringify(result))
         const len = result.length
         if (len > 1) {
           const storeData = result[len - 1]
