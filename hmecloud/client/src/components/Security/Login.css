@@ -493,3 +493,19 @@ padding:5px 5px;
     font-weight: bold;
     padding-right: 5px;
 }
+
+.toastButtons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+    .toastButtons button {
+        margin: 0px 5px;
+        color: white !important;
+        background-color: rgb(212, 27, 62);
+        border: none;
+        padding: 5px;
+    }
+    .toastButtons button a{
+        color: white !important;
+    }

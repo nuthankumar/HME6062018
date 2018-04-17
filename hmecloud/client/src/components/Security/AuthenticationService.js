@@ -47,6 +47,14 @@ export default class AuthenticationService {
   }
 */
 
+  getColdFusionAppUrl(isAdmin) {
+      if (isAdmin) {
+          return Config.adminColdFusionUrl;
+      } else {
+          return Config.coldFusionUrl;
+      }
+  }
+
   isAdmin() {
     let path = window.location.pathname;
     return (path == '/admin')

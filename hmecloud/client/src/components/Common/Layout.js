@@ -64,13 +64,10 @@ export default class Layout extends React.Component {
         if ((!isLoggedIn && window.location.pathname == '/admin') || isAdmin) {
             adminLogo = true
         }
-
-         console.log(isAdmin);
-         console.log(isLoggedIn);
         return (
             <div>
-                <AutoSignOut showToast={isAdministrator}/>
-                <HmeHeader isAdministrator={isAdministrator} isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} />
+                {/*<AutoSignOut showToast={isAdministrator}/>*/}
+               <HmeHeader isAdministrator={isAdministrator} isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} />
                 <AdminSubHeader isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} pathName={pathName} />
                 <div className="hmeBody">
                     {children}

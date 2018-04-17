@@ -30,8 +30,8 @@ ReactDOM.render(<Router>
         <Route exact path="/emailSent" render={(props) => <Layout Params={props}><Route path='/emailSent' component={Authenticate(EmailAlert)} /></Layout>} />
         <Route exact path="/longestTime" render={(props) => <Layout Params={props}><Route path='/longestTime' component={Authenticate(LongestTime)} /></Layout>} />
         <Route exact path="/rawcardatareport" render={(props) => <Layout Params={props}><Route path='/rawcardatareport' component={Authenticate(RawCarDataReport)} /></Layout>} />
-        <Route exact path="/grouphierarchy" render={(props) => <Layout Params={props}><Route path='/grouphierarchy' component={Authenticate(ReportGroupHierarchy)} /></Layout>} />        <Route exact path="/longestTime" render={(props) => <Layout Params={props}><Route path='/grouphierarchy' component={(ReportGroupHierarchy)} /></Layout>} />
-        <Route exact path="/summaryreport" render={(props) => <Layout Params={props}><Route path='/summaryreport' component={Authenticate(SummaryReport)} /></Layout>} />        <Route exact path="/longestTime" render={(props) => <Layout Params={props}><Route path='/summaryreport' component={(SummaryReport)} /></Layout>} />
+        <Route exact path="/grouphierarchy" render={(props) => <Layout Params={props}><Route path='/grouphierarchy' component={Authenticate(ReportGroupHierarchy)} /></Layout>} />        
+        <Route exact path="/summaryreport" render={(props) => <Layout Params={props}><Route path='/summaryreport' component={Authenticate(SummaryReport)} /></Layout>} />       
     </div>
 </Router>, document.getElementById('root'))
 registerServiceWorker()
