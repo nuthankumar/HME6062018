@@ -142,7 +142,22 @@ const carTotal = (StoreData) => {
   return totalCars.value
 }
 
+
+const JsonForPDF = (data, input, reportName, pdfInput, isMultiStore) => {
+  data.reportName = reportName
+  let isEmailSent = false
+  data.storeDetails = data.timeMeasureType
+  if (isMultiStore) {
+    isEmailSent = Pdfmail.mutipleStore(data, pdfInput)
+  } else {
+    isEmailSent = Pdfmail.singleStore(data, pdfInput)
+  }
+  return isEmailSent
+}
+
+
 module.exports = {
   prepareJsonForExport,
-  prepareJson
+  prepareJson,
+  JsonForPDF
 }

@@ -6,6 +6,7 @@ const moment = require('moment')
 const reportUtil = require('../Common/ReportGenerateUtils')
 const HashMap = require('hashmap')
 const dateFormat = require('dateformat')
+const message = require('../Common/Message')
 
 /**
  *  This Service is used to Generate the Summary reports details for
@@ -143,8 +144,17 @@ function multiStoreResult (totalRecordCount, input, averageTimeResultSet, colorS
       }
     })
   })
-  reportData.status = true
-  callBack(reportData)
+  if (!_.isUndefined(input.reportType) && input.reportType.toLowerCase().trim() === 'pdf') {
+    let isMultiStore = true
+    generatePDFReport(reportData, input, isMultiStore)
+    let output = {}
+    output.data = input.UserEmail
+    output.status = true
+    callBack(output)
+  } else {
+    reportData.status = true
+    callBack(reportData)
+  }
 }
 
 function singleStoreResult (reportData, totalRecordCount, averageTimeResultSet, input, colorSettings, goalsStatistics, data, dayPartObject, singleDayParts, storeDetails, getGoalTime, longestTimes, systemStatisticsLane, systemStatisticsGenral, callBack) {
@@ -177,8 +187,30 @@ function singleStoreResult (reportData, totalRecordCount, averageTimeResultSet, 
   if (input.systemStatistics) {
     reportUtil.prepareStatistics(reportData, systemStatisticsLane, systemStatisticsGenral)
   }
-  reportData.status = true
-  callBack(reportData)
+  if (!_.isUndefined(input.reportType) && input.reportType.toLowerCase().trim() === 'pdf') {
+    let isMultiStore = false
+    
+    generatePDFReport(reportData, input, isMultiStore)
+    let output = {}
+    output.data = input.UserEmail
+    output.status = true
+    callBack(output)
+  } else {
+    reportData.status = true
+    callBack(reportData)
+  }
+}
+
+function generatePDFReport (reportData, input, isMultiStore) {
+  let pdfInput = {}
+  pdfInput.type = `${message.COMMON.PDFTYPE}`
+  pdfInput.reportName = `${message.COMMON.DAYPARTREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
+  console.log('input input ', input)
+  pdfInput.email = input.UserEmail
+  pdfInput.subject = `${message.COMMON.DAYPARTREPORTTITLEPDF} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
+  let reportName = 'Daypart'
+  
+  dataExportUtil.JsonForPDF(reportData, input, reportName, pdfInput, isMultiStore)
 }
 
 function generateCSVOrPdfTriggerEmail (request, input, result, callBack) {

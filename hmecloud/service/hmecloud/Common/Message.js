@@ -77,7 +77,16 @@ exports.COMMON = {
     DAYOPENCLOSE: 'OPEN-CLOSE',
     WAVG: 'W-Avg',
     OPENVALUE: ' OPEN',
-    CLOSEVALUE: ' CLOSE'
+    CLOSEVALUE: ' CLOSE',
+    DAYREPORTNAME: 'summarizedDayReport',
+  DAYPARTREPORTNAME: 'summarizedDayPartReport',
+  WEEKREPORTNAME: 'summarizedWeeklyReport',
+  DAYREPORTTITLE: ' CSV Day Report',
+  DAYPARTREPORTTITLE: ' CSV Daypart Report',
+  WEEKREPORTTITLE: ' CSV Weekly Report',
+  DAYREPORTTITLEPDF: ' PDF Day Report',
+  DAYPARTREPORTTITLEPDF: ' PDF Daypart Report',
+  WEEKREPORTTITLEPDF: ' PDF Weekly Report'
 }
 
 exports.JWT = {
