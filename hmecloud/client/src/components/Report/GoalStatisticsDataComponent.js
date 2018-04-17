@@ -11,15 +11,21 @@ export default class GoalStatisticsDataComponent extends Component {
       super(props)
       this.state = {
           currentLanguage: languageSettings.getCurrentLanguage(),
+          goalStatisticsType: ''
       }
     this.displayGoalStatisticsData = this.displayGoalStatisticsData.bind(this)
     this.displayGoalStatisticsRowData = this.displayGoalStatisticsRowData.bind(this)
   }
 
+  componentWillMount(){
+    this.state.goalStatisticsType = this.getTimeMeasureType(this.props.reportData.drillDownRequestData.timeMeasure)
+    this.setState(this.state)
+  }
+
   displayGoalStatisticsData(goalData) {
       const language = this.state.currentLanguage
     return (<div>
-        <div className='col-xs-12 goalstatistics-header-text'>{t[language].ReportsGoalsStatsFor}</div>
+        <div className='col-xs-12 goalstatistics-header-text'>{t[language].ReportsGoalsStatsFor + ' '+ this.state.goalStatisticsType}</div>
         <div className='col-xs-12 goalstatistics-data-unit'>
           <table className='goalstatistics-table goalstatistics-table-header'>
             <tbody>
@@ -79,6 +85,17 @@ getStatisticsRow(goalItem,type,title,color,fontcolor){
         <td>{goalItem.laneQueue[type]}</td>
         <td>{goalItem.laneTotal[type]}</td>
       </tr>
+  }
+
+  getTimeMeasureType(timeMeasureType){
+    switch(timeMeasureType.toString()){
+      case '1' : return 'DAY'
+      break;
+      case '2': return 'DAYPART'
+      break
+      case '3': return 'WEEK'
+      break
+    }
   }
 
   render () {
