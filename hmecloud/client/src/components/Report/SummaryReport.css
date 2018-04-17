@@ -553,7 +553,7 @@ span.redFont {
     left: 0;
     right: 0;
     display: block;
-
+    cursor: pointer;
     background: #ededed;
     color: #06b1cb;
     font-weight: bold;

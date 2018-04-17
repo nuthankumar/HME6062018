@@ -208,6 +208,9 @@ export default class SummaryReport extends Component {
 
     handleDrillDown (storeId) {
         // api call for getting the next drilldown
+        this.state.showLoader = true
+        this.setState(this.state)
+
         if (!this.state.reportData.generate) {
             this.state.reportData.generate = false
             // this.state.reportData.response = {}
@@ -230,6 +233,8 @@ export default class SummaryReport extends Component {
             if (request.timeMeasure === 4) {
                 let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
                 this.api.postData(url, request, data => {
+                    this.state.showLoader = false
+                    this.setState(this.state)
                     this.props.history.push({
                         pathname: '/rawcardatareport',
                         state: { rawCarRequest:request, rawCarData: data }
@@ -253,13 +258,18 @@ export default class SummaryReport extends Component {
                 this.api.postData(url, request, data => {
                     request.deviceIds = data.deviceIds;
                     this.setTimeMeasures(request)
+                    this.state.showLoader = false
+                    this.setState(this.state)
                     this.state.reportData.response = data
                     this.state.reportData.NoOfPages = data.totalRecordCount.NoOfPages
+                    this.state.showLoader = false
                     this.setState(this.state)
+                    
 
                 }, error => {
                     this.state.successMessage = ''
                     this.state.errorMessage = error.message
+                    this.state.showLoader = false
                     this.setState(this.state)
                 })
             }
@@ -360,6 +370,9 @@ export default class SummaryReport extends Component {
     }
 
     getPageDetails (curPage) {
+        this.state.showLoader = true
+        this.setState(this.state)
+        console.log("shd be true",this.state.showLoader)
         let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
         this.api.postData(url, this.state.reportData.drillDownRequestData, data => {
           /*  this.props.history.push({
@@ -368,6 +381,8 @@ export default class SummaryReport extends Component {
             })  */
             this.state.reportData = this.state.reportData
             this.state.reportData.response = data
+            this.setState(this.state)
+            this.state.showLoader = false
             this.setState(this.state)
         }, error => {
             this.state.successMessage = ''
@@ -384,7 +399,7 @@ export default class SummaryReport extends Component {
             url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=csv';
         }
         if (type == 'PDF') {
-           url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=csv';
+           url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=pdf';
         }
         this.setState({ showLoader: true });
         this.api.postData(url, request, data => {
@@ -417,12 +432,12 @@ export default class SummaryReport extends Component {
     }
 
   render() {
-    const { showLoader } = this.state;
+   // let { showLoader } = this.state;
     let language = this.state.currentLanguage
     // let reportData = this.state.reportData.data
     return (<section>
-            <Loader showLoader={showLoader} />
-            <div className={showLoader ? 'hidden' : 'show'}>
+            <Loader showLoader={this.state.showLoader} />
+            <div className={this.state.showLoader ? 'hide' : 'show'}>
               <section className='report-summary-page'>
                 <section className='reportsummary-container'>
                     <div className='row download-btn-section downloadOptionsSection'>

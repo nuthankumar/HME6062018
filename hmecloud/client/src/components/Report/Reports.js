@@ -5,6 +5,7 @@ import "../Security/Login.css";
 import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
 import Tree, { TreeNode } from "rc-tree";
+import Loader from '../Alerts/Loader'
 import "rc-tree/assets/index.css";
 import "../../../node_modules/react-datetime/css/react-datetime.css";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
@@ -55,6 +56,7 @@ class Report extends Component {
       mode: "time"
     };
     this.state = {
+      showLoader: false,
       currentLanguage: languageSettings.getCurrentLanguage(),
       selectAll: false,
       selectedList: [],
@@ -170,7 +172,8 @@ class Report extends Component {
     //{
     //  (t, { i18n }) => (
       <section className="reportsPage">
-        <div className="reports">
+        <Loader showLoader = {this.state.showLoader} />
+        <div className={"reports " + (this.state.showLoader ? 'hide' : 'show')}>
           <SuccessAlert successMessage={this.state.successMessage} />
           <ErrorAlert errorMessage={this.state.errorMessage} />
           <header className="reports-header">{t[language].summaryReport}</header>
@@ -186,9 +189,9 @@ class Report extends Component {
 								<label className="label-heading" for="includeTime">{t[language].selectall}</label>
                   </div>
                   <div className="timings">
-                                    <span> {t[language].brand} </span>
-                                    <a data-tip={t[language].selectonestore}><span className="tip openTip">?</span></a>
-                                    <ReactTooltip place="right" type="dark" effect="solid" />
+                    <span> {t[language].brand} </span>
+                    <a data-tip={t[language].selectonestore}><span className="tip openTip">?</span></a>
+                    <ReactTooltip place="right" type="dark" effect="solid" />
                   </div>
                 </div>
 
@@ -211,10 +214,10 @@ class Report extends Component {
                   </Tree>
                 </div>
                 <span className="span-heading">
-                                <span> {t[language].timemeasure} </span>
+                    <span> {t[language].timemeasure} </span>
 
-                                  <a data-tip={t[language].thereportwillsummarize}><span className="tip openTip">?</span></a>
-                                  <ReactTooltip place="right" type="dark" effect="solid" />
+                    <a data-tip={t[language].thereportwillsummarize}><span className="tip openTip">?</span></a>
+                    <ReactTooltip place="right" type="dark" effect="solid" />
                 </span>
                 <div>
                                 <select name="timeMeasure" className="time-measures" onChange={this.changeTimeMeasure.bind(this)}>
@@ -341,8 +344,6 @@ class Report extends Component {
                         </span>
                       </div>
                       <div className="type-sub-section">
-
-                                            
                          <input type="radio" id="type2"   name="type"   checked={this.state.type == 2 ? true : false} onChange={this.handleOnChange.bind(this)} value={2}/>
 								<label className="label-heading" for="type2">   {t[language].cumulative}</label>     
                                             <span>
@@ -1017,6 +1018,8 @@ class Report extends Component {
   }
 
   generateDaypartReport(){
+    this.state.showLoader = true
+    this.setState(this.state)
     let template = this.state.templateData[0]
     this.state.reportData.generate = true
       let deviceIds =[]
@@ -1056,6 +1059,8 @@ class Report extends Component {
     }
     let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
     this.api.postData(url, request, data => {
+        this.state.showLoader = false
+        this.setState(this.state)
         this.props.history.push({
             pathname: '/summaryreport',
             state: { reportData: this.state.reportData , reportDataResponse : data, reportRequest: request }
