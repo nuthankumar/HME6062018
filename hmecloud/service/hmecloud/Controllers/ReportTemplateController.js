@@ -26,8 +26,8 @@ const errorHandler = (message, status, request) => {
 const create = (reportTemplate, callback) => {
     let output = {}
   const values = {
-    DeviceUUIds: reportTemplate.body.deviceUUIds.toString(),
-    Uid: uuidv4(), 
+      DeviceUUIds: reportTemplate.body.deviceUUIds.toString(),
+      Uid: uuidv4().toUpperCase(), 
     TimeMeasure: messages.TimeMeasure[reportTemplate.body.timeMeasure],
     FromDate: reportTemplate.body.fromDate,
     ToDate: reportTemplate.body.toDate,
