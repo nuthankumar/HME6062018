@@ -39,15 +39,15 @@ const create = (reportTemplate, callback) => {
       SystemStatistics: (reportTemplate.body.systemStatistics === true ? 1 : 0),
       Format: messages.TimeFormat[reportTemplate.body.format],
     TemplateName: reportTemplate.body.templateName,
-    SessionUid: uuidv4(),  // To be updated with actual
+      // Session Id is reading dtbl_User_Session table in 
+      //the Procedure while creating template
+      SessionUid: " ",  
     UserUid: reportTemplate.userUid,
     CreatedBy: reportTemplate.UserEmail,
       AdvancedOption: (reportTemplate.body.advancedOption === true ? 1 : 0),
       LongestTime: (reportTemplate.body.longestTime === true ? 1 : 0),
     CreatedDateTime: reportTemplate.body.createdDateTime
     }
-
-    console.log("The final input", values)
     repository.create(values, (result) => {
         if (result.length > 0) {
             let isTemplateCreated = result[0]
@@ -80,8 +80,8 @@ const get = (reportTemplate, request, callback) => {
          let reportTemplate = result
          reportTemplate.fromDate = dateUtils.convertYYYYMMDD(reportTemplate.fromDate)
          reportTemplate.toDate = dateUtils.convertYYYYMMDD(reportTemplate.toDate)
-            reportTemplate.openTime = dateUtils.converthhmmtt(reportTemplate.openTime)
-            reportTemplate.closeTime = dateUtils.converthhmmtt(reportTemplate.closeTime)
+         reportTemplate.openTime = dateUtils.converthhmmtt(reportTemplate.openTime)
+         reportTemplate.closeTime = dateUtils.converthhmmtt(reportTemplate.closeTime)
          reportTemplate.timeMeasure = messages.TimeMeasure[reportTemplate.timeMeasure]
          reportTemplate.type = messages.Type[reportTemplate.type]
          reportTemplate.format = messages.TimeFormat[reportTemplate.format]
