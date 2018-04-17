@@ -78,19 +78,19 @@ const get = (reportTemplate, request, callback) => {
     repository.get(reportTemplate, (result) => {
         if (result) {
          let reportTemplate = result
-         reportTemplate.fromDate = dateUtils.convertYYYYMMDD(reportTemplate.fromDate)
-         reportTemplate.toDate = dateUtils.convertYYYYMMDD(reportTemplate.toDate)
-         reportTemplate.openTime = dateUtils.converthhmmtt(reportTemplate.openTime)
-         reportTemplate.closeTime = dateUtils.converthhmmtt(reportTemplate.closeTime)
-         reportTemplate.timeMeasure = messages.TimeMeasure[reportTemplate.timeMeasure]
-         reportTemplate.type = messages.Type[reportTemplate.type]
-         reportTemplate.format = messages.TimeFormat[reportTemplate.format]
-         reportTemplate.deviceUUIds = reportTemplate.devices.split(',')
-         reportTemplate.advancedOption = (reportTemplate.advancedOption === 1 ? true : false)
-         reportTemplate.longestTime = (reportTemplate.longestTime === 1 ? true : false)
-         reportTemplate.systemStatistics = (reportTemplate.systemStatistics === 1 ? true : false)
-         reportTemplate.close = (reportTemplate.close === 1 ? true : false)
-         reportTemplate.open= (reportTemplate.open === 1 ? true : false)
+         reportTemplate.FromDate = dateUtils.convertYYYYMMDD(reportTemplate.FromDate)
+         reportTemplate.ToDate = dateUtils.convertYYYYMMDD(reportTemplate.ToDate)
+         reportTemplate.OpenTime = dateUtils.converthhmmtt(reportTemplate.OpenTime)
+         reportTemplate.CloseTime = dateUtils.converthhmmtt(reportTemplate.CloseTime)
+         reportTemplate.TimeMeasure = messages.TimeMeasure[reportTemplate.TimeMeasure]
+         reportTemplate.Type = messages.Type[reportTemplate.Type]
+         reportTemplate.Format = messages.TimeFormat[reportTemplate.Format]
+         reportTemplate.DeviceUUIds = reportTemplate.Devices.split(',')
+         reportTemplate.AdvancedOption = (reportTemplate.AdvancedOption === 1 ? true : false)
+         reportTemplate.LongestTime = (reportTemplate.LongestTime === 1 ? true : false)
+         reportTemplate.SystemStatistics = (reportTemplate.SystemStatistics === 1 ? true : false)
+         reportTemplate.Close = (reportTemplate.Close === 1 ? true : false)
+         reportTemplate.Open= (reportTemplate.Open === 1 ? true : false)
 
          output.data = reportTemplate
          output.status = true
