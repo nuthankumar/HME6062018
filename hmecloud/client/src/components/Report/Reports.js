@@ -81,7 +81,7 @@ class Report extends Component {
       checkStores: false,
       treeData: [],
       templateData : [],
-      selectedStoreIds: [],
+      deviceUIds: [],
       disableIncludes:false,
       reportData:{
         generate: false,
@@ -122,12 +122,12 @@ class Report extends Component {
   onCheck(checkedKeys, node) {
     this.state.selectedList = checkedKeys;
     this.state.defaultCheckedKeys = checkedKeys;
-    this.state.stores = _.pluck(_.where(_.pluck(node.checkedNodes, "props"), { type: "store" }),"title");
-    let selectedStoreIds = _.pluck(_.where(_.pluck(node.checkedNodes, "props"), { type: "store" }), "value");
-    this.state.selectedStoreIds = selectedStoreIds;
+    this.state.stores = _.pluck(_.where(_.pluck(node.checkedNodes, "props"), { type: "store" }),"className");
+    let deviceUIds = _.pluck(_.where(_.pluck(node.checkedNodes, "props"), { type: "store" }), "value");
+    this.state.deviceUIds = deviceUIds;
     this.setState(this.state);
 
-    if (selectedStoreIds.length > 1) {
+    if (deviceUIds.length > 1) {
         this.setState({ include: [] });
         document.getElementById("longestTime").checked = false;
         document.getElementById("systemStatistics").checked = false;
@@ -156,13 +156,13 @@ class Report extends Component {
       console.log(data); 
         return data.map(item => {
         if (item.Children && item.Children.length) {
-          return (
-            <TreeNode title={item.Name} key={item.Id} value={item.Id} type={item.Type}>
+            return (
+                <TreeNode title={this.renderStoresAndBrand(item)} className={item.StoreNumber} key={item.Type == 'store' ? item.DeviceUID : item.Id} value={item.Type == 'store' ? item.DeviceUID : item.Id} type={item.Type}>
               {loop(item.Children)}
             </TreeNode>
           );
         }
-        return <TreeNode title={item.Name} key={item.Id} value={item.Id} type={item.Type} />;
+        return <TreeNode title={this.renderStoresAndBrand(item)} className={item.StoreNumber} key={item.Type == 'store' ? item.DeviceUID : item.Id} value={item.Type == 'store' ? item.DeviceUID : item.Id} type={item.Type} />;
       });
     };
 
@@ -604,6 +604,31 @@ console.log(data);
     return selectedItems;
   }
 
+
+  findMatchedClassName(list, keys) {
+      let selectedItems = [];
+      let selectedList = [];
+      let findStore = function (items) {
+          items.map(item => {
+              if (item.Children && item.Children.length) {
+                  findStore(item.Children);
+              }
+              if (keys(item)) {
+                  // if ( item.Type === 'store' && keys.indexOf(item.Id.toString()) > -1) {
+                  selectedItems.push(item.StoreNumber);
+                  selectedList.push(item.Id);
+              }
+          });
+      };
+
+      findStore(list);
+      this.setState({
+          selectedList: selectedList
+      });
+      return selectedItems;
+  }
+
+
   findMatchedIds(list, keys) {
     let selectedList = [];
     let findStore = function(items) {
@@ -617,9 +642,25 @@ console.log(data);
       });
     };
 
-
     findStore(list);
     return selectedList;
+  }
+
+  findMatchedDeviceIds(list, keys) {
+      let selectedList = [];
+      let findStore = function (items) {
+          items.map(item => {
+              if (item.Children && item.Children.length) {
+                  findStore(item.Children);
+              }
+              if (keys(item)) {
+                  selectedList.push(item.DeviceId);
+              }
+          });
+      };
+
+      findStore(list);
+      return selectedList;
   }
 
   apply(e) {
@@ -639,11 +680,11 @@ console.log(data);
         let toDate = moment(template.ToDate).format("MM/DD/YYYY");
         this.setState({ toDate: toDate });
         this.setState({ defaultCheckedKeys: template.SelectedStoreIds });
-        // let selectedStoreIds = []
+        // let deviceUIds = []
         // this.setState({
         //   stores: this.findMatch(this.state.treeData, item => {
         //     if(item.Type === "store" && template.SelectedList.indexOf(item.Id.toString()) > -1){
-        //       selectedStoreIds.push(item.Id);
+        //       deviceUIds.push(item.Id);
         //     }
         //     return (
         //       item.Type === "store" &&
@@ -652,7 +693,7 @@ console.log(data);
         //   })
         // });
         //  this.setState({
-        //    selectedStoreIds : selectedStoreIds
+        //    deviceUIds : deviceUIds
         //  })
           this.setState({
            stores: this.findMatch(this.state.treeData, item => {
@@ -663,7 +704,7 @@ console.log(data);
            })
          });
          this.setState({
-          selectedStoreIds :  template.SelectedStoreIds
+          deviceUIds :  template.SelectedStoreIds
         })
         let include = []
         if(template.LongestTime){
@@ -736,16 +777,19 @@ console.log(data);
       selectedList: this.state.selectedList,timeMeasure: this.state.timeMeasure,fromDate: this.state.fromDate,toDate: this.state.toDate,
       openTime: this.openTime,closeTime: this.closeTime,
       templateName: this.state.templateName, open: this.state.open, close: this.state.close,
-      type: this.state.type, include: this.state.include, format: this.state.format, selectedStoreIds: this.state.selectedStoreIds,
+      type: this.state.type, include: this.state.include, format: this.state.format, deviceUIds: this.state.deviceUIds,
+      deviceIds: this.findMatchedDeviceIds(this.state.treeData, item => {
+          return (item.Type === "store" && _.contains(this.state.deviceUIds, item.DeviceUID));
+      }), 
       CreatedDateTime: moment().format("YYYY-MM-DD HH:mm:ss a"), UpdatedDateTime: moment().format("YYYY-MM-DD HH:mm:ss a"),
       advancedOptions: (!this.state.open || !this.state.close), longestTime: _.contains(this.state.include, "1"),systemStatistics: _.contains(this.state.include, "2"),
     });
 
     createTemplateData.push({
-      selectedList: this.state.selectedList,timeMeasure: this.state.timeMeasure,fromDate: this.state.fromDate,toDate: this.state.toDate,
+     timeMeasure: this.state.timeMeasure,fromDate: this.state.fromDate,toDate: this.state.toDate,
       openTime: this.openTime,closeTime: this.closeTime,
       templateName: this.state.templateName, open: this.state.open, close: this.state.close,
-      type: this.state.type, include: this.state.include, format: this.state.format, selectedStoreIds: this.state.selectedStoreIds,
+      type: this.state.type, format: this.state.format, deviceUUIds: this.state.deviceUIds,
       createdDateTime: moment().format("YYYY-MM-DD HH:mm:ss a"),
       advancedOption: (!this.state.open || !this.state.close), longestTime: _.contains(this.state.include, "1"),systemStatistics: _.contains(this.state.include, "2"),
     });
@@ -787,7 +831,7 @@ console.log(data);
             this.setState(this.state);
             isError = true;
     }
-    if (this.state.selectedStoreIds.length >= 250) {
+    if (this.state.deviceUIds.length >= 250) {
         this.state.errorMessage = t[language].storeselectioninvalid250;
             this.setState(this.state);
             isError = true;
@@ -844,7 +888,7 @@ console.log(data);
         this.setState(this.state);
         isError = true;
         }
-        if (this.state.selectedStoreIds.length > 1) {
+        if (this.state.deviceUIds.length > 1) {
             this.state.errorMessage = t[language].invalidselectiononestore
           this.setState(this.state);
           isError = true;
@@ -887,7 +931,7 @@ console.log(data);
       switch (timeMeasure) {
 
         case '1' : this.state.reportData.dailyData = true
-          if (templateData.selectedStoreIds.length === 1) {
+          if (templateData.deviceUIds.length === 1) {
             this.state.reportData.dayColumn = true
             this.state.reportData.groupStoreColumns = false
             this.state.reportData.singleStore = true
@@ -901,7 +945,7 @@ console.log(data);
           break
 
         case '2' : this.state.reportData.dayPartData = true
-          if (templateData.selectedStoreIds.length === 1) {
+          if (templateData.deviceUIds.length === 1) {
             this.state.reportData.dayPartColumn = true
             this.state.reportData.groupStoreColumns = false
             this.state.reportData.singleStore = true
@@ -915,7 +959,7 @@ console.log(data);
           break
 
         case '3' : this.state.reportData.weeklyData = true
-          if (templateData.selectedStoreIds.length === 1) {
+          if (templateData.deviceUIds.length === 1) {
             this.state.reportData.weekColumn = true
             this.state.reportData.groupStoreColumns = false
             this.state.reportData.singleStore = true
@@ -938,8 +982,8 @@ console.log(data);
 
   generateRawCarDataReport(template){
     let rawCarData = [];
-    let selectedStoreIds = this.state.selectedStoreIds
-    selectedStoreIds = selectedStoreIds.map(String);
+    let deviceUIds = this.state.deviceUIds
+    deviceUIds = deviceUIds.map(String);
     rawCarData.push(
         {
             "timeMeasure": parseInt(this.state.timeMeasure),
@@ -952,7 +996,7 @@ console.log(data);
             "type": this.state.type,
             "include": this.state.include,
             "format": this.state.format,
-            "selectedStoreIds": selectedStoreIds,
+            "deviceIds": template.deviceIds,
             "advancedOptions": template[0].advancedOptions,
             "longestTime": template[0].longestTime,
             "systemStatistics":template[0].systemStatistics
@@ -978,6 +1022,7 @@ console.log(data);
   generateDaypartReport(){
     let template = this.state.templateData[0]
     this.state.reportData.generate = true
+      let deviceIds =[]
     let request = {
       "timeMeasure": parseInt(template.timeMeasure),
       "fromDate": moment(template.fromDate).format('YYYY-MM-DD'),
@@ -989,7 +1034,23 @@ console.log(data);
       "type": template.type,
       "include": template.include,
       "format": template.format,
-      "selectedStoreIds": template.selectedStoreIds,
+      "deviceIds":template.deviceIds,
+
+
+      //"deviceIds": this.findMatchedDeviceIds(this.state.treeData, item => {
+      //    let deviceIds
+      //    if (item.Type === "store" && template.deviceUIds.indexOf(item.DeviceUID.toString()) > -1) {
+      //      return  deviceIds.push(item.DeviceId);
+      //    }
+
+
+      //       //return (
+      //       //  item.Type === "store" &&
+      //       //    template.deviceUIds.indexOf(item.DeviceUID.toString()) > -1
+      //       //);
+      //     }),
+
+
       "advancedOptions": template.advancedOptions,
       "longestTime": template.longestTime,
       "systemStatistics": template.systemStatistics,
@@ -1075,13 +1136,14 @@ console.log(data);
     if (!this.state.selectAll) {
       this.setState({
         defaultCheckedKeys: _.pluck(this.state.treeData, "Id").map(String),
-        stores: this.findMatch(this.state.treeData, item => {
+        stores: this.findMatchedClassName(this.state.treeData, item => {
           return item.Type === "store";
         }),
+
         selectedList: this.findMatchedIds(this.state.treeData, item => {
           return true;
         }),
-        selectedStoreIds: this.findMatchedIds(this.state.treeData, item => {
+        deviceUIds: this.findMatchedIds(this.state.treeData, item => {
           return item.Type === "store";
         })
         });
@@ -1101,6 +1163,13 @@ console.log(data);
       selectAll: !this.state.selectAll
     });
   }
+
+
+
+
+    renderStoresAndBrand(item) {
+        return (<div className="storeTree"><span className="StoreTitile">{item.Name ? (item.StoreNumber ? item.StoreNumber + '-' : '') + item.Name : item.StoreNumber ? item.StoreNumber : ''}</span> <span className="StoreBrand">{item.Brand ? item.Brand : ''}</span> </div>)
+}
 }
 
 export default Report;
