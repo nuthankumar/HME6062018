@@ -1,3 +1,4 @@
+
 const dateUtils = require('../Common/DateUtils')
 const _ = require('lodash')
 const moment = require('moment')
@@ -14,7 +15,7 @@ const prepareStoreDetails = (daysingleResult, storeData, input) => {
   daysingleResult.printDate = dateUtils.currentDate()
   daysingleResult.printTime = dateUtils.currentTime()
   daysingleResult.timeMeasure = input.ReportTemplate_Time_Measure
-  daysingleResult.deviceIds = input.ReportTemplate_DeviceIds
+  daysingleResult.selectedStoreIds = input.ReportTemplate_StoreIds
   return daysingleResult
 }
 
@@ -101,41 +102,45 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
   }
   // Get the values for the goals
 
-  let GoalTime = _.map(getGoalTime[0], (value, key) => {
-    let object = {}
-    object.key = key
-    object.value = (isMinutes === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES))
-    return object
-  })
+  if (getGoalTime[0] && getGoalTime[0].length > 0) {
+    let GoalTime = _.map(getGoalTime[0], (value, key) => {
+      let object = {}
+      object.key = key
+      object.value = (isMinutes === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES))
+      return object
+    })
 
-  GoalTime.forEach(element => {
-    prepareGoal(goalGrades, 'menu', 'goal', element.key, element.value)
-    prepareGoal(goalGrades, 'greet', 'goal', element.key, element.value)
-    prepareGoal(goalGrades, 'service', 'goal', element.key, element.value)
-    prepareGoal(goalGrades, 'laneQueue', 'goal', element.key, element.value)
-    prepareGoal(goalGrades, 'laneTotal', 'goal', element.key, element.value)
-  })
-  // get the values for the cars
-  _.map(goalsStatistics[0], (value, key) => {
-    prepareGoal(goalGrades, 'menu', 'cars', key, value)
-    prepareGoal(goalGrades, 'greet', 'cars', key, value)
-    prepareGoal(goalGrades, 'service', 'cars', key, value)
-    prepareGoal(goalGrades, 'laneQueue', 'cars', key, value)
-    prepareGoal(goalGrades, 'laneTotal', 'cars', key, value)
+    GoalTime.forEach(element => {
+      prepareGoal(goalGrades, 'menu', 'goal', element.key, element.value)
+      prepareGoal(goalGrades, 'greet', 'goal', element.key, element.value)
+      prepareGoal(goalGrades, 'service', 'goal', element.key, element.value)
+      prepareGoal(goalGrades, 'laneQueue', 'goal', element.key, element.value)
+      prepareGoal(goalGrades, 'laneTotal', 'goal', element.key, element.value)
+    })
+    // get the values for the cars
+    _.map(goalsStatistics[0], (value, key) => {
+      prepareGoal(goalGrades, 'menu', 'cars', key, value)
+      prepareGoal(goalGrades, 'greet', 'cars', key, value)
+      prepareGoal(goalGrades, 'service', 'cars', key, value)
+      prepareGoal(goalGrades, 'laneQueue', 'cars', key, value)
+      prepareGoal(goalGrades, 'laneTotal', 'cars', key, value)
 
-    prepareGoalPercentage(goalGrades, 'menu', 'percentage', key, value, totalCars)
-    prepareGoalPercentage(goalGrades, 'greet', 'percentage', key, value, totalCars)
-    prepareGoalPercentage(goalGrades, 'service', 'percentage', key, value, totalCars)
-    prepareGoalPercentage(goalGrades, 'laneQueue', 'percentage', key, value, totalCars)
-    prepareGoalPercentage(goalGrades, 'laneTotal', 'percentage', key, value, totalCars)
+      prepareGoalPercentage(goalGrades, 'menu', 'percentage', key, value, totalCars)
+      prepareGoalPercentage(goalGrades, 'greet', 'percentage', key, value, totalCars)
+      prepareGoalPercentage(goalGrades, 'service', 'percentage', key, value, totalCars)
+      prepareGoalPercentage(goalGrades, 'laneQueue', 'percentage', key, value, totalCars)
+      prepareGoalPercentage(goalGrades, 'laneTotal', 'percentage', key, value, totalCars)
 
-    dataArray.push(goalGrades)
-  })
-
+      dataArray.push(goalGrades)
+    })
+  }
   let goalStats = []
-  Object.keys(dataArray[0]).map(function (key, value) {
-    goalStats.push(dataArray[0][key])
-  })
+
+  if (dataArray[0] && dataArray[0].length > 0) {
+    Object.keys(dataArray[0]).map(function (key, value) {
+      goalStats.push(dataArray[0][key])
+    })
+  }
 
   dataArray = []
   dataArray = goalStats
@@ -385,8 +390,8 @@ const getAllStoresDetails = (result, colors, goalSettings, format) => {
         'storeId': {'value': items.StoreID},
         'storeName': (items.Store_Name ? items.Store_Name : 'N/A'),
         'deviceId': {'value': items.Device_ID},
-        'deviceUid': {'value': items.Device_UID},        
-            // 'storedesc': (items.Brand_Name ? items.Brand_Name : 'N/A'),
+        'deviceUid': {'value': items.Device_UID},
+        // 'storedesc': (items.Brand_Name ? items.Brand_Name : 'N/A'),
         'index': items.WeekIndex,
         'week': {'timeSpan': items.WeekStartDate + (items.StoreNo !== 'Total Week' ? '-' + items.WeekEndDate : ' '), 'currentWeekpart': 'OPEN-CLOSE'},
         'menu': {'value': dateUtils.convertSecondsToMinutes(parseInt(items['Menu Board']), format), 'color': getColor('Menu', items['Menu Board'])},
@@ -409,7 +414,7 @@ const getAllStoresDetails = (result, colors, goalSettings, format) => {
         'storeId': {'value': items.StoreID},
         'index': items.WeekIndex,
         'storeName': (items.Store_Name ? items.Store_Name : 'N/A'),
-            // 'storedesc': (items.Brand_Name ? items.Brand_Name : 'N/A'),
+        // 'storedesc': (items.Brand_Name ? items.Brand_Name : 'N/A'),
         'deviceId': {'value': items.Device_ID},
         'deviceUid': {'value': items.Device_UID},
         'week': {'timeSpan': items.WeekStartDate + (items.StoreNo !== 'Total Week' ? '-' + items.WeekEndDate : ' '), 'currentWeekpart': 'OPEN-CLOSE'},

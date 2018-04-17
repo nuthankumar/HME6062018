@@ -17,7 +17,14 @@
     "WeekInvalidDateRange": "REPORTSUMMARY.WeekInvalidDateRange",
     "AdvancedDayInvalidDateRange": "REPORTSUMMARY.AdvancedDayInvalidDateRange",
     "createSuccess": "REPORTSUMMARY.createSuccess",
-    "deleteSuccess": "REPORTSUMMARY.deleteSuccess"
+    "deleteSuccess": "REPORTSUMMARY.deleteSuccess",
+    "DayPartInvalidDateRange": "REPORTSUMMARY.DayPartInvalidDateRange"
   },
-  "LISTGROUP": "LISTGROUP"
+  "LISTGROUP": "LISTGROUP",
+  "COMMON": {
+    "CSVTYPE": "COMMON.CSVTYPE",
+    "PDFTYPE": "COMMON.PDFTYPE",
+    "WEEKREPORTNAME": "COMMON.WEEKREPORTNAME",
+    "WEEKREPORTTITLE": "COMMON.WEEKREPORTTITLE"
+  }
 }

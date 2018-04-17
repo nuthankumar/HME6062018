@@ -103,10 +103,9 @@ const singleStore = (reportData, pdfInput, callback) => {
       }
     }
   }
+
   PdfBuffer.create(document, options)
     .then(response => {
-      console.log('BUFFERSTREAM', Buffer.from(response, 'base64'))
-
       if (response) {
         const attachment = [{
           filename: reportData.reportName + '.pdf',

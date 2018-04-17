@@ -8,7 +8,7 @@ const dateUtils = require('../Common/DateUtils')
 const reportValidator = (request, callback) => {
   let output = {}
 
-    if (request.body.deviceIds.length > 0) {
+  if (request.body.deviceIds.length > 0) {
     const input = {
       ReportTemplate_DeviceIds: request.body.deviceIds, //  [] array of object
       ReportTemplate_Advanced_Op: request.body.advancedOptions, // boolean
@@ -33,7 +33,7 @@ const reportValidator = (request, callback) => {
 
     // if advance option true and open/ close is true report type can be 2=TC
     // longest and system statistic disalbled and should be false
-        if (input.ReportTemplate_DeviceIds.length > 250) {
+    if (input.ReportTemplate_DeviceIds.length > 250) {
       output.error = request.t('REPORTSUMMARY.StoreSelectionInvalid')
       output.status = false
       callback(output)
@@ -84,7 +84,7 @@ const reportValidator = (request, callback) => {
         output.status = false
         callback(output)
       }
-        dayReportController.generateDayReportByDate(request, input, result => {
+      dayReportController.generateDayReportByDate(request, input, result => {
         callback(result)
       })
       // report time measure day part data
@@ -121,12 +121,12 @@ const reportValidator = (request, callback) => {
         output.status = false
         callback(output)
       }
-        weekReportController.generateWeekReportByDate(request,input, result => {
+      weekReportController.generateWeekReportByDate(request, input, result => {
         callback(result)
       })
       // report time measure raw car data
     } else if (input.ReportTemplate_Time_Measure === 4) {
-        if (input.ReportTemplate_DeviceIds.length > 1) {
+      if (input.ReportTemplate_DeviceIds.length > 1) {
         output.error = request.t('REPORTSUMMARY.InvalidRawCarStoreLength')
         output.status = false
         callback(output)
