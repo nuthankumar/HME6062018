@@ -158,12 +158,12 @@ class Report extends Component {
         return data.map(item => {
         if (item.Children && item.Children.length) {
             return (
-                <TreeNode title={this.item == 'group' ? this.renderStoresAndBrand(item) : ''} className={item.StoreNumber} key={item.Type == 'store' ? item.DeviceUID : item.Id} value={item.Type == 'store' ? item.DeviceUID : item.Id} type={item.Type}>
+                <TreeNode title={this.renderStoresAndBrand(item) } className={item.StoreNumber} key={item.Type == 'store' ? item.DeviceUID : item.Id} value={item.Type == 'store' ? item.DeviceUID : item.Id} type={item.Type}>
               {loop(item.Children)}
             </TreeNode>
           );
         }
-        return <TreeNode title={ this.item == 'group' ? this.renderStoresAndBrand(item) : ''} className={item.StoreNumber} key={item.Type == 'store' ? item.DeviceUID : item.Id} value={item.Type == 'store' ? item.DeviceUID : item.Id} type={item.Type} />;
+        return <TreeNode title={this.renderStoresAndBrand(item)} className={item.StoreNumber} key={item.Type == 'store' ? item.DeviceUID : item.Id} value={item.Type == 'store' ? item.DeviceUID : item.Id} type={item.Type} />;
       });
     };
 
@@ -978,7 +978,9 @@ class Report extends Component {
     }
   }
 
-  generateRawCarDataReport(template){
+  generateRawCarDataReport(template) {
+      this.state.showLoader = true
+      this.setState(this.state)
     let rawCarData = [];
     let deviceUIds = this.state.deviceUIds
     deviceUIds = deviceUIds.map(String);
@@ -1006,6 +1008,8 @@ class Report extends Component {
     let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
     this.api.postData(url, rawCarData[0], data => {
       //  this.props.history.push("/rawcardatareport", this.state.rawCarData);
+        this.state.showLoader = false
+        this.setState(this.state)
         this.props.history.push({
             pathname: '/rawcardatareport',
             state: { rawCarRequest: rawCarData[0] , rawCarData : data }
