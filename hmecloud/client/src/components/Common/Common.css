@@ -1,0 +1,36 @@
+.modalHeader {
+    background-color: #87B6DB;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    border-radius: 2px;
+}
+
+.ReactModal__Content
+{
+    padding: 2px !important;
+    width: 230px !important;
+    height: 139px;
+}
+
+.continueButton {
+    width: 106px;
+    height: 39px;
+    font-size: 11px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: #E9F5FD !important;
+    color: #1b96c8;
+    border-radius: 8px;
+    box-shadow: 2px 2px 2px -2px black;
+    border: none;
+}
+.autoSignOutContent {
+    height: 50px;
+}
+
+.ReactModal__Overlay {
+    background-color: rgba(18, 14, 14, 0.75) !important;
+}

@@ -7,15 +7,66 @@ import Footer from '../Footer/Footer';
 import { Config } from '../../Config'
 import Authenticate from '../Security/Authentication'
 import * as UserContext from '../Common/UserContext'
-import AutoSignOut from '../Security/AutoSignOut'
+//import AutoSignOut from '../Security/AutoSignOut'
 import AuthenticationService from '../Security/AuthenticationService'
+import Common from './Common.css'
+import Modal from 'react-modal';
+
+const customStyles = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        padding:'10px'
+    }
+};
+
+
+
 
 export default class Layout extends React.Component {
     constructor() {
         super()
         this.authService = new AuthenticationService(Config.authBaseUrl)
+
+        this.state = {
+            modalIsOpen: false
+        };
+
+        this.openModal = this.openModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+        this.signOutInterval = this.signOutInterval.bind(this);
+      
     }
-     render() {
+    componentDidMount() {
+        this.signOutInterval(UserContext.isAdmin() === 'true' ? true : false, UserContext.isLoggedIn())
+    }
+    
+    openModal() {
+        this.setState({ modalIsOpen: true });
+    }
+
+    closeModal() {
+        this.setState({ modalIsOpen: false });
+        this.signOutInterval(UserContext.isAdmin() === 'true' ? true : false, UserContext.isLoggedIn())
+    }
+
+    signOutInterval(isAdmin,isLoggedIn){
+        if (isAdmin && isLoggedIn) {
+           let autoInterval = setInterval(function () {
+               if (!this.state.modalIsOpen) {
+                   clearInterval(autoInterval);
+                    this.openModal()
+                }
+           }.bind(this), 300000) 
+        }
+     }
+
+    render() {
+ 
         const { Params, children } = this.props;
         let pathName = Params.location.pathname;
         var url_string = window.location.href
@@ -34,10 +85,8 @@ export default class Layout extends React.Component {
         let isAdministrator = (idToken) ? true : false;
          
         isAdministrator = true;
-        // return (
         let isAdmin = false
         let isLoggedIn = false;
-        // let isAdmin;
         let adminLogo = false
 
         if (window.location.pathname == '/admin') {
@@ -45,15 +94,12 @@ export default class Layout extends React.Component {
         }
         else {
             isAdmin = UserContext.isAdmin() === 'true' ? true : false;
-            console.log(UserContext.isAdmin());
             if (isAdmin == true) {
                 isAdmin = true
             } else {
                 isAdmin = false
             }
         }
-
-        // console.log(UserContext.isAdmin());
 
         if (UserContext.isLoggedIn()) {
             isLoggedIn = true
@@ -64,16 +110,28 @@ export default class Layout extends React.Component {
         if ((!isLoggedIn && window.location.pathname == '/admin') || isAdmin) {
             adminLogo = true
         }
+
+    
+
         return (
             <div>
-                {/*<AutoSignOut showToast={isAdministrator}/>*/}
+                <Modal
+                    isOpen={this.state.modalIsOpen}
+                    onRequestClose={this.closeModal}
+                    style={customStyles}
+                    ariaHideApp={false}
+                >
+                    <header className="modalHeader"> Auto SignOut <button onClick={this.closeModal}> X </button> </header>
+                    <span className="autoSignOutContent">You are currently viewing the site as another User</span> 
+                    <button className="continueButton" onClick={this.closeModal}>Continue Viewing as Selected User</button>
+                </Modal>
                <HmeHeader isAdministrator={isAdministrator} isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} />
                 <AdminSubHeader isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} pathName={pathName} />
                 <div className="hmeBody">
                     {children}
                 </div>
                 <Footer />
-                {/* <AutoSignOut /> */}
+              
             </div>
         );
     }

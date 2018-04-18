@@ -1,51 +1,73 @@
-import React, { Component } from 'react'
-import { ToastContainer, toast } from 'react-toastify';
-import t from '../Language/language'
-import * as languageSettings from '../Language/languageSettings'
-import './Login.css'
-import * as UserContext from '../Common/UserContext'
-import { Config } from '../../Config'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Modal from 'react-modal';
 
-class AutoSignOut extends Component {
+const customStyles = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)'
+    }
+};
+
+// Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
+Modal.setAppElement('#yourAppElement')
+
+class AutoSignOut extends React.Component {
     constructor() {
-        super(),
+        super();
 
-            this.state = {
-                language: languageSettings.getCurrentLanguage(),
-                token: UserContext.getToken()
-            }
+        this.state = {
+            modalIsOpen: false
+        };
+
+        this.openModal = this.openModal.bind(this);
+        this.afterOpenModal = this.afterOpenModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
     }
-    componentWillMount() {
+
+    openModal() {
+        this.setState({ modalIsOpen: true });
     }
 
-  
+    afterOpenModal() {
+        // references are now sync'd and can be accessed.
+        this.subtitle.style.color = '#f00';
+    }
 
-
-    notify = (Msg,e) => this.toastId = toast( Msg
-    , { type: toast.TYPE.INFO, autoClose: false });
+    closeModal() {
+        this.setState({ modalIsOpen: false });
+    }
 
     render() {
-        const { language, token } = this.state;
-        const Msg = ({ closeToast }) => (
-            <div>
-                <div>You are currently viewing the site as another User </div>
-                <div className="toastButtons">
-                <button> <a className="black_link" href={Config.coldFusionUrl + "?pg=Logout&amp;token=" + token} onClick={this.logout.bind(this)}> {t[language].headerSignOut}</a></button>
-                <button onClick={closeToast}>Continue </button>
-                </div>
-                </div>
-        )
-
         return (
             <div>
-                <a onClick={this.notify.bind(this,Msg)}>Timer</a>
-                <ToastContainer autoClose={false} />
+                <button onClick={this.openModal}>Open Modal</button>
+                <Modal
+                    isOpen={this.state.modalIsOpen}
+                    onAfterOpen={this.afterOpenModal}
+                    onRequestClose={this.closeModal}
+                    //style={customStyles}
+                    contentLabel="Example Modal"
+                >
+
+                    <h2 ref={subtitle => this.subtitle = subtitle}>Hello</h2>
+                    <button onClick={this.closeModal}>close</button>
+                    <div>I am a modal</div>
+                    <form>
+                        <input />
+                        <button>tab navigation</button>
+                        <button>stays</button>
+                        <button>inside</button>
+                        <button>the modal</button>
+                    </form>
+                </Modal>
             </div>
-        )
-    }
-    logout(e) {
-        UserContext.clearToken();
+        );
     }
 }
 
-export default AutoSignOut
+ReactDOM.render(<App />, appElement);
