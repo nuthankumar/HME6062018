@@ -137,9 +137,16 @@ const goalData = (repositoryData) => {
 }
 
 const carTotal = (StoreData) => {
-  const getCarsTotal = _.last(StoreData)
-  const totalCars = getCarsTotal.totalCars
-  return totalCars.value
+    let totalCars
+    const getCarsTotal = _.last(StoreData)
+    if (getCarsTotal) {
+        console.log("StoreData", getCarsTotal)
+        const totalCars = getCarsTotal.totalCars
+        return totalCars.value
+    }
+    return totalCars = 0
+    
+  
 }
 
 
