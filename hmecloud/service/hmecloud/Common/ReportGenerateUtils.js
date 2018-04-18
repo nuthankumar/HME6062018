@@ -65,86 +65,84 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
   goalGrades.goalD.color = colorSettings[2]
 
   goalGrades.goalF = _.clone(goalGrades.goalA)
-  goalGrades.goalF.title = 'Goal D'
+  goalGrades.goalF.title = '>Goal D'
   goalGrades.goalF.color = colorSettings[2]
 
-  var populate = (result, goal, event, property, key, value) => {
-    if (key.toLowerCase().includes(goal.toLowerCase()) && key.toLowerCase().includes(event.toLowerCase())) {
-      result[goal][event][property] = value || 'N/A'
+  function CalculatePercetage (value, totalCarsCount) {
+    if (value === 0 || value === null || isNaN(value) || _.isUndefined(value) || totalCarsCount === 0) {
+      return `0%`
+    } else {
+      return `${Math.round(value / totalCarsCount * 100)}%`
     }
   }
 
-  // Calculate Percentage details for goal statistics
-  var populatePercentage = (result, goal, event, property, key, value, totalCarsCount) => {
-    if (key.toLowerCase().includes(goal.toLowerCase()) && key.toLowerCase().includes(event.toLowerCase())) {
-      if (value === 0 || value === null || isNaN(value) || _.isUndefined(value) || totalCarsCount === 0) {
-        result[goal][event][property] = `0%`
-      } else {
-        result[goal][event][property] = `${Math.round(value / totalCarsCount * 100)}%`
-      }
+  _.map(getGoalTime[0], (value, key) => {
+    value = (isMinutes === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES))
+
+    if (key.includes('GoalA')) {
+      setGoalTime(key, value, goalGrades.goalA)
+    } else if (key.includes('GoalB')) {
+      setGoalTime(key, value, goalGrades.goalB)
+    } else if (key.includes('GoalC')) {
+      setGoalTime(key, value, goalGrades.goalC)
+    } else if (key.includes('GoalD')) {
+      setGoalTime(key, value, goalGrades.goalD)
+    } else if (key.includes('GoalF')) {
+      setGoalTime(key, value, goalGrades.goalF)
+    }
+    // return object
+  })
+
+  function setGoalTime (key, value, goal) {
+    if (key.includes('Menu')) {
+      goal.menu.goal = value
+    } else if (key.includes('Greet')) {
+      goal.greet.goal = value
+    } else if (key.includes('Service')) {
+      goal.service.goal = value
+    } else if (key.includes('Queue')) {
+      goal.laneQueue.goal = value
+    } else if (key.includes('Total')) {
+      goal.laneTotal.goal = value
     }
   }
 
-  var prepareGoal = (result, event, property, key, value) => {
-    populate(result, 'goalA', event, property, key, value)
-    populate(result, 'goalB', event, property, key, value)
-    populate(result, 'goalC', event, property, key, value)
-    populate(result, 'goalD', event, property, key, value)
-    populate(result, 'goalF', event, property, key, value)
+  _.map(goalsStatistics[0], (value, key) => {
+    if (key.includes('GoalA')) {
+      eventMatch(key, value, goalGrades.goalA, totalCars)
+    } else if (key.includes('GoalB')) {
+      eventMatch(key, value, goalGrades.goalB, totalCars)
+    } else if (key.includes('GoalC')) {
+      eventMatch(key, value, goalGrades.goalC, totalCars)
+    } else if (key.includes('GoalD')) {
+      eventMatch(key, value, goalGrades.goalD, totalCars)
+    } else if (key.includes('GoalF')) {
+      eventMatch(key, value, goalGrades.goalF, totalCars)
+    }
+  })
+
+  function eventMatch (key, value, goal, totalCarsCount) {
+    if (!value) {
+      value = 'N/A'
+    }
+    if (key.includes('Menu')) {
+      goal.menu.cars = value
+      goal.menu.percentage = CalculatePercetage(value, totalCarsCount)
+    } else if (key.includes('Greet')) {
+      goal.greet.cars = value
+      goal.greet.percentage = CalculatePercetage(value, totalCarsCount)
+    } else if (key.includes('Service')) {
+      goal.service.cars = value
+      goal.service.percentage = CalculatePercetage(value, totalCarsCount)
+    } else if (key.includes('Queue')) {
+      goal.laneQueue.cars = value
+      goal.laneQueue.percentage = CalculatePercetage(value, totalCarsCount)
+    } else if (key.includes('Total')) {
+      goal.laneTotal.cars = value
+      goal.laneTotal.percentage = CalculatePercetage(value, totalCarsCount)
+    }
   }
-
-  var prepareGoalPercentage = (result, event, property, key, value, totalCars) => {
-    populatePercentage(result, 'goalA', event, property, key, value, totalCars)
-    populatePercentage(result, 'goalB', event, property, key, value, totalCars)
-    populatePercentage(result, 'goalC', event, property, key, value, totalCars)
-    populatePercentage(result, 'goalD', event, property, key, value, totalCars)
-    populatePercentage(result, 'goalF', event, property, key, value, totalCars)
-  }
-  // Get the values for the goals
-
-  if (getGoalTime[0] && getGoalTime[0].length > 0) {
-    let GoalTime = _.map(getGoalTime[0], (value, key) => {
-      let object = {}
-      object.key = key
-      object.value = (isMinutes === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES))
-      return object
-    })
-
-    GoalTime.forEach(element => {
-      prepareGoal(goalGrades, 'menu', 'goal', element.key, element.value)
-      prepareGoal(goalGrades, 'greet', 'goal', element.key, element.value)
-      prepareGoal(goalGrades, 'service', 'goal', element.key, element.value)
-      prepareGoal(goalGrades, 'laneQueue', 'goal', element.key, element.value)
-      prepareGoal(goalGrades, 'laneTotal', 'goal', element.key, element.value)
-    })
-    // get the values for the cars
-    _.map(goalsStatistics[0], (value, key) => {
-      prepareGoal(goalGrades, 'menu', 'cars', key, value)
-      prepareGoal(goalGrades, 'greet', 'cars', key, value)
-      prepareGoal(goalGrades, 'service', 'cars', key, value)
-      prepareGoal(goalGrades, 'laneQueue', 'cars', key, value)
-      prepareGoal(goalGrades, 'laneTotal', 'cars', key, value)
-
-      prepareGoalPercentage(goalGrades, 'menu', 'percentage', key, value, totalCars)
-      prepareGoalPercentage(goalGrades, 'greet', 'percentage', key, value, totalCars)
-      prepareGoalPercentage(goalGrades, 'service', 'percentage', key, value, totalCars)
-      prepareGoalPercentage(goalGrades, 'laneQueue', 'percentage', key, value, totalCars)
-      prepareGoalPercentage(goalGrades, 'laneTotal', 'percentage', key, value, totalCars)
-
-      dataArray.push(goalGrades)
-    })
-  }
-  let goalStats = []
-
-  if (dataArray[0] && dataArray[0].length > 0) {
-    Object.keys(dataArray[0]).map(function (key, value) {
-      goalStats.push(dataArray[0][key])
-    })
-  }
-
-  dataArray = []
-  dataArray = goalStats
-
+  dataArray.push(goalGrades)
   return dataArray
 }
 

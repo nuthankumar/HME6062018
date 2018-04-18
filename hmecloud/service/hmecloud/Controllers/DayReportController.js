@@ -62,7 +62,7 @@ const generateDayReport = (request, input, callback) => {
     ReportTemplate_To_Date: input.ReportTemplate_To_Date,
     FromDateTime: fromDateTime,
     ToDateTime: toDateTime,
-    ReportTemplate_Type: input.reportType,
+    ReportTemplate_Type: input.ReportTemplate_Type,
     CarDataRecordType_ID: 11, // input.CarDataRecordType_ID
     UserUID: input.userUid
 
@@ -95,7 +95,7 @@ const generateDayReport = (request, input, callback) => {
             if (input.longestTime) {
               reportUtil.prepareLongestTimes(daysingleResult, result.data[1], input.ReportTemplate_Format)
             }
-            getGoalTime = result.data[5]
+            let getGoalTime = result.data[5]
             const dayPartTotalObject = _.last(result.data[0])
             const totalCars = dayPartTotalObject['Total_Car']
             let dataArray = []
