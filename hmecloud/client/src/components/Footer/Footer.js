@@ -19,7 +19,7 @@ export default class Footer extends React.Component {
             token: UserContext.getToken()
         }
         this.authService = new AuthenticationService(Config.authBaseUrl)
-        this.state.url = this.authService.getColdFusionAppUrl(this.authService.isAdmin())
+        this.state.url = this.authService.getColdFusionAppUrl(UserContext.isAdmin())
     }
   render() {
       const language = this.state.currentLanguage

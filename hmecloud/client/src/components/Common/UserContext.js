@@ -1,6 +1,6 @@
 export function isAdmin() {
     if (localStorage.getItem("isAdmin")){
-        return localStorage.getItem("isAdmin");
+        return localStorage.getItem("isAdmin") == 'true' ? true : false;
     }
     else {
         return false;
@@ -21,9 +21,6 @@ export function clearToken() {
     localStorage.removeItem("token");
     localStorage.removeItem("isAdmin");
 }
-
-
-
 
 
 
