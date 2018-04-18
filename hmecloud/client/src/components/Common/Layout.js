@@ -42,7 +42,7 @@ export default class Layout extends React.Component {
       
     }
     componentDidMount() {
-        this.signOutInterval(UserContext.isAdmin() === 'true' ? true : false, UserContext.isLoggedIn())
+        this.signOutInterval(UserContext.isAdmin(), UserContext.isLoggedIn())
     }
     
     openModal() {
@@ -51,7 +51,7 @@ export default class Layout extends React.Component {
 
     closeModal() {
         this.setState({ modalIsOpen: false });
-        this.signOutInterval(UserContext.isAdmin() === 'true' ? true : false, UserContext.isLoggedIn())
+        this.signOutInterval(UserContext.isAdmin(), UserContext.isLoggedIn())
     }
 
     signOutInterval(isAdmin,isLoggedIn){
@@ -70,15 +70,23 @@ export default class Layout extends React.Component {
         const { Params, children } = this.props;
         let pathName = Params.location.pathname;
         var url_string = window.location.href
-        var url = new URL(url_string);
-        let token = url.searchParams.get("token");
-        let isAdminParam = url.searchParams.get("a");
 
-        if (token) {
-            this.authService.setToken(token, isAdminParam)
-            UserContext.isLoggedIn()
-            let path = window.location.pathname;
-            window.location.href = path;
+        if (url_string) {
+            var url = new URL(url_string);
+            let token = url.searchParams.get("token") ? url.searchParams.get("token") : null;
+            let isAdminParam = url.searchParams.get("a") ? url.searchParams.get("a") : null;
+            let uuid = url.searchParams.get("uuid") ? url.searchParams.get("uuid") : null;
+
+            if (token) {
+                this.authService.setToken(token, isAdminParam)
+                UserContext.isLoggedIn()
+                let path = window.location.pathname;
+                window.location.href = path;
+            }
+
+            if (uuid) {
+                this.authService.setUUID(uuid)
+            }
         }
         localStorage.setItem('id_token', Config.token)
         let idToken = localStorage.getItem('id_token')
@@ -93,7 +101,7 @@ export default class Layout extends React.Component {
             isAdmin = true
         }
         else {
-            isAdmin = UserContext.isAdmin() === 'true' ? true : false;
+            isAdmin = UserContext.isAdmin();
             if (isAdmin == true) {
                 isAdmin = true
             } else {

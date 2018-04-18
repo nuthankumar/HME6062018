@@ -14,20 +14,21 @@ export default class AdminSubHeader extends React.Component {
             token: UserContext.getToken()
         }
         this.authService = new AuthenticationService(Config.authBaseUrl)
-        this.state.url = this.authService.getColdFusionAppUrl(this.authService.isAdmin())
+        this.state.uuid = this.authService.getUUID()
+        this.state.url = this.authService.getColdFusionAppUrl(UserContext.isAdmin())
     }
     render() {
-        const { language, token, url } = this.state;
+        const { language, token, url, uuid } = this.state;
         const { isAdmin, pathName, isLoggedIn } = this.props;
         return (
             <div className={"subMenu menuBar " + (isAdmin && isLoggedIn  ? 'show' : 'hidden')}>
                 <ul>
-                    <li><a className="headerMenu" href={url + "?pg=SettingsStores&amp;uuid=2IK3Z0P0GO2X1OLU60QCIILD3RJZK1XV&amp;path=Users&amp;token=" + token}>{t[language].stores}</a></li>
-                    <li><a className="headerMenu" href={url + "?pg=SettingsUsers&amp;uuid=2IK3Z0P0GO2X1OLU60QCIILD3RJZK1XV&amp;path=Users&amp;token=" + token}>{t[language].users}</a></li>
-                    <li><a className="headerMenu" href={url + "?pg=SettingsRoles&amp;uuid=2IK3Z0P0GO2X1OLU60QCIILD3RJZK1XV&amp;path=Users&amp;token=" + token}>{t[language].roles}</a></li>
-                    <li><a className="headerMenu" href={url + "?pg=Dashboard&amp;uuid=2IK3Z0P0GO2X1OLU60QCIILD3RJZK1XV&amp;path=Users&amp;token=" + token}>{t[language].subNavbarDashboard}</a></li>
+                    <li><a className="headerMenu" href={uuid ? (url + "?pg=SettingsStores&uuid=" + uuid + "&path=Users&token=" + token) : ( url + "?pg=SettingsStores&path=Users&token=" + token ) }>{t[language].stores}</a></li>
+                    <li><a className="headerMenu" href={uuid ? (url + "?pg=SettingsUsers&uuid=" + uuid + "&path=Users&token=" + token) : (url + "?pg=SettingsUsers&path=Users&token=" + token)}>{t[language].users}</a></li>
+                    <li><a className="headerMenu" href={uuid ? (url + "?pg=SettingsRoles&uuid=" + uuid + "&path=Users&token=" + token) : (url + "?pg=SettingsRoles&path=Users&token=" + token)}>{t[language].roles}</a></li>
+                    <li><a className="headerMenu" href={uuid ? (url + "?pg=Dashboard&uuid=" + uuid + "&path=Users&token=" + token) : (url + "?pg=Dashboard&path=Users&token=" + token)}>{t[language].subNavbarDashboard}</a></li>
                     <li class="active_tab"><a className="active_tab headerMenu" href='/reports'>{t[language].navbarReports}</a></li>
-                    <li><a className="headerMenu" href={url + "?pg=SettingsStores&amp;token=" + token}>{t[language].subNavbarDeviceSettingsHistory}</a></li>
+                    <li><a className="headerMenu" href={uuid ? (url + "?pg=SettingsStores&uuid=" + uuid + "&token=" + token) : (url + "?pg=SettingsStores&token=" + token)}>{t[language].subNavbarDeviceSettingsHistory}</a></li>
                 </ul>
             </div>
         )

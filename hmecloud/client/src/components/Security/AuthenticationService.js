@@ -47,6 +47,8 @@ export default class AuthenticationService {
   }
 */
 
+
+
   getColdFusionAppUrl(isAdmin) {
       if (isAdmin) {
           return Config.adminColdFusionUrl;
@@ -54,6 +56,14 @@ export default class AuthenticationService {
           return Config.coldFusionUrl;
       }
   }
+
+  setUUID(uuid) {
+      localStorage.setItem("uuid", uuid);
+  }
+  getUUID(uuid) {
+      localStorage.setItem("uuid", uuid);
+  }
+
 
   isAdmin() {
     let path = window.location.pathname;
