@@ -61,9 +61,14 @@ export default class AuthenticationService {
       localStorage.setItem("uuid", uuid);
   }
   getUUID(uuid) {
-      localStorage.setItem("uuid", uuid);
+      localStorage.getItem("uuid", uuid);
   }
-
+  setMasquerade(masquerade) {
+      localStorage.setItem("masquerade", masquerade);
+  }
+  getMasquerade(masquerade) {
+      localStorage.getItem("masquerade", masquerade);
+  }
 
   isAdmin() {
     let path = window.location.pathname;

@@ -69,25 +69,28 @@ export default class Layout extends React.Component {
  
         const { Params, children } = this.props;
         let pathName = Params.location.pathname;
-        var url_string = window.location.href
+         let search = this.props.Params.location.search
+        const params = new URLSearchParams(search);
+        const token = params.get('token') ? params.get('token'):null
+        const admin = params.get('a') ? params.get('a') : null 
+        const uuid = params.get('uuid') ? params.get('uuid') : null
+        const masquerade = params.get('m') ? params.get('m') : null
 
-        if (url_string) {
-            var url = new URL(url_string);
-            let token = url.searchParams.get("token") ? url.searchParams.get("token") : null;
-            let isAdminParam = url.searchParams.get("a") ? url.searchParams.get("a") : null;
-            let uuid = url.searchParams.get("uuid") ? url.searchParams.get("uuid") : null;
-
-            if (token) {
-                this.authService.setToken(token, isAdminParam)
+        if (token && admin) {
+            this.authService.setToken(token, admin)
                 UserContext.isLoggedIn()
                 let path = window.location.pathname;
                 window.location.href = path;
             }
 
-            if (uuid) {
+        if (uuid) {
                 this.authService.setUUID(uuid)
-            }
         }
+
+        if (masquerade) {
+            this.authService.setMasquerade(masquerade)
+        }
+
         localStorage.setItem('id_token', Config.token)
         let idToken = localStorage.getItem('id_token')
         let isAdministrator = (idToken) ? true : false;
