@@ -158,12 +158,12 @@ class Report extends Component {
         return data.map(item => {
         if (item.Children && item.Children.length) {
             return (
-                <TreeNode title={this.renderStoresAndBrand(item)} className={item.StoreNumber} key={item.Type == 'store' ? item.DeviceUID : item.Id} value={item.Type == 'store' ? item.DeviceUID : item.Id} type={item.Type}>
+                <TreeNode title={this.item == 'group' ? this.renderStoresAndBrand(item) : ''} className={item.StoreNumber} key={item.Type == 'store' ? item.DeviceUID : item.Id} value={item.Type == 'store' ? item.DeviceUID : item.Id} type={item.Type}>
               {loop(item.Children)}
             </TreeNode>
           );
         }
-        return <TreeNode title={this.renderStoresAndBrand(item)} className={item.StoreNumber} key={item.Type == 'store' ? item.DeviceUID : item.Id} value={item.Type == 'store' ? item.DeviceUID : item.Id} type={item.Type} />;
+        return <TreeNode title={ this.item == 'group' ? this.renderStoresAndBrand(item) : ''} className={item.StoreNumber} key={item.Type == 'store' ? item.DeviceUID : item.Id} value={item.Type == 'store' ? item.DeviceUID : item.Id} type={item.Type} />;
       });
     };
 
