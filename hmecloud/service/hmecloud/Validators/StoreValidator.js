@@ -34,7 +34,7 @@ const reportValidator = (request, callback) => {
     // if advance option true and open/ close is true report type can be 2=TC
     // longest and system statistic disalbled and should be false
     if (input.ReportTemplate_DeviceIds.length > 250) {
-      output.error = request.t('REPORTSUMMARY.StoreSelectionInvalid')
+      output.key = 'storeSelectionInvalid'
       output.status = false
       callback(output)
     }
@@ -42,7 +42,7 @@ const reportValidator = (request, callback) => {
     if (input.ReportTemplate_Advanced_Op &&
           (input.ReportTemplate_Open || input.ReportTemplate_Close)) {
       if (input.ReportTemplate_To_Date > dateUtils.getAdvancedSelectionMaxDate(93, input.ReportTemplate_From_Date)) {
-        output.error = request.t('REPORTSUMMARY.AdvancedDateRangeInvalid')
+        output.key = 'advancedDateRangeInvalid'
         output.status = false
         callback(output)
       }
@@ -50,21 +50,19 @@ const reportValidator = (request, callback) => {
       if (input.ReportTemplate_Type === 1) {
         input.ReportTemplate_Type = 'TC'
       }
-      // input.longestTime = false
-      // input.systemStatistics = false
     }
     if (input.ReportTemplate_Type === 2) {
       input.ReportTemplate_Type = 'AC'
     }
     // If date range is null
     if (!input.ReportTemplate_From_Date || !input.ReportTemplate_To_Date) {
-      output.error = request.t('REPORTSUMMARY.DateCannotbeEmpty')
+      output.key = 'dateCannotbeEmpty'
       output.status = false
       callback(output)
     }
 
     if (input.ReportTemplate_From_Date > input.ReportTemplate_To_Date) {
-      output.error = request.t('REPORTSUMMARY.FormDateGreaterThanToDate')
+      output.key = 'formDateGreaterThanToDate'
       output.status = false
       callback(output)
     }
@@ -72,7 +70,7 @@ const reportValidator = (request, callback) => {
     // report time measure day data
     if (input.ReportTemplate_Time_Measure === 1) {
       if (!input.ReportTemplate_Advanced_Op && input.ReportTemplate_To_Date > dateUtils.getAdvancedSelectionMaxDate(31, input.ReportTemplate_From_Date)) {
-        output.error = request.t('REPORTSUMMARY.DayInvalidDateRange')
+        output.key = 'dayInvalidDateRange'
         output.status = false
         callback(output)
       }
@@ -80,7 +78,7 @@ const reportValidator = (request, callback) => {
           input.ReportTemplate_DeviceIds.length > 100 &&
           input.ReportTemplate_DeviceIds.length < 250 &&
               input.ReportTemplate_To_Date > dateUtils.getAdvancedSelectionMaxDate(31, input.ReportTemplate_From_Date)) {
-        output.error = request.t('REPORTSUMMARY.AdvancedDayInvalidDateRange')
+        output.key = 'advancedDayInvalidDateRange'
         output.status = false
         callback(output)
       }
@@ -90,7 +88,7 @@ const reportValidator = (request, callback) => {
       // report time measure day part data
     } else if (input.ReportTemplate_Time_Measure === 2) {
       if (!input.ReportTemplate_Advanced_Op && input.ReportTemplate_To_Date > dateUtils.getAdvancedSelectionMaxDate(14, input.ReportTemplate_From_Date)) {
-        output.error = request.t('REPORTSUMMARY.DayPartInvalidDateRange')
+        output.key = 'dayPartInvalidDateRange'
         output.status = false
         callback(output)
       }
@@ -98,7 +96,7 @@ const reportValidator = (request, callback) => {
           input.ReportTemplate_DeviceIds.length > 100 &&
           input.ReportTemplate_DeviceIds.length < 250 &&
               input.ReportTemplate_To_Date > dateUtils.getAdvancedSelectionMaxDate(21, input.ReportTemplate_From_Date)) {
-        output.error = request.t('REPORTSUMMARY.AdvancedDateRangeDayPartInvalid')
+        output.key = 'advancedDateRangeDayPartInvalid'
         output.status = false
         callback(output)
       }
@@ -109,7 +107,7 @@ const reportValidator = (request, callback) => {
     } else if (input.ReportTemplate_Time_Measure === 3) {
       if (!input.ReportTemplate_Advanced_Op &&
               input.ReportTemplate_To_Date > dateUtils.getAdvancedSelectionMaxDate(62, input.ReportTemplate_From_Date)) {
-        output.error = request.t('REPORTSUMMARY.WeekInvalidDateRange')
+        output.key = 'weekInvalidDateRange'
         output.status = false
         callback(output)
       }
@@ -117,7 +115,7 @@ const reportValidator = (request, callback) => {
           input.ReportTemplate_DeviceIds.length > 100 &&
           input.ReportTemplate_DeviceIds.length < 250 &&
               input.ReportTemplate_To_Date > dateUtils.getAdvancedSelectionMaxDate(21, input.ReportTemplate_From_Date)) {
-        output.error = request.t('REPORTSUMMARY.AdvancedDateRangeWeekInvalid')
+        output.key = 'advancedDateRangeWeekInvalid'
         output.status = false
         callback(output)
       }
@@ -127,12 +125,12 @@ const reportValidator = (request, callback) => {
       // report time measure raw car data
     } else if (input.ReportTemplate_Time_Measure === 4) {
       if (input.ReportTemplate_DeviceIds.length > 1) {
-        output.error = request.t('REPORTSUMMARY.InvalidRawCarStoreLength')
+        output.key = 'invalidRawCarStoreLength'
         output.status = false
         callback(output)
       }
       if (input.ReportTemplate_To_Date !== input.ReportTemplate_From_Date) {
-        output.error = request.t('REPORTSUMMARY.DateRangeInvalid')
+        output.key = 'dateRangeInvalid'
         output.status = false
         callback(output)
       }
@@ -141,7 +139,7 @@ const reportValidator = (request, callback) => {
       })
     }
   } else {
-    output.error = request.t('REPORTSUMMARY.InvalidStoreId')
+    output.key = 'invalidDeviceId'
     output.status = false
     callback(output)
   }
@@ -161,7 +159,7 @@ const csvValidator = (request, callback) => {
       callback(result)
     })
   } else {
-    output.error = request.t('REPORTSUMMARY.InvalidEmail')
+    output.key = 'invalidEmail'
     output.status = false
     callback(output)
   }

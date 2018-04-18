@@ -64,21 +64,21 @@ exports.Events = {
 
 exports.TimeFormat = {
   Seconds: 1,
-    MINUTES: 2,
-    2: 'Minutes',
-    1: 'Seconds',
-    Minutes : 2
-    
+  MINUTES: 2,
+  2: 'Minutes',
+  1: 'Seconds',
+  Minutes: 2
+
 }
 exports.COMMON = {
-    CSVTYPE: 'CSV',
-    DAYPARTOPENTIME: ' OPEN-11:59',
-    DAYPARTCLOSETIME: ' CLOSE-23:59',
-    DAYOPENCLOSE: 'OPEN-CLOSE',
-    WAVG: 'W-Avg',
-    OPENVALUE: ' OPEN',
-    CLOSEVALUE: ' CLOSE',
-    DAYREPORTNAME: 'summarizedDayReport',
+  CSVTYPE: 'CSV',
+  DAYPARTOPENTIME: ' OPEN-11:59',
+  DAYPARTCLOSETIME: ' CLOSE-23:59',
+  DAYOPENCLOSE: 'OPEN-CLOSE',
+  WAVG: 'W-Avg',
+  OPENVALUE: ' OPEN',
+  CLOSEVALUE: ' CLOSE',
+  DAYREPORTNAME: 'summarizedDayReport',
   DAYPARTREPORTNAME: 'summarizedDayPartReport',
   WEEKREPORTNAME: 'summarizedWeeklyReport',
   DAYREPORTTITLE: ' CSV Day Report',
@@ -95,20 +95,20 @@ exports.JWT = {
 }
 
 exports.TimeMeasure = {
-    Day: 1,
-    1: 'Day',
-    Daypart: 2,
-    2: 'Daypart',
-    Week: 3,
-    3: 'Week',
-    'Raw Data Report': 4,
-    4: 'Raw Data Report'
+  Day: 1,
+  1: 'Day',
+  Daypart: 2,
+  2: 'Daypart',
+  Week: 3,
+  3: 'Week',
+  'Raw Data Report': 4,
+  4: 'Raw Data Report'
 
 }
 
 exports.Type = {
-    Cumulative: 2,
-    'Time Slice': 1,
-    2: 'Cumulative',
-    1: 'Time Slice'
+  Cumulative: 2,
+  'Time Slice': 1,
+  2: 'Cumulative',
+  1: 'Time Slice'
 }

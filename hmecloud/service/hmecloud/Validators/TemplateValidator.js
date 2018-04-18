@@ -14,7 +14,7 @@ const create = (request, callback) => {
       callback(result)
     })
   } else {
-    output.error = request.t('REPORTSUMMARY.invalidTemplateName')
+    output.key = 'invalidTemplateName'
     output.status = false
     callback(output)
   }
@@ -35,7 +35,7 @@ const get = (request, callback) => {
       callback(result)
     })
   } else {
-    output.error = request.t('REPORTSUMMARY.invalidTemplateId')
+    output.key = 'invalidTemplateId'
     output.status = false
     callback(output)
   }
@@ -58,7 +58,7 @@ const getAll = (input, callback) => {
       callback(result)
     })
   } else {
-    output.error = input.t('CREATEGROUP.invalidInput')
+    output.key = 'invalidInput'
     output.status = false
   }
 }
@@ -73,7 +73,7 @@ const deleteById = (input, callback) => {
   let output = {}
   const templateId = validate.isNumeric(input.query.templateId)
   if (!templateId) {
-    output.error = input.t('REPORTSUMMARY.invalidTemplateId')
+    output.key = 'invalidTemplateId'
     output.status = false
     callback(output)
   }

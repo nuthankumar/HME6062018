@@ -3,9 +3,7 @@ const router = express.Router()
 const VerifyToken = require('../Controllers/AuthenticationController')
 const storeValidator = require('../Validators/StoreValidator')
 const authValidator = require('../Controllers/AuthenticationController')
-const daySingle = require('../Common/Day_Single')
-const dayPart = require('../Common/DayPart')
-const dateFormat = require('dateformat')
+
 /**
  * This Service is used to Generate the Summary reports details for
  *provided details
@@ -14,9 +12,7 @@ const dateFormat = require('dateformat')
  *
  */
 router.post('/generatereport', authValidator, (request, response) => {
-  let reportType = request.query.reportType
-
-   storeValidator.reportValidator(request, result => {
+  storeValidator.reportValidator(request, result => {
     if (result.status === true) {
       response.status(200).send(result)
     } else {

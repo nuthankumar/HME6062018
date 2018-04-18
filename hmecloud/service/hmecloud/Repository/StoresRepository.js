@@ -5,8 +5,6 @@ const sqlQuery = require('../Common/DataBaseQueries')
 
 const sql = require('mssql')
 
-
-
 /**
  *
  * @param {*} JSON input template for calling Procedure
@@ -27,6 +25,7 @@ const getDayDataReport = (input, callback) => {
       output.status = false
       callback(output)
     }
+
     sqlPool.request()
       .input('Device_IDs', sql.VarChar(500), input.ReportTemplate_DeviceIds.toString())
       .input('StoreStartDate', sql.Date, input.ReportTemplate_From_Date)

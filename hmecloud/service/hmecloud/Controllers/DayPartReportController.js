@@ -80,7 +80,8 @@ const generateDaypartReport = (request, input, callBack) => {
         }
       } else {
         result = {}
-        result.error = request.t('LISTGROUP.notfound')
+        result.key = 'noDataFound'
+
         result.status = false
         callBack(result)
       }
@@ -189,7 +190,6 @@ function singleStoreResult (reportData, totalRecordCount, averageTimeResultSet, 
   }
   if (!_.isUndefined(input.reportType) && input.reportType.toLowerCase().trim() === 'pdf') {
     let isMultiStore = false
-    
     generatePDFReport(reportData, input, isMultiStore)
     let output = {}
     output.data = input.UserEmail
@@ -209,13 +209,12 @@ function generatePDFReport (reportData, input, isMultiStore) {
   pdfInput.email = input.UserEmail
   pdfInput.subject = `${message.COMMON.DAYPARTREPORTTITLEPDF} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
   let reportName = 'Daypart'
-  
   dataExportUtil.JsonForPDF(reportData, input, reportName, pdfInput, isMultiStore)
 }
 
 function generateCSVOrPdfTriggerEmail (request, input, result, callBack) {
   let csvInput = {}
-  csvInput.type = request.t('COMMON.CSVTYPE')
+  csvInput.type = message.COMMON.CSVTYPE
   csvInput.reportName = `${request.t('COMMON.DAYPARTREPORTNAME')} ${dateFormat(new Date(), 'isoDate')}`
 
   csvInput.email = input.UserEmail

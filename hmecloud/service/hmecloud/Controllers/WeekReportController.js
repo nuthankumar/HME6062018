@@ -1,10 +1,10 @@
 const dateUtils = require('../Common/DateUtils')
-const reportGenerate = require('../Common/ReportGenerateUtils')
 const _ = require('lodash')
 const moment = require('moment')
 const repository = require('../Repository/StoresRepository')
 const dataExportUtil = require('../Common/DataExportUtil')
 const dateFormat = require('dateformat')
+const message = require('../Common/Message')
 
 const generateWeekReportByDate = (request, input, callback) => {
   let pageStartDate = input.ReportTemplate_From_Date
@@ -65,6 +65,7 @@ const generateWeekReport = (request, input, callback) => {
     UserUID: request.userUid,
     UserEmail: request.UserEmail
   }
+
   repository.getWeekReport(inputDate, (result) => {
     if (result.length > 0) {
       const repositoryData = result
@@ -90,6 +91,7 @@ const generateWeekReport = (request, input, callback) => {
             callback(output)
           } else {
             let output = {}
+            output.key = 'pdfNotificationFailed'
             output.status = false
             callback(output)
           }
@@ -104,7 +106,7 @@ const generateWeekReport = (request, input, callback) => {
         let isMethod = 'multipleReport'
         const multipleReport = jsonFromateChange(request, data, input, result, reportName, isMethod)
         //  multipleReports.totalRecordCount = _.find(repositoryData, totalRecords => totalRecords.TotalRecCount)
-        console.log("multipleReport",multipleReport)
+        console.log('multipleReport', multipleReport)
         reportData = multipleReport
         reportData.status = true
 
@@ -112,7 +114,8 @@ const generateWeekReport = (request, input, callback) => {
       }
     } else {
       let output = {}
-      output.error = 'no data'
+
+      output.key = 'noDataFound'
       output.status = false
       callback(output)
     }
@@ -121,7 +124,7 @@ const generateWeekReport = (request, input, callback) => {
 
 function generateCSVOrPdfTriggerEmail (request, input, result, callBack) {
   let csvInput = {}
-  csvInput.type = request.t('COMMON.CSVTYPE')
+  csvInput.type = message.COMMON.CSVTYPE
   csvInput.reportName = `${request.t('COMMON.WEEKREPORTNAME')} ${dateFormat(new Date(), 'isoDate')}`
 
   csvInput.email = input.UserEmail

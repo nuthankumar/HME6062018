@@ -76,10 +76,10 @@ const generateDayReport = (request, input, callback) => {
         // Preparing response for CSV
         if (input.reportType.toLowerCase().trim() === 'csv') {
           let csvInput = {}
-          csvInput.type = request.t('COMMON.CSVTYPE')
-          csvInput.reportName = request.t('COMMON.DAYREPORTNAME') + '_' + dateFormat(new Date(), 'isoDate'),
+          csvInput.type = message.COMMON.CSVTYPE
+          csvInput.reportName = message.COMMON.DAYREPORTNAME + '_' + dateFormat(new Date(), 'isoDate'),
           csvInput.email = input.UserEmail,
-          csvInput.subject = request.t('COMMON.DAYREPORTTITLE') + ' ' + fromDateTime + ' - ' + toDateTime + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')
+          csvInput.subject = message.COMMON.DAYREPORTTITLE + ' ' + fromDateTime + ' - ' + toDateTime + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')
           dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput, csvResults => {
             callback(csvResults)
           })

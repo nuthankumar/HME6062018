@@ -24,91 +24,91 @@ const createGroup = (request, callback) => {
     }
   } else {
     let output = {}
-    output.error = request.t('CREATEGROUP.groupNameEmpty')
+    output.key = 'groupNameEmpty'
     output.status = false
     callback(output)
   }
 }
 const getgroupDetails = (request, callback) => {
   let output = {}
-    if (request.query.groupId) {
-        const input = {
-            groupId: request.query.groupId
-        }
-        groupController.getgroupDetails(request, input, result => {
-            callback(result)
-        })
-    } else if (!request.query.groupId) {
-        output.error = request.t('CREATEGROUP.groupId')
-        output.status = false
-        callback(output)
+  if (request.query.groupId) {
+    const input = {
+      groupId: request.query.groupId
     }
+    groupController.getgroupDetails(request, input, result => {
+      callback(result)
+    })
+  } else if (!request.query.groupId) {
+    output.key = 'groupIdInvalid'
+    output.status = false
+    callback(output)
+  }
 }
 const deleteGroupById = (request, callback) => {
   let output = {}
-  if (request.query.groupId ) {
+  if (request.query.groupId) {
     const input = {
       groupId: request.query.groupId,
       accountId: request.AccountId
     }
     const groupId = validate.isNumeric(input.groupId)
     if (!groupId) {
-      output.error = request.t('CREATEGROUP.groupId')
+      output.key = 'groupIdInvalid'
       output.status = false
       callback(output)
     } else if (!input.accountId) {
-      output.error = request.t('LISTGROUP.accountId')
+      output.key = 'requiredAccountId'
       output.status = false
       callback(output)
     }
     if (groupId && input.accountId) {
       groupController.deleteGroupById(request, input, result => {
-       callback(result)
+        callback(result)
       })
     }
   } else {
-    output.error = request.t('CREATEGROUP.invalidInput')
+    output.key = 'invalidInput'
     output.status = false
     callback(output)
   }
 }
 
 const avaliabledGroups = (request, callback) => {
-    const input = {
-      accountId: request.AccountId
-      }
+  let output = {}
+  const input = {
+    accountId: request.AccountId
+  }
 
-    if (!input.accountId) {
-        output.error = request.t('LISTGROUP.accountId')
-        output.status = false
-        callback(output)
-    }
+  if (!input.accountId) {
+    output.key = 'requiredAccountId'
+    output.status = false
+    callback(output)
+  }
 
-      if (input.accountId) {
-      groupController.avaliabledGroups(request, input, result => {
-        callback(result)
-      })
-    }
- 
+  if (input.accountId) {
+    groupController.avaliabledGroups(request, input, result => {
+      callback(result)
+    })
+  }
 }
 const getAll = (request, callback) => {
   let output = {}
-    if (request.AccountId) {
+  if (request.AccountId) {
     const input = {
-        accountId: request.AccountId
+      accountId: request.AccountId
     }
-     if (!input.accountId) {
-      output.error = request.t('LISTGROUP.accountId')
+    if (!input.accountId) {
+      output.key = 'requiredAccountId'
       output.status = false
       callback(output)
     }
-        if (input.accountId) {
+    if (input.accountId) {
       groupController.getAll(request, input, result => {
         callback(result)
       })
     }
   } else {
-    output.error = request.t('LISTGROUP')
+    output.key = 'requiredAccountId'
     output.status = false
     callback(output)
   }

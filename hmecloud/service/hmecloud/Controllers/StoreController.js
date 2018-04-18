@@ -36,12 +36,12 @@ const getRawCarDataReport = (input, callBack) => {
   let toDateTime = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
 
   const rawCarDataqueryTemplate = {
-      ReportTemplate_DeviceIds: input.ReportTemplate_DeviceIds,
+    ReportTemplate_DeviceIds: input.ReportTemplate_DeviceIds,
     ReportTemplate_From_Date: input.ReportTemplate_From_Date,
     ReportTemplate_To_Date: input.ReportTemplate_To_Date,
     fromDateTime: fromDateTime,
     toDateTime: toDateTime,
-    ReportTemplate_Type: 11, //input.CarDataRecordType_ID,
+    ReportTemplate_Type: 11, // input.CarDataRecordType_ID,
     ReportType: input.ReportTemplate_Type,
     LaneConfig_ID: 1
   }
@@ -91,7 +91,8 @@ const getRawCarDataReport = (input, callBack) => {
     })
   } else {
     callBack({
-      error: messages.REPORTSUMMARY.InvalidReportType,
+
+      key: 'invalidReportType',
       status: false
     })
   }

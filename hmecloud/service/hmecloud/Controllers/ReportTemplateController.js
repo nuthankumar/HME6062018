@@ -2,7 +2,7 @@
 const messages = require('../Common/Message')
 const repository = require('../Repository/ReportTemplateRepository')
 const dateUtils = require('../Common/DateUtils')
-const uuidv4 = require('uuid/v4');
+const uuidv4 = require('uuid/v4')
 
 /**
  * The method can be used to execute handel errors and return to routers.
@@ -12,7 +12,7 @@ const uuidv4 = require('uuid/v4');
  */
 const errorHandler = (message, status, request) => {
   let output = {}
-  output.error = request.t(message)
+  output.key = message
   output.status = status
   return output
 }
@@ -24,10 +24,10 @@ const errorHandler = (message, status, request) => {
  * @public
  */
 const create = (reportTemplate, callback) => {
-    let output = {}
+  let output = {}
   const values = {
-      DeviceUUIds: reportTemplate.body.deviceUUIds.toString(),
-      Uid: uuidv4().toUpperCase(), 
+    DeviceUUIds: reportTemplate.body.deviceUUIds.toString(),
+    Uid: uuidv4().toUpperCase(),
     TimeMeasure: messages.TimeMeasure[reportTemplate.body.timeMeasure],
     FromDate: reportTemplate.body.fromDate,
     ToDate: reportTemplate.body.toDate,
@@ -35,32 +35,32 @@ const create = (reportTemplate, callback) => {
     CloseTime: reportTemplate.body.closeTime,
     Type: messages.Type[reportTemplate.body.type],
     Open: (reportTemplate.body.open === true ? 1 : 0),
-      Close: (reportTemplate.body.close === true ? 1 : 0),
-      SystemStatistics: (reportTemplate.body.systemStatistics === true ? 1 : 0),
-      Format: messages.TimeFormat[reportTemplate.body.format],
+    Close: (reportTemplate.body.close === true ? 1 : 0),
+    SystemStatistics: (reportTemplate.body.systemStatistics === true ? 1 : 0),
+    Format: messages.TimeFormat[reportTemplate.body.format],
     TemplateName: reportTemplate.body.templateName,
-      // Session Id is reading dtbl_User_Session table in 
-      //the Procedure while creating template
-      SessionUid: " ",  
+    // Session Id is reading dtbl_User_Session table in
+    // the Procedure while creating template
+    SessionUid: ' ',
     UserUid: reportTemplate.userUid,
     CreatedBy: reportTemplate.UserEmail,
-      AdvancedOption: (reportTemplate.body.advancedOption === true ? 1 : 0),
-      LongestTime: (reportTemplate.body.longestTime === true ? 1 : 0),
+    AdvancedOption: (reportTemplate.body.advancedOption === true ? 1 : 0),
+    LongestTime: (reportTemplate.body.longestTime === true ? 1 : 0),
     CreatedDateTime: reportTemplate.body.createdDateTime
-    }
-    repository.create(values, (result) => {
-        if (result.length > 0) {
-            let isTemplateCreated = result[0]
-            if (isTemplateCreated.IsRecordInserted === 1) {
-                output.data = reportTemplate.t('REPORTSUMMARY.ReportTemplateAlreadyExist')
-                output.status = true
-            } else if (isTemplateCreated.IsRecordInserted > 1) {
-                output.data = reportTemplate.t('REPORTSUMMARY.createSuccess')
-                output.status = true
-            }
+  }
+  repository.create(values, (result) => {
+    if (result.length > 0) {
+      let isTemplateCreated = result[0]
+      if (isTemplateCreated.IsRecordInserted === 1) {
+        output.key = 'reportTemplateAlreadyExist'
+        output.status = true
+      } else if (isTemplateCreated.IsRecordInserted > 1) {
+        output.key = 'reportTemplatecreateSuccess'
+        output.status = true
+      }
       callback(output)
     } else {
-      output.error = reportTemplate.t('REPORTSUMMARY.createFail')
+      output.key = 'reportTemplatecreateFailure'
       output.status = false
       callback(output)
     }
@@ -75,28 +75,28 @@ const create = (reportTemplate, callback) => {
  */
 const get = (reportTemplate, request, callback) => {
   let output = {}
-    repository.get(reportTemplate, (result) => {
-        if (result) {
-         let reportTemplate = result
-         reportTemplate.FromDate = dateUtils.convertYYYYMMDD(reportTemplate.FromDate)
-         reportTemplate.ToDate = dateUtils.convertYYYYMMDD(reportTemplate.ToDate)
-         reportTemplate.OpenTime = dateUtils.converthhmmtt(reportTemplate.OpenTime)
-         reportTemplate.CloseTime = dateUtils.converthhmmtt(reportTemplate.CloseTime)
-         reportTemplate.TimeMeasure = messages.TimeMeasure[reportTemplate.TimeMeasure]
-         reportTemplate.Type = messages.Type[reportTemplate.Type]
-         reportTemplate.Format = messages.TimeFormat[reportTemplate.Format]
-         reportTemplate.DeviceUUIds = reportTemplate.Devices.split(',')
-         reportTemplate.AdvancedOption = (reportTemplate.AdvancedOption === 1 ? true : false)
-         reportTemplate.LongestTime = (reportTemplate.LongestTime === 1 ? true : false)
-         reportTemplate.SystemStatistics = (reportTemplate.SystemStatistics === 1 ? true : false)
-         reportTemplate.Close = (reportTemplate.Close === 1 ? true : false)
-         reportTemplate.Open= (reportTemplate.Open === 1 ? true : false)
+  repository.get(reportTemplate, (result) => {
+    if (result) {
+      let reportTemplate = result
+      reportTemplate.FromDate = dateUtils.convertYYYYMMDD(reportTemplate.FromDate)
+      reportTemplate.ToDate = dateUtils.convertYYYYMMDD(reportTemplate.ToDate)
+      reportTemplate.OpenTime = dateUtils.converthhmmtt(reportTemplate.OpenTime)
+      reportTemplate.CloseTime = dateUtils.converthhmmtt(reportTemplate.CloseTime)
+      reportTemplate.TimeMeasure = messages.TimeMeasure[reportTemplate.TimeMeasure]
+      reportTemplate.Type = messages.Type[reportTemplate.Type]
+      reportTemplate.Format = messages.TimeFormat[reportTemplate.Format]
+      reportTemplate.DeviceUUIds = reportTemplate.Devices.split(',')
+      reportTemplate.AdvancedOption = (reportTemplate.AdvancedOption === 1)
+      reportTemplate.LongestTime = (reportTemplate.LongestTime === 1)
+      reportTemplate.SystemStatistics = (reportTemplate.SystemStatistics === 1)
+      reportTemplate.Close = (reportTemplate.Close === 1)
+      reportTemplate.Open = (reportTemplate.Open === 1)
 
-         output.data = reportTemplate
-         output.status = true
-         callback(output)
+      output.data = reportTemplate
+      output.status = true
+      callback(output)
     } else {
-      output.error = request.t('LISTGROUP.notfound')
+      output.key = 'noDataFound'
       output.status = false
       callback(output)
     }
@@ -112,14 +112,14 @@ const get = (reportTemplate, request, callback) => {
  */
 const getAll = (input, request, callback) => {
   let output = {}
-    repository.getAll(input.UserUid, (result) => {
-        console.log("The result==", JSON.stringify(result))
+  repository.getAll(input.UserUid, (result) => {
+    console.log('The result==', JSON.stringify(result))
     if (result.length > 0) {
       output.data = result
       output.status = true
       callback(output)
     } else {
-      output.error = request.t('LISTGROUP.notfound')
+      output.key = 'noDataFound'
       output.status = false
       callback(output)
     }
@@ -135,11 +135,11 @@ const deleteById = (input, callback) => {
   let output = {}
   repository.deleteById(input.query.templateId, (result) => {
     if (result) {
-      output.data = input.t('REPORTSUMMARY.deleteSuccess')
+      output.key = 'reportTemplatedeleteSuccess'
       output.status = true
       callback(output)
     } else {
-      output.error = input.t('LISTGROUP.notfound')
+      output.key = 'noDataFound'
       output.status = false
       callback(output)
     }
