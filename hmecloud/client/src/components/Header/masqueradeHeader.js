@@ -23,7 +23,7 @@ export default class MasqueradeHeader extends React.Component {
         const { language, masquerade ,url} = this.state;
         const { isAdministrator, viewAsUser } = this.props;
         return (
-            <span className="view-as"><button type="button"> <a href={Config.adminColdFusionUrl + "?pg=SettingsUsers&path=Main&token=" + masquerade} onClick={this.authService.logoutMasquerade.bind()}> X </a></button> Currently Viewing As {viewAsUser.User_EmailAddress} </span>
+            <span className="view-as"><button type="button"> <a href={Config.adminColdFusionUrl + "?token=" + masquerade} onClick={this.authService.logoutMasquerade.bind()}> X </a></button> Currently Viewing As {viewAsUser.User_EmailAddress} </span>
         )
     }
 }
