@@ -67,10 +67,15 @@ export default class HmeHeader extends React.Component {
             }
         }
 
-        let loggedInUser = this.authService.getLoggedInProfile()
-
+        //let loggedInUser = this.authService.getLoggedInProfile()
+        let loggedInUser = this.authService.getUserName()
         if (loggedInUser) {
-            this.state.loggedInUser = loggedInUser
+            this.state.userName = loggedInUser
+        }
+        else {
+            let token = UserContext.getToken();
+            let userObject = this.authService.getTokenDetails(token);
+            this.state.userName = userObject.name;
         }
         this.setState(this.state)
     }
@@ -113,7 +118,7 @@ export default class HmeHeader extends React.Component {
         }
     }
     render() {
-        const { language, showSubMenu, contextUser, loggedInUser, token, url, masquerade } = this.state;
+        const { language, showSubMenu, contextUser, loggedInUser, token, url, masquerade, userName } = this.state;
         const { isAdministrator, isAdmin, isLoggedIn, adminLogo } = this.props;
 
 
@@ -131,7 +136,7 @@ export default class HmeHeader extends React.Component {
 
                             <div>
                                 <div className="loggedInUser">
-                                    <a className="black_link headerLink loginInfo" href={url + "?pg=SettingsAccount&token=" + token}><span> {t[language].headerLoggedInAs} </span> <span className="username">{loggedInUser.name}</span></a>
+                                    <a className="black_link headerLink loginInfo" href={url + "?pg=SettingsAccount&token=" + token}><span> {t[language].headerLoggedInAs} </span> <span className="username">{userName}</span></a>
                                 </div>
                                 <div>
                                     <span className={masquerade ? 'show' : 'hidden'}><MasqueradeHeader isAdministrator={isAdministrator} viewAsUser={this.state.contextUser} />

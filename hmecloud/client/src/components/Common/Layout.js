@@ -109,28 +109,24 @@ export default class Layout extends React.Component {
         let pathName = Params.location.pathname;
         const params = new URLSearchParams(this.props.Params.location.search);
         const token = params.get('token') ? params.get('token'):null
-        const admin = params.get('a') ? params.get('a') : null 
+        const admin = params.get('a') =='true' ? true : false 
+        //const admin = params.get('atoken') ? true : false;
         const uuid = params.get('uuid') ? params.get('uuid') : null
+        const userName = params.get('un') ? params.get('un') : null
         const masquerade = params.get('atoken') ? params.get('atoken') : null
-
-
-
-        console.log(masquerade);
-
-
-
-
-        if (token && admin) {
-                this.authService.setToken(token, admin)
-                UserContext.isLoggedIn()
-                let path = window.location.pathname;
-                window.location.href = path;
+        if (token) {
+            this.authService.setToken(token, admin)
+            UserContext.isLoggedIn()
+            let path = window.location.pathname;
+            window.location.href = path;
         }
-
+        
         if (uuid) {
                 this.authService.setUUID(uuid)
         }
-
+        if (userName) {
+            this.authService.setUserName(userName)
+        }
         if (masquerade) {
             this.authService.setMasquerade(masquerade)
         }

@@ -112,7 +112,15 @@ export default class AuthenticationService {
   setAdmin(isAdmin) {
       if (isAdmin)
           localStorage.setItem("isAdmin", isAdmin)
-      }
+  }
+
+  setUserName(userName) {
+      if (userName)
+          localStorage.setItem("userName", userName)
+  }
+  getUserName() {
+       return  localStorage.getItem("userName")
+  }
 
   getToken() {
     // Retrieves the user token from localStorage
