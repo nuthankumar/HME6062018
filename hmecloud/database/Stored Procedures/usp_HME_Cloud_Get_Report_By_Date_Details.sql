@@ -42,7 +42,7 @@ BEGIN
 	DECLARE @header TABLE(headerName varchar(25), headerID smallint, Detector_ID smallint, sort smallint)
 	DECLARE @headerSourceCol varchar(50)
 	DECLARE @isMultiStore bit = 0
-	--DECLARE @Device_IDs varchar(500)
+	DECLARE @Preferences_Preference_Value varchar(50)
 	
 	IF @StartDateTime IS NULL 
 		SET @StartDateTime = '1900-01-01 00:00:00'
@@ -133,7 +133,11 @@ BEGIN
 	/*************************************
 	 step 2. populate, then roll up data
 	*************************************/
-
+		
+	-- Get Users Pull-ins Preference for CarDataRecordType_ID
+	SELECT @CarDataRecordType_ID = User_Preferences_Preference_Value FROM itbl_User_Preferences WHERE 
+	User_Preferences_User_ID =(SELECT USER_ID FROM  tbl_Users WHERE User_UID = @UserUID ) AND User_Preferences_Preference_ID=9
+		
 	-- pull in raw data from proc
 	INSERT INTO #raw_data
 	EXECUTE dbo.usp_HME_Cloud_Get_Report_Raw_Data @Device_IDs, @StoreStartDate, @StoreEndDate, @StartDateTime, @EndDateTime, @CarDataRecordType_ID, @ReportType, @LaneConfig_ID
@@ -416,8 +420,16 @@ BEGIN
 		SELECT 1
 
 		SET @query = '';
-		SELECT Preferences_Preference_Value AS ColourCode FROM itbl_Leaderboard_Preferences WHERE 
-			Preferences_Company_ID=(SELECT User_Company_ID FROM  tbl_Users WHERE User_UID = @UserUID ) AND Preferences_Preference_ID=5
+		
+		-- Get Users Primary Color Preference
+		SET @Preferences_Preference_Value =''
+		SELECT @Preferences_Preference_Value = User_Preferences_Preference_Value FROM itbl_User_Preferences WHERE 
+			User_Preferences_User_ID =(SELECT USER_ID FROM  tbl_Users WHERE User_UID = @UserUID ) AND User_Preferences_Preference_ID=5
+		
+		IF(ISNULL(@Preferences_Preference_Value,'') ='')
+			SET @Preferences_Preference_Value = '##00b04c|##dcba00|##b40000'
+		
+		SELECT @Preferences_Preference_Value AS ColourCode
 
 	EXECUTE(@query);
 		SET @query = '';	
