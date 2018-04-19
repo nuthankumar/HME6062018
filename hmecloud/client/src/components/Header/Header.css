@@ -87,3 +87,24 @@ font-weight:bold;
     margin-left: 30px;
 }
 
+.loginInfo {
+text-align:right}
+
+span.view-as button {
+    border-radius: 10px;
+    color: white !important;
+    height: 20px;
+    border: none;
+    background:red;
+}
+
+
+span.view-as button a {
+    color: white !important;
+    text-decoration:none;
+}
+
+.loggedInUser {
+    display:flex;
+    justify-content:flex-end;
+}

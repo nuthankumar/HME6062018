@@ -10,12 +10,12 @@
 .ReactModal__Content
 {
     padding: 2px !important;
-    width: 230px !important;
+    width: 255px !important;
     height: 139px;
 }
 
 .continueButton {
-    width: 106px;
+    width: 155px;
     height: 39px;
     font-size: 11px;
     position: absolute;

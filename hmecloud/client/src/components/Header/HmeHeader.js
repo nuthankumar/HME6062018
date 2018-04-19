@@ -31,14 +31,16 @@ export default class HmeHeader extends React.Component {
             },
             loggedInUser: {},
             token: UserContext.getToken(),
-           
+
         }
 
         this.apiMediator = new Api()
         this.authService = new AuthenticationService(Config.authBaseUrl)
         this.state.url = this.authService.getColdFusionAppUrl(UserContext.isAdmin())
+        this.state.masquerade = this.authService.isMasquerade();
         this.setWrapperRef = this.setWrapperRef.bind(this);
         this.handleClickOutside = this.handleClickOutside.bind(this);
+
         // this.contextUser = {}
     }
 
@@ -46,7 +48,6 @@ export default class HmeHeader extends React.Component {
         this.setUserContext() // to-do: remove this once its set @ cfm-app
         document.addEventListener('mousedown', this.handleClickOutside);
     }
-   
     componentWillUnmount() {
         document.removeEventListener('mousedown', this.handleClickOutside);
     }
@@ -54,7 +55,12 @@ export default class HmeHeader extends React.Component {
     setUserContext() {
         // this.authService.setToken(Config.ctxToken, false)
         let ctxToken = this.authService.getToken()
-        if (ctxToken) {
+        let token = UserContext.getToken()
+
+        if (token) {
+            this.state.contextUser = this.authService.getTokenDetails(token)
+        }
+        else if (ctxToken) {
             let ctxUser = this.authService.getProfile()
             if (ctxUser) {
                 this.state.contextUser = ctxUser
@@ -74,7 +80,7 @@ export default class HmeHeader extends React.Component {
     }
     renderAdminMenuItems(isAdmin, isLoggedIn) {
 
-        const { language, showSubMenu, token ,url } = this.state;
+        const { language, showSubMenu, token, url } = this.state;
         if (isAdmin && isLoggedIn) {
             return (
                 <ul>
@@ -91,7 +97,7 @@ export default class HmeHeader extends React.Component {
         }
     }
     renderClientMenuItems(isAdmin, isLoggedIn) {
-        const { language, showSubMenu, token ,url } = this.state;
+        const { language, showSubMenu, token, url } = this.state;
         if (!isAdmin && isLoggedIn) {
             return (
                 <ul>
@@ -107,10 +113,10 @@ export default class HmeHeader extends React.Component {
         }
     }
     render() {
-        const { language, showSubMenu, contextUser, loggedInUser, token ,url } = this.state;
+        const { language, showSubMenu, contextUser, loggedInUser, token, url, masquerade } = this.state;
         const { isAdministrator, isAdmin, isLoggedIn, adminLogo } = this.props;
-        
-      
+
+
 
         return (
             <div >
@@ -122,8 +128,18 @@ export default class HmeHeader extends React.Component {
                     <div className='user-info-section'>
                         {/* <span className={(isLoggedIn ? 'show' : 'hidden')}> */}
                         <span className={(isAdministrator && isLoggedIn ? 'show' : 'hidden')}>
-                            <a className="black_link headerLink" href={url + "?pg=SettingsAccount&token=" + token}><span> {t[language].headerLoggedInAs} </span> <span className="username">{loggedInUser.name}</span></a>
-                            <MasqueradeHeader isAdministrator={isAdministrator} viewAsUser={this.state.contextUser} />
+
+                            <div>
+                                <div className="loggedInUser">
+                                    <a className="black_link headerLink loginInfo" href={url + "?pg=SettingsAccount&token=" + token}><span> {t[language].headerLoggedInAs} </span> <span className="username">{loggedInUser.name}</span></a>
+                                </div>
+                                <div>
+                                    <span className={masquerade ? 'show' : 'hidden'}><MasqueradeHeader isAdministrator={isAdministrator} viewAsUser={this.state.contextUser} />
+                                    </span>
+                                </div>
+                            </div>
+
+
                             {/* <MasqueradeHeader isAdmin="true" viewAsUser={this.state.contextUser} /> */}
                         </span>
                         <button className={'logout ' + (isLoggedIn ? 'show' : 'hidden')}> <a className="black_link" href={url + "?pg=Logout&token=" + token} onClick={this.logout.bind(this)}> {t[language].headerSignOut}</a></button>
@@ -162,15 +178,6 @@ export default class HmeHeader extends React.Component {
             </div>)
     }
 
-    handleClickOutside(event) {
-        if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-            this.setState({ settingsDropdown: false })
-        }
-    }
-    setWrapperRef(node) {
-        this.wrapperRef = node;
-    }
-    
     toggle(e) {
         this.state.settingsDropdown ? this.setState({ settingsDropdown: false }) : this.setState({ settingsDropdown: true })
     }
@@ -181,6 +188,17 @@ export default class HmeHeader extends React.Component {
     redirectUrl(url) {
         console.log(url)
     }
+
+
+    handleClickOutside(event) {
+        if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+            this.setState({ settingsDropdown: false })
+        }
+    }
+    setWrapperRef(node) {
+        this.wrapperRef = node;
+    }
+
     //handleOnClick(e) {
     //    console.log(e)
     //    let set;

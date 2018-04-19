@@ -32,19 +32,43 @@ export default class Layout extends React.Component {
         this.authService = new AuthenticationService(Config.authBaseUrl)
 
         this.state = {
-            modalIsOpen: false
+            modalIsOpen: false,
+            signoutTime : 20000
         };
 
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.signOutInterval = this.signOutInterval.bind(this);
+        this.authService = new AuthenticationService(Config.authBaseUrl)
+        this.state.masquerade = this.authService.getMasquerade()
+        this.state.url = this.authService.getColdFusionAppUrl(UserContext.isAdmin())
       }
     componentDidMount() {
         this.signOutInterval(UserContext.isAdmin(), UserContext.isLoggedIn())
+        this.setUserContext()
     }
-    
+
+    componentWillMount() {
+        //UserContext.isAdmin()
+        //this.setUserContext()
+    }
+
+    autoSignout() {
+         let signout = setTimeout(function () {
+             if (this.state.modalIsOpen) {
+                 console.log('signOut');
+                 let url = this.state.url + "?pg=SettingsUsers&path=Main&token=" + this.state.masquerade
+                 window.location.href = url;
+             }
+             else {
+             clearTimeout(signout);
+             }
+         }.bind(this), this.state.signoutTime)
+    } 
+
     openModal() {
         this.setState({ modalIsOpen: true });
+ 
     }
 
     closeModal() {
@@ -52,20 +76,36 @@ export default class Layout extends React.Component {
         this.signOutInterval(UserContext.isAdmin(), UserContext.isLoggedIn())
     }
 
-    signOutInterval(isAdmin,isLoggedIn){
-        if (isAdmin && isLoggedIn) {
-           let autoInterval = setInterval(function () {
-               if (!this.state.modalIsOpen) {
+    signOutInterval(isAdmin, isLoggedIn) {
+        if (isAdmin && isLoggedIn && this.authService.getMasquerade()) {
+            let autoInterval = setInterval(function () {
+               if (!this.state.modalIsOpen) {                 
                    clearInterval(autoInterval);
-                    this.openModal()
+                   this.openModal()
+                   this.autoSignout();
                 }
-           }.bind(this), 5000) 
+           }.bind(this), 3000000) 
         }
-     }
+    }
+    setUserContext() {
+        // this.authService.setToken(Config.ctxToken, false)
+        let ctxToken = this.authService.getToken()
+        if (ctxToken) {
+            let ctxUser = this.authService.getProfile()
+            if (ctxUser) {
+                this.state.contextUser = ctxUser
+            }
+        }
+        let loggedInUser = this.authService.getLoggedInProfile()
+        if (loggedInUser) {
+            this.state.loggedInUser = loggedInUser
+        }
+        this.setState(this.state)
+    }
 
     render() {
- 
         const { Params, children } = this.props;
+        const { contextUser } = this.state;
         let pathName = Params.location.pathname;
         const params = new URLSearchParams(this.props.Params.location.search);
         const token = params.get('token') ? params.get('token'):null
@@ -73,12 +113,19 @@ export default class Layout extends React.Component {
         const uuid = params.get('uuid') ? params.get('uuid') : null
         const masquerade = params.get('atoken') ? params.get('atoken') : null
 
+
+
+        console.log(masquerade);
+
+
+
+
         if (token && admin) {
-            this.authService.setToken(token, admin)
+                this.authService.setToken(token, admin)
                 UserContext.isLoggedIn()
                 let path = window.location.pathname;
                 window.location.href = path;
-            }
+        }
 
         if (uuid) {
                 this.authService.setUUID(uuid)
@@ -119,9 +166,10 @@ export default class Layout extends React.Component {
         if ((!isLoggedIn && window.location.pathname == '/admin') || isAdmin) {
             adminLogo = true
         }
-
-    
-
+        // console.log(this.authService.getProfile());
+         let userToken = localStorage.getItem('token') ? localStorage.getItem('token') : localStorage.getItem('ctx_token') ? localStorage.getItem('ctx_token') : localStorage.getItem('id_token') 
+         let contextUserEmail = this.authService.getTokenDetails(userToken);
+     //    console.log(contextUserEmail);
         return (
             <div>
                 <Modal
@@ -131,8 +179,8 @@ export default class Layout extends React.Component {
                     ariaHideApp={false}
                 >
                     <header className="modalHeader"> Auto SignOut <button onClick={this.closeModal}> X </button> </header>
-                    <span className="autoSignOutContent">You are currently viewing the site as another User</span> 
-                    <button className="continueButton" onClick={this.closeModal}>Continue Viewing as Selected User</button>
+                    <span className="autoSignOutContent">You are currently viewing the site as {contextUserEmail.User_EmailAddress} </span>
+                    <button className="continueButton" onClick={this.closeModal}>Continue Viewing as {contextUserEmail.User_EmailAddress} </button>
                 </Modal>
                 <HmeHeader isAdministrator={isAdministrator} isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} />
                 <AdminSubHeader isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} pathName={pathName} />
