@@ -162,10 +162,8 @@ export default class Layout extends React.Component {
         if ((!isLoggedIn && window.location.pathname == '/admin') || isAdmin) {
             adminLogo = true
         }
-        // console.log(this.authService.getProfile());
          let userToken = localStorage.getItem('token') ? localStorage.getItem('token') : localStorage.getItem('ctx_token') ? localStorage.getItem('ctx_token') : localStorage.getItem('id_token') 
          let contextUserEmail = this.authService.getTokenDetails(userToken);
-     //    console.log(contextUserEmail);
         return (
             <div>
                 <Modal
