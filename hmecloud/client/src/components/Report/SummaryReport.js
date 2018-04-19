@@ -230,7 +230,7 @@ export default class SummaryReport extends Component {
              this.setState(this.state)
              this.setTimeMeasures(request)
 
-            if (request.timeMeasure === 4) {
+          /*  if (request.timeMeasure === 4) {
                 let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
                 this.api.postData(url, request, data => {
                     this.state.showLoader = false
@@ -244,7 +244,7 @@ export default class SummaryReport extends Component {
                     this.state.errorMessage = error.message
                     this.setState(this.state)
                 })
-            }
+            } */
 
             if (request.timeMeasure < 4) {
                 if (currentStoreIds.length == 1) {
@@ -256,7 +256,7 @@ export default class SummaryReport extends Component {
             if (request.timeMeasure < 4) {
                 let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
                 this.api.postData(url, request, data => {
-                    request.deviceIds = data.deviceIds;
+                    request.deviceIds = data.deviceIds
                     this.setTimeMeasures(request)
                     this.state.showLoader = false
                     this.setState(this.state)
@@ -270,6 +270,20 @@ export default class SummaryReport extends Component {
                     this.state.successMessage = ''
                     this.state.errorMessage = error.message
                     this.state.showLoader = false
+                    this.setState(this.state)
+                })
+            }else if(request.timeMeasure === 4){
+                let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
+                this.api.postData(url, request, data => {
+                    this.state.showLoader = false
+                    this.setState(this.state)
+                    this.props.history.push({
+                        pathname: '/rawcardatareport',
+                        state: { rawCarRequest:request, rawCarData: data }
+                    })
+                }, error => {
+                    this.state.successMessage = ''
+                    this.state.errorMessage = error.message
                     this.setState(this.state)
                 })
             }

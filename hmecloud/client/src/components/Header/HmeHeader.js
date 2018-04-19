@@ -37,11 +37,18 @@ export default class HmeHeader extends React.Component {
         this.apiMediator = new Api()
         this.authService = new AuthenticationService(Config.authBaseUrl)
         this.state.url = this.authService.getColdFusionAppUrl(UserContext.isAdmin())
+        this.setWrapperRef = this.setWrapperRef.bind(this);
+        this.handleClickOutside = this.handleClickOutside.bind(this);
         // this.contextUser = {}
     }
 
     componentDidMount() {
         this.setUserContext() // to-do: remove this once its set @ cfm-app
+        document.addEventListener('mousedown', this.handleClickOutside);
+    }
+   
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClickOutside);
     }
 
     setUserContext() {
@@ -141,7 +148,7 @@ export default class HmeHeader extends React.Component {
                         {/*<a data-tip="<a>HTML tooltip</a> <br/> <a>HTML tooltip</a> <br/> <a>HTML tooltip</a>" data-html={true} data-event='click focus'>  <img className='cogWheel' src={CogWheel} aria-hidden='true' /></a>
             <ReactTooltip html={true} place="right" type="dark" effect="solid" globalEventOff='click' eventOff='click' />*/}
                         <div className="cogWheelSection">
-                            <div className="dropdown open">
+                            <div className="dropdown open" ref={this.setWrapperRef}>
                                 <a href="javascript:void(0);" className="dropdown-toggle" onClick={this.toggle.bind(this)}><img className='cogWheel' src={CogWheel} aria-hidden='true' /></a>
                                 <ul className={'dropdown-menu dropdown-menu-right ' + (this.state.settingsDropdown ? 'show' : 'hide')}>
                                     <li><a href={url + "?pg=Settings&token=" + token}>{t[language].navbarOptionSettings}</a></li>
@@ -155,6 +162,15 @@ export default class HmeHeader extends React.Component {
             </div>)
     }
 
+    handleClickOutside(event) {
+        if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+            this.setState({ settingsDropdown: false })
+        }
+    }
+    setWrapperRef(node) {
+        this.wrapperRef = node;
+    }
+    
     toggle(e) {
         this.state.settingsDropdown ? this.setState({ settingsDropdown: false }) : this.setState({ settingsDropdown: true })
     }
