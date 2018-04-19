@@ -15,7 +15,7 @@ export default class MasqueradeHeader extends React.Component {
         const { language } = this.state;
         const { isAdministrator, viewAsUser } = this.props;
         return (            
-            <span className="view-as">Currently Viewing As {viewAsUser.User_EmailAddress} </span>
+            <span className="view-as"><button type="button"> <a href=""> X </a></button> Currently Viewing As {viewAsUser.User_EmailAddress} </span>
         )
     }
 }

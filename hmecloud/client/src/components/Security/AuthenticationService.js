@@ -60,14 +60,17 @@ export default class AuthenticationService {
   setUUID(uuid) {
       localStorage.setItem("uuid", uuid);
   }
+
   getUUID(uuid) {
       localStorage.getItem("uuid", uuid);
   }
+
   setMasquerade(masquerade) {
       localStorage.setItem("masquerade", masquerade);
   }
-  getMasquerade(masquerade) {
-      localStorage.getItem("masquerade", masquerade);
+
+  isMasquerade(masquerade) {
+      return localStorage.getItem("masquerade", masquerade) ? true:false;
   }
 
   isAdmin() {
@@ -93,7 +96,6 @@ export default class AuthenticationService {
   }
 
   setToken(idToken, isAdmin) {
-    // Saves user token to localStorage
     if (isAdmin)
       localStorage.setItem('id_token', idToken)
     else localStorage.setItem('ctx_token', idToken)
@@ -101,6 +103,13 @@ export default class AuthenticationService {
     localStorage.setItem("token", idToken) //to-do: remove this post testing
     localStorage.setItem("isAdmin", isAdmin)
   }
+
+
+  setAdmin(isAdmin) {
+      if (isAdmin)
+          localStorage.setItem("isAdmin", isAdmin)
+      }
+
 
   getToken() {
     // Retrieves the user token from localStorage
@@ -119,7 +128,8 @@ export default class AuthenticationService {
 
   getProfile() {
     // Using jwt-decode npm package to decode the token
-    return decode(this.getToken())
+     // decode(this.getToken())
+      return decode(this.getToken())
   }
 
   fetch(url, options) {

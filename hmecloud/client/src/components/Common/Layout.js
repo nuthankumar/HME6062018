@@ -11,6 +11,7 @@ import * as UserContext from '../Common/UserContext'
 import AuthenticationService from '../Security/AuthenticationService'
 import Common from './Common.css'
 import Modal from 'react-modal';
+import 'url-search-params-polyfill';
 
 const customStyles = {
     content: {
@@ -25,8 +26,6 @@ const customStyles = {
 };
 
 
-
-
 export default class Layout extends React.Component {
     constructor() {
         super()
@@ -39,8 +38,7 @@ export default class Layout extends React.Component {
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.signOutInterval = this.signOutInterval.bind(this);
-      
-    }
+      }
     componentDidMount() {
         this.signOutInterval(UserContext.isAdmin(), UserContext.isLoggedIn())
     }
@@ -61,7 +59,7 @@ export default class Layout extends React.Component {
                    clearInterval(autoInterval);
                     this.openModal()
                 }
-           }.bind(this), 300000) 
+           }.bind(this), 5000) 
         }
      }
 
@@ -69,12 +67,11 @@ export default class Layout extends React.Component {
  
         const { Params, children } = this.props;
         let pathName = Params.location.pathname;
-         let search = this.props.Params.location.search
-        const params = new URLSearchParams(search);
+        const params = new URLSearchParams(this.props.Params.location.search);
         const token = params.get('token') ? params.get('token'):null
         const admin = params.get('a') ? params.get('a') : null 
         const uuid = params.get('uuid') ? params.get('uuid') : null
-        const masquerade = params.get('m') ? params.get('m') : null
+        const masquerade = params.get('atoken') ? params.get('atoken') : null
 
         if (token && admin) {
             this.authService.setToken(token, admin)
@@ -102,6 +99,7 @@ export default class Layout extends React.Component {
 
         if (window.location.pathname == '/admin') {
             isAdmin = true
+            this.authService.setAdmin(isAdmin)
         }
         else {
             isAdmin = UserContext.isAdmin();
@@ -136,7 +134,7 @@ export default class Layout extends React.Component {
                     <span className="autoSignOutContent">You are currently viewing the site as another User</span> 
                     <button className="continueButton" onClick={this.closeModal}>Continue Viewing as Selected User</button>
                 </Modal>
-               <HmeHeader isAdministrator={isAdministrator} isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} />
+                <HmeHeader isAdministrator={isAdministrator} isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} />
                 <AdminSubHeader isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} pathName={pathName} />
                 <div className="hmeBody">
                     {children}
