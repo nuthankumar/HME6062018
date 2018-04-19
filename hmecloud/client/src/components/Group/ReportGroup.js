@@ -275,7 +275,7 @@ export default class ReportGroup extends React.Component {
         <div className='row reportgroup-buttons'>
           <div className='col-xs-12'>
             <div className="border-right"> <button type='button' className='btn btn-primary  col-xs-2 save-group-btn' onClick={this.saveAssigned.bind(this, assigned)}>{t[language].save}</button> </div>
-            <div className="border-right"> <span className='btn-pipe'> | </span><button type='button' className={'btn btn-danger reportgroup-delete col-xs-2 ' + (this.state.editGroup ? 'show' : 'hidden')} onClick={this.deleteGroup.bind(this)} > {t[language].delete}</button> </div>
+            <div className="border-right"> <span  className={'btn-pipe ' + (this.state.editGroup ? 'show' : 'hidden')}> | </span><button type='button' className={'btn btn-danger reportgroup-delete col-xs-2 ' + (this.state.editGroup ? 'show' : 'hidden')} onClick={this.deleteGroup.bind(this)} > {t[language].delete}</button> </div>
             <div> <span className='btn-pipe'> | </span> <Link to='/grouphierarchy' className='col-xs-2 reportgroup-cancel'>{t[language].cancel}</Link> </div>
           </div>
         </div>
