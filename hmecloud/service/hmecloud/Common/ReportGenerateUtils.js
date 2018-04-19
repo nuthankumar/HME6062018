@@ -15,7 +15,7 @@ const prepareStoreDetails = (daysingleResult, storeData, input) => {
   daysingleResult.printDate = dateUtils.convertMMMddMM(dateUtils.currentDate())
   daysingleResult.printTime = dateUtils.currentTime()
   daysingleResult.timeMeasure = input.ReportTemplate_Time_Measure
-  daysingleResult.selectedStoreIds = input.ReportTemplate_StoreIds
+  daysingleResult.deviceIds = input.ReportTemplate_DeviceIds
   return daysingleResult
 }
 

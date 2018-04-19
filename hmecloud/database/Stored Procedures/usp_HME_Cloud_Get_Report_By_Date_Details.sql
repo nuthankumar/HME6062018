@@ -21,8 +21,8 @@ CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details](
 	@Device_IDs varchar(500),
 	@StoreStartDate date,
 	@StoreEndDate date,
-	@StartDateTime datetime = '1900-01-01 00:00:00',
-	@EndDateTime datetime = '3000-01-01 23:59:59',
+	@InputStartDateTime NVARCHAR(50) = '1900-01-01 00:00:00',  -- 2018-04-09 20:00:00
+	@InputEndDateTime NVARCHAR(50) = '3000-01-01 23:59:59',
 	@CarDataRecordType_ID varchar(255) = '11',
 	@ReportType char(2) = 'AC',   -- AC: cumulative  TC: Time Slice
 	@LaneConfig_ID tinyint = 1,
@@ -43,6 +43,10 @@ BEGIN
 	DECLARE @headerSourceCol varchar(50)
 	DECLARE @isMultiStore bit = 0
 	DECLARE @Preferences_Preference_Value varchar(50)
+	DECLARE @StartDateTime DATETIME 
+	DECLARE @EndDateTime DATETIME 
+	SELECT @StartDateTime = CONVERT(DATETIME,  @InputStartDateTime);
+	SELECT @EndDateTime = CONVERT(DATETIME,  @InputEndDateTime);
 	
 	IF @StartDateTime IS NULL 
 		SET @StartDateTime = '1900-01-01 00:00:00'

@@ -17,7 +17,6 @@ const message = require('../Common/Message')
 const generateDaypartReport = (request, input, callBack) => {
   let reportData = {
     timeMeasure: '',
-    selectedStoreIds: [],
     storeName: '',
     storeDesc: '',
     startTime: '',
@@ -68,12 +67,12 @@ const generateDaypartReport = (request, input, callBack) => {
       }
 
       if (averageTimeResultSet.length > 0) {
-        reportData.deviceIds = input.ReportTemplate_DeviceIds
         totalRecordCount.NoOfPages = input.pageNumber || 1
         if (!_.isUndefined(input.reportType) && input.reportType.toLowerCase().trim() === 'csv') {
           generateCSVOrPdfTriggerEmail(request, input, result, callBack)
         } else {
           if (input.ReportTemplate_DeviceIds.length < 2) {
+            reportData.deviceIds = input.ReportTemplate_DeviceIds
             singleStoreResult(reportData, totalRecordCount, averageTimeResultSet, input, colorSettings, goalsStatistics, data, dayPartObject, singleDayParts, storeDetails, getGoalTime, longestTimes, systemStatisticsLane, systemStatisticsGenral, callBack)
           } else {
             multiStoreResult(totalRecordCount, input, averageTimeResultSet, colorSettings, goalsStatistics, callBack)
@@ -98,14 +97,15 @@ const generateDaypartReport = (request, input, callBack) => {
 function multiStoreResult (totalRecordCount, input, averageTimeResultSet, colorSettings, goalsStatistics, callBack) {
   let reportData = {
     timeMeasure: '',
-    selectedStoreIds: [],
-    totalRecordCount: ''
+    totalRecordCount: '',
+    deviceIds: []
   }
   let groupByStore = {}
   groupByStore.data = []
   //  Multi store
   reportData.totalRecordCount = totalRecordCount[0]
   reportData.timeMeasure = input.ReportTemplate_Time_Measure
+  reportData.deviceIds = input.ReportTemplate_DeviceIds
   reportData.timeMeasureType = []
   let groupByDate
   groupByDate = _.groupBy(averageTimeResultSet, 'StoreDate')

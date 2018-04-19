@@ -74,7 +74,7 @@ const generateDayReport = (request, input, callback) => {
       if (result.status === true) {
         // Preparing Single Store results
         // Preparing response for CSV
-        if (input.reportType.toLowerCase().trim() === 'csv') {
+        if (!_.isUndefined(input.reportType) && input.reportType.toLowerCase().trim() === 'csv') {
           let csvInput = {}
           csvInput.type = message.COMMON.CSVTYPE
           csvInput.reportName = message.COMMON.DAYREPORTNAME + '_' + dateFormat(new Date(), 'isoDate'),

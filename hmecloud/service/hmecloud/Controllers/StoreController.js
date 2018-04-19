@@ -128,9 +128,9 @@ module.exports = {
 function prepareStoreDetails (rawCarData, storeData, input) {
   rawCarData.storeName = storeData.Store_Name
   rawCarData.storeDescription = storeData.Brand_Name
-  rawCarData.startTime = input.ReportTemplate_From_Date
-  rawCarData.stopTime = input.ReportTemplate_To_Date
-  rawCarData.printDate = dateFormat(new Date(), 'isoDate')
+  rawCarData.startTime = `${dateUtils.convertMMMddMM(input.ReportTemplate_To_Date)} OPEN`
+  rawCarData.stopTime = `${dateUtils.convertMMMddMM(input.ReportTemplate_To_Date)} CLOSE`
+  rawCarData.printDate = dateUtils.convertMMMddMM(dateFormat(new Date(), 'isoDate'))
   rawCarData.printTime = dateFormat(new Date(), 'shortTime')
 
   return rawCarData
