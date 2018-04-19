@@ -781,7 +781,7 @@ class Report extends Component {
           return (item.Type === "store" && _.contains(this.state.deviceUIds, item.DeviceUID));
       }), 
       CreatedDateTime: moment().format("YYYY-MM-DD HH:mm:ss a"), UpdatedDateTime: moment().format("YYYY-MM-DD HH:mm:ss a"),
-      advancedOptions: (!this.state.open || !this.state.close), longestTime: _.contains(this.state.include, "1"),systemStatistics: _.contains(this.state.include, "2"),
+      advancedOption: (!this.state.open || !this.state.close), longestTime: _.contains(this.state.include, "1"),systemStatistics: _.contains(this.state.include, "2"),
     });
 
     createTemplateData.push({
@@ -1026,7 +1026,7 @@ class Report extends Component {
     this.setState(this.state)
     let template = this.state.templateData[0]
     this.state.reportData.generate = true
-      let deviceIds =[]
+   //   let deviceIds =[]
     let request = {
       "timeMeasure": parseInt(template.timeMeasure),
       "fromDate": moment(template.fromDate).format('YYYY-MM-DD'),
@@ -1039,41 +1039,53 @@ class Report extends Component {
       "include": template.include,
       "format": template.format,
       "deviceIds":template.deviceIds,
-
-
-      //"deviceIds": this.findMatchedDeviceIds(this.state.treeData, item => {
-      //    let deviceIds
-      //    if (item.Type === "store" && template.deviceUIds.indexOf(item.DeviceUID.toString()) > -1) {
-      //      return  deviceIds.push(item.DeviceId);
-      //    }
-
-
-      //       //return (
-      //       //  item.Type === "store" &&
-      //       //    template.deviceUIds.indexOf(item.DeviceUID.toString()) > -1
-      //       //);
-      //     }),
-
-
-      "advancedOptions": template.advancedOptions,
+      "advancedOption": template.advancedOption,
       "longestTime": template.longestTime,
       "systemStatistics": template.systemStatistics,
   //    "recordPerPage": 4,
       "pageNumber": 1
     }
-    let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
-    this.api.postData(url, request, data => {
-        this.state.showLoader = false
-        this.setState(this.state)
-        this.props.history.push({
-            pathname: '/summaryreport',
-            state: { reportData: this.state.reportData , reportDataResponse : data, reportRequest: request }
+
+    if(request.advancedOption){
+      let url;
+      let type = 'PDF'
+        if (type == 'CSV')
+        {
+            url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=csv';
+        }
+        if (type == 'PDF') {
+           url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=pdf';
+        }
+        this.setState({ showLoader: true });
+        this.api.postData(url, request, data => {
+            if (data.status) {
+                this.state.errorMessage = ''
+                this.state.pdfEmailMessage = data.data
+                this.setState(this.state)
+                this.setState({ showLoader: false })
+                this.props.history.push("/emailSent", this.state.pdfEmailMessage);
+            }
+        }, error => {
+            this.state.successMessage = ''
+            this.state.errorMessage = 'Failed sending Email'
+            this.setState(this.state)
         })
-    }, error => {
-        this.state.successMessage = ''
-        this.state.errorMessage = error.message
-        this.setState(this.state)
-    })
+    }else{
+      let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
+      this.api.postData(url, request, data => {
+          this.state.showLoader = false
+          this.setState(this.state)
+          this.props.history.push({
+              pathname: '/summaryreport',
+              state: { reportData: this.state.reportData , reportDataResponse : data, reportRequest: request }
+          })
+      }, error => {
+          this.state.successMessage = ''
+          this.state.errorMessage = error.message
+          this.setState(this.state)
+      })
+    }
+   
   }
 
   changeDate(date, dateSelection) {
