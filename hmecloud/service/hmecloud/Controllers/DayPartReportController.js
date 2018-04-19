@@ -68,6 +68,7 @@ const generateDaypartReport = (request, input, callBack) => {
       }
 
       if (averageTimeResultSet.length > 0) {
+        reportData.deviceIds = input.ReportTemplate_DeviceIds
         totalRecordCount.NoOfPages = input.pageNumber || 1
         if (!_.isUndefined(input.reportType) && input.reportType.toLowerCase().trim() === 'csv') {
           generateCSVOrPdfTriggerEmail(request, input, result, callBack)
@@ -86,6 +87,9 @@ const generateDaypartReport = (request, input, callBack) => {
         callBack(result)
       }
     } else {
+      result = {}
+      result.key = 'noDataFound'
+      result.status = false
       callBack(result)
     }
   })
@@ -102,7 +106,6 @@ function multiStoreResult (totalRecordCount, input, averageTimeResultSet, colorS
   //  Multi store
   reportData.totalRecordCount = totalRecordCount[0]
   reportData.timeMeasure = input.ReportTemplate_Time_Measure
-  reportData.selectedStoreIds = input.ReportTemplate_DeviceIds
   reportData.timeMeasureType = []
   let groupByDate
   groupByDate = _.groupBy(averageTimeResultSet, 'StoreDate')

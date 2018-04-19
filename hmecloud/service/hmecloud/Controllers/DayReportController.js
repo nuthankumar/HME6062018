@@ -86,6 +86,7 @@ const generateDayReport = (request, input, callback) => {
         } else {
           let colors
           let goalstatisticsDetails
+          daysingleResult.deviceIds = input.ReportTemplate_DeviceIds
           if (storesLength === 1) {
             reportUtil.prepareStoreDetails(daysingleResult, result.data[3], input)
             colors = result.data[4]

@@ -17,7 +17,7 @@ const generateDayPartSummaryReport = (input, callback) => {
       .input('StoreEndDate', sql.Date, input.ReportTemplate_To_Date)
       .input('InputStartDateTime', sql.NVarChar(50), input.ReportTemplate_From_Time)
       .input('InputEndDateTime', sql.NVarChar(50), input.ReportTemplate_To_Time)
-      .input('CarDataRecordType_ID', sql.VarChar(255), input.CarDataRecordType_ID)
+      // .input('CarDataRecordType_ID', sql.VarChar(255), '11')
       .input('ReportType', sql.Char(2), input.ReportTemplate_Type)
       .input('LaneConfig_ID', sql.TinyInt, '1')
       // .input('RecordPerPage', sql.SmallInt, input.recordPerPage)
