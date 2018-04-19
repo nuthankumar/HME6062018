@@ -57,7 +57,7 @@ export default class Layout extends React.Component {
          let signout = setTimeout(function () {
              if (this.state.modalIsOpen) {
                  console.log('signOut');
-                 let url = this.state.url + "?pg=SettingsUsers&path=Main&token=" + this.state.masquerade
+                 let url = Config.adminColdFusionUrl + "?pg=SettingsUsers&path=Main&token=" + this.state.masquerade
                  window.location.href = url;
              }
              else {

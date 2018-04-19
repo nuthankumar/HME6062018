@@ -136,7 +136,7 @@ export default class HmeHeader extends React.Component {
 
                             <div>
                                 <div className="loggedInUser">
-                                    <a className="black_link headerLink loginInfo" href={url + "?pg=SettingsAccount&token=" + token}><span> {t[language].headerLoggedInAs} </span> <span className="username">{userName}</span></a>
+                                    <a className="black_link headerLink loginInfo" href={Config.adminColdFusionUrl + "?pg=SettingsAccount&token=" + token}><span> {t[language].headerLoggedInAs} </span> <span className="username">{userName}</span></a>
                                 </div>
                                 <div>
                                     <span className={masquerade ? 'show' : 'hidden'}><MasqueradeHeader isAdministrator={isAdministrator} viewAsUser={this.state.contextUser} />
