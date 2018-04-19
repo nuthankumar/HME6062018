@@ -124,21 +124,21 @@ const generateWeekReport = (request, input, callback) => {
 
 function generateCSVOrPdfTriggerEmail (request, input, result, callBack) {
   let csvInput = {}
-  csvInput.type = message.COMMON.CSVTYPE
-  csvInput.reportName = `${request.t('COMMON.WEEKREPORTNAME')} ${dateFormat(new Date(), 'isoDate')}`
+  csvInput.type = `${message.COMMON.CSVTYPE}`
+  csvInput.reportName = `${message.COMMON.WEEKREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
 
   csvInput.email = input.UserEmail
-  csvInput.subject = `${request.t('COMMON.WEEKREPORTTITLE')} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
+  csvInput.subject = `${message.COMMON.WEEKREPORTTITLE} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
   dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput, csvResults => {
     callBack(csvResults)
   })
 }
 const jsonFromateChange = (request, data, input, result, reportName, isMethod) => {
   let pdfInput = {}
-  pdfInput.type = request.t('COMMON.PDFTYPE')
-  pdfInput.reportName = `${request.t('COMMON.WEEKREPORTNAME')} ${dateFormat(new Date(), 'isoDate')}`
+  pdfInput.type = `${message.COMMON.PDFTYPE}`
+  pdfInput.reportName = `${message.COMMON.WEEKREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
   pdfInput.email = input.UserEmail
-  pdfInput.subject = `${request.t('COMMON.WEEKREPORTTITLE')} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
+  pdfInput.subject = `${message.COMMON.WEEKREPORTTITLE} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
   return dataExportUtil.prepareJson(data, input, result, reportName, pdfInput, isMethod)
 }
 

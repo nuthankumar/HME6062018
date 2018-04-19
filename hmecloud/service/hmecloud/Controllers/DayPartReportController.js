@@ -218,10 +218,10 @@ function generatePDFReport (reportData, input, isMultiStore) {
 function generateCSVOrPdfTriggerEmail (request, input, result, callBack) {
   let csvInput = {}
   csvInput.type = message.COMMON.CSVTYPE
-  csvInput.reportName = `${request.t('COMMON.DAYPARTREPORTNAME')} ${dateFormat(new Date(), 'isoDate')}`
+  csvInput.reportName = `${message.COMMON.DAYPARTREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
 
   csvInput.email = input.UserEmail
-  csvInput.subject = `${request.t('COMMON.DAYPARTREPORTTITLE')} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
+  csvInput.subject = `${message.COMMON.DAYPARTREPORTTITLE} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
   dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput, csvResults => {
     callBack(csvResults)
   })
