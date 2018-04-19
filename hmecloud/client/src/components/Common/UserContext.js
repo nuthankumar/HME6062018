@@ -20,6 +20,7 @@ export function getToken() {
 export function clearToken() {
     localStorage.removeItem("token");
     localStorage.removeItem("isAdmin");
+    localStorage.removeItem("uuid");
 }
 
 

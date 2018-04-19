@@ -11,6 +11,7 @@ import * as UserContext from '../Common/UserContext'
 import AuthenticationService from '../Security/AuthenticationService'
 import Common from './Common.css'
 import Modal from 'react-modal';
+import 'url-search-params-polyfill';
 
 const customStyles = {
     content: {
@@ -25,8 +26,6 @@ const customStyles = {
 };
 
 
-
-
 export default class Layout extends React.Component {
     constructor() {
         super()
@@ -39,8 +38,7 @@ export default class Layout extends React.Component {
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.signOutInterval = this.signOutInterval.bind(this);
-      
-    }
+      }
     componentDidMount() {
         this.signOutInterval(UserContext.isAdmin(), UserContext.isLoggedIn())
     }
@@ -61,7 +59,7 @@ export default class Layout extends React.Component {
                    clearInterval(autoInterval);
                     this.openModal()
                 }
-           }.bind(this), 300000) 
+           }.bind(this), 5000) 
         }
      }
 
@@ -69,25 +67,27 @@ export default class Layout extends React.Component {
  
         const { Params, children } = this.props;
         let pathName = Params.location.pathname;
-        var url_string = window.location.href
+        const params = new URLSearchParams(this.props.Params.location.search);
+        const token = params.get('token') ? params.get('token'):null
+        const admin = params.get('a') ? params.get('a') : null 
+        const uuid = params.get('uuid') ? params.get('uuid') : null
+        const masquerade = params.get('atoken') ? params.get('atoken') : null
 
-        if (url_string) {
-            var url = new URL(url_string);
-            let token = url.searchParams.get("token") ? url.searchParams.get("token") : null;
-            let isAdminParam = url.searchParams.get("a") ? url.searchParams.get("a") : null;
-            let uuid = url.searchParams.get("uuid") ? url.searchParams.get("uuid") : null;
-
-            if (token) {
-                this.authService.setToken(token, isAdminParam)
+        if (token && admin) {
+            this.authService.setToken(token, admin)
                 UserContext.isLoggedIn()
                 let path = window.location.pathname;
                 window.location.href = path;
             }
 
-            if (uuid) {
+        if (uuid) {
                 this.authService.setUUID(uuid)
-            }
         }
+
+        if (masquerade) {
+            this.authService.setMasquerade(masquerade)
+        }
+
         localStorage.setItem('id_token', Config.token)
         let idToken = localStorage.getItem('id_token')
         let isAdministrator = (idToken) ? true : false;
@@ -99,6 +99,7 @@ export default class Layout extends React.Component {
 
         if (window.location.pathname == '/admin') {
             isAdmin = true
+            this.authService.setAdmin(isAdmin)
         }
         else {
             isAdmin = UserContext.isAdmin();
@@ -133,7 +134,7 @@ export default class Layout extends React.Component {
                     <span className="autoSignOutContent">You are currently viewing the site as another User</span> 
                     <button className="continueButton" onClick={this.closeModal}>Continue Viewing as Selected User</button>
                 </Modal>
-               <HmeHeader isAdministrator={isAdministrator} isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} />
+                <HmeHeader isAdministrator={isAdministrator} isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} />
                 <AdminSubHeader isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} pathName={pathName} />
                 <div className="hmeBody">
                     {children}
