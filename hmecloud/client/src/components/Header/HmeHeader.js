@@ -45,7 +45,9 @@ export default class HmeHeader extends React.Component {
     }
 
     componentDidMount() {
-        this.setUserContext() // to-do: remove this once its set @ cfm-app
+        if (localStorage.getItem('token')) {
+            this.setUserContext() // to-do: remove this once its set @ cfm-app
+        }
         document.addEventListener('mousedown', this.handleClickOutside);
     }
     componentWillUnmount() {
