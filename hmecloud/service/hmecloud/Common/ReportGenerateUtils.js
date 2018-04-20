@@ -227,7 +227,7 @@ const prepareLongestTimes = (daysingleResult, longestData, format) => {
  * @param {*} goalSettings
  * @param {*} format
  */
-const storesDetails = (result, colors, goalSettings, format) => {
+const storesDetails = (weekRecords, result, colors, goalSettings, format) => {
   let storeDetails = _.filter(result, (value) => {
     if (value.StoreNo) {
       return value
@@ -258,18 +258,30 @@ const storesDetails = (result, colors, goalSettings, format) => {
   let storesData = []
   _.forEach(storeDetails, (items) => {
     if (format === 2) {
+      let subtotal
+      let groupName
+      if (items.StoreNo === 'Subtotal') {
+        subtotal = ''
+        groupName = {'value': items.GroupName  +  'Subtotal'}
+      } else if (items.StoreNo === 'Total Week') {
+        subtotal = ''
+        groupName = {'value': 'Total Week', 'timeSpan': messages.COMMON.WAVG}
+      } else {
+        groupName = {'value': items.GroupName}
+        subtotal = items.StoreNo
+      }
       let Week = {
         'title': moment(items.WeekStartDate).format('LL') + ' OPEN -' + moment(items.WeekEndDate).format('LL') + ' CLOSE',
         'data': [
           {
-            'group': {'value': items.GroupName},
+            'group': groupName,
             'storeId': {'value': items.StoreID},
             'index': items.WeekIndex,
             'storeName': (items.Store_Name ? items.Store_Name : 'N/A'),
             // 'storedesc': (items.Brand_Name ? items.Brand_Name : 'N/A'),
             'deviceId': {'value': items.Device_ID},
             'deviceUid': {'value': items.Device_UID},
-            'store': {'name': items.StoreNo},
+            'store': {'name': subtotal},
             'week': {'open': items.WeekStartDate, 'close': items.WeekEndDate},
             'menu': {'value': dateUtils.convertSecondsToMinutes(parseInt(items['Menu Board']), format), 'color': getColor('Menu', items['Menu Board'])},
             'greet': {'value': dateUtils.convertSecondsToMinutes(parseInt(items.Greet), format), 'color': getColor('Greet', items.Greet)},
@@ -282,18 +294,30 @@ const storesDetails = (result, colors, goalSettings, format) => {
       }
       return storesData.push(Week)
     } else {
+      let subtotal
+      let groupName
+      if (items.StoreNo === 'Subtotal') {
+        subtotal = ''
+        groupName = {'value': items.GroupName + 'Subtotal'}
+      } else if (items.StoreNo === 'Total Week') {
+        subtotal = ''
+        groupName = {'value': items.GroupName + 'Total Week', 'timeSpan': messages.COMMON.WAVG}
+      } else {
+        groupName = {'value': items.GroupName}
+        subtotal = items.StoreNo
+      }
       let Week = {
         'title': moment(items.WeekStartDate).format('LL') + ' OPEN -' + moment(items.WeekEndDate).format('LL') + ' CLOSE',
         'data': [
           {
-            'group': {'value': items.GroupName},
+            'group': groupName,
             'storeId': {'value': items.StoreID},
             'index': items.WeekIndex,
             'storeName': (items.Store_Name ? items.Store_Name : 'N/A'),
             // 'storedesc': (items.Brand_Name ? items.Brand_Name : 'N/A'),
             'deviceId': {'value': items.Device_ID},
             'deviceUid': {'value': items.Device_UID},
-            'store': {'name': items.StoreNo},
+            'store': {'name': subtotal},
             'week': {'open': items.WeekStartDate, 'close': items.WeekEndDate},
             'menu': {'value': items['Menu Board'], 'color': getColor('Menu', items['Menu Board'])},
             'greet': {'value': items.Greet, 'color': getColor('Greet', items.Greet)},
@@ -308,7 +332,12 @@ const storesDetails = (result, colors, goalSettings, format) => {
     }
   })
 
-  return storesData
+  let temp = []
+  let weekInfo = {}
+  weekInfo.data = storesData
+  temp.push(weekInfo)
+  weekRecords.timeMeasure = temp
+  return weekRecords
 }
 /**
  * get Color Code details for the Goals
@@ -344,7 +373,7 @@ const getColourCode = (event, eventValue, colors, goalSettings) => {
 // Mutiple store
 
 // This function is used to prepare colors with event values
-const getAllStoresDetails = (result, colors, goalSettings, format) => {
+const getAllStoresDetails = (weekRecords, result, colors, goalSettings, format) => {
   let storeDetails = _.filter(result, (value) => {
     if (value.StoreNo) {
       return value
@@ -376,7 +405,6 @@ const getAllStoresDetails = (result, colors, goalSettings, format) => {
   let storesData = []
   _.forEach(storeDetails, (items) => {
     if (format === 2) {
-      let weekinfo
       if (items.StoreNo === 'Total Week') {
         items.WeekStartDate = 'Total Week'
       } else {
@@ -391,7 +419,7 @@ const getAllStoresDetails = (result, colors, goalSettings, format) => {
         'deviceUid': {'value': items.Device_UID},
         // 'storedesc': (items.Brand_Name ? items.Brand_Name : 'N/A'),
         'index': items.WeekIndex,
-        'week': {'timeSpan': items.WeekStartDate + (items.StoreNo !== 'Total Week' ? '-' + items.WeekEndDate : ' '), 'currentWeekpart': 'OPEN-CLOSE'},
+        'week': {'timeSpan': items.WeekStartDate + (items.StoreNo !== 'Total Week' ? '-' + items.WeekEndDate : ' '), 'currentWeekpart': (items.StoreNo !== 'Total Week' ? messages.COMMON.DAYOPENCLOSE : messages.COMMON.WAVG)},
         'menu': {'value': dateUtils.convertSecondsToMinutes(parseInt(items['Menu Board']), format), 'color': getColor('Menu', items['Menu Board'])},
         'greet': {'value': dateUtils.convertSecondsToMinutes(parseInt(items.Greet), format), 'color': getColor('Greet', items.Greet)},
         'service': {'value': dateUtils.convertSecondsToMinutes(parseInt(items.Service), format), 'color': getColor('Service', items.Service)},
@@ -415,7 +443,7 @@ const getAllStoresDetails = (result, colors, goalSettings, format) => {
         // 'storedesc': (items.Brand_Name ? items.Brand_Name : 'N/A'),
         'deviceId': {'value': items.Device_ID},
         'deviceUid': {'value': items.Device_UID},
-        'week': {'timeSpan': items.WeekStartDate + (items.StoreNo !== 'Total Week' ? '-' + items.WeekEndDate : ' '), 'currentWeekpart': 'OPEN-CLOSE'},
+        'week': {'timeSpan': items.WeekStartDate + (items.StoreNo !== 'Total Week' ? '-' + items.WeekEndDate : ' '), 'currentWeekpart': (items.StoreNo !== 'Total Week' ? messages.COMMON.DAYOPENCLOSE : messages.COMMON.WAVG)},
         'menu': {'value': items['Menu Board'], 'color': getColor('Menu', items['Menu Board'])},
         'greet': {'value': items.Greet, 'color': getColor('Greet', items.Greet)},
         'service': {'value': items.Service, 'color': getColor('Service', items.Service)},
@@ -426,8 +454,12 @@ const getAllStoresDetails = (result, colors, goalSettings, format) => {
       return storesData.push(Week)
     }
   })
-
-  return storesData
+  let temp = []
+  let weekInfo = {}
+  weekInfo.data = storesData
+  temp.push(weekInfo)
+  weekRecords.timeMeasure = temp
+  return weekRecords
 }
 /**
  * Preparing the System statisitics
@@ -446,7 +478,6 @@ const prepareStatistics = (daysingleResult, systemStatisticsLane, systemStatisti
     SystemResets: 0,
     VBDResets: 0
   }
-
   if (systemStatisticsLane[0]) {
     displayData.Lane = systemStatisticsLane[0]['Lane']
     displayData.AverageCarsInLane = systemStatisticsLane[0]['AvgCarsInLane']
@@ -460,8 +491,8 @@ const prepareStatistics = (daysingleResult, systemStatisticsLane, systemStatisti
     displayData.SystemResets = systemStatisticsGenral[0]['SystemResets']
     displayData.VBDResets = systemStatisticsGenral[0]['VDBResets']
   }
-
   daysingleResult.systemStatistics = displayData
+  return daysingleResult
 }
 
 module.exports = {
