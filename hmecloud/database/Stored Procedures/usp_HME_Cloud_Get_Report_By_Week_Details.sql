@@ -472,6 +472,30 @@ BEGIN
 	ELSE
 		SELECT 1	-- fake resultset in case the application expecting it
 
+		
+		SET @query = '';
+		IF (@isMultiStore = 0)
+		BEGIN 
+		SELECT 
+			a.Device_ID, 
+			b.Store_Number, 
+			b.Store_Name, 
+			c.Brand_Name, 
+			a.Device_LaneConfig_ID
+		FROM tbl_DeviceInfo a
+		LEFT JOIN tbl_Stores b WITH (NOLOCK) ON a.Device_Store_ID = b.Store_ID
+		LEFT JOIN ltbl_Brands c WITH (NOLOCK) ON b.Store_Brand_ID = c.Brand_ID
+		WHERE 
+			Device_ID IN (@Device_IDs)
+		AND b.Store_Number <> ''
+		ORDER BY
+		b.Store_Number
+
+		EXECUTE(@query);
+		END
+	ELSE
+		SELECT 1
+		
 		SET @query = '';
 
 		-- Get Users Primary Color Preference
@@ -480,7 +504,7 @@ BEGIN
 			User_Preferences_User_ID =(SELECT USER_ID FROM  tbl_Users WHERE User_UID = @UserUID ) AND User_Preferences_Preference_ID=5
 		
 		IF(ISNULL(@Preferences_Preference_Value,'') ='')
-			SET @Preferences_Preference_Value = '##00b04c|##dcba00|##b40000'
+			SET @Preferences_Preference_Value = '#00b04c|#dcba00|#b40000'
 		
 		SELECT @Preferences_Preference_Value AS ColourCode
 

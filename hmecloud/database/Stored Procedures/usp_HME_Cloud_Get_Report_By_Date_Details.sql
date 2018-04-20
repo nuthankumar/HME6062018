@@ -431,7 +431,7 @@ BEGIN
 			User_Preferences_User_ID =(SELECT USER_ID FROM  tbl_Users WHERE User_UID = @UserUID ) AND User_Preferences_Preference_ID=5
 		
 		IF(ISNULL(@Preferences_Preference_Value,'') ='')
-			SET @Preferences_Preference_Value = '##00b04c|##dcba00|##b40000'
+			SET @Preferences_Preference_Value = '#00b04c|#dcba00|#b40000'
 		
 		SELECT @Preferences_Preference_Value AS ColourCode
 

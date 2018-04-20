@@ -138,7 +138,7 @@ function multiStoreResult (totalRecordCount, input, averageTimeResultSet, colorS
             tempData.push(dataObject)
           } else if (storeObj.StoreNo !== 'Total Daypart') {
             let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
-            store.name = `${storeObj.StoreNo} ${storeObj.Store_Name}`
+            store.name = `${storeObj.StoreNo}-${storeObj.Store_Name}`
             dataObject.store = store
             tempData.push(dataObject)
           }

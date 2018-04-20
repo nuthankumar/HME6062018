@@ -90,7 +90,6 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
     } else if (key.includes('GoalF')) {
       setGoalTime(key, value, goalGrades.goalF)
     }
-    // return object
   })
 
   function setGoalTime (key, value, goal) {
@@ -122,7 +121,7 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
   })
 
   function eventMatch (key, value, goal, totalCarsCount) {
-    if (!value) {
+    if (value === null) {
       value = 'N/A'
     }
     if (key.includes('Menu')) {
@@ -142,7 +141,8 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
       goal.laneTotal.percentage = CalculatePercetage(value, totalCarsCount)
     }
   }
-  dataArray.push(goalGrades)
+
+  dataArray.push(goalGrades.goalA, goalGrades.goalB, goalGrades.goalC, goalGrades.goalD, goalGrades.goalF)
   return dataArray
 }
 
@@ -262,7 +262,7 @@ const storesDetails = (weekRecords, result, colors, goalSettings, format) => {
       let groupName
       if (items.StoreNo === 'Subtotal') {
         subtotal = ''
-        groupName = {'value': items.GroupName  +  'Subtotal'}
+        groupName = {'value': items.GroupName + 'Subtotal'}
       } else if (items.StoreNo === 'Total Week') {
         subtotal = ''
         groupName = {'value': 'Total Week', 'timeSpan': messages.COMMON.WAVG}
@@ -336,7 +336,7 @@ const storesDetails = (weekRecords, result, colors, goalSettings, format) => {
   let weekInfo = {}
   weekInfo.data = storesData
   temp.push(weekInfo)
-  weekRecords.timeMeasure = temp
+  weekRecords.timeMeasureType = temp
   return weekRecords
 }
 /**
@@ -458,7 +458,7 @@ const getAllStoresDetails = (weekRecords, result, colors, goalSettings, format) 
   let weekInfo = {}
   weekInfo.data = storesData
   temp.push(weekInfo)
-  weekRecords.timeMeasure = temp
+  weekRecords.timeMeasureType = temp
   return weekRecords
 }
 /**
@@ -468,29 +468,17 @@ const getAllStoresDetails = (weekRecords, result, colors, goalSettings, format) 
  * @param {*} systemStatisticsGenral
  */
 const prepareStatistics = (daysingleResult, systemStatisticsLane, systemStatisticsGenral) => {
-  let displayData = {
-    Lane: 0,
-    AverageCarsInLane: 0,
-    TotalPullouts: 0,
-    TotalPullins: 0,
-    DeleteOverMaximum: 0,
-    PowerFails: 0,
-    SystemResets: 0,
-    VBDResets: 0
-  }
-  if (systemStatisticsLane[0]) {
-    displayData.Lane = systemStatisticsLane[0]['Lane']
-    displayData.AverageCarsInLane = systemStatisticsLane[0]['AvgCarsInLane']
-    displayData.TotalPullouts = systemStatisticsLane[0]['Pullouts']
-    displayData.TotalPullins = systemStatisticsLane[0]['Pullins']
-    displayData.DeleteOverMaximum = systemStatisticsLane[0]['DeleteOverMax']
-  }
+  let displayData = { }
 
-  if (systemStatisticsGenral[0]) {
-    displayData.PowerFails = systemStatisticsGenral[0]['PowerFails']
-    displayData.SystemResets = systemStatisticsGenral[0]['SystemResets']
-    displayData.VBDResets = systemStatisticsGenral[0]['VDBResets']
-  }
+  displayData.Lane = _.get(systemStatisticsLane, '0.Lane', '0')
+  displayData.AverageCarsInLane = _.get(systemStatisticsLane, '0.AvgCarsInLane', '0')
+  displayData.TotalPullouts = _.get(systemStatisticsLane, '0.Pullouts', '0')
+  displayData.TotalPullins = _.get(systemStatisticsLane, '0.Pullins', '0')
+  displayData.DeleteOverMaximum = _.get(systemStatisticsLane, '0.DeleteOverMax', '0')
+  displayData.PowerFails = _.get(systemStatisticsGenral, '0.PowerFails', '0')
+  displayData.SystemResets = _.get(systemStatisticsGenral, '0.SystemResets', '0')
+  displayData.VBDResets = _.get(systemStatisticsGenral, '0.VDBResets', '0')
+
   daysingleResult.systemStatistics = displayData
   return daysingleResult
 }
