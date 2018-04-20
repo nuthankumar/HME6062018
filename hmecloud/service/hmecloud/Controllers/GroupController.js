@@ -120,7 +120,7 @@ const addToHierarchy = (hierarchy, inputItem) => {
       Name: inputItem.Name,
       Type: inputItem.Type,
       StoreNumber: inputItem.Store_Number,
-      Brand: inputItem.Brand_Description,
+      Brand: inputItem.Brand_Name,
       DeviceId: inputItem.Device_ID,
       DeviceUID: inputItem.Device_UID,
       Children: []
@@ -133,7 +133,7 @@ const addToHierarchy = (hierarchy, inputItem) => {
         Name: inputItem.Name,
         Type: inputItem.Type,
         StoreNumber: inputItem.Store_Number,
-        Brand: inputItem.Brand_Description,
+        Brand: inputItem.Brand_Name,
         DeviceId: inputItem.Device_ID,
         DeviceUID: inputItem.Device_UID,
         Children: []

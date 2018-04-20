@@ -44,9 +44,13 @@
     width: 80%;
     min-width: 900px;
     float: none !important;
+    border-bottom: 1px solid #ebebeb;
 }
 .menuBar {
     float:left;
+}
+.menuBar ul{
+    padding: 0;
 }
 .menuBar ul li {
     color: #9be0ea !important;

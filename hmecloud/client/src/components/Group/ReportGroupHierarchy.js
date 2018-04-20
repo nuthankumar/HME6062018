@@ -56,11 +56,14 @@ export default class ReportGroupHierarchy extends React.Component {
     const loop = data => {
       return data.map((item) => {
         // item.Children = [];
+
+        var cssClass = "treeNode " + (item.Type === "group" ? "group-node" : "store-node");
+
         if (item.Children && item.Children.length) {
-          return <TreeNode className='treeNode' title={item.Name}
+          return <TreeNode className={cssClass} title={item.Name}
             key={item.Id} title={item.Type === 'group' ? item.Name : item.Name ? item.StoreNumber + '-' + item.Name : item.StoreNumber} type={item.Type}>{loop(item.Children)}</TreeNode>
         }
-        return <TreeNode className='treeNode' title={item.Type === 'group' ? item.Name : item.Name ? item.StoreNumber + '-' + item.Name : item.StoreNumber} key={item.Id} type={item.Type}/>
+        return <TreeNode className={cssClass} title={item.Type === 'group' ? item.Name : item.Name ? item.StoreNumber + '-' + item.Name : item.StoreNumber} key={item.Id} type={item.Type}/>
       })
     }
     return (<section className='groupManagementSection'>
@@ -69,7 +72,7 @@ export default class ReportGroupHierarchy extends React.Component {
           <h1>{t[language].ReportingGroupManagement}</h1>
         </div>
         <div className='row'>
-          <div className='col-xs-12'>
+          <div className='col-sm-12'>
             <button type='button' className='btn btn-primary  add-group-btn' onClick={this.addNewGroup.bind(this)}>{t[language].AddNewGroup}</button>
           </div>
         </div>
