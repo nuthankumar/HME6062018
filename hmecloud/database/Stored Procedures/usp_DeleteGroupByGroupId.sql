@@ -1,3 +1,11 @@
+
+/****** Dropping the StoredProcedure [dbo].[usp_DeleteGroupByGroupId] if already exists *****/
+IF (EXISTS(SELECT *
+FROM sys.objects
+WHERE [name] = 'usp_DeleteGroupByGroupId' AND [type] ='P'))
+	DROP PROCEDURE [dbo].[usp_DeleteGroupByGroupId]
+GO
+
 -- ===========================================================
 --      Copyright © 2018, HME, All Rights Reserved
 -- ===========================================================

@@ -1,5 +1,11 @@
+
+/****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details] if already exists *****/
+IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_HME_Cloud_Get_Report_By_Week_Details' AND [type] ='P'))
+	DROP PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details]
+GO
+
 -- ===========================================================
---      Copyright © 2018, HME, All Rights Reserved
+--      Copyright Â© 2018, HME, All Rights Reserved
 -- ===========================================================
 -- Name			:	usp_HME_Cloud_Get_Report_By_Week_Details
 -- Author		:	Swathi Kumar
@@ -13,10 +19,12 @@
 -- -----------------------------------------------------------
 -- 1.		13/04/2018		Swathi Kumar	Added Subtotal calculation
 -- ===========================================================
--- EXEC [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details] '3,4','2018-03-24','2018-03-26',N'2018-03-24 00:00:00',N'2018-03-26 10:30:00','11','AC',1
+-- EXEC [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details] '15','2018-03-24','2018-03-26',N'2018-03-24 00:00:00',N'2018-03-26 10:30:00','11','AC',1,N'68LKBP85C1SKH1FI3M7X40CJHKGU07FZ'
+-- use the below UserUid for testing in local data base
+-- --,@UserUID=N'68LKBP85C1SKH1FI3M7X40CJHKGU07FZ'
 -- ===========================================================
 
-ALTER PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details](
+CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details](
 	@Device_IDs varchar(500),
 	@StoreStartDate date,
 	@StoreEndDate date,
@@ -156,12 +164,7 @@ BEGIN
 	/*************************************
 	 step 2. populate, then roll up data
 	*************************************/
-	-- Get Users Pull-ins Preference for CarDataRecordType_ID
-	SELECT @CarDataRecordType_ID = User_Preferences_Preference_Value FROM itbl_User_Preferences WHERE 
-		User_Preferences_User_ID =(SELECT USER_ID FROM  tbl_Users WHERE User_UID = @UserUID ) AND User_Preferences_Preference_ID=9
-		
-	SET @CarDataRecordType_ID = CASE WHEN ISNULL(@CarDataRecordType_ID,'') ='' THEN '11' ELSE @CarDataRecordType_ID END
-	
+
 	-- pull in raw data from proc
 	INSERT INTO #raw_data
 	EXECUTE dbo.usp_HME_Cloud_Get_Report_Raw_Data @Device_IDs, @StoreStartDate, @StoreEndDate, @StartDateTime, @EndDateTime, @CarDataRecordType_ID, @ReportType, @LaneConfig_ID
@@ -472,30 +475,6 @@ BEGIN
 	ELSE
 		SELECT 1	-- fake resultset in case the application expecting it
 
-		
-		SET @query = '';
-		IF (@isMultiStore = 0)
-		BEGIN 
-		SELECT 
-			a.Device_ID, 
-			b.Store_Number, 
-			b.Store_Name, 
-			c.Brand_Name, 
-			a.Device_LaneConfig_ID
-		FROM tbl_DeviceInfo a
-		LEFT JOIN tbl_Stores b WITH (NOLOCK) ON a.Device_Store_ID = b.Store_ID
-		LEFT JOIN ltbl_Brands c WITH (NOLOCK) ON b.Store_Brand_ID = c.Brand_ID
-		WHERE 
-			Device_ID IN (@Device_IDs)
-		AND b.Store_Number <> ''
-		ORDER BY
-		b.Store_Number
-
-		EXECUTE(@query);
-		END
-	ELSE
-		SELECT 1
-		
 		SET @query = '';
 
 		-- Get Users Primary Color Preference
@@ -540,4 +519,7 @@ BEGIN
 	
 	RETURN(0)
 END
+
+GO
+
 

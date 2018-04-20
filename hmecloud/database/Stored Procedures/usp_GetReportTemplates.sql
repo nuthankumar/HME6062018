@@ -1,3 +1,9 @@
+
+/****** Dropping the StoredProcedure [dbo].[usp_GetReportTemplates] if already exists *****/
+IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_GetReportTemplates' AND [type] ='P'))
+	DROP PROCEDURE [dbo].[usp_GetReportTemplates]
+GO
+
 -- ===========================================================
 --      Copyright © 2018, HME, All Rights Reserved
 -- ===========================================================
@@ -33,3 +39,6 @@ BEGIN
 	FROM [dbo].[stbl_ReportTemplates]
 	WHERE ReportTemplate_Session_User_UID = @UserUid
 END
+GO
+
+

@@ -1,3 +1,11 @@
+
+/****** Dropping the StoredProcedure [dbo].[usp_DeleteReportTemplate] if already exists *****/
+IF (EXISTS(SELECT *
+FROM sys.objects
+WHERE [name] = 'usp_DeleteReportTemplate' AND [type] ='P'))
+	DROP PROCEDURE [dbo].[usp_DeleteReportTemplate]
+GO
+
 -- ===========================================================
 --      Copyright © 2018, HME, All Rights Reserved
 -- ===========================================================
@@ -23,3 +31,6 @@ AS
 
 DELETE FROM [dbo].[stbl_ReportTemplates]
       WHERE ReportTemplate_ID=@Id
+GO
+
+

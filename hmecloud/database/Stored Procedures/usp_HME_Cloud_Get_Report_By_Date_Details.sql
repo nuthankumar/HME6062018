@@ -1,5 +1,11 @@
+
+/****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details] if already exists *****/
+IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_HME_Cloud_Get_Report_By_Date_Details' AND [type] ='P'))
+	DROP PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details]
+GO
+
 -- ===========================================================
---      Copyright © 2018, HME, All Rights Reserved
+--      Copyright Â© 2018, HME, All Rights Reserved
 -- ===========================================================
 -- Name			:	usp_HME_Cloud_Get_Report_By_Date_Details
 -- Author		:	Swathi Kumar
@@ -14,9 +20,10 @@
 -- 1.		13/04/2018		Swathi Kumar	Added Subtotal calculation
 -- ===========================================================
 -- exec [usp_HME_Cloud_Get_Report_By_Date_Details] '15', '2018-03-24', '2018-03-24', '2018-03-24 00:00:00' , '2018-03-24 12:00:00', 11, 'AC',1, '68LKBP85C1SKH1FI3M7X40CJHKGU07FZ'
+-- exec usp_HME_Cloud_Get_Report_By_Date_Details '3,4','2018-03-20','2018-03-26',N'2018-03-20 00:00:00',N'2018-03-26 10:30:00','11','AC',1
 -- ===========================================================
 
---exec usp_HME_Cloud_Get_Report_By_Date_Details '3,4','2018-03-20','2018-03-26',N'2018-03-20 00:00:00',N'2018-03-26 10:30:00','11','AC',1
+
 CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details](
 	@Device_IDs varchar(500),
 	@StoreStartDate date,
