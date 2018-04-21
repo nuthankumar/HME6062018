@@ -1,3 +1,9 @@
+
+/****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details] if already exists *****/
+IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_HME_Cloud_Get_Report_Raw_Data_Details' AND [type] ='P'))
+	DROP PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details]
+GO
+
 -- ===========================================================
 --      Copyright © 2018, HME, All Rights Reserved
 -- ===========================================================
@@ -5,20 +11,24 @@
 -- Author		:	Swathi Kumar
 -- Created		:	12-April-2018
 -- Tables		:	Group,Stores
--- Purpose		:	To get the Raw Car details
+-- Purpose		:	To get Day report details for the given StoreIds
 -- ===========================================================
 --				Modification History
 -- -----------------------------------------------------------
 -- Sl.No.	Date			Developer		Descriptopn   
 -- -----------------------------------------------------------
--- 1.
+-- 1.		
 -- ===========================================================
--- EXEC [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details] '4', '2018-03-24', '2018-03-24'
+-- exec [usp_HME_Cloud_Get_Report_Raw_Data_Details] '15', '2018-03-24', '2018-03-24', '2018-03-24 00:00:00' , '2018-03-24 12:00:00', 11, 'AC',1
+-- exec usp_HME_Cloud_Get_Report_Raw_Data '2955', '2015-01-28', '2015-01-28', NULL, NULL, '11' --'2014-07-09 10:00:00', '2014-07-09 12:02:00', '11', 'AC'
+-- exec usp_HME_Cloud_Get_Report_Raw_Data '2979', '2015-01-13', '2015-01-13', NULL, NULL, '11' --'2014-07-09 10:00:00', '2014-07-09 12:02:00', '11', 'AC'
+-- exec usp_HME_Cloud_Get_Report_Raw_Data '1354,1382', '2014-07-11', '2014-07-11', '2014-08-11 10:00:00', '2014-08-11 10:01:00', '11', 'AC'
+-- exec usp_HME_Cloud_Get_Report_Raw_Data '1382', '2015-02-10', '2015-02-10', NULL, NULL, '11' --'2014-07-09 10:00:00', '2014-07-09 12:02:00', '11', 'AC'
 -- ===========================================================
 
 
 CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details](
-	@StoreId int,
+	@Device_IDs varchar(500),
 	@StoreStartDate date,
 	@StoreEndDate date,
 	@StartDateTime datetime = '1900-01-01 00:00:00',
@@ -33,9 +43,7 @@ SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 SET NOCOUNT ON
 
 DECLARE @MaxID int
-DECLARE @Device_IDs varchar(500)
 DECLARE @query NVARCHAR(3000)
-DECLARE @Device_UID varchar(500)
 
 IF @StartDateTime IS NULL 
 	SET @StartDateTime = '1900-01-01 00:00:00'
@@ -83,8 +91,9 @@ CREATE TABLE #CarDetectorData(
 		CarsInQueue tinyint
 )
 -- Getting the DeviceIds for the given StoreId
-SET @Device_IDs = (select dinf.Device_ID from tbl_DeviceInfo as dinf inner join tbl_Stores strs on dinf.Device_Store_ID = strs.Store_ID where dinf.Device_Store_ID IN (@StoreId));
-SET @Device_UID = (select dinf.Device_UID from tbl_DeviceInfo as dinf inner join tbl_Stores strs on dinf.Device_Store_ID = strs.Store_ID where dinf.Device_Store_ID IN (@StoreId));
+--SET @Device_IDs = (select dinf.Device_ID from tbl_DeviceInfo as dinf inner join tbl_Stores strs on dinf.Device_Store_ID = strs.Store_ID where dinf.Device_Store_ID IN (@StoreId));
+--SET @Device_UID = (select dinf.Device_UID from tbl_DeviceInfo as dinf inner join tbl_Stores strs on dinf.Device_Store_ID = strs.Store_ID where dinf.Device_Store_ID IN (@StoreId));
+
 
 -- report type is "Time Slice", then calculate each store date with the time slice
 IF @ReportType = 'TC'
@@ -249,7 +258,7 @@ SELECT a.Device_ID, b.Store_Number, b.Store_Name, c.Brand_Name, a.Device_LaneCon
 			FROM tbl_DeviceInfo a
 				LEFT JOIN tbl_Stores b WITH (NOLOCK) ON a.Device_Store_ID = b.Store_ID
 				LEFT JOIN ltbl_Brands c WITH (NOLOCK) ON b.Store_Brand_ID = c.Brand_ID
-			WHERE Device_UID IN (@Device_UID)
+			WHERE Device_ID IN (@Device_IDs)
 			AND b.Store_Number <> ''
 			ORDER BY b.Store_Number
 
@@ -264,13 +273,6 @@ EXECUTE(@query);
 
 RETURN(0)
 
-
-
--- exec usp_HME_Cloud_Get_Report_Raw_Data '2955', '2015-01-28', '2015-01-28', NULL, NULL, '11' --'2014-07-09 10:00:00', '2014-07-09 12:02:00', '11', 'AC'
--- exec usp_HME_Cloud_Get_Report_Raw_Data '2979', '2015-01-13', '2015-01-13', NULL, NULL, '11' --'2014-07-09 10:00:00', '2014-07-09 12:02:00', '11', 'AC'
--- exec usp_HME_Cloud_Get_Report_Raw_Data '1354,1382', '2014-07-11', '2014-07-11', '2014-08-11 10:00:00', '2014-08-11 10:01:00', '11', 'AC'
-
--- exec usp_HME_Cloud_Get_Report_Raw_Data '1382', '2015-02-10', '2015-02-10', NULL, NULL, '11' --'2014-07-09 10:00:00', '2014-07-09 12:02:00', '11', 'AC'
 GO
 
 

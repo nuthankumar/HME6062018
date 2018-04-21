@@ -119,9 +119,10 @@ const reportValidator = (request, callback) => {
         output.status = false
         callback(output)
       }
-      weekReportController.generateWeekReportByDate(request, input, result => {
+      weekReportController.weekReportController(request, input, result => {
         callback(result)
       })
+
       // report time measure raw car data
     } else if (input.ReportTemplate_Time_Measure === 4) {
       if (input.ReportTemplate_DeviceIds.length > 1) {

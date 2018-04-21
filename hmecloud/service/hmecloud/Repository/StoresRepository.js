@@ -63,10 +63,44 @@ const getDayDataReport = (input, callback) => {
  * @public
  */
 const getWeekReport = (template, callback) => {
-  repository.execute(sqlQuery.SummarizedReport.weekReport, {
-    replacements: template,
-    type: dataBase.QueryTypes.SELECT
-  }, result => callback(result))
+  const output = {}
+  const sqlPool = new sql.ConnectionPool(dataBaseSql, err => {
+    if (err) {
+      output.data = err
+      output.status = false
+      callback(output)
+    }
+    sqlPool.request()
+      .input('Device_IDs', sql.VarChar(500), template.Device_IDs)
+      .input('StoreStartDate', sql.Date, template.StoreStartDate)
+      .input('StoreEndDate', sql.Date, template.StoreEndDate)
+      .input('InputStartDateTime', sql.NVarChar(50), template.StartDateTime)
+      .input('InputEndDateTime', sql.NVarChar(50), template.EndDateTime)
+      // .input('CarDataRecordType_ID', sql.SmallInt, template.CarDataRecordType_ID)
+      .input('ReportType', sql.Char, template.ReportType)
+      .input('LaneConfig_ID', sql.TinyInt, template.LaneConfig_ID)
+      .input('UserUID', sql.NVarChar(50), template.UserUID)
+      .execute('usp_HME_Cloud_Get_Report_By_Week_Details', (err, result) => {
+        if (err) {
+          output.data = err
+          output.status = false
+          console.log(err)
+          callback(output)
+        }
+        if (result && result.recordsets) {
+          //  console.log("result.recordsets",result.recordsets)
+          output.data = result.recordsets
+          output.status = true
+          callback(output)
+        }
+      })
+  })
+
+  sqlPool.on('error', err => {
+    if (err) {
+      callback(err)
+    }
+  })
 }
 
 module.exports = {

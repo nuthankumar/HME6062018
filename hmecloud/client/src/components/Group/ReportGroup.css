@@ -6,7 +6,7 @@
   display : none;
 }
 .report-container,.grouphierarchy-tree-section , .status-messages {
-    margin: 45px 20%;
+    margin: 45px auto;
   }
   .report-description{
     margin-top : 20px;
@@ -103,17 +103,25 @@
   width: 28px !important;
   height: 30px !important;
 }
-
+.group-node span.rc-tree-title{
+    text-decoration: underline;
+    color: blue;
+}
+.store-node span.rc-tree-title{
+    text-decoration:none;
+    color: #212529;
+}
 .hierarchy-tree{
   font-size: 18px;
 }
 
 .grouphierarchy-tree{
   border: 1px solid grey;
-  height: 450px;
-  width: 50%;
-  overflow: scroll;
+  /*height: 450px;*/
+  width: 100%;
+  overflow: none;
   padding:10px !important;
+  background-color:#ffffff !important
 }
 
 .grouphierarchy-tree .rc-tree li span.rc-tree-switcher.rc-tree-switcher_open {
@@ -143,4 +151,20 @@
   margin-left: 8px;
   margin-top: 5px;
   font-weight: bold;
+}
+
+.rc-tree li span.rc-tree-switcher.rc-tree-switcher_close{
+  background: url('../../images/sideArrow.PNG') ;
+  background-size: contain;
+}
+
+.rc-tree li span.rc-tree-switcher.rc-tree-switcher_open{
+  background: url('../../images/downArrow.PNG') ;
+  background-size: contain;
+}
+.rc-tree.rc-tree-show-line li:not(:last-child) > ul, 
+.rc-tree.rc-tree-show-line li:not(:last-child) > .rc-tree-switcher-noop,
+.rc-tree.rc-tree-show-line li:last-child > .rc-tree-switcher-noop
+{
+  background: none;
 }

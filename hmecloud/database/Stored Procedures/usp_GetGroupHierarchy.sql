@@ -1,3 +1,9 @@
+
+/****** Dropping the StoredProcedure [dbo].[usp_GetGroupHierarchy] if already exists *****/
+IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_GetGroupHierarchy' AND [type] ='P'))
+	DROP PROCEDURE [dbo].[usp_GetGroupHierarchy]
+GO
+
 -- ===========================================================
 --      Copyright © 2018, HME, All Rights Reserved
 -- ===========================================================
@@ -14,7 +20,7 @@
 --  1.  	30-March-2018	Selvendran K	Procedure created
 --	2.
 -- ===========================================================
--- EXEC [dbo].[usp_GetGroupHierarchy] @AccountId = 100
+-- EXEC [dbo].[usp_GetGroupHierarchy] @AccountId = 1333
 -- ===========================================================
 
 CREATE PROCEDURE [dbo].[usp_GetGroupHierarchy]
@@ -68,3 +74,5 @@ BEGIN
 	ORDER BY [Level],[Name]  
 END
 GO
+
+

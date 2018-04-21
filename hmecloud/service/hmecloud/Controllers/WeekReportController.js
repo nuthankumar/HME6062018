@@ -1,17 +1,17 @@
 const dateUtils = require('../Common/DateUtils')
 const _ = require('lodash')
-const moment = require('moment')
 const repository = require('../Repository/StoresRepository')
 const dataExportUtil = require('../Common/DataExportUtil')
+const reportsUtils = require('../Common/ReportGenerateUtils')
 const dateFormat = require('dateformat')
-const message = require('../Common/Message')
+const messages = require('../Common/Message')
+const Pdfmail = require('../Common/PDFUtils')
 
-const generateWeekReportByDate = (request, input, callback) => {
+const pagination = (request, input) => {
   let pageStartDate = input.ReportTemplate_From_Date
   let pageEndDate = input.ReportTemplate_To_Date
   let lastPage = 0
   let currentPage = input.pageNumber
-
   if (currentPage === 0) {
     lastPage = 0
     pageStartDate = input.ReportTemplate_From_Date
@@ -39,25 +39,18 @@ const generateWeekReportByDate = (request, input, callback) => {
   }
   input.ReportTemplate_From_Date = pageStartDate
   input.ReportTemplate_To_Date = pageEndDate
-  generateWeekReport(request, input, result => {
-    if (result) {
-      let totalRecordCount = {}
-      totalRecordCount.NoOfPages = lastPage
-      result.totalRecordCount = totalRecordCount
-    }
-    callback(result)
-  })
+  let totalRecordCount = {}
+  totalRecordCount.NoOfPages = lastPage
+  return totalRecordCount
 }
-const generateWeekReport = (request, input, callback) => {
-  let fromDateTime = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
-  let toDateTime = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
-  const inputDate = {
-    Device_IDs: (input.ReportTemplate_DeviceIds).toString(),
+const repositoryInput = (request, input) => {
+  let inputTransform = {
+    Device_IDs: input.ReportTemplate_DeviceIds.toString(),
     StoreStartDate: input.ReportTemplate_From_Date,
     StoreEndDate: input.ReportTemplate_To_Date,
-    StartDateTime: fromDateTime,
-    EndDateTime: toDateTime,
-    CarDataRecordType_ID: input.CarDataRecordType_ID,
+    StartDateTime: dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time),
+    EndDateTime: dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time),
+    CarDataRecordType_ID: 11,
     ReportType: input.ReportTemplate_Type,
     LaneConfig_ID: 1,
     longestTime: input.longestTime,
@@ -65,84 +58,97 @@ const generateWeekReport = (request, input, callback) => {
     UserUID: request.userUid,
     UserEmail: request.UserEmail
   }
-
-  repository.getWeekReport(inputDate, (result) => {
-    if (result.length > 0) {
-      const repositoryData = result
-      let reportData = {}
-      let data = {}
-      data.timeMeasure = 3
-      data.selectedStoreIds = input.ReportTemplate_DeviceIds
-      data.startTime = moment(fromDateTime).format('LL')
-      data.stopTime = moment(toDateTime).format('LL')
-      let colors = _.filter(repositoryData, val => val.ColourCode)
-      let reportName = 'Week'
-      // Single Store
+  return inputTransform
+}
+const SingleStore = (weekReports, result, input) => {
+  let storeInfo = reportsUtils.prepareStoreDetails(weekReports, result.data[3], input)
+  let colors = result.data[4]
+  let goalstatisticsDetails = result.data[2]
+  let goalSettings = _.filter(goalstatisticsDetails, group => group['Menu Board - GoalA'])
+  const storeDetails = reportsUtils.getAllStoresDetails(weekReports, result.data[0], colors, goalSettings, input.ReportTemplate_Format)
+  if (input.longestTime) {
+    reportsUtils.prepareLongestTimes(weekReports, result.data[1], input.ReportTemplate_Format)
+  }
+  let getGoalTime = result.data[5]
+  const dayPartTotalObject = _.last(result.data[0])
+  const totalCars = dayPartTotalObject['Total_Car']
+  let dataArray = []
+  dataArray = reportsUtils.getGoalStatistic(goalstatisticsDetails, getGoalTime, dataArray, totalCars, input.ReportTemplate_Format, colors)
+  weekReports.goalData = dataArray
+  if (input.systemStatistics) {
+    let systemStatisticsLane
+    let systemStatisticsGenral
+    systemStatisticsLane = result.data[6]
+    systemStatisticsGenral = result.data[5]
+    if (systemStatisticsLane && systemStatisticsGenral) {
+      reportsUtils.prepareStatistics(weekReports, systemStatisticsLane, systemStatisticsGenral)
+    }
+  }
+  return weekReports
+}
+const multipleStore = (weekReports, result, input) => {
+  let storeInfo = reportsUtils.prepareStoreDetails(weekReports, result.data[3], input)
+  let colors = result.data[4]
+  let goalStatistics = result.data[2]
+  const storeDetails = reportsUtils.storesDetails(weekReports, result.data[0], colors, goalStatistics, input.ReportTemplate_Format)
+  return weekReports
+}
+const generateCSVTriggerEmail = (request, input, result, callBack) => {
+  let csvInput = {}
+  csvInput.type = `${messages.COMMON.CSVTYPE}`
+  csvInput.reportName = `${messages.COMMON.WEEKREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
+  csvInput.email = input.UserEmail
+  csvInput.subject = `${messages.COMMON.WEEKREPORTTITLE} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
+  dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput, csvResults => {
+    callBack(csvResults)
+  })
+}
+const weekReportController = (request, input, callback) => {
+  let weekReports = {}
+  let reportPagination = pagination(request, input)
+  let inputData = repositoryInput(request, input)
+  repository.getWeekReport(inputData, (result) => {
+    if (result.status === true) {
       if (!_.isUndefined(input.reportType) && (input.reportType.toLowerCase().trim() === 'csv' || input.reportType.toLowerCase().trim() === 'pdf')) {
         if (input.reportType.toLowerCase().trim() === 'csv') {
-          generateCSVOrPdfTriggerEmail(request, input, result)
-        } else {
-          let isMethod = 'PDF'
-          const pdf = jsonFromateChange(request, data, input, result, reportName, isMethod)
-          if (pdf) {
-            let output = {}
-            output.data = input.UserEmail
-            output.status = true
-            callback(output)
-          } else {
-            let output = {}
-            output.key = 'pdfNotificationFailed'
-            output.status = false
-            callback(output)
+          generateCSVTriggerEmail(request, input, result)
+        } else if (input.reportType.toLowerCase().trim() === 'pdf') {
+          let pdfInput = {}
+          pdfInput.type = `${messages.COMMON.PDFTYPE}`
+          pdfInput.reportName = `${messages.COMMON.WEEKREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
+          pdfInput.email = input.UserEmail
+          pdfInput.subject = `${messages.COMMON.WEEKREPORTTITLE} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
+          if (input.ReportTemplate_DeviceIds.length === 1) {
+            let weekRecords = SingleStore(weekReports, result, input)
+            let data = []
+            data = weekRecords
+            data.storeDetails = weekRecords.timeMeasure
+            Pdfmail.singleStore(data, pdfInput)
+          } else if (input.ReportTemplate_DeviceIds.length > 1) {
+            let weekRecords = multipleStore(weekReports, result, input)
+            let data = []
+            data = weekRecords
+            data.storeDetails = weekRecords.timeMeasure
+            Pdfmail.mutipleStore(data, pdfInput)
           }
         }
       } else if (input.ReportTemplate_DeviceIds.length === 1) {
-        let isMethod = 'singleReport'
-        const singleReport = jsonFromateChange(request, data, input, result, reportName, isMethod)
-        reportData = singleReport
-        reportData.status = true
-        callback(reportData)
+        let weekRecords = SingleStore(weekReports, result, input)
+        weekRecords.status = true
+        callback(weekRecords)
       } else if (input.ReportTemplate_DeviceIds.length > 1) {
-        let isMethod = 'multipleReport'
-        const multipleReport = jsonFromateChange(request, data, input, result, reportName, isMethod)
-        //  multipleReports.totalRecordCount = _.find(repositoryData, totalRecords => totalRecords.TotalRecCount)
-        console.log('multipleReport', multipleReport)
-        reportData = multipleReport
-        reportData.status = true
-
-        callback(reportData)
+        let weekRecords = multipleStore(weekReports, result, input)
+        weekRecords.status = true
+        callback(weekRecords)
       }
     } else {
       let output = {}
-
       output.key = 'noDataFound'
       output.status = false
       callback(output)
     }
   })
 }
-
-function generateCSVOrPdfTriggerEmail (request, input, result, callBack) {
-  let csvInput = {}
-  csvInput.type = `${message.COMMON.CSVTYPE}`
-  csvInput.reportName = `${message.COMMON.WEEKREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
-
-  csvInput.email = input.UserEmail
-  csvInput.subject = `${message.COMMON.WEEKREPORTTITLE} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
-  dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput, csvResults => {
-    callBack(csvResults)
-  })
-}
-const jsonFromateChange = (request, data, input, result, reportName, isMethod) => {
-  let pdfInput = {}
-  pdfInput.type = `${message.COMMON.PDFTYPE}`
-  pdfInput.reportName = `${message.COMMON.WEEKREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
-  pdfInput.email = input.UserEmail
-  pdfInput.subject = `${message.COMMON.WEEKREPORTTITLE} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
-  return dataExportUtil.prepareJson(data, input, result, reportName, pdfInput, isMethod)
-}
-
 module.exports = {
-  generateWeekReport,
-  generateWeekReportByDate
+  weekReportController
 }

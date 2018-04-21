@@ -1,3 +1,11 @@
+
+/****** Dropping the StoredProcedure [dbo].[usp_CreateGroup] if already exists *****/
+IF (EXISTS(SELECT *
+FROM sys.objects
+WHERE [name] = 'usp_CreateGroup' AND [type] ='P'))
+	DROP PROCEDURE [dbo].[usp_CreateGroup]
+GO
+
 -- ===========================================================
 --      Copyright © 2018, HME, All Rights Reserved
 -- ===========================================================

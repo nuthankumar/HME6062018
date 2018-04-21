@@ -1,3 +1,11 @@
+
+/****** Dropping the Table [dbo].[Group] if already exists *****/
+IF (EXISTS(SELECT *
+FROM sys.objects
+WHERE [name] = 'Group' AND [type] ='U'))
+	DROP TABLE [dbo].[Group]
+GO
+
 -- ===========================================================
 --      Copyright © 2018, HME, All Rights Reserved
 -- ===========================================================

@@ -1,3 +1,9 @@
+
+/****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details] if already exists *****/
+IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_HME_Cloud_Get_Report_By_Daypart_Details' AND [type] ='P'))
+	DROP PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details]
+GO
+
 -- ===========================================================
 --      Copyright © 2018, HME, All Rights Reserved
 -- ===========================================================
@@ -12,9 +18,11 @@
 -- -----------------------------------------------------------
 -- 1.
 -- ===========================================================
+-- exec usp_HME_Cloud_Get_Report_By_Daypart_Details_WithSubTotal @StoreIDs='3,4',@StoreStartDate='2018-03-23',@StoreEndDate='2018-03-24',@InputStartDateTime=N'2018-03-23 00:00:00',@InputEndDateTime=N'2018-03-24 10:30:00',@CarDataRecordType_ID='11',@ReportType='TC',@LaneConfig_ID=1,@PageNumber=1
+-- exec usp_HME_Cloud_Get_Report_By_Daypart_Details_WithSubTotal @StoreIDs='4',@StoreStartDate='2018-03-23',@StoreEndDate='2018-03-24',@InputStartDateTime=N'2018-03-23 00:00:00',@InputEndDateTime=N'2018-03-24 10:30:00',@CarDataRecordType_ID='11',@ReportType='AC',@LaneConfig_ID=1,@PageNumber=1
 -- ===========================================================
 
-ALTER PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details]
+CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details]
 (
 	@Device_IDs varchar(500),
 	@StoreStartDate date,
@@ -170,12 +178,11 @@ BEGIN
 	/*************************************
 	 step 2. populate, then roll up data
 	*************************************/
-	
-	
+
 	-- Get Users Pull-ins Preference for CarDataRecordType_ID
 	SELECT @CarDataRecordType_ID = User_Preferences_Preference_Value FROM itbl_User_Preferences WHERE 
 		User_Preferences_User_ID =(SELECT USER_ID FROM  tbl_Users WHERE User_UID = @UserUID ) AND User_Preferences_Preference_ID=9
-		
+
 	-- pull in raw data from proc
 	INSERT INTO #raw_data
 	EXECUTE dbo.usp_HME_Cloud_Get_Report_Raw_Data @Device_IDs, @StoreStartDate, @StoreEndDate, @StartDateTime, @EndDateTime, @CarDataRecordType_ID, @ReportType, @LaneConfig_ID
@@ -491,18 +498,17 @@ BEGIN
 	-- return avg time report
 	EXECUTE(@query)
 	
-		-- Get Users Primary Color Preference
+	-- Get Users Primary Color Preference
 		SET @Preferences_Preference_Value =''
 		SELECT @Preferences_Preference_Value = User_Preferences_Preference_Value FROM itbl_User_Preferences WHERE 
 			User_Preferences_User_ID =(SELECT USER_ID FROM  tbl_Users WHERE User_UID = @UserUID ) AND User_Preferences_Preference_ID=5
 		
 		IF(ISNULL(@Preferences_Preference_Value,'') ='')
-			SET @Preferences_Preference_Value = '##00b04c|##dcba00|##b40000'
+			SET @Preferences_Preference_Value = '#00b04c|#dcba00|#b40000'
 		
 		SELECT @Preferences_Preference_Value AS ColourCode
 
-
-
+		
 	-- return top 3 longest times
 	IF (@isMultiStore = 0 AND @PageNumber >0)
 		SELECT	e.headerName, t.DetectorTime, t.DeviceTimeStamp, e.Detector_ID
@@ -639,5 +645,6 @@ BEGIN
 	RETURN(0)
 END
 
--- exec usp_HME_Cloud_Get_Report_By_Daypart_Details_WithSubTotal @StoreIDs='3,4',@StoreStartDate='2018-03-23',@StoreEndDate='2018-03-24',@InputStartDateTime=N'2018-03-23 00:00:00',@InputEndDateTime=N'2018-03-24 10:30:00',@CarDataRecordType_ID='11',@ReportType='TC',@LaneConfig_ID=1,@PageNumber=1
--- exec usp_HME_Cloud_Get_Report_By_Daypart_Details_WithSubTotal @StoreIDs='4',@StoreStartDate='2018-03-23',@StoreEndDate='2018-03-24',@InputStartDateTime=N'2018-03-23 00:00:00',@InputEndDateTime=N'2018-03-24 10:30:00',@CarDataRecordType_ID='11',@ReportType='AC',@LaneConfig_ID=1,@PageNumber=1
+GO
+
+
