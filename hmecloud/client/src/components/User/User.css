@@ -1,0 +1,86 @@
+.editUser .forms {
+    margin-bottom: 25px;
+    margin-top: 47px;
+}
+
+.editUser .forms h3 {
+    font-size: 30px;
+    margin-bottom: 17px;
+}
+.editUser .fleft {
+    float: left;
+}
+
+.editUser .fright {
+    float: right;
+}
+
+.editUser .remove_button {
+    float: left;
+    margin-right: 150px;
+    margin-top: 30px;
+    margin-left: -5px;
+    margin-bottom: 15px;
+}
+
+.editUser table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+table.user_form {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    font-family: Arial;
+    vertical-align: baseline;
+}
+
+.editUser .forms th {
+    font-size: 14px;
+    text-align: left;
+}
+.editUser .cancel_butt {
+    font-size: 14px !important;
+    font-weight: bold;
+    vertical-align: middle;
+}
+.editUser a:link, a:visited, a:active {
+    color: #D41B3E;
+    font-size: inherit;
+    text-decoration: none;
+}
+.editUser .forms input[type=submit] {
+    background-color: #d41b3e;
+    border: none;
+    float: right;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 10px 25px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+.req:after {
+    color: #ff0000;
+    content: " * ";
+    display: inline;
+    font-weight: bold;
+}
+
+.editUser th.req {
+    padding: 10px;
+}
+
+.editUser label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: lighter;
+}
+
+.editUser #Content {
+    width: 100%;
+    min-width: 1126px;
+}
