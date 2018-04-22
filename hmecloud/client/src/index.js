@@ -9,7 +9,7 @@ import ReportGroupHierarchy from './components/Group/ReportGroupHierarchy'
 import SummaryReport from './components/Report/SummaryReport'
 import RawCarDataReport from './components/Report/RawCarDataReport'
 import LongestTime from './components/Report/LongestTime'
-import EditUser from './components/User/EditUser'
+import User from './components/User/User'
 import registerServiceWorker from './registerServiceWorker'
 import EmailAlert from './components/Alerts/Email'
 import './i18n'
@@ -33,7 +33,7 @@ ReactDOM.render(<Router>
         <Route exact path="/rawcardatareport" render={(props) => <Layout Params={props}><Route path='/rawcardatareport' component={Authenticate(RawCarDataReport)} /></Layout>} />
         <Route exact path="/grouphierarchy" render={(props) => <Layout Params={props}><Route path='/grouphierarchy' component={Authenticate(ReportGroupHierarchy)} /></Layout>} />        
         <Route exact path="/summaryreport" render={(props) => <Layout Params={props}><Route path='/summaryreport' component={Authenticate(SummaryReport)} /></Layout>} />       
-        <Route exact path="/editUser" render={(props) => <Layout Params={props}><Route path='/editUser' component={Authenticate(EditUser)} /></Layout>} />
+        <Route exact path="/user" render={(props) => <Layout Params={props}><Route path='/user' component={Authenticate(User)} /></Layout>} />
 
 
     </div>
