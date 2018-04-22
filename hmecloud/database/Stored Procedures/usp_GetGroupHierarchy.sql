@@ -5,7 +5,7 @@ IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_GetGroupHierarchy' AND 
 GO
 
 -- ===========================================================
---      Copyright © 2018, HME, All Rights Reserved
+--      Copyright Â© 2018, HME, All Rights Reserved
 -- ===========================================================
 -- Name			:	usp_GetGroupHierarchy
 -- Author		:	Selvendran K
@@ -71,6 +71,7 @@ BEGIN
 	RIGHT JOIN tbl_Stores AS store ON store.Store_ID = gs.StoreId
 	LEFT JOIN ltbl_Brands AS brand ON brand.Brand_ID = store.Store_Brand_ID
 	INNER JOIN tbl_DeviceInfo device ON store.store_ID = device.Device_Store_ID
+	WHERE store.Store_Account_ID = @AccountId
 	ORDER BY [Level],[Name]  
 END
 GO

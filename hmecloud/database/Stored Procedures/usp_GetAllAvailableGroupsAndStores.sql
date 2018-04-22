@@ -48,7 +48,7 @@ BEGIN
 		LEFT JOIN GroupStore AS gd ON s.Store_ID = gd.StoreID
 	WHERE 
 	gd.StoreID IS NULL
-		
+	AND s.Store_Account_ID = @AccountId	
 END
 GO
 

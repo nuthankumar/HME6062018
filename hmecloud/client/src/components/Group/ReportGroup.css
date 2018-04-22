@@ -112,14 +112,14 @@
     color: #212529;
 }
 .hierarchy-tree{
-  font-size: 18px;
+  font-size: 14px;
 }
 
 .grouphierarchy-tree{
   border: 1px solid grey;
   /*height: 450px;*/
   width: 100%;
-  overflow: none;
+  overflow: auto;
   padding:10px !important;
   background-color:#ffffff !important
 }
@@ -130,7 +130,7 @@
     }
 
 .grouphierarchy-tree .rc-tree li span.rc-tree-switcher.rc-tree-switcher_close {
-    background: url('../../images/sideArrow.PNG') !important;
+    background: url('../../images/sideArrow.PNG') no-repeat !important;
     background-position: -75px -56px;
 }
 .grouphierarchy-tree .rc-tree-title {
@@ -168,3 +168,4 @@
 {
   background: none;
 }
+

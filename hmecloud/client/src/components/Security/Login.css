@@ -405,9 +405,9 @@ input[type=checkbox], input[type=radio] {
     padding: 5px !important;
 }
 
-    .rc-tree li:hover {
+    /*.rc-tree li:hover {
         background: rgb(245, 242, 242);
-    }
+    }*/
 
 .rnshadeg {
     background-color: #ffffff;

@@ -12,6 +12,7 @@ const bodyParser = require('body-parser')
 const groupRouter = require('./Router/GroupRouter')
 const reportsTemplate = require('./Router/TemplateRouter')
 const summaryReport = require('./Router/StoreRouter')
+const userRouter = require('./Router/UserRouter')
 
 // JWT - Auth config
 const authentication = require('./Router/AuthenticationRouter')
@@ -49,6 +50,9 @@ app.use('/api/report', summaryReport)
 
 // Report Templates
 app.use('/api/reportTemplate', reportsTemplate)
+
+// Users
+app.use('/api/user', userRouter)
 
 app.use('/api/auth', authentication)
 /**
