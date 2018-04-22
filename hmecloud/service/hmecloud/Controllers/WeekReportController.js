@@ -7,7 +7,7 @@ const dateFormat = require('dateformat')
 const messages = require('../Common/Message')
 const Pdfmail = require('../Common/PDFUtils')
 
-const pagination = (request, input) => {
+const pagination = (weekReports, request, input) => {
   let pageStartDate = input.ReportTemplate_From_Date
   let pageEndDate = input.ReportTemplate_To_Date
   let lastPage = 0
@@ -41,7 +41,8 @@ const pagination = (request, input) => {
   input.ReportTemplate_To_Date = pageEndDate
   let totalRecordCount = {}
   totalRecordCount.NoOfPages = lastPage
-  return totalRecordCount
+  weekReports.NoOfPages = lastPage
+  return weekReports
 }
 const repositoryInput = (request, input) => {
   let inputTransform = {
@@ -105,7 +106,7 @@ const generateCSVTriggerEmail = (request, input, result, callBack) => {
 }
 const weekReportController = (request, input, callback) => {
   let weekReports = {}
-  let reportPagination = pagination(request, input)
+  let reportPagination = pagination(weekReports, request, input)
   let inputData = repositoryInput(request, input)
   repository.getWeekReport(inputData, (result) => {
     if (result.status === true) {
