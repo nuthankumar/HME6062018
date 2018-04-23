@@ -284,6 +284,9 @@ h2 .report-start-time-value,h2 .report-end-time-value{
   font-weight: normal;
       width: 175px;
 }
+.goalstatistics-table th.reportTableAttributesHeading:first-child{
+  width: 125px;
+}
 
 .goalstatistics-table td{
   border-top: 1px solid #FFFFFF;
@@ -292,6 +295,10 @@ h2 .report-start-time-value,h2 .report-end-time-value{
   vertical-align: middle;
   height: 21px;
 }
+
+.goalstatistics-table td:first-child{width: 125px;
+}
+
 .goalstatistics-table tr th{
   text-align : center;
 }
