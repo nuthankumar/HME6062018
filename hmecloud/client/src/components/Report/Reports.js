@@ -982,8 +982,8 @@ class Report extends Component {
       this.state.showLoader = true
       this.setState(this.state)
     let rawCarData = [];
-    let deviceUIds = this.state.deviceUIds
-    deviceUIds = deviceUIds.map(String);
+    // let deviceUIds = this.state.deviceUIds
+    // deviceUIds = deviceUIds.map(String);
     rawCarData.push(
         {
             "timeMeasure": parseInt(this.state.timeMeasure),
@@ -997,11 +997,12 @@ class Report extends Component {
             "include": this.state.include,
             "format": this.state.format,
             "deviceIds": template[0].deviceIds,
-            "advancedOptions": template[0].advancedOptions,
+            "advancedOption": template[0].advancedOption,
             "longestTime": template[0].longestTime,
             "systemStatistics":template[0].systemStatistics
         }
     )
+    console.log(JSON.stringify(rawCarData[0]))
     this.setState({
         rawCarRequest: rawCarData[0]
     });

@@ -580,8 +580,14 @@ span.redFont {
           width: 300px;
           white-space: nowrap;
           overflow: hidden;
-          color:red;
+          /* color:red; */
           text-overflow: ellipsis;
+        }
+        .storeWrap span:not(:first-child){
+          color:red
+        }
+        input.save-template::placeholder,input.save-template::-webkit-input-placeholder, input.save-template::-moz-placeholder, input.save-template:-ms-input-placeholder  { 
+         font-style: italic
         }
         
 .download-summaryreport-btn {
