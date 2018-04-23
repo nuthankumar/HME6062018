@@ -10,23 +10,23 @@ const sqlQuery = require('../Common/DataBaseQueries')
  * @public
  */
 const create = (user, callback) => {
-  repository.execute(sqlQuery.users.createuser, {
-    replacements: user,
-    type: dataBase.QueryTypes.SELECT
-  }, callback)
+    repository.execute(sqlQuery.users.createuser, {
+        replacements: user,
+        type: dataBase.QueryTypes.SELECT
+    }, callback)
 }
 
 /**
  * The method can be used to execute get user
- * @param  {input} userId templateId from  controller
+ * @param  {input} userUUId templateId from  controller
  * @param  {funct} callback Function will be called once the input executed.
  * @public
  */
-const get = (userId, callback) => {
-  repository.execute(sqlQuery.users.getReportsTemplate, {
-    replacements: { id: userId },
-    type: dataBase.QueryTypes.SELECT
-  }, result => callback(result[0]))
+const get = (userUUId, callback) => {
+    repository.execute(sqlQuery.users.getuser, {
+        replacements: { id: userUUId },
+        type: dataBase.QueryTypes.SELECT
+    }, callback)
 }
 
 /**
@@ -37,10 +37,10 @@ const get = (userId, callback) => {
  * @public
  */
 const getAll = (UserUid, callback) => {
-  repository.execute(sqlQuery.users.getAllReportsTemplates, {
-    replacements: { UserUid: UserUid },
-    type: dataBase.QueryTypes.SELECT
-  }, callback)
+    repository.execute(sqlQuery.users.getAllReportsTemplates, {
+        replacements: { UserUid: UserUid },
+        type: dataBase.QueryTypes.SELECT
+    }, callback)
 }
 
 /**
@@ -50,14 +50,14 @@ const getAll = (UserUid, callback) => {
  * @public
  */
 const deleteById = (userId, callback) => {
-  repository.execute(sqlQuery.users.deleteTemplate, {
-    replacements: { id: userId },
-    type: dataBase.QueryTypes.SELECT
-  }, callback)
+    repository.execute(sqlQuery.users.deleteTemplate, {
+        replacements: { id: userId },
+        type: dataBase.QueryTypes.SELECT
+    }, callback)
 }
 module.exports = {
-  create,
-  deleteById,
-  get,
-  getAll
+    create,
+    deleteById,
+    get,
+    getAll
 }
