@@ -1,12 +1,10 @@
 const dayPartRepository = require('../Repository/DayPartRepository')
 const dateUtils = require('../Common/DateUtils')
-const dataExportUtil = require('../Common/DataExportUtil')
 const _ = require('lodash')
 const moment = require('moment')
 const reportUtil = require('../Common/ReportGenerateUtils')
 const HashMap = require('hashmap')
-const dateFormat = require('dateformat')
-const message = require('../Common/Message')
+const responseObject = require('../Common/DayPart')
 
 /**
  *  This Service is used to Generate the Summary reports details for
@@ -15,8 +13,7 @@ const message = require('../Common/Message')
  * @param {*} callBack
  */
 const generateDaypartReport = (request, input, callBack) => {
-  let reportData = {
-    timeMeasure: '',
+  let reportData = { timeMeasure: '',
     storeName: '',
     storeDesc: '',
     startTime: '',
@@ -29,7 +26,6 @@ const generateDaypartReport = (request, input, callBack) => {
   let dayPartObject = {
     data: ''
   }
-
   let data = []
   let averageTimeResultSet
   let colorSettings
@@ -40,13 +36,11 @@ const generateDaypartReport = (request, input, callBack) => {
   let systemStatisticsLane
   let systemStatisticsGenral
   let totalRecordCount = {}
-
   /**
    * Configure start time and end time
    */
   input.ReportTemplate_From_Time = dateUtils.fromTime(input.ReportTemplate_From_Date, input.ReportTemplate_From_Time)
   input.ReportTemplate_To_Time = dateUtils.toTime(input.ReportTemplate_To_Date, input.ReportTemplate_To_Time)
-
   dayPartRepository.generateDayPartSummaryReport(input, result => {
     if (result.status === true) {
       if (input.ReportTemplate_DeviceIds.length > 1) {
@@ -65,11 +59,10 @@ const generateDaypartReport = (request, input, callBack) => {
         systemStatisticsLane = result.data[7]
         totalRecordCount = _.last(result.data)
       }
-
       if (averageTimeResultSet.length > 0) {
         totalRecordCount.NoOfPages = input.pageNumber || 1
         if (!_.isUndefined(input.reportType) && input.reportType.toLowerCase().trim() === 'csv') {
-          generateCSVOrPdfTriggerEmail(request, input, result, callBack)
+          responseObject.generateCSVOrPdfTriggerEmail(request, input, result, callBack)
         } else {
           if (input.ReportTemplate_DeviceIds.length < 2) {
             reportData.deviceIds = input.ReportTemplate_DeviceIds
@@ -93,7 +86,6 @@ const generateDaypartReport = (request, input, callBack) => {
     }
   })
 }
-
 function multiStoreResult (totalRecordCount, input, averageTimeResultSet, colorSettings, goalsStatistics, callBack) {
   let reportData = {
     timeMeasure: '',
@@ -127,17 +119,17 @@ function multiStoreResult (totalRecordCount, input, averageTimeResultSet, colorS
           let storeObj = dayPartResultsList[i]
           let store = {}
           if (storeObj.StoreNo === 'SubTotal') {
-            let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
+            let dataObject = responseObject.prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
             dataObject.groupId.value = `${item.GroupName} SubTotal`
             tempData.push(dataObject)
           } else if (storeObj.StoreNo === 'Total Daypart') {
-            let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
+            let dataObject = responseObject.prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
             dataObject.groupId.value = `Total Daypart`
             dataObject.groupId.const = `(W-Avg)`
             // dataObject.storeId = store
             tempData.push(dataObject)
           } else if (storeObj.StoreNo !== 'Total Daypart') {
-            let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
+            let dataObject = responseObject.prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
             store.name = `${storeObj.StoreNo}-${storeObj.Store_Name}`
             dataObject.store = store
             tempData.push(dataObject)
@@ -150,7 +142,7 @@ function multiStoreResult (totalRecordCount, input, averageTimeResultSet, colorS
   })
   if (!_.isUndefined(input.reportType) && input.reportType.toLowerCase().trim() === 'pdf') {
     let isMultiStore = true
-    generatePDFReport(reportData, input, isMultiStore)
+    responseObject.generatePDFReport(reportData, input, isMultiStore)
     let output = {}
     output.data = input.UserEmail
     output.status = true
@@ -160,7 +152,6 @@ function multiStoreResult (totalRecordCount, input, averageTimeResultSet, colorS
     callBack(reportData)
   }
 }
-
 function singleStoreResult (reportData, totalRecordCount, averageTimeResultSet, input, colorSettings, goalsStatistics, data, dayPartObject, singleDayParts, storeDetails, getGoalTime, longestTimes, systemStatisticsLane, systemStatisticsGenral, callBack) {
   reportData.totalRecordCount = totalRecordCount[0]
   let totoalCars = ''
@@ -170,7 +161,7 @@ function singleStoreResult (reportData, totalRecordCount, averageTimeResultSet, 
       if (item.StoreNo === 'Total Daypart') {
         totoalCars = item['Total_Car']
       }
-      let dataObject = prepareDayPartObject(item, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
+      let dataObject = responseObject.prepareDayPartObject(item, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
       data.push(dataObject)
     })
   })
@@ -178,13 +169,11 @@ function singleStoreResult (reportData, totalRecordCount, averageTimeResultSet, 
   singleDayParts.push(dayPartObject)
   reportData.timeMeasureType = singleDayParts
   reportUtil.prepareStoreDetails(reportData, storeDetails, input)
-  let dataArray = []
-
+  let dataArray
   dataArray = reportUtil.getGoalStatistic(goalsStatistics, getGoalTime, dataArray, totoalCars, input.ReportTemplate_Format, colorSettings)
   reportData.goalData = dataArray
+  // goal Longest time
   if (input.longestTime) {
-    // goal Longest time
-
     reportUtil.prepareLongestTimes(reportData, longestTimes, input.ReportTemplate_Format)
   }
   // system statistics
@@ -193,7 +182,7 @@ function singleStoreResult (reportData, totalRecordCount, averageTimeResultSet, 
   }
   if (!_.isUndefined(input.reportType) && input.reportType.toLowerCase().trim() === 'pdf') {
     let isMultiStore = false
-    generatePDFReport(reportData, input, isMultiStore)
+    responseObject.generatePDFReport(reportData, input, isMultiStore)
     let output = {}
     output.data = input.UserEmail
     output.status = true
@@ -203,94 +192,6 @@ function singleStoreResult (reportData, totalRecordCount, averageTimeResultSet, 
     callBack(reportData)
   }
 }
-
-function generatePDFReport (reportData, input, isMultiStore) {
-  let pdfInput = {}
-  pdfInput.type = `${message.COMMON.PDFTYPE}`
-  pdfInput.reportName = `${message.COMMON.DAYPARTREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
-  console.log('input input ', input)
-  pdfInput.email = input.UserEmail
-  pdfInput.subject = `${message.COMMON.DAYPARTREPORTTITLEPDF} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
-  let reportName = 'Daypart'
-  dataExportUtil.JsonForPDF(reportData, input, reportName, pdfInput, isMultiStore)
-}
-
-function generateCSVOrPdfTriggerEmail (request, input, result, callBack) {
-  let csvInput = {}
-  csvInput.type = message.COMMON.CSVTYPE
-  csvInput.reportName = `${message.COMMON.DAYPARTREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
-
-  csvInput.email = input.UserEmail
-  csvInput.subject = `${message.COMMON.DAYPARTREPORTTITLE} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
-  dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput, csvResults => {
-    callBack(csvResults)
-  })
-}
-
-function prepareDayPartObject (item, format, input, colors, goalSettings) {
-  let menu = {}
-  let greet = {}
-  let service = {}
-  let laneQueue = {}
-  let laneTotal = {}
-  let totalCars = {}
-  let dataObject = {}
-  let groupId = {}
-  let storeId = {}
-  let daypart = {}
-  let deviceId = {}
-  let deviceUid = {}
-
-  if (item.StartTime !== null && item.StoreDate !== 'Total Daypart' && item.EndTime !== null && input.ReportTemplate_DeviceIds.length < 2) {
-    var dateSplit = item['StoreDate'].split('-')
-    daypart.timeSpan = `${dateSplit[1]}/${dateSplit[2]}-Daypart${item['DayPartIndex']}`
-    daypart.currentDaypart = `${dateUtils.converthhmmsstt(item.StartTime)}-${dateUtils.converthhmmsstt(item.EndTime)}`
-    dataObject.daypart = daypart
-  }
-
-  groupId.value = item.GroupName
-  dataObject.groupId = groupId
-
-  deviceId.value = item.Device_ID
-  dataObject.deviceId = deviceId
-
-  deviceUid.value = item.Device_UID
-  dataObject.deviceUid = deviceUid
-
-  if ((_.isUndefined(item.Store_ID) && _.isUndefined(item.Store_Name)) || (item.Store_ID === null && item.Store_Name === null)) {
-    storeId.value = 'N/A'
-  } else {
-    storeId.value = `${item.Store_ID} - ${item.Store_Name}`
-  }
-  storeId.value = item.Store_ID
-  dataObject.storeId = storeId
-
-  menu.value = dateUtils.convertSecondsToMinutes(item['Menu Board'], format)
-  menu.color = reportUtil.getColourCode('Menu Board', item['Menu Board'], colors, goalSettings)
-  dataObject.menu = menu
-
-  greet.value = dateUtils.convertSecondsToMinutes(item.Greet, format)
-  greet.color = reportUtil.getColourCode('Greet', item.Greet, colors, goalSettings)
-  dataObject.greet = greet
-
-  service.value = dateUtils.convertSecondsToMinutes(item.Service, format)
-  service.color = reportUtil.getColourCode('Service', item.Service, colors, goalSettings)
-  dataObject.service = service
-
-  laneQueue.value = dateUtils.convertSecondsToMinutes(item['Lane Queue'], format)
-  laneQueue.color = reportUtil.getColourCode('Lane Queue', item['Lane Queue'], colors, goalSettings)
-  dataObject.laneQueue = laneQueue
-
-  laneTotal.value = dateUtils.convertSecondsToMinutes(item['Lane Total'], format)
-  laneTotal.color = reportUtil.getColourCode('Lane Total', item['Lane Total'], colors, goalSettings)
-  dataObject.laneTotal = laneTotal
-
-  totalCars.value = item['Total_Car']
-  dataObject.totalCars = totalCars
-
-  return dataObject
-}
-
 module.exports = {
   generateDaypartReport
 }

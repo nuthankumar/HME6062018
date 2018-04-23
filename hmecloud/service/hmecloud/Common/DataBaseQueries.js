@@ -10,7 +10,7 @@ const sqlQueries = {
   },
   'ReportTemplates': {
     'createReportTemplate': `exec [dbo].[usp_InsertReportTemplate]
-	@Uid = :Uid,
+@Uid = :Uid,
 @TemplateName = :TemplateName,
 @SessionUid = :SessionUid,
 @UserUid = :UserUid,
@@ -63,8 +63,8 @@ const sqlQueries = {
     @IsVerified =:IsVerified,
     @ResetPassword =:ResetPassword,
     @OwnerAccountId =:OwnerAccountId,
-    @CompanyId	=:CompanyId,
-    @FirstName	=:FirstName,
+    @CompanyId =:CompanyId,
+    @FirstName =:FirstName,
     @LastName =:LastName,
     @EmailAddress =:EmailAddress,
     @PasswordHash =:PasswordHash,

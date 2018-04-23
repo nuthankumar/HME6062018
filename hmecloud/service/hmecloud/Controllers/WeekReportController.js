@@ -48,7 +48,7 @@ const pagination = (weekReports, request, input) => {
   input.ReportTemplate_To_Date = pageEndDate
   let totalRecordCount = {}
   totalRecordCount.NoOfPages = lastPage
-  weekReports.NoOfPages = lastPage
+  weekReports.totalRecordCount = totalRecordCount
   return weekReports
 }
 /**
@@ -82,11 +82,11 @@ const repositoryInput = (request, input) => {
  * @public
  */
 const SingleStore = (weekReports, result, input) => {
-  let storeInfo = reportsUtils.prepareStoreDetails(weekReports, result.data[3], input)
+  reportsUtils.prepareStoreDetails(weekReports, result.data[3], input)
   let colors = result.data[4]
   let goalstatisticsDetails = result.data[2]
   let goalSettings = _.filter(goalstatisticsDetails, group => group['Menu Board - GoalA'])
-  const storeDetails = reportsUtils.getAllStoresDetails(weekReports, result.data[0], colors, goalSettings, input.ReportTemplate_Format)
+  reportsUtils.getAllStoresDetails(weekReports, result.data[0], colors, goalSettings, input.ReportTemplate_Format)
   if (input.longestTime) {
     reportsUtils.prepareLongestTimes(weekReports, result.data[1], input.ReportTemplate_Format)
   }
@@ -115,10 +115,10 @@ const SingleStore = (weekReports, result, input) => {
  * @public
  */
 const multipleStore = (weekReports, result, input) => {
-  let storeInfo = reportsUtils.prepareStoreDetails(weekReports, result.data[3], input)
+  reportsUtils.prepareStoreDetails(weekReports, result.data[3], input)
   let colors = result.data[4]
   let goalStatistics = result.data[2]
-  const storeDetails = reportsUtils.storesDetails(weekReports, result.data[0], colors, goalStatistics, input.ReportTemplate_Format)
+  reportsUtils.storesDetails(weekReports, result.data[0], colors, goalStatistics, input.ReportTemplate_Format)
   return weekReports
 }
 /**
@@ -148,7 +148,7 @@ const generateCSVTriggerEmail = (request, input, result, callBack) => {
  */
 const weekReportController = (request, input, callback) => {
   let weekReports = {}
-  let reportPagination = pagination(weekReports, request, input)
+  pagination(weekReports, request, input)
   let inputData = repositoryInput(request, input)
   repository.getWeekReport(inputData, (result) => {
     if (result.status === true) {

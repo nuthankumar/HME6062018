@@ -4,11 +4,11 @@ const validator = require('../Validators/UserValidator')
 const authenticator = require('../Controllers/AuthenticationController')
 
 const handelResult = (result, response) => {
-    if (result.status === true) {
-        response.status(200).send(result)
-    } else {
-        response.status(400).send(result)
-    }
+  if (result.status === true) {
+    response.status(200).send(result)
+  } else {
+    response.status(400).send(result)
+  }
 }
 /**
  * This service  using create user
@@ -19,7 +19,7 @@ const handelResult = (result, response) => {
  * @public
  */
 router.post('/create', authenticator, (request, response) => {
-    validator.create(request, result => handelResult(result, response))
+  validator.create(request, result => handelResult(result, response))
 })
 
 /**
@@ -31,7 +31,7 @@ router.post('/create', authenticator, (request, response) => {
  * @public
  */
 router.get('/get', authenticator, (request, response) => {
-    validator.get(request, result => handelResult(result, response))
+  validator.get(request, result => handelResult(result, response))
 })
 
 /**
@@ -43,7 +43,7 @@ router.get('/get', authenticator, (request, response) => {
  * @public
  */
 router.get('/getAll', authenticator, (request, response) => {
-    validator.getAll(request, result => handelResult(result, response))
+  validator.getAll(request, result => handelResult(result, response))
 })
 
 /**
@@ -55,7 +55,7 @@ router.get('/getAll', authenticator, (request, response) => {
  * @public
  */
 router.delete('/delete', authenticator, (request, response) => {
-    validator.deleteById(request, result => handelResult(result, response))
+  validator.deleteById(request, result => handelResult(result, response))
 })
 
 module.exports = router

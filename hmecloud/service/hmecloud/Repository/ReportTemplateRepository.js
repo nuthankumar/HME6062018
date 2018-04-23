@@ -38,7 +38,7 @@ const get = (reportTemplateId, callback) => {
  */
 const getAll = (UserUid, callback) => {
   repository.execute(sqlQuery.ReportTemplates.getAllReportsTemplates, {
-      replacements: {UserUid: UserUid },
+    replacements: { UserUid: UserUid },
     type: dataBase.QueryTypes.SELECT
   }, callback)
 }

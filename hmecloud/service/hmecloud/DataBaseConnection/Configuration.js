@@ -1,5 +1,4 @@
 const Sequelize = require('sequelize')
-const sql = require('mssql')
 
 const db = new Sequelize('hmeCloud', 'sa', 'nous@123', {
   host: '192.168.27.87',
