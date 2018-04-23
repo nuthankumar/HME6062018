@@ -332,11 +332,7 @@ const storesDetails = (weekRecords, result, colors, goalSettings, format) => {
     }
   })
 
-  let temp = []
-  let weekInfo = {}
-  weekInfo.data = storesData
-  temp.push(weekInfo)
-  weekRecords.timeMeasureType = temp
+  weekRecords.timeMeasureType = storesData
   return weekRecords
 }
 /**

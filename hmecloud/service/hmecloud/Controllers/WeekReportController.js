@@ -48,7 +48,7 @@ const pagination = (weekReports, request, input) => {
   input.ReportTemplate_To_Date = pageEndDate
   let totalRecordCount = {}
   totalRecordCount.NoOfPages = lastPage
-  weekReports.NoOfPages = lastPage
+  weekReports.totalRecordCount = totalRecordCount
   return weekReports
 }
 /**
