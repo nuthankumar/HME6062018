@@ -151,6 +151,14 @@ class Report extends Component {
     this.selKey = info.node.props.eventKey;
   };
 
+  showFromDatePicker(){
+    this.refs.fromDate.openCalendar();
+  }
+
+  showToDatePicker(){
+    this.refs.toDate.openCalendar();
+  }
+
   render() {
     const language = this.state.currentLanguage
     const { date, format, mode, inputFormat } = this.state;
@@ -236,7 +244,7 @@ class Report extends Component {
                     </span>
                     <div className="calendar">
                       <div className="calendar-icon">
-                        <img src={Calendar} aria-hidden="true" />
+                        <img src={Calendar} aria-hidden="true" onClick={this.showFromDatePicker.bind(this)}  />
                       </div>
                       <DateTimeField
                         className="date-time"
@@ -259,7 +267,7 @@ class Report extends Component {
                     </span>
                     <div className="calendar">
                       <div className="calendar-icon">
-                        <img src={Calendar} aria-hidden="true" />
+                        <img src={Calendar} aria-hidden="true" onClick={this.showToDatePicker.bind(this)} />
                       </div>
                       <DateTimeField
                         className="date-time"
@@ -907,20 +915,31 @@ class Report extends Component {
         this.setState(this.state)
         isError = true;
       } else {
-              let url = Config.apiBaseUrl + CommonConstants.apiUrls.createTemplate
+        let sameTemplate= false;
+        this.state.savedTemplates.map((template) => {
+          if(template.templateName === this.state.templateName){
+            sameTemplate = true
+          }
+        })
+        if(sameTemplate){
+          this.state.errorMessage = t[language].pleaseenterauniquetemplate
+          this.setState(this.state);
+          isError = true;
+        }else{
+          isError = false;
+          let url = Config.apiBaseUrl + CommonConstants.apiUrls.createTemplate
 
-              this.api.postData(url, createTemplateData[0], data => {
-                  this.state.successMessage = data.data;
-                  this.state.errorMessage = "";
-                  this.setState(this.state);
-                  this.getSavedReports();
-              }, error => {
-                  this.state.errorMessage = "ERROR";
-                  this.state.successMessage = "";
-                  this.setState(this.state);
-              })
-
-
+          this.api.postData(url, createTemplateData[0], data => {
+              this.state.successMessage = data.data;
+              this.state.errorMessage = "";
+              this.setState(this.state);
+              this.getSavedReports();
+          }, error => {
+              this.state.errorMessage = "ERROR";
+              this.state.successMessage = "";
+              this.setState(this.state);
+          })
+        }
       }
     }
     if (!isError) {
