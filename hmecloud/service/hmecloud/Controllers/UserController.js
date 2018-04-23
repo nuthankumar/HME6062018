@@ -68,24 +68,34 @@ const create = (user, callback) => {
  * @param  {funct} callback Function will be called once the input executed.
  * @public
  */
-const get = (user, request, callback) => {
+const get = (user, callback) => {
   let output = {}
-  repository.get(user, (result) => {
-    if (result) {
-      let user = result
-      user.FromDate = dateUtils.convertYYYYMMDD(user.FromDate)
-      user.ToDate = dateUtils.convertYYYYMMDD(user.ToDate)
-      user.OpenTime = dateUtils.converthhmmtt(user.OpenTime)
-      user.CloseTime = dateUtils.converthhmmtt(user.CloseTime)
-      user.TimeMeasure = messages.TimeMeasure[user.TimeMeasure]
-      user.Type = messages.Type[user.Type]
-      user.Format = messages.TimeFormat[user.Format]
-      user.DeviceUUIds = user.Devices.split(',')
-      user.AdvancedOption = (user.AdvancedOption === 1)
-      user.LongestTime = (user.LongestTime === 1)
-      user.SystemStatistics = (user.SystemStatistics === 1)
-      user.Close = (user.Close === 1)
-      user.Open = (user.Open === 1)
+    repository.get(user.uuId, (result) => {
+    if (result.length > 0) {
+        let userProfile = result[0]
+        let userRole = result[1]
+        let userStores = result[2]
+        let user = {}
+        if (userProfile) {
+            user.uuId = userProfile.User_UID
+            user.isActive = userProfile.User_IsActive
+            user.firstName = userProfile.User_FirstName
+            user.lastName = userProfile.User_LastName
+            user.userEmail = userProfile.User_EmailAddress
+        }
+        user.userRole = ""
+        if (userRole) {
+            user.userRole = userRole.Role_ID
+        }
+        user.storeIds = []
+        if (userStores) {
+            let storeIds = []
+            for (let i = 0; i < userStores.length; i++) {
+                let userStore = userStores[i]
+                storeIds.push(userStore.Store_ID)
+            }
+            user.storeIds = storeIds
+        }
 
       output.data = user
       output.status = true
