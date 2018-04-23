@@ -33,9 +33,7 @@ ReactDOM.render(<Router>
         <Route exact path="/rawcardatareport" render={(props) => <Layout Params={props}><Route path='/rawcardatareport' component={Authenticate(RawCarDataReport)} /></Layout>} />
         <Route exact path="/grouphierarchy" render={(props) => <Layout Params={props}><Route path='/grouphierarchy' component={Authenticate(ReportGroupHierarchy)} /></Layout>} />        
         <Route exact path="/summaryreport" render={(props) => <Layout Params={props}><Route path='/summaryreport' component={Authenticate(SummaryReport)} /></Layout>} />       
-        <Route exact path="/user" render={(props) => <Layout Params={props}><Route path='/user' component={Authenticate(User)} /></Layout>} />
-
-
+        <Route exact path="/user/:uuid?" render={(props) => <Layout Params={props}><Route path='/user/:uuid?' component={Authenticate(User)} /></Layout>} />
     </div>
 </Router>, document.getElementById('root'))
 registerServiceWorker()

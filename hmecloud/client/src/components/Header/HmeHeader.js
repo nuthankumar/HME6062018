@@ -46,7 +46,7 @@ export default class HmeHeader extends React.Component {
 
     componentDidMount() {
         if (localStorage.getItem('token')) {
-            this.setUserContext() // to-do: remove this once its set @ cfm-app
+          this.setUserContext() // to-do: remove this once its set @ cfm-app
         }
         document.addEventListener('mousedown', this.handleClickOutside);
     }
@@ -77,7 +77,7 @@ export default class HmeHeader extends React.Component {
         else {
             let token = UserContext.getToken();
             let userObject = this.authService.getTokenDetails(token);
-            this.state.userName = userObject.name;
+            this.state.userName = userObject.name ? userObject.name : userObject.User_LastName + ',' + userObject.User_FirstName;
         }
         this.setState(this.state)
     }

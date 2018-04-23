@@ -84,3 +84,108 @@ table.user_form {
     width: 100%;
     min-width: 1126px;
 }
+
+
+.editUser .form_cbox {
+    width: 290px;
+    border: 1px solid gray;
+    height: 169px;
+    overflow-y: auto;
+}
+.editUser .forms input[type=button] {
+    background-color: #d41b3e;
+    border: none;
+    float: right;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 10px 25px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+
+.editUser .forms select {
+    background-color: #ebebeb;
+    width: 100%;
+}
+.editUser span.select_all {
+    color: #B9B9B9;
+    font-style: italic;
+    font-weight:lighter
+}
+
+.editUser #select, .editUser #select-none, .editUser #remove {
+    color: #D41B3E !important;
+}
+
+.ctable {
+    margin: 0 auto;
+}
+
+    .ctable table {
+        width: 100%;
+    }
+
+    .ctable .theader,.ctable .cheader {
+        border: 1px solid #b9b9b9;
+        color: #757575;
+    }
+
+        .ctable .theader th.dateTime {
+            width: 200px;
+            user-select: none;
+        }
+        .ctable .theader th.page {
+            width: 125px;
+            user-select: none;
+        }
+        .ctable .theader th.action {
+            width: 100px;
+            user-select: none;
+        }
+        .ctable .theader th.record {
+            width: 300px;
+            user-select: none;
+        }
+
+.ctable tr.theader th {
+    font-size: 16px;
+}
+
+    .ctable .ctable th {
+        padding: 10px;
+    }
+.ctable tr.tdata td {
+    font-size: 14px;
+}
+
+    .ctable td {
+        padding: 10px;
+        vertical-align: top;
+    }
+    .ctable caption {
+        font-size: 16px;
+        font-weight: 600;
+        text-align: center;
+        color: black;
+    }
+.viewing_as {
+    background: #ececec;
+    display: table-cell;
+    font-size: 12px;
+    padding: 5px 7px 5px 5px;
+    border-radius: 0px 0px 8px 0px;
+}
+.view-as-user {
+    background: #E4F2FB;
+    border-radius: 5px 5px 5px 5px;
+    float: right;
+    border: 2px groove #D4E7F4;
+    padding: 5px;
+    text-align: center;
+    margin-right: 15px;
+}
+.ctable .theader a, .cheader a {
+    color: #757575;
+    font-weight:lighter
+}

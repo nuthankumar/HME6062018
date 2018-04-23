@@ -1461,7 +1461,7 @@ const language = [
     'Groups': 'groupes',
 
 
-    //added
+//added
 
 //    'requiredAccountId': 'Le numéro accountId est requis',
 //    'notRecordsFound': 'Aucun enregistrement trouvé',

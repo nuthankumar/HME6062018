@@ -2,6 +2,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import HmeHeader from '../Header/HmeHeader';
+import SettingsHeader from '../Header/SettingsHeader'
 import AdminSubHeader from '../Header/adminSubHeader'
 import Footer from '../Footer/Footer';
 import { Config } from '../../Config'
@@ -33,7 +34,7 @@ export default class Layout extends React.Component {
 
         this.state = {
             modalIsOpen: false,
-            signoutTime : 20000
+            signoutTime: 20000
         };
 
         this.openModal = this.openModal.bind(this);
@@ -64,11 +65,11 @@ export default class Layout extends React.Component {
              clearTimeout(signout);
              }
          }.bind(this), this.state.signoutTime)
-    } 
+    }
 
     openModal() {
         this.setState({ modalIsOpen: true });
- 
+
     }
 
     closeModal() {
@@ -79,12 +80,12 @@ export default class Layout extends React.Component {
     signOutInterval(isAdmin, isLoggedIn) {
         if (isAdmin && isLoggedIn && this.authService.getMasquerade()) {
             let autoInterval = setInterval(function () {
-               if (!this.state.modalIsOpen) {                 
+               if (!this.state.modalIsOpen) {
                    clearInterval(autoInterval);
                    this.openModal()
                    this.autoSignout();
                 }
-           }.bind(this), 3000000) 
+           }.bind(this), 3000000)
         }
     }
     setUserContext() {
@@ -109,7 +110,7 @@ export default class Layout extends React.Component {
         let pathName = Params.location.pathname;
         const params = new URLSearchParams(this.props.Params.location.search);
         const token = params.get('token') ? params.get('token'):null
-        const admin = params.get('a') =='true' ? true : false 
+        const admin = params.get('a') =='true' ? true : false
         //const admin = params.get('atoken') ? true : false;
         const uuid = params.get('uuid') ? params.get('uuid') : null
         const userName = params.get('un') ? params.get('un') : null
@@ -118,9 +119,12 @@ export default class Layout extends React.Component {
             this.authService.setToken(token, admin)
             UserContext.isLoggedIn()
             let path = window.location.pathname;
+            if (uuid) {
+                path += '?uuid=' + uuid;
+            }
             window.location.href = path;
         }
-        
+
         if (uuid) {
                 this.authService.setUUID(uuid)
         }
@@ -131,18 +135,23 @@ export default class Layout extends React.Component {
             this.authService.setMasquerade(masquerade)
         }
 
-        localStorage.setItem('id_token', Config.token)
+         localStorage.setItem('id_token', Config.token)
         let idToken = localStorage.getItem('id_token')
         let isAdministrator = (idToken) ? true : false;
-         
+
         isAdministrator = true;
         let isAdmin = false
         let isLoggedIn = false;
         let adminLogo = false
 
+        let isSettings = false
         if (window.location.pathname == '/admin') {
             isAdmin = true
             this.authService.setAdmin(isAdmin)
+        }
+        if (window.location.pathname == '/user') {
+            isSettings = true
+            //this.authService.setAdmin(isAdmin)
         }
         else {
             isAdmin = UserContext.isAdmin();
@@ -162,7 +171,7 @@ export default class Layout extends React.Component {
         if ((!isLoggedIn && window.location.pathname == '/admin') || isAdmin) {
             adminLogo = true
         }
-         let userToken = localStorage.getItem('token') ? localStorage.getItem('token') : localStorage.getItem('ctx_token') ? localStorage.getItem('ctx_token') : localStorage.getItem('id_token') 
+         let userToken = localStorage.getItem('token') ? localStorage.getItem('token') : localStorage.getItem('ctx_token') ? localStorage.getItem('ctx_token') : localStorage.getItem('id_token')
          let contextUserEmail = this.authService.getTokenDetails(userToken);
         return (
             <div>
@@ -178,11 +187,13 @@ export default class Layout extends React.Component {
                 </Modal>
                 <HmeHeader isAdministrator={isAdministrator} isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} />
                 <AdminSubHeader isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} pathName={pathName} />
+                <div className={!isAdmin && isSettings ? 'show' : 'hidden'}>
+                    <SettingsHeader isAdmin={isAdmin} adminLogo={adminLogo}  isLoggedIn={isLoggedIn} /></div>
                 <div className="hmeBody">
                     {children}
                 </div>
                 <Footer />
-              
+
             </div>
         );
     }
