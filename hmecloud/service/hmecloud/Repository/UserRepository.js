@@ -18,15 +18,15 @@ const create = (user, callback) => {
 
 /**
  * The method can be used to execute get user
- * @param  {input} userId templateId from  controller
+ * @param  {input} userUUId templateId from  controller
  * @param  {funct} callback Function will be called once the input executed.
  * @public
  */
-const get = (userId, callback) => {
-    repository.execute(sqlQuery.users.getReportsTemplate, {
-        replacements: { id: userId },
+const get = (userUUId, callback) => {
+    repository.execute(sqlQuery.users.getuser, {
+        replacements: { id: userUUId },
         type: dataBase.QueryTypes.SELECT
-    }, result => callback(result[0]))
+    }, callback)
 }
 
 /**
