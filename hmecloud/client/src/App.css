@@ -43,3 +43,26 @@
   margin-right:auto;
  /* width: 1130px;*/ 
 }
+.forms *{
+  font-size: 12px;
+}
+.forms input, .forms select {
+	border: 1px solid #b9b9b9;
+	margin: 5px;
+    padding: 5px;
+}
+.forms input[type=text], .forms input[type=password] {
+	width:200px;
+}
+.form_cbox {
+	border: 1px solid #B9B9B9;
+	height: 125px;
+	margin: 5px 0 0 5px;
+	overflow: auto;
+	padding: 5px;
+	width: 250px;
+}
+
+select.wide_select {
+	width:260px;
+}

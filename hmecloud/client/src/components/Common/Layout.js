@@ -189,7 +189,7 @@ export default class Layout extends React.Component {
                 <AdminSubHeader isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} pathName={pathName} />
                 <div className={!isAdmin && isSettings ? 'show' : 'hidden'}>
                     <SettingsHeader isAdmin={isAdmin} adminLogo={adminLogo}  isLoggedIn={isLoggedIn} /></div>
-                <div className="hmeBody">
+                <div className="hmeBody forms">
                     {children}
                 </div>
                 <Footer />

@@ -7,12 +7,12 @@ WHERE [name] = 'usp_GetUserAudit' AND [type] ='P'))
 GO
 
 -- ===========================================================
---      Copyright Â© 2018, HME, All Rights Reserved
+--      Copyright © 2018, HME, All Rights Reserved
 -- ===========================================================
 -- Name			:	usp_GetUserByEmail
 -- Author		:	Selvendran K
 -- Created		:	20-APRIL-2018
--- Tables		:	dtbl_Audit_User
+-- Tables		:	tbl_Users
 -- Purpose		:	Get user audit by id
 -- ===========================================================
 --				Modification History
@@ -26,22 +26,28 @@ GO
 -- ===========================================================
 
 CREATE PROCEDURE [dbo].[usp_GetUserAudit]
-    @UserUid				VARCHAR(32)
+    @UserUid				VARCHAR(32), 
+	@PageNumber				INT = 1,  
+	@PageSize				INT = 1000
 AS
 BEGIN
 
    WITH Get_User_Audit
     AS
     (
-        SELECT	TOP 1000 
+        SELECT	--TOP 1000 
         		au.Audit_LastLogin,
                 au.Audit_Action,
                 [action_pos] = CHARINDEX('st=', au.Audit_Action),
                 [action_len] = CHARINDEX('&', au.Audit_Action, CHARINDEX('st=', au.Audit_Action)) - CHARINDEX('st=', au.Audit_Action) - 3,
                 [first_&_pos] = CHARINDEX('&', au.Audit_Action)
         FROM 	dbo.dtbl_Audit_User au WITH (NOLOCK)
-        WHERE	EXISTS(SELECT 1 FROM dbo.tbl_Users u WITH (NOLOCK) WHERE u.User_ID = au.Audit_User_ID AND u.User_UID=@UserUid)
+        INNER JOIN tbl_Users u ON u.[User_ID] = au.Audit_User_ID
+		WHERE u.User_UID=@UserUid
         AND		au.Audit_LastLogin > DateAdd(month, -3, GetDate())
+		ORDER BY Audit_LastLogin
+		OFFSET @PageSize * (@PageNumber - 1) ROWS
+		FETCH NEXT @PageSize ROWS ONLY
     )
     SELECT	Audit_LastLogin,
             Audit_Action,
