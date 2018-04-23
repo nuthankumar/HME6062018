@@ -26,7 +26,12 @@
     margin-top : 40px;
   }
   .reportgroup-delete{
-    background: #d41b3e !important;
+    background-color: #d41b3e !important;
+    color: #ffffff !important;
+    cursor: pointer;
+    border-color: #D41B42 !important;
+    float: left;
+    padding: 10px 25px !important;
   }
   .reportgroup-delete,.reportgroup-cancel{
     margin-left : 5px;
@@ -60,12 +65,22 @@
     border-radius : 0 !important;
   }
 
-  .save-group-btn,.add-group-btn {
+  .add-group-btn {
     background-color: #d41b3e !important;
     color: #ffffff !important;
     cursor: pointer;
     border-color: #D41B42 !important;
   }
+
+  .save-group-btn{
+    background-color: #d41b3e !important;
+    color: #ffffff !important;
+    cursor: pointer;
+    border-color: #D41B42 !important;
+    float: left;
+    padding: 10px 25px !important;
+  }
+
   .move-group-store{
     text-align:center;
         top: 150px;
