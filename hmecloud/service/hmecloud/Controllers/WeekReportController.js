@@ -81,10 +81,16 @@ const SingleStore = (weekReports, result, input) => {
   }
   let getGoalTime = result.data[5]
   const dayPartTotalObject = _.last(result.data[0])
-  const totalCars = dayPartTotalObject['Total_Car']
-  let dataArray = []
-  dataArray = reportsUtils.getGoalStatistic(goalstatisticsDetails, getGoalTime, dataArray, totalCars, input.ReportTemplate_Format, colors)
-  weekReports.goalData = dataArray
+  let totalCars
+  if (dayPartTotalObject) {
+    totalCars = dayPartTotalObject['Total_Car']
+    let dataArray = []
+    dataArray = reportsUtils.getGoalStatistic(goalstatisticsDetails, getGoalTime, dataArray, totalCars, input.ReportTemplate_Format, colors)
+    weekReports.goalData = dataArray
+  } else {
+    weekReports.goalData = []
+  }
+
   if (input.systemStatistics) {
     let systemStatisticsLane
     let systemStatisticsGenral
