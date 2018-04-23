@@ -39,7 +39,7 @@ const create = (reportTemplate, callback) => {
     if (result.length > 0) {
       let isTemplateCreated = result[0]
       if (isTemplateCreated.IsRecordInserted === 1) {
-        output.key = 'reportTemplateAlreadyExist'
+        output.key = 'pleaseenterauniquetemplate'
         output.status = true
       } else if (isTemplateCreated.IsRecordInserted > 1) {
         output.key = 'reportTemplatecreateSuccess'

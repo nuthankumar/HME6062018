@@ -4,7 +4,6 @@ const _ = require('lodash')
 const moment = require('moment')
 const reportUtil = require('../Common/ReportGenerateUtils')
 const HashMap = require('hashmap')
-const responseObject = require('../Common/DayPartUtil')
 
 /**
  *  This Service is used to Generate the Summary reports details for

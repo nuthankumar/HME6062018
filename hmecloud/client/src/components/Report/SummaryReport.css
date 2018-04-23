@@ -280,7 +280,12 @@ h2 .report-start-time-value,h2 .report-end-time-value{
       width: 125px;
 }
 .goalstatistics-table th.reportTableAttributesHeading{
+  font-size: 10px;
+  font-weight: normal;
       width: 175px;
+}
+.goalstatistics-table th.reportTableAttributesHeading:first-child{
+  width: 125px;
 }
 
 .goalstatistics-table td{
@@ -290,6 +295,10 @@ h2 .report-start-time-value,h2 .report-end-time-value{
   vertical-align: middle;
   height: 21px;
 }
+
+.goalstatistics-table td:first-child{width: 125px;
+}
+
 .goalstatistics-table tr th{
   text-align : center;
 }
@@ -300,6 +309,8 @@ h2 .report-start-time-value,h2 .report-end-time-value{
 }
 
 .goalstatistics-table.goalstatistics-table-content{
+  font-size: 12px;
+  font-weight: normal;
   border-bottom: 1px solid #aeaeae;
 }
 
@@ -391,10 +402,16 @@ table .th {
   width: 1125px;
 }
 .table-layout th {
-  font-weight: bold;
+  /* font-weight: bold; */
   font-size:12px;
   height: 30px;
 }
+.table-layout th span{
+  /* font-weight: bold; */
+  font-size:10px;
+  height: 30px;
+}
+
 .table-layout th{
 	/* background:url(/images/th_background_up.png); */
 	background-color: #0087a1;

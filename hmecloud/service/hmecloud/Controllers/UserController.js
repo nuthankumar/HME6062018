@@ -9,8 +9,8 @@ const uuidv4 = require('uuid/v4')
  * @public
  */
 const create = (user, callback) => {
-  let output = {}
-  const values = {
+    let output = {}
+    const values = {
     Uid: uuidv4().toUpperCase(),
     IsActive: user.isActive,
     IsVerified: 0,
@@ -30,7 +30,7 @@ const create = (user, callback) => {
   repository.create(values, (result) => {
     if (result.length > 0) {
       let isUserCreated = result[0]
-      if (isUserCreated.IsUserCreated !== null && isUserCreated.IsUserCreated > 1) {
+      if (isUserCreated.IsUserCreated !== null && isUserCreated.IsUserCreated > 0) {
         output.key = 'usercreateSuccess'
         output.status = true
       } else {
@@ -44,6 +44,37 @@ const create = (user, callback) => {
       callback(output)
     }
   })
+}
+
+const update = (user, callback) => {
+    let output = {}
+    const values = {
+        Uid: user.uuId,
+        IsActive: user.isActive,
+        FirstName: user.firstName,
+        LastName: user.lastName,
+        EmailAddress: user.userEmail,
+        UpdatedDTS: user.createdDTS,
+        Stores: user.storeIds.toString(),
+        UserRole: user.userRole
+    }
+    repository.update(values, (result) => {
+        if (result.length > 0) {
+            let isUserUpdated = result[0]
+            if (isUserUpdated.IsUserUpdated !== null && isUserUpdated.IsUserUpdated > 0) {
+                output.key = 'userupdatedSuccess'
+                output.status = true
+            } else {
+                output.key = 'noDataFound'
+                output.status = false
+            }
+            callback(output)
+        } else {
+            output.key = 'userupdateFailure'
+            output.status = false
+            callback(output)
+        }
+    })
 }
 
 /**
@@ -69,7 +100,7 @@ const get = (user, callback) => {
       }
       user.userRole = ''
       if (userRole) {
-        user.userRole = userRole.Role_ID
+        user.userRole = userRole.Role_UID
       }
       user.storeIds = []
       if (userStores) {
@@ -125,7 +156,6 @@ const deleteById = (input, callback) => {
         if (result.length > 0) {
             let isUserDeleted = result[0]
             if (Number(isUserDeleted.IsUserDeleted) > 0) {
-                console.log("Inside if block")
                 output.key = 'userdeleteSuccess'
                 output.status = true
                 callback(output)
@@ -146,5 +176,6 @@ module.exports = {
   create,
   deleteById,
   get,
-  getAll
+  getAll,
+  update
 }
