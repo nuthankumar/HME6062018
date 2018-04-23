@@ -5,7 +5,7 @@ const createGroup = (request, callback) => {
   if (request.body.name) {
     const input = {
       id: request.body.id,
-      name: request.body.name,
+      name: (request.body.name).trim(),
       description: request.body.description,
       groups: request.body.groups,
       stores: request.body.stores,

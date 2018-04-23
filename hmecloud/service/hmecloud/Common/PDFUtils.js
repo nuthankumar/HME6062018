@@ -2,9 +2,10 @@ const fs = require('fs')
 const moment = require('moment')
 const PdfBuffer = require('dynamic-html-pdf')
 const mail = require('../Common/EmailUtil')
+const path = require('path')
 
 const mutipleStore = (reportData, pdfInput, callback) => {
-  const html = fs.readFileSync(__dirname + '/MultipleStore.html', 'utf8')
+  const html = fs.readFileSync(path.dirname(__dirname) + '/MultipleStore.html', 'utf8')
   const reportName = reportData.reportName
   const options = {
     format: 'Letter',
@@ -55,7 +56,7 @@ const mutipleStore = (reportData, pdfInput, callback) => {
 }
 
 const singleStore = (reportData, pdfInput, callback) => {
-  var html = fs.readFileSync(__dirname + '/SingleStore.html', 'utf8')
+  var html = fs.readFileSync(path.dirname(__dirname) + '/SingleStore.html', 'utf8')
   var options = {
     format: 'Letter',
     orientation: 'landscape',

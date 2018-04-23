@@ -73,7 +73,8 @@ const sqlQueries = {
     @CreatedBy =:CreatedBy,
     @Stores =:Stores,
     @UserRole =:UserRole`,
-    'getuser': `EXEC [dbo].[usp_GetUserById] @Uid =:id`
+      'getuser': `EXEC [dbo].[usp_GetUserById] @Uid =:id`,
+      'deleteuser': `EXEC [dbo].[usp_DeleteUser] @Uid =:id`
   },
   'ROLES': {
     'userRoles': 'EXEC [dbo].[usp_GetRoles] @AccountId = :AccountId, @IsCorporate = null, @IsHidden =null'

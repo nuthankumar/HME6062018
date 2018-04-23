@@ -91,7 +91,6 @@ const getRawCarDataReport = (input, callBack) => {
     })
   } else {
     callBack({
-
       key: 'invalidReportType',
       status: false
     })
@@ -112,13 +111,6 @@ const generateCsv = (input, response) => {
     }
   })
 }
-
-module.exports = {
-  generateReport,
-  generateCsv,
-  getRawCarDataReport
-}
-
 /**
  *
  * @param {*} rawCarData
@@ -178,4 +170,9 @@ function prepareResponsObject (result, departTimeStampMap, rawCarDataList, rawCa
   })
 
   return rawCarDataList
+}
+module.exports = {
+  generateReport,
+  generateCsv,
+  getRawCarDataReport
 }

@@ -3,16 +3,12 @@ const _ = require('lodash')
 const repository = require('../Repository/StoresRepository')
 const dataExportUtil = require('../Common/DataExportUtil')
 const reportsUtils = require('../Common/ReportGenerateUtils')
+const storeInfo = require('../Common/WeekReportUtils')
 const dateFormat = require('dateformat')
 const messages = require('../Common/Message')
 const Pdfmail = require('../Common/PDFUtils')
-
 /**
  * The method can be used to execute Pagination Details
- * @param  {weekReports} weekReports empty object and get back the results
- * @param  {request} request form validator
- * @param  {input} input form validator
- * @public
  */
 const pagination = (weekReports, request, input) => {
   let pageStartDate = input.ReportTemplate_From_Date
@@ -53,9 +49,6 @@ const pagination = (weekReports, request, input) => {
 }
 /**
  * The method can be used to execute preaping the input to database
- * @param  {request} request form validator
- * @param  {input} input form validator
- * @public
  */
 const repositoryInput = (request, input) => {
   let inputTransform = {
@@ -76,17 +69,13 @@ const repositoryInput = (request, input) => {
 }
 /**
  * The method can be used to execute SingleStore function based on input
- * @param  {weekReports} weekReports empty object and get back the results
- * @param  {result} result form database
- * @param  {input} input form validator
- * @public
  */
 const SingleStore = (weekReports, result, input) => {
   reportsUtils.prepareStoreDetails(weekReports, result.data[3], input)
   let colors = result.data[4]
   let goalstatisticsDetails = result.data[2]
   let goalSettings = _.filter(goalstatisticsDetails, group => group['Menu Board - GoalA'])
-  reportsUtils.getAllStoresDetails(weekReports, result.data[0], colors, goalSettings, input.ReportTemplate_Format)
+  storeInfo.singleStoreinfo(weekReports, result.data[0], colors, goalSettings, input.ReportTemplate_Format)
   if (input.longestTime) {
     reportsUtils.prepareLongestTimes(weekReports, result.data[1], input.ReportTemplate_Format)
   }
@@ -109,25 +98,16 @@ const SingleStore = (weekReports, result, input) => {
 }
 /**
  * The method can be used to execute multipleStore function based on input
- * @param  {weekReports} weekReports empty object and get back the results
- * @param  {result} result form database
- * @param  {input} input form validator
- * @public
  */
 const multipleStore = (weekReports, result, input) => {
   reportsUtils.prepareStoreDetails(weekReports, result.data[3], input)
   let colors = result.data[4]
   let goalStatistics = result.data[2]
-  reportsUtils.storesDetails(weekReports, result.data[0], colors, goalStatistics, input.ReportTemplate_Format)
+  storeInfo.multipleStoreInfo(weekReports, result.data[0], colors, goalStatistics, input.ReportTemplate_Format)
   return weekReports
 }
 /**
  * The method can be used to execute report converting json to CSV and sending mail
- * @param  {weekReports} weekReports empty object and get back the results
- * @param  {result} result form database
- * @param  {input} input form validator
- * @param  {func} calback calback the result
- * @public
  */
 const generateCSVTriggerEmail = (request, input, result, callBack) => {
   let csvInput = {}

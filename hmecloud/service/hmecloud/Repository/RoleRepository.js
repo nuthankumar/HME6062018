@@ -6,7 +6,6 @@ const sqlQuery = require('../Common/DataBaseQueries')
 /**
  * The method can be used to execute getall user
  * @param  {input} accountId accountId   from  controller
- * @param  {input} createdById createdById  from  controller
  * @param  {funct} callback Function will be called once the input executed.
  * @public
  */

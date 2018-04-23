@@ -29,7 +29,17 @@ CREATE PROCEDURE [dbo].[usp_DeleteUser]
     @Uid				VARCHAR(32)
 AS
 BEGIN
+DECLARE @IsUserDeleted INT = 0
+DECLARE @UserId INT = 0
 
+SET @UserId = 
+	(SELECT [User_ID] 
+	FROM 
+		tbl_Users 
+	WHERE  User_UID=@Uid)
+
+IF(@UserId IS NOT NULL)
+	BEGIN
 
     DELETE urol
 FROM itbl_User_Role urol
@@ -48,6 +58,12 @@ FROM
 WHERE usrs.User_UID=@Uid
 
     DELETE FROM tbl_Users WHERE User_UID=@Uid
+	SET @IsUserDeleted = @UserId
+
+	SELECT @IsUserDeleted IsUserDeleted
+	END
+	ELSE
+	SELECT @IsUserDeleted IsUserDeleted
 
 END
-
+GO

@@ -1,9 +1,8 @@
 
-/****** Dropping the StoredProcedure [dbo].[usp_GetRoles] if already exists *****/
-IF (EXISTS(SELECT *
-FROM sys.objects
-WHERE [name] = 'usp_GetRoles' AND [type] ='P'))
-	DROP PROCEDURE [dbo].[usp_GetRoles]
+/****** Object:  StoredProcedure [dbo].[usp_GetRoles]    Script Date: 4/23/2018 3:46:38 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
 GO
 
 -- ===========================================================
@@ -19,22 +18,22 @@ GO
 -- ===========================================================
 --				Modification History
 -- -----------------------------------------------------------
--- Sl.No.	Date			Developer		Descriptopn   
+-- Sl.No.	Date			Developer		Descriptopn
 -- -----------------------------------------------------------
 --  1.  	20-APRIL-2018	Selvendran K	Procedure created
---	
+--	2.		23-APRIL-2018	Jayaram V		Add orderby condition
 -- ===========================================================
--- EXEC [dbo].[usp_GetRoles] 
+-- EXEC [dbo].[usp_GetRoles] @AccountId = 1333
 -- ===========================================================
 
-CREATE PROCEDURE [dbo].[usp_GetRoles]
+ALTER PROCEDURE [dbo].[usp_GetRoles]
     @AccountId      INT,
     @IsCorporate    BIT = NULL,
     @IsHidden       BIT = NULL
 AS
 BEGIN
 
-    SELECT DISTINCT Role_UID, Role_Name
+    SELECT DISTINCT Role_UID, Role_Name, Role_IsDefault
     FROM
         tbl_Roles lrol
         INNER JOIN itbl_Account_Role_Permission rper ON rper.Role_ID = lrol.Role_ID
@@ -47,4 +46,5 @@ BEGIN
     WHERE lrol.Role_IsCorporate=ISNULL(@IsCorporate,lrol.Role_IsCorporate)
         AND lrol.Role_IsHidden=ISNULL(@IsHidden,lrol.Role_IsHidden)
         AND lrol.Role_OwnerAccount_ID=@AccountId
+		ORDER BY lrol.Role_Name
 END
