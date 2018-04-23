@@ -55,9 +55,23 @@ const deleteById = (userUUId, callback) => {
         type: dataBase.QueryTypes.SELECT
     }, callback)
 }
+
+/**
+ * The method can be used to execute update user
+ * @param  {input} user create template input from  controller
+ * @param  {funct} callback Function will be called once the input executed.
+ * @public
+ */
+const update = (user, callback) => {
+    repository.execute(sqlQuery.users.updateuser, {
+        replacements: user,
+        type: dataBase.QueryTypes.SELECT
+    }, callback)
+}
 module.exports = {
     create,
     deleteById,
     get,
-    getAll
+    getAll,
+    update
 }

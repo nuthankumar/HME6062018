@@ -21,9 +21,9 @@ const create = (request, callback) => {
             })
         } else {
             // Update Group
-           // groupController.updateGroup(request, input, result => {
-            //    callback(result)
-           // })
+            userController.update(input, result => {
+                callback(result)
+            })
         }
     } else {
         let output = {}

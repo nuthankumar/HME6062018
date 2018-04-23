@@ -46,8 +46,8 @@ CREATE PROCEDURE [dbo].[usp_InsertUser]
 	@UserRole           INT
 AS
 BEGIN
-DECLARE @IsUserCreated int = 0
-DECLARE @i int = 1
+DECLARE @IsUserCreated INT = 0
+DECLARE @i INT = 1
 
 	-- Inserting User Details
     INSERT INTO tbl_Users
