@@ -9,8 +9,8 @@ const uuidv4 = require('uuid/v4')
  * @public
  */
 const create = (user, callback) => {
-  let output = {}
-  const values = {
+    let output = {}
+    const values = {
     Uid: uuidv4().toUpperCase(),
     IsActive: user.isActive,
     IsVerified: 0,
@@ -100,7 +100,7 @@ const get = (user, callback) => {
       }
       user.userRole = ''
       if (userRole) {
-        user.userRole = userRole.Role_ID
+        user.userRole = userRole.Role_UID
       }
       user.storeIds = []
       if (userStores) {

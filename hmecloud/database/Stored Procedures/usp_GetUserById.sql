@@ -49,6 +49,7 @@ BEGIN
 
     SELECT
         urol.Role_ID,
+		lrol.Role_UID,
         urol.[User_ID],
         lrol.Role_Name
     FROM itbl_User_Role urol
