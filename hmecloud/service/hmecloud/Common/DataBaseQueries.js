@@ -55,10 +55,9 @@ const sqlQueries = {
                   @ReportType =:ReportType,
                   @LaneConfig_ID =:LaneConfig_ID,
                   @UserUID = :UserUID`
-    },
-
+  },
   'users': {
-      'createuser': `exec [dbo].[usp_InsertUser]
+    'createuser': `exec [dbo].[usp_InsertUser]
     @Uid =:Uid,
     @IsActive =:IsActive,
     @IsVerified =:IsVerified,
@@ -74,7 +73,10 @@ const sqlQueries = {
     @CreatedBy =:CreatedBy,
     @Stores =:Stores,
     @UserRole =:UserRole`
-    }
+  },
+  'ROLES': {
+    'userRoles': 'EXEC [dbo].[usp_GetRoles] @AccountId = :AccountId, @IsCorporate = null, @IsHidden =null'
+  }
 }
 
 module.exports = sqlQueries

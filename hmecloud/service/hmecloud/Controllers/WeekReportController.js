@@ -7,6 +7,13 @@ const dateFormat = require('dateformat')
 const messages = require('../Common/Message')
 const Pdfmail = require('../Common/PDFUtils')
 
+/**
+ * The method can be used to execute Pagination Details
+ * @param  {weekReports} weekReports empty object and get back the results
+ * @param  {request} request form validator
+ * @param  {input} input form validator
+ * @public
+ */
 const pagination = (weekReports, request, input) => {
   let pageStartDate = input.ReportTemplate_From_Date
   let pageEndDate = input.ReportTemplate_To_Date
@@ -44,6 +51,12 @@ const pagination = (weekReports, request, input) => {
   weekReports.NoOfPages = lastPage
   return weekReports
 }
+/**
+ * The method can be used to execute preaping the input to database
+ * @param  {request} request form validator
+ * @param  {input} input form validator
+ * @public
+ */
 const repositoryInput = (request, input) => {
   let inputTransform = {
     Device_IDs: input.ReportTemplate_DeviceIds.toString(),
@@ -61,6 +74,13 @@ const repositoryInput = (request, input) => {
   }
   return inputTransform
 }
+/**
+ * The method can be used to execute SingleStore function based on input
+ * @param  {weekReports} weekReports empty object and get back the results
+ * @param  {result} result form database
+ * @param  {input} input form validator
+ * @public
+ */
 const SingleStore = (weekReports, result, input) => {
   let storeInfo = reportsUtils.prepareStoreDetails(weekReports, result.data[3], input)
   let colors = result.data[4]
@@ -87,6 +107,13 @@ const SingleStore = (weekReports, result, input) => {
   }
   return weekReports
 }
+/**
+ * The method can be used to execute multipleStore function based on input
+ * @param  {weekReports} weekReports empty object and get back the results
+ * @param  {result} result form database
+ * @param  {input} input form validator
+ * @public
+ */
 const multipleStore = (weekReports, result, input) => {
   let storeInfo = reportsUtils.prepareStoreDetails(weekReports, result.data[3], input)
   let colors = result.data[4]
@@ -94,6 +121,14 @@ const multipleStore = (weekReports, result, input) => {
   const storeDetails = reportsUtils.storesDetails(weekReports, result.data[0], colors, goalStatistics, input.ReportTemplate_Format)
   return weekReports
 }
+/**
+ * The method can be used to execute report converting json to CSV and sending mail
+ * @param  {weekReports} weekReports empty object and get back the results
+ * @param  {result} result form database
+ * @param  {input} input form validator
+ * @param  {func} calback calback the result
+ * @public
+ */
 const generateCSVTriggerEmail = (request, input, result, callBack) => {
   let csvInput = {}
   csvInput.type = `${messages.COMMON.CSVTYPE}`
@@ -104,6 +139,13 @@ const generateCSVTriggerEmail = (request, input, result, callBack) => {
     callBack(csvResults)
   })
 }
+/**
+ * The method can be used to execute weekReportController to genearate week repots
+ * @param  {result} result form database
+ * @param  {input} input form validator
+ * @param  {func} calback calback the result
+ * @public
+ */
 const weekReportController = (request, input, callback) => {
   let weekReports = {}
   let reportPagination = pagination(weekReports, request, input)

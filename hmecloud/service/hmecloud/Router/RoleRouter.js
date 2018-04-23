@@ -4,11 +4,11 @@ const controller = require('../Controllers/RoleController')
 const authenticator = require('../Controllers/AuthenticationController')
 
 const handelResult = (result, response) => {
-    if (result.status === true) {
-        response.status(200).send(result)
-    } else {
-        response.status(204).send(result)
-    }
+  if (result.status === true) {
+    response.status(200).send(result)
+  } else {
+    response.status(204).send(result)
+  }
 }
 
 /**
@@ -20,8 +20,7 @@ const handelResult = (result, response) => {
  * @public
  */
 router.get('/getAll', authenticator, (request, response) => {
-    controller.getAll(request, result => handelResult(result, response))
+  controller.getAll(request, result => handelResult(result, response))
 })
-
 
 module.exports = router
