@@ -125,6 +125,7 @@
 .store-node span.rc-tree-title{
     text-decoration:none;
     color: #212529;
+    cursor: not-allowed;
 }
 .hierarchy-tree{
   font-size: 14px;
