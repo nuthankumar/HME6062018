@@ -13,7 +13,7 @@ const groupRouter = require('./Router/GroupRouter')
 const reportsTemplate = require('./Router/TemplateRouter')
 const summaryReport = require('./Router/StoreRouter')
 const userRouter = require('./Router/UserRouter')
-
+const roleRouter = require('./Router/RoleRouter')
 // JWT - Auth config
 const authentication = require('./Router/AuthenticationRouter')
 
@@ -53,6 +53,10 @@ app.use('/api/reportTemplate', reportsTemplate)
 
 // Users
 app.use('/api/user', userRouter)
+
+// Users
+app.use('/api/role', roleRouter)
+
 
 app.use('/api/auth', authentication)
 /**
