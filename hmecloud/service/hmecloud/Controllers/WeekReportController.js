@@ -166,7 +166,7 @@ const weekReportController = (request, input, callback) => {
       }
     } else {
       let output = {}
-      output.key = messages.LISTGROUP.notfound
+      output.key = 'noDataFound'
       output.status = false
       callback(output)
     }

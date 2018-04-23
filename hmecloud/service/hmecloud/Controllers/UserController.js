@@ -1,21 +1,6 @@
 
-const messages = require('../Common/Message')
 const repository = require('../Repository/UserRepository')
-const dateUtils = require('../Common/DateUtils')
 const uuidv4 = require('uuid/v4')
-
-/**
- * The method can be used to execute handel errors and return to routers.
- * @param  {input} message input from custom messages.
- * @param  {input} status input false.
- * @public
- */
-const errorHandler = (message, status, request) => {
-  let output = {}
-  output.key = message
-  output.status = status
-  return output
-}
 
 /**
  * The method can be used to create user
@@ -24,7 +9,6 @@ const errorHandler = (message, status, request) => {
  * @public
  */
 const create = (user, callback) => {
-  console.log('User Controller invoked..')
   let output = {}
   const values = {
     Uid: uuidv4().toUpperCase(),
@@ -70,32 +54,32 @@ const create = (user, callback) => {
  */
 const get = (user, callback) => {
   let output = {}
-    repository.get(user.uuId, (result) => {
+  repository.get(user.uuId, (result) => {
     if (result.length > 0) {
-        let userProfile = result[0]
-        let userRole = result[1]
-        let userStores = result[2]
-        let user = {}
-        if (userProfile) {
-            user.uuId = userProfile.User_UID
-            user.isActive = userProfile.User_IsActive
-            user.firstName = userProfile.User_FirstName
-            user.lastName = userProfile.User_LastName
-            user.userEmail = userProfile.User_EmailAddress
+      let userProfile = result[0]
+      let userRole = result[1]
+      let userStores = result[2]
+      let user = {}
+      if (userProfile) {
+        user.uuId = userProfile.User_UID
+        user.isActive = userProfile.User_IsActive
+        user.firstName = userProfile.User_FirstName
+        user.lastName = userProfile.User_LastName
+        user.userEmail = userProfile.User_EmailAddress
+      }
+      user.userRole = ''
+      if (userRole) {
+        user.userRole = userRole.Role_ID
+      }
+      user.storeIds = []
+      if (userStores) {
+        let storeIds = []
+        for (let i = 0; i < userStores.length; i++) {
+          let userStore = userStores[i]
+          storeIds.push(userStore.Store_ID)
         }
-        user.userRole = ""
-        if (userRole) {
-            user.userRole = userRole.Role_ID
-        }
-        user.storeIds = []
-        if (userStores) {
-            let storeIds = []
-            for (let i = 0; i < userStores.length; i++) {
-                let userStore = userStores[i]
-                storeIds.push(userStore.Store_ID)
-            }
-            user.storeIds = storeIds
-        }
+        user.storeIds = storeIds
+      }
 
       output.data = user
       output.status = true
