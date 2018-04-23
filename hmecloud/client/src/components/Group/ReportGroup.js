@@ -127,6 +127,7 @@ export default class ReportGroup extends React.Component {
   }
 
   saveAssigned (items) {
+    let language = this.state.currentLanguage
     this.state.editGroup = this.props.history.location.state.editGroup
     this.setState(this.state)
     let groupStoreObject = this.getGroupandStore(items)
@@ -162,14 +163,19 @@ export default class ReportGroup extends React.Component {
 
       let url = Config.apiBaseUrl + CommonConstants.apiUrls.addNewGroup
       this.api.postData(url,data,data => {
-        this.state.successMessage = data.data
-        this.state.errorMessage = ''
-        this.state.saveSuccess = true
-        this.setState(this.state)
-        this.getAvailableGroupStoreList()
+        if(data.status === true){
+          this.state.successMessage = t[language][data.key]
+          this.state.errorMessage = ''
+          this.state.saveSuccess = true
+          this.setState(this.state)
+          this.getAvailableGroupStoreList()
+        }else{
+          this.state.errorMessage = t[language][data.key]
+        }
+      
       }, error => {
         this.state.successMessage = ''
-        this.state.errorMessage = error.message
+        this.state.errorMessage = t[language][data.key]
         this.setState(this.state)
       })
     }
@@ -214,27 +220,29 @@ export default class ReportGroup extends React.Component {
   }
 
   confirmDelete () {
+      let language = this.state.currentLanguage
       let url = Config.apiBaseUrl + CommonConstants.apiUrls.deleteGroup + '?groupId=' + this.state.groupId
+      
       this.api.deleteData(url,data => {
-        if (data.data) {
-          this.state.successMessage = this.state.deleteSuceessMessage
+        if (data.status === true) {
+          this.state.successMessage = t[language][data.key]
           this.state.errorMessage = ''
           this.state.deleteSuccess = true
           this.setState(this.state)
         } else {
-          this.state.errorMessage = this.state.deleteErrorMessage
+          this.state.errorMessage = t[language][data.key]
           this.state.successMessage = ''
           this.setState(this.state)
         }
       }, error => {
-        this.state.errorMessage = error.message
+        this.state.errorMessage = t[language][error.key]
         this.state.successMessage = ''
         this.setState(this.state)
       })
   }
 
   render () {
-    const language = this.state.currentLanguage
+    let language = this.state.currentLanguage
     let assigned = this.state.assigned
     return (<section className='groupDetailsPage'>
       <div className='status-messages'>
