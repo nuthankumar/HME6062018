@@ -49,6 +49,7 @@ BEGIN
 	WHERE 
 	gd.StoreID IS NULL
 	AND s.Store_Account_ID = @AccountId	
+	ORDER BY type, g.GroupName
 END
 GO
 
