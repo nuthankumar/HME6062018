@@ -118,7 +118,6 @@ const get = (user, callback) => {
 const getAll = (input, request, callback) => {
   let output = {}
   repository.getAll(input.UserUid, (result) => {
-    console.log('The result==', JSON.stringify(result))
     if (result.length > 0) {
       output.data = result
       output.status = true
@@ -137,14 +136,22 @@ const getAll = (input, request, callback) => {
  * @public
  */
 const deleteById = (input, callback) => {
-  let output = {}
-  repository.deleteById(input.query.templateId, (result) => {
-    if (result) {
-      output.key = 'userdeleteSuccess'
-      output.status = true
-      callback(output)
-    } else {
-      output.key = 'noDataFound'
+    let output = {}
+    repository.deleteById(input.uuId, (result) => {
+        if (result.length > 0) {
+            let isUserDeleted = result[0]
+            if (Number(isUserDeleted.IsUserDeleted) > 0) {
+                console.log("Inside if block")
+                output.key = 'userdeleteSuccess'
+                output.status = true
+                callback(output)
+            } else {
+                output.key = 'noDataFound'
+                output.status = false
+                callback(output)
+            }
+        } else {
+      output.key = 'userDeleteFailed'
       output.status = false
       callback(output)
     }

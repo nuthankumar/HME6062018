@@ -37,7 +37,7 @@ const get = (request, callback) => {
     let output = {}
     if (request.query.uuId) {
         const input = {
-            uuId: request.query.uuId
+            uuId: request.query.uuId.trim()
         }
         userController.get(input, result => {
             callback(result)
@@ -49,7 +49,24 @@ const get = (request, callback) => {
     }
 }
 
+const deleteById = (request, callback) => {
+    let output = {}
+    if (request.query.uuId) {
+        const input = {
+            uuId: request.query.uuId.trim()
+        }
+        userController.deleteById(input, result => {
+            callback(result)
+        })
+    } else if (!request.query.uuId) {
+        output.key = 'invalidUserUUID'
+        output.status = false
+        callback(output)
+    }
+}
+
 module.exports = {
     create,
-    get
+    get,
+    deleteById
 }

@@ -45,13 +45,13 @@ const getAll = (UserUid, callback) => {
 
 /**
  * The method can be used to execute delete user
- * @param  {input} userId  userId   from  controller
+ * @param  {input} userUUId  userId   from  controller
  * @param  {funct} callback Function will be called once the input executed.
  * @public
  */
-const deleteById = (userId, callback) => {
-    repository.execute(sqlQuery.users.deleteTemplate, {
-        replacements: { id: userId },
+const deleteById = (userUUId, callback) => {
+    repository.execute(sqlQuery.users.deleteuser, {
+        replacements: { id: userUUId },
         type: dataBase.QueryTypes.SELECT
     }, callback)
 }
