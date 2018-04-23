@@ -239,7 +239,7 @@ const storesDetails = (weekRecords, result, colors, goalSettings, format) => {
   }
   let getColor = (event, eventValue) => {
     let color = colorSettings[2]
-    const eventSettings = _.pickBy(goalSettings[0], (value, key) => {
+    _.pickBy(goalSettings[0], (value, key) => {
       if (key.toLowerCase().includes(event.toLowerCase())) {
         if (value && eventValue < value) {
           if (key.includes('GoalA')) {
@@ -353,7 +353,7 @@ const getColourCode = (event, eventValue, colors, goalSettings) => {
     colorSettings = colors[0].ColourCode.split('|')
   }
   color = colorSettings[2]
-  const eventSettings = _.pickBy(goalSettings[0], (value, key) => {
+  _.pickBy(goalSettings[0], (value, key) => {
     if (key.toLowerCase().includes(event.toLowerCase())) {
       if (value && eventValue < value) {
         if (key.includes('GoalA')) {
@@ -386,7 +386,7 @@ const getAllStoresDetails = (weekRecords, result, colors, goalSettings, format) 
   }
   let getColor = (event, eventValue) => {
     let color = colorSettings[2]
-    const eventSettings = _.pickBy(goalSettings[0], (value, key) => {
+    _.pickBy(goalSettings[0], (value, key) => {
       if (key.toLowerCase().includes(event.toLowerCase())) {
         if (value && eventValue < value) {
           if (key.includes('GoalA')) {

@@ -1,7 +1,5 @@
 const dateUtils = require('../Common/DateUtils')
 const csvGeneration = require('../Common/CsvUtils')
-const _ = require('lodash')
-const reportGenerate = require('./ReportGenerateUtils')
 const Pdfmail = require('./PDFUtils')
 
 const prepareJsonForExport = (storeData, input, csvInput, callback) => {

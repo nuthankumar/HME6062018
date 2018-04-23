@@ -57,7 +57,6 @@ app.use('/api/user', userRouter)
 // Users
 app.use('/api/role', roleRouter)
 
-
 app.use('/api/auth', authentication)
 /**
  * end

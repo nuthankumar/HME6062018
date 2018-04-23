@@ -5,19 +5,6 @@ const dateUtils = require('../Common/DateUtils')
 const uuidv4 = require('uuid/v4')
 
 /**
- * The method can be used to execute handel errors and return to routers.
- * @param  {input} message input from custom messages.
- * @param  {input} status input false.
- * @public
- */
-const errorHandler = (message, status, request) => {
-  let output = {}
-  output.key = message
-  output.status = status
-  return output
-}
-
-/**
  * The method can be used to execute create Report Template
  * @param  {input} reportTemplate input from  user request
  * @param  {funct} callback Function will be called once the input executed.
