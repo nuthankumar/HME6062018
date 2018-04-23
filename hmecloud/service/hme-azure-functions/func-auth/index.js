@@ -23,15 +23,7 @@ module.exports = function (context, req) {
       }
 
       sqlPool.request()
-        .query(`SELECT [User_ID]
-        ,[User_UID]
-        ,[User_OwnerAccount_ID]
-        ,[User_Company_ID]
-        ,[User_EmailAddress]
-        ,[User_FirstName]
-        ,[User_LastName]
-        FROM [dbo].[tbl_Users] 
-        WHERE [User_IsActive] = 1 AND [User_EmailAddress] = '${email}'`, (err, result) => {
+        .query(`EXEC [dbo].[usp_GetUserByEmail] @EmailAddress='${email}'`, (err, result) => {
           if (err) {
             context.res = {
               status: 404,

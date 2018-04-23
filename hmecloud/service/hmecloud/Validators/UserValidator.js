@@ -49,6 +49,28 @@ const get = (request, callback) => {
     }
 }
 
+/**
+ * The method can be used to execute get user audit
+ * @param  {input} request input from  user request
+ * @param  {funct} callback Function will be called once the input executed.
+ * @public
+ */
+const getAudit = (request, callback) => {
+    let output = {}
+    if (request.query.uuId) {
+        const input = {
+            uuId: request.query.uuId.trim()
+        }
+        userController.getAudit(input, result => {
+            callback(result)
+        })
+    } else if (!request.query.uuId) {
+        output.key = 'invalidUserUUID'
+        output.status = false
+        callback(output)
+    }
+}
+
 const deleteById = (request, callback) => {
     let output = {}
     if (request.query.uuId) {
@@ -68,5 +90,6 @@ const deleteById = (request, callback) => {
 module.exports = {
     create,
     get,
+    getAudit,
     deleteById
 }

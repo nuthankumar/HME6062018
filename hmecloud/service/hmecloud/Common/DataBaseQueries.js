@@ -74,6 +74,7 @@ const sqlQueries = {
     @Stores =:Stores,
     @UserRole =:UserRole`,
     'getuser': `EXEC [dbo].[usp_GetUserById] @Uid =:id`,
+    'getUserAudit': `EXEC [dbo].[usp_GetUserAudit] @UserUid =:id`,
     'deleteuser': `EXEC [dbo].[usp_DeleteUser] @Uid =:id`,
 
     'updateuser':`EXEC [dbo]. [usp_UpdateUser]
