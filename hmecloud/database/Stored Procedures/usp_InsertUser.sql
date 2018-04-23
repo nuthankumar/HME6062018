@@ -43,11 +43,12 @@ CREATE PROCEDURE [dbo].[usp_InsertUser]
     @CreatedDTS			DateTime,
     @CreatedBy			VARCHAR(100),
 	@Stores				VARCHAR(MAX),
-	@UserRole           INT
+	@UserRole           VARCHAR(32)
 AS
 BEGIN
 DECLARE @IsUserCreated INT = 0
 DECLARE @i INT = 1
+DECLARE @Role_ID INT
 
 	-- Inserting User Details
     INSERT INTO tbl_Users
@@ -105,24 +106,25 @@ DECLARE @i INT = 1
 		Store_ID) 
 	VALUES 
 		(@IsUserCreated, 
-		 @StoreId);
+		@StoreId);
     
 	SET 
-		@Stores = SUBSTRING(@Stores, @comma+1, LEN(@Stores))
+	@Stores = SUBSTRING(@Stores, @comma+1, LEN(@Stores))
     SET 
-		@i +=1
+	@i +=1
 	END
 	-- Inserting User Selected Roles
 	if(@UserRole IS NOT NULL)
 	BEGIN
+	SET @Role_ID = (select Role_ID from tbl_Roles where Role_UID = @UserRole)
 	INSERT
 	INTO 
 		itbl_User_Role(
 		[User_ID],
 		Role_ID)
 	VALUES
-		(@IsUserCreated,
-		@UserRole)
+	(@IsUserCreated,
+	 @Role_ID)
 
 	END
 
@@ -131,5 +133,3 @@ DECLARE @i INT = 1
 
 END
 GO
-
-
