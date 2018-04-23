@@ -1,13 +1,13 @@
 const express = require('express')
 const router = express.Router()
-const validator = require('../Validators/userValidator')
+const validator = require('../Validators/UserValidator')
 const authenticator = require('../Controllers/AuthenticationController')
 
 const handelResult = (result, response) => {
     if (result.status === true) {
         response.status(200).send(result)
     } else {
-        response.status(204).send(result)
+        response.status(400).send(result)
     }
 }
 /**

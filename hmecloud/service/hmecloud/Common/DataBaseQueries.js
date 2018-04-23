@@ -55,7 +55,26 @@ const sqlQueries = {
                   @ReportType =:ReportType,
                   @LaneConfig_ID =:LaneConfig_ID,
                   @UserUID = :UserUID`
-  }
+    },
+
+  'users': {
+      'createuser': `exec [dbo].[usp_InsertUser]
+    @Uid =:Uid,
+    @IsActive =:IsActive,
+    @IsVerified =:IsVerified,
+    @ResetPassword =:ResetPassword,
+    @OwnerAccountId =:OwnerAccountId,
+    @CompanyId	=:CompanyId,
+    @FirstName	=:FirstName,
+    @LastName =:LastName,
+    @EmailAddress =:EmailAddress,
+    @PasswordHash =:PasswordHash,
+    @PasswordSalt =:PasswordSalt,
+    @CreatedDTS =:CreatedDTS,
+    @CreatedBy =:CreatedBy,
+    @Stores =:Stores,
+    @UserRole =:UserRole`
+    }
 }
 
 module.exports = sqlQueries

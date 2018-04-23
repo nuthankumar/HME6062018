@@ -53,6 +53,7 @@ function verifyToken (request, response, next) {
       // request.Role = decoded.Role
       request.AccountId = decoded.User_OwnerAccount_ID
       // request.UserPreferenceValue = decoded.UserPreferencesValue
+      request.companyId = decoded.User_Company_ID
       next()
     })
   }

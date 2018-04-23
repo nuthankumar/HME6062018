@@ -24,37 +24,35 @@ const errorHandler = (message, status, request) => {
  * @public
  */
 const create = (user, callback) => {
+    console.log("User Controller invoked..")
     let output = {}
     const values = {
-        DeviceUUIds: user.body.deviceUUIds.toString(),
         Uid: uuidv4().toUpperCase(),
-        TimeMeasure: messages.TimeMeasure[user.body.timeMeasure],
-        FromDate: user.body.fromDate,
-        ToDate: user.body.toDate,
-        OpenTime: user.body.openTime,
-        CloseTime: user.body.closeTime,
-        Type: messages.Type[user.body.type],
-        Open: (user.body.open === true ? 1 : 0),
-        Close: (user.body.close === true ? 1 : 0),
-        SystemStatistics: (user.body.systemStatistics === true ? 1 : 0),
-        Format: messages.TimeFormat[user.body.format],
-        TemplateName: user.body.templateName,
-        SessionUid: ' ',
-        UserUid: user.userUid,
-        CreatedBy: user.UserEmail,
-        AdvancedOption: (user.body.advancedOption === true ? 1 : 0),
-        LongestTime: (user.body.longestTime === true ? 1 : 0),
-        CreatedDateTime: user.body.createdDateTime
+        IsActive: user.isActive,
+        IsVerified: 0,
+        ResetPassword: 0,
+        OwnerAccountId: user.accountId,
+        CompanyId: user.companyId,
+        FirstName: user.firstName,
+        LastName: user.lastName,
+        EmailAddress: user.userEmail,
+        PasswordHash: "abcd", // To be updated
+        PasswordSalt: "abcd", // to be updated
+        CreatedDTS: user.createdDTS,
+        CreatedBy: user.createdUserEmail ,
+        Stores: user.storeIds.toString(),
+        UserRole: user.userRole
     }
     repository.create(values, (result) => {
         if (result.length > 0) {
-            let isTemplateCreated = result[0]
-            if (isTemplateCreated.IsRecordInserted === 1) {
-                output.key = 'userAlreadyExist'
-                output.status = true
-            } else if (isTemplateCreated.IsRecordInserted > 1) {
+            let isUserCreated = result[0]
+            if (isUserCreated.IsUserCreated !== null && isUserCreated.IsUserCreated > 1 ) {
                 output.key = 'usercreateSuccess'
                 output.status = true
+                
+            } else  {
+                output.key = 'userAlreadyExist'
+                output.status = false 
             }
             callback(output)
         } else {
@@ -62,7 +60,7 @@ const create = (user, callback) => {
             output.status = false
             callback(output)
         }
-    })
+    }) 
 }
 
 /**
