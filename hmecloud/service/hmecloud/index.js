@@ -4,7 +4,7 @@ const express = require('express')
 const i18next = require('i18next')
 const i18nextMiddleware = require('i18next-express-middleware')
 const Backend = require('i18next-node-fs-backend')
-
+const path = require('path')
 const bodyParser = require('body-parser')
 
 // Router config
@@ -24,8 +24,8 @@ i18next
   .use(i18nextMiddleware.LanguageDetector)
   .init({
     backend: {
-      loadPath: __dirname + '/i18n/{{lng}}/{{ns}}.json',
-      addPath: __dirname + '/i18n/{{lng}}/{{ns}}.missing.json'
+      loadPath: path.dirname(__dirname) + '/i18n/{{lng}}/{{ns}}.json',
+      addPath: path.dirname(__dirname) + '/i18n/{{lng}}/{{ns}}.missing.json'
     },
     fallbackLng: 'en',
     preload: ['en', 'fr'],
