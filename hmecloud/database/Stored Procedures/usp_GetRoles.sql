@@ -1,8 +1,9 @@
 
-/****** Object:  StoredProcedure [dbo].[usp_GetRoles]    Script Date: 4/23/2018 3:46:38 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
+ /****** Dropping the StoredProcedure [dbo].[usp_GetRoles] if already exists *****/
+IF (EXISTS(SELECT *
+FROM sys.objects
+WHERE [name] = 'usp_GetRoles' AND [type] ='P'))
+	DROP PROCEDURE [dbo].[usp_GetRoles]
 GO
 
 -- ===========================================================
@@ -26,7 +27,7 @@ GO
 -- EXEC [dbo].[usp_GetRoles] @AccountId = 1333
 -- ===========================================================
 
-ALTER PROCEDURE [dbo].[usp_GetRoles]
+CREATE PROCEDURE [dbo].[usp_GetRoles]
     @AccountId      INT,
     @IsCorporate    BIT = NULL,
     @IsHidden       BIT = NULL
