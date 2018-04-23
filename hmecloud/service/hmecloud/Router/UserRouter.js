@@ -35,6 +35,18 @@ router.get('/get', authenticator, (request, response) => {
 })
 
 /**
+ * This service  using get user audit logs
+ * @param  {endpoint} getAudit API name to get all the audit log for a user
+ * @param  {funct} authenticator  check JWT authentication
+ * @param  {request} request  from  user request
+ * @param  {response} callback Function will be called once the request executed.
+ * @public
+ */
+router.get('/getAudit', authenticator, (request, response) => {
+  validator.getAudit(request, result => handelResult(result, response))
+})
+
+/**
  * This service  using getAll users
  * @param  {endpoint} getAll webservice name
  * @param  {funct} authenticator  check JWT authentication

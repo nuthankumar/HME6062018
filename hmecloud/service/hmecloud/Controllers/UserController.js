@@ -9,8 +9,8 @@ const uuidv4 = require('uuid/v4')
  * @public
  */
 const create = (user, callback) => {
-    let output = {}
-    const values = {
+  let output = {}
+  const values = {
     Uid: uuidv4().toUpperCase(),
     IsActive: user.isActive,
     IsVerified: 0,
@@ -47,34 +47,34 @@ const create = (user, callback) => {
 }
 
 const update = (user, callback) => {
-    let output = {}
-    const values = {
-        Uid: user.uuId,
-        IsActive: user.isActive,
-        FirstName: user.firstName,
-        LastName: user.lastName,
-        EmailAddress: user.userEmail,
-        UpdatedDTS: user.createdDTS,
-        Stores: user.storeIds.toString(),
-        UserRole: user.userRole
+  let output = {}
+  const values = {
+    Uid: user.uuId,
+    IsActive: user.isActive,
+    FirstName: user.firstName,
+    LastName: user.lastName,
+    EmailAddress: user.userEmail,
+    UpdatedDTS: user.createdDTS,
+    Stores: user.storeIds.toString(),
+    UserRole: user.userRole
+  }
+  repository.update(values, (result) => {
+    if (result.length > 0) {
+      let isUserUpdated = result[0]
+      if (isUserUpdated.IsUserUpdated !== null && isUserUpdated.IsUserUpdated > 0) {
+        output.key = 'userupdatedSuccess'
+        output.status = true
+      } else {
+        output.key = 'noDataFound'
+        output.status = false
+      }
+      callback(output)
+    } else {
+      output.key = 'userupdateFailure'
+      output.status = false
+      callback(output)
     }
-    repository.update(values, (result) => {
-        if (result.length > 0) {
-            let isUserUpdated = result[0]
-            if (isUserUpdated.IsUserUpdated !== null && isUserUpdated.IsUserUpdated > 0) {
-                output.key = 'userupdatedSuccess'
-                output.status = true
-            } else {
-                output.key = 'noDataFound'
-                output.status = false
-            }
-            callback(output)
-        } else {
-            output.key = 'userupdateFailure'
-            output.status = false
-            callback(output)
-        }
-    })
+  })
 }
 
 /**
@@ -124,6 +124,37 @@ const get = (user, callback) => {
 }
 
 /**
+ * The method can be used to execute get user audit
+ * @param  {input} user input from  user request
+ * @param  {funct} callback Function will be called once the input executed.
+ * @public
+ */
+const getAudit = (user, callback) => {
+  let output = {}
+  repository.getAudit(user.uuId, (result) => {
+    if (result.length > 0) {
+      let logs = []
+      for (let i = 0; i < result.length; i++) {
+        let log = {
+          lastLogin: result[i].Audit_LastLogin,
+          record: result[i].Audit_Action,
+          page: result[i].audit_page,
+          action: result[i].page_action
+        }
+        logs.push(log)
+      }
+      output.data = logs
+      output.status = true
+      callback(output)
+    } else {
+      output.key = 'noDataFound'
+      output.status = false
+      callback(output)
+    }
+  })
+}
+
+/**
  * The method can be used to execute getAll users
  * @param  {input} AccountId input from  user request
  * @param  {input} CreatedBy input from  user request
@@ -151,20 +182,20 @@ const getAll = (input, request, callback) => {
  * @public
  */
 const deleteById = (input, callback) => {
-    let output = {}
-    repository.deleteById(input.uuId, (result) => {
-        if (result.length > 0) {
-            let isUserDeleted = result[0]
-            if (Number(isUserDeleted.IsUserDeleted) > 0) {
-                output.key = 'userdeleteSuccess'
-                output.status = true
-                callback(output)
-            } else {
-                output.key = 'noDataFound'
-                output.status = false
-                callback(output)
-            }
-        } else {
+  let output = {}
+  repository.deleteById(input.uuId, (result) => {
+    if (result.length > 0) {
+      let isUserDeleted = result[0]
+      if (Number(isUserDeleted.IsUserDeleted) > 0) {
+        output.key = 'userdeleteSuccess'
+        output.status = true
+        callback(output)
+      } else {
+        output.key = 'noDataFound'
+        output.status = false
+        callback(output)
+      }
+    } else {
       output.key = 'userDeleteFailed'
       output.status = false
       callback(output)
@@ -176,6 +207,7 @@ module.exports = {
   create,
   deleteById,
   get,
+  getAudit,
   getAll,
   update
 }

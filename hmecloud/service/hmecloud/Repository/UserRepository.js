@@ -30,6 +30,20 @@ const get = (userUUId, callback) => {
 }
 
 /**
+ * The method can be used to execute get user audit information
+ * @param  {input} userUid templateId from  controller
+ * @param  {funct} callback Function will be called once the input executed.
+ * @public
+ */
+const getAudit = (userUid, callback) => {
+    repository.execute(sqlQuery.users.getUserAudit, {
+        replacements: { id: userUid },
+        type: dataBase.QueryTypes.SELECT
+    }, callback)
+}
+
+
+/**
  * The method can be used to execute getall user
  * @param  {input} accountId accountId   from  controller
  * @param  {input} createdById createdById  from  controller
@@ -72,6 +86,7 @@ module.exports = {
     create,
     deleteById,
     get,
+    getAudit,
     getAll,
     update
 }
