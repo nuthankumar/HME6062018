@@ -13,13 +13,6 @@ export default class SummaryReportDataComponent extends Component {
     this.state = {
         currentLanguage: languageSettings.getCurrentLanguage()
     }
-    this.dynamicColumnData = {
-      showFromToTime: (this.props.reportData.dayColumn || this.props.reportData.dayPartColumn || this.props.reportData.weekColumn ? 'hide' : 'show'),
-      showGroupsStores: (this.props.reportData.groupStoreColumns ? 'show-table-cell' : 'hide-table-cell'),
-      showWeekColumn: (this.props.reportData.weekColumn ? 'show-table-cell' : 'hide-table-cell'),
-      showDayColumn: (this.props.reportData.dayColumn ? 'show-table-cell' : 'hide-table-cell'),
-      showDayPartColumn: (this.props.reportData.dayPartColumn ? 'show-table-cell' : 'hide-table-cell')
-    }
     this.displaySummarizedData = this.displaySummarizedData.bind(this)
     this.displaySummarizedRowData = this.displaySummarizedRowData.bind(this)
     this.displayLongestTimes = this.displayLongestTimes.bind(this)
@@ -93,10 +86,10 @@ export default class SummaryReportDataComponent extends Component {
             <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayPartColumn} onClick={() => this.props.handleDrillDown(reportItem.deviceId.value)}><span className='timeSpan'>{reportItem.daypart? reportItem.daypart.timeSpan : ''}</span><br/><span className='currentMeasure'>{reportItem.daypart ? reportItem.daypart.currentDaypart : ''}</span></td>
             <td className={'timeMeasureColumn ' + this.dynamicColumnData.showWeekColumn} onClick={() => this.props.handleDrillDown(reportItem.deviceId.value)}><span>{reportItem.week? reportItem.week.timeSpan : ''}</span> <span className='currentMeasure'>{reportItem.week ? reportItem.week.currentDaypart : ''}</span></td>
             <td style={menuStyle} className={(reportItem.menu.value === "N/A" ? "background-NA" : "")}>{reportItem.menu.value}</td>
-            <td style={greetStyle} className={(reportItem.menu.value === "N/A" ? "background-NA" : "")}>{reportItem.greet.value}</td>
-            <td style={serviceStyle} className={(reportItem.menu.value === "N/A" ? "background-NA" : "")}>{reportItem.service.value}</td>
-            <td style={laneQueueStyle} className={(reportItem.menu.value === "N/A" ? "background-NA" : "")}>{reportItem.laneQueue.value}</td>
-            <td style={laneTotalStyle} className={(reportItem.menu.value === "N/A" ? "background-NA" : "")}>{reportItem.laneTotal.value}</td>
+            <td style={greetStyle} className={(reportItem.greet.value === "N/A" ? "background-NA" : "")}>{reportItem.greet.value}</td>
+            <td style={serviceStyle} className={(reportItem.service.value === "N/A" ? "background-NA" : "")}>{reportItem.service.value}</td>
+            <td style={laneQueueStyle} className={(reportItem.laneQueue.value === "N/A" ? "background-NA" : laneQueueStyle.backgroundColor)}>{reportItem.laneQueue.value}</td>
+            <td style={laneTotalStyle} className={(reportItem.laneTotal.value === "N/A" ? "background-NA" : "")}>{reportItem.laneTotal.value}</td>
             <td>{reportItem.totalCars.value}</td>
           </tr>
         )
