@@ -6,6 +6,7 @@ import fetch from 'isomorphic-fetch'
 import { confirmAlert } from 'react-confirm-alert'
 import t from '../Language/language'
 import * as languageSettings from '../Language/languageSettings'
+import AuthenticationService from '../Security/AuthenticationService'
 import { Link } from 'react-router-dom'
 import {Config} from '../../Config'
 import {CommonConstants} from '../../Constants'
@@ -36,14 +37,19 @@ export default class ReportGroup extends React.Component {
       deleteConfirm:'Yes',
       deleteCancel: 'No',
       deleteSuceessMessage: 'Group Deleted Successfully',
-      deleteErrorMessage: 'Unable to delete group data'
+      deleteErrorMessage: 'Unable to delete group data',
+      userContext: {}
     }
     this.api = new Api()
     this.getAvailableGroupStoreList()
+    this.authService = new AuthenticationService(Config.authBaseUrl)
+    this.renderButtonGroups = this.renderButtonGroups.bind(this)
   }
 
   componentDidMount () {
     this.populateGroupDetails()
+    this.state.userContext = this.authService.getProfile()
+    this.setState(this.state)
   }
 
   getAvailableGroupStoreList () {
@@ -62,7 +68,22 @@ export default class ReportGroup extends React.Component {
       this.setState(this.state)
     })
   }
-
+  renderButtonGroups(assigned){
+    let language = this.state.currentLanguage
+    if(this.state.userContext.IsAccountOwner === 1){
+      return(
+        <div className='row reportgroup-buttons'>
+          <div className='col-xs-12'>
+            <div className="border-right"> <button type='button' className='btn btn-primary  save-group-btn' onClick={this.saveAssigned.bind(this, assigned)}>{t[language].save}</button> </div>
+            <div className="border-right"> <span  className={'btn-pipe ' + (this.state.editGroup ? 'show' : 'hidden')}> | </span><button type='button' className={'btn btn-danger reportgroup-delete ' + (this.state.editGroup ? 'show' : 'hidden')} onClick={this.deleteGroup.bind(this)} > {t[language].delete}</button> </div>
+            <div> <span className='btn-pipe'> | </span> <Link to='/grouphierarchy' className='col-xs-2 reportgroup-cancel'>{t[language].cancel}</Link> </div>
+          </div>
+        </div>
+      )
+    }else{
+      return <div></div>
+    }
+  }
   populateGroupDetails () {
     this.state.editGroup = this.props.history.location.state.editGroup
     this.state.groupId = this.props.history.location.state.groupId
@@ -279,15 +300,7 @@ export default class ReportGroup extends React.Component {
           </div>
           <CheckBoxList title={t[language].GroupsStoresinGroup} items={this.state.assigned} selectAll={(e, items) => this.selectAll(e, items)} toggle={(item) => this.toggle(item)} />
         </div>
-
-        <div className='row reportgroup-buttons'>
-          <div className='col-xs-12'>
-            <div className="border-right"> <button type='button' className='btn btn-primary  save-group-btn' onClick={this.saveAssigned.bind(this, assigned)}>{t[language].save}</button> </div>
-            <div className="border-right"> <span  className={'btn-pipe ' + (this.state.editGroup ? 'show' : 'hidden')}> | </span><button type='button' className={'btn btn-danger reportgroup-delete ' + (this.state.editGroup ? 'show' : 'hidden')} onClick={this.deleteGroup.bind(this)} > {t[language].delete}</button> </div>
-            <div> <span className='btn-pipe'> | </span> <Link to='/grouphierarchy' className='col-xs-2 reportgroup-cancel'>{t[language].cancel}</Link> </div>
-          </div>
-        </div>
-
+        {this.renderButtonGroups(assigned)}
       </section>
     </section>)
   }

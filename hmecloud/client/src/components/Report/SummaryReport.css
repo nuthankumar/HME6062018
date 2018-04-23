@@ -667,3 +667,18 @@ span.StoreBrand {
 .background-NA {
     background-color: grey !important;
 }
+
+.total-row-css{
+  border: 2px solid #06B1CB;
+}
+
+.time-span-total{
+  font-weight: bold !important;
+  color:black;
+}
+
+.time-measure-total{
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  color:black;
+}

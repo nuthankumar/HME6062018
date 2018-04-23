@@ -5,6 +5,7 @@ import t from '../Language/language'
 import * as languageSettings from '../Language/languageSettings'
 import { Config } from '../../Config'
 import {CommonConstants} from '../../Constants'
+import AuthenticationService from '../Security/AuthenticationService'
 import Api from '../../Api'
 import 'rc-tree/assets/index.css'
 import './ReportGroup.css'
@@ -20,10 +21,19 @@ export default class ReportGroupHierarchy extends React.Component {
       treeData: [
       ],
       editGroup: false,
-      groupId: null
+      groupId: null,
+      userContext: {}
+      
     }
     this.api = new Api()
     this.getTreeHierarchy()
+    this.renderAddButton = this.renderAddButton.bind(this)
+    this.authService = new AuthenticationService(Config.authBaseUrl)
+  }
+
+  componentDidMount(){
+    this.state.userContext = this.authService.getProfile()
+    this.setState(this.state)
   }
 
   getTreeHierarchy () {
@@ -36,6 +46,18 @@ export default class ReportGroupHierarchy extends React.Component {
         this.state.errorMessage = error.message
         this.setState(this.state)
       })
+  }
+  renderAddButton(){
+    let language = this.state.currentLanguage
+    if(this.state.userContext.IsAccountOwner === 1){
+      return(
+        <button type='button' className='btn btn-primary  add-group-btn' onClick={this.addNewGroup.bind(this)}>{t[language].AddNewGroup}</button>
+      )
+    }else{
+      return(
+        <div></div>
+      )
+    }
   }
 
   addNewGroup () {
@@ -52,7 +74,7 @@ export default class ReportGroupHierarchy extends React.Component {
     console.log(node.node.props.eventKey)
   }
   render () {
-    const language = this.state.currentLanguage
+    let language = this.state.currentLanguage
     const loop = data => {
       return data.map((item) => {
         // item.Children = [];
@@ -73,7 +95,7 @@ export default class ReportGroupHierarchy extends React.Component {
         </div>
         <div className='row'>
           <div className='col-sm-12'>
-            <button type='button' className='btn btn-primary  add-group-btn' onClick={this.addNewGroup.bind(this)}>{t[language].AddNewGroup}</button>
+            {this.renderAddButton()}  
           </div>
         </div>
 
