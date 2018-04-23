@@ -41,7 +41,7 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
   let goalDetails = { goal: 'N/A', cars: 'N/A', percentage: '0%' }
   const goalGrades = {
     goalA: {
-      title: '<Goal A',
+      title: '< Goal A (min:sec)',
       color: '',
       menu: _.clone(goalDetails),
       greet: _.clone(goalDetails),
@@ -53,19 +53,19 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
 
   goalGrades.goalA.color = colorSettings[0]
   goalGrades.goalB = _.clone(goalGrades.goalA)
-  goalGrades.goalB.title = '<Goal B'
+  goalGrades.goalB.title = '< Goal B (min:sec)'
   goalGrades.goalB.color = colorSettings[1]
 
   goalGrades.goalC = _.clone(goalGrades.goalA)
-  goalGrades.goalC.title = '<Goal C'
+  goalGrades.goalC.title = '< Goal C (min:sec)'
   goalGrades.goalC.color = colorSettings[2]
 
   goalGrades.goalD = _.clone(goalGrades.goalA)
-  goalGrades.goalD.title = '<Goal D'
+  goalGrades.goalD.title = '< Goal D (min:sec)'
   goalGrades.goalD.color = colorSettings[2]
 
   goalGrades.goalF = _.clone(goalGrades.goalA)
-  goalGrades.goalF.title = '>Goal D'
+  goalGrades.goalF.title = '> Goal D (min:sec)'
   goalGrades.goalF.color = colorSettings[2]
 
   function CalculatePercetage (value, totalCarsCount) {
