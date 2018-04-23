@@ -5,7 +5,7 @@ WHERE [name] = 'usp_UpdateUser' AND [type] ='P'))
 GO
 
 -- ===========================================================
-	--      Copyright © 2018, HME, All Rights Reserved
+	--      Copyright ï¿½ 2018, HME, All Rights Reserved
 	-- ===========================================================
 	-- Name			:	usp_UpdateUser
 	-- Author		:	Swathi Kumar
@@ -15,10 +15,10 @@ GO
 	-- ===========================================================
 	--				Modification History
 	-- -----------------------------------------------------------
-	-- Sl.No.	Date			Developer		Descriptopn   
+	-- Sl.No.	Date			Developer		Descriptopn
 	-- -----------------------------------------------------------
-	--  1.  	23-APRIL-2018	Swathi Kumar	Procedure created 	
-
+	--  1.  	23-APRIL-2018	Swathi Kumar	Procedure created
+	--  2.		24-APRIL-2018	Jayaram V		Change userRoal datatype
 	-- ===========================================================
 	-- EXEC [dbo].[[usp_UpdateUser]]  @Uid =N'4FD913EE-A4A0-4311-8D6F-21BEABC2AE3A',@IsActive =1,
     -- @FirstName  =N'Hme ',@LastName =N'User',@EmailAddress =N'hmeuser@hme.com',
@@ -34,17 +34,17 @@ CREATE PROCEDURE [dbo].[usp_UpdateUser]
     @EmailAddress		VARCHAR(50),
 	@UpdatedDTS			DateTime,
 	@Stores				VARCHAR(MAX),
-	@UserRole           INT
+	@UserRole           VARCHAR(32)
 AS
 BEGIN
 DECLARE @IsUserUpdated INT = 0
 DECLARE @i INT = 1
-DECLARE @User_ID INT
+DECLARE @User_ID	INT
 
 	-- Updating User Details
-SET @User_ID = 
+SET @User_ID =
 	(SELECT [User_ID] FROM tbl_Users WHERE User_UID = @Uid)
-    UPDATE 
+    UPDATE
 		tbl_Users
 	SET
 		User_IsActive = @IsActive,
@@ -58,30 +58,30 @@ SET @User_ID =
    -- Inserting User selected Store Id's
 	DELETE FROM itbl_User_Store WHERE [User_ID] = @User_ID
 	IF
-		(@Stores IS NOT NULL 
-	AND 
+		(@Stores IS NOT NULL
+	AND
 		@User_ID IS NOT NULL)
-	WHILE 
-	LEN(@Stores) > 0 
+	WHILE
+	LEN(@Stores) > 0
 	BEGIN
-    DECLARE 
+    DECLARE
 		@comma int= CHARINDEX(',', @Stores)
-    IF 
+    IF
 		@comma = 0 SET @comma = LEN(@Stores)+1
-    DECLARE 
+    DECLARE
 		@StoreId varchar(16) = SUBSTRING(@Stores, 1, @comma-1)
-    INSERT 
-	INTO 
+    INSERT
+	INTO
 		itbl_User_Store(
 		[User_ID],
-		Store_ID) 
-	VALUES 
-		(@User_ID, 
+		Store_ID)
+	VALUES
+		(@User_ID,
 		 @StoreId);
-    
-	SET 
+
+	SET
 		@Stores = SUBSTRING(@Stores, @comma+1, LEN(@Stores))
-    SET 
+    SET
 		@i +=1
 	END
 	-- Updating User Selected Roles
@@ -90,7 +90,7 @@ SET @User_ID =
 	UPDATE
 		itbl_User_Role
 	SET
-		Role_ID = @UserRole
+		Role_ID = (select Role_ID from tbl_Roles where Role_UID = @UserRole)
 	WHERE
 		[User_ID] = @User_ID
 	END
