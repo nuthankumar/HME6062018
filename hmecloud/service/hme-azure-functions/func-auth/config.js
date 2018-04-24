@@ -1,4 +1,3 @@
-const sql = require('mssql')
 
 module.exports = {
     tenant: 'hme.com', //'nousinfo.onmicrosoft.com',

@@ -85,6 +85,13 @@ const convertMMMddMM = (dateVal) => {
     return 'N/A'
   }
 }
+const convertMMMdYYYY = (dateVal) => {
+  if (dateVal !== null || (_.isUndefined(dateVal))) {
+    return moment(dateVal).format('MMM DD,YYYY')
+  } else {
+    return 'N/A'
+  }
+}
 
 const converthhmmsstt = (dateVal) => {
   if (dateVal !== null || (_.isUndefined(dateVal))) {
@@ -141,5 +148,6 @@ module.exports = {
   getAdvancedSelectionMaxMonth,
   dateDifferenceMonths,
   convertYYYYMMDD,
-  converthhmmtt
+  converthhmmtt,
+  convertMMMdYYYY
 }

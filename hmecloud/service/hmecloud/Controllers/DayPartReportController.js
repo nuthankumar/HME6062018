@@ -133,7 +133,7 @@ function multiStoreResult (totalRecordCount, input, averageTimeResultSet, colorS
           } else if (storeObj.StoreNo === 'Total Daypart') {
             let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
             dataObject.groupId.value = `Total Daypart`
-            dataObject.groupId.const = `(W-Avg)`
+              dataObject.groupId.timeSpan = `(W-Avg)`
             // dataObject.storeId = store
             tempData.push(dataObject)
           } else if (storeObj.StoreNo !== 'Total Daypart') {
