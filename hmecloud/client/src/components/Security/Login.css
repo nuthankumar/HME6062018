@@ -517,6 +517,6 @@ padding:5px 5px;
       .storeWrap span:not(:first-child){
         color:red;
       }
-      input.save-template::placeholder, input.save-template::-webkit-input-placeholder, input.save-template::-moz-placeholder, input.save-template:-ms-input-placeholder  { 
+      input.save-template::placeholder, input.save-template::-webkit-input-placeholder, input.save-template::-moz-placeholder, input.save-template::-ms-input-placeholder  { 
        font-style: italic;
       }

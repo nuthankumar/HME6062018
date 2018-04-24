@@ -127,8 +127,8 @@ class User extends Component {
             
         };
         return (<section className="editUser">
-            <div id="Content">
-                <div class="col1">
+            <div id="Content" className="forms">
+                <div className="col1">
                     <div class="forms clear">
                         <h3>{t[language].userdetails}
 
@@ -143,8 +143,8 @@ class User extends Component {
                         </h3>
                         <ErrorAlert errorMessage={this.state.errorMessage} />
                         <form /*action="./?pg=SettingsUsers&amp;st=confirm&amp;uuid=PWD1L9GMR73VHJMV11RYHTSD7QTPNQG6" method="post" */ onsubmit={this.submit.bind(this)}>
-                            <div class="fleft">
-                                <table class="user_form">
+                            <div className="fleft">
+                                <table className="user_form">
                                     <tbody>
                                         <tr>
                                             <th class="req"><label for="userEmail">{t[language].usernameemail}</label></th>
