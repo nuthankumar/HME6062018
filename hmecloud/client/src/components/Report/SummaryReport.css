@@ -670,3 +670,11 @@ span.StoreBrand {
   font-weight: 500 !important;
   color:black;
 }
+
+.summaryreport-table tr:last-child {
+    border: 2px solid #06B1CB !important;
+}
+
+    .summaryreport-table tr:last-child > td > span {
+        color: #000;
+    } 
