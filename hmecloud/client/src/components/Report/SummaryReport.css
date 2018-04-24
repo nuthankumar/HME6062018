@@ -106,7 +106,7 @@
 
 .reports-terms{
   font-size: 12px;
-  color: #777;
+  color: #777777;
   margin-top: 16px;
 }
 .show-page-toggle{
@@ -122,6 +122,14 @@
 .goalstatistics-table-section, .systemstatistics-table-section{
       margin-top: 10px;
 }
+
+/* .goalStatistics-cover{
+  position:absolute;
+  left: 15px;
+  right: 15px;
+  height:1px;
+  color: #777777;
+} */
 
 .currentMeasure{
   font-size: 10px;
@@ -178,9 +186,11 @@ h2 .report-start-time-value,h2 .report-end-time-value{
 }
 .from-to-detail{
   color:#008898;
-  margin-bottom: 5px;
+  /* margin-bottom: 5px; */
   font-size: 12px;
   margin-bottom: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 .show-all-pagination-toggle{
   text-align : right;
@@ -670,3 +680,15 @@ span.StoreBrand {
   font-weight: 500 !important;
   color:black;
 }
+
+.summaryreport-table tr:last-child {
+    border: 2px solid #06B1CB !important;
+}
+
+    .summaryreport-table tr:last-child > td > span {
+        color: #000;
+    } 
+    .summaryreport-table tr:last-child > td{
+      pointer-events: none;
+    }
+    

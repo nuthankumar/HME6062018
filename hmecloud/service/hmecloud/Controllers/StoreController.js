@@ -120,9 +120,9 @@ const generateCsv = (input, response) => {
 function prepareStoreDetails (rawCarData, storeData, input) {
   rawCarData.storeName = storeData.Store_Name
   rawCarData.storeDescription = storeData.Brand_Name
-  rawCarData.startTime = `${dateUtils.convertMMMddMM(input.ReportTemplate_To_Date)} OPEN`
-  rawCarData.stopTime = `${dateUtils.convertMMMddMM(input.ReportTemplate_To_Date)} CLOSE`
-  rawCarData.printDate = dateUtils.convertMMMddMM(dateFormat(new Date(), 'isoDate'))
+  rawCarData.startTime = `${dateUtils.convertMMMdYYYY(input.ReportTemplate_To_Date)} OPEN`
+  rawCarData.stopTime = `${dateUtils.convertMMMdYYYY(input.ReportTemplate_To_Date)} CLOSE`
+  rawCarData.printDate = dateUtils.convertMMMdYYYY(dateFormat(new Date(), 'isoDate'))
   rawCarData.printTime = dateFormat(new Date(), 'shortTime')
 
   return rawCarData

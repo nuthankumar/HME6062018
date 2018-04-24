@@ -375,6 +375,7 @@ span.tip {
 
 .advanced-option-section {
     border: 1px solid #cac7c7;
+    border-top: none;
     margin: 0px -10px;
     padding: 10px;
     z-index: 0;
@@ -429,8 +430,11 @@ td.repTemplateRow:hover {
 .textPaddingLarge {
     padding: 0px 10px;
 }
-.textPaddingSmall {
+.textPaddingSmall-reports {
     padding: 0px 5px;
+    position: absolute;
+    top: -7px;
+    background-color: #EBEBEB;
 }
 .__react_component_tooltip {
     width: 350px !important;
@@ -449,6 +453,11 @@ td.repTemplateRow:hover {
     justify-content: center;
     font-size: 12px;
     font-weight: bold;
+    cursor: pointer;
+    position: relative;
+    border-top: 1px solid #cac7c7;
+    margin-left: -9px;
+    width: 305px;
 }
 .container.criteria div {
     margin: 5px auto;
@@ -520,3 +529,14 @@ padding:5px 5px;
       input.save-template::placeholder, input.save-template::-webkit-input-placeholder, input.save-template::-moz-placeholder, input.save-template::-ms-input-placeholder  { 
        font-style: italic;
       }
+
+    .includeCriteria{
+        margin-top: 15px;
+    }
+    .showIcon{
+        position: absolute;
+        left: 69%;
+        top: -2px;
+        width: 10px !important;
+        background: #EBEBEB;
+    } 

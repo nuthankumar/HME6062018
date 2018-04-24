@@ -284,9 +284,11 @@ class Report extends Component {
                 </div>
                 <div>
                                   <div className='advancedOptions' onClick={this.showAdvanced.bind(this)}>
-                                    <span className='textPaddingSmall'> {t[language].advancedoptions} </span>
+                                    <span className='textPaddingSmall-reports'> {t[language].advancedoptions} </span>
+                                    <span className='showIcon'>
                                          <img src={Asc} className={(this.state.showAdvancedOptions ? "show" : "hidden")} aria-hidden="true" />
                                          <img src={Desc} className={(this.state.showAdvancedOptions ? "hidden" : "show")}  aria-hidden="true" />
+                                 </span>
                                  </div>
                   <div
                     className={
@@ -363,7 +365,7 @@ class Report extends Component {
                     <span className="note">{t[language].reportsadvancedreport} </span>
                   </div>
                 </div>
-                <span>{t[language].include}  </span>
+                <div className="includeCriteria">{t[language].include} </div>
                 <div className="checkbox-sections">
                           <div className="alignCenter">
                                     <input type="checkbox" id="longestTime" disabled={this.state.showAdvancedOptions || this.state.disableIncludes} value={1} onChange={this.include.bind(this)}/>

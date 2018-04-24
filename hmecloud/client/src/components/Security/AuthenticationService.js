@@ -136,6 +136,10 @@ export default class AuthenticationService {
         // Retrieves the user token from localStorage
         return localStorage.getItem('ctx_token')
     }
+    getIdToken() {
+        // Retrieves the user token from localStorage
+        return localStorage.getItem('id_token')
+    }
 
     logout() {
         // Clear user token and profile data from localStorage
