@@ -678,3 +678,7 @@ span.StoreBrand {
     .summaryreport-table tr:last-child > td > span {
         color: #000;
     } 
+    .summaryreport-table tr:last-child > td{
+      pointer-events: none;
+    }
+    
