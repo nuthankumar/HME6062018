@@ -435,7 +435,7 @@ class User extends Component {
                 this.authService.setToken(data.accessToken, false)
                 let user = this.authService.getProfile();
                 let userName = user.name ? user.name : user.User_FirstName + ' ' + user.User_LastName;
-                let url = Config.coldFusionUrl + "?atoken=" + this.authService.getIdToken() + "&token=" + this.authService.getToken() + "&un=" + userName
+                let url = Config.coldFusionUrl + "?atoken=" + this.authService.getIdToken() + "&memail=" + user.User_EmailAddress + "&un=" + userName
                 window.location.href = url;
             }
         }, error => {
