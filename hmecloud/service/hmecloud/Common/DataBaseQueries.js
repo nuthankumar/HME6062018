@@ -3,7 +3,7 @@ const sqlQueries = {
   'GroupHierarchy': {
     'getgroupDetails': 'exec [usp_GetGroupDetailsByGroupId] @GroupId = :groupId',
     'getAllAvailableGroupsAndStores': 'exec [usp_GetAllAvailableGroupsAndStores] @AccountId = :accountId',
-    'getGroupHierarchy': 'exec [dbo].[usp_GetGroupHierarchy]  @AccountId= :accountId',
+    'getGroupHierarchy': 'exec [dbo].[usp_GetGroupHierarchy]  @AccountId= :accountId, @UserUid=:userUid',
     'deleteGroupByGroupId': 'exec usp_DeleteGroupByGroupId @GroupId= :groupId',
     'createGroup': 'exec usp_CreateGroup :groupName, :description, :accountId, :userName, :groups, :stores',
     'updateGroup': 'exec usp_UpdateGroup :groupId, :groupName, :description, :accountId, :userName, :groups, :stores'

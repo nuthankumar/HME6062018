@@ -144,7 +144,7 @@ const addToHierarchy = (hierarchy, inputItem) => {
 
 const getAll = (request, input, callback) => {
   const output = {}
-  groupRepository.getAll(input.accountId, result => {
+  groupRepository.getAll(input.accountId, input.userUid, result => {
     if (result) {
       let hierarchy = []
       result.forEach((item) => {

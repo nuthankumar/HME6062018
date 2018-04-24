@@ -40,9 +40,9 @@ const avaliabledGroups = (accountId, callback) => {
   }, result => callback(result))
 }
 
-const getAll = (accountId, callback) => {
+const getAll = (accountId, userUid, callback) => {
   repository.execute(sqlQuery.GroupHierarchy.getGroupHierarchy, {
-    replacements: { accountId: accountId },
+    replacements: { accountId: accountId, userUid: userUid },
     type: db.QueryTypes.SELECT
   }, result => callback(result))
 }

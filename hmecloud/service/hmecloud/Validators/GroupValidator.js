@@ -93,16 +93,17 @@ const avaliabledGroups = (request, callback) => {
 }
 const getAll = (request, callback) => {
   let output = {}
-  if (request.AccountId) {
+  if (request.AccountId || request.uuid) {
     const input = {
-      accountId: request.AccountId
+      accountId: request.AccountId,
+      userUid: request.uuid
     }
-    if (!input.accountId) {
+    if (!input.accountId && !input.userUid) {
       output.key = 'requiredAccountId'
       output.status = false
       callback(output)
     }
-    if (input.accountId) {
+    if (input.accountId || input.userUid) {
       groupController.getAll(request, input, result => {
         callback(result)
       })
