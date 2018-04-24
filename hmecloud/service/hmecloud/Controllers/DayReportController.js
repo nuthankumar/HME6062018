@@ -98,7 +98,7 @@ const generateDayReport = (request, input, callback) => {
             }
             let getGoalTime = result.data[5]
             const dayPartTotalObject = _.last(result.data[0])
-            const totalCars = dayPartTotalObject['Total_Car']
+            const totalCars = _.get(dayPartTotalObject, 'Total_Car', '0')
             let dataArray = []
             dataArray = reportUtil.getGoalStatistic(goalstatisticsDetails, getGoalTime, dataArray, totalCars, input.ReportTemplate_Format, colors)
             daysingleResult.goalData = dataArray

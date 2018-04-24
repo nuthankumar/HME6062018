@@ -9,9 +9,9 @@ const prepareStoreDetails = (daysingleResult, storeData, input) => {
     daysingleResult.storeName = (storeData[0].Store_Name ? storeData[0].Store_Name : 'N/A')
     daysingleResult.storeDesc = (storeData[0].Brand_Name ? storeData[0].Brand_Name : 'N/A')
   }
-  daysingleResult.startTime = `${dateUtils.convertMMMddMM(input.ReportTemplate_To_Date)} OPEN`
-  daysingleResult.stopTime = `${dateUtils.convertMMMddMM(input.ReportTemplate_To_Date)} CLOSE`
-  daysingleResult.printDate = dateUtils.convertMMMddMM(dateUtils.currentDate())
+  daysingleResult.startTime = `${dateUtils.convertMMMdYYYY(input.ReportTemplate_To_Date)} OPEN`
+  daysingleResult.stopTime = `${dateUtils.convertMMMdYYYY(input.ReportTemplate_To_Date)} CLOSE`
+  daysingleResult.printDate = dateUtils.convertMMMdYYYY(dateUtils.currentDate())
   daysingleResult.printTime = dateUtils.currentTime()
   daysingleResult.timeMeasure = input.ReportTemplate_Time_Measure
   daysingleResult.deviceIds = input.ReportTemplate_DeviceIds
@@ -30,7 +30,7 @@ const prepareStoreDetails = (daysingleResult, storeData, input) => {
 function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, isMinutes, colors) {
   isMinutes = Number(isMinutes)
   let colorSettings
-  if (_.isUndefined(colors[0])) {
+  if (_.isUndefined(colors[0]) || _.isUndefined(colors[0].ColourCode)) {
     colorSettings = ['N/A', 'N/A', 'N/A']
   } else {
     colorSettings = colors[0].ColourCode.split('|')

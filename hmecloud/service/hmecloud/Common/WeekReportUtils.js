@@ -101,6 +101,7 @@ const singleStoreinfo = (weekRecords, result, colors, goalSettings, format) => {
  */
 const multipleStoreInfo = (weekRecords, result, colors, goalSettings, format) => {
   console.log('color', colors)
+  let getColor
   let storeDetails = _.filter(result, (value) => {
     if (value.StoreNo) {
       return value
@@ -109,7 +110,7 @@ const multipleStoreInfo = (weekRecords, result, colors, goalSettings, format) =>
   let colorSettings = []
   if (colors && colors.length > 0) {
     colorSettings = colors[0].ColourCode.split('|')
-    let getColor = (event, eventValue) => {
+    getColor = (event, eventValue) => {
       let color = colorSettings[2]
       _.pickBy(goalSettings[0], (value, key) => {
         if (key.toLowerCase().includes(event.toLowerCase())) {
