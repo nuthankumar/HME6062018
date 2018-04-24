@@ -113,7 +113,7 @@ const get = (user, callback) => {
         let storeIds = []
         for (let i = 0; i < userStores.length; i++) {
           let userStore = userStores[i]
-          storeIds.push(userStore.Store_ID)
+          storeIds.push(userStore.Store_UID)
         }
         user.storeIds = storeIds
       }

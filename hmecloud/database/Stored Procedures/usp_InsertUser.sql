@@ -49,6 +49,7 @@ BEGIN
 DECLARE @IsUserCreated INT = 0
 DECLARE @i INT = 1
 DECLARE @Role_ID INT
+DECLARE @StoreId INT
 
 	-- Inserting User Details
     INSERT INTO tbl_Users
@@ -98,7 +99,15 @@ DECLARE @Role_ID INT
     IF 
 		@comma = 0 SET @comma = LEN(@Stores)+1
     DECLARE 
-		@StoreId varchar(16) = SUBSTRING(@Stores, 1, @comma-1)
+		@StoreUid varchar(50) = SUBSTRING(@Stores, 1, @comma-1)
+	SET 
+		@StoreId = 
+		(SELECT 
+			Store_ID 
+		FROM 
+			tbl_Stores 
+		WHERE 
+			Store_UID = @StoreUid)
     INSERT 
 	INTO 
 		itbl_User_Store(

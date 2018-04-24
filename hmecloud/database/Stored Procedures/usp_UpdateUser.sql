@@ -18,7 +18,7 @@ GO
 	-- Sl.No.	Date			Developer		Descriptopn
 	-- -----------------------------------------------------------
 	--  1.  	23-APRIL-2018	Swathi Kumar	Procedure created
-	--  2.		24-APRIL-2018	Jayaram V		Change userRoal datatype
+	--  2.		24-APRIL-2018	Jayaram V		Change userRoal datatype 
 	-- ===========================================================
 	-- EXEC [dbo].[[usp_UpdateUser]]  @Uid =N'4FD913EE-A4A0-4311-8D6F-21BEABC2AE3A',@IsActive =1,
     -- @FirstName  =N'Hme ',@LastName =N'User',@EmailAddress =N'hmeuser@hme.com',
@@ -34,12 +34,13 @@ CREATE PROCEDURE [dbo].[usp_UpdateUser]
     @EmailAddress		VARCHAR(50),
 	@UpdatedDTS			DateTime,
 	@Stores				VARCHAR(MAX),
-	@UserRole           VARCHAR(32)
+	@UserRole           VARCHAR(32) 
 AS
 BEGIN
 DECLARE @IsUserUpdated INT = 0
 DECLARE @i INT = 1
-DECLARE @User_ID	INT
+DECLARE @User_ID INT 
+DECLARE @StoreId INT
 
 	-- Updating User Details
 SET @User_ID =
@@ -69,7 +70,15 @@ SET @User_ID =
     IF
 		@comma = 0 SET @comma = LEN(@Stores)+1
     DECLARE
-		@StoreId varchar(16) = SUBSTRING(@Stores, 1, @comma-1)
+		@StoreUid varchar(50) = SUBSTRING(@Stores, 1, @comma-1)
+	SET 
+		@StoreId = 
+		(SELECT 
+			Store_ID 
+		FROM 
+			tbl_Stores 
+		WHERE 
+			Store_UID = @StoreUid)
     INSERT
 	INTO
 		itbl_User_Store(
@@ -100,5 +109,3 @@ SET @User_ID =
 
 END
 GO
-
-
