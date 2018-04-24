@@ -12,6 +12,7 @@ import LongestTime from './components/Report/LongestTime'
 import User from './components/User/User'
 import registerServiceWorker from './registerServiceWorker'
 import EmailAlert from './components/Alerts/Email'
+import Message from './components/Alerts/Message'
 import './i18n'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 
@@ -29,6 +30,7 @@ ReactDOM.render(<Router>
         <Route exact path="/reports" render={(props) => <Layout Params={props}><Route path='/reports' component={Authenticate(Reports)} /></Layout>} />
         <Route exact path="/groups" render={(props) => <Layout Params={props}><Route path='/groups' component={Authenticate(ReportGroup)} /></Layout>} />
         <Route exact path="/emailSent" render={(props) => <Layout Params={props}><Route path='/emailSent' component={Authenticate(EmailAlert)} /></Layout>} />
+        <Route exact path="/message" render={(props) => <Layout Params={props}><Route path='/message' component={Authenticate(Message)} /></Layout>} />
         <Route exact path="/longestTime" render={(props) => <Layout Params={props}><Route path='/longestTime' component={Authenticate(LongestTime)} /></Layout>} />
         <Route exact path="/rawcardatareport" render={(props) => <Layout Params={props}><Route path='/rawcardatareport' component={Authenticate(RawCarDataReport)} /></Layout>} />
         <Route exact path="/grouphierarchy" render={(props) => <Layout Params={props}><Route path='/grouphierarchy' component={Authenticate(ReportGroupHierarchy)} /></Layout>} />        

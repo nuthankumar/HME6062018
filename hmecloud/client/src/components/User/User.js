@@ -36,14 +36,13 @@ class User extends Component {
             confirmDeleteMessage: 'Are you sure you want to remove this user?',
             deleteConfirm: 'Yes',
             deleteCancel: 'No',
-            deleteSuceessMessage: 'Group Deleted Successfully',
+            deleteSuceessMessage: 'User Deleted Successfully',
             deleteErrorMessage: 'Unable to delete group data',
             errorMessage: '',
         }
         this.api = new Api()
         this.authService = new AuthenticationService(Config.authBaseUrl)
         let isAdmin = this.authService.isAdmin();
-        console.log(this.authService.isAdmin());
         this.state.isAdmin = isAdmin;
     }
 
@@ -84,12 +83,10 @@ class User extends Component {
     }
     load(uuid) {
         let url = Config.apiBaseUrl + CommonConstants.apiUrls.getGroupHierarchyTree
-        console.log(this.state.isAdmin);
         if (this.state.isAdmin) {
             url = +'?uuid=' + uuid;
         }
         this.api.getData(url, data => {
-            console.log(JSON.stringify(data));
             this.state.treeData = data.data
             this.setState(this.state)
         })
@@ -150,7 +147,7 @@ class User extends Component {
                                             <th class="req"><label for="userEmail">{t[language].usernameemail}</label></th>
                                             <td><input type="text" name="userEmail" value={user.userEmail} onChange={this.handleOnChange.bind(this)} /></td>
                                             <td>
-                                                <div className={!this.state.isAdmin ? 'show' : 'hidden'}>
+                                                <div className={!this.state.isAdmin /*&& !this.state.isEdit*/ ? 'show' : 'hidden'}>
                                                     &nbsp;|&nbsp;<a class="cancel_butt" id="remove" onClick={this.deleteUser.bind(this)} /*href="./?pg=SettingsUsers&amp;st=delete&amp;uuid=PWD1L9GMR73VHJMV11RYHTSD7QTPNQG6"*/ >{t[language].removeuser}</a>
                                                 </div>
                                             </td>
@@ -407,12 +404,14 @@ class User extends Component {
         if (this.state.isEdit && this.state.user.uuId) {
             let url = Config.apiBaseUrl + CommonConstants.apiUrls.deleteUser + '?uuId=' + this.state.user.uuId
             this.api.deleteData(url, data => {
-                if (data.data) {
-                    this.state.successMessage = this.state.deleteSuceessMessage
-                    this.state.errorMessage = ''
-                    this.state.deleteSuccess = true
-                    this.setState(this.state)
-                } else {
+                if (data) {
+                this.props.history.push("/message", data.key);
+                //    this.state.successMessage = this.state.deleteSuceessMessage
+                //    this.state.errorMessage = ''
+                //    this.state.deleteSuccess = true
+                //    this.setState(this.state)
+                } 
+                    else {
                     this.state.errorMessage = this.state.deleteErrorMessage
                     this.state.successMessage = ''
                     this.setState(this.state)
@@ -432,22 +431,19 @@ class User extends Component {
         }
         let url = Config.authBaseUrl + Config.tokenPath
         this.api.postData(url, user, data => {
-            //if (data && data.accessToken) {
-            // this.authService.setToken(data.accessToken, this.authService.isAdmin())
-            //}
-            ////to-do: verify if required , move to auth-service
-            //if (UserContext.isLoggedIn()) {
-            //    this.props.history.push("/grouphierarchy");
-            //}
+            if (data && data.accessToken) {
+                this.authService.setToken(data.accessToken, false)
+                let user = this.authService.getProfile();
+                let userName = user.name ? user.name : user.User_FirstName + ' ' + user.User_LastName;
+                let url = Config.coldFusionUrl + "?atoken=" + this.authService.getIdToken() + "&token=" + this.authService.getToken() + "&un=" + userName
+                window.location.href = url;
+            }
         }, error => {
-            //this.state.errorMessage = "ERROR";
-            //this.state.successMessage = "";
-            //this.setState(this.state);
         })
-
     }
 
     submit(e) {
+
         let isError = false;
         const language = this.state.currentLanguage
         if (!this.state.firstName) {
@@ -472,16 +468,17 @@ class User extends Component {
                 "userEmail": this.state.userEmail,
                 "isActive": this.state.isActive,
                 "userRole": this.state.userRole ? this.state.userRole : _.pluck(_.where(this.state.roles, { 'Role_IsDefault': 1 }), 'Role_UID')[0],
-                "storeIds": this.state.stores,
+                "storeIds": this.state.stores ? this.state.stores : [],
                 "createdDateTime": moment().format("YYYY-MM-DD HH:mm:ss")
             }]
-            console.log(JSON.stringify(User[0]));
             let url = Config.apiBaseUrl + CommonConstants.apiUrls.createUser
             this.api.postData(url, User[0], data => {
                 if (data.status) {
-                    this.state.successMessage = t[language][data.key];
-                    this.state.errorMessage = "";
-                    this.setState(this.state);
+                    // const language = this.state.currentLanguage
+                    this.props.history.push("/message", data.key);
+                    //this.state.successMessage = t[language][data.key];
+                    //this.state.errorMessage = "";
+                    //this.setState(this.state);
                 }
                 else if (!data.status) {
                     this.state.errorMessage = "ERROR";

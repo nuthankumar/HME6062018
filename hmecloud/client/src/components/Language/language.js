@@ -745,7 +745,19 @@ const language = [
     'createSuccess': 'Report Template create successfully',
     'createFailure': 'Unable to Create Report',
     'deleteSuccess': 'Report Template Deleted successfully',
-    'deteleFailure': 'Unable to Delete Report'
+    'deteleFailure': 'Unable to Delete Report',
+
+     'firstNameEmpty': 'User firstName can not be empty',
+    'invalidUserUUID': 'Invalid User id',
+    'usercreateSuccess': 'Record Saved',
+    'userAlreadyExist': 'User already exist',
+    'usercreateFailure': 'User creation failed',
+    'userupdatedSuccess': 'User details updated successfully',
+    'userupdateFailure': 'User details updation failed',
+    'userdeleteSuccess': 'User deleted successfully',
+    'userDeleteFailed': 'User deletion failed'
+
+
   },
 
   // French
@@ -1504,6 +1516,17 @@ const language = [
 //    'createFailure': 'Impossible de créer un rapport',
 //    'deleteSuccess': 'Modèle de rapport supprimé avec succès',
 //    'deteleFailure': 'Impossible de supprimer le rapport'
+
+
+    'firstNameEmpty': 'User firstName can not be empty',
+    'invalidUserUUID': 'Invalid User id',
+    'usercreateSuccess': 'User created successfully',
+    'userAlreadyExist': 'User already exist',
+    'usercreateFailure': 'User creation failed',
+    'userupdatedSuccess': 'User details updated successfully',
+    'userupdateFailure': 'User details updation failed',
+    'userdeleteSuccess': 'User deleted successfully',
+    'userDeleteFailed': 'User deletion failed'
 
   }
 ]
