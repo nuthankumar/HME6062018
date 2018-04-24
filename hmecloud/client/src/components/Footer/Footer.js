@@ -27,7 +27,7 @@ export default class Footer extends React.Component {
     return (<div >
         <div id="Footer">
             <div className="copyright">
-            <span>HM Electronics, Inc. ©2018
+            <span><b>HM Electronics, Inc. &copy;2018 </b>
 	    |
 		    <a className="terms black_link" href={url + "images/HMECLOUD_Terms_and_Conditions.pdf?token="+token} target="_blank" translate="" key="useragreement">{t[language].useragreement}</a>
                     |
