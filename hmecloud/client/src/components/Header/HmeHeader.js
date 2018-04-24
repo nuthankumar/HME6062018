@@ -77,7 +77,7 @@ export default class HmeHeader extends React.Component {
         else {
             let token = UserContext.getToken();
             let userObject = this.authService.getTokenDetails(token);
-            this.state.userName = userObject.name ? userObject.name : userObject.User_LastName + ',' + userObject.User_FirstName;
+            this.state.userName = userObject.name ? userObject.name : userObject.User_FirstName+' '+userObject.User_LastName;
         }
         this.setState(this.state)
     }
