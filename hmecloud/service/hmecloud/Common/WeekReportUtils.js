@@ -100,32 +100,33 @@ const singleStoreinfo = (weekRecords, result, colors, goalSettings, format) => {
  * @param {*} format
  */
 const multipleStoreInfo = (weekRecords, result, colors, goalSettings, format) => {
+  console.log('color', colors)
   let storeDetails = _.filter(result, (value) => {
     if (value.StoreNo) {
       return value
     }
   })
   let colorSettings = []
-  if (colors.length > 0) {
+  if (colors && colors.length > 0) {
     colorSettings = colors[0].ColourCode.split('|')
-  }
-  let getColor = (event, eventValue) => {
-    let color = colorSettings[2]
-    _.pickBy(goalSettings[0], (value, key) => {
-      if (key.toLowerCase().includes(event.toLowerCase())) {
-        if (value && eventValue < value) {
-          if (key.includes('GoalA')) {
-            color = colorSettings[0]
-          } else if (key.includes('GoalB')) {
-            color = colorSettings[1]
-          } else if (key.includes('GoalC')) {
-            color = colorSettings[2]
+    let getColor = (event, eventValue) => {
+      let color = colorSettings[2]
+      _.pickBy(goalSettings[0], (value, key) => {
+        if (key.toLowerCase().includes(event.toLowerCase())) {
+          if (value && eventValue < value) {
+            if (key.includes('GoalA')) {
+              color = colorSettings[0]
+            } else if (key.includes('GoalB')) {
+              color = colorSettings[1]
+            } else if (key.includes('GoalC')) {
+              color = colorSettings[2]
+            }
+            return true
           }
-          return true
         }
-      }
-    })
-    return color
+      })
+      return color
+    }
   }
   let storesData = []
   _.forEach(storeDetails, (items) => {
