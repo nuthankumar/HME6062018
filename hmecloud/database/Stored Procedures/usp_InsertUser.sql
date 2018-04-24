@@ -114,7 +114,9 @@ DECLARE @Role_ID INT
 	@i +=1
 	END
 	-- Inserting User Selected Roles
-	if(@UserRole IS NOT NULL)
+	if(@UserRole IS NOT NULL
+	AND 
+		@IsUserCreated IS NOT NULL)
 	BEGIN
 	SET @Role_ID = (select Role_ID from tbl_Roles where Role_UID = @UserRole)
 	INSERT
