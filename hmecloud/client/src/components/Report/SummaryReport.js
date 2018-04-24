@@ -238,6 +238,13 @@ export default class SummaryReport extends Component {
             }
 
             if (request.timeMeasure < 4) {
+                 if(storeId.day){
+                    request.fromDate = storeId.day.timeSpan
+                    request.toDate = storeId.day.timeSpan
+                 }else if(storeId.week){
+                    request.fromDate = storeId.week.timeSpan.split("-")[0]
+                    request.toDate = storeId.week.timeSpan.split("-")[1]
+                 }
                 let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
                 this.api.postData(url, request, data => {
                     request.deviceIds = data.deviceIds
@@ -254,7 +261,7 @@ export default class SummaryReport extends Component {
                     this.setState(this.state)
                 })
             }else if(request.timeMeasure === 4){
-                if(storeId.daypart.timeSpan){
+                if(storeId.daypart){
                     let year = request.fromDate.split("-")[0]
                     let monthDay = storeId.daypart.timeSpan.split("-")[0]
                     request.fromDate = year.concat('/'+monthDay)

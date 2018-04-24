@@ -284,7 +284,7 @@ class Report extends Component {
                 </div>
                 <div>
                                   <div className='advancedOptions' onClick={this.showAdvanced.bind(this)}>
-                                    <span className='textPaddingSmall'> {t[language].advancedoptions} </span>
+                                    <span className='textPaddingSmall-reports'> {t[language].advancedoptions} </span>
                                     <span className='showIcon'>
                                          <img src={Asc} className={(this.state.showAdvancedOptions ? "show" : "hidden")} aria-hidden="true" />
                                          <img src={Desc} className={(this.state.showAdvancedOptions ? "hidden" : "show")}  aria-hidden="true" />

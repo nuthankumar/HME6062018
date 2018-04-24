@@ -430,7 +430,7 @@ td.repTemplateRow:hover {
 .textPaddingLarge {
     padding: 0px 10px;
 }
-.textPaddingSmall {
+.textPaddingSmall-reports {
     padding: 0px 5px;
     position: absolute;
     top: -7px;
