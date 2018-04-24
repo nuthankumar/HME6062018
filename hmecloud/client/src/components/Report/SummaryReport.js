@@ -224,7 +224,7 @@ export default class SummaryReport extends Component {
             let currentStoreIds = request.deviceIds
             if (request.deviceIds.length > 1) {
                 let array = []
-                array.push(storeId)
+                array.push(storeId.deviceId.value)
                 request.deviceIds = array;
             }
              this.setState(this.state)
@@ -254,6 +254,12 @@ export default class SummaryReport extends Component {
                     this.setState(this.state)
                 })
             }else if(request.timeMeasure === 4){
+                if(storeId.daypart.timeSpan){
+                    let year = request.fromDate.split("-")[0]
+                    let monthDay = storeId.daypart.timeSpan.split("-")[0]
+                    request.fromDate = year.concat('/'+monthDay)
+                    request.toDate = year.concat('/'+monthDay)
+                }
                 let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
                 this.api.postData(url, request, data => {
                     this.state.showLoader = false

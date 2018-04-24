@@ -86,7 +86,9 @@ exports.COMMON = {
   WEEKREPORTTITLE: ' CSV Weekly Report',
   DAYREPORTTITLEPDF: ' PDF Day Report',
   DAYPARTREPORTTITLEPDF: ' PDF Daypart Report',
-  WEEKREPORTTITLEPDF: ' PDF Weekly Report'
+    WEEKREPORTTITLEPDF: ' PDF Weekly Report',
+    PASSWORDLENGTH: 10,
+    SALTLENGTH: 32
 }
 
 exports.JWT = {

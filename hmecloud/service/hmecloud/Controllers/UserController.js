@@ -1,6 +1,8 @@
 
 const repository = require('../Repository/UserRepository')
 const uuidv4 = require('uuid/v4')
+const passwordUtil = require('../Common/PasswordUtil')
+const messages = require('../Common/Message')
 
 /**
  * The method can be used to create user
@@ -9,8 +11,12 @@ const uuidv4 = require('uuid/v4')
  * @public
  */
 const create = (user, callback) => {
-  let output = {}
-  const values = {
+    let output = {}
+    let generatePassword = passwordUtil.generatePassword(messages.COMMON.PASSWORDLENGTH)
+    let salt = passwordUtil.generateSalt(messages.COMMON.SALTLENGTH)
+    let hashValue = passwordUtil.computeHash(generatePassword.toLowerCase(), salt)
+
+    const values = {
     Uid: uuidv4().toUpperCase(),
     IsActive: user.isActive,
     IsVerified: 0,
@@ -20,10 +26,10 @@ const create = (user, callback) => {
     FirstName: user.firstName,
     LastName: user.lastName,
     EmailAddress: user.userEmail,
-    PasswordHash: 'abcd', // To be updated
-    PasswordSalt: 'abcd', // to be updated
+    PasswordHash: hashValue.toUpperCase(), 
+    PasswordSalt: salt, 
     CreatedDTS: user.createdDTS,
-    CreatedBy: user.createdUserEmail,
+    CreatedBy: user.userUid,
     Stores: user.storeIds.toString(),
     UserRole: user.userRole
   }
@@ -107,7 +113,7 @@ const get = (user, callback) => {
         let storeIds = []
         for (let i = 0; i < userStores.length; i++) {
           let userStore = userStores[i]
-          storeIds.push(userStore.Store_ID)
+          storeIds.push(userStore.Store_UID)
         }
         user.storeIds = storeIds
       }

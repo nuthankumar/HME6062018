@@ -63,6 +63,7 @@ BEGIN
 			[Level],
 			'group' AS [Type],
 			NULL Store_Number,
+			NULL Store_UID,
 			NULL Brand_Name,
 			NULL Device_ID,
 			NULL Device_UID
@@ -76,6 +77,7 @@ BEGIN
 			ISNULL(GH.[Level],8)+1,
 			'store' AS [Type],
 			store.Store_Number Store_Number,
+			store.Store_UID,
 			brand.Brand_Name Brand_Name,
 			device.Device_ID,
 			device.Device_UID

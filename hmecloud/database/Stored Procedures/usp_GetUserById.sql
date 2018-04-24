@@ -59,6 +59,7 @@ BEGIN
 
     SELECT
         stor.Store_ID,
+		stor.Store_UID,
         bran.Brand_ID,
         subs.Subscription_Level,
         usrs.User_Company_ID
@@ -72,3 +73,6 @@ BEGIN
     WHERE usrs.User_UID=@Uid
 
 END
+GO
+
+
