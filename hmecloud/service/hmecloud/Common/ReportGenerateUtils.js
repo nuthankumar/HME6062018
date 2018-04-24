@@ -121,7 +121,7 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
 
   function eventMatch (key, value, goal, totalCarsCount) {
     if (value === null) {
-      value = 'N/A'
+      value = 0
     }
     if (key.includes('Menu')) {
       goal.menu.cars = value
@@ -280,3 +280,4 @@ module.exports = {
   getColourCode,
   prepareStatistics
 }
+
