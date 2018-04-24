@@ -31,7 +31,7 @@ CREATE PROCEDURE [dbo].[usp_GetGroupHierarchy]
 AS
 BEGIN
 	IF (@AccountId IS NULL)
-	SELECT @AccountId=User_OwnerAccout_ID
+	SELECT @AccountId=User_OwnerAccount_ID
 	FROM tbl_Users
 	WHERE User_Uid=@UserUid
 	

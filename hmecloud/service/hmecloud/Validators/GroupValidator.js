@@ -96,7 +96,7 @@ const getAll = (request, callback) => {
   if (request.AccountId || request.uuid) {
     const input = {
       accountId: request.AccountId,
-      userUid: request.uuid
+      userUid: (request.uuid ? request.uuid:null)
     }
     if (!input.accountId && !input.userUid) {
       output.key = 'requiredAccountId'
