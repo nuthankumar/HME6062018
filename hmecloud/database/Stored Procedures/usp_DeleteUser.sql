@@ -48,14 +48,10 @@ FROM itbl_User_Role urol
 WHERE usrs.User_UID =@Uid
 
     DELETE urol
-FROM
+	FROM
         tbl_Users usrs
         INNER JOIN itbl_User_Store urol ON usrs.[User_ID] = urol.[User_ID]
-        INNER JOIN tbl_Stores stor ON stor.Store_ID = urol.Store_ID
-        INNER JOIN ltbl_Brands bran ON bran.Brand_ID = stor.Store_Brand_ID
-        INNER JOIN tbl_Accounts acct ON acct.Account_ID = usrs.User_OwnerAccount_ID
-        INNER JOIN ltbl_Subscriptions subs ON subs.Subscription_ID = acct.Account_Subscription_ID
-WHERE usrs.User_UID=@Uid
+    WHERE usrs.User_UID=@Uid
 
     DELETE FROM tbl_Users WHERE User_UID=@Uid
 	SET @IsUserDeleted = @UserId
