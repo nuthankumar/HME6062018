@@ -194,6 +194,8 @@ export default class ReportGroup extends React.Component {
           this.getAvailableGroupStoreList()
         }else{
           this.state.errorMessage = t[language][data.key]
+          this.state.successMessage = ''
+          this.setState(this.state)
         }
       
       }, error => {
