@@ -25,8 +25,10 @@ class Login extends Component {
   }
   componentWillMount() {
     //  if (this.Auth.loggedIn()) { this.props.history.replace('/') }
-    console.log(UserContext.isLoggedIn());
-    let isLoggedIn = UserContext.isLoggedIn()
+    //console.log(UserContext.isLoggedIn());
+    // let isLoggedIn = UserContext.isLoggedIn()
+
+      let isLoggedIn = this.authService.isLoggedIn()
 
     if (isLoggedIn) {
       this.props.history.push("/grouphierarchy");
