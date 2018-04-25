@@ -300,11 +300,15 @@ h2 .report-start-time-value,h2 .report-end-time-value{
 
 .goalstatistics-table td{
   border-top: 1px solid #FFFFFF;
-  border-left: 1px solid #FFFFFF;
+  /* border-left: 1px solid #FFFFFF; */
   text-align: center;
   vertical-align: middle;
   height: 21px;
 }
+
+.goalstatistics-table tr:first-child td:first-child{
+  border-right: 1px solid #FFFFFF;
+  } 
 
 .goalstatistics-table td:first-child{width: 125px;
 }
@@ -692,3 +696,21 @@ span.StoreBrand {
       pointer-events: none;
     }
     
+
+    /* Placeholder italic */
+
+    .save-template::-webkit-input-placeholder {
+      font-style: italic;
+      }
+      .save-template:-moz-placeholder {
+      font-style: italic;
+      }
+      .save-template::-moz-placeholder {
+      font-style: italic;
+      }
+      .save-template:-ms-input-placeholder {
+      font-style: italic;
+      } 
+
+ 
+

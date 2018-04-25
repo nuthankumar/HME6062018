@@ -724,7 +724,6 @@ class Report extends Component {
           document.getElementById("longestTime").checked = false;
         }
         if(template.SystemStatistics){
-          
           document.getElementById("systemStatistics").checked = true;
           include.push('2')
         }
