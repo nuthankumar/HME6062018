@@ -150,6 +150,7 @@ export default class ReportGroup extends React.Component {
   saveAssigned (items) {
     let language = this.state.currentLanguage
     this.state.editGroup = this.props.history.location.state.editGroup
+    this.refs.groupName.value = this.refs.groupName.value.trim()
     this.setState(this.state)
     let groupStoreObject = this.getGroupandStore(items)
     if (this.refs.groupName.value === '' || this.refs.groupName.value === undefined) {

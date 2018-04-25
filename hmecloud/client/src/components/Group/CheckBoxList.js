@@ -15,7 +15,7 @@ export default class CheckBoxList extends React.Component {
       <div className='col-xs-4'>{this.props.title} :
         <div className='select-all-groups alignCenter'>
                 <input type='checkbox' onChange={(event) => this.props.selectAll(event, this.props.items)}
-                    name='selectAll' /> <span className="textPaddingSmall">{t[language].selectall}</span></div>
+                    name='selectAll' /> <span className="textPaddingSmall">&nbsp;{t[language].selectall}</span></div>
         <div className='col-xs-12 new-groups'>
           <ul className='unlinked-grouplist'>
             {
