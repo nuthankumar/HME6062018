@@ -237,6 +237,7 @@ width:197px;
     margin: 10px 0px !important;
     border: 1px solid #dad9d9;
     background-color: #f5f5f5;
+    font-size: 13px;
 }
 
 .time-measures {
@@ -435,6 +436,7 @@ td.repTemplateRow:hover {
     position: absolute;
     top: -7px;
     background-color: #EBEBEB;
+    color: #d31b3d; 
 }
 .__react_component_tooltip {
     width: 350px !important;
@@ -540,3 +542,18 @@ padding:5px 5px;
         width: 10px !important;
         background: #EBEBEB;
     } 
+
+    .save-template::-webkit-input-placeholder {
+        font-style: italic;
+    }
+    .save-template:-moz-placeholder {
+        font-style: italic;
+    }
+    .save-template::-moz-placeholder {
+        font-style: italic;
+    }
+    .save-template:-ms-input-placeholder {
+        font-style: italic;
+    } 
+
+   

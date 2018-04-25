@@ -32,4 +32,19 @@ router.post('/verifyJWT', authVerfiy, (request, response, next) => {
   // response.send(Actual functionality )
 })
 
+router.get('/getUser', authVerfiy, (request, response) => {
+  const userDetails = {
+    userUid: request.userUid,
+    UserEmail: request.UserEmail,
+    UserName: request.UserName,
+    AccountId: request.AccountId,
+    companyId: request.companyId
+  }
+  const output = {
+    data: userDetails,
+    status: true
+  }
+  response.send(output)
+})
+
 module.exports = router

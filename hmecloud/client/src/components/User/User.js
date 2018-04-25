@@ -47,7 +47,6 @@ class User extends Component {
     }
 
     componentWillMount() {
-
         const params = new URLSearchParams(this.props.history.location.search);
         const uuid = params.get('uuid') ? params.get('uuid') : null
         this.load(uuid)
@@ -55,14 +54,27 @@ class User extends Component {
             this.setState({ isEdit: true })
             let url = Config.apiBaseUrl + CommonConstants.apiUrls.getUser + '?uuId=' + uuid;
             this.api.getData(url, data => {
-                let userObject = data.data
+
+                //let userObject = {
+                //    "uuId":"98A65FE0-23CE-413B-9093-753733C8",
+                //        "isActive":1, "firstName":"n", "lastName":"n",
+                //        "userEmail": "n@n.com", "userRole":"4443TLW53IFBUFCHC4FFZW9M6ZQPTEOQ",
+                //            "storeIds": ["5D8B2DED97894183927020E4CCB0700E", "B3696D2623FC4D58AF11031C04276C41", "4198FCA03EF74AEEA076F78D27DC12E7"]
+                //}
+                let userObject = data.data;
                 this.state.uuid = uuid
                 this.state.userEmail = userObject.userEmail
                 this.state.firstName = userObject.firstName
                 this.state.lastName = userObject.lastName
                 this.state.isActive = userObject.isActive
                 this.state.userRole = userObject.userRole
-                this.state.defaultCheckedKeys = userObject.storeIds
+                const keys = this.findMatchedIds(this.state.treeData, item => {
+                    return (
+                        item.Type === "store" &&
+                        userObject.storeIds.indexOf(item.StoreUid.toString()) > -1
+                    );
+                })
+                this.state.defaultCheckedKeys= keys.map(String)
                 this.state.user = data.data;
                 this.setState(this.state)
             })
@@ -73,6 +85,7 @@ class User extends Component {
         let url = Config.apiBaseUrl + CommonConstants.apiUrls.getUserRoles
         this.api.getData(url, data => {
             this.state.roles = data.data
+         //   this.state.userRole = _.pluck(_.where(this.state.roles, { 'Role_IsDefault': 1 }), 'Role_UID')[0]
             this.setState(this.state)
         })
         url = Config.apiBaseUrl + CommonConstants.apiUrls.getAudit + '?uuId=' + uuid;
@@ -83,21 +96,25 @@ class User extends Component {
     }
     load(uuid) {
         let url = Config.apiBaseUrl + CommonConstants.apiUrls.getGroupHierarchyTree
+        
+
         if (this.state.isAdmin) {
-            url = +'?uuid=' + uuid;
+            url += '?uuid=' + uuid;
         }
         this.api.getData(url, data => {
             this.state.treeData = data.data
+            console.log(this.state.treeData);
             this.setState(this.state)
         })
     }
     onCheck(checkedKeys, node) {
-        this.state.selectedList = checkedKeys;
+        //this.state.selectedList = checkedKeys;
         this.state.defaultCheckedKeys = checkedKeys;
-        // this.state.stores = _.pluck(_.where(_.pluck(node.checkedNodes, "props"), { type: "store" }), "className");
+        this.state.stores = _.pluck(_.where(_.pluck(node.checkedNodes, "props"), { type: "store" }), "className");
         let deviceUIds = _.pluck(_.where(_.pluck(node.checkedNodes, "props"), { type: "store" }), "value");
         this.state.deviceUIds = deviceUIds;
         this.setState(this.state);
+        console.log(this.state)
     }
 
 
@@ -110,12 +127,12 @@ class User extends Component {
                 return data.map(item => {
                     if (item.Children && item.Children.length) {
                         return (
-                            <TreeNode title={this.renderStoresAndBrand(item)} className={item.StoreNumber} key={item.Type == 'store' ? item.DeviceUID : item.Id} value={item.Type == 'store' ? item.DeviceUID : item.Id} type={item.Type}>
+                            <TreeNode title={this.renderStoresAndBrand(item)} className={item.StoreUid} key={item.Id} value={item.Type == 'store' ? item.DeviceUID : item.Id} type={item.Type}>
                                 {loop(item.Children)}
                             </TreeNode>
                         );
                     }
-                    return <TreeNode title={this.renderStoresAndBrand(item)} className={item.StoreNumber} key={item.Type == 'store' ? item.DeviceUID : item.Id} value={item.Type == 'store' ? item.DeviceUID : item.Id} type={item.Type} />;
+                    return <TreeNode title={this.renderStoresAndBrand(item)} className={item.StoreUid} key={item.Id} value={item.Type == 'store' ? item.DeviceUID : item.Id} type={item.Type} />;
                 });
             }
             else {
@@ -147,7 +164,7 @@ class User extends Component {
                                             <th class="req"><label for="userEmail">{t[language].usernameemail}</label></th>
                                             <td><input type="text" name="userEmail" value={user.userEmail} onChange={this.handleOnChange.bind(this)} /></td>
                                             <td>
-                                                <div className={!this.state.isAdmin /*&& !this.state.isEdit*/ ? 'show' : 'hidden'}>
+                                                <div className={this.state.isAdmin  /*&& !this.state.isEdit*/ ? 'hidden' : 'show'}>
                                                     &nbsp;|&nbsp;<a class="cancel_butt" id="remove" onClick={this.deleteUser.bind(this)} /*href="./?pg=SettingsUsers&amp;st=delete&amp;uuid=PWD1L9GMR73VHJMV11RYHTSD7QTPNQG6"*/ >{t[language].removeuser}</a>
                                                 </div>
                                             </td>
@@ -165,7 +182,7 @@ class User extends Component {
                                             <td>
                                                 <input type="radio" name="isActive" value={1} checked={this.state.isActive == 1} onClick={this.handleRadioChange.bind(this)} />
                                                 <span id="active_inactive"><span>{t[language].Active}</span>&nbsp;&nbsp;
-                                                    <input type="radio" name="isActive" value={0} checked={this.state.isActive == 0} onClick={this.handleRadioChange.bind(this)} /><span>{t[language].Inactive}</span></span>
+                                                <input type="radio" name="isActive" value={0} checked={this.state.isActive == 0} onClick={this.handleRadioChange.bind(this)} /><span>{t[language].Inactive}</span></span>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -177,7 +194,8 @@ class User extends Component {
                                         <tr>
                                             <th class="req"><label for="Role_UID" translate="" key="userrole">{t[language].userrole}</label></th>
                                             <td>
-                                                <select name="userRole" class="wide_select" onChange={this.handleOnChange.bind(this)}>
+                                                <select name="userRole" class="wide_select" value={this.state.userRole} onChange={this.handleOnChange.bind(this)}>
+                                                    <option value='' selected={!this.state.userRole}></option>
                                                     {this.renderOptions()}
                                                 </select>
                                             </td>
@@ -258,11 +276,20 @@ class User extends Component {
 
     renderOptions() {
         let roles = this.state.roles;
+        console.log(roles);
         //let isEdit = this.state.isEdit
         if (roles) {
             let roleOptions = roles.map(function (role, index) {
                 //                return (<option key={index} value={role.Role_UID} selected={!this.state.isEdit ? (role.Role_IsDefault == 1 ? true : false) : (role.Role_UID == this.state.userRole ? true : false)} >{role.Role_Name}</option>)
+
+              
+                if (role.Role_IsDefault == 1) {
+                    this.state.userRole = role.Role_UID;
+                    this.setState(this.state);
+                    console.log(this.state)
+                }
                 return (<option key={index} value={role.Role_UID} selected={(role.Role_IsDefault == 1 ? true : false)} >{role.Role_Name}</option>)
+
 
             });
             return roleOptions;
@@ -306,6 +333,7 @@ class User extends Component {
     selectAll(e) {
 
         if (!this.state.selectAll) {
+            console.log(_.pluck(this.state.treeData, "Id").map(String));
             this.setState({
                 defaultCheckedKeys: _.pluck(this.state.treeData, "Id").map(String),
                 stores: this.findMatchedClassName(this.state.treeData, item => {
@@ -347,7 +375,7 @@ class User extends Component {
                 }
                 if (keys(item)) {
                     // if ( item.Type === 'store' && keys.indexOf(item.Id.toString()) > -1) {
-                    selectedItems.push(item.StoreNumber);
+                    selectedItems.push(item.StoreUid);
                     selectedList.push(item.Id);
                 }
             });
@@ -426,20 +454,26 @@ class User extends Component {
 
 
     masquerade(e) {
-        let user = {
-            username: this.state.userEmail
-        }
-        let url = Config.authBaseUrl + Config.tokenPath
-        this.api.postData(url, user, data => {
-            if (data && data.accessToken) {
-                this.authService.setToken(data.accessToken, false)
-                let user = this.authService.getProfile();
-                let userName = user.name ? user.name : user.User_FirstName + ' ' + user.User_LastName;
-                let url = Config.coldFusionUrl + "?atoken=" + this.authService.getIdToken() + "&token=" + this.authService.getToken() + "&un=" + userName
-                window.location.href = url;
-            }
-        }, error => {
-        })
+        
+        let user = this.authService.getProfile();
+        let userName = user.name ? user.name : user.User_FirstName + ' ' + user.User_LastName;
+        let url = Config.coldFusionUrl + "?atoken=" + this.authService.getIdToken() + "&memail=" + this.state.userEmail + "&un=" + userName
+        window.location.href = url;
+
+        // let user = {
+        //     username: this.state.userEmail
+        // }
+        // let url = Config.authBaseUrl + Config.tokenPath
+        // this.api.postData(url, user, data => {
+        //     if (data && data.accessToken) {
+        //         this.authService.setToken(data.accessToken, false)
+        //         let user = this.authService.getProfile();
+        //         let userName = user.name ? user.name : user.User_FirstName + ' ' + user.User_LastName;
+        //         let url = Config.coldFusionUrl + "?atoken=" + this.authService.getIdToken() + "&memail=" + user.User_EmailAddress + "&un=" + userName
+        //         window.location.href = url;
+        //     }
+        // }, error => {
+        // })
     }
 
     submit(e) {
@@ -448,15 +482,19 @@ class User extends Component {
         const language = this.state.currentLanguage
         if (!this.state.firstName) {
             this.state.errorMessage = t[language].pleasefillinfirstname
-            let isError = true;
+            isError = true;
         }
         if (!this.state.lastName) {
             this.state.errorMessage = t[language].pleasefillinlastname
-            let isError = true;
+            isError = true;
         }
         if (!this.state.userEmail) {
             this.state.errorMessage = t[language].emailinvalid
-            let isError = true;
+            isError = true;
+        }
+        if (!this.state.userRole) {
+            this.state.errorMessage = t[language].pleaseassignrole
+            isError = true;
         }
 
         this.setState(this.state);
@@ -467,12 +505,14 @@ class User extends Component {
                 "lastName": this.state.lastName,
                 "userEmail": this.state.userEmail,
                 "isActive": this.state.isActive,
-                "userRole": this.state.userRole ? this.state.userRole : _.pluck(_.where(this.state.roles, { 'Role_IsDefault': 1 }), 'Role_UID')[0],
+                "userRole": this.state.userRole,
                 "storeIds": this.state.stores ? this.state.stores : [],
                 "createdDateTime": moment().format("YYYY-MM-DD HH:mm:ss")
             }]
+            console.log(User[0])
             let url = Config.apiBaseUrl + CommonConstants.apiUrls.createUser
             this.api.postData(url, User[0], data => {
+                
                 if (data.status) {
                     // const language = this.state.currentLanguage
                     this.props.history.push("/message", data.key);

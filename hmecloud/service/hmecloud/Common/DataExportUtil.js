@@ -1,28 +1,73 @@
 const dateUtils = require('../Common/DateUtils')
 const csvGeneration = require('../Common/CsvUtils')
 const Pdfmail = require('./PDFUtils')
+const moment = require('moment')
 
-const prepareJsonForExport = (storeData, input, csvInput, callback) => {
+const prepareJsonForExport = (storeData, input, csvInput, reportType, callback) => {
   let storeDataList = []
-
   let format = input.ReportTemplate_Format
   storeData.forEach(item => {
     let store = {}
-
-    if (item.StoreDate.includes('Total')) {
-      store.Stores = item.StoreDate
-    } else {
-      store.Day = dateUtils.convertmmddyyyy(item.StoreDate)
-    }
-    if (input.ReportTemplate_StoreIds.length > 1) {
-      store.Groups = item.GroupName
-      if (item.StoreDate.includes('Total')) {
-        store.Stores = item.StoreDate
-      } else {
-        store.Stores = item.StoreNo
+    // Week
+    if (reportType === 'week') {
+      if (item.StoreNo === 'Total Week') {
+        store.Week = 'Total Week'
+      } else if (input.ReportTemplate_DeviceIds.length === 1) {
+        store.Week = moment(item.WeekStartDate).format('DD/MM/YYYY') + '-' + moment(item.WeekEndDate).format('DD/MM/YYYY')
+      } else if (input.ReportTemplate_DeviceIds.length > 1) {
+        store.Groups = item.GroupName
+        store.Stores = item.Store_Name
+        if (item.StoreNo === 'Total Week' && item.Store_Name === null) {
+          store.Week = 'Total Week'
+          store.Stores = ''
+        } else if (item.StoreNo === 'Subtotal' && item.Store_Name === null) {
+          store.Week = 'Subtotal'
+          store.Stores = ''
+        } else {
+          store.Week = moment(item.WeekStartDate).format('DD/MM/YYYY') + '-' + moment(item.WeekEndDate).format('DD/MM/YYYY')
+        }
       }
     }
-
+    // Daypart
+    if (reportType === 'Daypart') {
+      if (item.StoreNo === 'Total Daypart') {
+        store.Daypart = 'Total Daypart'
+      } else if (input.ReportTemplate_DeviceIds.length === 1) {
+        store.Daypart = moment(item.StoreDate).format('DD/MM/YYYY')
+      } else if (input.ReportTemplate_DeviceIds.length > 1) {
+        store.Groups = item.GroupName
+        store.Stores = item.Store_Name
+        if (item.StoreNo === 'Total Daypart') {
+          store.Daypart = 'Total Daypart'
+          store.Stores = ''
+        } else if (item.StoreNo === 'SubTotal') {
+          store.Daypart = 'SubTotal'
+          store.Stores = ''
+        } else {
+          store.Daypart = moment(item.StoreDate).format('DD/MM/YYYY')
+        }
+      }
+    }
+    // Day
+    if (reportType === 'Day') {
+      if (item.StoreNo === 'Total Day') {
+        store.Day = 'Total Day'
+      } else if (input.ReportTemplate_DeviceIds.length === 1) {
+        store.Day = moment(item.StoreDate).format('DD/MM/YYYY')
+      } else if (input.ReportTemplate_DeviceIds.length > 1) {
+        store.Groups = item.GroupName
+        store.Stores = item.Store_Name
+        if (item.StoreNo === 'Total Day') {
+          store.Day = 'Total Day'
+          store.Stores = ''
+        } else if (item.StoreNo === 'Subtotal') {
+          store.Day = 'SubTotal'
+          store.Stores = ''
+        } else {
+          store.Day = moment(item.StoreDate).format('DD/MM/YYYY')
+        }
+      }
+    }
     store['Menu Board'] = dateUtils.convertSecondsToMinutes(item['Menu Board'], format)
     store.Greet = dateUtils.convertSecondsToMinutes(item.Greet, format)
     store.Service = dateUtils.convertSecondsToMinutes(item.Service, format)
@@ -31,6 +76,7 @@ const prepareJsonForExport = (storeData, input, csvInput, callback) => {
     store['Total_Car'] = dateUtils.convertSecondsToMinutes(item['Total_Car'], format)
     storeDataList.push(store)
   })
+
   csvInput.reportinput = storeDataList
   csvGeneration.generateCsvAndEmail(csvInput, result => {
     let output = {}

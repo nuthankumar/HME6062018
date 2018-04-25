@@ -65,17 +65,17 @@ export default class AuthenticationService {
         localStorage.getItem("uuid", uuid);
     }
 
-    setMasquerade(masquerade) {
+    /*setMasquerade(masquerade) {
         localStorage.setItem("masquerade", masquerade);
     }
-
+*/
     isMasquerade() {
-        return localStorage.getItem("masquerade") ? true : false;
+        return this.getToken() !== this.getIdToken() ? true : false;
     }
-    getMasquerade() {
-        return localStorage.getItem("masquerade") ? localStorage.getItem("masquerade") : null;
-    }
-
+    /*  getMasquerade() {
+          return localStorage.getItem("masquerade") ? localStorage.getItem("masquerade") : null;
+      }
+  */
 
     isAdmin() {
         let path = window.location.pathname;
@@ -109,13 +109,14 @@ export default class AuthenticationService {
         }
     }
 
-    setToken(idToken, isAdmin) {
-        if (isAdmin)
-            localStorage.setItem('id_token', idToken)
-        else localStorage.setItem('ctx_token', idToken)
-
-        localStorage.setItem("token", idToken) //to-do: remove this post testing
+    setTokens(idToken, ctx_token, isAdmin) {
+        localStorage.setItem('id_token', idToken)
+        localStorage.setItem('ctx_token', ctx_token)
         localStorage.setItem("isAdmin", isAdmin)
+    }
+
+    setToken(idToken, isAdmin) {
+        this.setTokens(idToken, idToken, isAdmin)
     }
 
 
@@ -145,27 +146,50 @@ export default class AuthenticationService {
         // Clear user token and profile data from localStorage
         localStorage.removeItem('ctx_token')
     }
+    clear() {
+
+        // Clear user token and profile data from localStorage
+        localStorage.removeItem('id_token')
+        localStorage.removeItem('ctx_token')
+        localStorage.removeItem('isAdmin')
+        localStorage.removeItem("uuid");
+    }
     logoutMasquerade() {
         // Clear user token and profile data from localStorage
         localStorage.removeItem('masquerade')
     }
 
-    getLoggedInProfile() {
+    /*getLoggedInProfile() {
         // Using jwt-decode npm package to decode the token
 
         console.log(decode(localStorage.getItem('id_token')))
         return decode(localStorage.getItem('id_token'))
+    }*/
+    isLoggedIn() {
+        return this.getToken() ? true : false;
     }
 
     getProfile() {
+        //debugger;
         // Using jwt-decode npm package to decode the token
-        console.log(decode(this.getToken()))
-        return decode(this.getToken())
+        return this.decodeToken(this.getToken())
     }
-
-    getTokenDetails(token) {
+    getAdminProfile() {
+        //debugger;
+        // Using jwt-decode npm package to decode the token
+        return this.decodeToken(this.getIdToken())
+    }
+    decodeToken(token) {
+        if (token) {
+            console.log(decode(token))
+            return decode(token)
+        } else {
+            return {};
+        }
+    }
+    /*getTokenDetails(token) {
         return decode(token)
-    }
+    }*/
 
     fetch(url, options) {
         // performs api calls sending the required authentication headers

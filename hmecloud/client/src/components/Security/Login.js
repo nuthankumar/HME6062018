@@ -25,8 +25,10 @@ class Login extends Component {
   }
   componentWillMount() {
     //  if (this.Auth.loggedIn()) { this.props.history.replace('/') }
-    console.log(UserContext.isLoggedIn());
-    let isLoggedIn = UserContext.isLoggedIn()
+    //console.log(UserContext.isLoggedIn());
+    // let isLoggedIn = UserContext.isLoggedIn()
+
+      let isLoggedIn = this.authService.isLoggedIn()
 
     if (isLoggedIn) {
       this.props.history.push("/grouphierarchy");
@@ -85,12 +87,10 @@ class Login extends Component {
 
 
     e.preventDefault()
-    console.log(this.state.username)
-    console.log(this.state.password)
     let user = {
       username: this.state.username,
       password: this.state.password,
-      isAdmin: UserContext.isAdmin()
+      isAdmin: this.authService.isAdmin()
     }
 
     let url = Config.authBaseUrl + Config.tokenPath
@@ -101,7 +101,7 @@ class Login extends Component {
       }
 
       //to-do: verify if required , move to auth-service
-      if (UserContext.isLoggedIn()) {
+      if (this.authService.isLoggedIn()) {
         this.props.history.push("/grouphierarchy");
       }
     }, error => {

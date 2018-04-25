@@ -80,7 +80,8 @@ const generateDayReport = (request, input, callback) => {
           csvInput.reportName = message.COMMON.DAYREPORTNAME + '_' + dateFormat(new Date(), 'isoDate')
           csvInput.email = input.UserEmail
           csvInput.subject = message.COMMON.DAYREPORTTITLE + ' ' + fromDateTime + ' - ' + toDateTime + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')
-          dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput, csvResults => {
+          let reportType = 'Day'
+          dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput, reportType, csvResults => {
             callback(csvResults)
           })
         } else {

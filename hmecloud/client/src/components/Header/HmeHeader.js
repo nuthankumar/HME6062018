@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 import MasqueradeHeader from '../Header/masqueradeHeader';
 import Api from '../../Api'
 import AuthenticationService from '../Security/AuthenticationService'
-import * as UserContext from '../Common/UserContext'
+//import * as UserContext from '../Common/UserContext'
 
 const ProductLogo = require('../../images/ProductLogo-1.png')
 
@@ -22,6 +22,7 @@ export default class HmeHeader extends React.Component {
     constructor(props) {
         super(props)
         //languageSettings.setCurrentLanguage('fr');
+        this.authService = new AuthenticationService(Config.authBaseUrl)
         this.state = {
             language: languageSettings.getCurrentLanguage(),
             settingsDropdown: false,
@@ -30,13 +31,12 @@ export default class HmeHeader extends React.Component {
                 User_EmailAddress: ''
             },
             loggedInUser: {},
-            token: UserContext.getToken(),
+            token: this.authService.getToken(),
 
         }
 
         this.apiMediator = new Api()
-        this.authService = new AuthenticationService(Config.authBaseUrl)
-        this.state.url = this.authService.getColdFusionAppUrl(UserContext.isAdmin())
+        this.state.url = this.authService.getColdFusionAppUrl(this.authService.isAdmin())
         this.state.masquerade = this.authService.isMasquerade();
         this.setWrapperRef = this.setWrapperRef.bind(this);
         this.handleClickOutside = this.handleClickOutside.bind(this);
@@ -45,9 +45,9 @@ export default class HmeHeader extends React.Component {
     }
 
     componentDidMount() {
-        if (localStorage.getItem('token')) {
-          this.setUserContext() // to-do: remove this once its set @ cfm-app
-        }
+        // if (localStorage.getItem('token')) {
+        this.setUserContext() // to-do: remove this once its set @ cfm-app
+        // }
         document.addEventListener('mousedown', this.handleClickOutside);
     }
     componentWillUnmount() {
@@ -56,29 +56,29 @@ export default class HmeHeader extends React.Component {
 
     setUserContext() {
         // this.authService.setToken(Config.ctxToken, false)
-        let ctxToken = this.authService.getToken()
-        let token = UserContext.getToken()
+        // let ctxToken = this.authService.getToken()
+        // let token = this.authService.getToken()
 
-        if (token) {
-            this.state.contextUser = this.authService.getTokenDetails(token)
-        }
-        else if (ctxToken) {
-            let ctxUser = this.authService.getProfile()
-            if (ctxUser) {
-                this.state.contextUser = ctxUser
-            }
-        }
+        // if (token) {
+        this.state.contextUser = this.authService.getProfile()
+        // }
+        // else if (ctxToken) {
+        //     let ctxUser = this.authService.getProfile()
+        //     if (ctxUser) {
+        //         this.state.contextUser = ctxUser
+        //     }
+        // }
 
         //let loggedInUser = this.authService.getLoggedInProfile()
-        let loggedInUser = this.authService.getUserName()
-        if (loggedInUser) {
-            this.state.userName = loggedInUser
-        }
-        else {
-            let token = UserContext.getToken();
-            let userObject = this.authService.getTokenDetails(token);
-            this.state.userName = userObject.name ? userObject.name : userObject.User_FirstName+' '+userObject.User_LastName;
-        }
+        // let loggedInUser = this.authService.getUserName()
+        // if (loggedInUser) {
+        //     this.state.userName = loggedInUser
+        // }
+        // else {
+        //     let token = this.authService.getToken();
+        let user = this.authService.isMasquerade() ? this.authService.getAdminProfile() : this.authService.getProfile();
+        this.state.userName = user.name ? user.name : user.User_FirstName + ' ' + user.User_LastName;
+        // }
         this.setState(this.state)
     }
 
@@ -134,14 +134,15 @@ export default class HmeHeader extends React.Component {
                     </a></div>
                     <div className='user-info-section'>
                         {/* <span className={(isLoggedIn ? 'show' : 'hidden')}> */}
-                        <span className={(isAdministrator && isLoggedIn ? 'show' : 'hidden')}>
+                        <span className={isLoggedIn ? 'show' : 'hidden'}>
 
                             <div>
                                 <div className="loggedInUser">
                                     <a className="black_link headerLink loginInfo" href={url + "?pg=SettingsAccount&token=" + token}><span> {t[language].headerLoggedInAs} </span> <span className="username">{userName}</span></a>
                                 </div>
                                 <div>
-                                    <span className={masquerade ? 'show' : 'hidden'}><MasqueradeHeader isAdministrator={isAdministrator} viewAsUser={this.state.contextUser} />
+                                    <span className={masquerade ? 'show' : 'hidden'}>
+                                        <MasqueradeHeader />
                                     </span>
                                 </div>
                             </div>
@@ -189,7 +190,7 @@ export default class HmeHeader extends React.Component {
         this.state.settingsDropdown ? this.setState({ settingsDropdown: false }) : this.setState({ settingsDropdown: true })
     }
     logout(e) {
-        UserContext.clearToken();
+        this.authService.clear()
     }
 
     redirectUrl(url) {

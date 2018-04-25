@@ -266,6 +266,8 @@ export default class SummaryReport extends Component {
                     let monthDay = storeId.daypart.timeSpan.split("-")[0]
                     request.fromDate = year.concat('/'+monthDay)
                     request.toDate = year.concat('/'+monthDay)
+                    request.openTime = storeId.daypart.currentDaypart.split("-")[0]
+                    request.closeTime = storeId.daypart.currentDaypart.split("-")[1]
                 }
                 let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
                 this.api.postData(url, request, data => {

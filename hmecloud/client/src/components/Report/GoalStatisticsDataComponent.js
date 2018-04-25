@@ -28,11 +28,12 @@ export default class GoalStatisticsDataComponent extends Component {
         <div className='col-xs-12 goalstatistics-header-text'>{t[language].ReportsGoalsStatsFor + ' '+ this.state.goalStatisticsType}</div>
         <div className='col-xs-12 goalstatistics-data-unit'>
           <table className='goalstatistics-table goalstatistics-table-header'>
+          <div className='goalStatistics-cover'></div>
             <tbody>
               <tr>
                 <th className='blankHeader'/>
                 <th className='tableHeading' colSpan='4'>
-                            <span>{t[language].ReportsAveragePerformancePerEvent}</span><span>(min:sec)</span>
+                    <span>{t[language].ReportsAveragePerformancePerEvent}</span><span>(min:sec)</span>
                 </th>
               </tr>
               <tr className='goalstatistics-row-heading'>

@@ -7,12 +7,13 @@ import AdminSubHeader from '../Header/adminSubHeader'
 import Footer from '../Footer/Footer';
 import { Config } from '../../Config'
 import Authenticate from '../Security/Authentication'
-import * as UserContext from '../Common/UserContext'
+//import * as UserContext from '../Common/UserContext'
 //import AutoSignOut from '../Security/AutoSignOut'
 import AuthenticationService from '../Security/AuthenticationService'
 import Common from './Common.css'
 import Modal from 'react-modal';
 import 'url-search-params-polyfill';
+import Api from '../../Api'
 
 const customStyles = {
     content: {
@@ -22,7 +23,7 @@ const customStyles = {
         bottom: 'auto',
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
-        padding:'10px'
+        padding: '10px'
     }
 };
 
@@ -36,16 +37,17 @@ export default class Layout extends React.Component {
             modalIsOpen: false,
             signoutTime: 20000
         };
+        this.api = new Api()
 
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.signOutInterval = this.signOutInterval.bind(this);
         this.authService = new AuthenticationService(Config.authBaseUrl)
-        this.state.masquerade = this.authService.getMasquerade()
-        this.state.url = this.authService.getColdFusionAppUrl(UserContext.isAdmin())
-      }
+        this.state.idToken = this.authService.getIdToken()
+        this.state.url = this.authService.getColdFusionAppUrl(this.authService.isAdmin())
+    }
     componentDidMount() {
-        this.signOutInterval(UserContext.isAdmin(), UserContext.isLoggedIn())
+        this.signOutInterval(this.authService.isLoggedIn())
         this.setUserContext()
     }
 
@@ -55,37 +57,38 @@ export default class Layout extends React.Component {
     }
 
     autoSignout() {
-         let signout = setTimeout(function () {
-             if (this.state.modalIsOpen) {
-                 console.log('signOut');
-                 let url = Config.adminColdFusionUrl + "?token=" + this.state.masquerade
-                 window.location.href = url;
-             }
-             else {
-             clearTimeout(signout);
-             }
-         }.bind(this), this.state.signoutTime)
+        let signout = setTimeout(function () {
+            if (this.state.modalIsOpen) {
+                let url = Config.adminColdFusionUrl + "?token=" + this.state.idToken
+                window.location.href = url;
+            }
+            else {
+                clearTimeout(signout);
+            }
+        }.bind(this), this.state.signoutTime)
     }
 
     openModal() {
-        this.setState({ modalIsOpen: true });
 
+        if (this.authService.isMasquerade()) {
+            this.setState({ modalIsOpen: true });
+        };
     }
 
     closeModal() {
         this.setState({ modalIsOpen: false });
-        this.signOutInterval(UserContext.isAdmin(), UserContext.isLoggedIn())
+        this.signOutInterval(this.authService.isLoggedIn())
     }
 
-    signOutInterval(isAdmin, isLoggedIn) {
-        if (isAdmin && isLoggedIn && this.authService.getMasquerade()) {
+    signOutInterval(isLoggedIn) {
+        if (isLoggedIn && this.authService.isMasquerade()) {
             let autoInterval = setInterval(function () {
-               if (!this.state.modalIsOpen) {
-                   clearInterval(autoInterval);
-                   this.openModal()
-                   this.autoSignout();
+                if (!this.state.modalIsOpen) {
+                    clearInterval(autoInterval);
+                    this.openModal()
+                    this.autoSignout();
                 }
-           }.bind(this), 3000000)
+            }.bind(this), 300000)
         }
     }
     setUserContext() {
@@ -97,27 +100,57 @@ export default class Layout extends React.Component {
                 this.state.contextUser = ctxUser
             }
         }
-        let loggedInUser = this.authService.getLoggedInProfile()
+        let loggedInUser = this.authService.getProfile()
         if (loggedInUser) {
             this.state.loggedInUser = loggedInUser
         }
         this.setState(this.state)
     }
 
+    
     render() {
         const { Params, children } = this.props;
         const { contextUser } = this.state;
         let pathName = Params.location.pathname;
         const params = new URLSearchParams(this.props.Params.location.search);
-        const token = params.get('token') ? params.get('token'):null
-        const admin = params.get('a') =='true' ? true : false
+        const contextToken = params.get('token') ? params.get('token') : null
+        const admin = params.get('a') == 'true' ? true : false
         //const admin = params.get('atoken') ? true : false;
         const uuid = params.get('uuid') ? params.get('uuid') : null
         const userName = params.get('un') ? params.get('un') : null
-        const masquerade = params.get('atoken') ? params.get('atoken') : null
-        if (token) {
-            this.authService.setToken(token, admin)
-            UserContext.isLoggedIn()
+        const idToken = params.get('atoken') ? params.get('atoken') : null
+        const userId = params.get('memail') ? params.get('memail') : null
+
+        if (contextToken) {
+            this.authService.setToken(contextToken, admin)
+        }
+        if (idToken) {
+            this.authService.setTokens(idToken,contextToken, admin)
+        }
+        if (userId) {
+            let user = {
+                username: userId
+            }
+            let url = Config.authBaseUrl + Config.tokenPath
+            this.api.postData(url, user, data => {
+                if (data && data.accessToken) {
+                    this.authService.setTokens(this.authService.getIdToken(), data.accessToken,
+                        this.authService.isAdmin())
+                    let path = window.location.pathname;
+                    if (uuid) {
+                        path += '?uuid=' + uuid;
+                    }
+                    window.location.href = path;
+                }
+            }, error => {
+            })
+        }
+        else if (contextToken) {
+            // if (idToken)
+            //     this.authService.setTokens(idToken, contextToken, admin)
+            // else
+            //     this.authService.setToken(contextToken, admin)
+            // //this.authService.isLoggedIn()
             let path = window.location.pathname;
             if (uuid) {
                 path += '?uuid=' + uuid;
@@ -126,20 +159,20 @@ export default class Layout extends React.Component {
         }
 
         if (uuid) {
-                this.authService.setUUID(uuid)
+            this.authService.setUUID(uuid)
         }
-        if (userName) {
+        /*if (userName) {
             this.authService.setUserName(userName)
         }
         if (masquerade) {
             this.authService.setMasquerade(masquerade)
-        }
+        }*/
 
-         localStorage.setItem('id_token', Config.token)
-        let idToken = localStorage.getItem('id_token')
-        let isAdministrator = (idToken) ? true : false;
+        // localStorage.setItem('id_token', Config.token)
+        // let idToken = localStorage.getItem('id_token')
+        // let isAdministrator = (idToken) ? true : false;
 
-        isAdministrator = true;
+        // isAdministrator = true;
         let isAdmin = false
         let isLoggedIn = false;
         let adminLogo = false
@@ -154,7 +187,7 @@ export default class Layout extends React.Component {
             //this.authService.setAdmin(isAdmin)
         }
         else {
-            isAdmin = UserContext.isAdmin();
+            isAdmin = this.authService.isAdmin();
             if (isAdmin == true) {
                 isAdmin = true
             } else {
@@ -162,7 +195,7 @@ export default class Layout extends React.Component {
             }
         }
 
-        if (UserContext.isLoggedIn()) {
+        if (this.authService.isLoggedIn()) {
             isLoggedIn = true
         } else {
             isLoggedIn = false
@@ -171,8 +204,7 @@ export default class Layout extends React.Component {
         if ((!isLoggedIn && window.location.pathname == '/admin') || isAdmin) {
             adminLogo = true
         }
-         let userToken = localStorage.getItem('token') ? localStorage.getItem('token') : localStorage.getItem('ctx_token') ? localStorage.getItem('ctx_token') : localStorage.getItem('id_token')
-         let contextUserEmail = this.authService.getTokenDetails(userToken);
+        let contextUserEmail = this.authService.getProfile();
         return (
             <div>
                 <Modal
@@ -182,13 +214,13 @@ export default class Layout extends React.Component {
                     ariaHideApp={false}
                 >
                     <header className="modalHeader"> Auto SignOut <button onClick={this.closeModal}> X </button> </header>
-                    <span className="autoSignOutContent">You are currently viewing the site as {contextUserEmail.User_EmailAddress} </span>
-                    <button className="continueButton" onClick={this.closeModal}>Continue Viewing as {contextUserEmail.User_EmailAddress} </button>
+                    <span className="autoSignOutContent">You are currently viewing the site as {contextUserEmail.User_EmailAddress ? contextUserEmail.User_EmailAddress : contextUserEmail.name} </span>
+                    <button className="continueButton" onClick={this.closeModal}>Continue Viewing as {contextUserEmail.User_EmailAddress ? contextUserEmail.User_EmailAddress : contextUserEmail.name} </button>
                 </Modal>
-                <HmeHeader isAdministrator={isAdministrator} isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} />
+                <HmeHeader isAdministrator={this.authService.isAdmin()} isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} />
                 <AdminSubHeader isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} pathName={pathName} />
                 <div className={!isAdmin && isSettings ? 'show' : 'hidden'}>
-                    <SettingsHeader isAdmin={isAdmin} adminLogo={adminLogo}  isLoggedIn={isLoggedIn} /></div>
+                    <SettingsHeader isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} /></div>
                 <div className="hmeBody ">
                     {children}
                 </div>
