@@ -189,6 +189,7 @@ export default class ReportGroup extends React.Component {
           this.state.errorMessage = ''
           this.state.saveSuccess = true
           this.setState(this.state)
+          this.props.history.push("/message", data.key); 
           this.getAvailableGroupStoreList()
         }else{
           this.state.errorMessage = t[language][data.key]
@@ -250,6 +251,7 @@ export default class ReportGroup extends React.Component {
           this.state.errorMessage = ''
           this.state.deleteSuccess = true
           this.setState(this.state)
+          this.props.history.push("/message", data.key); 
         } else {
           this.state.errorMessage = t[language][data.key]
           this.state.successMessage = ''
@@ -267,7 +269,7 @@ export default class ReportGroup extends React.Component {
     let assigned = this.state.assigned
     return (<section className='groupDetailsPage'>
       <div className='status-messages'>
-        <SuccessAlert successMessage={this.state.successMessage} />
+        {/* <SuccessAlert successMessage={this.state.successMessage} /> */}
         <ErrorAlert errorMessage={this.state.errorMessage} />
       </div>
       <section className={'report-container ' + (this.state.saveSuccess || this.state.deleteSuccess ? 'hide' : 'show')}>
