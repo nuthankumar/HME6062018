@@ -1,11 +1,5 @@
-
-/****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details] if already exists *****/
-IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_HME_Cloud_Get_Report_By_Date_Details' AND [type] ='P'))
-	DROP PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details]
-GO
-
 -- ===========================================================
---      Copyright Â© 2018, HME, All Rights Reserved
+--      Copyright © 2018, HME, All Rights Reserved
 -- ===========================================================
 -- Name			:	usp_HME_Cloud_Get_Report_By_Date_Details
 -- Author		:	Swathi Kumar
@@ -19,12 +13,11 @@ GO
 -- -----------------------------------------------------------
 -- 1.		13/04/2018		Swathi Kumar	Added Subtotal calculation
 -- ===========================================================
--- exec [usp_HME_Cloud_Get_Report_By_Date_Details] '15', '2018-03-24', '2018-03-24', '2018-03-24 00:00:00' , '2018-03-24 12:00:00', 11, 'AC',1, '68LKBP85C1SKH1FI3M7X40CJHKGU07FZ'
--- exec usp_HME_Cloud_Get_Report_By_Date_Details '3,4','2018-03-20','2018-03-26',N'2018-03-20 00:00:00',N'2018-03-26 10:30:00','11','AC',1
+-- exec [usp_HME_Cloud_Get_Report_By_Date_Details] '99180,99181', '2018-02-23', '2018-02-27', '2018-02-23 00:00:00' , '2018-02-27 12:00:00', 11, 'AC',1, '68LKBP85C1SKH1FI3M7X40CJHKGU07FZ'
 -- ===========================================================
 
-
-CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details](
+--exec usp_HME_Cloud_Get_Report_By_Date_Details '3,4','2018-03-20','2018-03-26',N'2018-03-20 00:00:00',N'2018-03-26 10:30:00','11','AC',1
+ALTER PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details](
 	@Device_IDs varchar(500),
 	@StoreStartDate date,
 	@StoreEndDate date,
@@ -60,6 +53,8 @@ BEGIN
 
 	IF @EndDateTime IS NULL
 		SET @EndDateTime = '3000-01-01 23:59:59'
+
+
 
 	CREATE TABLE #raw_data(
 		StoreDate date,
@@ -124,7 +119,7 @@ BEGIN
 		Greet_GoalC int,              
 		Greet_GoalD int,             --Greet_GoalF int,
 		Cashier_GoalA int,          
-		Cashier_GoalB int,           
+		Cashier_GoalB int,     
 		Cashier_GoalC int,           
 		Cashier_GoalD int, --Cashier_GoalF int, 
 		Pickup_GoalA int,            
@@ -144,11 +139,7 @@ BEGIN
 	/*************************************
 	 step 2. populate, then roll up data
 	*************************************/
-		
-	-- Get Users Pull-ins Preference for CarDataRecordType_ID
-	SELECT @CarDataRecordType_ID = User_Preferences_Preference_Value FROM itbl_User_Preferences WHERE 
-	User_Preferences_User_ID =(SELECT USER_ID FROM  tbl_Users WHERE User_UID = @UserUID ) AND User_Preferences_Preference_ID=9
-		
+
 	-- pull in raw data from proc
 	INSERT INTO #raw_data
 	EXECUTE dbo.usp_HME_Cloud_Get_Report_Raw_Data @Device_IDs, @StoreStartDate, @StoreEndDate, @StartDateTime, @EndDateTime, @CarDataRecordType_ID, @ReportType, @LaneConfig_ID
@@ -239,9 +230,10 @@ BEGIN
 					AVG(DetectorTime) AVG_DetectorTime,
 					COUNT(CarDataRecord_ID) Total_Car
 				FROM	#raw_data
+				--WHERE DetectorTime IS NOT NULL
 				GROUP BY  EventType_Name'
+		
 		END
-
 
 	-- roll up records into each store date
 	-- for single stores, generate a single summary row for all dates
@@ -284,7 +276,29 @@ BEGIN
 	INSERT INTO #rollup_data (StoreNo, Store_Name, Device_UID, StoreDate, Device_ID, GroupName, Store_ID, Category, AVG_DetectorTime , Total_Car)
 	EXECUTE(@sum_query);
 	SET @sum_query = '';
+	
+	IF NOT EXISTS(SELECT 1 FROM #rollup_data)
+	BEGIN
+		DECLARE @tmpDate DateTime
+		CREATE TABLE #tmpDateRange
+		(StoreDate datetime)
+		SET @tmpDate =@StoreStartDate
+		WHILE (@tmpDate <= @StoreEndDate)
+		BEGIN
+			INSERT INTO #tmpDateRange
+			SELECT @tmpDate
+			SET @tmpDate = DATEADD(dd,1,@tmpDate)
+		END
+		
 
+		
+		INSERT INTO #rollup_data (ID, StoreNo, Store_Name, Device_UID, StoreDate, Device_ID, GroupName, Store_ID, Category, AVG_DetectorTime , Total_Car)
+		SELECT  ROW_NUMBER()OVER(ORDER BY StoreDate) ID , NULL StoreNo, NULL Store_Name, NULL Device_UID, StoreDate, NULL Device_ID, NULL GroupName, NULL Store_ID, NULL Category, NULL AVG_DetectorTime , NULL Total_Car
+		FROM #tmpDateRange
+		UNION ALL
+		SELECT 10000 ID, 'Total Day' StoreNo, NULL Store_Name, NULL Device_UID, NULL StoreDate, NULL Device_ID, NULL GroupName, NULL Store_ID, NULL Category, NULL AVG_DetectorTime , NULL Total_Car
+		
+	END;
 	-- below is a hack!!
 	-- when a single store has change of config (for instanc: menu board, service... to pre loop, menu board, service...) 
 	-- or when multi store don't have the same config for each store
@@ -303,35 +317,49 @@ BEGIN
 			INNER JOIN Max_TotalCar_By_Day mc ON mc.StoreNo = d.StoreNo
 				AND	mc.StoreDate = d.StoreDate
 
+				
 	-- pivot table to display avg time by event/category name for each day
-	SET @query = N'
-	SELECT	*, RANK () OVER (ORDER BY Storedate) DayID
-	FROM	#rollup_data
-	PIVOT(
-		AVG(AVG_DetectorTime)
-		FOR Category IN (' + @cols + ')
-	) AS p
-	ORDER BY StoreDate, ID, StoreNo;'
-
+	IF(ISNULL(@cols,'')<>'')
+		SET @query = N'
+		SELECT	*, RANK () OVER (ORDER BY Storedate) DayID
+		FROM	#rollup_data
+		PIVOT(
+			AVG(AVG_DetectorTime)
+			FOR Category IN (' + @cols + ')
+		) AS p
+		ORDER BY  ID,StoreDate, StoreNo;'
+	ELSE
+		SET @query = N'
+		SELECT	*, RANK () OVER (ORDER BY ID, Storedate) DayID
+		FROM #rollup_data ORDER BY ID, StoreDate, StoreNo;'
 
 	/***********************************
 		step 3. return result sets
 	***********************************/
 	-- return avg time report
 	EXECUTE(@query);
-
+	
 	-- return top 3 longest times (only applicable to single store)
 	IF (@isMultiStore = 0)
-		SELECT	e.headerName, t.DetectorTime, t.DeviceTimeStamp, t.Detector_ID
-		FROM 	@header e
-		CROSS APPLY
-		(
-			SELECT	TOP 3 DetectorTime, DeviceTimeStamp, Detector_ID
-			FROM	#raw_data r
-			WHERE	r.EventType_ID = e.headerID
-			ORDER BY DetectorTime DESC
-		)	AS t
-		ORDER BY e.Detector_ID, DetectorTime DESC
+	BEGIN
+		IF EXISTS(SELECT 1 FROM @header)
+		BEGIN
+			SELECT	e.headerName, t.DetectorTime, t.DeviceTimeStamp, t.Detector_ID
+			FROM 	@header e
+			CROSS APPLY
+			(
+				SELECT	TOP 3 DetectorTime, DeviceTimeStamp, Detector_ID
+				FROM	#raw_data r
+				WHERE	r.EventType_ID = e.headerID
+				ORDER BY DetectorTime DESC
+			)	AS t
+			ORDER BY e.Detector_ID, DetectorTime DESC
+		END
+		ELSE
+		BEGIN
+			SELECT	NULL headerName, NULL DetectorTime, NULL DeviceTimeStamp, NULL Detector_ID
+		END
+	END
 	ELSE
 		SELECT 1	-- fake resultset in case the application expecting it
 
@@ -377,100 +405,151 @@ BEGIN
 			SET @query = '';
 
 			-- calculate total cars that meet each of the goals
-			SET @query = N'
-			WITH Total_Car_Count
-			AS
-			(
-				SELECT	Device_ID,
-						EventType_Name,
-						IsNull(Goal_ID, 0) AS Goal_ID,
-						COUNT(CarDataRecord_ID) AS Total_Cars
-				FROM	#raw_data
-				GROUP BY EventType_Name,
-						Device_ID,
-						IsNull(Goal_ID, 0)
-			)
-			SELECT	*
-			FROM	
-			(		SELECT	Device_ID, 
-							EventType_Name + '' - '' + CASE Goal_ID WHEN 1 THEN ''GoalA'' WHEN 2 THEN ''GoalB'' WHEN 3 THEN ''GoalC'' WHEN 4 THEN ''GoalD'' WHEN 5 THEN ''GoalF'' ELSE ''N/A'' END AS EventGoal,
-							Total_Cars
-					FROM	Total_Car_Count
-			) AS Car_count_by_goal
-			PIVOT(
-				SUM(Total_Cars)
-				FOR EventGoal IN (' + @cols + ')
-			) AS p'
-
+			IF(ISNULL(@cols,'')<>'')
+			BEGIN
+			
+				SET @query = N'
+				WITH Total_Car_Count
+				AS
+				(
+					SELECT	Device_ID,
+							EventType_Name,
+							IsNull(Goal_ID, 0) AS Goal_ID,
+							COUNT(CarDataRecord_ID) AS Total_Cars
+					FROM	#raw_data
+					GROUP BY EventType_Name,
+							Device_ID,
+							IsNull(Goal_ID, 0)
+				)
+				SELECT	*
+				FROM	
+				(		SELECT	Device_ID, 
+								EventType_Name + '' - '' + CASE Goal_ID WHEN 1 THEN ''GoalA'' WHEN 2 THEN ''GoalB'' WHEN 3 THEN ''GoalC'' WHEN 4 THEN ''GoalD'' WHEN 5 THEN ''GoalF'' ELSE ''N/A'' END AS EventGoal,
+								Total_Cars
+						FROM	Total_Car_Count
+				) AS Car_count_by_goal
+				PIVOT(
+					SUM(Total_Cars)
+					FOR EventGoal IN (' + @cols + ')
+				) AS p'
+			END
+			ELSE
+				SET @query = N'
+				IF EXISTS (SELECT	Device_ID,
+							EventType_Name,
+							IsNull(Goal_ID, 0) AS Goal_ID,
+							COUNT(CarDataRecord_ID) AS Total_Cars
+					FROM	#raw_data
+					GROUP BY EventType_Name,
+							Device_ID,
+							IsNull(Goal_ID, 0))
+				BEGIN
+					SELECT	Device_ID,
+								EventType_Name,
+								IsNull(Goal_ID, 0) AS Goal_ID,
+								COUNT(CarDataRecord_ID) AS Total_Cars
+						FROM	#raw_data
+						GROUP BY EventType_Name,
+								Device_ID,
+								IsNull(Goal_ID, 0)
+				END
+				ELSE
+				BEGIN
+					SELECT	NULL Device_ID,
+					NULL EventType_Name,
+					0 AS Goal_ID,
+					0 AS Total_Cars
+				END'
 			EXECUTE(@query);
+
 		END
 	ELSE
 		SELECT 1	-- fake resultset in case the application expecting it
 
-		SET @query = '';
+	-- Store details
 	IF (@isMultiStore = 0)
 		BEGIN 
-		SELECT 
-			a.Device_ID, 
-			b.Store_Number, 
-			b.Store_Name, 
-			c.Brand_Name, 
-			a.Device_LaneConfig_ID
-		FROM tbl_DeviceInfo a
-		LEFT JOIN tbl_Stores b WITH (NOLOCK) ON a.Device_Store_ID = b.Store_ID
-		LEFT JOIN ltbl_Brands c WITH (NOLOCK) ON b.Store_Brand_ID = c.Brand_ID
-		WHERE 
-			Device_ID IN (@Device_IDs)
-		AND b.Store_Number <> ''
-		ORDER BY
-		b.Store_Number
-
-		EXECUTE(@query);
+			IF EXISTS (SELECT TOP 1 1 FROM tbl_DeviceInfo a
+			LEFT JOIN tbl_Stores b WITH (NOLOCK) ON a.Device_Store_ID = b.Store_ID
+			LEFT JOIN ltbl_Brands c WITH (NOLOCK) ON b.Store_Brand_ID = c.Brand_ID
+			WHERE 
+				Device_ID IN (@Device_IDs)
+			AND b.Store_Number <> '')
+			BEGIN
+				SELECT 
+					a.Device_ID, 
+					b.Store_Number, 
+					b.Store_Name, 
+					c.Brand_Name, 
+					a.Device_LaneConfig_ID
+				FROM tbl_DeviceInfo a
+				LEFT JOIN tbl_Stores b WITH (NOLOCK) ON a.Device_Store_ID = b.Store_ID
+				LEFT JOIN ltbl_Brands c WITH (NOLOCK) ON b.Store_Brand_ID = c.Brand_ID
+				WHERE 
+					Device_ID IN (@Device_IDs)
+				AND b.Store_Number <> ''
+				ORDER BY
+				b.Store_Number
+			END
+			ELSE
+			BEGIN
+				SELECT 
+					NULL Device_ID, 
+					NULL Store_Number, 
+					NULL Store_Name, 
+					NULL Brand_Name, 
+					NULL Device_LaneConfig_ID
+			END
 		END
 	ELSE
 		SELECT 1
 
-		SET @query = '';
+		-- get Color code from user Prefernce table if not found get default values
+	SET @Preferences_Preference_Value =''
+	SELECT @Preferences_Preference_Value = User_Preferences_Preference_Value FROM itbl_User_Preferences WHERE 
+		User_Preferences_User_ID =(SELECT USER_ID FROM  tbl_Users WHERE User_UID = @UserUID ) AND User_Preferences_Preference_ID=5
 		
-		-- Get Users Primary Color Preference
-		SET @Preferences_Preference_Value =''
-		SELECT @Preferences_Preference_Value = User_Preferences_Preference_Value FROM itbl_User_Preferences WHERE 
-			User_Preferences_User_ID =(SELECT USER_ID FROM  tbl_Users WHERE User_UID = @UserUID ) AND User_Preferences_Preference_ID=5
+	IF(ISNULL(@Preferences_Preference_Value,'') ='')
+		SET @Preferences_Preference_Value = '#00b04c|#dcba00|#b40000'
 		
-		IF(ISNULL(@Preferences_Preference_Value,'') ='')
-			SET @Preferences_Preference_Value = '#00b04c|#dcba00|#b40000'
-		
-		SELECT @Preferences_Preference_Value AS ColourCode
+	SELECT @Preferences_Preference_Value AS ColourCode
 
-	EXECUTE(@query);
-		SET @query = '';	
+	-- Goal time
+	EXEC usp_HME_Cloud_Get_Device_Goals_Details @Device_IDs
+	--INSERT INTO @getGoalTime  VALUES(15,30,60,90,120,5,10,15,20,30,60,90,120,30,60,90,120,30,30,120,180,90,150,300,420)
+	--SELECT *  FROM @getGoalTime;
 
-			EXEC usp_HME_Cloud_Get_Device_Goals @Device_IDs
-			
-			EXECUTE(@query);
-			-- Changes for System Statistics
+	-- Changes for System Statistics
 	IF (@isMultiStore = 0)
 	BEGIN
-		SET @query = '';
-			-- Device SystemStatistics General
-				EXEC GetDeviceSystemStatisticsGeneral @Device_IDs,@StoreEndDate,@StoreStartDate
-		EXECUTE(@query);
-		-- include pullins
-				DECLARE @IncludePullins bit
-				SELECT @IncludePullins = CASE WHEN DeviceSetting_SettingValue = 1 THEN 0 ELSE 1 End
-					FROM tbl_DeviceSetting WITH (NOLOCK)
-					WHERE DeviceSetting_Device_ID = @Device_IDs
-					AND DeviceSetting_Setting_ID = '6002'
-			SET @query = ''
-				-- Device SystemStatistics Lane
-		EXEC GetDeviceSystemStatisticsLane  @Device_IDs,@StoreEndDate,@StoreStartDate, @includePullins 
-		EXECUTE(@query);
-	END
+		-- Device SystemStatistics General
+		EXEC GetDeviceSystemStatisticsGeneral @Device_IDs,@StoreEndDate,@StoreStartDate
 
-	
+		-- include pullins
+			DECLARE @IncludePullins bit
+			SELECT @IncludePullins = CASE WHEN DeviceSetting_SettingValue = 1 THEN 0 ELSE 1 End
+				FROM tbl_DeviceSetting WITH (NOLOCK)
+				WHERE DeviceSetting_Device_ID = @Device_IDs
+				AND DeviceSetting_Setting_ID = '6002'
+
+				-- Device SystemStatistics Lane
+		CREATE TABLE #tmpSystemStatisticsLane
+			(
+				Device_ID int,
+				Lane tinyint,
+				AvgCarsInLane int,
+				Pullouts int,
+				Pullins int,
+				DeleteOverMax int
+			);
+		INSERT INTO #tmpSystemStatisticsLane(Device_ID, Lane, AvgCarsInLane, Pullouts, Pullins, DeleteOverMax)
+		EXEC GetDeviceSystemStatisticsLane  @Device_IDs,@StoreEndDate,@StoreStartDate, @includePullins 
+		IF EXISTS(SELECT 1 FROM #tmpSystemStatisticsLane)
+			SELECT * FROM #tmpSystemStatisticsLane
+		ELSE
+			SELECT NULL Device_ID, NULL Lane, NULL AvgCarsInLane, NULL Pullouts, NULL Pullins, NULL DeleteOverMax
+	END
 	RETURN(0)
 
 END
-GO
-
 
