@@ -4,18 +4,19 @@ import t from '../Language/language';
 import { Config } from '../../Config';
 import * as languageSettings from '../Language/languageSettings';
 import AuthenticationService from '../Security/AuthenticationService'
-import * as UserContext from '../Common/UserContext'
+//import * as UserContext from '../Common/UserContext'
 
 export default class SettingsHeader extends React.Component {
     constructor(props) {
         super(props)
+
+        this.authService = new AuthenticationService(Config.authBaseUrl)
         this.state = {
             language: languageSettings.getCurrentLanguage(),
-            token: UserContext.getToken()
+            token: this.authService.getToken()
         }
-        this.authService = new AuthenticationService(Config.authBaseUrl)
        // this.state.uuid = this.authService.getUUID()
-        this.state.url = this.authService.getColdFusionAppUrl(UserContext.isAdmin())
+        this.state.url = this.authService.getColdFusionAppUrl(this.authService.isAdmin())
     }
     render() {
         const { language, token, url, uuid } = this.state;

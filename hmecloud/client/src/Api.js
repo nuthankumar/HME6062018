@@ -1,5 +1,5 @@
 import { Config } from './Config'
-import * as UserContext from '../src/components/Common/UserContext'
+//import * as UserContext from '../src/components/Common/UserContext'
 import AuthenticationService from './components/Security/AuthenticationService'
 /***
 GET, POST and DELETE api methods to be called from different components across the application.
@@ -20,7 +20,7 @@ class Api {
         'Content-Type': 'application/json',
         // 'x-access-token': token
         //'Authorization': 'Bearer ' + this.authService.getToken()
-        'Authorization': 'Bearer ' + UserContext.getToken()
+        'Authorization': 'Bearer ' + this.authService.getToken()
       },
       body: JSON.stringify(data)
     })
@@ -44,7 +44,7 @@ class Api {
         'Content-Type': 'application/json',
         // 'x-access-token': token
         //'Authorization': 'Bearer ' + this.authService.getToken()
-        'Authorization': 'Bearer ' + UserContext.getToken()
+        'Authorization': 'Bearer ' + this.authService.getToken()
       }
     })
       .then((response) => response.json())
@@ -58,7 +58,7 @@ class Api {
 
   deleteData(url, callback) {
 
-    let token = UserContext.getToken()
+    //let token = UserContext.getToken()
     fetch(url, {
       method: 'DELETE',
       headers: {

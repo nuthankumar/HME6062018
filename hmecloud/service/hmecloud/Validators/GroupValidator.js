@@ -92,17 +92,13 @@ const avaliabledGroups = (request, callback) => {
   }
 }
 const getAll = (request, callback) => {
-    let output = {}
-    let uuid
-    if (request.uuid) {
-        uuid = request.uuid
-    } else {
-        uuid = request.query.uuid
-    }
-    if (request.AccountId || uuid) {
+  let output = {}
+  let uuid = (request.userUid) ? request.userUid : request.query.uuid
+
+  if (request.AccountId || uuid) {
     const input = {
-        accountId: (request.AccountId ? request.AccountId : null),
-        userUid: (uuid ? uuid:null)
+      accountId: (request.AccountId ? request.AccountId : null),
+      userUid: (uuid ? uuid : null)
     }
     if (!input.accountId && !input.userUid) {
       output.key = 'requiredAccountId'

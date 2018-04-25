@@ -84,7 +84,7 @@ class User extends Component {
     load(uuid) {
         let url = Config.apiBaseUrl + CommonConstants.apiUrls.getGroupHierarchyTree
         if (this.state.isAdmin) {
-            url = +'?uuid=' + uuid;
+            url += '?uuid=' + uuid;
         }
         this.api.getData(url, data => {
             this.state.treeData = data.data
@@ -426,20 +426,26 @@ class User extends Component {
 
 
     masquerade(e) {
-        let user = {
-            username: this.state.userEmail
-        }
-        let url = Config.authBaseUrl + Config.tokenPath
-        this.api.postData(url, user, data => {
-            if (data && data.accessToken) {
-                this.authService.setToken(data.accessToken, false)
-                let user = this.authService.getProfile();
-                let userName = user.name ? user.name : user.User_FirstName + ' ' + user.User_LastName;
-                let url = Config.coldFusionUrl + "?atoken=" + this.authService.getIdToken() + "&memail=" + user.User_EmailAddress + "&un=" + userName
-                window.location.href = url;
-            }
-        }, error => {
-        })
+        
+        let user = this.authService.getProfile();
+        let userName = user.name ? user.name : user.User_FirstName + ' ' + user.User_LastName;
+        let url = Config.coldFusionUrl + "?atoken=" + this.authService.getIdToken() + "&memail=" + this.state.userEmail + "&un=" + userName
+        window.location.href = url;
+
+        // let user = {
+        //     username: this.state.userEmail
+        // }
+        // let url = Config.authBaseUrl + Config.tokenPath
+        // this.api.postData(url, user, data => {
+        //     if (data && data.accessToken) {
+        //         this.authService.setToken(data.accessToken, false)
+        //         let user = this.authService.getProfile();
+        //         let userName = user.name ? user.name : user.User_FirstName + ' ' + user.User_LastName;
+        //         let url = Config.coldFusionUrl + "?atoken=" + this.authService.getIdToken() + "&memail=" + user.User_EmailAddress + "&un=" + userName
+        //         window.location.href = url;
+        //     }
+        // }, error => {
+        // })
     }
 
     submit(e) {

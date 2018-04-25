@@ -90,7 +90,7 @@ class Login extends Component {
     let user = {
       username: this.state.username,
       password: this.state.password,
-      isAdmin: UserContext.isAdmin()
+      isAdmin: this.authService.isAdmin()
     }
 
     let url = Config.authBaseUrl + Config.tokenPath

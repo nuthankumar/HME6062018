@@ -14,12 +14,12 @@ export default class Footer extends React.Component {
 
     constructor(props) {
         super(props)
+        this.authService = new AuthenticationService(Config.authBaseUrl)
         this.state = {
             currentLanguage: languageSettings.getCurrentLanguage(),
-            token: UserContext.getToken()
+            token: this.authService.getToken()
         }
-        this.authService = new AuthenticationService(Config.authBaseUrl)
-        this.state.url = this.authService.getColdFusionAppUrl(UserContext.isAdmin())
+        this.state.url = this.authService.getColdFusionAppUrl(this.authService.isAdmin())
     }
   render() {
       const language = this.state.currentLanguage
