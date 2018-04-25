@@ -87,8 +87,6 @@ class Login extends Component {
 
 
     e.preventDefault()
-    console.log(this.state.username)
-    console.log(this.state.password)
     let user = {
       username: this.state.username,
       password: this.state.password,
@@ -103,7 +101,7 @@ class Login extends Component {
       }
 
       //to-do: verify if required , move to auth-service
-      if (UserContext.isLoggedIn()) {
+      if (this.authService.isLoggedIn()) {
         this.props.history.push("/grouphierarchy");
       }
     }, error => {
