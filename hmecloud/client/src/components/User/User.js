@@ -55,13 +55,13 @@ class User extends Component {
             let url = Config.apiBaseUrl + CommonConstants.apiUrls.getUser + '?uuId=' + uuid;
             this.api.getData(url, data => {
 
-                //let userObject = {
-                //    "uuId":"98A65FE0-23CE-413B-9093-753733C8",
-                //        "isActive":1, "firstName":"n", "lastName":"n",
-                //        "userEmail": "n@n.com", "userRole":"4KHAEO4K3PTBQILH7PDBVQ4LF5BYOHZ2",
-                //            "storeIds": ["5D8B2DED97894183927020E4CCB0700E", "B3696D2623FC4D58AF11031C04276C41", "4198FCA03EF74AEEA076F78D27DC12E7"]
-                //}
-                let userObject = data.data;
+                let userObject = {
+                    "uuId":"98A65FE0-23CE-413B-9093-753733C8",
+                        "isActive":1, "firstName":"n", "lastName":"n",
+                        "userEmail": "n@n.com", "userRole":"4443TLW53IFBUFCHC4FFZW9M6ZQPTEOQ",
+                            "storeIds": ["5D8B2DED97894183927020E4CCB0700E", "B3696D2623FC4D58AF11031C04276C41", "4198FCA03EF74AEEA076F78D27DC12E7"]
+                }
+                //let userObject = data.data;
                 this.state.uuid = uuid
                 this.state.userEmail = userObject.userEmail
                 this.state.firstName = userObject.firstName
@@ -85,6 +85,7 @@ class User extends Component {
         let url = Config.apiBaseUrl + CommonConstants.apiUrls.getUserRoles
         this.api.getData(url, data => {
             this.state.roles = data.data
+         //   this.state.userRole = _.pluck(_.where(this.state.roles, { 'Role_IsDefault': 1 }), 'Role_UID')[0]
             this.setState(this.state)
         })
         url = Config.apiBaseUrl + CommonConstants.apiUrls.getAudit + '?uuId=' + uuid;
@@ -163,7 +164,7 @@ class User extends Component {
                                             <th class="req"><label for="userEmail">{t[language].usernameemail}</label></th>
                                             <td><input type="text" name="userEmail" value={user.userEmail} onChange={this.handleOnChange.bind(this)} /></td>
                                             <td>
-                                                <div className={!this.state.isAdmin /*&& !this.state.isEdit*/ ? 'show' : 'hidden'}>
+                                                <div className={this.state.isAdmin  /*&& !this.state.isEdit*/ ? 'hidden' : 'show'}>
                                                     &nbsp;|&nbsp;<a class="cancel_butt" id="remove" onClick={this.deleteUser.bind(this)} /*href="./?pg=SettingsUsers&amp;st=delete&amp;uuid=PWD1L9GMR73VHJMV11RYHTSD7QTPNQG6"*/ >{t[language].removeuser}</a>
                                                 </div>
                                             </td>
@@ -193,7 +194,8 @@ class User extends Component {
                                         <tr>
                                             <th class="req"><label for="Role_UID" translate="" key="userrole">{t[language].userrole}</label></th>
                                             <td>
-                                                <select name="userRole" class="wide_select" onChange={this.handleOnChange.bind(this)}>
+                                                <select name="userRole" class="wide_select" value={this.state.userRole} onChange={this.handleOnChange.bind(this)}>
+                                                    <option value='' selected={!this.state.userRole}></option>
                                                     {this.renderOptions()}
                                                 </select>
                                             </td>
@@ -274,11 +276,20 @@ class User extends Component {
 
     renderOptions() {
         let roles = this.state.roles;
+        console.log(roles);
         //let isEdit = this.state.isEdit
         if (roles) {
             let roleOptions = roles.map(function (role, index) {
                 //                return (<option key={index} value={role.Role_UID} selected={!this.state.isEdit ? (role.Role_IsDefault == 1 ? true : false) : (role.Role_UID == this.state.userRole ? true : false)} >{role.Role_Name}</option>)
+
+              
+                if (role.Role_IsDefault == 1) {
+                    this.state.userRole = role.Role_UID;
+                    this.setState(this.state);
+                    console.log(this.state)
+                }
                 return (<option key={index} value={role.Role_UID} selected={(role.Role_IsDefault == 1 ? true : false)} >{role.Role_Name}</option>)
+
 
             });
             return roleOptions;
@@ -471,15 +482,19 @@ class User extends Component {
         const language = this.state.currentLanguage
         if (!this.state.firstName) {
             this.state.errorMessage = t[language].pleasefillinfirstname
-            let isError = true;
+            isError = true;
         }
         if (!this.state.lastName) {
             this.state.errorMessage = t[language].pleasefillinlastname
-            let isError = true;
+            isError = true;
         }
         if (!this.state.userEmail) {
             this.state.errorMessage = t[language].emailinvalid
-            let isError = true;
+            isError = true;
+        }
+        if (!this.state.userRole) {
+            this.state.errorMessage = t[language].pleaseassignrole
+            isError = true;
         }
 
         this.setState(this.state);
@@ -490,7 +505,7 @@ class User extends Component {
                 "lastName": this.state.lastName,
                 "userEmail": this.state.userEmail,
                 "isActive": this.state.isActive,
-                "userRole": this.state.userRole ? this.state.userRole : _.pluck(_.where(this.state.roles, { 'Role_IsDefault': 1 }), 'Role_UID')[0],
+                "userRole": this.state.userRole,
                 "storeIds": this.state.stores ? this.state.stores : [],
                 "createdDateTime": moment().format("YYYY-MM-DD HH:mm:ss")
             }]
