@@ -542,3 +542,18 @@ padding:5px 5px;
         width: 10px !important;
         background: #EBEBEB;
     } 
+
+    .save-template::-webkit-input-placeholder {
+        font-style: italic;
+    }
+    .save-template:-moz-placeholder {
+        font-style: italic;
+    }
+    .save-template::-moz-placeholder {
+        font-style: italic;
+    }
+    .save-template:-ms-input-placeholder {
+        font-style: italic;
+    } 
+
+   
