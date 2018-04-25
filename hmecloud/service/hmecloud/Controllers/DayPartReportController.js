@@ -222,7 +222,8 @@ function generateCSVOrPdfTriggerEmail (request, input, result, callBack) {
 
   csvInput.email = input.UserEmail
   csvInput.subject = `${message.COMMON.DAYPARTREPORTTITLE} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
-  dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput, csvResults => {
+  let reportName = 'Daypart'
+  dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput, reportName, csvResults => {
     callBack(csvResults)
   })
 }

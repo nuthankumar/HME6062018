@@ -115,13 +115,13 @@ const multipleStore = (weekReports, result, input) => {
 /**
  * The method can be used to execute report converting json to CSV and sending mail
  */
-const generateCSVTriggerEmail = (request, input, result, callBack) => {
+const generateCSVTriggerEmail = (request, input, result, reportType, callBack) => {
   let csvInput = {}
   csvInput.type = `${messages.COMMON.CSVTYPE}`
   csvInput.reportName = `${messages.COMMON.WEEKREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
   csvInput.email = input.UserEmail
   csvInput.subject = `${messages.COMMON.WEEKREPORTTITLE} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
-  dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput, csvResults => {
+  dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput, reportType, csvResults => {
     callBack(csvResults)
   })
 }
@@ -140,7 +140,8 @@ const weekReportController = (request, input, callback) => {
     if (result.status === true) {
       if (!_.isUndefined(input.reportType) && (input.reportType.toLowerCase().trim() === 'csv' || input.reportType.toLowerCase().trim() === 'pdf')) {
         if (input.reportType.toLowerCase().trim() === 'csv') {
-          generateCSVTriggerEmail(request, input, result)
+          let reportName ='week'
+          generateCSVTriggerEmail(request, input, result, reportName)
         } else if (input.reportType.toLowerCase().trim() === 'pdf') {
           let pdfInput = {}
           pdfInput.type = `${messages.COMMON.PDFTYPE}`
