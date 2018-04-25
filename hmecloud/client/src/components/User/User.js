@@ -55,13 +55,13 @@ class User extends Component {
             let url = Config.apiBaseUrl + CommonConstants.apiUrls.getUser + '?uuId=' + uuid;
             this.api.getData(url, data => {
 
-                let userObject = {
-                    "uuId":"98A65FE0-23CE-413B-9093-753733C8",
-                        "isActive":1, "firstName":"n", "lastName":"n",
-                        "userEmail": "n@n.com", "userRole":"4443TLW53IFBUFCHC4FFZW9M6ZQPTEOQ",
-                            "storeIds": ["5D8B2DED97894183927020E4CCB0700E", "B3696D2623FC4D58AF11031C04276C41", "4198FCA03EF74AEEA076F78D27DC12E7"]
-                }
-                //let userObject = data.data;
+                //let userObject = {
+                //    "uuId":"98A65FE0-23CE-413B-9093-753733C8",
+                //        "isActive":1, "firstName":"n", "lastName":"n",
+                //        "userEmail": "n@n.com", "userRole":"4443TLW53IFBUFCHC4FFZW9M6ZQPTEOQ",
+                //            "storeIds": ["5D8B2DED97894183927020E4CCB0700E", "B3696D2623FC4D58AF11031C04276C41", "4198FCA03EF74AEEA076F78D27DC12E7"]
+                //}
+                let userObject = data.data;
                 this.state.uuid = uuid
                 this.state.userEmail = userObject.userEmail
                 this.state.firstName = userObject.firstName
