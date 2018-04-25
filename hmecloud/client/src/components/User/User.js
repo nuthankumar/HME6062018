@@ -47,7 +47,6 @@ class User extends Component {
     }
 
     componentWillMount() {
-
         const params = new URLSearchParams(this.props.history.location.search);
         const uuid = params.get('uuid') ? params.get('uuid') : null
         this.load(uuid)
@@ -55,14 +54,27 @@ class User extends Component {
             this.setState({ isEdit: true })
             let url = Config.apiBaseUrl + CommonConstants.apiUrls.getUser + '?uuId=' + uuid;
             this.api.getData(url, data => {
-                let userObject = data.data
+
+                //let userObject = {
+                //    "uuId":"98A65FE0-23CE-413B-9093-753733C8",
+                //        "isActive":1, "firstName":"n", "lastName":"n",
+                //        "userEmail": "n@n.com", "userRole":"4KHAEO4K3PTBQILH7PDBVQ4LF5BYOHZ2",
+                //            "storeIds": ["5D8B2DED97894183927020E4CCB0700E", "B3696D2623FC4D58AF11031C04276C41", "4198FCA03EF74AEEA076F78D27DC12E7"]
+                //}
+                let userObject = data.data;
                 this.state.uuid = uuid
                 this.state.userEmail = userObject.userEmail
                 this.state.firstName = userObject.firstName
                 this.state.lastName = userObject.lastName
                 this.state.isActive = userObject.isActive
                 this.state.userRole = userObject.userRole
-                this.state.defaultCheckedKeys = userObject.storeIds
+                const keys = this.findMatchedIds(this.state.treeData, item => {
+                    return (
+                        item.Type === "store" &&
+                        userObject.storeIds.indexOf(item.StoreUid.toString()) > -1
+                    );
+                })
+                this.state.defaultCheckedKeys= keys.map(String)
                 this.state.user = data.data;
                 this.setState(this.state)
             })
@@ -83,21 +95,25 @@ class User extends Component {
     }
     load(uuid) {
         let url = Config.apiBaseUrl + CommonConstants.apiUrls.getGroupHierarchyTree
+        
+
         if (this.state.isAdmin) {
             url += '?uuid=' + uuid;
         }
         this.api.getData(url, data => {
             this.state.treeData = data.data
+            console.log(this.state.treeData);
             this.setState(this.state)
         })
     }
     onCheck(checkedKeys, node) {
-        this.state.selectedList = checkedKeys;
+        //this.state.selectedList = checkedKeys;
         this.state.defaultCheckedKeys = checkedKeys;
-        // this.state.stores = _.pluck(_.where(_.pluck(node.checkedNodes, "props"), { type: "store" }), "className");
+        this.state.stores = _.pluck(_.where(_.pluck(node.checkedNodes, "props"), { type: "store" }), "className");
         let deviceUIds = _.pluck(_.where(_.pluck(node.checkedNodes, "props"), { type: "store" }), "value");
         this.state.deviceUIds = deviceUIds;
         this.setState(this.state);
+        console.log(this.state)
     }
 
 
@@ -110,12 +126,12 @@ class User extends Component {
                 return data.map(item => {
                     if (item.Children && item.Children.length) {
                         return (
-                            <TreeNode title={this.renderStoresAndBrand(item)} className={item.StoreNumber} key={item.Type == 'store' ? item.DeviceUID : item.Id} value={item.Type == 'store' ? item.DeviceUID : item.Id} type={item.Type}>
+                            <TreeNode title={this.renderStoresAndBrand(item)} className={item.StoreUid} key={item.Id} value={item.Type == 'store' ? item.DeviceUID : item.Id} type={item.Type}>
                                 {loop(item.Children)}
                             </TreeNode>
                         );
                     }
-                    return <TreeNode title={this.renderStoresAndBrand(item)} className={item.StoreNumber} key={item.Type == 'store' ? item.DeviceUID : item.Id} value={item.Type == 'store' ? item.DeviceUID : item.Id} type={item.Type} />;
+                    return <TreeNode title={this.renderStoresAndBrand(item)} className={item.StoreUid} key={item.Id} value={item.Type == 'store' ? item.DeviceUID : item.Id} type={item.Type} />;
                 });
             }
             else {
@@ -165,7 +181,7 @@ class User extends Component {
                                             <td>
                                                 <input type="radio" name="isActive" value={1} checked={this.state.isActive == 1} onClick={this.handleRadioChange.bind(this)} />
                                                 <span id="active_inactive"><span>{t[language].Active}</span>&nbsp;&nbsp;
-                                                    <input type="radio" name="isActive" value={0} checked={this.state.isActive == 0} onClick={this.handleRadioChange.bind(this)} /><span>{t[language].Inactive}</span></span>
+                                                <input type="radio" name="isActive" value={0} checked={this.state.isActive == 0} onClick={this.handleRadioChange.bind(this)} /><span>{t[language].Inactive}</span></span>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -306,6 +322,7 @@ class User extends Component {
     selectAll(e) {
 
         if (!this.state.selectAll) {
+            console.log(_.pluck(this.state.treeData, "Id").map(String));
             this.setState({
                 defaultCheckedKeys: _.pluck(this.state.treeData, "Id").map(String),
                 stores: this.findMatchedClassName(this.state.treeData, item => {
@@ -347,7 +364,7 @@ class User extends Component {
                 }
                 if (keys(item)) {
                     // if ( item.Type === 'store' && keys.indexOf(item.Id.toString()) > -1) {
-                    selectedItems.push(item.StoreNumber);
+                    selectedItems.push(item.StoreUid);
                     selectedList.push(item.Id);
                 }
             });
@@ -477,8 +494,10 @@ class User extends Component {
                 "storeIds": this.state.stores ? this.state.stores : [],
                 "createdDateTime": moment().format("YYYY-MM-DD HH:mm:ss")
             }]
+            console.log(User[0])
             let url = Config.apiBaseUrl + CommonConstants.apiUrls.createUser
             this.api.postData(url, User[0], data => {
+                
                 if (data.status) {
                     // const language = this.state.currentLanguage
                     this.props.history.push("/message", data.key);
