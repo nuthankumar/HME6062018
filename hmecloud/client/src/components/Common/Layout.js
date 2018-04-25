@@ -47,7 +47,7 @@ export default class Layout extends React.Component {
         this.state.url = this.authService.getColdFusionAppUrl(this.authService.isAdmin())
     }
     componentDidMount() {
-        this.signOutInterval(this.authService.isAdmin(), this.authService.isLoggedIn())
+        this.signOutInterval(this.authService.isLoggedIn())
         this.setUserContext()
     }
 
@@ -59,7 +59,6 @@ export default class Layout extends React.Component {
     autoSignout() {
         let signout = setTimeout(function () {
             if (this.state.modalIsOpen) {
-                console.log('signOut');
                 let url = Config.adminColdFusionUrl + "?token=" + this.state.idToken
                 window.location.href = url;
             }
@@ -70,24 +69,26 @@ export default class Layout extends React.Component {
     }
 
     openModal() {
-        this.setState({ modalIsOpen: true });
 
+        if (this.authService.isMasquerade()) {
+            this.setState({ modalIsOpen: true });
+        };
     }
 
     closeModal() {
         this.setState({ modalIsOpen: false });
-        this.signOutInterval(this.authService.isAdmin(), this.authService.isLoggedIn())
+        this.signOutInterval(this.authService.isLoggedIn())
     }
 
-    signOutInterval(isAdmin, isLoggedIn) {
-        if (isAdmin && isLoggedIn && this.authService.getIdToken()) {
+    signOutInterval(isLoggedIn) {
+        if (isLoggedIn && this.authService.isMasquerade()) {
             let autoInterval = setInterval(function () {
                 if (!this.state.modalIsOpen) {
                     clearInterval(autoInterval);
                     this.openModal()
                     this.autoSignout();
                 }
-            }.bind(this), 3000000)
+            }.bind(this), 300000)
         }
     }
     setUserContext() {
@@ -213,8 +214,8 @@ export default class Layout extends React.Component {
                     ariaHideApp={false}
                 >
                     <header className="modalHeader"> Auto SignOut <button onClick={this.closeModal}> X </button> </header>
-                    <span className="autoSignOutContent">You are currently viewing the site as {contextUserEmail.User_EmailAddress} </span>
-                    <button className="continueButton" onClick={this.closeModal}>Continue Viewing as {contextUserEmail.User_EmailAddress} </button>
+                    <span className="autoSignOutContent">You are currently viewing the site as {contextUserEmail.User_EmailAddress ? contextUserEmail.User_EmailAddress : contextUserEmail.name} </span>
+                    <button className="continueButton" onClick={this.closeModal}>Continue Viewing as {contextUserEmail.User_EmailAddress ? contextUserEmail.User_EmailAddress : contextUserEmail.name} </button>
                 </Modal>
                 <HmeHeader isAdministrator={this.authService.isAdmin()} isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} />
                 <AdminSubHeader isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} pathName={pathName} />
