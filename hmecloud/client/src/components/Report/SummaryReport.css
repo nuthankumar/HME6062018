@@ -697,20 +697,5 @@ span.StoreBrand {
     }
     
 
-    /* Placeholder italic */
-
-    .save-template::-webkit-input-placeholder {
-      font-style: italic;
-      }
-      .save-template:-moz-placeholder {
-      font-style: italic;
-      }
-      .save-template::-moz-placeholder {
-      font-style: italic;
-      }
-      .save-template:-ms-input-placeholder {
-      font-style: italic;
-      } 
-
  
 
