@@ -46,14 +46,13 @@ const mutipleStore = (reportData, pdfInput, callback) => {
         mail.send(pdfInput.email, pdfInput.subject, attachment, isMailSent => {
           let output = {}
           if (isMailSent) {
-            console.log('success')
+            output.key = 'pleasecheckemailreport' + ' ' + pdfInput.email
             output.status = true
-            return output
           } else {
+            output.key = 'sendMailFails' + ' ' + pdfInput.email
             output.status = false
-            console.log('fail')
-            return output
           }
+          callback(output)
         })
       }
     })
@@ -137,14 +136,13 @@ const singleStore = (reportData, pdfInput, callback) => {
         mail.send(pdfInput.email, pdfInput.subject, attachment, isMailSent => {
           let output = {}
           if (isMailSent) {
-            console.log('success')
+            output.key = 'pleasecheckemailreport' + ' ' + pdfInput.email
             output.status = true
-            return output
           } else {
-            console.log('fail')
+            output.key = 'sendMailFails' + ' ' + pdfInput.email
             output.status = false
-            return output
           }
+          callback(output)
         })
       }
     })

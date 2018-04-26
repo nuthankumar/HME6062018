@@ -38,8 +38,10 @@
     "AdvancedDateRangeDayPartInvalid": "Date range invalid. For Advanced Options Reports select any 3 weeks period.",
     "AdvancedDateRangeWeekInvalid": "Date range invalid. For Advanced Options Reports select any 2 month period.",
     "StoreSelectionInvalid": "Store selection invalid. You may select up to 250 stores from the list below.",
-    "AdvancedDayInvalidDateRange": "Date range invalid. For Advanced Options Reports select any 1 month period."
-    "ReportTemplateAlreadyExist" :  "Given Report Template already exist."
+    "AdvancedDayInvalidDateRange": "Date range invalid. For Advanced Options Reports select any 1 month period.",
+    "ReportTemplateAlreadyExist" :  "Given Report Template already exist.",
+    "pleasecheckemailreport": "Please check your email. Your Report has been sent to",
+    "sendMailFails":"Mail sent fails to "
   },
 
   "COMMON": {

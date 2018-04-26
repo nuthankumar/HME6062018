@@ -157,13 +157,17 @@ const weekReportController = (request, input, callback) => {
             let data = []
             data = weekRecords
             data.storeDetails = weekRecords.timeMeasureType
-            Pdfmail.singleStore(data, pdfInput)
+            Pdfmail.singleStore(data, pdfInput, isMailSent => {
+              callback(isMailSent)
+            })
           } else if (input.ReportTemplate_DeviceIds.length > 1) {
             let weekRecords = multipleStore(weekReports, result, input)
             let data = []
             data = weekRecords
             data.storeDetails = weekRecords.timeMeasureType
-            Pdfmail.mutipleStore(data, pdfInput)
+            Pdfmail.mutipleStore(data, pdfInput, isMailSent => {
+              callback(isMailSent)
+            })
           }
         }
       } else if (input.ReportTemplate_DeviceIds.length === 1) {

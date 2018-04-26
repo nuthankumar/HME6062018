@@ -31,6 +31,8 @@
     "createSuccess": "Report Template create successfully",
     "createFail": "Unable to Create Report",
     "deleteSuccess": "Report Template Deleted successfully",
-    "deteleFail": "Unable to Delete Report"
+    "deteleFail": "Unable to Delete Report",
+    "pleasecheckemailreport": "Please check your email. Your Report has been sent to",
+    "sendMailFails":"Mail sent fails to "
   }
 }

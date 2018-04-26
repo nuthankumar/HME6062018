@@ -81,13 +81,12 @@ const prepareJsonForExport = (storeData, input, csvInput, reportType, callback) 
   csvGeneration.generateCsvAndEmail(csvInput, result => {
     let output = {}
     if (result) {
-      output.data = input.UserEmail
+      output.key = 'pleasecheckemailreport' + ' ' + input.UserEmail
       output.status = true
     } else {
-      output.data = input.UserEmail
+      output.key = 'sendMailFails' + ' ' + input.UserEmail
       output.status = false
     }
-
     callback(output)
   })
 }
