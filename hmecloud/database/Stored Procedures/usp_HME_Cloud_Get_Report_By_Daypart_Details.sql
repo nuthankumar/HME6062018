@@ -8,8 +8,8 @@ GO
 --      Copyright © 2018, HME, All Rights Reserved
 -- ===========================================================
 -- Name			:	usp_HME_Cloud_Get_Report_By_Daypart_Details
--- Author		:	Jaffer Sherif
--- Created		:	12-March-2018
+-- Author		:	Ramesh
+-- Created		:	26-March-2018
 -- Purpose		:	To Generate a Day part report
 -- ===========================================================
 --				Modification History
@@ -18,8 +18,7 @@ GO
 -- -----------------------------------------------------------
 -- 1.
 -- ===========================================================
--- exec usp_HME_Cloud_Get_Report_By_Daypart_Details_WithSubTotal @StoreIDs='3,4',@StoreStartDate='2018-03-23',@StoreEndDate='2018-03-24',@InputStartDateTime=N'2018-03-23 00:00:00',@InputEndDateTime=N'2018-03-24 10:30:00',@CarDataRecordType_ID='11',@ReportType='TC',@LaneConfig_ID=1,@PageNumber=1
--- exec usp_HME_Cloud_Get_Report_By_Daypart_Details_WithSubTotal @StoreIDs='4',@StoreStartDate='2018-03-23',@StoreEndDate='2018-03-24',@InputStartDateTime=N'2018-03-23 00:00:00',@InputEndDateTime=N'2018-03-24 10:30:00',@CarDataRecordType_ID='11',@ReportType='AC',@LaneConfig_ID=1,@PageNumber=1
+-- exec usp_HME_Cloud_Get_Report_By_Daypart_Details @Device_IDs='4244',@StoreStartDate='2018-03-23',@StoreEndDate='2018-03-24',@InputStartDateTime=N'2018-03-23 00:00:00',@InputEndDateTime=N'2018-03-24 10:30:00',@CarDataRecordType_ID='11',@ReportType='AC',@LaneConfig_ID=1,@PageNumber=1,@UserUID=null
 -- ===========================================================
 
 CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details]
@@ -38,42 +37,7 @@ CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details]
 )
 AS
 BEGIN
-	/*
-		Copyright (c) 2014 HME, Inc.
-
-		Author:
-			Wells Wang (2014-08-10)
-
-		Description:
-			This proc is used for Cloud Reporting of daypart report.
-			It calculates avg time (seconds) at each detector.
-
-		Parameters:
-			@Device_IDs: required. a list of device id's separated by comma
-			@StoreStartDate: required. 
-			@StoreEndDate: required. 
-			@StartDateTime: optional. default to '1900-01-01 00:00:00'
-			@EndDateTime: optional. default to '3000-01-01 23:59:59'
-			@CarDataRecordType_ID: required. default to '11'. it can also be '11,4'
-			@ReportType: optional. default to 'AC'. AC: cumulative  TC: Time Slice
-			@LaneConfig_ID optional. default to 1
-
-		Usage:
-			EXECUTE dbo.usp_HME_Cloud_Get_Report_By_Daypart @Device_IDs, @StoreStartDate, @StoreEndDate, @StartDateTime, @EndDateTime, @CarDataRecordType_ID, @ReportType, @LaneConfig_ID
-
-		Documentation:
-			This report is used for both single and multiple stores. The logic is slightly different with each type.
-			For single store, the final result is pivoted by event type of the store. There's only one summary row for the entire period.
-			For multi store, the final result is pivoted by event category. There's one summary row for every store date for combined stores.
-
-		Based on:
-			New
-		Depends on:
-			dbo.usp_HME_Cloud_Get_Report_Raw_Data
-		Depends on me:
-			/hmecloud/_tmp_login_create.cfm
-	*/
-
+	
 	/******************************
 	 step 1. initialization
 	******************************/
@@ -95,7 +59,7 @@ BEGIN
 	SELECT @EndDateTime = CONVERT(DATETIME,  @InputEndDateTime);
 	DECLARE @Preferences_Preference_Value varchar(50)
 	
-
+	
 	IF @StartDateTime IS NULL 
 		SET @StartDateTime = '1900-01-01 00:00:00'
 
@@ -155,7 +119,8 @@ BEGIN
 		StoreDate date,
 		DayPartIndex tinyint,
 		StartTime time,
-		EndTime time
+		EndTime time,
+		OrigDayPartIndex tinyint,
 	)
 	CREATE TABLE #GroupDetails
 	(
@@ -163,17 +128,6 @@ BEGIN
 		Store_ID int,
 		Device_ID int
 	)
-	--SET @Device_IDs = ''
-	--SELECT @Device_IDs = CONVERT(varchar,dinf.Device_ID) + ',' + @Device_IDs 
-	-- FROM tbl_DeviceInfo AS dinf INNER JOIN tbl_Stores strs ON dinf.Device_Store_ID = strs.Store_ID 
-	-- WHERE dinf.Device_Store_ID IN (Select cValue FROM dbo.split(@StoreIDs,','))
-
-	 --SELECT dinf.Device_ID
-	 --FROM tbl_DeviceInfo AS dinf INNER JOIN tbl_Stores strs ON dinf.Device_Store_ID = strs.Store_ID 
-	 --WHERE dinf.Device_Store_ID IN (3,4)
-
-	--IF LEN(@Device_IDs)>0 
-	--	SET @Device_IDs = LEFT(@Device_IDs, LEN(@Device_IDs)-1)
 		
 	/*************************************
 	 step 2. populate, then roll up data
@@ -194,20 +148,12 @@ BEGIN
 	INNER JOIN [Group] g ON g.ID = gs.GroupID
 	WHERE td.Device_ID in (SELECT cValue FROM dbo.split(@Device_IDs,','))
 
-	--SELECT DISTINCT g.GroupName,ts.Store_ID 
-	--FROM [Group] g LEFT JOIN GroupStore gs ON g.ID = gs.GroupID
-	--INNER JOIN  tbl_Stores ts ON gs.StoreID = ts.Store_ID 
-	--WHERE gs.StoreID in (SELECT cValue FROM dbo.split(@StoreIDs,','))
-	
-	-- determine whether it's multi store or single store
-	-- for single stores, the column names would be its event name
-	-- for multi stores, the column names would be category name
 	IF EXISTS(SELECT 1 FROM dbo.Split(@Device_IDs, ',') HAVING MAX(id) > 1)
 		BEGIN	-- this is a multi store
 			SET @isMultiStore = 1
 
 			INSERT INTO @header
-			SELECT	DISTINCT EventType_Category, EventType_Category_ID, NULL, EventType_Sort
+			SELECT	DISTINCT CASE WHEN ISNULL(EventType_Category,'')='' THEN 'NA' ELSE EventType_Category END EventType_Category, EventType_Category_ID, NULL, EventType_Sort
 			FROM    #raw_data
 			WHERE	EventType_Category_ID IS NOT NULL
 
@@ -273,7 +219,7 @@ BEGIN
 	ELSE
 		BEGIN	-- this is a single store
 			INSERT INTO @header
-			SELECT	DISTINCT EventType_Name, EventType_ID, Detector_ID, EventType_Sort
+			SELECT	DISTINCT CASE WHEN ISNULL(EventType_Name,'')='' THEN 'NA' ELSE EventType_Name END EventType_Name, EventType_ID, Detector_ID, EventType_Sort
 			FROM    #raw_data
 			WHERE	Detector_ID IS NOT NULL
 
@@ -334,16 +280,17 @@ BEGIN
 			WHERE	StartTime >= CAST(@EndDateTime AS time)
 			OR		EndTime <= CAST(@StartDateTime AS time)
 
-			INSERT INTO #DayPartWithDate(StoreDate, DayPartIndex, StartTime, EndTime)
-			SELECT	d.ThisDate, dp.DayPartIndex, dp.StartTime, dp.EndTime
+			INSERT INTO #DayPartWithDate(StoreDate, OrigDayPartIndex, StartTime, EndTime, DayPartIndex)
+			SELECT	d.ThisDate, dp.DayPartIndex, dp.StartTime, dp.EndTime, ROW_NUMBER()OVER(Partition By d.ThisDate ORDER BY d.ThisDate, dp.StartTime, dp.EndTime) DayPartIndex
 			FROM	dbo.uf_GetDatesByRange(CAST(@StoreStartDate AS varchar(25)), CAST(@StoreEndDate AS varchar(25))) d
 					CROSS JOIN #DayPart dp
+					
 	END 
 	-- for cumulative reports, remove the dayparts for the first and last day that fall out of the range
 	ELSE
 		BEGIN
-			INSERT INTO #DayPartWithDate(StoreDate, DayPartIndex, StartTime, EndTime)
-			SELECT	d.ThisDate, dp.DayPartIndex, dp.StartTime, dp.EndTime
+			INSERT INTO #DayPartWithDate(StoreDate, OrigDayPartIndex, StartTime, EndTime, DayPartIndex)
+			SELECT	d.ThisDate, dp.DayPartIndex, dp.StartTime, dp.EndTime, ROW_NUMBER()OVER(Partition By d.ThisDate ORDER BY d.ThisDate, dp.StartTime, dp.EndTime) DayPartIndex
 			FROM	dbo.uf_GetDatesByRange(CAST(@StoreStartDate AS varchar(25)), CAST(@StoreEndDate AS varchar(25))) d
 					CROSS JOIN #DayPart dp
 
@@ -412,7 +359,7 @@ BEGIN
 	-- execute above query to populate #rollup_data table
 	EXECUTE(@query);
 	SET @query = '';
-	PRINT @sum_query
+
 	EXECUTE(@sum_query);
 	SET @sum_query = '';
 
@@ -453,9 +400,6 @@ BEGIN
 		FROM #rollup_data_all 
 	END;
 	
-	--INSERT INTO #rollup_data (DayPartIndex, StartTime, EndTime, StoreNo, Device_UID, StoreDate, Device_ID, GroupName, Store_ID, Category, AVG_DetectorTime, Total_Car)
-	--EXEC (@sum_query);
-	
 	-- below is a hack!!
 	-- when a single store has change of config (for instanc: menu board, service... to pre loop, menu board, service...) 
 	-- or when multi store don't have the same config for each store
@@ -489,7 +433,8 @@ BEGIN
 	ELSE
 		SET @query = N'
 		SELECT	*
-		FROM	#rollup_data'
+		FROM	#rollup_data
+		ORDER BY StoreDate, ID, SortOrder, DayPartIndex, StoreNo'
 
 
 	/***********************************
@@ -578,30 +523,33 @@ BEGIN
 			SET @query = '';
 
 			-- calculate total cars that meet each of the goals
-			SET @query = N'
-			WITH Total_Car_Count
-			AS
-			(
-				SELECT	Device_ID,
-						EventType_Name,
-						IsNull(Goal_ID, 0) AS Goal_ID,
-						COUNT(CarDataRecord_ID) AS Total_Cars
-				FROM	#raw_data
-				GROUP BY EventType_Name,
-						Device_ID,
-						IsNull(Goal_ID, 0)
-			)
-			SELECT	*
-			FROM	
-			(		SELECT	Device_ID, 
-							EventType_Name + '' - '' + CASE Goal_ID WHEN 1 THEN ''GoalA'' WHEN 2 THEN ''GoalB'' WHEN 3 THEN ''GoalC'' WHEN 4 THEN ''GoalD'' WHEN 5 THEN ''GoalF'' ELSE ''N/A'' END AS EventGoal,
-							Total_Cars
-					FROM	Total_Car_Count
-			) AS Car_count_by_goal
-			PIVOT(
-				SUM(Total_Cars)
-				FOR EventGoal IN (' + @cols + ')
-			) AS p'
+			IF(ISNULL(@cols,'')<>'')
+				SET @query = N'
+				WITH Total_Car_Count
+				AS
+				(
+					SELECT	Device_ID,
+							EventType_Name,
+							IsNull(Goal_ID, 0) AS Goal_ID,
+							COUNT(CarDataRecord_ID) AS Total_Cars
+					FROM	#raw_data
+					GROUP BY EventType_Name,
+							Device_ID,
+							IsNull(Goal_ID, 0)
+				)
+				SELECT	*
+				FROM	
+				(		SELECT	Device_ID, 
+								EventType_Name + '' - '' + CASE Goal_ID WHEN 1 THEN ''GoalA'' WHEN 2 THEN ''GoalB'' WHEN 3 THEN ''GoalC'' WHEN 4 THEN ''GoalD'' WHEN 5 THEN ''GoalF'' ELSE ''N/A'' END AS EventGoal,
+								Total_Cars
+						FROM	Total_Car_Count
+				) AS Car_count_by_goal
+				PIVOT(
+					SUM(Total_Cars)
+					FOR EventGoal IN (' + @cols + ')
+				) AS p'
+			ELSE
+				SET @query = N'SELECT	NULL Device_ID, NULL EventType_Name, 0 AS Goal_ID, 0 AS Total_Cars'
 
 			EXECUTE(@query);
 
@@ -622,7 +570,7 @@ BEGIN
 			b.Store_Number
 
 			-- get Gaols time in seconds
-			EXEC usp_HME_Cloud_Get_Device_Goals @Device_IDs
+			EXEC usp_HME_Cloud_Get_Device_Goals_Details @Device_IDs
 
 			-- include pullins
 			DECLARE @IncludePullins bit
@@ -644,7 +592,5 @@ BEGIN
 		SELECT @TotalRecCount TotalRecCount, @TotalRecCount NoOfPages
 	RETURN(0)
 END
-
-GO
 
 

@@ -1,8 +1,14 @@
+
+/****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details] if already exists *****/
+IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_HME_Cloud_Get_Report_By_Date_Details' AND [type] ='P'))
+	DROP PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details]
+GO
+
 -- ===========================================================
---      Copyright © 2018, HME, All Rights Reserved
+--      Copyright Â© 2018, HME, All Rights Reserved
 -- ===========================================================
 -- Name			:	usp_HME_Cloud_Get_Report_By_Date_Details
--- Author		:	Swathi Kumar
+-- Author		:	Ramesh Kumar
 -- Created		:	12-April-2018
 -- Tables		:	Group,Stores
 -- Purpose		:	To get Day report details for the given StoreIds
@@ -11,13 +17,13 @@
 -- -----------------------------------------------------------
 -- Sl.No.	Date			Developer		Descriptopn   
 -- -----------------------------------------------------------
--- 1.		13/04/2018		Swathi Kumar	Added Subtotal calculation
+-- 1.		26/04/2018		Ramesh Kumar	Added Subtotal calculation
 -- ===========================================================
--- exec [usp_HME_Cloud_Get_Report_By_Date_Details] '99180,99181', '2018-02-23', '2018-02-27', '2018-02-23 00:00:00' , '2018-02-27 12:00:00', 11, 'AC',1, '68LKBP85C1SKH1FI3M7X40CJHKGU07FZ'
+-- exec [usp_HME_Cloud_Get_Report_By_Date_Details] '15', '2018-03-24', '2018-03-24', '2018-03-24 00:00:00' , '2018-03-24 12:00:00', 11, 'AC',1, '68LKBP85C1SKH1FI3M7X40CJHKGU07FZ'
 -- ===========================================================
 
---exec usp_HME_Cloud_Get_Report_By_Date_Details '3,4','2018-03-20','2018-03-26',N'2018-03-20 00:00:00',N'2018-03-26 10:30:00','11','AC',1
-ALTER PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details](
+
+CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details](
 	@Device_IDs varchar(500),
 	@StoreStartDate date,
 	@StoreEndDate date,
@@ -99,42 +105,6 @@ BEGIN
 			Device_ID int
 		)
 
-		--SET @Device_IDs = ''
-		--SELECT @Device_IDs = CONVERT(varchar,dinf.Device_ID) + ',' + @Device_IDs 
-		-- FROM tbl_DeviceInfo AS dinf INNER JOIN tbl_Stores strs ON dinf.Device_Store_ID = strs.Store_ID 
-		-- WHERE dinf.Device_Store_ID IN (Select cValue FROM dbo.split(@StoreIDs,','))
-
-		--IF LEN(@Device_IDs)>0 
-		--	SET @Device_IDs = LEFT(@Device_IDs, LEN(@Device_IDs)-1)
-
-	-- This is table is created temporarly. Once we get the data it needs to be removed
-	DECLARE  @getGoalTime TABLE (
-		Device_ID int,    
-		MenuBoard_GoalA int, 
-		MenuBoard_GoalB int, 
-		MenuBoard_GoalC int, 
-		MenuBoard_GoalD int,-- MenuBoard_GoalF int,
-		Greet_GoalA int, 
-		Greet_GoalB int,          
-		Greet_GoalC int,              
-		Greet_GoalD int,             --Greet_GoalF int,
-		Cashier_GoalA int,          
-		Cashier_GoalB int,     
-		Cashier_GoalC int,           
-		Cashier_GoalD int, --Cashier_GoalF int, 
-		Pickup_GoalA int,            
-		Pickup_GoalB int,            
-		Pickup_GoalC int,            
-		Pickup_GoalD int, --Pickup_GoalF int,    
-		LaneQueue_GoalA int,  
-		LaneQueue_GoalB int,  
-		LaneQueue_GoalC int, 
-		LaneQueue_GoalD int,   --LaneQueue_GoalF int,         
-		LaneTotal_GoalA int,      
-		LaneTotal_GoalB int, 
-		LaneTotal_GoalC int,           
-		LaneTotal_GoalD int
-	)
 
 	/*************************************
 	 step 2. populate, then roll up data
@@ -150,11 +120,7 @@ BEGIN
 	LEFT JOIN GroupStore gs ON gs.StoreID = ts.Store_ID
 	INNER JOIN [Group] g ON g.ID = gs.GroupID
 	WHERE td.Device_ID in (SELECT cValue FROM dbo.split(@Device_IDs,','))
-		--SELECT DISTINCT g.GroupName,ts.Store_ID, ts.Store_Name
-		--FROM [Group] g INNER JOIN GroupStore gs ON g.ID = gs.GroupID
-		--INNER JOIN  tbl_Stores ts ON gs.StoreID = ts.Store_ID 
-		--WHERE gs.StoreID in (SELECT cValue FROM dbo.split(@StoreIDs,','))
-
+	
 	-- determine whether it's multi store or single store
 	-- for single stores, the column names would be its event name
 	-- for multi stores, the column names would be category name
@@ -163,7 +129,7 @@ BEGIN
 			SET @isMultiStore = 1
 
 			INSERT INTO @header
-			SELECT	DISTINCT EventType_Category, EventType_Category_ID, NULL, EventType_Sort
+			SELECT	DISTINCT CASE WHEN ISNULL(EventType_Category,'')='' THEN 'NA' ELSE EventType_Category END EventType_Category, EventType_Category_ID, NULL, EventType_Sort
 			FROM    #raw_data
 			WHERE	EventType_Category_ID IS NOT NULL
 
@@ -209,9 +175,9 @@ BEGIN
 	ELSE
 		BEGIN	-- this is single store
 			INSERT INTO @header
-			SELECT	DISTINCT EventType_Name, EventType_ID, Detector_ID, EventType_Sort
+			SELECT	DISTINCT CASE WHEN ISNULL(EventType_Name,'') ='' THEN 'NA' ELSE EventType_Name END EventType_Name, EventType_ID, Detector_ID, EventType_Sort
 			FROM    #raw_data
-			WHERE	Detector_ID IS NOT NULL
+			WHERE	Detector_ID IS NOT NULL 
 
 			SELECT  @cols = COALESCE(@cols + ',[' + headerName + ']', '[' + headerName + ']')
 			FROM    @header
@@ -290,8 +256,6 @@ BEGIN
 			SET @tmpDate = DATEADD(dd,1,@tmpDate)
 		END
 		
-
-		
 		INSERT INTO #rollup_data (ID, StoreNo, Store_Name, Device_UID, StoreDate, Device_ID, GroupName, Store_ID, Category, AVG_DetectorTime , Total_Car)
 		SELECT  ROW_NUMBER()OVER(ORDER BY StoreDate) ID , NULL StoreNo, NULL Store_Name, NULL Device_UID, StoreDate, NULL Device_ID, NULL GroupName, NULL Store_ID, NULL Category, NULL AVG_DetectorTime , NULL Total_Car
 		FROM #tmpDateRange
@@ -338,7 +302,8 @@ BEGIN
 	***********************************/
 	-- return avg time report
 	EXECUTE(@query);
-	
+	PRINT @query
+
 	-- return top 3 longest times (only applicable to single store)
 	IF (@isMultiStore = 0)
 	BEGIN
@@ -516,9 +481,7 @@ BEGIN
 
 	-- Goal time
 	EXEC usp_HME_Cloud_Get_Device_Goals_Details @Device_IDs
-	--INSERT INTO @getGoalTime  VALUES(15,30,60,90,120,5,10,15,20,30,60,90,120,30,60,90,120,30,30,120,180,90,150,300,420)
-	--SELECT *  FROM @getGoalTime;
-
+	
 	-- Changes for System Statistics
 	IF (@isMultiStore = 0)
 	BEGIN
@@ -552,4 +515,3 @@ BEGIN
 	RETURN(0)
 
 END
-

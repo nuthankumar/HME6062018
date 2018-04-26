@@ -1,17 +1,15 @@
-USE [db_qsrdrivethrucloud_engdev]
-GO
-/****** Object:  StoredProcedure [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details]    Script Date: 4/25/2018 2:43:52 AM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
+
+/****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details] if already exists *****/
+IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_HME_Cloud_Get_Report_By_Week_Details' AND [type] ='P'))
+	DROP PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details]
 GO
 
 -- ===========================================================
 --      Copyright © 2018, HME, All Rights Reserved
 -- ===========================================================
 -- Name			:	usp_HME_Cloud_Get_Report_By_Week_Details
--- Author		:	Swathi Kumar
--- Created		:	12-April-2018
+-- Author		:	Ramesh Kumar
+-- Created		:	26-March-2018
 -- Tables		:	Group,Stores
 -- Purpose		:	To get Weekly report details for the given StoreIds
 -- ===========================================================
@@ -22,11 +20,9 @@ GO
 -- 1.		13/04/2018		Swathi Kumar	Added Subtotal calculation
 -- ===========================================================
 -- EXEC [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details] '39180','2018-03-24','2018-03-26',N'2018-03-24 00:00:00',N'2018-03-26 10:30:00','11','AC',1,N'68LKBP85C1SKH1FI3M7X40CJHKGU07FZ'
--- use the below UserUid for testing in local data base
--- --,@UserUID=N'68LKBP85C1SKH1FI3M7X40CJHKGU07FZ'
 -- ===========================================================
 
-ALTER PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details](
+CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details](
 	@Device_IDs varchar(500),
 	@StoreStartDate date,
 	@StoreEndDate date,
@@ -88,35 +84,6 @@ BEGIN
 		LaneConfig_ID tinyint
 	)
 
-	-- This is table is created temporarly. Once we get the data it needs to be removed
-	DECLARE  @getGoalTime TABLE (
-		Device_ID int,    
-		MenuBoard_GoalA int, 
-		MenuBoard_GoalB int, 
-		MenuBoard_GoalC int, 
-		MenuBoard_GoalD int,-- MenuBoard_GoalF int,
-		Greet_GoalA int, 
-		Greet_GoalB int,          
-		Greet_GoalC int,              
-		Greet_GoalD int,             --Greet_GoalF int,
-		Cashier_GoalA int,          
-		Cashier_GoalB int,           
-		Cashier_GoalC int,           
-		Cashier_GoalD int, --Cashier_GoalF int, 
-		Pickup_GoalA int,            
-		Pickup_GoalB int,            
-		Pickup_GoalC int,            
-		Pickup_GoalD int, --Pickup_GoalF int,    
-		LaneQueue_GoalA int,  
-		LaneQueue_GoalB int,  
-		LaneQueue_GoalC int, 
-		LaneQueue_GoalD int,   --LaneQueue_GoalF int,         
-		LaneTotal_GoalA int,      
-		LaneTotal_GoalB int, 
-		LaneTotal_GoalC int,           
-		LaneTotal_GoalD int
-	)
-
 	CREATE TABLE #rollup_data(
 		WeekIndex smallint,
 		WeekStartDate char(10),
@@ -148,11 +115,6 @@ BEGIN
 			Device_ID int
 		)
 
-	--SET @Device_IDs = ''
-	--SELECT @Device_IDs = CONVERT(varchar,dinf.Device_ID) + ',' + @Device_IDs 
-	--	FROM tbl_DeviceInfo AS dinf INNER JOIN tbl_Stores strs ON dinf.Device_Store_ID = strs.Store_ID 
-	--	WHERE dinf.Device_Store_ID IN (Select cValue FROM dbo.split(@StoreIDs,','))
-	--SET @Device_IDs = CASE WHEN LEN(@Device_IDs)>0 THEN LEFT(@Device_IDs, LEN(@Device_IDs)-1) ELSE @Device_IDs END
 	
 	INSERT INTO #GroupDetails(GroupName, Store_ID, Store_Name, Device_ID)
 	SELECT DISTINCT g.GroupName,ts.Store_ID, ts.Store_Name , td.Device_ID
@@ -160,12 +122,6 @@ BEGIN
 	LEFT JOIN GroupStore gs ON gs.StoreID = ts.Store_ID
 	INNER JOIN [Group] g ON g.ID = gs.GroupID
 	WHERE td.Device_ID in (SELECT cValue FROM dbo.split(@Device_IDs,','))
-
-	--SELECT DISTINCT g.GroupName, ts.Store_ID, ts.Store_Name 
-	--	FROM [Group] g INNER JOIN GroupStore gs ON g.ID = gs.GroupID
-	--	INNER JOIN  tbl_Stores ts ON gs.StoreID = ts.Store_ID 
-	--	WHERE gs.StoreID in (SELECT cValue FROM dbo.split(@StoreIDs,','))
-
 
 	/*************************************
 	 step 2. populate, then roll up data
@@ -210,7 +166,7 @@ BEGIN
 			SET @isMultiStore = 1
 
 			INSERT INTO @header
-			SELECT	DISTINCT EventType_Category, EventType_Category_ID, NULL, EventType_Sort
+			SELECT	DISTINCT CASE WHEN ISNULL(EventType_Category,'')='' THEN 'NA' ELSE EventType_Category END EventType_Category, EventType_Category_ID, NULL, EventType_Sort
 			FROM    #raw_data
 			WHERE	EventType_Category_ID IS NOT NULL
 
@@ -277,7 +233,7 @@ BEGIN
 	ELSE
 		BEGIN	-- single store
 			INSERT INTO @header
-			SELECT	DISTINCT EventType_Name, EventType_ID, Detector_ID, EventType_Sort
+			SELECT	DISTINCT CASE WHEN ISNULL(EventType_Name,'')='' THEN 'NA' ELSE EventType_Name END, EventType_ID, Detector_ID, EventType_Sort
 			FROM    #raw_data
 			WHERE	Detector_ID IS NOT NULL
 
@@ -401,20 +357,26 @@ BEGIN
 	EXECUTE(@query)
 		
 	-- EXECUTE dbo.usp_HME_Cloud_Get_Device_Goals @Device_IDs
-
+	
 	-- return top 3 longest times
 	IF (@isMultiStore = 0 )
-		SELECT	e.headerName, t.DetectorTime, t.DeviceTimeStamp, e.Detector_ID,t.EventType_ID , e.headerID
-		FROM 	@header e
-		CROSS APPLY
-		(
-			SELECT	TOP 3 DetectorTime, DeviceTimeStamp, r.EventType_ID
-			FROM	#raw_data r
-			WHERE	r.EventType_ID = e.headerID
-			ORDER BY DetectorTime DESC
-		)	AS t
-		ORDER BY e.Detector_ID, DetectorTime DESC
-	
+		BEGIN
+			IF EXISTS(SELECT 1 FROM @header)
+			BEGIN
+				SELECT	e.headerName, t.DetectorTime, t.DeviceTimeStamp, e.Detector_ID,t.EventType_ID , e.headerID
+				FROM 	@header e
+				CROSS APPLY
+				(
+					SELECT	TOP 3 DetectorTime, DeviceTimeStamp, r.EventType_ID
+					FROM	#raw_data r
+					WHERE	r.EventType_ID = e.headerID
+					ORDER BY DetectorTime DESC
+				)	AS t
+				ORDER BY e.Detector_ID, DetectorTime DESC
+			END
+			ELSE
+				SELECT NULL headerName, NULL DetectorTime, NULL DeviceTimeStamp, NULL Detector_ID, NULL EventType_ID , NULL headerID
+		END
 	ELSE
 		SELECT 1	-- fake resultset in case the application expecting it
 
@@ -460,36 +422,37 @@ BEGIN
 			SET @query = '';
 
 			-- calculate total cars that meet each of the goals
-			SET @query = N'
-			WITH Total_Car_Count
-			AS
-			(
-				SELECT	Device_ID,
-						EventType_Name,
-						IsNull(Goal_ID, 0) AS Goal_ID,
-						COUNT(CarDataRecord_ID) AS Total_Cars
-				FROM	#raw_data
-				GROUP BY EventType_Name,
-						Device_ID,
-						IsNull(Goal_ID, 0)
-			)
-			SELECT	*
-			FROM	
-			(		SELECT	Device_ID, 
-							EventType_Name + '' - '' + CASE Goal_ID WHEN 1 THEN ''GoalA'' WHEN 2 THEN ''GoalB'' WHEN 3 THEN ''GoalC'' WHEN 4 THEN ''GoalD'' WHEN 5 THEN ''GoalF'' ELSE ''N/A'' END AS EventGoal,
-							Total_Cars
-					FROM	Total_Car_Count
-			) AS Car_count_by_goal
-			PIVOT(
-				SUM(Total_Cars)
-				FOR EventGoal IN (' + @cols + ')
-			) AS p'
-
+			IF ISNULL(@cols,'')<>'' 
+				SET @query = N'
+				WITH Total_Car_Count
+				AS
+				(
+					SELECT	Device_ID,
+							EventType_Name,
+							IsNull(Goal_ID, 0) AS Goal_ID,
+							COUNT(CarDataRecord_ID) AS Total_Cars
+					FROM	#raw_data
+					GROUP BY EventType_Name,
+							Device_ID,
+							IsNull(Goal_ID, 0)
+				)
+				SELECT	* 
+				FROM	
+				(		SELECT	Device_ID, 
+								EventType_Name + '' - '' + CASE Goal_ID WHEN 1 THEN ''GoalA'' WHEN 2 THEN ''GoalB'' WHEN 3 THEN ''GoalC'' WHEN 4 THEN ''GoalD'' WHEN 5 THEN ''GoalF'' ELSE ''N/A'' END AS EventGoal,
+								Total_Cars
+						FROM	Total_Car_Count
+				) AS Car_count_by_goal
+				PIVOT(
+					SUM(Total_Cars)
+					FOR EventGoal IN (' + @cols + ')
+				) AS p'
+			ELSE
+				SET @query = N'SELECT NULL Device_ID, NULL EventGoal, NULL Total_Cars'
 			EXECUTE(@query);
 		END
 	ELSE
 		SELECT 1	-- fake resultset in case the application expecting it
-
 
 		SET @query = '';
 	IF (@isMultiStore = 0)
@@ -529,10 +492,7 @@ BEGIN
 	EXECUTE(@query);
 
 		SET @query = '';	
-			--INSERT INTO @getGoalTime  VALUES(15,30,60,90,120,5,10,15,20,30,60,90,120,30,60,90,120,30,30,120,180,90,150,300,420)
-			--SELECT * 
-			--FROM 
-		--	@getGoalTime;
+		
 		-- get Gaols time in seconds
 			EXEC usp_HME_Cloud_Get_Device_Goals_Details @Device_IDs
 
