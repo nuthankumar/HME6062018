@@ -20,12 +20,13 @@ const convertSecondsToMinutes = (avgTime, formatFlag) => {
   }
 }
 
-const dayPartTime = (dayPartId, totalRecordCount, deviceStartTime, deviceEndTime) => {
+const dayPartTime = (dayPartId, input) => {
   let dayPartTime
+
   if (dayPartId && dayPartId === 1) {
-    dayPartTime = messages.COMMON.DAYPARTOPENTIME
+    dayPartTime = messages.COMMON.OPENVALUE + '-' + moment(input.ReportTemplate_From_Time, 'hh:mm:ss a').format('hh:mm')
   } else {
-    dayPartTime = messages.COMMON.DAYPARTCLOSETIME
+    dayPartTime = messages.COMMON.CLOSEVALUE + '-' + moment(input.ReportTemplate_To_Time, 'hh:mm:ss a').format('hh:mm')
   }
   return dayPartTime
 }
@@ -131,6 +132,15 @@ const getAdvancedSelectionMaxMonth = (noOfDays, dateValue) => {
 const convertYYYYMMDD = (dateValue) => {
   return moment(dateValue).format('YYYY-MM-DD')
 }
+
+const UtcTimeTo12HourFormat = (dateValue) => {
+  if (dateValue !== null || (_.isUndefined(dateValue))) {
+    return moment.utc(dateValue, 'YYYY-MM-DDTHH:mm:ss Z').format('YYYY-MM-DD HH:mm a')
+  } else {
+    return 'N/A'
+  }
+}
+
 module.exports = {
   convertSecondsToMinutes,
   dayPartTime,
@@ -149,5 +159,6 @@ module.exports = {
   dateDifferenceMonths,
   convertYYYYMMDD,
   converthhmmtt,
-  convertMMMdYYYY
+  convertMMMdYYYY,
+  UtcTimeTo12HourFormat
 }

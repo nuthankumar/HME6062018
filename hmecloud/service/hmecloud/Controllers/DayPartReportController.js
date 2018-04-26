@@ -133,12 +133,12 @@ function multiStoreResult (totalRecordCount, input, averageTimeResultSet, colorS
           } else if (storeObj.StoreNo === 'Total Daypart') {
             let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
             dataObject.groupId.value = `Total Daypart`
-              dataObject.groupId.timeSpan = `(W-Avg)`
+            dataObject.groupId.timeSpan = `(W-Avg)`
             // dataObject.storeId = store
             tempData.push(dataObject)
           } else if (storeObj.StoreNo !== 'Total Daypart') {
             let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
-            store.name = `${storeObj.StoreNo}-${storeObj.Store_Name}`
+            store.name = storeObj.StoreNo + (storeObj.Store_Name ? ' - ' + storeObj.Store_Name : '')
             dataObject.store = store
             tempData.push(dataObject)
           }

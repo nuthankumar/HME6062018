@@ -150,10 +150,12 @@ function prepareResponsObject (result, departTimeStampMap, rawCarDataList, rawCa
       })
       let tempRawCarData = departTimeStampList[0]
       const rawCarDataObj = {}
-      rawCarDataObj.departureTime = tempRawCarData.DepartTimeStamp || 'N/A'
+      rawCarDataObj.departureTime = dateUtils.UtcTimeTo12HourFormat(tempRawCarData.DepartTimeStamp)
       rawCarDataObj.eventName = tempRawCarData.CarRecordDataType_Name || 'N/A'
       rawCarDataObj.carsInQueue = tempRawCarData.CarsInQueue || '0'
-      rawCarData.dayPart = 'DP' + tempRawCarData.Daypart_ID + dateUtils.dayPartTime(tempRawCarData.Daypart_ID, len, dayPartData.StartTime, dayPartData.EndTime)
+      
+      rawCarData.dayPart = 'DP' + tempRawCarData.Daypart_ID + dateUtils.dayPartTime(tempRawCarData.Daypart_ID, input)
+      
       for (let i = 0; i < departTimeStampList.length; i++) {
         let tempEventDetails = departTimeStampList[i]
         if (tempEventDetails.EventType_Name.includes(messages.EventName.MENU)) {
