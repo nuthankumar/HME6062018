@@ -2,9 +2,9 @@
     color: black !important;
 }
 
-.view-as {
+/*.view-as {
     color: rgb(245, 108, 108) !important;
-}
+}*/
 .user-info-section span {
     display: inline;
     float: left;
@@ -94,21 +94,34 @@ font-weight:bold;
 .loginInfo {
 text-align:right}
 
-span.view-as button {
-    border-radius: 10px;
+div.view-as button {
+    border-radius: 36px;
     color: white !important;
-    height: 20px;
+    height: 15px;
     border: none;
-    background:red;
+    background: red;
+    padding: 3px 5px;
+    margin: 0px;
 }
+    div.view-as button span {
+        color: white !important;
+        font-size: 8px; 
+        padding: 0px;
+    }
 
 
-span.view-as button a {
-    color: white !important;
-    text-decoration:none;
+div.view-as span {
+    color: #D41B3E !important;
+    text-decoration: none;
 }
 
 .loggedInUser {
     display:flex;
     justify-content:flex-end;
+}
+
+.view-as {
+    display: flex;
+    align-items: center;
+    display: -webkit-flex;
 }

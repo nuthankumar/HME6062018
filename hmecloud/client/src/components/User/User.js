@@ -83,6 +83,9 @@ class User extends Component {
             this.setState({ isEdit: false })
         }
         let url = Config.apiBaseUrl + CommonConstants.apiUrls.getUserRoles
+        if (this.state.isAdmin || this.authService.isMasquerade()) {
+            url += '?uuid=' + uuid;
+        }
         this.api.getData(url, data => {
             this.state.roles = data.data
          //   this.state.userRole = _.pluck(_.where(this.state.roles, { 'Role_IsDefault': 1 }), 'Role_UID')[0]
@@ -96,9 +99,7 @@ class User extends Component {
     }
     load(uuid) {
         let url = Config.apiBaseUrl + CommonConstants.apiUrls.getGroupHierarchyTree
-        
-
-        if (this.state.isAdmin) {
+        if (this.state.isAdmin || this.authService.isMasquerade()) {
             url += '?uuid=' + uuid;
         }
         this.api.getData(url, data => {

@@ -150,7 +150,7 @@ export default class HmeHeader extends React.Component {
 
                             {/* <MasqueradeHeader isAdmin="true" viewAsUser={this.state.contextUser} /> */}
                         </span>
-                        <button className={'logout ' + (isLoggedIn ? 'show' : 'hidden')}> <a className="black_link" href={url + "?pg=Logout&token=" + token} onClick={this.logout.bind(this)}> {t[language].headerSignOut}</a></button>
+                        <button className={'logout ' + (isLoggedIn ? 'show' : 'hidden')} onClick={this.logout.bind(this)}> <span> {t[language].headerSignOut}</span></button>
                         <img className='logOutIcon' src={HMELogo} aria-hidden='true' />
                     </div>
                 </header>
@@ -189,9 +189,13 @@ export default class HmeHeader extends React.Component {
     toggle(e) {
         this.state.settingsDropdown ? this.setState({ settingsDropdown: false }) : this.setState({ settingsDropdown: true })
     }
+
     logout(e) {
         this.authService.clear()
+        let url = this.state.url + "?pg=Logout&token=" + this.state.token
+        window.location.href =url;
     }
+
 
     redirectUrl(url) {
         console.log(url)
