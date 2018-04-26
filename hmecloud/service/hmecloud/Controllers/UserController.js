@@ -91,7 +91,7 @@ const update = (user, callback) => {
  */
 const get = (user, callback) => {
   let output = {}
-  repository.get(user.uuId, (result) => {
+    repository.get(user.uuId, (result) => {
     if (result.length > 0) {
       let userProfile = result[0]
       let userRole = result[1]
@@ -111,8 +111,8 @@ const get = (user, callback) => {
       user.storeIds = []
       if (userStores) {
         let storeIds = []
-        for (let i = 0; i < userStores.length; i++) {
-          let userStore = userStores[i]
+          for (let i = 2; i < result.length; i++) {
+              let userStore = result[i]
           storeIds.push(userStore.Store_UID)
         }
         user.storeIds = storeIds
