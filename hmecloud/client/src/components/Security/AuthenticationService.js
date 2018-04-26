@@ -61,8 +61,8 @@ export default class AuthenticationService {
         localStorage.setItem("uuid", uuid);
     }
 
-    getUUID(uuid) {
-        localStorage.getItem("uuid", uuid);
+    getUUID() {
+        return localStorage.getItem("uuid");
     }
 
     /*setMasquerade(masquerade) {
@@ -121,8 +121,7 @@ export default class AuthenticationService {
 
 
     setAdmin(isAdmin) {
-        if (isAdmin)
-            localStorage.setItem("isAdmin", isAdmin)
+        localStorage.setItem("isAdmin", isAdmin)
     }
 
     setUserName(userName) {

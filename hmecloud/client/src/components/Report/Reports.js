@@ -23,6 +23,8 @@ import ReactTooltip from 'react-tooltip'
 import * as Enum from '../../Enums'
 import t from '../Language/language'
 import * as languageSettings from '../Language/languageSettings'
+import AuthenticationService from '../Security/AuthenticationService'
+
 const ProductLogo = require("../../images/ProductLogo-1.png");
 const HMELogo = require("../../images/HMELogo.png");
 const Calendar = require("../../images/mini-cal.jpg");
@@ -102,6 +104,8 @@ class Report extends Component {
 	      systemStatistics: false
       }
     };
+    this.authService = new AuthenticationService(Config.authBaseUrl)
+
     this.api = new Api()
     this.getSavedReports();
     // this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -111,7 +115,10 @@ class Report extends Component {
   }
 
   getTreeHierarchy() {
+    debugger;
       let url = Config.apiBaseUrl + CommonConstants.apiUrls.getGroupHierarchyTree
+      if(this.authService.getUUID())
+        url +="?uuId="+this.authService.getUUID()
       this.api.getData(url,data => {
         this.state.treeData = data.data
         this.setState(this.state)

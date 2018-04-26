@@ -47,13 +47,64 @@ export default class Layout extends React.Component {
         this.state.url = this.authService.getColdFusionAppUrl(this.authService.isAdmin())
     }
     componentDidMount() {
-        this.signOutInterval(this.authService.isLoggedIn())
+        this.signOutInterval()
         this.setUserContext()
     }
 
     componentWillMount() {
-        //UserContext.isAdmin()
-        //this.setUserContext()
+        this.prepareProfile();
+    }
+
+    prepareProfile() {
+
+        const params = new URLSearchParams(this.props.Params.location.search);
+        const contextToken = params.get('token') ? params.get('token') : null
+        const admin = params.get('a') == 'true' ? true : false
+        //const admin = params.get('atoken') ? true : false;
+        const uuid = params.get('uuid') ? params.get('uuid') : null
+        const userName = params.get('un') ? params.get('un') : null
+        const idToken = params.get('atoken') ? params.get('atoken') : null
+        const userId = params.get('memail') ? params.get('memail') : null
+
+        if (contextToken) {
+            this.authService.setToken(contextToken, admin)
+        }
+        if (idToken) {
+            this.authService.setTokens(idToken, contextToken, admin)
+        }
+        if (userId) {
+            let user = {
+                username: userId
+            }
+            let url = Config.authBaseUrl + Config.tokenPath
+            this.api.postData(url, user, data => {
+                if (data && data.accessToken) {
+                    this.authService.setTokens(this.authService.getIdToken(), data.accessToken,
+                        this.authService.isAdmin())
+                    let path = window.location.pathname;
+                    if (uuid) {
+                        path += '?uuid=' + uuid;
+                    }
+                    window.location.href = path;
+                }
+            }, error => {
+            })
+        }
+        else if (contextToken) {
+            let path = window.location.pathname;
+            if (uuid) {
+                path += '?uuid=' + uuid;
+            }
+            window.location.href = path;
+        }
+
+        if (uuid) {
+            this.authService.setUUID(uuid)
+        }
+
+        if (!this.authService.isLoggedIn()) {
+            this.authService.setAdmin(window.location.pathname == '/admin')
+        }
     }
 
     autoSignout() {
@@ -77,11 +128,11 @@ export default class Layout extends React.Component {
 
     closeModal() {
         this.setState({ modalIsOpen: false });
-        this.signOutInterval(this.authService.isLoggedIn())
+        this.signOutInterval()
     }
 
-    signOutInterval(isLoggedIn) {
-        if (isLoggedIn && this.authService.isMasquerade()) {
+    signOutInterval() {
+        if (this.authService.isLoggedIn() && this.authService.isMasquerade()) {
             let autoInterval = setInterval(function () {
                 if (!this.state.modalIsOpen) {
                     clearInterval(autoInterval);
@@ -107,103 +158,11 @@ export default class Layout extends React.Component {
         this.setState(this.state)
     }
 
-    
+
     render() {
-        const { Params, children } = this.props;
+        const { children } = this.props;
         const { contextUser } = this.state;
-        let pathName = Params.location.pathname;
-        const params = new URLSearchParams(this.props.Params.location.search);
-        const contextToken = params.get('token') ? params.get('token') : null
-        const admin = params.get('a') == 'true' ? true : false
-        //const admin = params.get('atoken') ? true : false;
-        const uuid = params.get('uuid') ? params.get('uuid') : null
-        const userName = params.get('un') ? params.get('un') : null
-        const idToken = params.get('atoken') ? params.get('atoken') : null
-        const userId = params.get('memail') ? params.get('memail') : null
 
-        if (contextToken) {
-            this.authService.setToken(contextToken, admin)
-        }
-        if (idToken) {
-            this.authService.setTokens(idToken,contextToken, admin)
-        }
-        if (userId) {
-            let user = {
-                username: userId
-            }
-            let url = Config.authBaseUrl + Config.tokenPath
-            this.api.postData(url, user, data => {
-                if (data && data.accessToken) {
-                    this.authService.setTokens(this.authService.getIdToken(), data.accessToken,
-                        this.authService.isAdmin())
-                    let path = window.location.pathname;
-                    if (uuid) {
-                        path += '?uuid=' + uuid;
-                    }
-                    window.location.href = path;
-                }
-            }, error => {
-            })
-        }
-        else if (contextToken) {
-            // if (idToken)
-            //     this.authService.setTokens(idToken, contextToken, admin)
-            // else
-            //     this.authService.setToken(contextToken, admin)
-            // //this.authService.isLoggedIn()
-            let path = window.location.pathname;
-            if (uuid) {
-                path += '?uuid=' + uuid;
-            }
-            window.location.href = path;
-        }
-
-        if (uuid) {
-            this.authService.setUUID(uuid)
-        }
-        /*if (userName) {
-            this.authService.setUserName(userName)
-        }
-        if (masquerade) {
-            this.authService.setMasquerade(masquerade)
-        }*/
-
-        // localStorage.setItem('id_token', Config.token)
-        // let idToken = localStorage.getItem('id_token')
-        // let isAdministrator = (idToken) ? true : false;
-
-        // isAdministrator = true;
-        let isAdmin = false
-        let isLoggedIn = false;
-        let adminLogo = false
-
-        let isSettings = false
-        if (window.location.pathname == '/admin') {
-            isAdmin = true
-            this.authService.setAdmin(isAdmin)
-        }
-        if (window.location.pathname == '/user') {
-            isSettings = true
-            //this.authService.setAdmin(isAdmin)
-        }
-        else {
-            isAdmin = this.authService.isAdmin();
-            if (isAdmin == true) {
-                isAdmin = true
-            } else {
-                isAdmin = false
-            }
-        }
-
-        if (this.authService.isLoggedIn()) {
-            isLoggedIn = true
-        } else {
-            isLoggedIn = false
-        }
-
-        if ((!isLoggedIn && window.location.pathname == '/admin') || isAdmin) {
-            adminLogo = true
-        }
         let contextUserEmail = this.authService.getProfile();
         return (
             <div>
@@ -217,10 +176,10 @@ export default class Layout extends React.Component {
                     <span className="autoSignOutContent">You are currently viewing the site as {contextUserEmail.User_EmailAddress ? contextUserEmail.User_EmailAddress : contextUserEmail.name} </span>
                     <button className="continueButton" onClick={this.closeModal}>Continue Viewing as {contextUserEmail.User_EmailAddress ? contextUserEmail.User_EmailAddress : contextUserEmail.name} </button>
                 </Modal>
-                <HmeHeader isAdministrator={this.authService.isAdmin()} isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} />
-                <AdminSubHeader isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} pathName={pathName} />
-                <div className={!isAdmin && isSettings ? 'show' : 'hidden'}>
-                    <SettingsHeader isAdmin={isAdmin} adminLogo={adminLogo} isLoggedIn={isLoggedIn} /></div>
+                <HmeHeader />
+                <AdminSubHeader />
+                <div>
+                    <SettingsHeader /></div>
                 <div className="hmeBody ">
                     {children}
                 </div>

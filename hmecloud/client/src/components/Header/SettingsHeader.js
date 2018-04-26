@@ -15,20 +15,22 @@ export default class SettingsHeader extends React.Component {
             language: languageSettings.getCurrentLanguage(),
             token: this.authService.getToken()
         }
-       // this.state.uuid = this.authService.getUUID()
         this.state.url = this.authService.getColdFusionAppUrl(this.authService.isAdmin())
     }
     render() {
         const { language, token, url, uuid } = this.state;
-        const { isLoggedIn } = this.props;
-        return (
-            <div className={"subMenu menuBar " + (isLoggedIn ? 'show' : 'hidden')}>
-                <ul>
-                    <li><a className="headerMenu" href={url + "?pg=SettingsStores&token=" + token}>{t[language].stores}</a></li>
-                    <li class="active_tab"><a className="headerMenu" href={ url + "?pg=SettingsUsers&token=" + token }>{t[language].users}</a></li>
-                    <li><a className="headerMenu" href={url + "?pg=SettingsRoles&token=" + token}>{t[language].roles}</a></li>
-                </ul>
-            </div>
-        )
+        if (!this.authService.isAdmin() && this.authService.isLoggedIn()) {
+            return (
+                <div className="subMenu menuBar ">
+                    <ul>
+                        <li><a className="headerMenu" href={url + "?pg=SettingsStores&token=" + token}>{t[language].stores}</a></li>
+                        <li class="active_tab"><a className="headerMenu" href={url + "?pg=SettingsUsers&token=" + token}>{t[language].users}</a></li>
+                        <li><a className="headerMenu" href={url + "?pg=SettingsRoles&token=" + token}>{t[language].roles}</a></li>
+                    </ul>
+                </div>
+            )
+        } else {
+            return null;
+        }
     }
 }

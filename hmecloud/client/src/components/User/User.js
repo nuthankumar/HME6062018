@@ -74,7 +74,7 @@ class User extends Component {
                         userObject.storeIds.indexOf(item.StoreUid.toString()) > -1
                     );
                 })
-                this.state.defaultCheckedKeys= keys.map(String)
+                this.state.defaultCheckedKeys = keys.map(String)
                 this.state.user = data.data;
                 this.setState(this.state)
             })
@@ -88,7 +88,7 @@ class User extends Component {
         }
         this.api.getData(url, data => {
             this.state.roles = data.data
-         //   this.state.userRole = _.pluck(_.where(this.state.roles, { 'Role_IsDefault': 1 }), 'Role_UID')[0]
+            //   this.state.userRole = _.pluck(_.where(this.state.roles, { 'Role_IsDefault': 1 }), 'Role_UID')[0]
             this.setState(this.state)
         })
         url = Config.apiBaseUrl + CommonConstants.apiUrls.getAudit + '?uuId=' + uuid;
@@ -118,7 +118,18 @@ class User extends Component {
         console.log(this.state)
     }
 
+    renderRemoveButton() {
 
+        if (!this.authService.isAdmin() && !this.authService.isMasquerade()) {
+            return (
+                <div >
+                    &nbsp;|&nbsp;<a class="cancel_butt" id="remove" onClick={this.deleteUser.bind(this)}  >{t[this.state.currentLanguage].removeuser}</a>
+                </div>
+            )
+        } else {
+            return "";
+        }
+    }
 
     render() {
         const language = this.state.currentLanguage
@@ -165,9 +176,7 @@ class User extends Component {
                                             <th class="req"><label for="userEmail">{t[language].usernameemail}</label></th>
                                             <td><input type="text" name="userEmail" value={user.userEmail} onChange={this.handleOnChange.bind(this)} /></td>
                                             <td>
-                                                <div className={this.state.isAdmin  /*&& !this.state.isEdit*/ ? 'hidden' : 'show'}>
-                                                    &nbsp;|&nbsp;<a class="cancel_butt" id="remove" onClick={this.deleteUser.bind(this)} /*href="./?pg=SettingsUsers&amp;st=delete&amp;uuid=PWD1L9GMR73VHJMV11RYHTSD7QTPNQG6"*/ >{t[language].removeuser}</a>
-                                                </div>
+                                                {this.renderRemoveButton()}
                                             </td>
                                         </tr>
                                         <tr>
@@ -283,7 +292,7 @@ class User extends Component {
             let roleOptions = roles.map(function (role, index) {
                 //                return (<option key={index} value={role.Role_UID} selected={!this.state.isEdit ? (role.Role_IsDefault == 1 ? true : false) : (role.Role_UID == this.state.userRole ? true : false)} >{role.Role_Name}</option>)
 
-              
+
                 if (role.Role_IsDefault == 1) {
                     this.state.userRole = role.Role_UID;
                     this.setState(this.state);
@@ -434,13 +443,13 @@ class User extends Component {
             let url = Config.apiBaseUrl + CommonConstants.apiUrls.deleteUser + '?uuId=' + this.state.user.uuId
             this.api.deleteData(url, data => {
                 if (data) {
-                this.props.history.push("/message", data.key);
-                //    this.state.successMessage = this.state.deleteSuceessMessage
-                //    this.state.errorMessage = ''
-                //    this.state.deleteSuccess = true
-                //    this.setState(this.state)
-                } 
-                    else {
+                    this.props.history.push("/message", data.key);
+                    //    this.state.successMessage = this.state.deleteSuceessMessage
+                    //    this.state.errorMessage = ''
+                    //    this.state.deleteSuccess = true
+                    //    this.setState(this.state)
+                }
+                else {
                     this.state.errorMessage = this.state.deleteErrorMessage
                     this.state.successMessage = ''
                     this.setState(this.state)
@@ -455,7 +464,7 @@ class User extends Component {
 
 
     masquerade(e) {
-        
+
         let user = this.authService.getProfile();
         let userName = user.name ? user.name : user.User_FirstName + ' ' + user.User_LastName;
         let url = Config.coldFusionUrl + "?atoken=" + this.authService.getIdToken() + "&memail=" + this.state.userEmail + "&un=" + userName
@@ -513,7 +522,7 @@ class User extends Component {
             console.log(User[0])
             let url = Config.apiBaseUrl + CommonConstants.apiUrls.createUser
             this.api.postData(url, User[0], data => {
-                
+
                 if (data.status) {
                     // const language = this.state.currentLanguage
                     this.props.history.push("/message", data.key);
