@@ -4,6 +4,7 @@ const dateUtils = require('../Common/DateUtils')
 const dateFormat = require('dateformat')
 const csvGeneration = require('../Common/CsvUtils')
 const HashMap = require('hashmap')
+const _ = require('lodash')
 /**
  * This Service is used to Generate the Summary reports details for
  *provided details
@@ -51,7 +52,7 @@ const getRawCarDataReport = (input, callBack) => {
 
   if (input.reportType === 'rr1' || input.reportType === 'rrcsv1') {
     stores.getRawCarDataReport(rawCarDataqueryTemplate, result => {
-      if (result) {
+      if (!_.isEmpty(result)) {
         const len = result.length
         if (len > 1) {
           const storeData = result[len - 1]
@@ -86,7 +87,10 @@ const getRawCarDataReport = (input, callBack) => {
           }
         }
       } else {
-        callBack(result)
+        callBack({
+          key: 'noRecordFound',
+          status: false
+        })
       }
     })
   } else {
@@ -120,7 +124,7 @@ const generateCsv = (input, response) => {
 function prepareStoreDetails (rawCarData, storeData, input) {
   rawCarData.storeName = storeData.Store_Name
   rawCarData.storeDescription = storeData.Brand_Name
-  rawCarData.startTime = `${dateUtils.convertMMMdYYYY(input.ReportTemplate_To_Date)} OPEN`
+  rawCarData.startTime = `${dateUtils.convertMMMdYYYY(input.ReportTemplate_From_Date)} OPEN`
   rawCarData.stopTime = `${dateUtils.convertMMMdYYYY(input.ReportTemplate_To_Date)} CLOSE`
   rawCarData.printDate = dateUtils.convertMMMdYYYY(dateFormat(new Date(), 'isoDate'))
   rawCarData.printTime = dateFormat(new Date(), 'shortTime')
@@ -146,9 +150,9 @@ function prepareResponsObject (result, departTimeStampMap, rawCarDataList, rawCa
       })
       let tempRawCarData = departTimeStampList[0]
       const rawCarDataObj = {}
-      rawCarDataObj.departureTime = tempRawCarData.DepartTimeStamp
-      rawCarDataObj.eventName = tempRawCarData.CarRecordDataType_Name
-      rawCarDataObj.carsInQueue = tempRawCarData.CarsInQueue
+      rawCarDataObj.departureTime = tempRawCarData.DepartTimeStamp || 'N/A'
+      rawCarDataObj.eventName = tempRawCarData.CarRecordDataType_Name || 'N/A'
+      rawCarDataObj.carsInQueue = tempRawCarData.CarsInQueue || '0'
       rawCarData.dayPart = 'DP' + tempRawCarData.Daypart_ID + dateUtils.dayPartTime(tempRawCarData.Daypart_ID, len, dayPartData.StartTime, dayPartData.EndTime)
       for (let i = 0; i < departTimeStampList.length; i++) {
         let tempEventDetails = departTimeStampList[i]

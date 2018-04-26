@@ -9,7 +9,7 @@ const prepareStoreDetails = (daysingleResult, storeData, input) => {
     daysingleResult.storeName = (storeData[0].Store_Name ? storeData[0].Store_Name : 'N/A')
     daysingleResult.storeDesc = (storeData[0].Brand_Name ? storeData[0].Brand_Name : 'N/A')
   }
-  daysingleResult.startTime = `${dateUtils.convertMMMdYYYY(input.ReportTemplate_To_Date)} OPEN`
+  daysingleResult.startTime = `${dateUtils.convertMMMdYYYY(input.ReportTemplate_From_Date)} OPEN`
   daysingleResult.stopTime = `${dateUtils.convertMMMdYYYY(input.ReportTemplate_To_Date)} CLOSE`
   daysingleResult.printDate = dateUtils.convertMMMdYYYY(dateUtils.currentDate())
   daysingleResult.printTime = dateUtils.currentTime()
@@ -37,7 +37,7 @@ function getGoalStatistic (goalsStatistics, getGoalTime, dataArray, totalCars, i
   }
 
   // Goal Statistics properties
-  let goalDetails = { goal: 'N/A', cars: 'N/A', percentage: '0%' }
+  let goalDetails = { goal: 'N/A', cars: '0', percentage: '0%' }
   const goalGrades = {
     goalA: {
       title: '< Goal A (min:sec)',
@@ -155,64 +155,67 @@ const prepareLongestTimes = (daysingleResult, longestData, format) => {
   let LongestTimes = []
   let longestObj = {}
   let k = 0
-  for (let i = 0; i < longestData.length; i++) {
-    let tempTimeObj = longestData[i]
-    if (tempTimeObj.headerName.includes(messages.EventName.MENU)) {
-      let timeObj = {}
-      timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
-      timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
-      timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
-      // if (!_.isUndefined(LongestTimes[k])) {
-      longestObj.Menu = timeObj
-      // }
-      LongestTimes.push(longestObj)
-    } else if (tempTimeObj.headerName.includes(messages.EventName.GREET)) {
-      let timeObj = {}
-      timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
-      timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
-      timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
-      // if (!_.isUndefined(LongestTimes[k])) {
-      LongestTimes[k].Greet = timeObj
-      // }
-      k = k + 1
-      if (k === 2) {
-        k = 0
-      }
-    } else if (tempTimeObj.headerName.includes(messages.EventName.SERVICE)) {
-      let timeObj = {}
-      timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
-      timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
-      timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
-      if (!_.isUndefined(LongestTimes[k])) {
-        LongestTimes[k].Service = timeObj
-      }
-      k = k + 1
-      if (k === 2) {
-        k = 0
-      }
-    } else if (tempTimeObj.headerName.includes(messages.EventName.LANEQUEUE)) {
-      let timeObj = {}
-      timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
-      timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
-      timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
-      // if (!_.isUndefined(LongestTimes[k])) {
-      LongestTimes[k].LaneQueue = timeObj
-      // }
-      k = k + 1
-      if (k === 2) {
-        k = 0
-      }
-    } else if (tempTimeObj.headerName.includes(messages.EventName.LANETOTAl)) {
-      let timeObj = {}
-      timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
-      timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
-      timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
-      if (!_.isUndefined(LongestTimes[k])) {
-        LongestTimes[k].LaneTotal = timeObj
-      }
-      k = k + 1
-      if (k === 2) {
-        k = 0
+  console.log('longestData', longestData.headerName)
+  if (!_.isUndefined(longestData.headerName)) {
+    for (let i = 0; i < longestData.length; i++) {
+      let tempTimeObj = longestData[i]
+      if (tempTimeObj.headerName.includes(messages.EventName.MENU)) {
+        let timeObj = {}
+        timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
+        timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
+        timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
+        // if (!_.isUndefined(LongestTimes[k])) {
+        longestObj.Menu = timeObj
+        // }
+        LongestTimes.push(longestObj)
+      } else if (tempTimeObj.headerName.includes(messages.EventName.GREET)) {
+        let timeObj = {}
+        timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
+        timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
+        timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
+        // if (!_.isUndefined(LongestTimes[k])) {
+        LongestTimes[k].Greet = timeObj
+        // }
+        k = k + 1
+        if (k === 2) {
+          k = 0
+        }
+      } else if (tempTimeObj.headerName.includes(messages.EventName.SERVICE)) {
+        let timeObj = {}
+        timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
+        timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
+        timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
+        if (!_.isUndefined(LongestTimes[k])) {
+          LongestTimes[k].Service = timeObj
+        }
+        k = k + 1
+        if (k === 2) {
+          k = 0
+        }
+      } else if (tempTimeObj.headerName.includes(messages.EventName.LANEQUEUE)) {
+        let timeObj = {}
+        timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
+        timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
+        timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
+        // if (!_.isUndefined(LongestTimes[k])) {
+        LongestTimes[k].LaneQueue = timeObj
+        // }
+        k = k + 1
+        if (k === 2) {
+          k = 0
+        }
+      } else if (tempTimeObj.headerName.includes(messages.EventName.LANETOTAl)) {
+        let timeObj = {}
+        timeObj.Value = dateUtils.convertSecondsToMinutes(tempTimeObj.DetectorTime, format)
+        timeObj.Date = dateUtils.convertMMMddMM(tempTimeObj.DeviceTimeStamp)
+        timeObj.Time = dateUtils.converthhmmsstt(tempTimeObj.DeviceTimeStamp)
+        if (!_.isUndefined(LongestTimes[k])) {
+          LongestTimes[k].LaneTotal = timeObj
+        }
+        k = k + 1
+        if (k === 2) {
+          k = 0
+        }
       }
     }
   }
@@ -259,15 +262,14 @@ const getColourCode = (event, eventValue, colors, goalSettings) => {
  */
 const prepareStatistics = (daysingleResult, systemStatisticsLane, systemStatisticsGenral) => {
   let displayData = { }
-
-  displayData.Lane = _.get(systemStatisticsLane, '0.Lane', '0')
-  displayData.AverageCarsInLane = _.get(systemStatisticsLane, '0.AvgCarsInLane', '0')
-  displayData.TotalPullouts = _.get(systemStatisticsLane, '0.Pullouts', '0')
-  displayData.TotalPullins = _.get(systemStatisticsLane, '0.Pullins', '0')
-  displayData.DeleteOverMaximum = _.get(systemStatisticsLane, '0.DeleteOverMax', '0')
-  displayData.PowerFails = _.get(systemStatisticsGenral, '0.PowerFails', '0')
-  displayData.SystemResets = _.get(systemStatisticsGenral, '0.SystemResets', '0')
-  displayData.VBDResets = _.get(systemStatisticsGenral, '0.VDBResets', '0')
+  displayData.Lane = (_.isNull(systemStatisticsLane[0].Lane)) ? 0 : systemStatisticsLane[0].Lane
+  displayData.AverageCarsInLane = (_.isNull(systemStatisticsLane[0].AvgCarsInLane)) ? 0 : _.get(systemStatisticsLane, '0.AvgCarsInLane', '0')
+  displayData.TotalPullouts = (_.isNull(systemStatisticsLane[0].Pullouts)) ? 0 : _.get(systemStatisticsLane, '0.Pullouts', '0')
+  displayData.TotalPullins = (_.isNull(systemStatisticsLane[0].Pullins)) ? 0 : _.get(systemStatisticsLane, '0.Pullins', '0')
+  displayData.DeleteOverMaximum = (_.isNull(systemStatisticsLane[0].DeleteOverMax)) ? 0 : _.get(systemStatisticsLane, '0.DeleteOverMax', '0')
+  displayData.PowerFails = (_.isNull(systemStatisticsLane[0].PowerFails)) ? 0 : _.get(systemStatisticsGenral, '0.PowerFails', '0')
+  displayData.SystemResets = (_.isNull(systemStatisticsLane[0].SystemResets)) ? 0 : _.get(systemStatisticsGenral, '0.SystemResets', '0')
+  displayData.VBDResets = (_.isNull(systemStatisticsLane[0].VDBResets)) ? 0 : _.get(systemStatisticsGenral, '0.VDBResets', '0')
 
   daysingleResult.systemStatistics = displayData
   return daysingleResult
@@ -280,4 +282,3 @@ module.exports = {
   getColourCode,
   prepareStatistics
 }
-
