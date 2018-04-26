@@ -1,6 +1,6 @@
-
 const messages = require('../Common/Message')
 const repository = require('../Repository/RoleRepository')
+const validator = require('../Validators/RoleValidator')
 
 /**
  * The method can be used to execute handel errors and return to routers.
@@ -17,20 +17,28 @@ const errorHandler = (message, status) => {
 
 /**
  * The method can be used to execute getAll users
- * @param  {input} AccountId input from  user request
+ * @param  {input} request input from  user request
  * @param  {funct} callback Function will be called once the input executed.
  * @public
  */
 const getAll = (request, callback) => {
-  let output = {}
-  repository.getAll(request.AccountId, (result) => {
-    if (result.length > 0) {
-      output.data = result
-      output.status = true
-      callback(output)
-    } else {
-      errorHandler(messages.LISTGROUP.notfound, false)
+
+  const input = {
+    accountId: (request.AccountId ? request.AccountId : null),
+    userUid: (request.query.uuid ? request.query.uuid : null)
+  }
+
+  validator.validate(input, (err) => {
+    if (err) {
+      callback(err)
     }
+    repository.getAll(input, (result) => {
+      if (result.data && result.data.length > 0) {
+        callback(result)
+      } else {
+        callback(errorHandler(messages.LISTGROUP.notfound, false))
+      }
+    })
   })
 }
 

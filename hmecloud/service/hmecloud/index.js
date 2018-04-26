@@ -14,6 +14,8 @@ const reportsTemplate = require('./Router/TemplateRouter')
 const summaryReport = require('./Router/StoreRouter')
 const userRouter = require('./Router/UserRouter')
 const roleRouter = require('./Router/RoleRouter')
+const permissionRouter = require('./Router/PermissionRouter')
+
 // JWT - Auth config
 const authentication = require('./Router/AuthenticationRouter')
 
@@ -54,8 +56,11 @@ app.use('/api/reportTemplate', reportsTemplate)
 // Users
 app.use('/api/user', userRouter)
 
-// Users
+// Roles
 app.use('/api/role', roleRouter)
+
+// Permissions
+app.use('/api/permission', permissionRouter)
 
 app.use('/api/auth', authentication)
 /**

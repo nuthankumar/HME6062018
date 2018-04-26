@@ -37,7 +37,7 @@ const sqlQueries = {
   },
   'SummarizedReport': {
     'getRawData':
-            `exec [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details]
+      `exec [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details]
                  @Device_IDs  =:ReportTemplate_DeviceIds
                 ,@StoreStartDate = :ReportTemplate_From_Date
                 ,@StoreEndDate = :ReportTemplate_To_Date
@@ -77,7 +77,7 @@ const sqlQueries = {
     'getUserAudit': `EXEC [dbo].[usp_GetUserAudit] @UserUid =:id`,
     'deleteuser': `EXEC [dbo].[usp_DeleteUser] @Uid =:id`,
 
-    'updateuser':`EXEC [dbo]. [usp_UpdateUser]
+    'updateuser': `EXEC [dbo]. [usp_UpdateUser]
     @Uid =:Uid,
     @IsActive =:IsActive,
     @FirstName =:FirstName,
@@ -86,9 +86,28 @@ const sqlQueries = {
 	@UpdatedDTS =:UpdatedDTS,
 	@Stores	 =:Stores,
 	@UserRole =:UserRole`
-    },
-  'ROLES': {
-    'userRoles': 'EXEC [dbo].[usp_GetRoles] @AccountId = :AccountId, @IsCorporate = null, @IsHidden =null'
+  },
+  ROLES: {
+    userRoles: 'EXEC [dbo].[usp_GetRoles] @AccountId = :AccountId, @IsCorporate = null, @IsHidden =null, @UserUid=:userUid'
+  },
+  Permission: {
+    GetByUser: '[dbo].[usp_GetPermissionsByUser]',
+    Parameters: {
+
+    }
+  },
+  Account: {
+    Parameters: {
+      AccountId: 'AccountId'
+    }
+  },
+  User: {
+    Parameters: {
+      UserUid: 'UserUid'
+    }
+  },
+  Role: {
+    getRoles: '[dbo].[usp_GetRoles]'
   }
 }
 

@@ -1,5 +1,5 @@
 
- /****** Dropping the StoredProcedure [dbo].[usp_GetRoles] if already exists *****/
+/****** Dropping the StoredProcedure [dbo].[usp_GetRoles] if already exists *****/
 IF (EXISTS(SELECT *
 FROM sys.objects
 WHERE [name] = 'usp_GetRoles' AND [type] ='P'))
@@ -24,15 +24,21 @@ GO
 --  1.  	20-APRIL-2018	Selvendran K	Procedure created
 --	2.		23-APRIL-2018	Jayaram V		Add orderby condition
 -- ===========================================================
--- EXEC [dbo].[usp_GetRoles] @AccountId = 1333
+-- EXEC [dbo].[usp_GetRoles] @AccountId = 1333, @UserUid='CEO7JK0VUSRJZFXXC0J1WW0I0E4CHD2M'
 -- ===========================================================
 
 CREATE PROCEDURE [dbo].[usp_GetRoles]
-    @AccountId      INT,
+    @AccountId      INT=NULL,
+    @UserUid	    VARCHAR(32)=NULL,
     @IsCorporate    BIT = NULL,
     @IsHidden       BIT = NULL
 AS
 BEGIN
+
+    IF (@AccountId IS NULL)
+        SELECT @AccountId=User_OwnerAccount_ID
+        FROM tbl_Users
+        WHERE User_Uid=@UserUid
 
     SELECT DISTINCT Role_UID, Role_Name, Role_IsDefault
     FROM
@@ -47,5 +53,5 @@ BEGIN
     WHERE lrol.Role_IsCorporate=ISNULL(@IsCorporate,lrol.Role_IsCorporate)
         AND lrol.Role_IsHidden=ISNULL(@IsHidden,lrol.Role_IsHidden)
         AND lrol.Role_OwnerAccount_ID=@AccountId
-		ORDER BY lrol.Role_Name
+    ORDER BY lrol.Role_Name
 END
