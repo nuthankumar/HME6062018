@@ -382,7 +382,7 @@ table .th {
   width: 850px;
 }
 .rawcar-table-details {
-  margin-left: 2em;
+  margin-left: 1em;
 }
 .thin-header {
   width: 115px;
@@ -397,7 +397,7 @@ table .th {
 }
 .rawcar-h2 {
   color: #0087a1;
-  margin-left: 7.5em;
+  /* margin-left: 7.5em; */
   font-weight: bolder;
   font-size: 18px;
   margin-top: 10px;
