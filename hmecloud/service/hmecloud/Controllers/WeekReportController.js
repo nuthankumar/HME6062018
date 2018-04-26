@@ -109,18 +109,20 @@ const multipleStore = (weekReports, result, input) => {
   reportsUtils.prepareStoreDetails(weekReports, result.data[3], input)
   let colors = result.data[4]
   let goalStatistics = result.data[2]
-  storeInfo.multipleStoreInfo(weekReports, result.data[0], colors, goalStatistics, input.ReportTemplate_Format)
+  console.log('data')
+  storeInfo.multipleStoreInfo(weekReports, result.data[0], input.ReportTemplate_Format, colors, goalStatistics)
   return weekReports
 }
 /**
  * The method can be used to execute report converting json to CSV and sending mail
  */
-const generateCSVTriggerEmail = (request, input, result, reportType, callBack) => {
+const generateCSVTriggerEmail = (request, input, result, callBack) => {
   let csvInput = {}
   csvInput.type = `${messages.COMMON.CSVTYPE}`
   csvInput.reportName = `${messages.COMMON.WEEKREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
   csvInput.email = input.UserEmail
   csvInput.subject = `${messages.COMMON.WEEKREPORTTITLE} ${input.ReportTemplate_From_Time} ${input.ReportTemplate_To_Date + (input.ReportTemplate_Format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
+  let reportType = 'week'
   dataExportUtil.prepareJsonForExport(result.data[0], input, csvInput, reportType, csvResults => {
     callBack(csvResults)
   })
@@ -140,8 +142,10 @@ const weekReportController = (request, input, callback) => {
     if (result.status === true) {
       if (!_.isUndefined(input.reportType) && (input.reportType.toLowerCase().trim() === 'csv' || input.reportType.toLowerCase().trim() === 'pdf')) {
         if (input.reportType.toLowerCase().trim() === 'csv') {
-          let reportName ='week'
-          generateCSVTriggerEmail(request, input, result, reportName)
+          generateCSVTriggerEmail(request, input, result, isMailSend => {
+            console.log('ISMAIL', isMailSend)
+            callback(isMailSend)
+          })
         } else if (input.reportType.toLowerCase().trim() === 'pdf') {
           let pdfInput = {}
           pdfInput.type = `${messages.COMMON.PDFTYPE}`
@@ -152,13 +156,13 @@ const weekReportController = (request, input, callback) => {
             let weekRecords = SingleStore(weekReports, result, input)
             let data = []
             data = weekRecords
-            data.storeDetails = weekRecords.timeMeasure
+            data.storeDetails = weekRecords.timeMeasureType
             Pdfmail.singleStore(data, pdfInput)
           } else if (input.ReportTemplate_DeviceIds.length > 1) {
             let weekRecords = multipleStore(weekReports, result, input)
             let data = []
             data = weekRecords
-            data.storeDetails = weekRecords.timeMeasure
+            data.storeDetails = weekRecords.timeMeasureType
             Pdfmail.mutipleStore(data, pdfInput)
           }
         }

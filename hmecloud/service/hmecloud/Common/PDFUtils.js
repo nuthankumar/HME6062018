@@ -5,8 +5,15 @@ const mail = require('../Common/EmailUtil')
 const path = require('path')
 
 const mutipleStore = (reportData, pdfInput, callback) => {
-  const html = fs.readFileSync(path.dirname(__dirname) + '/MultipleStore.html', 'utf8')
-  const reportName = reportData.reportName
+  let reportName
+  if (reportData.timeMeasure === 3) {
+    reportName = 'Weekly Report'
+  } else if (reportData.timeMeasure === 2) {
+    reportName = 'Daypart Report'
+  } else if (reportData.timeMeasure === 1) {
+    reportName = 'Day Report'
+  }
+  const html = fs.readFileSync(__dirname + '/MultipleStore.html', 'utf8')
   const options = {
     format: 'Letter',
     orientation: 'landscape',
@@ -39,10 +46,12 @@ const mutipleStore = (reportData, pdfInput, callback) => {
         mail.send(pdfInput.email, pdfInput.subject, attachment, isMailSent => {
           let output = {}
           if (isMailSent) {
+            console.log('success')
             output.status = true
             return output
           } else {
             output.status = false
+            console.log('fail')
             return output
           }
         })
@@ -56,7 +65,19 @@ const mutipleStore = (reportData, pdfInput, callback) => {
 }
 
 const singleStore = (reportData, pdfInput, callback) => {
-  var html = fs.readFileSync(path.dirname(__dirname) + '/SingleStore.html', 'utf8')
+  let reportName
+  let headerName
+  if (reportData.timeMeasure === 3) {
+    reportName = 'Weekly Report'
+    headerName = 'Week'
+  } else if (reportData.timeMeasure === 2) {
+    reportName = 'Daypart Report'
+    headerName = 'Daypart'
+  } else if (reportData.timeMeasure === 1) {
+    reportName = 'Day Report'
+    headerName = 'Day'
+  }
+  var html = fs.readFileSync(__dirname + '/SingleStore.html', 'utf8')
   var options = {
     format: 'Letter',
     orientation: 'landscape',
@@ -87,7 +108,7 @@ const singleStore = (reportData, pdfInput, callback) => {
     template: html,
     context: {
       details: {
-        reportName: reportData.reportName,
+        reportName: headerName,
         storeName: reportData.storeName,
         storeDesc: reportData.storeDesc,
         startTime: reportData.startTime,
@@ -109,16 +130,18 @@ const singleStore = (reportData, pdfInput, callback) => {
     .then(response => {
       if (response) {
         const attachment = [{
-          filename: reportData.reportName + '.pdf',
+          filename: reportName + '.pdf',
           content: Buffer.from(response, 'base64'),
           contentType: 'application/pdf'
         }]
         mail.send(pdfInput.email, pdfInput.subject, attachment, isMailSent => {
           let output = {}
           if (isMailSent) {
+            console.log('success')
             output.status = true
             return output
           } else {
+            console.log('fail')
             output.status = false
             return output
           }

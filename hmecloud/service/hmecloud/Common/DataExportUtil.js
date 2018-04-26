@@ -16,13 +16,13 @@ const prepareJsonForExport = (storeData, input, csvInput, reportType, callback) 
         store.Week = moment(item.WeekStartDate).format('DD/MM/YYYY') + '-' + moment(item.WeekEndDate).format('DD/MM/YYYY')
       } else if (input.ReportTemplate_DeviceIds.length > 1) {
         store.Groups = item.GroupName
-        store.Stores = item.Store_Name
+        store.Store = item.Store_Name
         if (item.StoreNo === 'Total Week' && item.Store_Name === null) {
           store.Week = 'Total Week'
-          store.Stores = ''
+          store.Store = ''
         } else if (item.StoreNo === 'Subtotal' && item.Store_Name === null) {
           store.Week = 'Subtotal'
-          store.Stores = ''
+          store.Store = ''
         } else {
           store.Week = moment(item.WeekStartDate).format('DD/MM/YYYY') + '-' + moment(item.WeekEndDate).format('DD/MM/YYYY')
         }
