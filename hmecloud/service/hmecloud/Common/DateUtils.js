@@ -24,9 +24,17 @@ const dayPartTime = (dayPartId, input) => {
   let dayPartTime
 
   if (dayPartId && dayPartId === 1) {
-    dayPartTime = messages.COMMON.OPENVALUE + '-' + moment(input.ReportTemplate_From_Time, 'hh:mm:ss a').format('hh:mm')
+    if (input.ReportTemplate_From_Time) {
+      dayPartTime = messages.COMMON.OPENVALUE + '-' + moment(input.ReportTemplate_From_Time, 'hh:mm:ss a').format('hh:mm')
+    } else {
+      dayPartTime = messages.COMMON.DAYPARTOPENTIME
+    }
   } else {
-    dayPartTime = messages.COMMON.CLOSEVALUE + '-' + moment(input.ReportTemplate_To_Time, 'hh:mm:ss a').format('hh:mm')
+    if (input.ReportTemplate_To_Time) {
+      dayPartTime = messages.COMMON.CLOSEVALUE + '-' + moment(input.ReportTemplate_To_Time, 'hh:mm:ss a').format('hh:mm')
+    } else {
+      dayPartTime = messages.COMMON.DAYPARTCLOSETIME
+    }
   }
   return dayPartTime
 }
