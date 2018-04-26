@@ -104,7 +104,6 @@ const singleStoreinfo = (weekRecords, result, colors, goalSettings, format) => {
 const multipleStoreInfo = (weekInfo, weekData, format, colors, goalSettings) => {
   const dayIndexIds = new HashMap()
   let timeMeasure = []
-
   weekData.forEach(item => {
     let dayIndexId = item.WeekIndex
     if (dayIndexId && !dayIndexIds.has(dayIndexId)) {
@@ -116,7 +115,8 @@ const multipleStoreInfo = (weekInfo, weekData, format, colors, goalSettings) => 
 
       let tempRawCarData = dayResultsList[0]
       if (tempRawCarData.StoreNo !== 'Total Week') {
-        multiStoreObj.title = dateUtils.convertMonthDayYear(tempRawCarData.StoreDate) + messages.COMMON.OPENVALUE + ' - ' + dateUtils.convertMonthDayYear(tempRawCarData.StoreDate) + messages.COMMON.CLOSEVALUE
+
+        multiStoreObj.title = dateUtils.convertMonthDayYear(tempRawCarData.WeekStartDate) + messages.COMMON.OPENVALUE + ' - ' + dateUtils.convertMonthDayYear(tempRawCarData.WeekEndDate) + messages.COMMON.CLOSEVALUE
       }
 
       for (let i = 0; i < dayResultsList.length; i++) {
