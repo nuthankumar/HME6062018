@@ -168,6 +168,11 @@ h2 .report-start-time-value,h2 .report-end-time-value{
   margin-left: 5px;
   text-transform: uppercase;
 }
+.store-error{
+  font-size: 9px;
+  color:#d41b3e;
+
+}
 
 .report-start-time-header, .report-end-time-header{
   margin-top:0px;

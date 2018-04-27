@@ -186,6 +186,9 @@ table.user_form {
     text-align: center;
     margin-right: 15px;
 }
+.view-as-user a{
+    cursor: pointer;
+}
 .ctable .theader a, .cheader a {
     color: #757575;
     font-weight:lighter

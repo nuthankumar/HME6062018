@@ -38,7 +38,7 @@ BEGIN
 	WHERE g.ParentGroup IS NULL AND g.AccountId = @AccountId
 	UNION
 	SELECT 
-		DISTINCT TOP 500 s.Store_ID, 
+		DISTINCT s.Store_ID, 
 		s.Store_Name, 
 		'store' AS [Type],
 		d.Device_ID,
