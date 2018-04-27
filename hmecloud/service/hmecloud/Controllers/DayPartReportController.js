@@ -132,8 +132,8 @@ function multiStoreResult (totalRecordCount, input, averageTimeResultSet, colorS
             tempData.push(dataObject)
           } else if (storeObj.StoreNo === 'Total Daypart') {
             let dataObject = prepareDayPartObject(storeObj, input.ReportTemplate_Format, input, colorSettings, goalsStatistics)
-            dataObject.groupId.value = `Total Daypart`
-            dataObject.groupId.timeSpan = `(W-Avg)`
+            dataObject.groupId.value = storeObj.StoreNo
+            dataObject.groupId.timeSpan = message.COMMON.WAVG
             // dataObject.storeId = store
             tempData.push(dataObject)
           } else if (storeObj.StoreNo !== 'Total Daypart') {
@@ -248,7 +248,15 @@ function prepareDayPartObject (item, format, input, colors, goalSettings) {
     daypart.currentDaypart = `${dateUtils.converthhmmsstt(item.StartTime)}-${dateUtils.converthhmmsstt(item.EndTime)}`
     dataObject.daypart = daypart
   }
-
+  if (item.StoreNo && item.StoreNo.includes('Subtotal')) {
+    groupId.value = item.GroupName + ' ' + item.StoreNo
+  } else if (item.StoreNo && item.StoreNo === 'Total Daypart') {
+    daypart.timeSpan = item.StoreNo
+    daypart.currentDaypart = message.COMMON.WAVG
+    dataObject.daypart = daypart
+  } else {
+    groupId.value = item.GroupName
+  }
   groupId.value = item.GroupName
   dataObject.groupId = groupId
 

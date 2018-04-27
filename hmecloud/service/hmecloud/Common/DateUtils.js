@@ -24,17 +24,17 @@ const dayPartTime = (dayPartId, input) => {
   let dayPartTime
 
   if (dayPartId && dayPartId === 1) {
-    if (input.ReportTemplate_From_Time) {
-      dayPartTime = messages.COMMON.OPENVALUE + '-' + moment(input.ReportTemplate_From_Time, 'hh:mm:ss a').format('hh:mm')
-    } else {
-      dayPartTime = messages.COMMON.DAYPARTOPENTIME
-    }
+    dayPartTime = messages.COMMON.DAYPARTOPENTIME
+
+    // TODO check with HME team
+    // if (input.ReportTemplate_From_Time) {
+    //   dayPartTime = messages.COMMON.OPENVALUE + '-' + moment(input.ReportTemplate_From_Time, 'hh:mm:ss a').format('hh:mm')
+    // } else {
+    //   dayPartTime = messages.COMMON.CLOSEVALUE + '-' + moment(input.ReportTemplate_To_Time, 'hh:mm:ss a').format('hh:mm')
+    // }
+
   } else {
-    if (input.ReportTemplate_To_Time) {
-      dayPartTime = messages.COMMON.CLOSEVALUE + '-' + moment(input.ReportTemplate_To_Time, 'hh:mm:ss a').format('hh:mm')
-    } else {
-      dayPartTime = messages.COMMON.DAYPARTCLOSETIME
-    }
+    dayPartTime = messages.COMMON.DAYPARTCLOSETIME
   }
   return dayPartTime
 }

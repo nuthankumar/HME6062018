@@ -55,9 +55,28 @@ const getRawCarDataReport = (input, callBack) => {
       if (!_.isEmpty(result)) {
         const len = result.length
         if (len > 1) {
-          const storeData = result[len - 1]
+          //  Store_Name
+          // const storeData = ''
+          // // const storeData = result[result.length - 1]
+          // console.log('storeData', storeData)
           const dayPartData = result[1]
-          prepareStoreDetails(rawCarData, storeData, input)
+          // prepareStoreDetails(rawCarData, storeData, input)
+
+          let counter = 0
+          _.mapKeys(result, function (value, key) {
+            if (_.has(value, 'Store_Name')) {
+              prepareStoreDetails(rawCarData, value, input)
+            }
+
+            if (value.DepartTimeStamp === null || value.DepartTimeStamp === undefined) {
+              counter++
+              if (counter === len) {
+                rawCarData.key = 'noRecordFound'
+                callBack(result)
+              }
+            }
+          })
+
           prepareResponsObject(result, departTimeStampMap, rawCarDataList, rawCarData, len, dayPartData, input)
           rawCarData.rawCarData = rawCarDataList
 
@@ -149,13 +168,15 @@ function prepareResponsObject (result, departTimeStampMap, rawCarDataList, rawCa
         return obj.RawDataID === rawCarTempId
       })
       let tempRawCarData = departTimeStampList[0]
+
+      console.log('tempRawCarData', tempRawCarData);
       const rawCarDataObj = {}
       rawCarDataObj.departureTime = dateUtils.UtcTimeTo12HourFormat(tempRawCarData.DepartTimeStamp)
       rawCarDataObj.eventName = tempRawCarData.CarRecordDataType_Name || 'N/A'
       rawCarDataObj.carsInQueue = tempRawCarData.CarsInQueue || '0'
-      
+
       rawCarData.dayPart = 'DP' + tempRawCarData.Daypart_ID + dateUtils.dayPartTime(tempRawCarData.Daypart_ID, input)
-      
+
       for (let i = 0; i < departTimeStampList.length; i++) {
         let tempEventDetails = departTimeStampList[i]
         if (tempEventDetails.EventType_Name.includes(messages.EventName.MENU)) {
