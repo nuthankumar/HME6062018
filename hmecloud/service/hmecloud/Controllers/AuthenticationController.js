@@ -24,9 +24,9 @@ function verifyToken(request, response, next) {
     }
 
     /* AzureAD token verification */
-    aad.verify(jwtToken, null, (error, result) => {
+      aad.verify(jwtToken, null, (error, result) => {
       if (result) {
-        request.userUid = result.puid
+        request.userUid = (request.query.uuid ? request.query.uuid : null)
         request.UserEmail = result.unique_name
         request.UserName = result.name
         next()
@@ -45,7 +45,7 @@ function verifyToken(request, response, next) {
                 message: 'Failed to authenticate token.'
               })
           }
-
+         console.log("The decodec")
           request.userUid = decoded.User_UID
           request.UserEmail = decoded.User_EmailAddress
           request.UserName = `${decoded.User_LastName}, ${decoded.User_FirstName}`
