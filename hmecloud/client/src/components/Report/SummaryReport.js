@@ -179,7 +179,7 @@ export default class SummaryReport extends Component {
             case '3': this.state.reportData.weeklyData = true
                 if (templateData.deviceIds.length === 1) {
                     this.state.reportData.weekColumn = true
-                    this.state.reportData.dayPartColumn = true
+                    this.state.reportData.dayPartColumn = false
                     this.state.reportData.dayColumn = false
                     this.state.reportData.groupStoreColumns = false
                     this.state.reportData.singleStore = true
@@ -262,10 +262,10 @@ export default class SummaryReport extends Component {
                 })
             }else if(request.timeMeasure === 4){
                 if(storeId.daypart){
-                    let year = request.fromDate.split("-")[0]
-                    let monthDay = storeId.daypart.timeSpan.split("-")[0]
-                    request.fromDate = year.concat('/'+monthDay)
-                    request.toDate = year.concat('/'+monthDay)
+                    // let year = request.fromDate.split("-")[0]
+                    // let monthDay = storeId.daypart.timeSpan.split("-")[0]
+                    // request.fromDate = year.concat('/'+monthDay)
+                    // request.toDate = year.concat('/'+monthDay)
                     request.openTime = storeId.daypart.currentDaypart.split("-")[0]
                     request.closeTime = storeId.daypart.currentDaypart.split("-")[1]
                 }
