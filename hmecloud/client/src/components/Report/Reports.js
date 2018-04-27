@@ -173,12 +173,12 @@ class Report extends Component {
         return data.map(item => {
         if (item.Children && item.Children.length) {
             return (
-                <TreeNode title={this.renderStoresAndBrand(item) } className={item.StoreNumber} key={item.Type == 'store' ? item.DeviceUID : item.Id} value={item.Type == 'store' ? item.DeviceUID : item.Id} type={item.Type}>
+                <TreeNode title={this.renderStoresAndBrand(item) } className={item.StoreNumber} key={item.Type == 'store' ? item.DeviceUID : item.Id} value={item.Type == 'store' ? item.DeviceUID : null} type={item.Type}>
               {loop(item.Children)}
             </TreeNode>
           );
         }
-        return <TreeNode title={this.renderStoresAndBrand(item)} className={item.StoreNumber} key={item.Type == 'store' ? item.DeviceUID : item.Id} value={item.Type == 'store' ? item.DeviceUID : item.Id} type={item.Type} />;
+        return <TreeNode title={this.renderStoresAndBrand(item)} className={item.StoreNumber} key={item.Type == 'store' ? item.DeviceUID : item.Id} value={item.Type == 'store' ? item.DeviceUID : null} type={item.Type} />;
       });
     };
 
@@ -679,6 +679,23 @@ class Report extends Component {
       return selectedList;
   }
 
+  findMatchedDeviceUIds(list, keys) {
+    let selectedList = [];
+    let findStore = function (items) {
+        items.map(item => {
+            if (item.Children && item.Children.length) {
+                findStore(item.Children);
+            }
+            if (keys(item)) {
+                selectedList.push(item.DeviceUID);
+            }
+        });
+    };
+
+    findStore(list);
+    return selectedList;
+  }
+
   apply(e) {
 
       let url = Config.apiBaseUrl + CommonConstants.apiUrls.getSavedTemplateData + '?templetId=' +
@@ -772,6 +789,7 @@ class Report extends Component {
   generate(e) {
     let language = this.state.currentLanguage;
     this.state.reportData.generate = true
+    let self = this
     this.setState({ errorMessage: "" });
     let isError = false;
     let template = [];
@@ -794,7 +812,7 @@ class Report extends Component {
       templateName: this.state.templateName, open: this.state.open, close: this.state.close,
       type: this.state.type, include: this.state.include, format: this.state.format, deviceUIds: this.state.deviceUIds,
       deviceIds: this.findMatchedDeviceIds(this.state.treeData, item => {
-          return (item.Type === "store" && _.contains(this.state.deviceUIds, item.DeviceUID));
+          return (item.Type === "store" && _.contains(self.state.deviceUIds, item.DeviceUID));
       }), 
       CreatedDateTime: moment().format("YYYY-MM-DD HH:mm:ss a"), UpdatedDateTime: moment().format("YYYY-MM-DD HH:mm:ss a"),
       advancedOption: (!this.state.open || !this.state.close), longestTime: _.contains(this.state.include, "1"),systemStatistics: _.contains(this.state.include, "2"),
@@ -1187,7 +1205,7 @@ class Report extends Component {
         selectedList: this.findMatchedIds(this.state.treeData, item => {
           return true;
         }),
-        deviceUIds: this.findMatchedIds(this.state.treeData, item => {
+        deviceUIds: this.findMatchedDeviceUIds(this.state.treeData, item => {
           return item.Type === "store";
         })
         });
