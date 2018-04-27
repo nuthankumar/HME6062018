@@ -173,12 +173,12 @@ class Report extends Component {
         return data.map(item => {
         if (item.Children && item.Children.length) {
             return (
-                <TreeNode title={this.renderStoresAndBrand(item) } className={item.StoreNumber} key={item.Type == 'store' ? item.DeviceUID : item.Id} value={item.Type == 'store' ? item.DeviceUID : null} type={item.Type}>
+                <TreeNode title={this.renderStoresAndBrand(item) } className={item.StoreNumber} key={item.Id} value={item.Type == 'store' ? item.DeviceUID : null} type={item.Type}>
               {loop(item.Children)}
             </TreeNode>
           );
         }
-        return <TreeNode title={this.renderStoresAndBrand(item)} className={item.StoreNumber} key={item.Type == 'store' ? item.DeviceUID : item.Id} value={item.Type == 'store' ? item.DeviceUID : null} type={item.Type} />;
+        return <TreeNode title={this.renderStoresAndBrand(item)} className={item.StoreNumber} key={item.Id} value={item.Type == 'store' ? item.DeviceUID : null} type={item.Type} />;
       });
     };
 
@@ -702,7 +702,6 @@ class Report extends Component {
     e.target.id;
     this.api.getData (url,data => {
         let template = data.data;
-//        this.setState({ tempStore: template.SelectedList });
         this.setState({ format: template.Format });
         this.setState({ type: template.Type });
         this.setState({ open: template.Open });
@@ -712,7 +711,10 @@ class Report extends Component {
         this.setState({ fromDate: fromDate });
         let toDate = moment(template.ToDate).format("MM/DD/YYYY");
         this.setState({ toDate: toDate });
-        this.setState({ defaultCheckedKeys: template.DeviceUUIds });
+        this.state.defaultCheckedKeys =  this.findMatchedIds(this.state.treeData, item => {
+          return item.Type === "store" && _.contains(template.DeviceUUIds, item.DeviceUID);
+        }).map(String)
+        this.setState(this.state);
         // let deviceUIds = []
         // this.setState({
         //   stores: this.findMatch(this.state.treeData, item => {
@@ -1047,7 +1049,6 @@ class Report extends Component {
             "systemStatistics":template[0].systemStatistics
         }
     )
-    console.log(JSON.stringify(rawCarData[0]))
     this.setState({
         rawCarRequest: rawCarData[0]
     });
