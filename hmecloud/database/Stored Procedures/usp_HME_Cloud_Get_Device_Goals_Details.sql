@@ -1,12 +1,26 @@
-USE [db_qsrdrivethrucloud_engdev]
+
+/****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_Device_Goals_Details] if already exists *****/
+IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_HME_Cloud_Get_Device_Goals_Details' AND [type] ='P'))
+	DROP PROCEDURE [dbo].[usp_HME_Cloud_Get_Device_Goals_Details]
 GO
-/****** Object:  StoredProcedure [dbo].[usp_HME_Cloud_Get_Device_Goals_Details]    Script Date: 4/25/2018 9:28:03 AM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
+
+-- ===========================================================
+--      Copyright © 2018, HME, All Rights Reserved
+-- ===========================================================
+-- Name			:	usp_HME_Cloud_Get_Report_By_Daypart_Details
+-- Author		:	Ramesh Kumar
+-- Created		:	26-March-2018
+-- Purpose		:	To Generate a Day part report
+-- ===========================================================
+--				Modification History
+-- -----------------------------------------------------------
+-- Sl.No.	Date			Developer		Descriptopn   
+-- -----------------------------------------------------------
+
+-- ===========================================================
 --EXEC usp_HME_Cloud_Get_Device_Goals '14'
-ALTER PROCEDURE [dbo].[usp_HME_Cloud_Get_Device_Goals_Details](
+-- ===========================================================
+CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Device_Goals_Details](
 	@Device_IDs varchar(500)
 )
 AS

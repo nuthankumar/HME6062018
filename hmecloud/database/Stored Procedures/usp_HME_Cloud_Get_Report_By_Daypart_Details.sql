@@ -18,7 +18,7 @@ GO
 -- -----------------------------------------------------------
 -- 1.
 -- ===========================================================
--- exec usp_HME_Cloud_Get_Report_By_Daypart_Details @Device_IDs='4244',@StoreStartDate='2018-03-23',@StoreEndDate='2018-03-24',@InputStartDateTime=N'2018-03-23 00:00:00',@InputEndDateTime=N'2018-03-24 10:30:00',@CarDataRecordType_ID='11',@ReportType='AC',@LaneConfig_ID=1,@PageNumber=1,@UserUID=null
+-- exec usp_HME_Cloud_Get_Report_By_Daypart_Details @Device_IDs='15',@StoreStartDate='2018-03-23',@StoreEndDate='2018-03-24',@InputStartDateTime=N'2018-03-23 00:00:00',@InputEndDateTime=N'2018-03-24 10:30:00',@CarDataRecordType_ID='11',@ReportType='AC',@LaneConfig_ID=1,@PageNumber=1,@UserUID=null
 -- ===========================================================
 
 CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details]
@@ -55,8 +55,11 @@ BEGIN
 	DECLARE @TotalRecCount smallint
 	DECLARE @StartDateTime DATETIME 
 	DECLARE @EndDateTime DATETIME 
+	DECLARE @EventNames VARCHAR(4000)
+	DECLARE @EventGoalNames VARCHAR(4000)
 	SELECT @StartDateTime = CONVERT(DATETIME,  @InputStartDateTime);
 	SELECT @EndDateTime = CONVERT(DATETIME,  @InputEndDateTime);
+
 	DECLARE @Preferences_Preference_Value varchar(50)
 	
 	
@@ -157,7 +160,10 @@ BEGIN
 			FROM    #raw_data
 			WHERE	EventType_Category_ID IS NOT NULL
 
-			SELECT  @cols = COALESCE(@cols + ',[' + headerName + ']', '[' + headerName + ']')
+			SET @EventNames = NULL
+			SET @cols = NULL
+			SELECT  @cols = COALESCE(@cols + ',[' + headerName + ']', '[' + headerName + ']'),
+				@EventNames = COALESCE(@EventNames + '|$|' + headerName , headerName )
 			FROM    @header
 			ORDER BY sort
 
@@ -185,13 +191,13 @@ BEGIN
 					FROM	#StoreWithDatePart d
 						LEFT JOIN #GroupDetails ts ON d.Device_ID = ts.Device_ID
 						LEFT JOIN #raw_data r ON d.Device_ID = r.Device_ID
-							AND	d.DayPartIndex = r.Daypart_ID 
+							AND	d.OrigDayPartIndex = r.Daypart_ID 
 							AND d.StoreDate = r.StoreDate
 						WHERE ts.GroupName IS NOT NULL
 					GROUP BY 
 						DayPartIndex, ts.GroupName, CAST(d.StoreDate AS varchar(25)),
 						r.EventType_Category
-					HAVING COUNT(DISTINCT d.Store_ID)>1
+					--HAVING COUNT(DISTINCT d.Store_ID)>1
 					UNION ALL
 					SELECT	DayPartIndex,
 						NULL StartTime,
@@ -208,7 +214,7 @@ BEGIN
 						COUNT(r.CarDataRecord_ID) Total_Car
 					FROM	#StoreWithDatePart d
 						LEFT JOIN #raw_data r ON d.Store_id = r.Store_id
-							AND	d.DayPartIndex = r.Daypart_ID 
+							AND	d.OrigDayPartIndex = r.Daypart_ID 
 							AND d.StoreDate = r.StoreDate
 					GROUP BY 
 						DayPartIndex, CAST(d.StoreDate AS varchar(25)),
@@ -223,8 +229,10 @@ BEGIN
 			FROM    #raw_data
 			WHERE	Detector_ID IS NOT NULL
 
-			-- 
-			SELECT  @cols = COALESCE(@cols + ',[' + headerName + ']', '[' + headerName + ']')
+			SET @EventNames = NULL
+			SET @cols = NULL
+			SELECT  @cols = COALESCE(@cols + ',[' + headerName + ']', '[' + headerName + ']'),
+				@EventNames =COALESCE(@EventNames + '|$|' + headerName , headerName)
 			FROM    @header
 			ORDER BY sort
 
@@ -259,7 +267,7 @@ BEGIN
 
 	-- get daypart records from the proc
 	INSERT INTO #DayPart(Device_ID, DayPartIndex, StartTime, EndTime)
-	SELECT  [Device_ID], [Daypart_ID], dbo.uf_ConvertNumberToTime([Daypart_Start]), dbo.uf_ConvertNumberToTime([Daypart_End])
+	SELECT  DISTINCT [Device_ID], [Daypart_ID], dbo.uf_ConvertNumberToTime([Daypart_Start]), dbo.uf_ConvertNumberToTime([Daypart_End])
 	FROM	[dbo].[tbl_DeviceConfigDayparts]
 	WHERE	device_id = @TheDevice_ID
 	AND		[Daypart_Start] IS NOT NULL
@@ -281,10 +289,11 @@ BEGIN
 			OR		EndTime <= CAST(@StartDateTime AS time)
 
 			INSERT INTO #DayPartWithDate(StoreDate, OrigDayPartIndex, StartTime, EndTime, DayPartIndex)
-			SELECT	d.ThisDate, dp.DayPartIndex, dp.StartTime, dp.EndTime, ROW_NUMBER()OVER(Partition By d.ThisDate ORDER BY d.ThisDate, dp.StartTime, dp.EndTime) DayPartIndex
+			SELECT	DISTINCT d.ThisDate, dp.DayPartIndex, dp.StartTime, dp.EndTime, 
+				ROW_NUMBER()OVER(Partition By d.ThisDate ORDER BY d.ThisDate, dp.StartTime, dp.EndTime) DayPartIndex
 			FROM	dbo.uf_GetDatesByRange(CAST(@StoreStartDate AS varchar(25)), CAST(@StoreEndDate AS varchar(25))) d
 					CROSS JOIN #DayPart dp
-					
+				
 	END 
 	-- for cumulative reports, remove the dayparts for the first and last day that fall out of the range
 	ELSE
@@ -303,20 +312,21 @@ BEGIN
 			AND		StartTime > CAST(@EndDateTime AS time)
 		END
 
+
 	SELECT	dp.StoreDate,
-					dp.DayPartIndex,
-					dp.StartTime,
-					dp.EndTime,
-					e.Store_Number,
-					d.Device_UID,
-					d.Device_ID,
-					e.Store_id,
-					e.Store_Name INTO #StoreWithDatePart
-			FROM	tbl_DeviceInfo d
-					INNER JOIN tbl_Stores e ON d.Device_Store_ID = e.Store_ID
-					CROSS JOIN #DayPartWithDate dp
-			WHERE	EXISTS(SELECT 1 FROM dbo.Split(@Device_IDs, ',') AS Devices WHERE CAST(Devices.cValue AS int) = d.Device_ID)
-	
+			dp.DayPartIndex,
+			dp.StartTime,
+			dp.EndTime,
+			e.Store_Number,
+			d.Device_UID,
+			d.Device_ID,
+			e.Store_id,
+			e.Store_Name,
+			dp.OrigDayPartIndex INTO #StoreWithDatePart
+	FROM	tbl_DeviceInfo d
+			INNER JOIN tbl_Stores e ON d.Device_Store_ID = e.Store_ID
+			CROSS JOIN #DayPartWithDate dp
+	WHERE	EXISTS(SELECT 1 FROM dbo.Split(@Device_IDs, ',') AS Devices WHERE CAST(Devices.cValue AS int) = d.Device_ID)
 	
 	-- roll up records into each store date and daypart
 	-- for single stores, generate a single summary row for all dayparts
@@ -399,7 +409,6 @@ BEGIN
 		Category, AVG_DetectorTime, Total_Car, RANK() OVER(Partition By ID ORDER BY ID, ISNULL(DayPartIndex,100)) SortOrder
 		FROM #rollup_data_all 
 	END;
-	
 	-- below is a hack!!
 	-- when a single store has change of config (for instanc: menu board, service... to pre loop, menu board, service...) 
 	-- or when multi store don't have the same config for each store
@@ -501,8 +510,9 @@ BEGIN
 
 			-- construct column names
 			SET  @cols = NULL;
-
-			SELECT  @cols = COALESCE(@cols + ',[' + headerName + ' - ' + goalName + ']', '[' + headerName + ' - ' + goalName + ']')
+			SET @EventGoalNames =NULL
+			SELECT  @cols = COALESCE(@cols + ',[' + headerName + ' - ' + goalName + ']', '[' + headerName + ' - ' + goalName + ']'),
+				@EventGoalNames=COALESCE(@EventGoalNames + '|$|' + headerName + ' - ' + goalName , headerName + ' - ' + goalName )
 			FROM    @header
 					CROSS JOIN @goals
 			ORDER BY Sort;
@@ -583,14 +593,18 @@ BEGIN
 			EXEC GetDeviceSystemStatisticsGeneral @Device_IDs,@StoreEndDate,@StoreStartDate
 			
 			-- Device SystemStatistics Lane
-			EXEC GetDeviceSystemStatisticsLane  @Device_IDs,@StoreEndDate,@StoreStartDate, @includePullins -- '15','2018-03-24', '2018-03-24',0
-						
+			EXEC GetDeviceSystemStatisticsLane  @Device_IDs,@StoreEndDate,@StoreStartDate, @includePullins -- '15','2018-03-24', '2018-03-24',0		
 		END
 	ELSE
+	BEGIN
 		SELECT 1	-- fake resultset in case the application expecting it
+		
+	END
 
-		SELECT @TotalRecCount TotalRecCount, @TotalRecCount NoOfPages
+	SELECT @TotalRecCount TotalRecCount, @TotalRecCount NoOfPages
+	
 	RETURN(0)
+	
 END
 
 
