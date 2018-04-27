@@ -22,7 +22,6 @@ const errorHandler = (message, status) => {
  * @public
  */
 const getAll = (request, callback) => {
-
   const input = {
     accountId: (request.AccountId ? request.AccountId : null),
     userUid: (request.query.uuid ? request.query.uuid : null)
@@ -34,7 +33,10 @@ const getAll = (request, callback) => {
     }
     repository.getAll(input, (result) => {
       if (result.data && result.data.length > 0) {
-        callback(result)
+        let output = {}
+        output.data = result.data[0]
+        output.status = true
+        callback(output)
       } else {
         callback(errorHandler(messages.LISTGROUP.notfound, false))
       }

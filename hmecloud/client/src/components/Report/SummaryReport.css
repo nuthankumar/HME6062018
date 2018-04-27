@@ -695,7 +695,13 @@ span.StoreBrand {
     .summaryreport-table tr:last-child > td{
       pointer-events: none;
     }
-    
 
- 
 
+
+
+.selectAStore {
+    color:red !important;
+}
+.storeWrap span:not(:first-child) {
+    color: #696969;
+}
