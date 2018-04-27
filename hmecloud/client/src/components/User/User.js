@@ -88,6 +88,8 @@ class User extends Component {
         }
         this.api.getData(url, data => {
             this.state.roles = data.data
+
+            console.log(data.data);
             //   this.state.userRole = _.pluck(_.where(this.state.roles, { 'Role_IsDefault': 1 }), 'Role_UID')[0]
             this.setState(this.state)
         })
@@ -286,17 +288,14 @@ class User extends Component {
 
     renderOptions() {
         let roles = this.state.roles;
-        console.log(roles);
-        //let isEdit = this.state.isEdit
         if (roles) {
             let roleOptions = roles.map(function (role, index) {
                 //                return (<option key={index} value={role.Role_UID} selected={!this.state.isEdit ? (role.Role_IsDefault == 1 ? true : false) : (role.Role_UID == this.state.userRole ? true : false)} >{role.Role_Name}</option>)
 
-
+                console.log(role);
                 if (role.Role_IsDefault == 1) {
                     this.state.userRole = role.Role_UID;
                     this.setState(this.state);
-                    console.log(this.state)
                 }
                 return (<option key={index} value={role.Role_UID} selected={(role.Role_IsDefault == 1 ? true : false)} >{role.Role_Name}</option>)
 
@@ -444,10 +443,6 @@ class User extends Component {
             this.api.deleteData(url, data => {
                 if (data) {
                     this.props.history.push("/message", data.key);
-                    //    this.state.successMessage = this.state.deleteSuceessMessage
-                    //    this.state.errorMessage = ''
-                    //    this.state.deleteSuccess = true
-                    //    this.setState(this.state)
                 }
                 else {
                     this.state.errorMessage = this.state.deleteErrorMessage
@@ -469,21 +464,6 @@ class User extends Component {
         let userName = user.name ? user.name : user.User_FirstName + ' ' + user.User_LastName;
         let url = Config.coldFusionUrl + "?atoken=" + this.authService.getIdToken() + "&memail=" + this.state.userEmail + "&un=" + userName
         window.location.href = url;
-
-        // let user = {
-        //     username: this.state.userEmail
-        // }
-        // let url = Config.authBaseUrl + Config.tokenPath
-        // this.api.postData(url, user, data => {
-        //     if (data && data.accessToken) {
-        //         this.authService.setToken(data.accessToken, false)
-        //         let user = this.authService.getProfile();
-        //         let userName = user.name ? user.name : user.User_FirstName + ' ' + user.User_LastName;
-        //         let url = Config.coldFusionUrl + "?atoken=" + this.authService.getIdToken() + "&memail=" + user.User_EmailAddress + "&un=" + userName
-        //         window.location.href = url;
-        //     }
-        // }, error => {
-        // })
     }
 
     submit(e) {
@@ -524,11 +504,7 @@ class User extends Component {
             this.api.postData(url, User[0], data => {
 
                 if (data.status) {
-                    // const language = this.state.currentLanguage
                     this.props.history.push("/message", data.key);
-                    //this.state.successMessage = t[language][data.key];
-                    //this.state.errorMessage = "";
-                    //this.setState(this.state);
                 }
                 else if (!data.status) {
                     this.state.errorMessage = "ERROR";

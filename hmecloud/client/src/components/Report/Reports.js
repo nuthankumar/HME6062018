@@ -432,7 +432,7 @@ class Report extends Component {
                   <div className="col-md-12 storeWrap">
 
                                     <span className="criteriaHeading">{t[language].stores} :</span>
-                    {this.state.stores.length ? this.renderStores() : "Select a Store"}
+                                    {this.state.stores.length ? this.renderStores() : <span className="selectAStore">{t[language].SelectAStore}</span>}
                   </div>
                   <div className="col-md-6"> <span className="criteriaHeading">{t[language].from} :</span>{this.state.fromDate} </div>
                   <div className="col-md-6"> <span className="criteriaHeading">{t[language].to} :</span>{this.state.toDate}</div>
