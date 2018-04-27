@@ -705,3 +705,17 @@ span.StoreBrand {
 .storeWrap span:not(:first-child) {
     color: #696969;
 }
+.average-time-label{
+  font-size: 10px
+}
+tr.summary-row-data:nth-child(even){
+  background-color: #ededed;
+}
+tr.summary-row-data:nth-child(odd){
+  background-color: #ffffff;
+}
+.store-name-number{
+  color: #D41B3E;
+  text-decoration: none;
+  font-weight:bold;
+}

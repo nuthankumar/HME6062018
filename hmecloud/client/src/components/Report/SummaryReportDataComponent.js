@@ -30,8 +30,8 @@ export default class SummaryReportDataComponent extends Component {
                 <tbody>
                   <tr>
                     <th className='blankHeader' />
-                    <th className='tableHeading' colSpan='4'>
-                      <span>{t[language].ReportsAverageTime}</span><span>(min:sec)</span>
+                    <th className='tableHeading' colSpan={(this.props.reportData.singleStore ? '4': '5')}>
+                      <span className='average-time-label'>{t[language].ReportsAverageTime}</span><span>(min:sec)</span>
                     </th>
                   </tr>
                   <tr>
@@ -79,10 +79,10 @@ export default class SummaryReportDataComponent extends Component {
         let laneTotalStyle = { backgroundColor: laneTotalColor, color: dataColour };
 
         return (
-          <tr>
+          <tr className='summary-row-data'>
             {/* <td className={this.dynamicColumnData.showGroupsStores}> {reportItem.groupId ? reportItem.groupId.value : '' }</td> */}
             <td className={this.dynamicColumnData.showGroupsStores}> <span className='timeSpan'>{reportItem.groupId ? reportItem.groupId.value : ''}</span><br /><span className='currentMeasure'>{reportItem.groupId ? reportItem.groupId.timeSpan : ''}</span></td>
-            <td className={this.dynamicColumnData.showGroupsStores}> <a href='#' className='' onClick={(e) => { e.preventDefault(); this.props.handleDrillDown(reportItem) }}>{reportItem.store ? reportItem.store.name : ''} </a></td>
+            <td className={this.dynamicColumnData.showGroupsStores}> <a href='#' className='store-name-number' onClick={(e) => { e.preventDefault(); this.props.handleDrillDown(reportItem) }}>{reportItem.store ? reportItem.store.name : ''} </a></td>
             <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayColumn} onClick={() => this.props.handleDrillDown(reportItem)}><span className='timeSpan'>{reportItem.day ? reportItem.day.timeSpan : ''}</span><br /><span className='currentMeasure'>{reportItem.day ? reportItem.day.currentDaypart : ''}</span></td>
             <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayPartColumn} onClick={() => this.props.handleDrillDown(reportItem)}><span className='timeSpan'>{reportItem.daypart ? reportItem.daypart.timeSpan : ''}</span><br /><span className='currentMeasure'>{reportItem.daypart ? reportItem.daypart.currentDaypart : ''}</span></td>
             <td className={'timeMeasureColumn ' + this.dynamicColumnData.showWeekColumn} onClick={() => this.props.handleDrillDown(reportItem)}><span className='timeSpan'>{reportItem.week ? reportItem.week.timeSpan : ''}</span> <br /> <span className='currentMeasure'>{reportItem.week ? reportItem.week.currentWeekpart : ''}</span></td>
@@ -91,7 +91,7 @@ export default class SummaryReportDataComponent extends Component {
             <td style={serviceStyle} className={(reportItem.service.value === "N/A" ? "background-NA" : "")}>{reportItem.service.value}</td>
             <td style={laneQueueStyle} className={(reportItem.laneQueue.value === "N/A" ? "background-NA" : laneQueueStyle.backgroundColor)}>{reportItem.laneQueue.value}</td>
             <td style={laneTotalStyle} className={(reportItem.laneTotal.value === "N/A" ? "background-NA" : "")}>{reportItem.laneTotal.value}</td>
-            <td>{reportItem.totalCars.value}</td>
+            <td>{reportItem.totalCars.value === 0 ? '' : reportItem.totalCars.value }</td>
           </tr>
         )
       })
