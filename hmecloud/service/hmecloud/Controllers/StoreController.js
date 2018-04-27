@@ -55,13 +55,7 @@ const getRawCarDataReport = (input, callBack) => {
       if (!_.isEmpty(result)) {
         const len = result.length
         if (len > 1) {
-          //  Store_Name
-          // const storeData = ''
-          // // const storeData = result[result.length - 1]
-          // console.log('storeData', storeData)
           const dayPartData = result[1]
-          // prepareStoreDetails(rawCarData, storeData, input)
-
           let counter = 0
           _.mapKeys(result, function (value, key) {
             if (_.has(value, 'Store_Name')) {
@@ -71,8 +65,9 @@ const getRawCarDataReport = (input, callBack) => {
             if (value.DepartTimeStamp === null || value.DepartTimeStamp === undefined) {
               counter++
               if (counter === len) {
-                rawCarData.key = 'noRecordFound'
-                callBack(result)
+                rawCarData.status = true
+                rawCarData.key = 'ReportsNoRecordsFound'
+                callBack(rawCarData)
               }
             }
           })
@@ -107,7 +102,7 @@ const getRawCarDataReport = (input, callBack) => {
         }
       } else {
         callBack({
-          key: 'noRecordFound',
+          key: 'ReportsNoRecordsFound',
           status: false
         })
       }
@@ -169,7 +164,7 @@ function prepareResponsObject (result, departTimeStampMap, rawCarDataList, rawCa
       })
       let tempRawCarData = departTimeStampList[0]
 
-      console.log('tempRawCarData', tempRawCarData);
+      
       const rawCarDataObj = {}
       rawCarDataObj.departureTime = dateUtils.UtcTimeTo12HourFormat(tempRawCarData.DepartTimeStamp)
       rawCarDataObj.eventName = tempRawCarData.CarRecordDataType_Name || 'N/A'
