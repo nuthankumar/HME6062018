@@ -32,12 +32,8 @@ export default class ReportGroup extends React.Component {
       groupId: null,
       saveSuccess: false,
       deleteSuccess: false,
-      deleteAlertTitle: 'Confirm to Delete',
-      confirmDeleteMessage: 'Are you sure you want to remove this user?',
-      deleteConfirm:'Yes',
-      deleteCancel: 'No',
-      deleteSuceessMessage: 'Group Deleted Successfully',
-      deleteErrorMessage: 'Unable to delete group data',
+      // deleteSuceessMessage: 'Group Deleted Successfully',
+      // deleteErrorMessage: 'Unable to delete group data',
       userContext: {}
     }
     this.api = new Api()
@@ -154,7 +150,7 @@ export default class ReportGroup extends React.Component {
     this.setState(this.state)
     let groupStoreObject = this.getGroupandStore(items)
     if (this.refs.groupName.value === '' || this.refs.groupName.value === undefined) {
-      this.state.errorMessage = 'Group name may not be blank'
+      this.state.errorMessage = t[language]['Group name may not be blank']
       this.state.successMessage = ''
       this.setState(this.state)
     } else {
@@ -225,17 +221,17 @@ export default class ReportGroup extends React.Component {
 
   deleteGroup () {
     confirmAlert({
-      title: this.state.deleteAlertTitle,
-      message: this.state.confirmDeleteMessage,
+      title: t[this.state.currentLanguage]['confirmToDelete'],
+      message: t[this.state.currentLanguage]['areyousureremoveuser'],
       buttons: [
         {
-          label: this.state.deleteConfirm,
+          label: t[this.state.currentLanguage]['yes'],
           onClick: () => {
             this.confirmDelete()
           }
         },
         {
-          label: this.state.deleteCancel,
+          label: t[this.state.currentLanguage]['no'],
           onClick: () => {
 
           }
