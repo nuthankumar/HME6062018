@@ -105,7 +105,7 @@ export default class SummaryReport extends Component {
                         <th>
                           <span>Print Time: </span>
                         </th>
-                        <td>{this.state.reportData.response.printTime ? this.state.reportData.response.printTime : 'N/A'}</td>
+                        <td>{moment(new Date()).format("hh:mm A")}</td>
                     </tr>
                 </tbody>
             </table>)

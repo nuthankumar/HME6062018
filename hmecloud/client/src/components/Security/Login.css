@@ -545,15 +545,19 @@ padding:5px 5px;
 
     .save-template::-webkit-input-placeholder {
         font-style: italic;
+        padding-left:3px;
     }
     .save-template:-moz-placeholder {
         font-style: italic;
+        padding-left:3px;
     }
     .save-template::-moz-placeholder {
         font-style: italic;
+        padding-left:3px;
     }
     .save-template:-ms-input-placeholder {
         font-style: italic;
+        padding-left:3px;
     } 
 
    
