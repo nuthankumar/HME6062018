@@ -78,7 +78,7 @@ class Report extends Component {
       tempStore: [],
       saveAsTemplate: false,
       templateName: null,
-      savedTemplates: null,
+      savedTemplates: [],
       successMessage: null,
       ErrorMessage: null,
       timeMeasure: 1,
