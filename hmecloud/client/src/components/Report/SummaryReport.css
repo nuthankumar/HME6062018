@@ -724,3 +724,9 @@ tr.summary-row-data:nth-child(odd){
   text-decoration: none;
   font-weight:bold;
 }
+.rawcar-no-data{
+  font-family: Arial;
+  font-size: 30px;
+  margin-bottom: 17px;
+  text-align: center;
+}
