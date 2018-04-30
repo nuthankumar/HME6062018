@@ -15,6 +15,7 @@ import EmailAlert from './components/Alerts/Email'
 import Message from './components/Alerts/Message'
 import './i18n'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { browserHistory } from 'react-dom';
 
 
 
@@ -23,7 +24,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import Layout from './components/Common/Layout';
 import Login from './components/Security/Login'
 
-ReactDOM.render(<Router>
+ReactDOM.render(<Router history={browserHistory}>
     <div>
         <Route exact path="/" render={(props) => <Layout Params={props}><Route path='/' component={(Login)} /></Layout>} />
         <Route exact path="/admin" render={(props) => <Layout Params={props}><Route path='/admin' component={(Login)} /></Layout>} />
@@ -34,7 +35,7 @@ ReactDOM.render(<Router>
         <Route exact path="/longestTime" render={(props) => <Layout Params={props}><Route path='/longestTime' component={Authenticate(LongestTime)} /></Layout>} />
         <Route exact path="/rawcardatareport" render={(props) => <Layout Params={props}><Route path='/rawcardatareport' component={Authenticate(RawCarDataReport)} /></Layout>} />
         <Route exact path="/grouphierarchy" render={(props) => <Layout Params={props}><Route path='/grouphierarchy' component={Authenticate(ReportGroupHierarchy)} /></Layout>} />        
-        <Route exact path="/summaryreport" render={(props) => <Layout Params={props}><Route path='/summaryreport' component={Authenticate(SummaryReport)} /></Layout>} />       
+        <Route exact path="/summaryreport/:r?" render={(props) => <Layout Params={props}><Route path='/summaryreport/:r?' component={Authenticate(SummaryReport)} /></Layout>} />       
         <Route exact path="/user/:uuid?" render={(props) => <Layout Params={props}><Route path='/user/:uuid?' component={Authenticate(User)} /></Layout>} />
     </div>
 </Router>, document.getElementById('root'))

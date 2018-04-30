@@ -211,7 +211,7 @@ export default class SummaryReport extends Component {
                 break
         }
         // this.constructReportRequest(templateData)
-    }
+    }   
 
     handleDrillDown (storeId) {
         // api call for getting the next drilldown
@@ -256,13 +256,14 @@ export default class SummaryReport extends Component {
                 this.api.postData(url, request, data => {
                     request.deviceIds = data.deviceIds
                     this.setTimeMeasures(request)
-                   // this.props.history.push('/summaryreport?r='+this.state.reportData.reportType)
-                    // window.history.pushState(this.state, null ,'http://localhost:3000/summaryreport?r='+this.state.reportData.reportType)
                     this.state.showLoader = false
                     this.state.reportData.response = data
                     this.state.reportData.NoOfPages = data.totalRecordCount.NoOfPages
                     this.state.showLoader = false
                     this.setState(this.state)
+                    this.props.history.push({
+                        state: { reportData: this.state.reportData, reportDataResponse: data, reportRequest: request }
+                    })
                 }, error => {
                     this.state.successMessage = ''
                     this.state.errorMessage = error.message
@@ -391,7 +392,6 @@ export default class SummaryReport extends Component {
     getPageDetails (curPage) {
         this.state.showLoader = true
         this.setState(this.state)
-        console.log("shd be true",this.state.showLoader)
         let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
         this.api.postData(url, this.state.reportData.drillDownRequestData, data => {
           /*  this.props.history.push({
