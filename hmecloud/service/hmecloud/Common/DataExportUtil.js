@@ -13,8 +13,9 @@ const prepareJsonForExport = (storeData, input, csvInput, reportType, callback) 
       if (item.StoreNo === 'Total Week') {
         store.Week = 'Total Week'
       } else if (input.ReportTemplate_DeviceIds.length === 1) {
-        store.Week = moment(item.WeekStartDate).format('DD/MM/YYYY') + '-' + moment(item.WeekEndDate).format('DD/MM/YYYY')
+        store.Week = moment(item.WeekStartDate).format('MM/DD/YYYY') + '-' + moment(item.WeekEndDate).format('MM/DD/YYYY')
       } else if (input.ReportTemplate_DeviceIds.length > 1) {
+        store.Week = moment(item.WeekStartDate).format('MM/DD/YYYY') + '-' + moment(item.WeekEndDate).format('MM/DD/YYYY')
         store.Groups = item.GroupName
         store.Store = item.Store_Name
         if (item.StoreNo === 'Total Week' && item.Store_Name === null) {
@@ -24,7 +25,7 @@ const prepareJsonForExport = (storeData, input, csvInput, reportType, callback) 
           store.Week = 'Subtotal'
           store.Store = ''
         } else {
-          store.Week = moment(item.WeekStartDate).format('DD/MM/YYYY') + '-' + moment(item.WeekEndDate).format('DD/MM/YYYY')
+          store.Week = moment(item.WeekStartDate).format('MM/DD/YYYY') + '-' + moment(item.WeekEndDate).format('MM/DD/YYYY')
         }
       }
     }
@@ -33,7 +34,7 @@ const prepareJsonForExport = (storeData, input, csvInput, reportType, callback) 
       if (item.StoreNo === 'Total Daypart') {
         store.Daypart = 'Total Daypart'
       } else if (input.ReportTemplate_DeviceIds.length === 1) {
-        store.Daypart = moment(item.StoreDate).format('DD/MM/YYYY')
+        store.Daypart = moment(item.StoreDate).format('MM/DD/YYYY')
       } else if (input.ReportTemplate_DeviceIds.length > 1) {
         store.Groups = item.GroupName
         store.Stores = item.Store_Name
@@ -44,7 +45,7 @@ const prepareJsonForExport = (storeData, input, csvInput, reportType, callback) 
           store.Daypart = 'SubTotal'
           store.Stores = ''
         } else {
-          store.Daypart = moment(item.StoreDate).format('DD/MM/YYYY')
+          store.Daypart = moment(item.StoreDate).format('MM/DD/YYYY')
         }
       }
     }
@@ -53,7 +54,7 @@ const prepareJsonForExport = (storeData, input, csvInput, reportType, callback) 
       if (item.StoreNo === 'Total Day') {
         store.Day = 'Total Day'
       } else if (input.ReportTemplate_DeviceIds.length === 1) {
-        store.Day = moment(item.StoreDate).format('DD/MM/YYYY')
+        store.Day = moment(item.StoreDate).format('MM/DD/YYYY')
       } else if (input.ReportTemplate_DeviceIds.length > 1) {
         store.Groups = item.GroupName
         store.Stores = item.Store_Name
@@ -64,19 +65,18 @@ const prepareJsonForExport = (storeData, input, csvInput, reportType, callback) 
           store.Day = 'SubTotal'
           store.Stores = ''
         } else {
-          store.Day = moment(item.StoreDate).format('DD/MM/YYYY')
+          store.Day = moment(item.StoreDate).format('MM/DD/YYYY')
         }
       }
     }
-    store['Menu Board'] = dateUtils.convertSecondsToMinutes(item['Menu Board'], format)
-    store.Greet = dateUtils.convertSecondsToMinutes(item.Greet, format)
-    store.Service = dateUtils.convertSecondsToMinutes(item.Service, format)
-    store['Lane Queue'] = dateUtils.convertSecondsToMinutes(item['Lane Queue'], format)
-    store['Lane Total'] = dateUtils.convertSecondsToMinutes(item['Lane Total'], format)
-    store['Total_Car'] = dateUtils.convertSecondsToMinutes(item['Total_Car'], format)
+    store['Menu Board'] = (dateUtils.convertSecondsToMinutes(item['Menu Board'], format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item['Menu Board'], format))
+    store.Greet = (dateUtils.convertSecondsToMinutes(item.Greet, format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item.Greet, format))
+    store.Service = (dateUtils.convertSecondsToMinutes(item.Service, format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item.Service, format))
+    store['Lane Queue'] = (dateUtils.convertSecondsToMinutes(item['Lane Queue'], format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item['Lane Queue'], format))
+    store['Lane Total'] = (dateUtils.convertSecondsToMinutes(item['Lane Total'], format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item['Lane Total'], format))
+    store['Total Cars'] = (dateUtils.convertSecondsToMinutes(item['Total_Car'], format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item['Total_Car'], format))
     storeDataList.push(store)
   })
-
   csvInput.reportinput = storeDataList
   csvGeneration.generateCsvAndEmail(csvInput, result => {
     let output = {}
