@@ -126,7 +126,7 @@ const monthDifference = (fromDate, toDate) => {
 }
 
 const convertMonthDayYear = (dateVal) => {
-  return moment(dateVal).format('LL')
+  return moment(dateVal).format('ll')
 }
 
 const getAdvancedSelectionMaxDate = (noOfDays, dateValue) => {

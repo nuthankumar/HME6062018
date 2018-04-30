@@ -28,7 +28,7 @@ const mutipleStore = (reportData, pdfInput, callback) => {
         reportName: reportName,
         startTime: reportData.startTime,
         stopTime: reportData.stopTime,
-        printDate: moment().format('LL'),
+        printDate: moment().format('ll'),
         reportPrintTime: moment().format('LT'),
         storeDetails: reportData.storeDetails
       }
@@ -112,7 +112,7 @@ const singleStore = (reportData, pdfInput, callback) => {
         storeDesc: reportData.storeDesc,
         startTime: reportData.startTime,
         stopTime: reportData.stopTime,
-        printDate: moment().format('LL'),
+        printDate: moment().format('ll'),
         reportPrintTime: moment().format('LT'),
         storeDetails: reportData.storeDetails,
         isLongTime: isLongTime,
