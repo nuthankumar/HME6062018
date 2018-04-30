@@ -11,7 +11,7 @@ import { CommonConstants } from '../../Constants'
 import t from '../Language/language'
 import * as languageSettings from '../Language/languageSettings'
 import Api from '../../Api'
-// import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link } from "react-router-dom"
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './SummaryReport.css'
 import '../../../node_modules/font-awesome/css/font-awesome.min.css'
@@ -53,6 +53,7 @@ export default class SummaryReport extends Component {
                 systemStatistics: false,
                 generate: false,
                 response: {},
+                reportType:'',
                 drillDownRequestData: {}
             }
         }
@@ -148,12 +149,14 @@ export default class SummaryReport extends Component {
                     this.state.reportData.weekColumn = false
                     this.state.reportData.groupStoreColumns = false
                     this.state.reportData.singleStore = true
+                    this.state.reportData.reportType = 'd'
                 } else {
                     this.state.reportData.dayColumn = false
                     this.state.reportData.groupStoreColumns = true
                     this.state.reportData.singleStore = false
                     this.state.reportData.dayPartColumn = false
                     this.state.reportData.weekColumn = false
+                    this.state.reportData.reportType = 'md'
                 }
                 this.setState(this.state)
                 break
@@ -165,12 +168,14 @@ export default class SummaryReport extends Component {
                     this.state.reportData.dayColumn = false
                     this.state.reportData.groupStoreColumns = false
                     this.state.reportData.singleStore = true
+                    this.state.reportData.reportType = 'dp'
                 } else {
                     this.state.reportData.dayColumn = false
                     this.state.reportData.dayPartColumn = false
                     this.state.reportData.weekColumn = false
                     this.state.reportData.groupStoreColumns = true
                     this.state.reportData.singleStore = false
+                    this.state.reportData.reportType = 'mdp'
 
                 }
                 this.setState(this.state)
@@ -183,12 +188,14 @@ export default class SummaryReport extends Component {
                     this.state.reportData.dayColumn = false
                     this.state.reportData.groupStoreColumns = false
                     this.state.reportData.singleStore = true
+                    this.state.reportData.reportType = 'w'
                 } else {
                     this.state.reportData.dayColumn = false
                     this.state.reportData.dayPartColumn = false
                     this.state.reportData.weekColumn = false
                     this.state.reportData.groupStoreColumns = true
                     this.state.reportData.singleStore = false
+                    this.state.reportData.reportType = 'mw'
                 }
                 this.setState(this.state)
                 break
@@ -247,9 +254,10 @@ export default class SummaryReport extends Component {
                  }
                 let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
                 this.api.postData(url, request, data => {
-                    // window.history.pushState(null, null ,'http://localhost:3000/summaryreport?r=m')
                     request.deviceIds = data.deviceIds
                     this.setTimeMeasures(request)
+                   // this.props.history.push('/summaryreport?r='+this.state.reportData.reportType)
+                    // window.history.pushState(this.state, null ,'http://localhost:3000/summaryreport?r='+this.state.reportData.reportType)
                     this.state.showLoader = false
                     this.state.reportData.response = data
                     this.state.reportData.NoOfPages = data.totalRecordCount.NoOfPages
