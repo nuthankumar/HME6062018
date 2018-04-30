@@ -79,7 +79,7 @@ export default class SummaryReport extends Component {
                         <th className='thin-header'>
                           <span>{t[language].store}</span>:
                         </th>
-                        <td className='thin-header'>{this.state.reportData.response.storeName ? this.state.reportData.response.storeName : 'N/A'}</td>
+                        <td className='thin-header'>{this.state.reportData.response.storeName ? this.state.reportData.response.storeName : this.state.reportData.response.storeNumber}</td>
                         <th>
                           <span>Start Time:</span>
                         </th>
@@ -247,6 +247,7 @@ export default class SummaryReport extends Component {
                  }
                 let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
                 this.api.postData(url, request, data => {
+                    // window.history.pushState(null, null ,'http://localhost:3000/summaryreport?r=m')
                     request.deviceIds = data.deviceIds
                     this.setTimeMeasures(request)
                     this.state.showLoader = false
