@@ -7,6 +7,7 @@ const messages = require('../Common/Message')
 const prepareStoreDetails = (daysingleResult, storeData, input) => {
   if (storeData && storeData[0]) {
     daysingleResult.storeName = (storeData[0].Store_Name ? storeData[0].Store_Name : 'N/A')
+    daysingleResult.storeNumber = (storeData[0].Store_Number ? storeData[0].Store_Number : 'N/A')
     daysingleResult.storeDesc = (storeData[0].Brand_Name ? storeData[0].Brand_Name : 'N/A')
   }
   daysingleResult.startTime = `${dateUtils.convertMMMdYYYY(input.ReportTemplate_From_Date)} OPEN`
