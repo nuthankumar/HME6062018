@@ -15,7 +15,6 @@ export default class Message extends React.Component {
         }
         const language = this.state.currentLanguage
         this.state.message = t[language][this.state.key];
-        console.log(this.state.language);
     }
     render() {
     
