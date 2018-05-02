@@ -82,29 +82,29 @@ export default class SummaryReport extends Component {
                         </th>
                         <td className='thin-header'>{this.state.reportData.response.storeName ? this.state.reportData.response.storeName : this.state.reportData.response.storeNumber}</td>
                         <th>
-                          <span>Start Time:</span>
+                          <span>{t[language].ReportsStart}</span>
                         </th>
                         <td>
-                          {this.state.reportData.response.startTime ? this.state.reportData.response.startTime : 'N/A'}&nbsp;
+                          {this.state.reportData.response.startTime ? this.state.reportData.response.startTime + t[language].OPEN : 'N/A'}&nbsp;
                         </td>
                         <th>
-                          <span>Print Date:</span>
+                          <span>{t[language].ReportsPrintDate}</span>
                         </th>
                         <td> {this.state.reportData.response.printDate ? this.state.reportData.response.printDate : 'N/A'} </td>
                     </tr>
                     <tr>
                         <th>
-                          <span>Description:</span>
+                          <span>{t[language].Description}</span>
                         </th>
                         <td>{this.state.reportData.response.storeDesc ? this.state.reportData.response.storeDesc : 'N/A'}</td>
                         <th>
-                            <span>Stop Time:</span>
+                            <span>{t[language].ReportsStop}</span>
                         </th>
                         <td>
-                            {this.state.reportData.response.stopTime ? this.state.reportData.response.stopTime : 'N/A'}&nbsp;
+                            {this.state.reportData.response.stopTime ? this.state.reportData.response.stopTime + t[language].CLOSE : 'N/A'}&nbsp;
                         </td>
                         <th>
-                          <span>Print Time: </span>
+                          <span>{t[language].ReportsPrintTime}</span>
                         </th>
                         <td>{moment(new Date()).format("hh:mm A")}</td>
                     </tr>
@@ -114,13 +114,13 @@ export default class SummaryReport extends Component {
             return (<div>
                 <div className='col-xs-3 left-padding-none'>
                     <h2 className='report-start-time-header'>
-                        <span className='report-start-time'>{t[language].ReportsStart}:</span>
+                        <span className='report-start-time'>{t[language].ReportsStart}</span>
                         <span className='report-start-time-value'>{moment(this.state.reportData.drillDownRequestData.fromDate).format("MMM D YYYY")} {t[language].OPEN}</span>
                     </h2>
                 </div>
                 <div className='col-xs-3 left-padding-none'>
                     <h2 className='report-end-time-header'>
-                        <span className='report-end-time'>End Time:</span>
+                        <span className='report-end-time'>{t[language].ReportsEnd}</span>
                         <span className='report-end-time-value'>{moment(this.state.reportData.drillDownRequestData.toDate).format("MMM D YYYY")} {t[language].CLOSE}</span>
                     </h2>
                 </div>
@@ -473,7 +473,7 @@ export default class SummaryReport extends Component {
 
                     <div className='row'>
                         {this.headerDetails()}
-                        <div className={'col-xs-2 show-all-pagination-toggle show-page-toggle pull-right show-all-single ' + (this.state.reportData.singleStore ? 'show' : 'hide')}>Show: <span className={(this.state.reportData.pagination) ? 'inactive-link' : 'active-link'} onClick={() => this.switchAllPage("all")}>All /</span><span className={(this.state.reportData.pagination) ? 'active-link' : 'inactive-link'} onClick={() => this.switchAllPage("pages")}>Pages</span></div>
+                        <div className={'col-xs-2 show-all-pagination-toggle show-page-toggle pull-right show-all-single ' + (this.state.reportData.singleStore ? 'show' : 'hide')}>{t[language].ReportsShow}: <span className={(this.state.reportData.pagination) ? 'inactive-link' : 'active-link'} onClick={() => this.switchAllPage("all")}>{t[language].ReportsAll} /</span><span className={(this.state.reportData.pagination) ? 'active-link' : 'inactive-link'} onClick={() => this.switchAllPage("pages")}>{t[language].ReportsPages}</span></div>
                         <div className={'col-xs-2  pagination-single pull-right ' + (this.state.reportData.pagination &&  this.state.reportData.singleStore ? 'show' : 'hide')}>
                           <PaginationComponent pagination= {this.state.reportData.pagination} totalPages={this.state.reportData.NoOfPages}  curPage={this.state.reportData.curPage} handlePreviousPage={(curPage, totalPages) => this.handlePreviousPage(curPage, totalPages)} handleNextPage={(curPage, totalPages) => this.handleNextPage(curPage, totalPages)} disablePrevButton={this.state.reportData.disablePrevButton} disableNextButton={this.state.reportData.disableNextButton} />
                         </div>
@@ -483,7 +483,7 @@ export default class SummaryReport extends Component {
                     </div>
 
                     <div className={'row show-all-multi ' + (this.state.reportData.singleStore ? 'hide' : 'show')}>
-                        <div className='col-xs-12 show-all-pagination-toggle'>Show: <span className={(this.state.reportData.pagination) ? 'inactive-link' : 'active-link'} onClick={() => this.switchAllPage("all")}>All /</span><span className={(this.state.reportData.pagination) ? 'active-link' : 'inactive-link'} onClick={() => this.switchAllPage("pages")}>Pages</span></div>
+                        <div className='col-xs-12 show-all-pagination-toggle'>{t[language].ReportsShow}: <span className={(this.state.reportData.pagination) ? 'inactive-link' : 'active-link'} onClick={() => this.switchAllPage("all")}>{t[language].ReportsAll} /</span><span className={(this.state.reportData.pagination) ? 'active-link' : 'inactive-link'} onClick={() => this.switchAllPage("pages")}>{t[language].ReportsPages}</span></div>
                     </div>
 
                     <div className='row summaryreport-table-section'>
