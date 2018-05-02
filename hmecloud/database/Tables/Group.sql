@@ -24,21 +24,33 @@ GO
 -- 
 -- ===========================================================
 
-CREATE TABLE [dbo].[Group](
+CREATE TABLE [dbo].[Group]
+(
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[GroupName] [varchar](50) NOT NULL,
 	[Description] [varchar](250) NULL,
 	[AccountId] [int] NOT NULL,
 	[CreatedBy] [varchar](50) NOT NULL,
 	[UpdatedBy] [varchar](50) NOT NULL,
-	[CreatedDateTime] [date] NOT NULL,
-	[UpdatedDateTime] [date] NOT NULL,
+	[CreatedDateTime] [datetime] NOT NULL,
+	[UpdatedDateTime] [datetime] NOT NULL,
 	[ParentGroup] [int] NULL,
- CONSTRAINT [PK_Group] PRIMARY KEY CLUSTERED 
+	CONSTRAINT [PK_Group] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+	CONSTRAINT [UK_GroupName_AccountID] UNIQUE NONCLUSTERED 
+(
+	[GroupName] ASC,
+	[AccountId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Group] ADD  CONSTRAINT [DF_CreatedDateTime]  DEFAULT (getdate()) FOR [CreatedDateTime]
+GO
+
+ALTER TABLE [dbo].[Group] ADD  CONSTRAINT [DF_UpdatedDateTime]  DEFAULT (getdate()) FOR [UpdatedDateTime]
 GO
 
 ALTER TABLE [dbo].[Group]  WITH CHECK ADD  CONSTRAINT [FK_Group_Parent_Group] FOREIGN KEY([ParentGroup])
@@ -47,3 +59,5 @@ GO
 
 ALTER TABLE [dbo].[Group] CHECK CONSTRAINT [FK_Group_Parent_Group]
 GO
+
+

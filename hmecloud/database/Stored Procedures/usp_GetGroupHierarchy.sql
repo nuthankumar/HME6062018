@@ -1,13 +1,13 @@
-USE [db_qsrdrivethrucloud_engdev]
-GO
-/****** Object:  StoredProcedure [dbo].[usp_GetGroupHierarchy]    Script Date: 4/25/2018 9:12:47 AM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
+
+/****** Dropping the StoredProcedure [dbo].[usp_GetGroupHierarchy] if already exists *****/
+IF (EXISTS(SELECT *
+FROM sys.objects
+WHERE [name] = 'usp_GetGroupHierarchy' AND [type] ='P'))
+	DROP PROCEDURE [dbo].[usp_GetGroupHierarchy]
 GO
 
 -- ===========================================================
---      Copyright © 2018, HME, All Rights Reserved
+--      Copyright Â© 2018, HME, All Rights Reserved
 -- ===========================================================
 -- Name			:	usp_GetGroupHierarchy
 -- Author		:	Selvendran K
@@ -25,7 +25,7 @@ GO
 -- EXEC [dbo].[usp_GetGroupHierarchy] @AccountId = 1333, @UserUid='CEO7JK0VUSRJZFXXC0J1WW0I0E4CHD2M'
 -- ===========================================================
 
-ALTER PROCEDURE [dbo].[usp_GetGroupHierarchy]
+CREATE PROCEDURE [dbo].[usp_GetGroupHierarchy]
 	@AccountId 	INT=NULL,
 	@UserUid	VARCHAR(32)=NULL
 AS
