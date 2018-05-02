@@ -418,23 +418,23 @@ class User extends Component {
 
     deleteUser() {
         confirmAlert({
-            title: this.state.deleteAlertTitle,
-            message: this.state.confirmDeleteMessage,
+            title: t[this.state.currentLanguage]['confirmToDelete'],
+            message: t[this.state.currentLanguage]['areyousureremoveuser'],
             buttons: [
-                {
-                    label: this.state.deleteConfirm,
-                    onClick: () => {
-                        this.confirmDelete()
-                    }
-                },
-                {
-                    label: this.state.deleteCancel,
-                    onClick: () => {
-
-                    }
+              {
+                label: t[this.state.currentLanguage]['yes'],
+                onClick: () => {
+                  this.confirmDelete()
                 }
+              },
+              {
+                label: t[this.state.currentLanguage]['no'],
+                onClick: () => {
+      
+                }
+              }
             ]
-        })
+          })
     }
 
     confirmDelete() {
