@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\components",
+    "\\src\\components\\Common",
+    "\\src\\components\\Language",
+    "\\src\\components\\Report",
+    "\\src\\components\\Security",
+    "\\src\\components\\User"
+  ],
+  "SelectedNode": "\\src\\components\\Report\\SummaryReport.js",
+  "PreviewInSolutionExplorer": false
+}
