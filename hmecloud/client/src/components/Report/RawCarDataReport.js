@@ -14,7 +14,7 @@ class RawCarReport extends Component {
     super(props)
     this.state = {
       currentLanguage: languageSettings.getCurrentLanguage(),
-      showLoader:false,
+      showLoader: false,
       rawData: false,
       pageHeading: 'Raw Car Data Report',
       displayData: {
@@ -33,20 +33,19 @@ class RawCarReport extends Component {
     this.displayRecords = this.displayRecords.bind(this)
     this.displayItems = this.displayItems.bind(this)
     this.getRawCarData = this.getRawCarData.bind(this)
-
   }
-  componentWillMount() {
+  componentWillMount () {
     this.getRawCarData()
   }
 
-  getRawCarData() {
-      let data = this.props.history.location.state
-      this.state.displayData = data.rawCarData;
-      this.state.rawCarRequest = data.rawCarRequest
-      console.log(data.rawCarRequest)
-      console.log(data.rawCarData)
-      this.state.rawData = true;
-      this.setState(this.state)
+  getRawCarData () {
+    let data = this.props.history.location.state
+    this.state.displayData = data.rawCarData
+    this.state.rawCarRequest = data.rawCarRequest
+    console.log(data.rawCarRequest)
+    console.log(data.rawCarData)
+    this.state.rawData = true
+    this.setState(this.state)
   }
 
   timeChange (name) {
@@ -54,94 +53,94 @@ class RawCarReport extends Component {
   }
 
   displayRecords () {
-        return (<section className='rawcar-data-page'>
-          <section className='rawcar-data-section'>
-             <div className='btn btn-danger emailCSV' onClick={this.emailAsCSV.bind(this)}> Email CSV version</div>
-             <div className='clear rawcar-table-details'>
-              <PageHeader pageHeading={this.state.pageHeading} />
-              {this.displayRawCarHeader()}
-            </div>
-            {this.displayRawCarContent()}
-          </section>
-        </section>)
-    }
+    return (<section className='rawcar-data-page'>
+      <section className='rawcar-data-section'>
+        <div className='btn btn-danger emailCSV' onClick={this.emailAsCSV.bind(this)}> Email CSV version</div>
+        <div className='clear rawcar-table-details'>
+          <PageHeader pageHeading={this.state.pageHeading} />
+          {this.displayRawCarHeader()}
+        </div>
+        {this.displayRawCarContent()}
+      </section>
+    </section>)
+  }
 
-  displayRawCarHeader(){
-    return(
+  displayRawCarHeader () {
+    return (
       <table className='rawcar-header-labels clear'>
-      <tbody>
-        <tr>
-          <th className='thin-header'>
-            <span>Store</span>:
-          </th>
-          <td className='thin-header'>{this.state.displayData.store ? this.state.displayData.store : 'N/A' }</td>
-          <th>
-            <span>Start Time:</span>
-          </th>
-          <td>
-            {this.state.displayData.startTime ? this.state.displayData.startTime : 'N/A'}&nbsp;
-          </td>
-          <th>
-            <span>Print Date:</span>
-          </th>
-          <td> {this.state.displayData.printDate ? this.state.displayData.printDate : 'N/A'} </td>
-        </tr>
-        <tr>
-          <th>
-            <span>Description:</span>
-          </th>
-          <td>{this.state.displayData.description ? this.state.displayData.description : 'N/A'}</td>
-          <th>
-            <span>Stop Time:</span>
-          </th>
-          <td>
-            {this.state.displayData.stopTime ? this.state.displayData.stopTime : 'N/A' }&nbsp;
-          </td>
-          <th>
-            <span>Print Time: </span>
-          </th>
-          <td>{this.state.displayData.printTime ? this.state.displayData.printTime : 'N/A' }</td>
-        </tr>
-      </tbody>
-    </table>
+        <tbody>
+          <tr>
+            <th className='thin-header'>
+              <span>Store</span>:
+            </th>
+            <td className='thin-header'>{this.state.displayData.storeName ? this.state.displayData.storeName :this.state.displayData.storeNumber }</td>
+            <th>
+              <span>Start Time:</span>
+            </th>
+            <td>
+              {this.state.displayData.startTime ? this.state.displayData.startTime : 'N/A'}&nbsp;
+            </td>
+            <th>
+              <span>Print Date:</span>
+            </th>
+            <td> {this.state.displayData.printDate ? this.state.displayData.printDate : 'N/A'} </td>
+          </tr>
+          <tr>
+            <th>
+              <span>Description:</span>
+            </th>
+            <td>{this.state.displayData.storeDescription ? this.state.displayData.storeDescription : 'N/A'}</td>
+            <th>
+              <span>Stop Time:</span>
+            </th>
+            <td>
+              {this.state.displayData.stopTime ? this.state.displayData.stopTime : 'N/A' }&nbsp;
+            </td>
+            <th>
+              <span>Print Time: </span>
+            </th>
+            <td>{this.state.displayData.printTime ? this.state.displayData.printTime : 'N/A' }</td>
+          </tr>
+        </tbody>
+      </table>
     )
   }
 
-  displayRawCarContent(){
+  displayRawCarContent () {
     let language = this.state.currentLanguage
-    if(this.state.displayData.key === 'ReportsNoRecordsFound' && this.state.displayData.key !== undefined){
-      return (<h3 className="rawcar-no-data"><span >{t[language][this.state.displayData.key]}</span></h3>)
-    }else{
-      return (<div className='rawcar-content'> 
-      <div className='rawcar-header'>
-        <h2 className='rawcar-h2'>{this.state.displayData.dayPart}</h2>
-      </div>
-      <table className='display-records table-layout table-layoutRawCar'>
-        <tbody>
-          <tr>
-            <th>Departure Time</th>
-            <th>Event Name</th>
-            <th>Cars In Queue</th>
-            <th>
-              <span>Menu</span>
-            </th>
-            <th>
-              <span>Greet</span>
-            </th>
-            <th>
-              <span>Service</span>
-            </th>
-            <th>
-              <span>Lane Queue</span>
-            </th>
-            <th>
-              <span>Lane Total</span>
-            </th>
-          </tr>
-          {this.displayItems()}
-        </tbody>
-      </table>
-    </div>)
+    if (this.state.displayData.key === 'ReportsNoRecordsFound' && this.state.displayData.key !== undefined) {
+      return (<h3 className='rawcar-no-data'><span >{t[language][this.state.displayData.key]}</span></h3>)
+    } else {
+      return (<div className='rawcar-content'>
+        <div className='rawcar-header'>
+          <h2 className='rawcar-h2'>{this.state.displayData.dayPart}</h2>
+        </div>
+        <table className='display-records table-layout table-layoutRawCar'>
+          <tbody>
+            <tr>
+              <th>Departure Time</th>
+              <th>Event Name</th>
+              <th>Cars In Queue</th>
+              <th>
+                <span>Menu</span>
+              </th>
+              <th>
+                <span>Greet</span>
+              </th>
+              <th>
+                <span>Service</span>
+              </th>
+              <th>
+                <span>Lane Queue</span>
+              </th>
+              <th>
+                <span>Lane Total</span>
+              </th>
+            </tr>
+            {this.displayItems()}
+          </tbody>
+        </table>
+      </div>)
     }
   }
 
@@ -161,38 +160,38 @@ class RawCarReport extends Component {
       )
     })
   }
-  render() {
-      const { showLoader } = this.state;
+  render () {
+    const { showLoader } = this.state
     return (
-        <div className="rawCarContainer">
-            <Loader showLoader={showLoader} />
-            <div className={showLoader ? 'hidden' : 'show'}>
-                {this.displayRecords()}
-            </div>
+      <div className='rawCarContainer'>
+        <Loader showLoader={showLoader} />
+        <div className={showLoader ? 'hidden' : 'show'}>
+          {this.displayRecords()}
+        </div>
       </div>
     )
   }
-  emailAsCSV() {
-      this.setState({
-          showLoader: true
-      })
-      let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rrcsv1'
-      this.api.postData(url, this.state.rawCarRequest, data => {
-          if (data.status) {
-              this.setState({
-                  email: data.data
-              });
-              this.state.emailId = data.data;
-              this.setState({
-                  showLoader: false
-              })
-              this.props.history.push("/emailSent", this.state.emailId); 
-           }
-           }, error => {
-          this.state.successMessage = ''
-          this.state.errorMessage = 'Failed sending Email'
-          this.setState(this.state)
-      })
+  emailAsCSV () {
+    this.setState({
+      showLoader: true
+    })
+    let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rrcsv1'
+    this.api.postData(url, this.state.rawCarRequest, data => {
+      if (data.status) {
+        this.setState({
+          email: data.data
+        })
+        this.state.emailId = data.data
+        this.setState({
+          showLoader: false
+        })
+        this.props.history.push('/emailSent', this.state.emailId)
+      }
+    }, error => {
+      this.state.successMessage = ''
+      this.state.errorMessage = 'Failed sending Email'
+      this.setState(this.state)
+    })
   }
 }
 

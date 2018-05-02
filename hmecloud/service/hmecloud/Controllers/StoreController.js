@@ -138,6 +138,7 @@ const generateCsv = (input, response) => {
 function prepareStoreDetails (rawCarData, storeData, input) {
   rawCarData.storeName = storeData.Store_Name
   rawCarData.storeDescription = storeData.Brand_Name
+  rawCarData.storeNumber = (storeData.Store_Number ? storeData.Store_Number : 'N/A')
   rawCarData.startTime = `${dateUtils.convertMMMdYYYY(input.ReportTemplate_From_Date)} OPEN`
   rawCarData.stopTime = `${dateUtils.convertMMMdYYYY(input.ReportTemplate_To_Date)} CLOSE`
   rawCarData.printDate = dateUtils.convertMMMdYYYY(dateFormat(new Date(), 'isoDate'))
@@ -164,7 +165,6 @@ function prepareResponsObject (result, departTimeStampMap, rawCarDataList, rawCa
       })
       let tempRawCarData = departTimeStampList[0]
 
-      
       const rawCarDataObj = {}
       rawCarDataObj.departureTime = dateUtils.UtcTimeTo12HourFormat(tempRawCarData.DepartTimeStamp)
       rawCarDataObj.eventName = tempRawCarData.CarRecordDataType_Name || 'N/A'
@@ -190,7 +190,6 @@ function prepareResponsObject (result, departTimeStampMap, rawCarDataList, rawCa
       departTimeStampMap.set(rawCarTempId, rawCarTempId)
     }
   })
-
   return rawCarDataList
 }
 module.exports = {
