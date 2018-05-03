@@ -128,6 +128,11 @@ class Report extends Component {
   componentWillMount() {
     // if (this.Auth.loggedIn()) this.props.history.replace("/");
   }
+
+  valid(current){
+    var today = moment().add( 1, 'day' );
+        return !current.isAfter( today );
+  }
   onCheck(checkedKeys, node) {
     this.state.selectedList = checkedKeys;
     this.state.defaultCheckedKeys = checkedKeys;
@@ -266,6 +271,7 @@ class Report extends Component {
                         ref="fromDate"
                         value={this.state.fromDate}
                         onChange={e => this.changeDate(e, "from")}
+                        isValidDate={ this.valid }
                       />
                     </div>
                   </div>
@@ -289,6 +295,7 @@ class Report extends Component {
                         ref="toDate"
                         value={this.state.toDate}
                         onChange={e => this.changeDate(e, "to")}
+                        isValidDate={ this.valid }
                       />
                     </div>
                   </div>

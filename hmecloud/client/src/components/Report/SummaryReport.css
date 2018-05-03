@@ -1,3 +1,7 @@
+.hmeBody {
+  width:100% !important;
+}
+
 .show-table-cell{
   display : table-cell;
 }

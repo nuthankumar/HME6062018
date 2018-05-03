@@ -220,9 +220,9 @@ export default class ReportGroup extends React.Component {
   }
 
   deleteGroup () {
-    confirmAlert({
+   confirmAlert({
       title: t[this.state.currentLanguage]['confirmToDelete'],
-      message: t[this.state.currentLanguage]['areyousureremoveuser'],
+      message: t[this.state.currentLanguage]['areyousureremovegroup'],
       buttons: [
         {
           label: t[this.state.currentLanguage]['yes'],

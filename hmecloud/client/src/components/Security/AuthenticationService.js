@@ -165,7 +165,7 @@ export default class AuthenticationService {
         return decode(localStorage.getItem('id_token'))
     }*/
     isLoggedIn() {
-        return this.getToken() ? true : false;
+        return this.loggedIn();
     }
 
     getProfile() {
@@ -180,7 +180,7 @@ export default class AuthenticationService {
     }
     decodeToken(token) {
         if (token) {
-            console.log(decode(token))
+            // console.log(decode(token))
             return decode(token)
         } else {
             return {};

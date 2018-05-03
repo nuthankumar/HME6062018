@@ -245,7 +245,7 @@ function prepareDayPartObject (item, format, input, colors, goalSettings) {
   if (item.StartTime !== null && item.StoreDate !== 'Total Daypart' && item.EndTime !== null && input.ReportTemplate_DeviceIds.length < 2) {
     var dateSplit = item['StoreDate'].split('-')
     daypart.timeSpan = `${dateSplit[1]}/${dateSplit[2]}-Daypart ${item['DayPartIndex']}`
-    daypart.currentDaypart = `${dateUtils.converthhmmtt(item.StartTime)}-${dateUtils.converthhmmtts(item.EndTime)}`
+    daypart.currentDaypart = `${dateUtils.converthhmmtt(item.StartTime)}-${dateUtils.converthhmmtt(item.EndTime)}`
     dataObject.daypart = daypart
   }
   if (item.StoreNo && item.StoreNo.includes('Subtotal')) {
