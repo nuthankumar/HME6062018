@@ -36,7 +36,6 @@ class LongestTime extends Component {
        // let renderStores;
       // let renderLongestTimes = null;
         let LongestTimes = this.props.LongestTimes;
-        console.log(LongestTimes);
          return LongestTimes.map(function (LongestTimes, index) {
           return (<tr>
                     <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{(LongestTimes.Menu ? LongestTimes.Menu.Value : 'N/A' )}</span><br /><span className="longtime-timeSpan">{(LongestTimes.Menu ? LongestTimes.Menu.Date : 'N/A')}<br />{(LongestTimes.Menu ? LongestTimes.Menu.Time : 'N/A')}</span></td>

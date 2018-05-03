@@ -70,8 +70,6 @@ export default class ReportGroupHierarchy extends React.Component {
     if(node.node.props.type === 'group'){
       this.props.history.push('/groups', this.state)
     }
-
-    console.log(node.node.props.eventKey)
   }
   render () {
     let language = this.state.currentLanguage

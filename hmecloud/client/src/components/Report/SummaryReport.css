@@ -1,5 +1,8 @@
-.hmeBody {
+ /* .hmeBody {
   width:100% !important;
+}  */
+.summaryReportsSection {
+  margin:0 -10%;
 }
 
 .show-table-cell{

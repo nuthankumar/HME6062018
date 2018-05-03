@@ -63,6 +63,7 @@ export default class SummaryReportDataComponent extends Component {
   }
 
   displaySummarizedRowData(reportRowData) {
+    let language = this.state.currentLanguage
     this.props.reportData.generate = false
     if (reportRowData.length > 0) {
       let dataColour = '#ffffff'
@@ -81,11 +82,11 @@ export default class SummaryReportDataComponent extends Component {
         return (
           <tr className='summary-row-data'>
             {/* <td className={this.dynamicColumnData.showGroupsStores}> {reportItem.groupId ? reportItem.groupId.value : '' }</td> */}
-            <td className={this.dynamicColumnData.showGroupsStores}> <span className='timeSpan'>{reportItem.groupId ? reportItem.groupId.value : ''}</span><br /><span className='currentMeasure'>{reportItem.groupId ? reportItem.groupId.timeSpan : ''}</span></td>
-            <td className={this.dynamicColumnData.showGroupsStores}> <a href='#' className='store-name-number' onClick={(e) => { e.preventDefault(); this.props.handleDrillDown(reportItem) }}>{reportItem.store ? reportItem.store.name : ''} </a></td>
-            <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayColumn} onClick={() => this.props.handleDrillDown(reportItem)}><span className='timeSpan'>{reportItem.day ? reportItem.day.timeSpan : ''}</span><br /><span className='currentMeasure'>{reportItem.day ? reportItem.day.currentDaypart : ''}</span></td>
-            <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayPartColumn} onClick={() => this.props.handleDrillDown(reportItem)}><span className='timeSpan'>{reportItem.daypart ? reportItem.daypart.timeSpan : ''}</span><br /><span className='currentMeasure'>{reportItem.daypart ? reportItem.daypart.currentDaypart : ''}</span></td>
-            <td className={'timeMeasureColumn ' + this.dynamicColumnData.showWeekColumn} onClick={() => this.props.handleDrillDown(reportItem)}><span className='timeSpan'>{reportItem.week ? reportItem.week.timeSpan : ''}</span> <br /> <span className='currentMeasure'>{reportItem.week ? reportItem.week.currentWeekpart : ''}</span></td>
+            <td className={this.dynamicColumnData.showGroupsStores}> <span className='timeSpan'>{reportItem.groupId ? reportItem.groupId.value : ''}</span><br /><span className='currentMeasure'>{reportItem.groupId ? ((t[language][reportItem.groupId.timeSpan])?(t[language][reportItem.groupId.timeSpan]):reportItem.groupId.timeSpan) : ''}</span></td>
+            <td className={this.dynamicColumnData.showGroupsStores}> <a href='#' className='store-name-number' onClick={(e) => { e.preventDefault(); this.props.handleDrillDown(reportItem) }}>{reportItem.store ? ((t[language][reportItem.store.name])?(t[language][reportItem.store.name]):reportItem.store.name) : ''} </a></td>
+            <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayColumn} onClick={() => this.props.handleDrillDown(reportItem)}><span className='timeSpan'>{reportItem.day ? ((t[language][reportItem.day.timeSpan])?(t[language][reportItem.day.timeSpan]):reportItem.day.timeSpan): ''}</span><br /><span className='currentMeasure'>{reportItem.day ? reportItem.day.currentDaypart : ''}</span></td>
+            <td className={'timeMeasureColumn ' + this.dynamicColumnData.showDayPartColumn} onClick={() => this.props.handleDrillDown(reportItem)}><span className='timeSpan'>{reportItem.daypart ? reportItem.daypart.timeSpan : ''}</span><br /><span className='currentMeasure'>{reportItem.daypart ? ((t[language][reportItem.daypart.currentDaypart])?(t[language][reportItem.daypart.currentDaypart]):reportItem.daypart.currentDaypart): ''}</span></td>
+            <td className={'timeMeasureColumn ' + this.dynamicColumnData.showWeekColumn} onClick={() => this.props.handleDrillDown(reportItem)}><span className='timeSpan'>{reportItem.week ? reportItem.week.timeSpan : ''}</span> <br /> <span className='currentMeasure'>{reportItem.week ? ((t[language][reportItem.week.currentWeekpart])?(t[language][reportItem.week.currentWeekpart]):reportItem.week.currentWeekpart) : ''}</span></td>
             <td style={menuStyle} className={(reportItem.menu.value === "N/A" ? "background-NA" : "")}>{reportItem.menu.value}</td>
             <td style={greetStyle} className={(reportItem.greet.value === "N/A" ? "background-NA" : "")}>{reportItem.greet.value}</td>
             <td style={serviceStyle} className={(reportItem.service.value === "N/A" ? "background-NA" : "")}>{reportItem.service.value}</td>

@@ -55,8 +55,6 @@ export default class GoalStatisticsDataComponent extends Component {
   }
 
   displayGoalStatisticsRowData(goalRowData) {
-      console.log(JSON.stringify(this.props.goalData));
-      //let goalRowData = this.state.goalData;
       if (goalRowData) {
       return goalRowData.map((goalItem) => {
       let color = '#ffffff'
@@ -101,7 +99,6 @@ getStatisticsRow(goalItem,type,title,color,fontcolor){
 
   render () {
       let goalData = this.props.goalData
-      console.log(JSON.stringify(goalData));
       return (<div>{this.displayGoalStatisticsData(goalData)}</div>)
   }
 }

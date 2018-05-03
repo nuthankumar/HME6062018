@@ -369,6 +369,7 @@ export default class SummaryReport extends Component {
             this.getPageDetails(curPage)
         } else {
             this.state.reportData.disablePrevButton = true
+
             this.state.reportData.disableNextButton = false
         }
         this.setState(this.state)
@@ -454,7 +455,7 @@ export default class SummaryReport extends Component {
    // let { showLoader } = this.state;
     let language = this.state.currentLanguage
     // let reportData = this.state.reportData.data
-    return (<section>
+    return (<section className="summaryReportsSection">
             <Loader showLoader={this.state.showLoader} />
             <div className={this.state.showLoader ? 'hide' : 'show'}>
               <section className='report-summary-page'>

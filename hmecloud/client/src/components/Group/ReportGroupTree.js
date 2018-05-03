@@ -35,14 +35,11 @@ export default class ReportGroupHierarchy extends React.Component {
     }
 
     onExpand(expandedKeys) {
-        console.log('onExpand', expandedKeys, arguments);
     }
     onSelect(selectedKeys, info) {
-        console.log('selected', selectedKeys, info);
         this.selKey = info.node.props.eventKey;
     }
     onCheck(checkedKeys, info) {
-        console.log('onCheck', checkedKeys, info);
     }
 
     loopData(data, callback) {

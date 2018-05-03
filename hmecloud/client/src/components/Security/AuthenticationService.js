@@ -27,7 +27,6 @@ export default class AuthenticationService {
       var encodedString = jwt.sign({ username: username, password: password, data: data }, 'super', {
         expiresIn: 5 // expires in 24 hours
       })
-      console.log(encodedString)
       this.setToken(encodedString)
       // encodedString= crypto.createCipher("aes-256-ctr",'super').update(token,"utf-8","hex");
       encodedString = btoa(encodedString)
@@ -161,7 +160,6 @@ export default class AuthenticationService {
     /*getLoggedInProfile() {
         // Using jwt-decode npm package to decode the token
 
-        console.log(decode(localStorage.getItem('id_token')))
         return decode(localStorage.getItem('id_token'))
     }*/
     isLoggedIn() {
@@ -180,7 +178,6 @@ export default class AuthenticationService {
     }
     decodeToken(token) {
         if (token) {
-            // console.log(decode(token))
             return decode(token)
         } else {
             return {};

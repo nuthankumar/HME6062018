@@ -12,7 +12,6 @@ class Api {
   }
   /* Method for POST API calls */
   postData(url, data, callback) {
-    console.log('data: ', data)
     // let token = UserContext.getToken()
     fetch(url, {
       method: 'POST',
@@ -81,10 +80,8 @@ class Api {
   //       'Authorization': 'Bearer ' + token
   //     }
   //   }).then(result => {
-  //     console.log('result: ', result)
   //     return result.json()
   //   }).then(data =>{
-  //     console.log('data: ', data)
   //     cb(data)
   //   })
   // }

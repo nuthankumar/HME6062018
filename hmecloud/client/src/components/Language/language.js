@@ -759,8 +759,12 @@ const language = [
     'userupdatedSuccess': 'User details updated successfully',
     'userupdateFailure': 'User details updation failed',
     'userdeleteSuccess': 'User deleted successfully',
-    'userDeleteFailed': 'User deletion failed'
-
+    'userDeleteFailed': 'User deletion failed',
+    'W-Avg':'W-Avg',
+    'Total Day':'Total Day',
+    'Total Daypart':'Total Daypart',
+    'Total Week':'Total Week',
+    'SubTotal':'SubTotal'
 
   },
 
@@ -1528,7 +1532,12 @@ const language = [
     'userupdatedSuccess': "Détails de l'utilisateur mis à jour",
     'userupdateFailure': 'La mise à jour des détails utilisateur a échoué',
     'userdeleteSuccess': 'Utilisateur supprimé avec succès',
-    'userDeleteFailed': "La suppression de l'utilisateur a échoué"
+    'userDeleteFailed': "La suppression de l'utilisateur a échoué",
+    'W-Avg':'W-Avg',
+    'Total Day':'Total Jour',
+    'Total Daypart':'Total Daypart',
+    'Total Week':'Total de la semaine',
+    'SubTotal':'Sous total'
   }
 ]
 export default language

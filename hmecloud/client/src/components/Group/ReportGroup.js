@@ -84,7 +84,6 @@ export default class ReportGroup extends React.Component {
     this.state.editGroup = this.props.history.location.state.editGroup
     this.state.groupId = this.props.history.location.state.groupId
     this.setState(this.state)
-    console.log(this.state.assigned)
     if (this.props.history.location.state.editGroup) {
         let url = Config.apiBaseUrl + CommonConstants.apiUrls.editGroupDetails + '?groupId=' + this.state.groupId
         this.api.getData(url,data => {

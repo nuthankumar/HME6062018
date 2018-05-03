@@ -200,12 +200,6 @@ export default class HmeHeader extends React.Component {
         window.location.href = url;
     }
 
-
-    redirectUrl(url) {
-        console.log(url)
-    }
-
-
     handleClickOutside(event) {
         if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
             this.setState({ settingsDropdown: false })

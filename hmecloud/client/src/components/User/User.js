@@ -88,8 +88,6 @@ class User extends Component {
         }
         this.api.getData(url, data => {
             this.state.roles = data.data
-
-            console.log(data.data);
             //   this.state.userRole = _.pluck(_.where(this.state.roles, { 'Role_IsDefault': 1 }), 'Role_UID')[0]
             this.setState(this.state)
         })
@@ -106,7 +104,6 @@ class User extends Component {
         }
         this.api.getData(url, data => {
             this.state.treeData = data.data
-            console.log(this.state.treeData);
             this.setState(this.state)
         })
     }
@@ -117,8 +114,7 @@ class User extends Component {
         let deviceUIds = _.pluck(_.where(_.pluck(node.checkedNodes, "props"), { type: "store" }), "value");
         this.state.deviceUIds = deviceUIds;
         this.setState(this.state);
-        console.log(this.state)
-    }
+     }
 
     renderRemoveButton() {
 
@@ -292,7 +288,6 @@ class User extends Component {
             let roleOptions = roles.map(function (role, index) {
                 //                return (<option key={index} value={role.Role_UID} selected={!this.state.isEdit ? (role.Role_IsDefault == 1 ? true : false) : (role.Role_UID == this.state.userRole ? true : false)} >{role.Role_Name}</option>)
 
-                console.log(role);
                 if (role.Role_IsDefault == 1) {
                     this.state.userRole = role.Role_UID;
                     this.setState(this.state);
@@ -342,7 +337,6 @@ class User extends Component {
     selectAll(e) {
 
         if (!this.state.selectAll) {
-            console.log(_.pluck(this.state.treeData, "Id").map(String));
             this.setState({
                 defaultCheckedKeys: _.pluck(this.state.treeData, "Id").map(String),
                 stores: this.findMatchedClassName(this.state.treeData, item => {
@@ -499,7 +493,6 @@ class User extends Component {
                 "storeIds": this.state.stores ? this.state.stores : [],
                 "createdDateTime": moment().format("YYYY-MM-DD HH:mm:ss")
             }]
-            console.log(User[0])
             let url = Config.apiBaseUrl + CommonConstants.apiUrls.createUser
             this.api.postData(url, User[0], data => {
 

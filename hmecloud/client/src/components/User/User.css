@@ -9,10 +9,12 @@
 }
 .editUser .fleft {
     float: left;
+    max-width:50% !important;
 }
 
 .editUser .fright {
     float: right;
+    max-width:50% !important;
 }
 
 .editUser .remove_button {

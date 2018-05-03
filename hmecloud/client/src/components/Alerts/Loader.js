@@ -18,7 +18,6 @@ export default class Loader extends React.Component {
     render() {
         const language = this.state.currentLanguage;
         const { showLoader } = this.props;
-        console.log(showLoader);
         return (
             <section className={"loaderSection text-center " + (showLoader ? 'show' : 'hidden')}>
                 <h3 className="loaderTxt">{t[language].ReportsLoadingPleaseWait}</h3>
