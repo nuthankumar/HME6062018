@@ -17,15 +17,7 @@ class RawCarReport extends Component {
       showLoader: false,
       rawData: false,
       pageHeading: 'Raw Car Data Report',
-      displayData: {
-        store: 'McDonalds 202000',
-        description: 'Description of the Store',
-        startTime: '2018-03-15',
-        stopTime: '2018-03-15',
-        printDate: '2018-04-02',
-        printTime: '2:59 AM',
-        dayPart: 'DP OPEN-11:59'
-      }
+      displayData: ''
     }
     this.api = new Api()
     this.displayRawCarHeader = this.displayRawCarHeader.bind(this)
@@ -51,11 +43,12 @@ class RawCarReport extends Component {
   }
 
   displayRecords () {
+    const language = this.state.currentLanguage
     return (<section className='rawcar-data-page'>
       <section className='rawcar-data-section'>
-        <div className='btn btn-danger emailCSV' onClick={this.emailAsCSV.bind(this)}> Email CSV version</div>
+        <div className='btn btn-danger emailCSV' onClick={this.emailAsCSV.bind(this)}> {t[language].ReportsEmailCSVVersion}</div>
         <div className='clear rawcar-table-details'>
-          <PageHeader pageHeading={this.state.pageHeading} />
+          <PageHeader pageHeading={t[language].ReportsRawDataReport} />
           {this.displayRawCarHeader()}
         </div>
         {this.displayRawCarContent()}
@@ -64,38 +57,39 @@ class RawCarReport extends Component {
   }
 
   displayRawCarHeader () {
+    const language = this.state.currentLanguage
     return (
       <table className='rawcar-header-labels clear'>
         <tbody>
           <tr>
             <th className='thin-header'>
-              <span>Store</span>:
+              <span>{t[language].store}</span>:
             </th>
             <td className='thin-header'>{this.state.displayData.storeName ? this.state.displayData.storeName :this.state.displayData.storeNumber }</td>
             <th>
-              <span>Start Time:</span>
+              <span>{t[language].ReportsStart}</span>
             </th>
             <td>
-              {this.state.displayData.startTime ? this.state.displayData.startTime : 'N/A'}&nbsp;
+              {this.state.displayData.startTime ? (this.state.displayData.startTime +' '+ t[language].OPEN) : 'N/A'}&nbsp;
             </td>
             <th>
-              <span>Print Date:</span>
+              <span>{t[language].ReportsPrintDate}</span>
             </th>
             <td> {this.state.displayData.printDate ? this.state.displayData.printDate : 'N/A'} </td>
           </tr>
           <tr>
             <th>
-              <span>Description:</span>
+              <span>{t[language].Description}</span>
             </th>
             <td>{this.state.displayData.storeDescription ? this.state.displayData.storeDescription : 'N/A'}</td>
             <th>
-              <span>Stop Time:</span>
+              <span>{t[language].ReportsStop}</span>
             </th>
             <td>
-              {this.state.displayData.stopTime ? this.state.displayData.stopTime : 'N/A' }&nbsp;
+              {this.state.displayData.stopTime ? (this.state.displayData.stopTime +' '+ t[language].CLOSE) : 'N/A' }&nbsp;
             </td>
             <th>
-              <span>Print Time: </span>
+              <span>{t[language].ReportsPrintTime} </span>
             </th>
             <td>{this.state.displayData.printTime ? this.state.displayData.printTime : 'N/A' }</td>
           </tr>
@@ -105,7 +99,7 @@ class RawCarReport extends Component {
   }
 
   displayRawCarContent () {
-    let language = this.state.currentLanguage
+    const language = this.state.currentLanguage
     if (this.state.displayData.key === 'ReportsNoRecordsFound' && this.state.displayData.key !== undefined) {
       return (<h3 className='rawcar-no-data'><span >{t[language][this.state.displayData.key]}</span></h3>)
     } else {
@@ -116,23 +110,23 @@ class RawCarReport extends Component {
         <table className='display-records table-layout table-layoutRawCar'>
           <tbody>
             <tr>
-              <th>Departure Time</th>
-              <th>Event Name</th>
-              <th>Cars In Queue</th>
+              <th>{t[language].ReportsDepartureTime}</th>
+              <th>{t[language].ReportsEventName}</th>
+              <th>{t[language].ReportsCarsinQueue}</th>
               <th>
-                <span>Menu</span>
+                <span>{t[language].MenuBoard}</span>
               </th>
               <th>
-                <span>Greet</span>
+                <span>{t[language].Greet}</span>
               </th>
               <th>
-                <span>Service</span>
+                <span>{t[language].Service}</span>
               </th>
               <th>
-                <span>Lane Queue</span>
+                <span>{t[language].LaneQueue}</span>
               </th>
               <th>
-                <span>Lane Total</span>
+                <span>{t[language].LaneTotal}</span>
               </th>
             </tr>
             {this.displayItems()}
