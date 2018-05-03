@@ -10,8 +10,8 @@ const prepareStoreDetails = (daysingleResult, storeData, input) => {
     daysingleResult.storeNumber = (storeData[0].Store_Number ? storeData[0].Store_Number : 'N/A')
     daysingleResult.storeDesc = (storeData[0].Brand_Name ? storeData[0].Brand_Name : 'N/A')
   }
-  daysingleResult.startTime = `${dateUtils.convertMMMdYYYY(input.ReportTemplate_From_Date)} OPEN`
-  daysingleResult.stopTime = `${dateUtils.convertMMMdYYYY(input.ReportTemplate_To_Date)} CLOSE`
+  daysingleResult.startTime = `${dateUtils.convertMMMdYYYY(input.ReportTemplate_From_Date)}`
+  daysingleResult.stopTime = `${dateUtils.convertMMMdYYYY(input.ReportTemplate_To_Date)}`
   daysingleResult.printDate = dateUtils.convertMMMdYYYY(dateUtils.currentDate())
   daysingleResult.printTime = dateUtils.currentTime()
   daysingleResult.timeMeasure = input.ReportTemplate_Time_Measure
