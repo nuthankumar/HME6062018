@@ -85,7 +85,7 @@ export default class SummaryReport extends Component {
                           <span>{t[language].ReportsStart}</span>
                         </th>
                         <td>
-                          {this.state.reportData.response.startTime ? this.state.reportData.response.startTime + t[language].OPEN : 'N/A'}&nbsp;
+                          {this.state.reportData.response.startTime ? this.state.reportData.response.startTime +' '+ t[language].OPEN : 'N/A'}&nbsp;
                         </td>
                         <th>
                           <span>{t[language].ReportsPrintDate}</span>
@@ -101,7 +101,7 @@ export default class SummaryReport extends Component {
                             <span>{t[language].ReportsStop}</span>
                         </th>
                         <td>
-                            {this.state.reportData.response.stopTime ? this.state.reportData.response.stopTime + t[language].CLOSE : 'N/A'}&nbsp;
+                            {this.state.reportData.response.stopTime ? this.state.reportData.response.stopTime +' '+ t[language].CLOSE : 'N/A'}&nbsp;
                         </td>
                         <th>
                           <span>{t[language].ReportsPrintTime}</span>
