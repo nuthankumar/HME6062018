@@ -139,8 +139,8 @@ function prepareStoreDetails (rawCarData, storeData, input) {
   rawCarData.storeName = storeData.Store_Name
   rawCarData.storeDescription = storeData.Brand_Name
   rawCarData.storeNumber = (storeData.Store_Number ? storeData.Store_Number : 'N/A')
-  rawCarData.startTime = `${dateUtils.convertMMMdYYYY(input.ReportTemplate_From_Date)} OPEN`
-  rawCarData.stopTime = `${dateUtils.convertMMMdYYYY(input.ReportTemplate_To_Date)} CLOSE`
+  rawCarData.startTime = `${dateUtils.convertMMMdYYYY(input.ReportTemplate_From_Date)}`
+  rawCarData.stopTime = `${dateUtils.convertMMMdYYYY(input.ReportTemplate_To_Date)}`
   rawCarData.printDate = dateUtils.convertMMMdYYYY(dateFormat(new Date(), 'isoDate'))
   rawCarData.printTime = dateFormat(new Date(), 'shortTime')
 
