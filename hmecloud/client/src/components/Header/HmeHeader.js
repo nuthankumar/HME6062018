@@ -70,8 +70,8 @@ export default class HmeHeader extends React.Component {
         if (this.authService.isAdmin() && this.authService.isLoggedIn()) {
             return (
                 <ul>
-                    <li><a className="headerMenu" href={url + "?token=" + token}>{t[language].navbarStores}</a></li>
-                    <li><a className="headerMenu" href={url + "?pg=SettingsStores&path=Main&token=" + token}>{t[language].navbarSystems}</a></li>
+                    <li><a className="headerMenu" href={url + "?token=" + token}>{t[language].navbarWelcome}</a></li>
+                    <li><a className="headerMenu" href={url + "?pg=SettingsStores&path=Main&token=" + token}>{t[language].navbarStores}</a></li>
                     <li><a className="headerMenu" href={url + "?pg=SettingsDevices&path=Main&token=" + token}>{t[language].navbarSystems}</a></li>
                     <li><a className="headerMenu active_tab" href={url + "?pg=pg=SettingsUsers&path=Main&token=" + token}>{t[language].navbarUsers}</a></li>
                     <li><a className="headerMenu" href={url + "?pg=SettingsAccounts&token=" + token}>{t[language].navbarAccounts}</a></li>
@@ -89,7 +89,7 @@ export default class HmeHeader extends React.Component {
                 <ul>
                     <li><a className="headerMenu" href={url + "?token=" + token}>{t[language].navbarWelcome}</a></li>
                     <li id="zoomLabel"><a className="headerMenu" href={url + "?pg=Dashboards&token=" + token}>{t[language].navbarDashboard}</a></li>
-                    <li id="zoomLabel"><Link className="active_tab headerMenu" to='/reports'>{t[language].navbarReports}</Link></li>
+                    <li id="zoomLabel"><Link className={"headerMenu "+ window.location.pathname ? (window.location.pathname.indexOf("/reports") !== -1 ? "active_tab" : '') : ''} to='/reports'>{t[language].navbarReports}</Link></li>
                     <li><a className="headerMenu" href={url + "?pg=SettingsAccount&token=" + token}>{t[language].navbarMyAccount}</a></li>
                     <li><a className="headerMenu" href={url + "?pg=SettingsStores&token=" + token}>{t[language].navbarSettings}</a></li>
                 </ul>

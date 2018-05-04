@@ -24,10 +24,10 @@ export default class SettingsHeader extends React.Component {
         const { language, token, url, uuid } = this.state;
         if (!this.authService.isAdmin() && this.authService.isLoggedIn() && this.state.showSettings) {
             return (
-                <div className="subMenu menuBar ">
+                <div className="subMenu menuBar">
                     <ul>
                         <li><a className="headerMenu" href={url + "?pg=SettingsStores&token=" + token}>{t[language].stores}</a></li>
-                        <li class="active_tab"><a className="headerMenu" href={url + "?pg=SettingsUsers&token=" + token}>{t[language].users}</a></li>
+                        <li><a className={"headerMenu " + window.location.pathname ? (window.location.pathname.indexOf("settings/users") !== -1 ? "active_tab" : '') : ''} href={url + "?pg=SettingsUsers&token=" + token}>{t[language].users}</a></li>
                         <li><a className="headerMenu" href={url + "?pg=SettingsRoles&token=" + token}>{t[language].roles}</a></li>
                     </ul>
                 </div>
