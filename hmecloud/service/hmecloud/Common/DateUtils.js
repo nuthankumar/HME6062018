@@ -32,7 +32,6 @@ const dayPartTime = (dayPartId, input) => {
     // } else {
     //   dayPartTime = messages.COMMON.CLOSEVALUE + '-' + moment(input.ReportTemplate_To_Time, 'hh:mm:ss a').format('hh:mm')
     // }
-
   } else {
     dayPartTime = messages.COMMON.DAYPARTCLOSETIME
   }
@@ -46,8 +45,7 @@ const fromTime = (dateVal, timeVal) => {
   } else {
     fromDateTime = dateVal + ' ' + defaultFromTime
   }
-
-  return moment(fromDateTime).format('YYYY-MM-DD HH:mm:ss')
+  return moment(fromDateTime, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:MM:SS')
 }
 
 const toTime = (dateVal, timeVal) => {
@@ -57,7 +55,7 @@ const toTime = (dateVal, timeVal) => {
   } else {
     toDateTime = dateVal + ' ' + defaultEndTime
   }
-  return moment(toDateTime).format('YYYY-MM-DD HH:mm:ss')
+  return moment(toDateTime, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')
 }
 
 const currentDate = () => {
