@@ -25,9 +25,9 @@ export default class SettingsHeader extends React.Component {
         if (!this.authService.isAdmin() && this.authService.isLoggedIn() && this.state.showSettings) {
             return (
                 <div className="subMenu menuBar">
-                    <ul>
-                        <li><a className="headerMenu" href={url + "?pg=SettingsStores&token=" + token}>{t[language].stores}</a></li>
-                        <li><a className={"headerMenu " + window.location.pathname ? (window.location.pathname.indexOf("/settings/users") !== -1 ? "active_tab" : '') : ''} href={url + "?pg=SettingsUsers&token=" + token}>{t[language].users}</a></li>
+                    <ul className="subHeaders">
+                        <li><a className={"headerMenu " + (window.location.pathname ? (window.location.pathname.indexOf("/settings/stores") !== -1 ? "active_tab_sub" : '') : '')} href={url + "?pg=SettingsStores&token=" + token}>{t[language].stores}</a></li>
+                        <li><a className={"headerMenu " + (window.location.pathname ? (window.location.pathname.indexOf("/settings/users") !== -1 ? "active_tab_sub" : '') : '')} href={url + "?pg=SettingsUsers&token=" + token}>{t[language].users}</a></li>
                         <li><a className="headerMenu" href={url + "?pg=SettingsRoles&token=" + token}>{t[language].roles}</a></li>
                     </ul>
                 </div>

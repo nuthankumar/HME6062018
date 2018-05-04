@@ -65,10 +65,38 @@
 .headerMenu{
    color: #9be0ea
 }
-a.active_tab.headerMenu {
-color:white;
+a.headerMenu.active_tab {
+color:white !important;
 font-weight:bold;
 }
+
+
+
+    a.headerMenu:hover{
+        color: #9be0ea ;
+    }
+    a.headerMenu.active_tab:hover{
+        color: white !important;
+    }
+    
+
+
+a.headerMenu.active_tab_sub {
+   
+            color: #06b1cb !important;;
+        font-size: inherit;
+
+
+            font-weight:bold;
+    }
+
+    ul.subHeaders li a.headerMenu:hover{
+        color: #06b1cb !important;
+    }
+
+
+
+
 .subMenu li a {
     color: #06b1cb;
 }
