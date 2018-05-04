@@ -30,7 +30,7 @@ class Login extends Component {
       let isLoggedIn = this.authService.isLoggedIn()
 
     if (isLoggedIn) {
-      this.props.history.push("/grouphierarchy");
+      this.props.history.push("/settings/stores/grouphierarchy");
     }
 
   }
@@ -101,7 +101,7 @@ class Login extends Component {
 
       //to-do: verify if required , move to auth-service
       if (this.authService.isLoggedIn()) {
-        this.props.history.push("/grouphierarchy");
+        this.props.history.push("/settings/stores/grouphierarchy");
       }
     }, error => {
       //this.state.errorMessage = "ERROR";

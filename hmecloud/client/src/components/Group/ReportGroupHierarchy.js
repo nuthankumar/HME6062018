@@ -61,14 +61,14 @@ export default class ReportGroupHierarchy extends React.Component {
   }
 
   addNewGroup () {
-    this.props.history.push('/groups', this.state)
+    this.props.history.push('/settings/stores/groups', this.state)
   }
   onCheck (value, node) {
     this.state.editGroup = true
     this.state.groupId = node.node.props.eventKey
     this.setState(this.state)
     if(node.node.props.type === 'group'){
-      this.props.history.push('/groups', this.state)
+      this.props.history.push('/settings/stores/groups', this.state)
     }
   }
   render () {
