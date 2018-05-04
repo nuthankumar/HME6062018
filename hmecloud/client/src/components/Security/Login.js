@@ -101,7 +101,12 @@ class Login extends Component {
 
       //to-do: verify if required , move to auth-service
       if (this.authService.isLoggedIn()) {
-        this.props.history.push("/settings/stores/grouphierarchy");
+        if(this.authService.isAdmin()){
+          window.location.href = Config.adminColdFusionUrl +'?token='+this.authService.getToken()
+        }
+        else{
+          window.location.href = Config.coldFusionUrl +'?token='+this.authService.getToken()
+        }
       }
     }, error => {
       //this.state.errorMessage = "ERROR";
