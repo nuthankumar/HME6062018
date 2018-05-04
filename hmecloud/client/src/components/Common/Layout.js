@@ -178,8 +178,7 @@ export default class Layout extends React.Component {
                 </Modal>
                 <HmeHeader />
                 <AdminSubHeader />
-                <div>
-                    <SettingsHeader /></div>
+                <div><SettingsHeader /></div>
                 <div className="hmeBody ">
                     {children}
                 </div>

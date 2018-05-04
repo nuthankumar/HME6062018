@@ -16,10 +16,12 @@ export default class SettingsHeader extends React.Component {
             token: this.authService.getToken()
         }
         this.state.url = this.authService.getColdFusionAppUrl(this.authService.isAdmin())
+        let path = window.location.pathname;
+        this.state.showSettings  =  path.includes("/settings") ? true : false
     }
     render() {
         const { language, token, url, uuid } = this.state;
-        if (!this.authService.isAdmin() && this.authService.isLoggedIn()) {
+        if (!this.authService.isAdmin() && this.authService.isLoggedIn()&& this.state.showSettings) {
             return (
                 <div className="subMenu menuBar ">
                     <ul>
