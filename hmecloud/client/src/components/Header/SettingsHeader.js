@@ -18,7 +18,7 @@ export default class SettingsHeader extends React.Component {
         this.state.url = this.authService.getColdFusionAppUrl(this.authService.isAdmin())
         let path = window.location.pathname;
 
-        this.state.showSettings  = path ? (path.includes("/settings") ? true : false): false;
+        this.state.showSettings  = path ? (path.indexOf("/settings") !== -1? true : false): false;
     }
     render() {
         const { language, token, url, uuid } = this.state;
@@ -27,7 +27,7 @@ export default class SettingsHeader extends React.Component {
                 <div className="subMenu menuBar">
                     <ul>
                         <li><a className="headerMenu" href={url + "?pg=SettingsStores&token=" + token}>{t[language].stores}</a></li>
-                        <li><a className={"headerMenu " + window.location.pathname ? (window.location.pathname.indexOf("settings/users") !== -1 ? "active_tab" : '') : ''} href={url + "?pg=SettingsUsers&token=" + token}>{t[language].users}</a></li>
+                        <li><a className={"headerMenu " + window.location.pathname ? (window.location.pathname.indexOf("/settings/users") !== -1 ? "active_tab" : '') : ''} href={url + "?pg=SettingsUsers&token=" + token}>{t[language].users}</a></li>
                         <li><a className="headerMenu" href={url + "?pg=SettingsRoles&token=" + token}>{t[language].roles}</a></li>
                     </ul>
                 </div>
