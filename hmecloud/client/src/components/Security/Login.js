@@ -30,7 +30,14 @@ class Login extends Component {
       let isLoggedIn = this.authService.isLoggedIn()
 
     if (isLoggedIn) {
-      this.props.history.push("/settings/stores/grouphierarchy");
+      //this.props.history.push("/settings/stores/grouphierarchy");
+
+        if(this.authService.isAdmin()){
+          window.location.href = Config.adminColdFusionUrl +'?token='+this.authService.getToken()
+        }
+        else{
+          window.location.href = Config.coldFusionUrl +'?token='+this.authService.getToken()
+        }
     }
 
   }
