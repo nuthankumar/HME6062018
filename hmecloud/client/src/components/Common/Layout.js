@@ -105,6 +105,17 @@ export default class Layout extends React.Component {
         if (!this.authService.isLoggedIn()) {
             this.authService.setAdmin(window.location.pathname == '/admin')
         }
+
+        // if(window.location.pathname.indexOf("/grouphierarchy") !== -1 ){
+        //     window.location.pathname =  "/settings/stores/grouphierarchy"
+
+        // }
+        // else if(window.location.pathname.indexOf("/groups") !== -1 ){
+        //     window.location.pathname =  "/settings/stores/groups"
+        // }
+        // else if(window.location.pathname.indexOf("/user") !== -1 ){
+        //     window.location.pathname =  "/settings/users/user"
+        // }
     }
 
     autoSignout() {
