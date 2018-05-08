@@ -16,15 +16,20 @@ import Message from './components/Alerts/Message'
 import './i18n'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { browserHistory } from 'react-dom';
-
-
+import { Provider } from 'react-redux';
+import StoreDetails from './containers/StoreDetails'
+import { createStore, applyMiddleware } from 'redux';
+import reducers from './reducers/index';
+import Layout from './components/Common/Layout'
+import Login from './components/Security/Login'
+const createStoreWithMiddlewaare = applyMiddleware()(createStore);
 
 // import { Router, Route } from 'react-router-dom'
 // import history from '../history';
-import Layout from './components/Common/Layout';
-import Login from './components/Security/Login'
 
-ReactDOM.render(<Router history={browserHistory}>
+
+ReactDOM.render( <Provider store={createStoreWithMiddlewaare(reducers)}>
+<Router history={browserHistory}>
     <div>
         <Route exact path="/" render={(props) => <Layout Params={props}><Route path='/' component={(Login)} /></Layout>} />
         <Route exact path="/admin" render={(props) => <Layout Params={props}><Route path='/admin' component={(Login)} /></Layout>} />
@@ -37,6 +42,7 @@ ReactDOM.render(<Router history={browserHistory}>
         <Route exact path="/settings/stores/grouphierarchy" render={(props) => <Layout Params={props}><Route path='/settings/stores/grouphierarchy' component={Authenticate(ReportGroupHierarchy)} /></Layout>} />        
         <Route exact path="/summaryreport/:r?" render={(props) => <Layout Params={props}><Route path='/summaryreport/:r?' component={Authenticate(SummaryReport)} /></Layout>} />       
         <Route exact path="/settings/users/user/:uuid?" render={(props) => <Layout Params={props}><Route path='/settings/users/user/:uuid?' component={Authenticate(User)} /></Layout>} />
+        <Route exact path="/storeDetails" render={(props) => <Layout Params={props}><Route path='/storeDetails' component={(StoreDetails)} /></Layout>} />  
     </div>
-</Router>, document.getElementById('root'))
+</Router></Provider>, document.getElementById('root'))
 registerServiceWorker()
