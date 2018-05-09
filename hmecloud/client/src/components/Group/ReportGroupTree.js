@@ -68,7 +68,7 @@ export default class ReportGroupHierarchy extends React.Component {
           <div>
           <Tree
               className="myCls"
-              showLine
+              showLine={true}
               checkable
               selectable={false}
               defaultExpandAll

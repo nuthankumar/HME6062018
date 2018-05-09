@@ -101,7 +101,7 @@ export default class ReportGroupHierarchy extends React.Component {
           <div className='col-xs-4'>
             <Tree
               className='hierarchy-tree'
-              showLine
+              showLine={true}
               selectable={false}
               checkable
               onExpand={this.onExpand}

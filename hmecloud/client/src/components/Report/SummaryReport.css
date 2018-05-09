@@ -737,3 +737,14 @@ tr.summary-row-data:nth-child(odd){
   margin-bottom: 17px;
   text-align: center;
 }
+
+
+
+
+/* .rc-tree.rc-tree-show-line li:not(:last-child) > ul, .rc-tree.rc-tree-show-line li:not(:last-child) > .rc-tree-switcher-noop, .rc-tree.rc-tree-show-line li:last-child > .rc-tree-switcher-noop {
+  background: auto !important;
+} */
+
+.rc-tree.rc-tree-show-line li:not(:last-child) > ul {
+  background: url(data:image/gif;base64,R0lGODlhCQACAIAAAMzMzP///yH5BAEAAAEALAAAAAAJAAIAAAIEjI9pUAA7) 0 0 repeat-y !important;
+}

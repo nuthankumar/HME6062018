@@ -105,19 +105,24 @@
   display : none !important;
 } */
 
-.rc-tree li.treeNode span.rc-tree-checkbox , li.treeNode .rc-tree-iconEle.rc-tree-icon__close, .rc-tree li.treeNode span.rc-tree-iconEle{
+ .rc-tree li.treeNode span.rc-tree-checkbox , li.treeNode .rc-tree-iconEle.rc-tree-icon__close, .rc-tree li.treeNode span.rc-tree-iconEle{
   display : none !important;
-}
+} 
+ /* .treeNode span.rc-tree-switcher{
 
-.treeNode span.rc-tree-switcher{
 
-
-  background-size: cover; /* for IE9+, Safari 4.1+, Chrome 3.0+, Firefox 3.6+ */
- -webkit-background-size: cover; /* for Safari 3.0 - 4.0 , Chrome 1.0 - 3.0 */
- -moz-background-size: cover; /* optional for Firefox 3.6 */
+  background-size: cover; 
+ -webkit-background-size: cover; 
+ -moz-background-size: cover; 
   width: 28px !important;
   height: 30px !important;
+}  */
+
+.grouphierarchy-tree .rc-tree li span.rc-tree-switcher {
+width:19px !important;
+height:19px !important;
 }
+
 .group-node span.rc-tree-title{
     text-decoration: underline;
     color: blue;
@@ -179,10 +184,10 @@
   background: url('../../images/downArrow.PNG') ;
   background-size: contain;
 }
-.rc-tree.rc-tree-show-line li:not(:last-child) > ul, 
+/* .rc-tree.rc-tree-show-line li:not(:last-child) > ul, 
 .rc-tree.rc-tree-show-line li:not(:last-child) > .rc-tree-switcher-noop,
 .rc-tree.rc-tree-show-line li:last-child > .rc-tree-switcher-noop
 {
   background: none;
-}
+} */
 
