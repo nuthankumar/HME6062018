@@ -956,7 +956,7 @@ class Report extends Component {
         }
     }
     if (this.state.saveAsTemplate) {
-      if (!this.state.templateName) {
+      if (!this.state.templateName || this.state.templateName.trim().length == 0) {
         this.state.errorMessage = t[language].pleaseneteratemplatename
         this.setState(this.state)
         isError = true;
