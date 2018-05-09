@@ -814,17 +814,17 @@ class Report extends Component {
     let isError = false;
     let template = [];
     let createTemplateData = []
-    this.openTime = moment(this.state.openTime).format("HH:mm a")
-    this.closeTime = moment(this.state.closeTime).format("HH:mm a")
+    this.openTime = moment(this.state.openTime).format("hh:mm a")
+    this.closeTime = moment(this.state.closeTime).format("hh:mm a")
     if(this.openTime === 'Invalid date'){
      this.openTime = ''
     }else{
-     this.openTime = moment(this.state.openTime).format("HH:mm a")
+     this.openTime = moment(this.state.openTime).format("hh:mm a")
     }
     if(this.closeTime === 'Invalid date'){
        this.closeTime = ''
     }else{
-      this.closeTime = moment(this.state.closeTime).format("HH:mm a")
+      this.closeTime = moment(this.state.closeTime).format("hh:mm a")
     }
     template.push({
       selectedList: this.state.selectedList,timeMeasure: this.state.timeMeasure,fromDate: this.state.fromDate,toDate: this.state.toDate,
@@ -1125,10 +1125,10 @@ class Report extends Component {
         this.api.postData(url, request, data => {
             if (data.status) {
                 this.state.errorMessage = ''
-                this.state.pdfEmailMessage = data.data
+                //this.state.pdfEmailMessage = data.data
                 this.setState(this.state)
                 this.setState({ showLoader: false })
-                this.props.history.push("/emailSent", this.state.pdfEmailMessage);
+                this.props.history.push("/emailSent", data.data);
             }
         }, error => {
             this.state.successMessage = ''
