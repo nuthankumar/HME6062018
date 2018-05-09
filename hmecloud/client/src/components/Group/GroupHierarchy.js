@@ -54,7 +54,7 @@ export default class GroupHierarchy extends React.Component {
             <Tree
                 className="myCls"
                 showIcon={false}
-                showLine
+                showLine= {true}
                 checkable
                 selectable={false}
                 defaultExpandAll

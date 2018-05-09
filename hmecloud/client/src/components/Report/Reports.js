@@ -219,7 +219,7 @@ class Report extends Component {
                   <Tree
                     className="myCls"
                     showIcon={false}
-                    showLine
+                    showLine= {true}
                     checkable
                     selectable={false}
                     defaultExpandAll

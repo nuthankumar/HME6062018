@@ -58,6 +58,7 @@ export default class Layout extends React.Component {
     prepareProfile() {
 
         const params = new URLSearchParams(this.props.Params.location.search);
+        console.log(this.props.Params.location.search);
         const contextToken = params.get('token') ? params.get('token') : null
         const admin = params.get('a') == 'true' ? true : false
         //const admin = params.get('atoken') ? true : false;
@@ -102,20 +103,22 @@ export default class Layout extends React.Component {
             this.authService.setUUID(uuid)
         }
 
+    console.log( window.location.search);
+
         if (!this.authService.isLoggedIn()) {
             this.authService.setAdmin(window.location.pathname == '/admin')
         }
 
-        // if(window.location.pathname.indexOf("/grouphierarchy") !== -1 ){
-        //     window.location.pathname =  "/settings/stores/grouphierarchy"
+        if(window.location.pathname == "/grouphierarchy" ){
+             window.location.href =  "/settings/stores/grouphierarchy"+this.props.Params.location.search
 
-        // }
-        // else if(window.location.pathname.indexOf("/groups") !== -1 ){
-        //     window.location.pathname =  "/settings/stores/groups"
-        // }
-        // else if(window.location.pathname.indexOf("/user") !== -1 ){
-        //     window.location.pathname =  "/settings/users/user"
-        // }
+         }
+         else if(window.location.pathname == "/groups"){
+             window.location.href =  "/settings/stores/groups"+this.props.Params.location.search
+         }
+         else if(window.location.pathname == "/user"){
+             window.location.href =  "/settings/users/user"+this.props.Params.location.search
+         }
     }
 
     autoSignout() {

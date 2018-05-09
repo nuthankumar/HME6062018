@@ -217,7 +217,7 @@ class User extends Component {
                                                     <Tree
                                                         className="myCls"
                                                         showIcon={false}
-                                                        showLine
+                                                        showLine={true}
                                                         checkable
                                                         selectable={false}
                                                         defaultSelectedKeys={this.state.defaultSelectedKeys}
