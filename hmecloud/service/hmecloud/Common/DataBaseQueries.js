@@ -45,16 +45,7 @@ const sqlQueries = {
                 ,@EndDateTime =:toDateTime
                 ,@CarDataRecordType_IDs=:ReportTemplate_Type
                 ,@ReportType =:ReportType
-                ,@LaneConfig_ID=:LaneConfig_ID`,
-    'weekReport': ` EXEC usp_HME_Cloud_Get_Report_By_Week_Details  @Device_IDs =:Device_IDs,
-                  @StoreStartDate =:StoreStartDate,
-                  @StoreEndDate =:StoreEndDate,
-                  @StartDateTime =:StartDateTime,
-                  @EndDateTime =:EndDateTime,
-                  @CarDataRecordType_ID =11,
-                  @ReportType =:ReportType,
-                  @LaneConfig_ID =:LaneConfig_ID,
-                  @UserUID = :UserUID`
+                ,@LaneConfig_ID=:LaneConfig_ID`
   },
   'users': {
     'createuser': `exec [dbo].[usp_InsertUser]
@@ -78,14 +69,14 @@ const sqlQueries = {
     'deleteuser': `EXEC [dbo].[usp_DeleteUser] @Uid =:id`,
 
     'updateuser': `EXEC [dbo]. [usp_UpdateUser]
-    @Uid =:Uid,
-    @IsActive =:IsActive,
-    @FirstName =:FirstName,
-    @LastName =:LastName,
-    @EmailAddress =:EmailAddress,
-	@UpdatedDTS =:UpdatedDTS,
-	@Stores	 =:Stores,
-	@UserRole =:UserRole`
+                    @Uid =:Uid,
+                    @IsActive =:IsActive,
+                    @FirstName =:FirstName,
+                    @LastName =:LastName,
+                    @EmailAddress =:EmailAddress,
+                    @UpdatedDTS =:UpdatedDTS,
+                    @Stores =:Stores,
+                    @UserRole =:UserRole`
   },
   ROLES: {
     userRoles: 'EXEC [dbo].[usp_GetRoles] @AccountId = :AccountId, @IsCorporate = null, @IsHidden =null, @UserUid=:userUid'
@@ -108,6 +99,56 @@ const sqlQueries = {
   },
   Role: {
     getRoles: '[dbo].[usp_GetRoles]'
+  },
+  Reports: {
+    getWeekReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Week_Details]',
+    getDayPartReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details]',
+    getDayReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Date_Details]'
+  },
+  DeviceIds: {
+    Parameters: {
+      Device_IDs: 'Device_IDs'
+    }
+  },
+  StartDate: {
+    Parameters: {
+      StoreStartDate: 'StoreStartDate'
+    }
+  },
+  EndDate: {
+    Parameters: {
+      StoreEndDate: 'StoreEndDate'
+    }
+  },
+  OpenTime: {
+    Parameters: {
+      InputStartDateTime: 'InputStartDateTime'
+    }
+  },
+  CloseTime: {
+    Parameters: {
+      InputEndDateTime: 'InputEndDateTime'
+    }
+  },
+  ReportType: {
+    Parameters: {
+      ReportType: 'ReportType'
+    }
+  },
+  Lane: {
+    Parameters: {
+      LaneConfig_ID: 'LaneConfig_ID'
+    }
+  },
+  PageNumber: {
+    Parameters: {
+      PageNumber: 'PageNumber'
+    }
+  },
+  UserUID: {
+    Parameters: {
+      UserUID: 'UserUID'
+    }
   }
 }
 

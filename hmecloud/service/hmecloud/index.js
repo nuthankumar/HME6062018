@@ -11,6 +11,7 @@ const bodyParser = require('body-parser')
 
 const groupRouter = require('./Router/GroupRouter')
 const reportsTemplate = require('./Router/TemplateRouter')
+const newReports = require('./Router/ReportsRouter')
 const summaryReport = require('./Router/StoreRouter')
 const userRouter = require('./Router/UserRouter')
 const roleRouter = require('./Router/RoleRouter')
@@ -52,6 +53,9 @@ app.use('/api/report', summaryReport)
 
 // Report Templates
 app.use('/api/reportTemplate', reportsTemplate)
+
+// Report Templates
+app.use('/api/newReports', newReports)
 
 // Users
 app.use('/api/user', userRouter)
