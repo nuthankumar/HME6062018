@@ -1181,6 +1181,7 @@ class Report extends Component {
   }
 
   renderInclude(e) {
+    const language = this.state.currentLanguage
     let include = this.state.include;
     let renderInclude;
     if (include) {
@@ -1188,7 +1189,7 @@ class Report extends Component {
         return (
           <span key={index}>
             <span className={index == 0 ? "hidden" : ""}>,</span>
-            {include == 1? "Longest Time": include == 2 ? "System Statistics" : ""}
+            {include == 1? t[language].longesttimes: include == 2 ? t[language].systemstats : ""}
           </span>
         );
       });
