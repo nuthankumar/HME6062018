@@ -134,9 +134,13 @@ export default class Layout extends React.Component {
 
     openModal() {
 
-        if (this.authService.isMasquerade()) {
+        // if (this.authService.isMasquerade()) {
+        //     this.setState({ modalIsOpen: true });
+        // };
+
+       // if (this.authService.isMasquerade()) {
             this.setState({ modalIsOpen: true });
-        };
+       // };
     }
 
     closeModal() {
@@ -145,7 +149,18 @@ export default class Layout extends React.Component {
     }
 
     signOutInterval() {
-        if (this.authService.isLoggedIn() && this.authService.isMasquerade()) {
+        // if (this.authService.isLoggedIn() && this.authService.isMasquerade()) {
+        //     let autoInterval = setInterval(function () {
+        //         if (!this.state.modalIsOpen) {
+        //             clearInterval(autoInterval);
+        //             this.openModal()
+        //             this.autoSignout();
+        //         }
+        //     }.bind(this), 300000)
+        // }
+
+
+        if (this.authService.isLoggedIn()) {
             let autoInterval = setInterval(function () {
                 if (!this.state.modalIsOpen) {
                     clearInterval(autoInterval);

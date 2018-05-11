@@ -748,3 +748,21 @@ tr.summary-row-data:nth-child(odd){
 .rc-tree.rc-tree-show-line li:not(:last-child) > ul {
   background: url(data:image/gif;base64,R0lGODlhCQACAIAAAMzMzP///yH5BAEAAAEALAAAAAAJAAIAAAIEjI9pUAA7) 0 0 repeat-y !important;
 }
+
+
+.rc-tree ul li:nth-child(even) {
+  background-color:#f5f5f5;
+} 
+
+.rc-tree li:nth-child(even) {
+  background-color:#f5f5f5 !important;
+} 
+
+
+.rc-tree ul ul li:nth-child(even) {
+  background-color:#f5f5f5;
+} 
+
+.rc-tree-child-tree  li:nth-child(even) {
+  background-color:#f5f5f5;
+}
