@@ -252,6 +252,8 @@ export default class SummaryReport extends Component {
                     request.fromDate = storeId.week.timeSpan.split("-")[0]
                     request.toDate = storeId.week.timeSpan.split("-")[1]
                  }
+                 request.fromDate = moment(request.fromDate).format('YYYY-MM-DD')
+                 request.toDate =  moment(request.toDate).format('YYYY-MM-DD')
                 let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
                 this.api.postData(url, request, data => {
                     request.deviceIds = data.deviceIds
@@ -276,6 +278,8 @@ export default class SummaryReport extends Component {
                     // let monthDay = storeId.daypart.timeSpan.split("-")[0]
                     // request.fromDate = year.concat('/'+monthDay)
                     // request.toDate = year.concat('/'+monthDay)
+                    request.fromDate = moment(request.fromDate).format('YYYY-MM-DD')
+                    request.toDate =  moment(request.toDate).format('YYYY-MM-DD')
                     request.openTime = storeId.daypart.currentDaypart.split("-")[0]
                     request.closeTime = storeId.daypart.currentDaypart.split("-")[1]
                 }

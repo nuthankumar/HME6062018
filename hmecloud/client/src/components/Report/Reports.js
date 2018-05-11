@@ -1052,8 +1052,8 @@ class Report extends Component {
     rawCarData.push(
         {
             "timeMeasure": parseInt(this.state.timeMeasure),
-            "fromDate": this.state.fromDate,
-            "toDate": this.state.toDate,
+            "fromDate": moment(this.state.fromDate).format('YYYY-MM-DD'),
+            "toDate": moment(this.state.toDate).format('YYYY-MM-DD'),
             "openTime": this.state.openTime,
             "closeTime": this.state.closeTime,
             "open": this.state.open,
@@ -1110,7 +1110,6 @@ class Report extends Component {
   //    "recordPerPage": 4,
       "pageNumber": 1
     }
-
     if(request.advancedOption){
       let url;
       let type = 'PDF'
