@@ -54,6 +54,7 @@ Device.prototype.getSingleStoreValues = function () {
     let startDate
     let endDate
     let dayPartValue
+    let newValue
     _.forEach(storeDetails[index], function (value, key) {
       if (key === 'WeekStartDate') {
         reportInfo['WeekStartDate'] = {'value': ` ${value}`}
@@ -120,9 +121,17 @@ Device.prototype.getSingleStoreValues = function () {
       } else if (key === 'WeekIndex') {
         reportInfo['index'] = {'value': ` ${value}`}
       } else if (timeFormat === 2) {
-        reportInfo[`${key}`] = {'value': `${dateUtils.convertSecondsToMinutes(parseInt(value), timeFormat)}`, 'color': `${getColor(key, value)}`}
+        newValue = value
+        if (newValue === 0 || newValue === null) {
+          newValue = 'N/A'
+        }
+        reportInfo[`${key}`] = {'value': `${dateUtils.convertSecondsToMinutes(parseInt(newValue), timeFormat)} ` , 'color': `${getColor(key, newValue)}`}
       } else if (timeFormat === 1) {
-        reportInfo[`${key}`] = {'value': `${value}`, 'color': `${getColor(key, value)}`}
+        newValue = value
+        if (newValue === 0 || newValue === null) {
+          newValue = 'N/A'
+        }
+        reportInfo[`${key}`] = {'value': `${newValue}`, 'color': `${getColor(key, newValue)}`}
       }
     })
     deviceInfo.push(reportInfo)
@@ -204,14 +213,17 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
 }
 Device.prototype.getSystemStatistics = function (DeviceSystemInfo, DeviceLaneInfo) {
   let displayData = {}
-  displayData.Lane = (_.isNull(DeviceLaneInfo[0].Lane)) ? 0 : DeviceLaneInfo[0].Lane
-  displayData.AverageCarsInLane = (_.isNull(DeviceLaneInfo[0].AvgCarsInLane)) ? 0 : DeviceLaneInfo[0].AvgCarsInLane
-  displayData.TotalPullouts = (_.isNull(DeviceLaneInfo[0].Pullouts)) ? 0 : _.get(DeviceLaneInfo, '0.Pullouts', '0')
-  displayData.TotalPullins = (_.isNull(DeviceLaneInfo[0].Pullins)) ? 0 : _.get(DeviceLaneInfo, '0.Pullins', '0')
-  displayData.DeleteOverMaximum = (_.isNull(DeviceLaneInfo[0].DeleteOverMax)) ? 0 : _.get(DeviceLaneInfo, '0.DeleteOverMax', '0')
-  displayData.PowerFails = (_.isNull(DeviceLaneInfo[0].PowerFails)) ? 0 : _.get(DeviceSystemInfo, '0.PowerFails', '0')
-  displayData.SystemResets = (_.isNull(DeviceLaneInfo[0].SystemResets)) ? 0 : _.get(DeviceSystemInfo, '0.SystemResets', '0')
-  displayData.VBDResets = (_.isNull(DeviceLaneInfo[0].VDBResets)) ? 0 : _.get(DeviceSystemInfo, '0.VDBResets', '0')
+  if (DeviceLaneInfo.length > 0 && DeviceLaneInfo.length > 0) {
+    displayData.Lane = (_.isNull(DeviceLaneInfo[0].Lane)) ? 0 : DeviceLaneInfo[0].Lane
+    displayData.AverageCarsInLane = (_.isNull(DeviceLaneInfo[0].AvgCarsInLane)) ? 0 : DeviceLaneInfo[0].AvgCarsInLane
+    displayData.TotalPullouts = (_.isNull(DeviceLaneInfo[0].Pullouts)) ? 0 : _.get(DeviceLaneInfo, '0.Pullouts', '0')
+    displayData.TotalPullins = (_.isNull(DeviceLaneInfo[0].Pullins)) ? 0 : _.get(DeviceLaneInfo, '0.Pullins', '0')
+    displayData.DeleteOverMaximum = (_.isNull(DeviceLaneInfo[0].DeleteOverMax)) ? 0 : _.get(DeviceLaneInfo, '0.DeleteOverMax', '0')
+    displayData.PowerFails = (_.isNull(DeviceLaneInfo[0].PowerFails)) ? 0 : _.get(DeviceSystemInfo, '0.PowerFails', '0')
+    displayData.SystemResets = (_.isNull(DeviceLaneInfo[0].SystemResets)) ? 0 : _.get(DeviceSystemInfo, '0.SystemResets', '0')
+    displayData.VBDResets = (_.isNull(DeviceLaneInfo[0].VDBResets)) ? 0 : _.get(DeviceSystemInfo, '0.VDBResets', '0')
+  }
+
   return displayData
 }
 module.exports = Device

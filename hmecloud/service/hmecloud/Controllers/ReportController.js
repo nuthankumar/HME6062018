@@ -56,10 +56,14 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
     // goal
     let deviceGoalInfo = reportResult.data[5]
     const getLastRecord = _.last(reportResult.data[0])
-    let totalCars = getLastRecord['Total_Car']
+    let totalCars
+    if (getLastRecord !== undefined) {
+      totalCars = getLastRecord['Total_Car']
+    } else {
+      totalCars = 0
+    }
     let goalHeader
     let deviceHeaders
-
     reportFilter === 'daypart' ? goalHeader = reportResult.data[9] : goalHeader = reportResult.data[8]
     reportFilter === 'daypart' ? deviceHeaders = reportResult.data[8] : deviceHeaders = reportResult.data[9]
     let goalStatistics = deviceRecords.getGoalStatistics(goalSetting, deviceGoalInfo, totalCars, goalHeader, deviceHeaders)
@@ -89,6 +93,8 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
         eventHeaders.push('Week')
       }
       deviceValues.eventList = eventHeaders
+    } else {
+      deviceValues.eventList = []
     }
     deviceValues.totalRecordCount = totalPages
     return deviceValues
