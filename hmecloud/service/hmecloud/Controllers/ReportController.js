@@ -3,7 +3,8 @@ const _ = require('lodash')
 const ReportValidator = require('../Validators/ReportValidator')
 const ReportsPagination = require('../Common/ReportPagination')
 const repository = require('../Repository/ReportRepository')
-const GetDeviceDetails = require('../Common/SingleStoreReport')
+const GetDeviceSingleStore = require('../Common/SingleStoreReport')
+const GetDeviceMultipleStores = require('../Common/MultipleStoreReports')
 /**
  * The method can be used to execute handel errors and return to routers.
  * @param  {input} message input from custom messages.
@@ -41,7 +42,6 @@ reports.prototype.pagination = function (isReportName) {
   return totalPages.noOfPages()
 }
 // get devices values
-// result, colors, goalSettings, format
 reports.prototype.deviceDataPreparation = function (reportResult, filter, totalPages) {
   let colors
   let goalSetting
@@ -50,7 +50,7 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
   goalSetting = reportResult.data[2]
   let deviceValues = {}
   if (this.isSingleStore) {
-    const deviceRecords = new GetDeviceDetails(reportResult.data[0], colors, goalSetting, this.request, reportFilter)
+    const deviceRecords = new GetDeviceSingleStore(reportResult.data[0], colors, goalSetting, this.request, reportFilter)
     deviceValues = deviceRecords.getStoreInfo(this.request, reportFilter)
     deviceValues.timeMeasureType = deviceRecords.getSingleStoreValues()
     // goal
@@ -97,6 +97,15 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
       deviceValues.eventList = []
     }
     deviceValues.totalRecordCount = totalPages
+    return deviceValues
+  } else {
+    // MutipleReport
+    deviceValues.deviceIds = this.request.body.deviceIds
+    deviceValues.totalRecordCount = totalPages
+    if (reportResult.data[0] || reportResult.data[0].length > 0) {
+      let getDevices = new GetDeviceMultipleStores(reportResult.data[0], colors, goalSetting, this.request, reportFilter)
+      deviceValues.timeMeasureType = getDevices.multipleStore()
+    }
     return deviceValues
   }
 }

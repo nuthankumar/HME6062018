@@ -125,7 +125,7 @@ Device.prototype.getSingleStoreValues = function () {
         if (newValue === 0 || newValue === null) {
           newValue = 'N/A'
         }
-        reportInfo[`${key}`] = {'value': `${dateUtils.convertSecondsToMinutes(parseInt(newValue), timeFormat)} ` , 'color': `${getColor(key, newValue)}`}
+        reportInfo[`${key}`] = {'value': `${dateUtils.convertSecondsToMinutes(parseInt(newValue), timeFormat)} `, 'color': `${getColor(key, newValue)}`}
       } else if (timeFormat === 1) {
         newValue = value
         if (newValue === 0 || newValue === null) {
@@ -213,7 +213,7 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
 }
 Device.prototype.getSystemStatistics = function (DeviceSystemInfo, DeviceLaneInfo) {
   let displayData = {}
-  if (DeviceLaneInfo.length > 0 && DeviceLaneInfo.length > 0) {
+  if ((!_.isEmpty(DeviceLaneInfo)) && !_.isEmpty(DeviceLaneInfo)) {
     displayData.Lane = (_.isNull(DeviceLaneInfo[0].Lane)) ? 0 : DeviceLaneInfo[0].Lane
     displayData.AverageCarsInLane = (_.isNull(DeviceLaneInfo[0].AvgCarsInLane)) ? 0 : DeviceLaneInfo[0].AvgCarsInLane
     displayData.TotalPullouts = (_.isNull(DeviceLaneInfo[0].Pullouts)) ? 0 : _.get(DeviceLaneInfo, '0.Pullouts', '0')
@@ -223,7 +223,6 @@ Device.prototype.getSystemStatistics = function (DeviceSystemInfo, DeviceLaneInf
     displayData.SystemResets = (_.isNull(DeviceLaneInfo[0].SystemResets)) ? 0 : _.get(DeviceSystemInfo, '0.SystemResets', '0')
     displayData.VBDResets = (_.isNull(DeviceLaneInfo[0].VDBResets)) ? 0 : _.get(DeviceSystemInfo, '0.VDBResets', '0')
   }
-
   return displayData
 }
 module.exports = Device
