@@ -66,27 +66,27 @@ Device.prototype.getSingleStoreValues = function () {
       } else if (key === 'StoreDate') {
         if (filter === 'day') {
           if (value === 'Total Day') {
-            reportInfo['day'] = {
+            reportInfo['Day'] = {
               'timeSpan': 'Total Day',
               'currentWeekpart': messages.COMMON.WAVG}
           } else {
-            reportInfo['day'] = {
+            reportInfo['Day'] = {
               'timeSpan': ` ${value}`,
               'currentWeekpart': messages.COMMON.DAYOPENCLOSE}
           }
         } else if (filter === 'daypart') {
           if (value === 'Total Daypart') {
-            reportInfo['daypart'] = {
+            reportInfo['Daypart'] = {
               'timeSpan': 'Total DayPart',
               'currentWeekpart': messages.COMMON.WAVG}
           } else {
             if (!Number.isNaN(parseInt(dayPartValue))) {
               let dateSplit = `${value}`.split('-')
-              reportInfo['daypart'] = {
+              reportInfo['Daypart'] = {
                 'timeSpan': `${dateSplit[1]}/${dateSplit[2]}-Daypart ${dayPartValue}`,
                 'currentWeekpart': messages.COMMON.DAYOPENCLOSE}
             } else if (Number.isNaN(parseInt(dayPartValue))) {
-              reportInfo['daypart'] = {
+              reportInfo['Daypart'] = {
                 'timeSpan': 'Total Daypart',
                 'currentWeekpart': messages.COMMON.WAVG}
             }
@@ -96,11 +96,11 @@ Device.prototype.getSingleStoreValues = function () {
       } else if (key === 'StoreNo') {
         if (filter === 'week') {
           if (value === 'Total Week') {
-            reportInfo['week'] = {
+            reportInfo['Week'] = {
               'timeSpan': 'Total Week',
               'currentWeekpart': messages.COMMON.WAVG}
           } else {
-            reportInfo['week'] = {
+            reportInfo['Week'] = {
               'timeSpan': startDate.value + ' - ' + endDate.value,
               'currentWeekpart': messages.COMMON.DAYOPENCLOSE}
           }
@@ -177,23 +177,23 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
       if (key.includes('GoalA')) {
         goalGrades.title = '< Goal A (min:sec)'
         goalGrades.color = getColors[0]
-        goalGrades[`${key}`] = {'goal': (goalTime || 'N/A'), 'cars': (value || 0), 'percentage': (CalculatePercetage(value, totalCars) || '0%')}
+        goalGrades[`${key}`] = {'goal': (goalTime || ''), 'cars': (value || 0), 'percentage': (CalculatePercetage(value, totalCars) || '0%')}
       } else if (key.includes('GoalB')) {
         goalGrades.title = '< Goal B (min:sec)'
         goalGrades.color = getColors[1]
-        goalGrades[`${key}`] = {'goal': (goalTime || 'N/A'), 'cars': (value || 0), 'percentage': (CalculatePercetage(value, totalCars) || '0%')}
+        goalGrades[`${key}`] = {'goal': (goalTime || ''), 'cars': (value || 0), 'percentage': (CalculatePercetage(value, totalCars) || '0%')}
       } else if (key.includes('GoalC')) {
         goalGrades.title = '< Goal C (min:sec)'
         goalGrades.color = getColors[2]
-        goalGrades[`${key}`] = {'goal': (goalTime || 'N/A'), 'cars': (value || 0), 'percentage': (CalculatePercetage(value, totalCars) || '0%')}
+        goalGrades[`${key}`] = {'goal': (goalTime || ''), 'cars': (value || 0), 'percentage': (CalculatePercetage(value, totalCars) || '0%')}
       } else if (key.includes('GoalD')) {
         goalGrades.title = '< Goal D (min:sec)'
         goalGrades.color = getColors[2]
-        goalGrades[`${key}`] = {'goal': (goalTime || 'N/A'), 'cars': (value || 0), 'percentage': (CalculatePercetage(value, totalCars) || '0%')}
+        goalGrades[`${key}`] = {'goal': (goalTime || ''), 'cars': (value || 0), 'percentage': (CalculatePercetage(value, totalCars) || '0%')}
       } else if (key.includes('GoalF')) {
         goalGrades.title = '> Goal D (min:sec)'
         goalGrades.color = getColors[2]
-        goalGrades[`${key}`] = {'goal': (goalTime || 'N/A'), 'cars': (value || 0), 'percentage': (CalculatePercetage(value, totalCars) || '0%')}
+        goalGrades[`${key}`] = {'goal': (goalTime || ''), 'cars': (value || 0), 'percentage': (CalculatePercetage(value, totalCars) || '0%')}
       }
     }
     if (goalGrades.title) {
