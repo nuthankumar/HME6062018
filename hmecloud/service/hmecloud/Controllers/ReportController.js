@@ -79,15 +79,17 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
       let DeviceLaneInfo = reportResult.data[7]
       deviceValues.systemStatistics = deviceRecords.getSystemStatistics(DeviceSystemInfo, DeviceLaneInfo)
     }
-    let eventHeaders = deviceHeaders[0].EventNames.split('|$|')
-    if (reportFilter === 'daypart') {
-      eventHeaders.push('Daypart')
-    } else if (reportFilter === 'day') {
-      eventHeaders.push('Day')
-    } else if (reportFilter === 'week') {
-      eventHeaders.push('Week')
+    if (deviceHeaders[0].EventNames !== null) {
+      let eventHeaders = deviceHeaders[0].EventNames.split('|$|')
+      if (reportFilter === 'daypart') {
+        eventHeaders.push('Daypart')
+      } else if (reportFilter === 'day') {
+        eventHeaders.push('Day')
+      } else if (reportFilter === 'week') {
+        eventHeaders.push('Week')
+      }
+      deviceValues.eventList = eventHeaders
     }
-    deviceValues.eventList = eventHeaders
     deviceValues.totalRecordCount = totalPages
     return deviceValues
   }
