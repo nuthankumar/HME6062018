@@ -98,7 +98,7 @@ export default class ReportGroupHierarchy extends React.Component {
         </div>
 
         <div className='grouphierarchy-tree jumbotron'>
-          <div className='col-xs-4'>
+          <div className='col-xs-4 hierarchy'>
             <Tree
               className='hierarchy-tree'
               showLine={true}

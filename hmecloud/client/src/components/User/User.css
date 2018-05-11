@@ -195,3 +195,7 @@ table.user_form {
     color: #757575;
     font-weight:lighter
 }
+
+.user_form span.StoreTitile{
+    width:260px !important;
+} 
