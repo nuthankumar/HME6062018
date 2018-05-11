@@ -58,7 +58,6 @@ export default class Layout extends React.Component {
     prepareProfile() {
 
         const params = new URLSearchParams(this.props.Params.location.search);
-        console.log(this.props.Params.location.search);
         const contextToken = params.get('token') ? params.get('token') : null
         const admin = params.get('a') == 'true' ? true : false
         //const admin = params.get('atoken') ? true : false;
