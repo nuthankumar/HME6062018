@@ -24,6 +24,8 @@ import { browserHistory } from 'react-dom';
 import Layout from './components/Common/Layout';
 import Login from './components/Security/Login'
 
+import Logout from './components/Security/Logout'
+
 ReactDOM.render(<Router history={browserHistory}>
     <div>
         <Route exact path="/" render={(props) => <Layout Params={props}><Route path='/' component={(Login)} /></Layout>} />
@@ -40,6 +42,7 @@ ReactDOM.render(<Router history={browserHistory}>
         <Route exact path="/summaryreport/:r?" render={(props) => <Layout Params={props}><Route path='/summaryreport/:r?' component={Authenticate(SummaryReport)} /></Layout>} />       
         <Route exact path="/settings/users/user/:uuid?" render={(props) => <Layout Params={props}><Route path='/settings/users/user/:uuid?' component={Authenticate(User)} /></Layout>} />
         <Route exact path="/user/:uuid?" render={(props) => <Layout Params={props}><Route path='/user/:uuid?' component={Authenticate(User)} /></Layout>} />
+        <Route exact path="/logout" render={(props) => <Layout Params={props}><Route path='/logout' component={Authenticate(Logout)} /></Layout>} />
     </div>
 </Router>, document.getElementById('root'))
 registerServiceWorker()
