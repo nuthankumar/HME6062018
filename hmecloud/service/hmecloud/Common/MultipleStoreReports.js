@@ -66,6 +66,18 @@ Device.prototype.multipleStore = function () {
         deviceValues.push(deviceInfo)
       }
     }
+    if (filter === 'day') {
+      if (item['ID'] !== index) {
+        deviceInfo = {
+          title: '',
+          data: []
+        }
+        deviceInfo.title = dateUtils.convertMonthDayYear(item['StoreDate']) + messages.COMMON.OPENVALUE + ' - ' + dateUtils.convertMonthDayYear(item['StoreDate']) + messages.COMMON.CLOSEVALUE
+        deviceInfo.data = []
+        index = item['ID']
+        deviceValues.push(deviceInfo)
+      }
+    }
     _.forEach(storeDetails[key], function (value, key) {
       if (key === 'StoreID') {
         reportInfo['storeId'] = {'value': ` ${value}`}
