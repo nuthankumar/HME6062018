@@ -63,8 +63,8 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
       totalCars = 0
     }
     let goalHeader
-    let deviceHeaders
     reportFilter === 'daypart' ? goalHeader = reportResult.data[9] : goalHeader = reportResult.data[8]
+    let deviceHeaders
     reportFilter === 'daypart' ? deviceHeaders = reportResult.data[8] : deviceHeaders = reportResult.data[9]
     let goalStatistics = deviceRecords.getGoalStatistics(goalSetting, deviceGoalInfo, totalCars, goalHeader, deviceHeaders)
     deviceValues.goalData = goalStatistics
@@ -105,6 +105,14 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
     if (reportResult.data[0] || reportResult.data[0].length > 0) {
       let getDevices = new GetDeviceMultipleStores(reportResult.data[0], colors, goalSetting, this.request, reportFilter)
       deviceValues.timeMeasureType = getDevices.multipleStore()
+    }
+    if (reportResult.data[6][0].EventNames !== null || reportResult.data[6][0].EventNames !== undefined ) {
+      let eventHeaders = reportResult.data[6][0].EventNames.split('|$|')
+      eventHeaders.push('Groups')
+      eventHeaders.push('Stores')
+      deviceValues.eventList = eventHeaders
+    } else {
+      deviceValues.eventList = []
     }
     return deviceValues
   }
