@@ -79,6 +79,7 @@ BEGIN
 		LEFT JOIN GroupStore AS gd ON s.Store_ID = gd.StoreID
 		LEFT JOIN ltbl_Brands AS brand ON brand.Brand_ID = s.Store_Brand_ID
 	WHERE s.Store_Account_ID IN (SELECT Account_ID FROM #AccountIDs)
+	AND d.Device_LaneConfig_ID=1
 	AND gd.StoreID IS NULL ' +IIF(ISNULL(@Brand_ID,0)<> 0,' AND brand.Brand_ID='+ CONVERT(VARCHAR,@Brand_ID), '' )
 	
 	EXEC (@sqlQuery)
