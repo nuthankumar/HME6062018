@@ -203,7 +203,7 @@ class Report extends Component {
             <section className="reports-pane-section">
               <div className="reports-pane">
                 <div className="checkbox-sections-advanced">
-                  <div className="timings">
+                  <div className="timings selectAllLabel">
                     <input type="checkbox" id="includeTime"  checked={this.state.selectAll}
                       onChange={this.selectAll.bind(this)}/>
 								<label className="label-heading" for="includeTime">{t[language].selectall}</label>
