@@ -58,7 +58,7 @@ Device.prototype.multipleStore = function () {
           title: '',
           data: []
         }
-        deviceInfo.title = item['WeekStartDate'] + ' - ' + item['WeekEndDate'] + '' + messages.COMMON.DAYOPENCLOSE
+        deviceInfo.title = item['WeekStartDate'] + ' - ' + item['WeekEndDate'] + ' ' + messages.COMMON.DAYOPENCLOSE
         deviceInfo.data = []
         index = item['WeekIndex']
         deviceValues.push(deviceInfo)
@@ -82,7 +82,7 @@ Device.prototype.multipleStore = function () {
           title: '',
           data: []
         }
-        deviceInfo.title = dateUtils.convertMonthDayYear(item['StoreDate']) + messages.COMMON.OPENVALUE + ' - ' + dateUtils.convertMonthDayYear(item['StoreDate']) + messages.COMMON.CLOSEVALUE
+        deviceInfo.title = moment(item['StoreDate']).format('LL') + messages.COMMON.OPENVALUE + ' - ' + moment(item['StoreDate']).format('LL') + messages.COMMON.CLOSEVALUE
         deviceInfo.data = []
         index = item['ID']
         deviceValues.push(deviceInfo)
@@ -118,8 +118,10 @@ Device.prototype.multipleStore = function () {
         reportInfo['WeekStartDate'] = {'value': (value || null)}
       } else if (key === 'WeekEndDate') {
         reportInfo['WeekEndDate'] = {'value': (value || null)}
+      } else if (key === 'Total_Car') {
+        reportInfo['Total Cars'] = {'value': (value || null)}
       } else {
-        reportInfo[` ${key}`] = {'value': ` ${dateUtils.convertSecondsToMinutes(parseInt(value), timeFormat)}`, 'color': `${getColor(key, value)}`}
+        reportInfo[`${key}`] = {'value': `${dateUtils.convertSecondsToMinutes(parseInt(value), timeFormat)}`, 'color': `${getColor(key, value)}`}
       }
     })
     deviceInfo.data.push(reportInfo)

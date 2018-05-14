@@ -1,22 +1,12 @@
-const messages = require('../Common/Message')
 const _ = require('lodash')
+const messages = require('../Common/Message')
 const ReportValidator = require('../Validators/ReportValidator')
 const ReportsPagination = require('../Common/ReportPagination')
 const repository = require('../Repository/ReportRepository')
 const GetDeviceSingleStore = require('../Common/SingleStoreReport')
 const GetDeviceMultipleStores = require('../Common/MultipleStoreReports')
-/**
- * The method can be used to execute handel errors and return to routers.
- * @param  {input} message input from custom messages.
- * @param  {input} status input false.
- * @public
- */
-const errorHandler = (message, status) => {
-  let output = {}
-  output.key = message
-  output.status = status
-  return output
-}
+const dateFormat = require('dateformat')
+const dataExportUtil = require('../Common/DataExportUtil')
 
 // Constructor method
 const reports = function (request) {
@@ -52,7 +42,11 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
   if (this.isSingleStore) {
     const deviceRecords = new GetDeviceSingleStore(reportResult.data[0], colors, goalSetting, this.request, reportFilter)
     deviceValues = deviceRecords.getStoreInfo(this.request, reportFilter)
-    deviceValues.timeMeasureType = deviceRecords.getSingleStoreValues()
+    if (reportResult.data[0] && reportResult.data[0].length > 0 && reportResult.data[0] !== null && reportResult.data[0] !== undefined) {
+      deviceValues.timeMeasureType = deviceRecords.getSingleStoreValues()
+    } else {
+      deviceValues.timeMeasureType = []
+    }
     // goal
     let deviceGoalInfo = reportResult.data[5]
     const getLastRecord = _.last(reportResult.data[0])
@@ -83,7 +77,7 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
       let DeviceLaneInfo = reportResult.data[7]
       deviceValues.systemStatistics = deviceRecords.getSystemStatistics(DeviceSystemInfo, DeviceLaneInfo)
     }
-    if (deviceHeaders[0].EventNames !== null) {
+    if (deviceHeaders && deviceHeaders.length > 0 && deviceHeaders[0].EventNames !== null) {
       let eventHeaders = deviceHeaders[0].EventNames.split('|$|')
       if (reportFilter === 'daypart') {
         eventHeaders = ['Daypart', ...eventHeaders]
@@ -102,11 +96,13 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
     // MutipleReport
     deviceValues.deviceIds = this.request.body.deviceIds
     deviceValues.totalRecordCount = totalPages
-    if (reportResult.data[0] && reportResult.data[0].length > 0) {
+    if (reportResult.data[0] && reportResult.data[0].length > 0 && reportResult.data[0] !== null && reportResult.data[0] !== undefined) {
       let getDevices = new GetDeviceMultipleStores(reportResult.data[0], colors, goalSetting, this.request, reportFilter)
       deviceValues.timeMeasureType = getDevices.multipleStore()
+    } else {
+      deviceValues.timeMeasureType = []
     }
-    if (reportResult.data[6] && reportResult.data[6][0].EventNames !== null) {
+    if (reportResult.data[6] && reportResult.data[6].length > 0 && reportResult.data[6][0].EventNames !== null) {
       let eventHeaders = reportResult.data[6][0].EventNames.split('|$|')
       eventHeaders = ['Groups', 'Stores', ...eventHeaders]
       deviceValues.eventList = eventHeaders
@@ -116,24 +112,34 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
     return deviceValues
   }
 }
+reports.prototype.createCSVReport = function (reportResult, reportName) {
+
+}
 // create Report
 reports.prototype.createReports = function (response) {
   let isValidation = this.validation()
   if (isValidation.status === true) {
     let totalPages = this.pagination(isValidation.reportName)
-    repository.createReport(this.request, isValidation.reportName, reportResult => {
-      try {
-        if (reportResult.status) {
-          let Output = this.deviceDataPreparation(reportResult, isValidation, totalPages)
-          Output.status = true
-          if (Output.status === true) {
-            response.status(200).send(Output)
-          } else {
-            response.status(400).send(Output)
+    repository.getReport(this.request, isValidation.reportName, reportResult => {
+      if (reportResult.status) {
+        let Output = this.deviceDataPreparation(reportResult, isValidation, totalPages)
+        if (!_.isUndefined(this.request.query.reportType) && (this.request.query.reportType.toLowerCase().trim() === 'csv' || this.request.query.reportType.toLowerCase().trim() === 'pdf')) {
+          if (this.request.query.reportType.toLowerCase().trim() === 'csv') {
+            this.createCSVReport(reportResult, isValidation)
+            // generateCSVTriggerEmail(request, input, result, isMailSend => {
+            //   console.log('ISMAIL', isMailSend)
+            //   callback(isMailSend)
+            // })
           }
         }
-      } catch (error) {
-        console.log('error', error)
+        Output.status = true
+        if (Output.status === true) {
+          response.status(200).send(Output)
+        } else {
+          response.status(400).send(Output)
+        }
+      } else {
+        response.status(400).send(reportResult)
       }
     })
   } else {

@@ -11,7 +11,7 @@ const sql = require('mssql')
  * @param  {funct} callback Function will be called once the input executed.
  * @public
  */
-const createReport = (input, reportName, callback) => {
+const getReport = (input, reportName, callback) => {
   let repositoryName
   let reportType
   if (reportName === 'day') {
@@ -41,4 +41,4 @@ const createReport = (input, reportName, callback) => {
     return request
   }, callback)
 }
-module.exports = {createReport}
+module.exports = {getReport}
