@@ -86,6 +86,7 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
       } else if (reportFilter === 'week') {
         eventHeaders = ['Week', ...eventHeaders]
       }
+      eventHeaders.push('Total Cars')
       deviceValues.eventList = eventHeaders
     } else {
       deviceValues.eventList = []
@@ -105,6 +106,7 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
     if (reportResult.data[6] && reportResult.data[6].length > 0 && reportResult.data[6][0].EventNames !== null) {
       let eventHeaders = reportResult.data[6][0].EventNames.split('|$|')
       eventHeaders = ['Groups', 'Stores', ...eventHeaders]
+      eventHeaders.push('Total Cars')
       deviceValues.eventList = eventHeaders
     } else {
       deviceValues.eventList = []

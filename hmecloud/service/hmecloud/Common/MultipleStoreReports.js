@@ -97,11 +97,11 @@ Device.prototype.multipleStore = function () {
         if (filter === 'week' || filter === 'daypart') {
           storeNo = ` ${value}`
           if ((key === 'StoreID') && key.includes('Subtotal')) {
-            reportInfo['groupId'] = {'value': groupName + ' ' + storeNo}
+            reportInfo['Groups'] = {'value': groupName + ' ' + storeNo}
           } else if (value === 'Total Week' || value === 'Total Daypart') {
-            reportInfo['groupId'] = {'value': storeNo, 'timeSpan': messages.COMMON.WAVG}
+            reportInfo['Groups'] = {'value': storeNo, 'timeSpan': messages.COMMON.WAVG}
           } else {
-            reportInfo['groupId'] = {'value': (groupName || null)}
+            reportInfo['Groups'] = {'value': (groupName || null)}
           }
         }
       } else if (key === 'Store_Name') {

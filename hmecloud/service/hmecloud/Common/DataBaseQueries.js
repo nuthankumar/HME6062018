@@ -101,9 +101,9 @@ const sqlQueries = {
     getRoles: '[dbo].[usp_GetRoles]'
   },
   Reports: {
-    getWeekReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Week_Details]',
-    getDayPartReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details]',
-    getDayReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Date_Details]'
+    getWeekReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Week_Details_Dynamic]',
+    getDayPartReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details_Dynamic]',
+    getDayReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Date_Details_Dynamic]'
   },
   DeviceIds: {
     Parameters: {
