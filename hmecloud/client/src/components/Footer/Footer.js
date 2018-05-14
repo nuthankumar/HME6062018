@@ -29,13 +29,13 @@ export default class Footer extends React.Component {
             <div className="copyright">
             <span><b>HM Electronics, Inc. &copy;2018 </b>
 	    |
-		    <a className="terms black_link" href={url + "images/HMECLOUD_Terms_and_Conditions.pdf?token="+token} target="_blank" translate="" key="useragreement">{t[language].useragreement}</a>
+		    <a className="terms black_link" href={url + "images/"+t[language].useragreementUrl+"?token="+token} target="_blank" translate="" key="useragreement">{t[language].useragreement}</a>
                     |
-			<a className="privacy black_link" href={url + "images/HMECLOUD_Privacy_Policy.pdf?token=" + token} target="_blank" translate="" key="privacypolicy">{t[language].privacypolicy}</a>
+			<a className="privacy black_link" href={url + "images/"+t[language].privacypolicyUrl+"?token=" + token} target="_blank" translate="" key="privacypolicy">{t[language].privacypolicy}</a>
                     | 
-		    <a className="supply black_link" href={url + "images/California_Transparency_Supply_Chains_Act_Disclosures.pdf?token=" + token} target="_blank" translate="" key="californiasupply">{t[language].californiasupply}</a>
+		    <a className="supply black_link" href={url + "images/"+t[language].californiasupplyUrl+"?token=" + token} target="_blank" translate="" key="californiasupply">{t[language].californiasupply}</a>
                     |
-		    <a className="cookie black_link" href={url + "images/HMECLOUD_Cookie_Policy.pdf?token=" + token} target="_blank">{t[language].cookiepolicy}</a>
+		    <a className="cookie black_link" href={url + "images/"+t[language].cookiepolicyUrl+"?token=" + token} target="_blank">{t[language].cookiepolicy}</a>
             </span></div>
         </div>
     </div>)

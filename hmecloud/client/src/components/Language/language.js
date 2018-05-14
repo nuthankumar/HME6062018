@@ -764,8 +764,11 @@ const language = [
     'Total Day':'Total Day',
     'Total Daypart':'Total Daypart',
     'Total Week':'Total Week',
-    'SubTotal':'SubTotal'
-
+    'SubTotal':'SubTotal',
+    'useragreementUrl' : 'HMECLOUD_Terms_and_Conditions.pdf',
+    'privacypolicyUrl' : 'HMECLOUD_Privacy_Policy.pdf',
+    'californiasupplyUrl' : 'California_Transparency_Supply_Chains_Agreement.pdf',
+    'cookiepolicyUrl' : 'HMECLOUD_Privacy_Policy.pdf'
   },
 
   // French
@@ -1537,7 +1540,12 @@ const language = [
     'Total Day':'Total Jour',
     'Total Daypart':'Total Daypart',
     'Total Week':'Total de la semaine',
-    'SubTotal':'Sous total'
+    'SubTotal':'Sous total',
+
+    'useragreementUrl' : 'HMECLOUD_Terms_and_Conditions_fr.pdf',
+    'privacypolicyUrl' : 'HMECLOUD_Privacy_Policy_fr.pdf',
+    'californiasupplyUrl' : 'California_Transparency_Supply_Chains_Agreement_fr.pdf',
+    'cookiepolicyUrl' : 'HMECLOUD_Privacy_Policy_fr.pdf'
   }
 ]
 export default language
