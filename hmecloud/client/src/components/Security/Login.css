@@ -314,6 +314,18 @@ width:197px;
     width: 100%;
     display: flex;
     align-items: center;
+ }
+.selectAllLabel{
+    padding-left: 33px;
+
+}
+
+.BrandTitle
+{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding-left: 5px;
 }
 
     .timings span {

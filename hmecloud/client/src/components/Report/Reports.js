@@ -203,12 +203,12 @@ class Report extends Component {
             <section className="reports-pane-section">
               <div className="reports-pane">
                 <div className="checkbox-sections-advanced">
-                  <div className="timings">
+                  <div className="timings selectAllLabel">
                     <input type="checkbox" id="includeTime"  checked={this.state.selectAll}
                       onChange={this.selectAll.bind(this)}/>
 								<label className="label-heading" for="includeTime">{t[language].selectall}</label>
                   </div>
-                  <div className="timings">
+                  <div className="timings BrandTitle">
                     <span> {t[language].brand} </span>
                     <a data-tip={t[language].selectonestore}><span className="tip openTip">?</span></a>
                     <ReactTooltip place="right" type="dark" effect="solid" />

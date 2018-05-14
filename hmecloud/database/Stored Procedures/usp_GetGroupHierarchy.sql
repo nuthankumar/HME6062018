@@ -120,7 +120,8 @@ BEGIN
 			RIGHT JOIN tbl_Stores AS store ON store.Store_ID = gs.StoreId
 			LEFT JOIN ltbl_Brands AS brand ON brand.Brand_ID = store.Store_Brand_ID 
 			INNER JOIN tbl_DeviceInfo device ON store.store_ID = device.Device_Store_ID
-		WHERE store.Store_Account_ID IN (SELECT Account_ID FROM #AccountIDs)		
+		WHERE store.Store_Account_ID IN (SELECT Account_ID FROM #AccountIDs)
+		AND device.Device_LaneConfig_ID=1		
 		'+IIF(ISNULL(@Brand_ID,0)<> 0,' AND brand.Brand_ID='+ CONVERT(VARCHAR,@Brand_ID), '' ) +'
 	ORDER BY [Level],[Type],[Name]'
 	EXEC (@sqlQuery)

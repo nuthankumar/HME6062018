@@ -123,14 +123,32 @@ export default class Layout extends React.Component {
     autoSignout() {
         let signout = setTimeout(function () {
             if (this.state.modalIsOpen) {
+                if(this.authService.isMasquerade()){
                 let url = Config.adminColdFusionUrl + "?token=" + this.state.idToken
+                this.authService.clear()
                 window.location.href = url;
+                }
+                else {        
+                    if(this.authService.isAdmin()){
+                    let url = Config.adminColdFusionUrl;
+                    this.authService.clear()
+                    window.location.href = url+'?pg=Logout';
+                    }
+                
+                    else{        
+                    let url = Config.coldFusionUrl;
+                    this.authService.clear()
+                    window.location.href = url+'?pg=Logout';
+                    }
+                }
             }
             else {
-                clearTimeout(signout);
+            clearTimeout(signout);
             }
-        }.bind(this), this.state.signoutTime)
-    }
+        }.bind(this), 
+        this.state.signoutTime)
+        }
+        
 
     openModal() {
 
@@ -156,7 +174,7 @@ export default class Layout extends React.Component {
         //             this.openModal()
         //             this.autoSignout();
         //         }
-        //     }.bind(this), 300000)
+        //     }.bind(this), 3000)
         // }
 
 

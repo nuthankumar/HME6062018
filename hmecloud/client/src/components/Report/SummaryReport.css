@@ -650,7 +650,9 @@ span.StoreTitile {
     overflow: hidden;
     -o-text-overflow: ellipsis;
     text-overflow: ellipsis;
+    padding-left: 5px;
 }
+
 
 span.StoreBrand {
     width: 50px;
