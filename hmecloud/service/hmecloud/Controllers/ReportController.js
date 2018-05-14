@@ -86,11 +86,11 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
     if (deviceHeaders[0].EventNames !== null) {
       let eventHeaders = deviceHeaders[0].EventNames.split('|$|')
       if (reportFilter === 'daypart') {
-        eventHeaders.push('Daypart')
+        eventHeaders = ['Daypart', ...eventHeaders]
       } else if (reportFilter === 'day') {
-        eventHeaders.push('Day')
+        eventHeaders = ['Day', ...eventHeaders]
       } else if (reportFilter === 'week') {
-        eventHeaders.push('Week')
+        eventHeaders = ['Week', ...eventHeaders]
       }
       deviceValues.eventList = eventHeaders
     } else {
@@ -108,8 +108,7 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
     }
     if (reportResult.data[6] && reportResult.data[6][0].EventNames !== null) {
       let eventHeaders = reportResult.data[6][0].EventNames.split('|$|')
-      eventHeaders.push('Groups')
-      eventHeaders.push('Stores')
+      eventHeaders = ['Groups', 'Stores', ...eventHeaders]
       deviceValues.eventList = eventHeaders
     } else {
       deviceValues.eventList = []
@@ -122,19 +121,19 @@ reports.prototype.createReports = function (response) {
   let isValidation = this.validation()
   if (isValidation.status === true) {
     let totalPages = this.pagination(isValidation.reportName)
-    repository.createReport(this.request, isValidation.reportName, (error, reportResult) => {
-      if (error) {
-        console.log('error', error)
-        throw error
-      }
-      if (reportResult.status) {
-        let Output = this.deviceDataPreparation(reportResult, isValidation, totalPages)
-        Output.status = true
-        if (Output.status === true) {
-          response.status(200).send(Output)
-        } else {
-          response.status(400).send(Output)
+    repository.createReport(this.request, isValidation.reportName, reportResult => {
+      try {
+        if (reportResult.status) {
+          let Output = this.deviceDataPreparation(reportResult, isValidation, totalPages)
+          Output.status = true
+          if (Output.status === true) {
+            response.status(200).send(Output)
+          } else {
+            response.status(400).send(Output)
+          }
         }
+      } catch (error) {
+        console.log('error', error)
       }
     })
   } else {
