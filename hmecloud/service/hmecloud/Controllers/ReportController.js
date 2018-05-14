@@ -114,9 +114,6 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
     return deviceValues
   }
 }
-reports.prototype.createCSVReport = function (reportResult, reportName) {
-
-}
 // create Report
 reports.prototype.createReports = function (response) {
   let isValidation = this.validation()
@@ -125,15 +122,7 @@ reports.prototype.createReports = function (response) {
     repository.getReport(this.request, isValidation.reportName, reportResult => {
       if (reportResult.status) {
         let Output = this.deviceDataPreparation(reportResult, isValidation, totalPages)
-        if (!_.isUndefined(this.request.query.reportType) && (this.request.query.reportType.toLowerCase().trim() === 'csv' || this.request.query.reportType.toLowerCase().trim() === 'pdf')) {
-          if (this.request.query.reportType.toLowerCase().trim() === 'csv') {
-            this.createCSVReport(reportResult, isValidation)
-            // generateCSVTriggerEmail(request, input, result, isMailSend => {
-            //   console.log('ISMAIL', isMailSend)
-            //   callback(isMailSend)
-            // })
-          }
-        }
+
         Output.status = true
         if (Output.status === true) {
           response.status(200).send(Output)

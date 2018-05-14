@@ -105,21 +105,23 @@ Device.prototype.getSingleStoreValues = function () {
               'timeSpan': startDate.value + ' - ' + endDate.value,
               'currentWeekpart': messages.COMMON.DAYOPENCLOSE}
           }
-          reportInfo[`${key}`] = {'value': ` ${value}`}
+          reportInfo[`${key}`] = {'value': `${value}`}
         }
-        reportInfo[`${key}`] = {'value': ` ${value}`}
+        reportInfo[`${key}`] = {'value': `${value}`}
       } else if (key === 'GroupName') {
-        reportInfo['group'] = {'value': ` ${value}`}
+        reportInfo['Groups'] = {'value': `${value}`}
       } else if (key === 'StoreID') {
-        reportInfo['storeId'] = {'value': ` ${value}`}
+        reportInfo['storeId'] = {'value': `${value}`}
       } else if (key === 'Store_Name') {
-        reportInfo['Stores'] = {'value': ` ${value}`}
+        reportInfo['Stores'] = {'value': `${value}`}
       } else if (key === 'Device_UID') {
-        reportInfo['deviceUid'] = {'value': ` ${value}`}
+        reportInfo['deviceUid'] = {'value': `${value}`}
       } else if (key === 'Device_ID') {
-        reportInfo['deviceId'] = {'value': ` ${value}`}
+        reportInfo['deviceId'] = {'value': `${value}`}
       } else if (key === 'WeekIndex') {
-        reportInfo['index'] = {'value': ` ${value}`}
+        reportInfo['index'] = {'value': `${value}`}
+      } else if (key === 'Total_Car') {
+        reportInfo['Total Cars'] = {'value': (value || null)}
       } else if (timeFormat === 2) {
         newValue = value
         if (newValue === 0 || newValue === null) {
