@@ -102,11 +102,11 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
     // MutipleReport
     deviceValues.deviceIds = this.request.body.deviceIds
     deviceValues.totalRecordCount = totalPages
-    if (reportResult.data[0] || reportResult.data[0].length > 0) {
+    if (reportResult.data[0] && reportResult.data[0].length > 0) {
       let getDevices = new GetDeviceMultipleStores(reportResult.data[0], colors, goalSetting, this.request, reportFilter)
       deviceValues.timeMeasureType = getDevices.multipleStore()
     }
-    if (reportResult.data[6][0].EventNames !== null || reportResult.data[6][0].EventNames !== undefined ) {
+    if (reportResult.data[6] && reportResult.data[6][0].EventNames !== null) {
       let eventHeaders = reportResult.data[6][0].EventNames.split('|$|')
       eventHeaders.push('Groups')
       eventHeaders.push('Stores')
@@ -122,7 +122,11 @@ reports.prototype.createReports = function (response) {
   let isValidation = this.validation()
   if (isValidation.status === true) {
     let totalPages = this.pagination(isValidation.reportName)
-    repository.createReport(this.request, isValidation.reportName, reportResult => {
+    repository.createReport(this.request, isValidation.reportName, (error, reportResult) => {
+      if (error) {
+        console.log('error', error)
+        throw error
+      }
       if (reportResult.status) {
         let Output = this.deviceDataPreparation(reportResult, isValidation, totalPages)
         Output.status = true
@@ -131,8 +135,6 @@ reports.prototype.createReports = function (response) {
         } else {
           response.status(400).send(Output)
         }
-      } else {
-        console.log('db error')
       }
     })
   } else {

@@ -2,8 +2,14 @@ const dateUtils = require('../Common/DateUtils')
 const _ = require('lodash')
 const moment = require('moment')
 const messages = require('../Common/Message')
-// goalSetting, deviceGoalInfo, totalCars, goalHeader, deviceHeaders
-
+/**
+ * This is method for creating multiple store devices values
+ * @param {*} result result form database
+ * @param {*} request request form user Input
+ * @param {*} colors   colors form database
+ * @param {*} goalSettings   goalSettings form database
+ * @param {*} reportFilter reportFilter like (day,daypart,week)
+ */
 const Device = function (result, colors, goalSettings, request, reportFilter) {
   this.result = result
   this.colors = colors
@@ -11,6 +17,10 @@ const Device = function (result, colors, goalSettings, request, reportFilter) {
   this.request = request
   this.reportFilter = reportFilter
 }
+
+/**
+ * This is creating multiple store devices values
+ */
 Device.prototype.multipleStore = function () {
   const timeFormat = this.request.body.format
   const filter = this.reportFilter
@@ -95,11 +105,11 @@ Device.prototype.multipleStore = function () {
           }
         }
       } else if (key === 'Store_Name') {
-        reportInfo['Store_Name'] = {'value': (value || null)}
+        reportInfo['Stores'] = {'value': (value || null)}
       } else if (key === 'Device_UID') {
         reportInfo['Device_UID'] = {'value': (value || null)}
       } else if (key === 'Device_ID') {
-        reportInfo['Device_ID'] = {'value': (value || null)}
+        reportInfo['deviceId'] = {'value': (value || null)}
       } else if (key === 'StartTime') {
         reportInfo['StartTime'] = {'value': (value || null)}
       } else if (key === 'EndTime') {

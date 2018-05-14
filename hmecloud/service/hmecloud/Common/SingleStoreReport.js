@@ -113,7 +113,7 @@ Device.prototype.getSingleStoreValues = function () {
       } else if (key === 'StoreID') {
         reportInfo['storeId'] = {'value': ` ${value}`}
       } else if (key === 'Store_Name') {
-        reportInfo['storeName'] = {'value': ` ${value}`}
+        reportInfo['Stores'] = {'value': ` ${value}`}
       } else if (key === 'Device_UID') {
         reportInfo['deviceUid'] = {'value': ` ${value}`}
       } else if (key === 'Device_ID') {
