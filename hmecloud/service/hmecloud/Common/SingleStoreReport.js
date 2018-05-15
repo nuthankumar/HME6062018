@@ -127,7 +127,7 @@ Device.prototype.getSingleStoreValues = function () {
         if (newValue === 0 || newValue === null) {
           newValue = 'N/A'
         }
-        reportInfo[`${key}`] = {'value': `${dateUtils.convertSecondsToMinutes(parseInt(newValue), timeFormat)} `, 'color': `${getColor(key, newValue)}`}
+        reportInfo[`${key}`] = {'value': `${dateUtils.convertSecondsToMinutes(parseInt(newValue), timeFormat)}`, 'color': `${getColor(key, newValue)}`}
       } else if (timeFormat === 1) {
         newValue = value
         if (newValue === 0 || newValue === null) {
