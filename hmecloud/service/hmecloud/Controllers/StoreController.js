@@ -192,8 +192,31 @@ function prepareResponsObject (result, departTimeStampMap, rawCarDataList, rawCa
   })
   return rawCarDataList
 }
+
+const settingsDevices = (input, response) => {
+  stores.settingsDevices(input, result => {
+    if (result.status === true) {
+      response.status(200).send(result)
+    } else {
+      response.status(400).send(result)
+    }
+  })
+}
+
+const settingsStores = (input, response) => {
+  stores.settingsStores(input, result => {
+    if (result.status === true) {
+      response.status(200).send(result)
+    } else {
+      response.status(400).send(result)
+    }
+  })
+}
+
 module.exports = {
   generateReport,
   generateCsv,
-  getRawCarDataReport
+  getRawCarDataReport,
+  settingsDevices,
+  settingsStores
 }

@@ -165,8 +165,40 @@ const csvValidator = (request, callback) => {
     callback(output)
   }
 }
+
+const settingsDevices = (request, callback) => {
+  let output = {}
+  const duid = request.duid
+
+  if (duid) {
+    storeController.settingsDevices(input, result => {
+      callback(result)
+    })
+  } else {
+    output.key = 'invalidInput'
+    output.status = false
+    callback(output)
+  }
+}
+
+const settingsStores = (request, callback) => {
+  let output = {}
+  const suid = request.suid
+
+  if (suid) {
+    storeController.settingsStores(input, result => {
+      callback(result)
+    })
+  } else {
+    output.key = 'invalidInput'
+    output.status = false
+    callback(output)
+  }
+}
+
 module.exports = {
   reportValidator,
-  csvValidator
-
+  csvValidator,
+  settingsDevices,
+  settingsStores
 }

@@ -103,8 +103,24 @@ const getWeekReport = (template, callback) => {
   })
 }
 
+const settingsDevices = (duid, callback) => {
+  repository.execute(sqlQuery.settingsDevices.getStatus, {
+    replacements: { duid: duid },
+    type: db.QueryTypes.SELECT
+  }, result => callback(result))
+}
+
+const settingsStores = (duid, callback) => {
+  repository.execute(sqlQuery.settingsStores.getStatus, {
+    replacements: { suid: suid },
+    type: db.QueryTypes.SELECT
+  }, result => callback(result))
+}
+
 module.exports = {
   getRawCarDataReport,
   getDayDataReport,
-  getWeekReport
+  getWeekReport,
+  settingsDevices,
+  settingsStores
 }

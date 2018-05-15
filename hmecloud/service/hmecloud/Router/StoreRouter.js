@@ -52,4 +52,24 @@ router.post('/generatecsv', authValidator, VerifyToken, (request, response) => {
   })
 })
 
+router.get('/settingsDevices', authValidator, (request, response) => {
+  storeValidator.settingsDevices(request, result => {
+    if (result.status === true) {
+      response.status(200).send(result)
+    } else {
+      response.status(400).send(result)
+    }
+  })
+})
+
+router.get('/settingsStores', authValidator, (request, response) => {
+  storeValidator.settingsStores(request, result => {
+    if (result.status === true) {
+      response.status(200).send(result)
+    } else {
+      response.status(400).send(result)
+    }
+  })
+})
+
 module.exports = router
