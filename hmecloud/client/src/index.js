@@ -17,16 +17,18 @@ import './i18n'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { browserHistory } from 'react-dom';
 
-
-
-// import { Router, Route } from 'react-router-dom'
-// import history from '../history';
-import Layout from './components/Common/Layout';
+import { Provider } from 'react-redux';
+import StoreDetails from './containers/StoreDetails'
+import { createStore, applyMiddleware } from 'redux';
+import reducers from './reducers/index';
+import Layout from './components/Common/Layout'
 import Login from './components/Security/Login'
-
 import Logout from './components/Security/Logout'
 
-ReactDOM.render(<Router history={browserHistory}>
+const createStoreWithMiddlewaare = applyMiddleware()(createStore);
+
+ReactDOM.render( <Provider store={createStoreWithMiddlewaare(reducers)}>
+<Router history={browserHistory}>
     <div>
         <Route exact path="/" render={(props) => <Layout Params={props}><Route path='/' component={(Login)} /></Layout>} />
         <Route exact path="/admin" render={(props) => <Layout Params={props}><Route path='/admin' component={(Login)} /></Layout>} />
@@ -43,6 +45,7 @@ ReactDOM.render(<Router history={browserHistory}>
         <Route exact path="/settings/users/user/:uuid?" render={(props) => <Layout Params={props}><Route path='/settings/users/user/:uuid?' component={Authenticate(User)} /></Layout>} />
         <Route exact path="/user/:uuid?" render={(props) => <Layout Params={props}><Route path='/user/:uuid?' component={Authenticate(User)} /></Layout>} />
         <Route exact path="/logout" render={(props) => <Layout Params={props}><Route path='/logout' component={Authenticate(Logout)} /></Layout>} />
-    </div>
-</Router>, document.getElementById('root'))
+        <Route exact path="/settings/stores" render={(props) => <Layout Params={props}><Route path='/settings/stores' component={Authenticate(StoreDetails)} /></Layout>} />  
+      </div>
+    </Router></Provider>, document.getElementById('root'))
 registerServiceWorker()
