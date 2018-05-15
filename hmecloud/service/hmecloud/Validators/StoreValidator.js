@@ -165,8 +165,94 @@ const csvValidator = (request, callback) => {
     callback(output)
   }
 }
+
+/**
+ *
+ * @param {*} request
+ * @param {*} callback
+ */
+const getStores = (request, callback) => {
+  storeController.getStores(request, result => {
+    callback(result)
+  })
+}
+
+const settingsDevices = (request, callback) => {
+  let output = {}
+  const duid = request.duid
+
+  if (duid) {
+    storeController.settingsDevices(input, result => {
+      callback(result)
+    })
+  } else {
+    output.key = 'invalidInput'
+    output.status = false
+    callback(output)
+  }
+}
+
+const settingsStores = (request, callback) => {
+  let output = {}
+  const suid = request.suid
+
+  if (suid) {
+    storeController.settingsStores(input, result => {
+      callback(result)
+    })
+  } else {
+    output.key = 'invalidInput'
+    output.status = false
+    callback(output)
+  }
+}
+
+/**
+ *
+ * @param {*} request
+ * @param {*} callback
+ */
+const getStoreByUid = (request, callback) => {
+  let output = {}
+  const suid = request.suid
+
+  if (suid) {
+    storeController.getStoreByStoreUid(suid, result => {
+      callback(result)
+    })
+  } else {
+    output.key = 'invalidInput'
+    output.status = false
+    callback(output)
+  }
+}
+
+
+/**
+ *
+ * @param {*} request
+ * @param {*} callback
+ */
+const removeDeviceById = (request, callback) => {
+  let output = {}
+  const duid = request.body.duid
+
+  if (duid) {
+    storeController.removeDeviceById(duid, result => {
+      callback(result)
+    })
+  } else {
+    output.key = 'invalidInput'
+    output.status = false
+    callback(output)
+  }
+}
 module.exports = {
   reportValidator,
-  csvValidator
-
+  csvValidator,
+  settingsDevices,
+  settingsStores,
+  getStores,
+  getStoreByUid,
+  removeDeviceById
 }

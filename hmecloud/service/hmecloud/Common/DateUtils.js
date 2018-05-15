@@ -73,7 +73,6 @@ const convertmmddyyyy = (dateValue) => {
 const dateDifference = (fromDate, toDate) => {
   const date1 = moment(fromDate)
   const date2 = moment(toDate)
-  // console.log('Difference is ', dateB.diff(dateC, 'days'), 'days')
   let diffent = date2.diff(date1, 'days')
   return diffent
 }
