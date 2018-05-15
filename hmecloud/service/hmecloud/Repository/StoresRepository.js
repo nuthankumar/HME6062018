@@ -39,7 +39,6 @@ const getDayDataReport = (input, callback) => {
         if (err) {
           output.data = err
           output.status = false
-          console.log(err)
           callback(output)
         }
         if (result && result.recordsets) {
@@ -103,8 +102,149 @@ const getWeekReport = (template, callback) => {
   })
 }
 
+const getStores = (input, callback) => {
+  const output = {}
+  const sqlPool = new sql.ConnectionPool(dataBaseSql, err => {
+    if (err) {
+      output.data = err
+      output.status = false
+      callback(output)
+    }
+    console.log(input)
+    sqlPool.request()
+      .input('User_UID', sql.VarChar(32), input.userUid)
+      .input('SortingColumnName', sql.VarChar(32), input.query.sort)
+      .input('IsAdmin', sql.VarChar(32), input.query.isAdmin) // number
+
+      // TO DO : Need to decide on number of parameters
+
+    // .input('Brand_Name', sql.VarChar(32), input.query.)
+    // .input('Store_Number', sql.VarChar(32), input.query.Store_Number)
+    // .input('Store_Name', sql.VarChar(32), input.query.Store_Name)
+    // .input('Device_SerialNumber', sql.VarChar(32), input.query.Device_SerialNumber)
+    // .input('Company_Name', sql.VarChar(32), input.query.Company_Name)
+    // .input('Device_MainVersion', sql.VarChar(32), input.query.Device_MainVersion)
+    // .input('Store_AddressLine1', sql.VarChar(32), input.query.Store_AddressLine1)
+    //  search add this varible
+
+      .input('RecordPerPage', sql.SmallInt, input.query.per)
+      .input('PageNumber', sql.SmallInt, input.query.pno)
+      .execute('usp_getUserStoreList1', (err, result) => {
+        if (err) {
+          output.data = err
+          output.status = false
+          callback(output)
+        }
+        if (result && result.recordsets) {
+          output.data = result.recordsets
+          output.status = true
+          callback(output)
+        }
+      })
+  })
+
+  sqlPool.on('error', err => {
+    if (err) {
+      callback(err)
+    }
+  })
+}
+
+/**
+ *
+ * @param {*} input
+ * @param {*} callback
+ */
+const getStoreByUid = (input, callback) => {
+  const output = {}
+  const sqlPool = new sql.ConnectionPool(dataBaseSql, err => {
+    if (err) {
+      output.data = err
+      output.status = false
+      callback(output)
+    }
+    console.log(input)
+    sqlPool.request()
+      .input('store_UID', sql.VarChar(32), input.suid)
+      .execute('usp_getStoreByStoreUid', (err, result) => {
+        if (err) {
+          output.data = err
+          output.status = false
+          callback(output)
+        }
+        if (result && result.recordsets) {
+          output.data = result.recordsets
+          output.status = true
+          callback(output)
+        }
+      })
+  })
+
+  sqlPool.on('error', err => {
+    if (err) {
+      callback(err)
+    }
+  })
+}
+
+/**
+ *
+ * @param {*} input
+ * @param {*} callback
+ */
+const removeDeviceById = (input, callback) => {
+  const output = {}
+  const sqlPool = new sql.ConnectionPool(dataBaseSql, err => {
+    if (err) {
+      output.data = err
+      output.status = false
+      callback(output)
+    }
+    console.log(input)
+    sqlPool.request()
+      .input('device_UID', sql.VarChar(32), input.duid)
+      .execute('usp_removeDeviceFromStore', (err, result) => {
+        if (err) {
+          output.data = err
+          output.status = false
+          callback(output)
+        }
+        if (result && result.recordsets) {
+          output.data = result.recordsets
+          output.status = true
+          callback(output)
+        }
+      })
+  })
+
+  sqlPool.on('error', err => {
+    if (err) {
+      callback(err)
+    }
+  })
+}
+
+const settingsDevices = (duid, callback) => {
+  repository.execute(sqlQuery.settingsDevices.getStatus, {
+    replacements: { duid: duid },
+    type: db.QueryTypes.SELECT
+  }, result => callback(result))
+}
+
+const settingsStores = (duid, callback) => {
+  repository.execute(sqlQuery.settingsStores.getStatus, {
+    replacements: { suid: suid },
+    type: db.QueryTypes.SELECT
+  }, result => callback(result))
+}
+
 module.exports = {
   getRawCarDataReport,
   getDayDataReport,
-  getWeekReport
+  getWeekReport,
+  settingsDevices,
+  settingsStores,
+  getStores,
+  getStoreByUid,
+  removeDeviceById
 }

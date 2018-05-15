@@ -1,7 +1,7 @@
-const dateUtils = require('../Common/DateUtils')
+const dateUtils = require('./DateUtils')
 const _ = require('lodash')
 const moment = require('moment')
-const messages = require('../Common/Message')
+const messages = require('./Message')
 /**
  * This is method for creating multiple store devices values
  * @param {*} result result form database

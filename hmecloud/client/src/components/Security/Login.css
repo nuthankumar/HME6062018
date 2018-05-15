@@ -388,7 +388,7 @@ span.tip {
 
 .advanced-option-section {
     border: 1px solid #cac7c7;
-    border-top: none;
+    /* border-top: none; */
     margin: 0px -10px;
     padding: 10px;
     z-index: 0;
@@ -444,7 +444,7 @@ td.repTemplateRow:hover {
     padding: 0px 10px;
 }
 .textPaddingSmall-reports {
-    padding: 0px 5px;
+    padding: 0px 15px;
     position: absolute;
     top: -7px;
     background-color: #EBEBEB;
@@ -469,9 +469,12 @@ td.repTemplateRow:hover {
     font-weight: bold;
     cursor: pointer;
     position: relative;
+    /* margin-left: -9px; */
+    /* width: 305px;*/  
+     width: 100%; 
+}
+.shortBorder{
     border-top: 1px solid #cac7c7;
-    margin-left: -9px;
-    width: 305px;
 }
 .container.criteria div {
     margin: 5px auto;
@@ -531,11 +534,10 @@ padding:5px 5px;
     }
 
     .storeWrap {
-        width: 300px;
-        white-space: nowrap;
-        overflow: hidden;
-        /* color:red; */
-        text-overflow: ellipsis;
+        width:300px;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
       }
       .storeWrap span:not(:first-child){
         color:red;
@@ -550,8 +552,9 @@ padding:5px 5px;
     .showIcon{
         position: absolute;
         left: 69%;
-        top: -2px;
-        width: 10px !important;
+        top: -1px !important;
+        padding-left: 3px;
+        width:  10px !important;
         background: #EBEBEB;
     } 
 

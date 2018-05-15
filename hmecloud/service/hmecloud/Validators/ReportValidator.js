@@ -52,6 +52,9 @@ validator.prototype.inputValidator = function () {
     } else if (this.request.body.timeMeasure === 3) {
       reportName = 'week'
       return reportName
+    } else if (this.request.body.timeMeasure === 4) {
+      reportName = 'rawcardata'
+      return reportName
     }
   } else {
     output.key = 'invalidDeviceId'

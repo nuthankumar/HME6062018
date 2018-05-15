@@ -103,7 +103,8 @@ const sqlQueries = {
   Reports: {
     getWeekReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Week_Details_Dynamic]',
     getDayPartReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details_Dynamic]',
-    getDayReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Date_Details_Dynamic]'
+    getDayReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Date_Details_Dynamic]',
+    getRawCarData: '[dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details_Dynamic]'
   },
   DeviceIds: {
     Parameters: {
@@ -143,6 +144,21 @@ const sqlQueries = {
   PageNumber: {
     Parameters: {
       PageNumber: 'PageNumber'
+    }
+  },
+  CarRecordTypeID: {
+    Parameters: {
+      CarDataRecordType_IDs: 'CarDataRecordType_IDs'
+    }
+  },
+  StartDateTime: {
+    Parameters: {
+      StartDateTime: 'StartDateTime'
+    }
+  },
+  EndDateTime: {
+    Parameters: {
+      EndDateTime: 'EndDateTime'
     }
   },
   UserUID: {
