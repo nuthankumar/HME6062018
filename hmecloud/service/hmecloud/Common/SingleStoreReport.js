@@ -186,7 +186,7 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
     }
   }
   _.map(deviceGoalInfo[0], (value, key) => {
-    let obj = {goal: '0', cars: '0', percentage: '0%'}
+    let obj = {goal: '', cars: '0', percentage: '0%'}
     let rowKey = {}
     let row = _.clone(obj)
     if (eventGoalList.indexOf(key) > -1) {
