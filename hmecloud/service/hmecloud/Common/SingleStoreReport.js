@@ -243,4 +243,5 @@ Device.prototype.getSystemStatistics = function (DeviceSystemInfo, DeviceLaneInf
   }
   return displayData
 }
+
 module.exports = Device
