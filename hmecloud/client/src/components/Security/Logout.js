@@ -10,13 +10,13 @@ class Logout extends Component {
   componentWillMount() {
       if(this.authService.isAdmin()){
        this.authService.clear()
-       this.props.history.push('/admin')
+       window.location.href = Config.adminColdFusionUrl + '/admin'
       }
       else{
-        this.authService.clear()
-        this.props.history.push('/')
-      }
-  
+       this.authService.clear()
+     //  this.props.history.push(Config.coldFusionUrl)
+     window.location.href = Config.coldFusionUrl
+    }
   }
   render() {
     return (<div/>
