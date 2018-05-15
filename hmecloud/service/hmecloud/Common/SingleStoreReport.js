@@ -166,52 +166,67 @@ Device.prototype.getLongestTime = function (longestTime) {
   return deviceLongestTime
 }
 Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, totalCars, goalHeader, deviceHeaders) {
-  const timeFormat = Number(this.request.body.format)
-  let getColors = []
-  if (_.isUndefined(this.colors[0]) || _.isUndefined(this.colors[0].ColourCode)) {
-    getColors = ['N/A', 'N/A', 'N/A']
-  } else {
-    getColors = this.colors[0].ColourCode.split('|')
+  let eventGoalList
+  if (!_.isNull(goalHeader[0].EventGoalNames)) {
+    eventGoalList = _.get(goalHeader[0], 'EventGoalNames').split('|$|')
   }
-  let goalDetails = []
-  function CalculatePercetage (value, totalCars) {
-    if (value === 0 || value === null || isNaN(value) || _.isUndefined(value) || totalCars === 0) {
+  let goalGrade = {}
+  let isMinutes = Number(this.request.body.format)
+  let colorSettings
+  if (_.isUndefined(this.colors[0]) || _.isUndefined(this.colors[0].ColourCode)) {
+    colorSettings = ['N/A', 'N/A', 'N/A']
+  } else {
+    colorSettings = this.colors[0].ColourCode.split('|')
+  }
+  function CalculatePercetage (value, totalCarsCount) {
+    if (value === 0 || value === null || isNaN(value) || _.isUndefined(value) || totalCarsCount === 0) {
       return `0%`
     } else {
-      return `${Math.round(value / totalCars * 100)}%`
+      return `${Math.round(value / totalCarsCount * 100)}%`
     }
   }
   _.map(deviceGoalInfo[0], (value, key) => {
-    let goalGrades = {}
-    if (key !== 'Device_ID') {
-      let goalTime = (timeFormat === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES))
-      if (key.includes('GoalA')) {
-        goalGrades.title = '< Goal A (min:sec)'
-        goalGrades.color = getColors[0]
-        goalGrades[`${key}`] = {'goal': (goalTime || ''), 'cars': (value || 0), 'percentage': (CalculatePercetage(value, totalCars) || '0%')}
-      } else if (key.includes('GoalB')) {
-        goalGrades.title = '< Goal B (min:sec)'
-        goalGrades.color = getColors[1]
-        goalGrades[`${key}`] = {'goal': (goalTime || ''), 'cars': (value || 0), 'percentage': (CalculatePercetage(value, totalCars) || '0%')}
-      } else if (key.includes('GoalC')) {
-        goalGrades.title = '< Goal C (min:sec)'
-        goalGrades.color = getColors[2]
-        goalGrades[`${key}`] = {'goal': (goalTime || ''), 'cars': (value || 0), 'percentage': (CalculatePercetage(value, totalCars) || '0%')}
-      } else if (key.includes('GoalD')) {
-        goalGrades.title = '< Goal D (min:sec)'
-        goalGrades.color = getColors[2]
-        goalGrades[`${key}`] = {'goal': (goalTime || ''), 'cars': (value || 0), 'percentage': (CalculatePercetage(value, totalCars) || '0%')}
-      } else if (key.includes('GoalF')) {
-        goalGrades.title = '> Goal D (min:sec)'
-        goalGrades.color = getColors[2]
-        goalGrades[`${key}`] = {'goal': (goalTime || ''), 'cars': (value || 0), 'percentage': (CalculatePercetage(value, totalCars) || '0%')}
+    let obj = {goal: '0', cars: '0', percentage: '0%'}
+    let rowKey = {}
+    let row = _.clone(obj)
+    if (eventGoalList.indexOf(key) > -1) {
+      row.cars = value || '0'
+      row.percentage = CalculatePercetage(value, totalCars)
+      let eventWithGolas = _.split(key, '-', 2)
+
+      let event = _.trim(eventWithGolas[0])
+      let goal = _.trim(eventWithGolas[1])
+      if (key.includes(goal)) {
+        if (_.has(goalGrade, goal)) {
+          goalGrade[goal][event] = row
+        } else {
+          rowKey[event] = row
+          goalGrade[goal] = rowKey
+          goalGrade[goal].title = (goal === 'GoalF' ? `> GoalD (min:sec)` : `< ${goal} (min:sec)`)
+          goalGrade[goal].color = getColorForGoal(goal)
+        }
       }
     }
-    if (goalGrades.title) {
-      goalDetails.push(goalGrades)
+  })
+  function getColorForGoal (goal) {
+    if (goal === 'GoalA') {
+      return colorSettings[0]
+    } else if (goal === 'GoalB') {
+      return colorSettings[1]
+    } else {
+      return colorSettings[2]
+    }
+  }
+  _.map(deviceGoalInfo[0], (value, key) => {
+    let eventWithGolas = _.split(key, '-', 2)
+    let event = _.trim(eventWithGolas[0])
+    let goals = _.trim(eventWithGolas[1])
+    if (_.has(goalGrade, [goals, event])) {
+      value = (isMinutes === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES))
+      _.set(goalGrade, [goals, event, 'goal'], value)
     }
   })
-  return goalDetails
+  return _.values(goalGrade) || []
 }
 Device.prototype.getSystemStatistics = function (DeviceSystemInfo, DeviceLaneInfo) {
   let displayData = {}
