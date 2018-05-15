@@ -51,6 +51,43 @@ router.post('/generatecsv', authValidator, VerifyToken, (request, response) => {
     }
   })
 })
+/**
+ * TO DO
+ */
+router.get('/getAll', authValidator, VerifyToken, (request, response) => {
+  storeValidator.getStores(request, result => {
+    if (result.status === true) {
+      response.status(200).send(result)
+    } else {
+      response.status(400).send(result)
+    }
+  })
+})
+/**
+ *
+ */
+router.get('/get', authValidator, VerifyToken, (request, response) => {
+  storeValidator.getStoreByUid(request, result => {
+    if (result.status === true) {
+      response.status(200).send(result)
+    } else {
+      response.status(400).send(result)
+    }
+  })
+})
+
+/**
+ *
+ */
+router.post('/remove', authValidator, VerifyToken, (request, response) => {
+  storeValidator.removeDeviceById(request, result => {
+    if (result.status === true) {
+      response.status(200).send(result)
+    } else {
+      response.status(400).send(result)
+    }
+  })
+})
 
 router.get('/settingsDevices', authValidator, (request, response) => {
   storeValidator.settingsDevices(request, result => {

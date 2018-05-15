@@ -212,11 +212,60 @@ const settingsStores = (input, response) => {
     }
   })
 }
+/**
+ * @param {*} input
+ * @param {*} callBack
+ */
+const getStores = (input, callBack) => {
+  stores.getStores(input, result => {
+    if (result.status === true) {
+      let response = {}
+      let permessions = _.compact(_.map(result.data[1], 'Permission_Name')) || []
+      response.storeList = result.data[0]
+      response.userPermessions = permessions
+      response.pageDetails = result.data[2][0] || []
+      response.status = true
+      callBack(response)
+    } else {
+      callBack(result)
+    }
+  })
+}
 
+/**
+ * @param {*} input
+ * @param {*} response
+ */
+const getStoreByUid = (input, response) => {
+  stores.getStoreByStoreUid(input, result => {
+    if (result.status === true) {
+      response.status(200).send(result)
+    } else {
+      response.status(400).send(result)
+    }
+  })
+}
+
+/**
+ * @param {*} input
+ * @param {*} response
+ */
+const removeDeviceById = (input, response) => {
+  stores.removeDeviceById(input, result => {
+    if (result.status === true) {
+      response.status(200).send(result)
+    } else {
+      response.status(400).send(result)
+    }
+  })
+}
 module.exports = {
   generateReport,
   generateCsv,
   getRawCarDataReport,
   settingsDevices,
-  settingsStores
+  settingsStores,
+  getStores,
+  getStoreByUid,
+  removeDeviceById
 }
