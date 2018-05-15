@@ -13,6 +13,7 @@ import User from './components/User/User'
 import registerServiceWorker from './registerServiceWorker'
 import EmailAlert from './components/Alerts/Email'
 import Message from './components/Alerts/Message'
+import SystemStatus from './components/Stores/SystemStatus'
 import './i18n'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { browserHistory } from 'react-dom';
@@ -46,6 +47,7 @@ ReactDOM.render( <Provider store={createStoreWithMiddlewaare(reducers)}>
         <Route exact path="/user/:uuid?" render={(props) => <Layout Params={props}><Route path='/user/:uuid?' component={Authenticate(User)} /></Layout>} />
         <Route exact path="/logout" render={(props) => <Layout Params={props}><Route path='/logout' component={Authenticate(Logout)} /></Layout>} />
         <Route exact path="/settings/stores" render={(props) => <Layout Params={props}><Route path='/settings/stores' component={Authenticate(StoreDetails)} /></Layout>} />  
-      </div>
+        <Route exact path="/systemStatus" render={(props) => <Layout Params={props}><Route path='/systemStatus' component={Authenticate(SystemStatus)} /></Layout>} />
+    </div>
     </Router></Provider>, document.getElementById('root'))
 registerServiceWorker()
