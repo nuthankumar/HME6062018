@@ -20,12 +20,10 @@ const convertSecondsToMinutes = (avgTime, formatFlag) => {
   }
 }
 
-const dayPartTime = (dayPartId, input) => {
+const dayPartTime = (dayPartId) => {
   let dayPartTime
-
   if (dayPartId && dayPartId === 1) {
     dayPartTime = messages.COMMON.DAYPARTOPENTIME
-
     // TODO check with HME team
     // if (input.ReportTemplate_From_Time) {
     //   dayPartTime = messages.COMMON.OPENVALUE + '-' + moment(input.ReportTemplate_From_Time, 'hh:mm:ss a').format('hh:mm')
@@ -45,7 +43,8 @@ const fromTime = (dateVal, timeVal) => {
   } else {
     fromDateTime = dateVal + ' ' + defaultFromTime
   }
-  return moment(fromDateTime, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:MM:SS')
+  // return moment(fromDateTime, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:MM:SS')
+  return fromDateTime
 }
 
 const toTime = (dateVal, timeVal) => {
@@ -55,7 +54,8 @@ const toTime = (dateVal, timeVal) => {
   } else {
     toDateTime = dateVal + ' ' + defaultEndTime
   }
-  return moment(toDateTime, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')
+  // return moment(toDateTime, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')
+  return toDateTime
 }
 
 const currentDate = () => {

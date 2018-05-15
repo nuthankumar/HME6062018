@@ -1,6 +1,6 @@
-const dateUtils = require('../Common/DateUtils')
+const dateUtils = require('./DateUtils')
 const _ = require('lodash')
-const messages = require('../Common/Message')
+const messages = require('./Message')
 // deviceData, color, goalSettings, this.request, reportFilter
 const Device = function (result, colors, goalSettings, request, reportFilter) {
   this.result = result
