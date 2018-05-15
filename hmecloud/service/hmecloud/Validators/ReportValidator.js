@@ -68,17 +68,17 @@ validator.prototype.dateRange = function (date) {
     output.key = date.errorKey
     output.status = false
     return output
-  }
-  if (this.request.body.advancedOptions &&
+  } else if (this.request.body.advancedOptions &&
               this.request.body.deviceIds.length > 100 &&
               this.request.body.deviceIds.length < 250 &&
                   this.request.body.toDate > dateUtils.getAdvancedSelectionMaxDate(date.dateRangeTwo, this.request.body.fromDate)) {
     output.key = date.advanceErrorKey
     output.status = false
     return output
+  } else {
+    output.status = true
+    return output
   }
-  output.status = true
-  return output
 }
 validator.prototype.reportValidator = function (isReportName) {
   let date = {}

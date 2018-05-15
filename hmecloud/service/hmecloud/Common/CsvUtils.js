@@ -1,7 +1,7 @@
 const jsonexport = require('jsonexport')
 const mail = require('../Common/EmailUtil')
 
-const generateCsvAndEmail = (input, callback) => {
+const generateCsvAndEmail = function (input, callback) {
   jsonexport(input.reportinput, function (err, result) {
     if (result) {
       var attachment = [{
@@ -9,12 +9,10 @@ const generateCsvAndEmail = (input, callback) => {
         content: result,
         encoding: 'utf16le'
       }]
-      mail.send(input.email, input.subject, attachment, isMailSent => {
+      isMailSent = mail.send( input.email, input.subject, attachment, isMailSent => {
         if (isMailSent) {
-            console.log("Success")
           callback(isMailSent)
         } else {
-            console.log("fail")
           callback(isMailSent)
         }
       })
@@ -22,7 +20,4 @@ const generateCsvAndEmail = (input, callback) => {
   })
 }
 
-module.exports = {
-  generateCsvAndEmail
-
-}
+module.exports = {generateCsvAndEmail}

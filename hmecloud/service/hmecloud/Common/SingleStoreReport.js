@@ -5,6 +5,7 @@ const messages = require('./Message')
 const Device = function (result, colors, goalSettings, request, reportFilter) {
   this.result = result
   this.colors = colors
+  console.log('color', this.colors)
   this.goalSettings = goalSettings
   this.request = request
   this.reportFilter = reportFilter
@@ -144,30 +145,32 @@ Device.prototype.getSingleStoreValues = function () {
   timeMeasureType.push(deviceTime)
   return timeMeasureType
 }
-Device.prototype.getLongestTime = function (longestTime) {
+Device.prototype.getLongestTime = function (longestTime, deviceHeaders) {
+  console.log('deviceHeaders', deviceHeaders)
   const timeFormat = this.request.body.format
   let deviceLongestTime = []
-  let timeObj = []
   _.forEach(longestTime, (items) => {
     let timeDetails = {}
-    if (items['DeviceTimeStamp'] !== null) {
-      timeDetails.headerName = items.headerName
-      timeDetails.Value = dateUtils.convertSecondsToMinutes(items.DetectorTime, timeFormat)
-      timeDetails.Date = dateUtils.convertMMMddMM(items.DeviceTimeStamp)
-      timeDetails.Time = dateUtils.converthhmmsstt(items.DeviceTimeStamp)
-      timeObj.push(timeDetails)
-    }
+    _.forEach(deviceHeaders, (value, key) => {
+      if (items['DeviceTimeStamp'] !== null) {
+        if (items[`${value}`] !== null) {
+          timeDetails[`${value}`] = {
+            'Value': dateUtils.convertSecondsToMinutes(items.DetectorTime, timeFormat),
+            'Date': dateUtils.convertMMMddMM(items.DeviceTimeStamp),
+            'Time': dateUtils.converthhmmsstt(items.DeviceTimeStamp)
+          }
+        }
+        deviceLongestTime.push(timeDetails)
+      } else {
+        deviceLongestTime = []
+      }
+    })
   })
-  if (timeObj.length > 0) {
-    deviceLongestTime = [ _.groupBy(timeObj, 'headerName') ]
-  } else {
-    deviceLongestTime = []
-  }
   return deviceLongestTime
 }
 Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, totalCars, goalHeader, deviceHeaders) {
   let eventGoalList
-  if (goalHeader && goalHeader.length > 0 && !_.isNull(goalHeader[0].EventGoalNames)) {
+  if (goalHeader && goalHeader.length > 0 && !_.isNull(goalHeader[0].EventGoalNames) && goalHeader[0].EventGoalNames !== undefined) {
     eventGoalList = _.get(goalHeader[0], 'EventGoalNames').split('|$|')
   } else {
     eventGoalList = []

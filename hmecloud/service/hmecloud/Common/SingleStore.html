@@ -977,8 +977,11 @@
                     </tr>
                 </tbody>
             </table>
-
-            <div class="multi-cont">
+            {{#each details.storeDetails}}
+            {{#data as event as |eventKey eventValue|}}
+            <p>eventValue</p>
+            {{/data}} {{/each}}
+            <!-- <div class="multi-cont">
 
 
                 <table cellspacing="0" class=" nobreak table-layout daypart " style="border-bottom:0px solid white;margin-top:4px;width: 785px;width: 785px;">
@@ -989,11 +992,14 @@
                                 <span>(min:sec)</span>
                             </th>
                         </tr>
-
+                        {{#each details.storeDetails}}
+                        {{#data as event as |eventKey eventValue|}}
+                        <p>eventValue</p>
+                        {{/data}} {{/each}}
                         <tr>
                             <th class="wide blueback colWidth ">{{details.reportName}}</th>
                             <th class="colWidth5 blueback ">
-                                <span>Menu</span>
+                                <span>menu</span>
                             </th>
                             <th class="colWidth5 blueback ">
                                 <span>Greet</span>
@@ -1010,7 +1016,8 @@
                             </th>
                             <th class="colWidth5 blueback grayhead">Total Cars</th>
                         </tr>
-                        {{#each details.storeDetails}} {{#data}}
+
+                        <!-- {{#each details.storeDetails}} {{#data}}
                         <tr class="table-row-data">
                             <td class="rnshade boldin">
                                 {{reportsTimes.timeSpan}} {{reportsTimes.currentDaypart}}
@@ -1029,11 +1036,37 @@
                                 {{#if totalCars.value}}{{totalCars.value}}{{else}} {{/if}}</td>
                         </tr>
                     </tbody>
-                    {{/data}} {{/each}}
+                    {{/data}} {{/each}} -->
+
+                    <!-- <tr class="table-row-data">
+                        <td class="rnshade boldin">
+                           menu
+                        </td>
+                        <td class="rnshade boldin">
+                            menu
+                         </td>
+                         <td class="rnshade boldin">
+                            menu
+                         </td>
+                         <td class="rnshade boldin">
+                            menu
+                         </td>
+                         <td class="rnshade boldin">
+                            menu
+                         </td>
+                        <<td class="rnshade boldin">
+                            menu
+                         </td>
+                         <td class="rnshade boldin">
+                            menu
+                         </td>
+                    </tr>
+                </tbody>
+
                 </table>
 </div>
-</div>
-
+</div> -->
+<!--
                 {{#if details.isLongTime }}
                 <div class="longSec">
      <table class="table-layout daypart longest" style="width: 735px;
@@ -1041,9 +1074,9 @@
         margin-top: -1px;
         border-bottom:0px solid white;
         padding-bottom: 500px;" cellspacing="0">
-                        <tbody>
+                        <tbody> -->
 
-                            <tr>
+                            <!-- <tr>
                                 <td class="rshade boldin longTimes" rowspan="4" style="width:130px;border: none;">
                                     <span translate="" key="ReportsLongest">Longest</span>
                                     <br>
@@ -1051,9 +1084,9 @@
                                     <br>
                                     <span class="timeSpan">(min)</span>
                                 </td>
-                            </tr>
-                            {{#each details.longTime}}
-                            <tr>
+                            </tr> -->
+                            <!-- {{#each details.longTime}} -->
+                            <!-- <tr>
                                 <td class="colWidth5 rshade" style="width: 190px;">
                                     <span class="boldin">{{Menu.Value}}</span>
                                     <br>
@@ -1085,27 +1118,27 @@
                                         <br>{{LaneTotal.Time}}</span>
                                 </td>
                                 <td style="border-right:1px solid white;width:125px;"></td>
-                            </tr>
-                            {{/each}}
-                        </tbody>
+                            </tr> -->
+                            <!-- {{/each}} -->
+                        <!-- </tbody>
 
                     </table>
 
 
                 </div>
-            </div>
-            <div style="page-break-after: always;">
+            </div> -->
+            <!-- <div style="page-break-after: always;">
                     <p style="color:white;">this is Page break</p>
-                      </div>
-            {{/if}} {{#if details.isgoalData }}
+                      </div> -->
+            <!-- {{/if}} {{#if details.isgoalData }} -->
             <!--
     GOALS STATISTICS FOR Daypart -->
-            <div class="multi-cont">
+            <!-- <div class="multi-cont">
                 <div class="row  alignHeader">
                     <h2>GOALS STATISTICS FOR {{details.reportName}}</h2>
-                </div>
-                <div class="multi-cont">
-                    <table cellspacing="0" class="table-layout goalW goalMain  daypart " style="border-bottom:0px solid white;margin-bottom:0px;margin-top:4px;/* position: relative; */width: 785px;">
+                </div> -->
+                <!-- <div class="multi-cont"> -->
+                    <!-- <table cellspacing="0" class="table-layout goalW goalMain  daypart " style="border-bottom:0px solid white;margin-bottom:0px;margin-top:4px;/* position: relative; */width: 785px;">
                         <tr>
                             <th class="clear"></th>
                             <th class="grayhead" colspan=4 "">AVERAGE TIME
@@ -1133,9 +1166,9 @@
                                 </th>
                             </tr>
                         </tr>
-                    </table>
-                    {{#each details.goalData}}
-                    <table cellspacing="0" class="table-layout goalW goalMain  daypart " style="border-bottom:0px solid white;margin-bottom:0px;width: 785px;padding-left:24px">
+                    </table> -->
+                    <!-- {{#each details.goalData}} -->
+                    <!-- <table cellspacing="0" class="table-layout goalW goalMain  daypart " style="border-bottom:0px solid white;margin-bottom:0px;width: 785px;padding-left:24px">
                         <tr class="greenBox" style=" background-color:{{color}}">
                             <td class="wide">&lt;
                                 <span translate="">{{title}}</span>
@@ -1166,19 +1199,19 @@
                             <td>{{laneTotal.goal}}</td>
                         </tr>
                         {{/each}}
-                    </table>
+                    </table> -->
 
-                </div>
-            </div>
-            {{/if}} {{#if details.isSystemStatistics }}
-            <div style="page-break-after: always;">
+                <!-- </div>
+            </div> -->
+            <!-- {{/if}} {{#if details.isSystemStatistics }} -->
+            <!-- <div style="page-break-after: always;"> -->
                     <p style="color:white;">this is Page break</p>
                       </div>
             <!-- System Statistics -->
-            <div class="row  alignHeader" style="margin-top: 50px;">
+            <!-- <div class="row  alignHeader" style="margin-top: 50px;">
                 <h2>System Statistics</h2>
-            </div>
-            <table class="table-layout  headSystemStatistics ssBord colWidthSS5" cellspacing="0">
+            </div> -->
+            <!-- <table class="table-layout  headSystemStatistics ssBord colWidthSS5" cellspacing="0">
 
                 <tbody>
                     <tr>
@@ -1232,8 +1265,8 @@
                     </tr>
                 </tbody>
 
-            </table>
-            {{/if}}
+            </table> -->
+            <!-- {{/if}} -->
         </div>
         <div style="page-break-after: always;">
                 <p style="color:white;">this is Page break</p>

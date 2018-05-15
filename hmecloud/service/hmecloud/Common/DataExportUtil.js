@@ -1,20 +1,29 @@
 const dateUtils = require('../Common/DateUtils')
-const csvGeneration = require('../Common/CsvUtils')
+const CSVGeneration = require('../Common/CsvUtils')
 const Pdfmail = require('./PDFUtils')
 const moment = require('moment')
+const _ = require('lodash')
 
-const prepareJsonForExport = (storeData, input, csvInput, reportType, callback) => {
+const generateCSVReport = (results, input, csvInput, reportType, eventHeaders, callback) => {
   let storeDataList = []
-  let format = input.ReportTemplate_Format
-  storeData.forEach(item => {
+  let format = input.body.format
+  let reportDetails
+  if (reportType === 'rawcardata') {
+    reportDetails = results
+  } else {
+    if (results && results.length > 0) {
+      reportDetails = results[0].data
+    }
+  }
+  _.forEach(reportDetails, (item, key) => {
     let store = {}
     // Week
     if (reportType === 'week') {
       if (item.StoreNo === 'Total Week') {
         store.Week = 'Total Week'
-      } else if (input.ReportTemplate_DeviceIds.length === 1) {
+      } else if (input.body.deviceIds.length === 1) {
         store.Week = moment(item.WeekStartDate).format('MM/DD/YYYY') + '-' + moment(item.WeekEndDate).format('MM/DD/YYYY')
-      } else if (input.ReportTemplate_DeviceIds.length > 1) {
+      } else if (input.body.deviceIds.length > 1) {
         store.Week = moment(item.WeekStartDate).format('MM/DD/YYYY') + '-' + moment(item.WeekEndDate).format('MM/DD/YYYY')
         store.Groups = item.GroupName
         store.Store = item.Store_Name
@@ -33,9 +42,9 @@ const prepareJsonForExport = (storeData, input, csvInput, reportType, callback) 
     if (reportType === 'Daypart') {
       if (item.StoreNo === 'Total Daypart') {
         store.Daypart = 'Total Daypart'
-      } else if (input.ReportTemplate_DeviceIds.length === 1) {
+      } else if (input.body.deviceIds.length === 1) {
         store.Daypart = moment(item.StoreDate).format('MM/DD/YYYY')
-      } else if (input.ReportTemplate_DeviceIds.length > 1) {
+      } else if (input.body.deviceIds.length > 1) {
         store.Groups = item.GroupName
         store.Stores = item.Store_Name
         if (item.StoreNo === 'Total Daypart') {
@@ -53,9 +62,9 @@ const prepareJsonForExport = (storeData, input, csvInput, reportType, callback) 
     if (reportType === 'Day') {
       if (item.StoreNo === 'Total Day') {
         store.Day = 'Total Day'
-      } else if (input.ReportTemplate_DeviceIds.length === 1) {
+      } else if (input.body.deviceIds.length === 1) {
         store.Day = moment(item.StoreDate).format('MM/DD/YYYY')
-      } else if (input.ReportTemplate_DeviceIds.length > 1) {
+      } else if (input.body.deviceIds.length > 1) {
         store.Groups = item.GroupName
         store.Stores = item.Store_Name
         if (item.StoreNo === 'Total Day') {
@@ -69,16 +78,22 @@ const prepareJsonForExport = (storeData, input, csvInput, reportType, callback) 
         }
       }
     }
-    store['Menu Board'] = (dateUtils.convertSecondsToMinutes(item['Menu Board'], format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item['Menu Board'], format))
-    store.Greet = (dateUtils.convertSecondsToMinutes(item.Greet, format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item.Greet, format))
-    store.Service = (dateUtils.convertSecondsToMinutes(item.Service, format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item.Service, format))
-    store['Lane Queue'] = (dateUtils.convertSecondsToMinutes(item['Lane Queue'], format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item['Lane Queue'], format))
-    store['Lane Total'] = (dateUtils.convertSecondsToMinutes(item['Lane Total'], format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item['Lane Total'], format))
-    store['Total Cars'] = (dateUtils.convertSecondsToMinutes(item['Total_Car'], format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item['Total_Car'], format))
+    if (reportType !== 'rawcardata') {
+      _.forEach(eventHeaders, (value, key) => {
+        if (item[`${value}`] !== null) {
+          store[`${value}`] = (dateUtils.convertSecondsToMinutes(item[`${value}`].value, format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item[`${value}`].value, format))
+        }
+      })
+    }
+    if (reportType === 'rawcardata') {
+      _.forEach(reportDetails[key], (value, key) => {
+        store[`${key}`] = `${value}` === 'N/A' ? '' : `${value}`
+      })
+    }
     storeDataList.push(store)
   })
   csvInput.reportinput = storeDataList
-  csvGeneration.generateCsvAndEmail(csvInput, result => {
+  CSVGeneration.generateCsvAndEmail(csvInput, result => {
     let output = {}
     if (result) {
       output.data = input.UserEmail
@@ -104,6 +119,4 @@ const JsonForPDF = (data, input, reportName, pdfInput, isMultiStore) => {
 }
 
 module.exports = {
-  prepareJsonForExport,
-  JsonForPDF
-}
+  generateCSVReport, JsonForPDF }
