@@ -34,8 +34,8 @@ BEGIN
 	@IsCorpUser bit = 0,
 	@Company_Type varchar(50),
 	@IsOwner bit = 0,
-	@UserUid varchar(32)
-
+	@UserUid varchar(32),
+	@View_Franchise bit = 0
 	CREATE TABLE #AccountIDs
 		(
 			Account_ID int
@@ -47,7 +47,7 @@ BEGIN
 	FROM tbl_Users usrs INNER JOIN tbl_Accounts acc ON usrs.User_ID = acc.Account_User_ID
 	WHERE acc.Account_ID = @AccountId
 
-	SELECT bran.Brand_ID, lrol.Role_IsCorporate, comp.Company_ID,  comp.Company_Type, CASE WHEN acc.Account_ID IS NULL THEN 0 ELSE 1 END IsOwner 
+	SELECT bran.Brand_ID, lrol.Role_IsCorporate, comp.Company_ID,comp.Company_Type,comp.View_Franchise, CASE WHEN acc.Account_ID IS NULL THEN 0 ELSE 1 END IsOwner 
 	INTO #UserRoleDetails
 	FROM 
 	tbl_Users usrs 
@@ -67,7 +67,7 @@ BEGIN
 				WHERE usrs.User_UID = @UserUid AND perm.Permission_Name ='ViewAllStores' )
 		SET @isViewAllStores = 1
 
-	SELECT @Brand_ID = Brand_ID, @Company_ID = Company_ID, @Company_Type = Company_Type, @isCorpUser = Role_IsCorporate,
+	SELECT @Brand_ID = Brand_ID, @Company_ID = Company_ID, @Company_Type = Company_Type, @View_Franchise = View_Franchise,@isCorpUser = Role_IsCorporate,
 	@IsOwner = IsOwner 
 	FROM #UserRoleDetails
 
@@ -114,11 +114,12 @@ BEGIN
 		WHERE  gd.StoreID IS NULL AND s.Store_Account_ID IN (SELECT Account_ID FROM #AccountIDs) 
 		AND d.Device_LaneConfig_ID <> 2 -- not dual lane		
 		AND d.device_deviceType_id = 1 -- ZOOM device
-		'+IIF(@IsCorpUser = 1 OR (@Company_Type = 'DISTRIBUTOR' AND @IsOwner = 1) AND ISNULL(@Brand_ID,0)<> 0,
-				' AND brand.Brand_ID='+ CONVERT(VARCHAR,@Brand_ID) + ' AND absr.Account_ShareData = 1', 
-				'' ) +' 
-		'+IIF((((@IsCorpUser = 0 AND @Company_Type <> 'DISTRIBUTOR') OR @isViewAllStores = 1) AND ISNULL(@Company_ID,0)<> 0 ),'   -- not cor user but veiw all usr
-		AND s.Store_Company_ID='+ CONVERT(VARCHAR,@Company_ID), '' ) +'
+		'+IIF((@IsCorpUser = 1 OR (@Company_Type = 'DISTRIBUTOR' AND @IsOwner = 1)) AND @View_Franchise = 1 AND ISNULL(@Brand_ID,0)<> 0,
+				' AND brand.Brand_ID='+ CONVERT(VARCHAR,@Brand_ID) + ' AND absr.Brand_ShareData = 1','' ) +' 
+		'+IIF((@IsCorpUser = 1 OR (@Company_Type = 'DISTRIBUTOR' AND @IsOwner = 1)) AND @View_Franchise = 0 AND ISNULL(@Brand_ID,0)<> 0,
+				'AND absr.Brand_ShareData is null AND s.Store_Company_ID='+ CONVERT(VARCHAR,@Company_ID), '' ) +'
+		'+IIF((((@IsCorpUser = 0 AND @Company_Type <> 'DISTRIBUTOR') OR @isViewAllStores = 1) AND ISNULL(@Company_ID,0)<> 0 ),    -- not corp user but view all usr
+		'AND s.Store_Company_ID='+ CONVERT(VARCHAR,@Company_ID), '' ) +'
 		' +IIF(((@IsCorpUser = 0 AND @Company_Type <> 'DISTRIBUTOR') AND @isViewAllStores <> 1) ,'  -- normal user with no view all and no corp user
 		AND s.Store_ID IN(SELECT Store_ID FROM #StoreIDs)', '') 
 	
