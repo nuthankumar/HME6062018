@@ -57,13 +57,13 @@ Device.prototype.getSingleStoreValues = function () {
     let newValue
     _.forEach(storeDetails[index], function (value, key) {
       if (key === 'WeekStartDate') {
-        reportInfo['WeekStartDate'] = {'value': ` ${value}`}
-        startDate = {'value': ` ${value}`}
+        reportInfo['WeekStartDate'] = {'value': `${value}`}
+        startDate = {'value': `${value}`}
       } else if (key === 'WeekEndDate') {
-        reportInfo['WeekEndDate'] = {'value': ` ${value}`}
-        endDate = {'value': ` ${value}`}
+        reportInfo['WeekEndDate'] = {'value': `${value}`}
+        endDate = {'value': `${value}`}
       } else if (key === 'DayPartIndex') {
-        dayPartValue = ` ${value}`
+        dayPartValue = `${value}`
       } else if (key === 'StoreDate') {
         if (filter === 'day') {
           if (value === 'Total Day') {
@@ -72,7 +72,7 @@ Device.prototype.getSingleStoreValues = function () {
               'currentWeekpart': messages.COMMON.WAVG}
           } else {
             reportInfo['Day'] = {
-              'timeSpan': ` ${value}`,
+              'timeSpan': `${value}`,
               'currentWeekpart': messages.COMMON.DAYOPENCLOSE}
           }
         } else if (filter === 'daypart') {
@@ -84,7 +84,7 @@ Device.prototype.getSingleStoreValues = function () {
             if (!Number.isNaN(parseInt(dayPartValue))) {
               let dateSplit = `${value}`.split('-')
               reportInfo['Daypart'] = {
-                'timeSpan': `${dateSplit[1]}/${dateSplit[2]}-Daypart ${dayPartValue}`,
+                'timeSpan': `${dateSplit[1]}/${dateSplit[2]}-Daypart${dayPartValue}`,
                 'currentWeekpart': messages.COMMON.DAYOPENCLOSE}
             } else if (Number.isNaN(parseInt(dayPartValue))) {
               reportInfo['Daypart'] = {
@@ -167,8 +167,10 @@ Device.prototype.getLongestTime = function (longestTime) {
 }
 Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, totalCars, goalHeader, deviceHeaders) {
   let eventGoalList
-  if (!_.isNull(goalHeader[0].EventGoalNames)) {
+  if (goalHeader && goalHeader.length > 0 && !_.isNull(goalHeader[0].EventGoalNames)) {
     eventGoalList = _.get(goalHeader[0], 'EventGoalNames').split('|$|')
+  } else {
+    eventGoalList = []
   }
   let goalGrade = {}
   let isMinutes = Number(this.request.body.format)
@@ -193,7 +195,6 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
       row.cars = value || '0'
       row.percentage = CalculatePercetage(value, totalCars)
       let eventWithGolas = _.split(key, '-', 2)
-
       let event = _.trim(eventWithGolas[0])
       let goal = _.trim(eventWithGolas[1])
       if (key.includes(goal)) {
@@ -202,7 +203,7 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
         } else {
           rowKey[event] = row
           goalGrade[goal] = rowKey
-          goalGrade[goal].title = (goal === 'GoalF' ? `> GoalD (min:sec)` : `< ${goal} (min:sec)`)
+          goalGrade[goal].title = (goal === 'GoalF' ? `> GoalD (min:sec)` : `<${goal} (min:sec)`)
           goalGrade[goal].color = getColorForGoal(goal)
         }
       }
