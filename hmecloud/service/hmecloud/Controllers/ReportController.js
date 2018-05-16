@@ -7,7 +7,7 @@ const GetDeviceSingleStore = require('../Common/SingleStoreReport')
 const GetDeviceMultipleStores = require('../Common/MultipleStoreReports')
 const GetDeviceRawCarDataReport = require('../Common/RawCarDataReport')
 const dateFormat = require('dateformat')
-const CSVReport = require('../Common/DataExportUtil')
+const CSVReport = require('../Common/DataExportUtil').default
 const Pdfmail = require('../Common/PDFUtils')
 
 // Constructor method
@@ -46,6 +46,7 @@ reports.prototype.pagination = function (isReportName) {
 reports.prototype.deviceDataPreparation = function (reportResult, filter, totalPages) {
   let colors
   let goalSetting
+  let storeInfo
   let reportFilter = filter.reportName
   reportFilter === 'daypart' ? colors = reportResult.data[1] : colors = reportResult.data[4]
   goalSetting = reportResult.data[2]
@@ -54,7 +55,8 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
     let Colors
     reportFilter === 'daypart' ? Colors = reportResult.data[1] : Colors = reportResult.data[4]
     const deviceRecords = new GetDeviceSingleStore(reportResult.data[0], Colors, goalSetting, this.request, reportFilter)
-    deviceValues = deviceRecords.getStoreInfo(this.request, reportFilter)
+    reportFilter === 'daypart' ? storeInfo = reportResult.data[4] : storeInfo = reportResult.data[3]
+    deviceValues = deviceRecords.getStoreInfo(this.request, storeInfo)
     if (reportResult.data[0] && reportResult.data[0].length > 0 && reportResult.data[0] !== null && reportResult.data[0] !== undefined) {
       deviceValues.timeMeasureType = deviceRecords.getSingleStoreValues()
     } else {
@@ -107,12 +109,21 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
     } else {
       deviceValues.eventList = []
     }
-    deviceValues.totalRecordCount = totalPages
+    if (reportFilter === 'daypart') {
+      deviceValues.totalRecordCount = reportResult.data[10]
+    } else {
+      deviceValues.totalRecordCount = totalPages
+    }
+
     return deviceValues
   } else {
     // MutipleReport
     deviceValues.deviceIds = this.request.body.deviceIds
-    deviceValues.totalRecordCount = totalPages
+    if (reportFilter === 'daypart') {
+      deviceValues.totalRecordCount = reportResult.data[10]
+    } else {
+      deviceValues.totalRecordCount = totalPages
+    }
     if (reportResult.data[0] && reportResult.data[0].length > 0 && reportResult.data[0] !== null && reportResult.data[0] !== undefined) {
       let getDevices = new GetDeviceMultipleStores(reportResult.data[0], colors, goalSetting, this.request, reportFilter)
       deviceValues.timeMeasureType = getDevices.multipleStore()
@@ -205,7 +216,9 @@ reports.prototype.generateCSV = function (reportResult, filter, totalPages, resp
 //   pdfInput.email = this.request.UserEmail
 //   if (this.isSingleStore) {
 //     let singleStore = this.deviceDataPreparation(reportResult, filter, totalPages)
+//     console.log('singleStore', singleStore)
 //     Pdfmail.singleStore(singleStore, pdfInput, isMailSent => {
+//       console.log('its starts')
 //       console.log(isMailSent)
 //     })
 //   } else {
