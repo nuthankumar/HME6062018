@@ -401,7 +401,7 @@ export default class SummaryReport extends Component {
     getPageDetails (curPage) {
         this.state.showLoader = true
         this.setState(this.state)
-        let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
+        let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=reports'
         this.api.postData(url, this.state.reportData.drillDownRequestData, data => {
           /*  this.props.history.push({
                 pathname: '/summaryreport',
@@ -424,10 +424,10 @@ export default class SummaryReport extends Component {
         let url;
         if (type == 'CSV')
         {
-            url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=csv';
+            url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=csv';
         }
         if (type == 'PDF') {
-           url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=pdf';
+           url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=pdf';
         }
         this.setState({ showLoader: true });
         this.api.postData(url, request, data => {

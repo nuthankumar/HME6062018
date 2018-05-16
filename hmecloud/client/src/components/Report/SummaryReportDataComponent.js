@@ -139,14 +139,14 @@ export default class SummaryReportDataComponent extends Component {
         )
       } else if(headerItem === 'Day'){
         return(
-          <td className={'timeMeasureColumn ' + (headerItem === 'Day' ? 'show-table-cell' : 'hide-table-cell')} onClick={(e) => {e.preventDefault(); this.props.handleDrillDown(reportItem)}}> 
+          <td className={'timeMeasureColumn ' + (headerItem === 'Day' ? 'show-table-cell' : 'hide-table-cell')} onClick={() => this.props.handleDrillDown(reportItem)}> 
             <span className={'timeSpan ' + (self.props.reportData.dayColumn &&  reportItem[headerItem] !== undefined && reportItem[headerItem] !== undefined ? 'show' : 'hide')}>{ headerItem === 'Day' ? reportItem[headerItem].timeSpan : ''}</span> 
             <span className={'currentMeasure ' + (self.props.reportData.dayColumn && reportItem[headerItem] !== undefined && reportItem[headerItem].currentWeekpart !== undefined ? 'show' : 'hide')}>{(headerItem !== undefined && headerItem === 'Day' ? reportItem[headerItem].currentWeekpart : '')}</span> 
           </td>
           )
       }else if(headerItem === 'Week'){ 
         return(
-          <td className={'timeMeasureColumn ' + (headerItem === 'Week' ? 'show-table-cell' : 'hide-table-cell')} onClick={(e) => {e.preventDefault(); this.props.handleDrillDown(reportItem)}}> 
+          <td className={'timeMeasureColumn ' + (headerItem === 'Week' ? 'show-table-cell' : 'hide-table-cell')} onClick={() => this.props.handleDrillDown(reportItem)}> 
             <span className={'timeSpan ' + (self.props.reportData.weekColumn &&  reportItem[headerItem] !== undefined && reportItem[headerItem] !== undefined ? 'show' : 'hide')}>{ headerItem === 'Week' ? reportItem[headerItem].timeSpan : ''}</span> 
             <span className={'currentMeasure ' + (self.props.reportData.weekColumn && reportItem[headerItem] !== undefined && reportItem[headerItem].currentWeekpart !== undefined ? 'show' : 'hide')}>{(headerItem !== undefined && headerItem === 'Week' ? reportItem[headerItem].currentWeekpart : '')}</span> 
           </td>
