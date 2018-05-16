@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import './Stores.css'
+
+import t from '../Language/language'
+import * as languageSettings from '../Language/languageSettings'
+
 const Online = require("../../images/connection_online.png");
 const Offline = require("../../images/connection_offline.png");
 
@@ -13,7 +17,6 @@ class StoreDetail extends Component { //ensure you dont export component directl
           showStores: this.props.showStores,
         }
       }
-
 
     render() {
         console.log(this.props.showStores);
@@ -99,8 +102,7 @@ class StoreDetail extends Component { //ensure you dont export component directl
 							<td> </td>
                             <td colspan="4">
                             	<table>
-									
-                                        <tbody><tr>
+									    <tbody><tr>
                                             <td>00000159</td>
                                             <td>2.31.7.999</td>
                                             <td>BasicPlus</td>
@@ -108,7 +110,6 @@ class StoreDetail extends Component { //ensure you dont export component directl
                                             	<img src={Online} class="cstat on_img_margin" alt="Device Offline"/><span class="cstat"><p class="device_loc"><span>ZOOM</span><br/>Offline</p></span>
                                             </td>
                                         </tr>
-                                    
                                 </tbody></table>
                             </td>
 						</tr>

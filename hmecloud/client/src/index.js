@@ -25,6 +25,7 @@ import reducers from './reducers/index';
 import Layout from './components/Common/Layout'
 import Login from './components/Security/Login'
 import Logout from './components/Security/Logout'
+import Systems from './components/Systems/Systems'
 
 const createStoreWithMiddlewaare = applyMiddleware()(createStore);
 
@@ -48,6 +49,9 @@ ReactDOM.render( <Provider store={createStoreWithMiddlewaare(reducers)}>
         <Route exact path="/logout" render={(props) => <Layout Params={props}><Route path='/logout' component={Authenticate(Logout)} /></Layout>} />
         <Route exact path="/settings/stores" render={(props) => <Layout Params={props}><Route path='/settings/stores' component={Authenticate(StoreDetails)} /></Layout>} />  
         <Route exact path="/systemStatus" render={(props) => <Layout Params={props}><Route path='/systemStatus' component={Authenticate(SystemStatus)} /></Layout>} />
+        <Route exact path="/systems" render={(props) => <Layout Params={props}><Route path='/systems' component={Authenticate(Systems)} /></Layout>} />
+   
     </div>
+   
     </Router></Provider>, document.getElementById('root'))
 registerServiceWorker()
