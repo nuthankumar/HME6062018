@@ -250,8 +250,12 @@ export default class SummaryReport extends Component {
                     request.fromDate = storeId.Day.timeSpan
                     request.toDate = storeId.Day.timeSpan
                  }else if(storeId.Week){
-                    request.fromDate = storeId.Week.timeSpan.split("-")[0]
-                    request.toDate = storeId.Week.timeSpan.split("-")[1]
+                    //  let fromYear  = request.fromDate.split("-")[0]
+                    //  let toYear = request.toDate.split("-")[0]
+                    //  request.fromDate = fromYear.concat('/'+storeId.Week.timeSpan.split("-")[0])
+                    //  request.toDate = toYear.concat('/'+storeId.Week.timeSpan.split("-")[1])
+                     request.fromDate = storeId.WeekStartDate.value
+                     request.toDate = storeId.WeekEndDate.value
                  }
                  request.fromDate = moment(request.fromDate).format('YYYY-MM-DD')
                  request.toDate =  moment(request.toDate).format('YYYY-MM-DD')
