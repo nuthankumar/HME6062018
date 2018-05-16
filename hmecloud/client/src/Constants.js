@@ -4,6 +4,7 @@ export const CommonConstants = {
     'getGroupHierarchyTree': 'api/group/getAll',
     'getSavedTemplates': 'api/reportTemplate/getAll',
     'generateReport': 'api/report/generatereport',
+    'generateNewReport': 'api/newReports/generatereport',
     'getSavedTemplateData': 'api/reportTemplate/get',
     'deleteTemplate': 'api/reportTemplate/delete',
     'createTemplate': 'api/reportTemplate/create',

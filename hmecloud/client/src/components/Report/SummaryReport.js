@@ -200,11 +200,11 @@ export default class SummaryReport extends Component {
                 this.setState(this.state)
                 break
 
-            case '4': let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
+            case '4': let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=reports'
                 this.api.postData(url, templateData, data => {
                     this.props.history.push({
                         pathname: '/rawcardatareport',
-                        state: { rawCarRequest: templateData, rawCarData: data }
+                        state: { rawCarRequest: templateData, rawCarData: data , reportData: this.state.reportData }
                     })
                 }, error => {
                 })
@@ -231,7 +231,8 @@ export default class SummaryReport extends Component {
             let currentStoreIds = request.deviceIds
             if (request.deviceIds.length > 1) {
                 let array = []
-                array.push(storeId.deviceId.value)
+                 array.push(storeId.deviceId.value)
+                // array.push(storeId.Device_ID.value)
                 request.deviceIds = array;
             }
              this.setState(this.state)
@@ -245,16 +246,18 @@ export default class SummaryReport extends Component {
             }
 
             if (request.timeMeasure < 4) {
-                 if(storeId.day){
-                    request.fromDate = storeId.day.timeSpan
-                    request.toDate = storeId.day.timeSpan
-                 }else if(storeId.week){
-                    request.fromDate = storeId.week.timeSpan.split("-")[0]
-                    request.toDate = storeId.week.timeSpan.split("-")[1]
+                 if(storeId.Day){
+                    request.fromDate = storeId.Day.timeSpan
+                    request.toDate = storeId.Day.timeSpan
+                 }else if(storeId.Week){
+                    request.fromDate = storeId.Week.timeSpan.split("-")[0]
+                    request.toDate = storeId.Week.timeSpan.split("-")[1]
                  }
                  request.fromDate = moment(request.fromDate).format('YYYY-MM-DD')
                  request.toDate =  moment(request.toDate).format('YYYY-MM-DD')
-                let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
+             //   let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
+                 
+                let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=reports'
                 this.api.postData(url, request, data => {
                     request.deviceIds = data.deviceIds
                     this.setTimeMeasures(request)
@@ -273,7 +276,7 @@ export default class SummaryReport extends Component {
                     this.setState(this.state)
                 })
             }else if(request.timeMeasure === 4){
-                if(storeId.daypart){
+                if(storeId.Daypart){
                     // let year = request.fromDate.split("-")[0]
                     // let monthDay = storeId.daypart.timeSpan.split("-")[0]
                     // request.fromDate = year.concat('/'+monthDay)
@@ -283,13 +286,14 @@ export default class SummaryReport extends Component {
                     request.openTime = storeId.daypart.currentDaypart.split("-")[0]
                     request.closeTime = storeId.daypart.currentDaypart.split("-")[1]
                 }
-                let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
+               // let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
+                let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=reports'
                 this.api.postData(url, request, data => {
                     this.state.showLoader = false
                     this.setState(this.state)
                     this.props.history.push({
                         pathname: '/rawcardatareport',
-                        state: { rawCarRequest:request, rawCarData: data }
+                        state: { rawCarRequest:request, rawCarData: data, reportData: this.state.reportData  }
                     })
                 }, error => {
                     this.state.successMessage = ''
@@ -505,7 +509,7 @@ export default class SummaryReport extends Component {
                           <PaginationComponent pagination={this.state.reportData.pagination} totalPages={this.state.reportData.NoOfPages}  curPage={this.state.reportData.curPage} handlePreviousPage={(curPage, totalPages) => this.handlePreviousPage(curPage, totalPages)} handleNextPage={(curPage, totalPages) => this.handleNextPage(curPage, totalPages)} disablePrevButton={this.state.reportData.disablePrevButton} disableNextButton={this.state.reportData.disableNextButton} />
                       </div>
                     </div>
-                    {this.displayGoalStatistics()}
+                     {this.displayGoalStatistics()}
                     {this.displaySystemStatistics()}
                 </section>
               </section>

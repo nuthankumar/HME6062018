@@ -2,7 +2,7 @@
   width:100% !important;
 }  */
 .summaryReportsSection {
-  margin:0 -10%;
+  /* margin:0 -10%; */ /* newly added */
 }
 
 .show-table-cell{
@@ -15,12 +15,19 @@
   pointer-events: none;
 }
 .reportsummary-container{
-  margin : 20px 68px 0px 68px;
+  /* margin : 20px 68px 0px 68px; */
+  margin : 20px 8px 0px 8px; /* newly added */
+}
+
+/* .reportTableAttributesHeading.total-cars{
+  width: 125px !important; newly added 
+} */
+.total-cars{
+  width: 125px !important;
 }
 
 .summary-header{
   background-color : #029fb9;
-
 }
 .summary-header-text{
   color: white;
@@ -86,8 +93,62 @@
 .summaryreport-table th.groupsColHeader,.summaryreport-table th.storesColHeader{
       width: 125px;
 }
-.summaryreport-table th.reportTableAttributesHeading{
+/* .summaryreport-table th.reportTableAttributesHeading{
       width: 175px;
+} */
+
+
+
+
+.summaryreport-table th.reporttable-attributes-heading-dynamic,
+.goalstatistics-table  th.reportTableAttributesHeading{
+  width: 125px;
+}
+.summaryreport-table th.reportTableAttributesHeading10,
+.goalstatistics-table tr th.reportTableAttributesHeading10,.reportTableAttributesHeading10{
+  width: 85px;
+  font-size : 11px !important;
+}
+.summaryreport-table th.reportTableAttributesHeading11,
+.goalstatistics-table  th.reportTableAttributesHeading11,.reportTableAttributesHeading11{
+  width: 75px;
+  font-size : 11px !important;
+}
+.summaryreport-table th.reportTableAttributesHeading12,
+.goalstatistics-table tr  th.reportTableAttributesHeading12,.reportTableAttributesHeading12{
+  width: 70px;
+  font-size : 11px !important;
+}
+.summaryreport-table th.reportTableAttributesHeading13,
+.goalstatistics-table  th.reportTableAttributesHeading13,.reportTableAttributesHeading13{
+  width: 65px;
+  font-size : 11px !important;
+}
+.summaryreport-table th.reportTableAttributesHeading9,
+.goalstatistics-table  th.reportTableAttributesHeading9,.reportTableAttributesHeading9{
+  width : 95px;
+  font-size : 11px !important;
+}
+.summaryreport-table th.reportTableAttributesHeading8,
+.goalstatistics-table  th.reportTableAttributesHeading8,.reportTableAttributesHeading8{
+  width: 105px;
+}
+.summaryreport-table th.reportTableAttributesHeading7,
+.goalstatistics-table  th.reportTableAttributesHeading7,.reportTableAttributesHeading7{
+  width: 120px;
+}
+.summaryreport-table th.reportTableAttributesHeading6,
+.goalstatistics-table  th.reportTableAttributesHeading6,.reportTableAttributesHeading6{
+  width: 145px;
+}
+
+.summaryreport-table th.reportTableAttributesHeading5,
+.goalstatistics-table  th.reportTableAttributesHeading5,.reportTableAttributesHeading5{
+  width : 175px;
+}
+
+.summaryreport-table th.reportTableAttributesHeading5{
+  width : 175px;
 }
 
 .summaryreport-table th.reporttable-attributes-heading-dynamic{
@@ -129,6 +190,10 @@
 .goalstatistics-table-section, .systemstatistics-table-section{
       margin-top: 10px;
 }
+.reportTableAttributesHeading.blank-heading{
+  background: none;
+}
+
 
 /* .goalStatistics-cover{
   position:absolute;
@@ -153,9 +218,9 @@
   text-decoration: underline;
 }
 
-.goalstatistics-table td{
+/* .goalstatistics-table td{
   width: 175px;
-}
+} */
 
 .goalStatistics-row{
   margin-bottom: 5px;
@@ -280,6 +345,10 @@ h2 .report-start-time-value,h2 .report-end-time-value{
   background: none;
 }
 
+.goalstats-title{
+  width : 125px;
+}
+
 .goalstatistics-table tr th.tableHeading{
   background: #959595;
   border-top: 1px solid #FFFFFF;
@@ -338,10 +407,12 @@ h2 .report-start-time-value,h2 .report-end-time-value{
   font-size: 12px;
   font-weight: normal;
   border-bottom: 1px solid #aeaeae;
+  width: 1005px;/* newly added */
 }
 
 .goalstatistics-table.goalstatistics-table-header{
   border-bottom: none;
+  width: 1005px;/* newly added */
 }
 .goalstatistics-header-text{
   color: #008898;
@@ -368,8 +439,16 @@ h2 .report-start-time-value,h2 .report-end-time-value{
 
 
 .rawcar-data-section{
-  margin: 20px 68px 0px 68px;
+  /* margin: 20px 68px 0px 68px; */
 }
+
+tr.raw-car-subheaders th:nth-child(1),tr.raw-car-subheaders th:nth-child(2){
+  width: 226px;
+}
+tr.raw-car-subheaders th{
+  width: 113px;
+}
+
 
 .clear:after {
   clear: both;
@@ -650,7 +729,7 @@ span.StoreTitile {
     overflow: hidden;
     -o-text-overflow: ellipsis;
     text-overflow: ellipsis;
-    padding-left: 5px;
+    /* padding-left: 5px; newly added */
 }
 
 
@@ -710,8 +789,7 @@ span.StoreBrand {
       pointer-events: none;
     }
 
-
-
+    
 
 .selectAStore {
     color:red !important;
@@ -767,4 +845,11 @@ tr.summary-row-data:nth-child(odd){
 
 .rc-tree-child-tree  li:nth-child(even) {
   background-color:#f5f5f5;
+}
+.font-black{
+  color: #000 !important;
+}
+
+.greyBox{
+  background-color: #959595 !important;
 }

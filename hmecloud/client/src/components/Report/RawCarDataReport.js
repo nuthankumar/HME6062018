@@ -17,7 +17,9 @@ class RawCarReport extends Component {
       showLoader: false,
       rawData: false,
       pageHeading: 'Raw Car Data Report',
-      displayData: ''
+      displayData: '',
+      eventList: [
+      ],
     }
     this.api = new Api()
     this.displayRawCarHeader = this.displayRawCarHeader.bind(this)
@@ -33,6 +35,7 @@ class RawCarReport extends Component {
   getRawCarData () {
     let data = this.props.history.location.state
     this.state.displayData = data.rawCarData
+    this.state.eventList = data.eventList
     this.state.rawCarRequest = data.rawCarRequest
     this.state.rawData = true
     this.setState(this.state)
@@ -109,11 +112,11 @@ class RawCarReport extends Component {
         </div>
         <table className='display-records table-layout table-layoutRawCar'>
           <tbody>
-            <tr>
+            <tr className ='raw-car-subheaders'>
               <th>{t[language].ReportsDepartureTime}</th>
               <th>{t[language].ReportsEventName}</th>
               <th>{t[language].ReportsCarsinQueue}</th>
-              <th>
+              {/* <th>
                 <span>{t[language].MenuBoard}</span>
               </th>
               <th>
@@ -127,7 +130,8 @@ class RawCarReport extends Component {
               </th>
               <th>
                 <span>{t[language].LaneTotal}</span>
-              </th>
+              </th> */}
+              {this.getRawCardColumnHeaders()}
             </tr>
             {this.displayItems()}
           </tbody>
@@ -136,22 +140,45 @@ class RawCarReport extends Component {
     }
   }
 
+  getRawCardColumnHeaders(){
+   return  this.state.eventList.map((headerItem) => {
+      if(headerItem !== 'DepartureTime' && headerItem !== 'EventName' && headerItem !== 'CarsInQueue'){
+        return(<th>
+        <span>{headerItem}</span>
+      </th>)
+      }
+    })
+    
+  }
+
   displayItems () {
     return this.state.displayData.rawCarData.map((items) => {
       return (
-        <tr className='display-result'>
-          <td>{items.departureTime ? items.departureTime : 'N/A'}</td>
-          <td>{items.eventName ? items.eventName : 'N/A'}</td>
-          <td>{items.carsInQueue ? items.carsInQueue : 'N/A'}</td>
-          <td> {items.menu ? items.menu : 'N/A'}</td>
-          <td> {items.greet ? items.greet : 'N/A'}</td>
-          <td> {items.service ? items.service : 'N/A'}</td>
-          <td> {items.laneQueue ? items.laneQueue : 'N/A'}</td>
-          <td> {items.laneTotal ? items.laneTotal : 'N/A'}</td>
+        // <tr className='display-result'>
+        //   <td>{items.departureTime ? items.departureTime : 'N/A'}</td>
+        //   <td>{items.eventName ? items.eventName : 'N/A'}</td>
+        //   <td>{items.carsInQueue ? items.carsInQueue : 'N/A'}</td>
+        //   <td> {items.menu ? items.menu : 'N/A'}</td>
+        //   <td> {items.greet ? items.greet : 'N/A'}</td>
+        //   <td> {items.service ? items.service : 'N/A'}</td>
+        //   <td> {items.laneQueue ? items.laneQueue : 'N/A'}</td>
+        //   <td> {items.laneTotal ? items.laneTotal : 'N/A'}</td>
+        // </tr>
+          <tr className='display-result'>
+          {this.displayRawCarCell(items)}
         </tr>
       )
     })
   }
+
+  displayRawCarCell(items){
+    let eventHeaders = this.state.eventList
+    return eventHeaders.map((headerItem) => {
+      return (
+        <td>{items[headerItem] ? items[headerItem] : 'N/A'}</td>)
+    })
+  }
+
   render () {
     const { showLoader } = this.state
     return (

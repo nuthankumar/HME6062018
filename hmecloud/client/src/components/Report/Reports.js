@@ -1070,14 +1070,15 @@ class Report extends Component {
     this.setState({
         rawCarRequest: rawCarData[0]
     });
-    let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
+    // let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
+    let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=reports'
     this.api.postData(url, rawCarData[0], data => {
       //  this.props.history.push("/rawcardatareport", this.state.rawCarData);
         this.state.showLoader = false
         this.setState(this.state)
         this.props.history.push({
             pathname: '/rawcardatareport',
-            state: { rawCarRequest: rawCarData[0] , rawCarData : data }
+            state: { rawCarRequest: rawCarData[0] , rawCarData : data, reportData: this.state.reportData }
         })
     }, error => {
         this.state.successMessage = ''
@@ -1115,10 +1116,10 @@ class Report extends Component {
       let type = 'PDF'
         if (type == 'CSV')
         {
-            url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=csv';
+            url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=csv';
         }
         if (type == 'PDF') {
-           url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=pdf';
+           url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=pdf';
         }
         this.setState({ showLoader: true });
         this.api.postData(url, request, data => {
@@ -1135,7 +1136,8 @@ class Report extends Component {
             this.setState(this.state)
         })
     }else{
-      let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
+     // let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
+     let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=reports'
       this.api.postData(url, request, data => {
           this.state.showLoader = false
           this.setState(this.state)
