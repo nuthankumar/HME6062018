@@ -70,11 +70,7 @@ class Systems extends Component { //ensure you dont export component directly
                                                     <td>
                                                         <img src={Offline} className="cstat on_img_margin" alt="Device Offline"/><span className="cstat">Offline</span>
                                                     </td>
-                                                    
                                                 </tr>
-                                                
-                                             
-                                                
                                         </tbody></table>
                                     </div>
                                 </div>

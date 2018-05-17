@@ -74,6 +74,34 @@
     color: #000000;
 }
 
+.masterSettings{
+   display:flex;
+   width: 100%;
+}
+.masterSettings .versions{
+    font-size: 30px !important;
+    margin: 25px 0px 17px 0px !important;
+    border: none !important;
+}
+
+.masterSettings .form_cbox {
+    border: 1px solid #B9B9B9;
+    height: 125px;
+    margin: 5px 0 0 5px;
+    overflow: auto;
+    padding: 5px;
+    width: 250px;
+}
+
+.masterSettings .forms input[type=submit] {
+    background-color: #d41b3e;
+    border: none;
+    float: right;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 10px 25px;
+}
+
 .sys-settings.forms {
     margin-bottom: 25px;
     margin-top: 47px;
@@ -128,3 +156,5 @@
 .sys-settings ul {
     list-style: none;
 }
+
+
