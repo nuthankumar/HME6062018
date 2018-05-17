@@ -224,18 +224,19 @@ const removeDeviceById = (input, callback) => {
   })
 }
 
-const settingsDevices = (duid, callback) => {
-  repository.execute(sqlQuery.settingsDevices.getStatus, {
-    replacements: { duid: duid },
-    type: db.QueryTypes.SELECT
-  }, result => callback(result))
+const settingsDevices = (input, callback) => {
+  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
+    return request
+      .input(sqlQuery.DeviceIds.Parameters.Device_IDs, sql.VarChar(36), input.duid)
+  }, callback);
 }
 
-const settingsStores = (duid, callback) => {
-  repository.execute(sqlQuery.settingsStores.getStatus, {
-    replacements: { suid: suid },
-    type: db.QueryTypes.SELECT
-  }, result => callback(result))
+// Todo: SettingStores Store Procedure
+const settingsStores = (input, callback) => {
+  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
+    return request
+      .input(sqlQuery.DeviceIds.Parameters.Device_IDs, sql.VarChar(36), input.duid)
+  }, callback);
 }
 
 module.exports = {

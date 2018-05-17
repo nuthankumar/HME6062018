@@ -177,33 +177,27 @@ const getStores = (request, callback) => {
   })
 }
 
-const settingsDevices = (request, callback) => {
-  let output = {}
-  const duid = request.duid
-
-  if (duid) {
-    storeController.settingsDevices(input, result => {
-      callback(result)
-    })
-  } else {
-    output.key = 'invalidInput'
-    output.status = false
-    callback(output)
+const settingsDevices = (input, callback) => {
+  if (!input.duid) {
+      let output = {}
+      output.key = 'requiredDuid';
+      output.status = false
+      callback(output)
+  }
+  if (input.duid) {
+      callback()
   }
 }
 
-const settingsStores = (request, callback) => {
-  let output = {}
-  const suid = request.suid
-
-  if (suid) {
-    storeController.settingsStores(input, result => {
-      callback(result)
-    })
-  } else {
-    output.key = 'invalidInput'
-    output.status = false
-    callback(output)
+const settingsStores = (input, callback) => {
+  if (!input.suid) {
+      let output = {}
+      output.key = 'requiredSuid';
+      output.status = false
+      callback(output)
+  }
+  if (input.duid) {
+      callback()
   }
 }
 

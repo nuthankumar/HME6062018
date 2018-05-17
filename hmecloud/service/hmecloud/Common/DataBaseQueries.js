@@ -100,6 +100,9 @@ const sqlQueries = {
   Role: {
     getRoles: '[dbo].[usp_GetRoles]'
   },
+  DeviceStatus: {
+    getStatus: '[dbo].[usp_getDeviceById]'
+  },
   Country: {
     getCountries: '[dbo].[usp_GetCountries]'
   },
