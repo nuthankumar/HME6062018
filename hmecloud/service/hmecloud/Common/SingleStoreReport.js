@@ -5,7 +5,6 @@ const messages = require('./Message')
 const Device = function (result, colors, goalSettings, request, reportFilter) {
   this.result = result
   this.colors = colors
-  console.log('color', this.colors)
   this.goalSettings = goalSettings
   this.request = request
   this.reportFilter = reportFilter
@@ -13,9 +12,9 @@ const Device = function (result, colors, goalSettings, request, reportFilter) {
 Device.prototype.getStoreInfo = (input, storeInformation) => {
   let storeInfo = {}
   if (storeInformation && storeInformation[0]) {
-    storeInfo.storeName = (storeInformation[0].Store_Name ? storeInformation[0].Store_Name : 'N/A')
-    storeInfo.storeNumber = (storeInformation[0].Store_Number ? storeInformation[0].Store_Number : 'N/A')
-    storeInfo.storeDesc = (storeInformation[0].Brand_Name ? storeInformation[0].Brand_Name : 'N/A')
+    storeInfo.storeName = storeInformation[0].Store_Name ? storeInformation[0].Store_Name : 'N/A'
+    storeInfo.storeNumber = storeInformation[0].Store_Number ? storeInformation[0].Store_Number : 'N/A'
+    storeInfo.storeDesc = storeInformation[0].Brand_Name ? storeInformation[0].Brand_Name : 'N/A'
   }
   storeInfo.startTime = `${dateUtils.convertMMMdYYYY(input.body.fromDate)}`
   storeInfo.stopTime = `${dateUtils.convertMMMdYYYY(input.body.toDate)}`
@@ -58,10 +57,10 @@ Device.prototype.getSingleStoreValues = function () {
     let newValue
     _.forEach(storeDetails[index], function (value, key) {
       if (key === 'WeekStartDate') {
-        reportInfo['WeekStartDate'] = {'value': `${value}`}
+        reportInfo['WeekStartDate'] = {'value': dateUtils.convertmmddyyyy(`${value}`)}
         startDate = {'value': `${value}`}
       } else if (key === 'WeekEndDate') {
-        reportInfo['WeekEndDate'] = {'value': `${value}`}
+        reportInfo['WeekEndDate'] = {'value': dateUtils.convertmmddyyyy(`${value}`)}
         endDate = {'value': `${value}`}
       } else if (key === 'DayPartIndex') {
         dayPartValue = `${value}`
@@ -146,7 +145,6 @@ Device.prototype.getSingleStoreValues = function () {
   return timeMeasureType
 }
 Device.prototype.getLongestTime = function (longestTime, deviceHeaders) {
-  console.log('deviceHeaders', deviceHeaders)
   const timeFormat = this.request.body.format
   let deviceLongestTime = []
   _.forEach(longestTime, (items) => {

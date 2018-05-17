@@ -250,8 +250,12 @@ export default class SummaryReport extends Component {
                     request.fromDate = storeId.Day.timeSpan
                     request.toDate = storeId.Day.timeSpan
                  }else if(storeId.Week){
-                    request.fromDate = storeId.Week.timeSpan.split("-")[0]
-                    request.toDate = storeId.Week.timeSpan.split("-")[1]
+                    //  let fromYear  = request.fromDate.split("-")[0]
+                    //  let toYear = request.toDate.split("-")[0]
+                    //  request.fromDate = fromYear.concat('/'+storeId.Week.timeSpan.split("-")[0])
+                    //  request.toDate = toYear.concat('/'+storeId.Week.timeSpan.split("-")[1])
+                     request.fromDate = storeId.WeekStartDate.value
+                     request.toDate = storeId.WeekEndDate.value
                  }
                  request.fromDate = moment(request.fromDate).format('YYYY-MM-DD')
                  request.toDate =  moment(request.toDate).format('YYYY-MM-DD')
@@ -401,7 +405,7 @@ export default class SummaryReport extends Component {
     getPageDetails (curPage) {
         this.state.showLoader = true
         this.setState(this.state)
-        let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
+        let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=reports'
         this.api.postData(url, this.state.reportData.drillDownRequestData, data => {
           /*  this.props.history.push({
                 pathname: '/summaryreport',
@@ -424,10 +428,10 @@ export default class SummaryReport extends Component {
         let url;
         if (type == 'CSV')
         {
-            url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=csv';
+            url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=csv';
         }
         if (type == 'PDF') {
-           url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=pdf';
+           url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=pdf';
         }
         this.setState({ showLoader: true });
         this.api.postData(url, request, data => {

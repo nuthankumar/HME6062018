@@ -73,3 +73,58 @@
     border-right: 1px solid #fff;
     color: #000000;
 }
+
+.sys-settings.forms {
+    margin-bottom: 25px;
+    margin-top: 47px;
+    color: rgb(0, 0, 0);
+}
+.sys-settings h3.clear {
+    font-size: 30px;
+    margin-bottom: 17px;
+}
+.sys-settings .system_header {
+    float: left;
+}
+.sys-settings .device_header {
+    float: left;
+    margin-left:8em;
+}
+.sys-settings .settab {
+    width: 430px;
+    float: left;
+}
+
+.sys-settings .settab tbody, .sys-settings .settab tr, .sys-settings span , .sys-settings th, .sys-settings ul, .sys-settings h3 {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    font-family: Arial;
+    vertical-align: baseline;
+}
+
+.sys-settings td {
+    padding-left: 10px;
+    padding: 10px;
+    font-size: 16px;
+    vertical-align: top;
+}
+
+.sys-settings .settab tbody th {
+    width: 150px;
+    font-size: 14px;
+    padding: 10px;
+    text-align: left;
+}
+
+.sys-settings a {
+    color: #D41B3E;
+    font-size: 16px;
+    text-decoration: underline;
+}
+
+.sys-settings ul {
+    list-style: none;
+}
