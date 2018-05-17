@@ -244,6 +244,50 @@ const settingsStores = (request, callback) => {
     })
   })
 }
+
+const getMasterSettings = (request, callback) => {
+  const input = {
+    duid: (request.query.duid ? request.query.duid : null)
+  }
+  storeValidator.getMasterSettings(input, (err) => {
+    if (err) {
+      callback(err)
+    }
+    stores.getMasterSettings(input, (result) => {
+      if (result.data && result.data.length > 0) {
+        let output = {}
+        output.data = result.data[0]
+        output.status = true
+        callback(output)
+      } else {
+        callback(errorHandler(messages.LISTGROUP.notfound, false))
+      }
+    })
+  })
+}
+
+const saveMasterSettings = (request, callback) => {
+  const input = {
+    duid: (request.params.duid ? request.params.duid : null),
+    settings: (request.params.settings.length ? request.params.settings : null),
+    destination: (request.params.destination.length ? request.params.destination : null)
+  }
+  storeValidator.saveMasterSettings(input, (err) => {
+    if (err) {
+      callback(err)
+    }
+    stores.saveMasterSettings(input, (result) => {
+      if (result.data && result.data.length > 0) {
+        let output = {}
+        output.data = result.data[0]
+        output.status = true
+        callback(output)
+      } else {
+        callback(errorHandler(messages.LISTGROUP.notfound, false))
+      }
+    })
+  })
+}
 /**
  * @param {*} input
  * @param {*} callBack
@@ -297,6 +341,8 @@ module.exports = {
   getRawCarDataReport,
   settingsDevices,
   settingsStores,
+  getMasterSettings,
+  saveMasterSettings,
   getStores,
   getStoreByUid,
   removeDeviceById

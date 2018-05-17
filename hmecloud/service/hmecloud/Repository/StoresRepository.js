@@ -239,12 +239,30 @@ const settingsStores = (input, callback) => {
   }, callback);
 }
 
+// Todo: getMasterSettings Store Procedure
+const getMasterSettings = (input, callback) => {
+  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
+    return request
+      .input(sqlQuery.DeviceIds.Parameters.Device_IDs, sql.VarChar(36), input.duid)
+  }, callback);
+}
+
+// Todo: saveMasterSettings Store Procedure
+const saveMasterSettings = (input, callback) => {
+  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
+    return request
+      .input(sqlQuery.DeviceIds.Parameters.Device_IDs, sql.VarChar(36), input.duid)
+  }, callback);
+}
+
 module.exports = {
   getRawCarDataReport,
   getDayDataReport,
   getWeekReport,
   settingsDevices,
   settingsStores,
+  getMasterSettings,
+  saveMasterSettings,
   getStores,
   getStoreByUid,
   removeDeviceById
