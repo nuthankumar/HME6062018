@@ -118,6 +118,13 @@ const sqlQueries = {
     getDayReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Date_Details_Dynamic]',
     getRawCarData: '[dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details_Dynamic]'
   },
+  
+  DeviceUid: {
+    Parameters: {
+      DeviceUid: 'DeviceUid'
+    }
+  },
+
   DeviceIds: {
     Parameters: {
       Device_IDs: 'Device_IDs'
