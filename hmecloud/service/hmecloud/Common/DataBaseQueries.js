@@ -103,6 +103,12 @@ const sqlQueries = {
   Country: {
     getCountries: '[dbo].[usp_GetCountries]'
   },
+  TimeZone: {
+    getTimeZones: '[dbo].[usp_GetTimeZones]'
+  },
+  Brand: {
+    getBrands: '[dbo].[usp_GetBrands]'
+  },
   Reports: {
     getWeekReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Week_Details_Dynamic]',
     getDayPartReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details_Dynamic]',
