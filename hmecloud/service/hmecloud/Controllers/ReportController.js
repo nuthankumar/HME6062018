@@ -110,7 +110,7 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
       deviceValues.eventList = []
     }
     if (reportFilter === 'daypart') {
-      deviceValues.totalRecordCount = reportResult.data[10]
+      deviceValues.totalRecordCount = reportResult.data[10][0]
     } else {
       deviceValues.totalRecordCount = totalPages
     }
@@ -120,7 +120,7 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
     // MutipleReport
     deviceValues.deviceIds = this.request.body.deviceIds
     if (reportFilter === 'daypart') {
-      deviceValues.totalRecordCount = reportResult.data[10]
+      deviceValues.totalRecordCount = reportResult.data[10][0]
     } else {
       deviceValues.totalRecordCount = totalPages
     }
@@ -146,6 +146,7 @@ reports.prototype.getRawCarDataReport = function (reportResult) {
   const devicesDetails = new GetDeviceRawCarDataReport(reportResult, this.request)
   let deviceStoreInfo = devicesDetails.storeInfo()
   deviceValues = deviceStoreInfo
+
   if (reportResult.data[0] && reportResult.data[0].length > 0 && reportResult.data[0] !== null && reportResult.data[0] !== undefined) {
     deviceValues.rawCarData = devicesDetails.generateReports(reportResult.data[0])
   } else {
@@ -246,6 +247,12 @@ reports.prototype.createReports = function (response) {
             }
           } else if (this.isReports) {
             Output = this.getRawCarDataReport(reportResult)
+            Output.status = true
+            if (Output.status === true) {
+              response.status(200).send(Output)
+            } else {
+              response.status(400).send(Output)
+            }
           }
         } else {
           // if (this.isPDF) {

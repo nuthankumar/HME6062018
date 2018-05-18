@@ -60,9 +60,13 @@ Device.prototype.generateReports = function (deviceDetails) {
       rawCarData.carsInQueue = 'N/A'
     }
     events.push(item['EventType_Name'])
-    rawCarData[`${item['EventType_Name']}`] = dateUtils.convertSecondsToMinutes(item['DetectorTime'], this.request.body.format)
   })
-  rawCarDataList.push(rawCarData)
+  _.forEach(deviceDetails, (item) => {
+    _.forEach(events, (value, key) => {
+      rawCarData[`${item['EventType_Name'].toString()}`] = dateUtils.convertSecondsToMinutes(item['DetectorTime'], this.request.body.format)
+    })
+    rawCarDataList.push(rawCarData)
+  })
   return rawCarDataList
 }
 module.exports = Device
