@@ -94,7 +94,7 @@ class RawCarReport extends Component {
             <th>
               <span>{t[language].ReportsPrintTime} </span>
             </th>
-            <td>{this.state.displayData.printTime ? this.state.displayData.printTime : 'N/A' }</td>
+            <td>{this.state.displayData.printTime ? new moment().format("hh:mm A") : 'N/A' }</td>
           </tr>
         </tbody>
       </table>
