@@ -10,8 +10,13 @@ class SystemStatus extends Component {
         this.state = {
             currentLanguage: languageSettings.getCurrentLanguage(),
         }
+        this.state.isMasterSettings =  window.location.pathname.indexOf("/masterSettings") !== -1  ? false : true;
     }
-
+    
+    componentWillMount () {
+        
+    }
+    
     render () {
         const language = this.state.currentLanguage
         let displayData = this.props.systemStats
@@ -20,7 +25,6 @@ class SystemStatus extends Component {
                 <div class='settings_plug clear'>
                     <div class="clear">			
 			            <h3 class="clear system_header">System Status</h3>
-						<h3 class="clear device_header">System Settings</h3>
 		            </div>
                     <table class="settab">
                         <tbody>
@@ -50,25 +54,25 @@ class SystemStatus extends Component {
                                 <th><span translate="" key="settingsDevicesLaneConfiguration">Lane Configuration</span></th>
                                 <td><span translate="" key="SingleLane">Single Lane</span></td>
                             </tr>
-                            <tr>
+                            <tr className = {(this.state.isMasterSettings?'':'hidden')}>
                                 <th><span translate="" key="settingsStoresSerialNumber">Serial Number</span></th>
                                 <td>E07X0508</td>
                             </tr>
-                            <tr>						
+                            <tr className = {(this.state.isMasterSettings?'':'hidden')}>						
                                 <th><span translate="" key="StoreSettingsHeaderStatus">System Status</span></th>
                                 <td>
                                     <img src="/images/connection_offline.png" class="cstat" alt="Device Offline"/><span class="cstat" translate="" key="settingsStoresOffline">Offline</span>
                                 </td>
                             </tr>
-                            <tr>
+                            <tr className = {(this.state.isMasterSettings?'':'hidden')}>
                                 <th><span translate="" key="settingsDevicesFirstActivity">First Activity</span></th>
                                 <td>February 23, 2018 14:51</td>
                             </tr>
-                            <tr>
+                            <tr className = {(this.state.isMasterSettings?'':'hidden')}>
                                 <th><span translate="" key="settingsDevicesLastActivity">Last Activity</span></th>
                                 <td>February 23, 2018 18:18 </td>
                             </tr>
-                            <tr>
+                            <tr className = {(this.state.isMasterSettings?'':'hidden')}>
                                 <th><span translate="" key="settingsDevicesNumberOfRecords">Number of Records</span></th>
                                 <td>207</td>
                             </tr>
@@ -78,6 +82,10 @@ class SystemStatus extends Component {
             </div>
         )
     }
+
+
+
+
 }
 
 export default SystemStatus

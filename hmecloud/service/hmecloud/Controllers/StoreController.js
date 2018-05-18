@@ -1,10 +1,19 @@
 const messages = require('../Common/Message')
+const storeValidator = require('../Validators/StoreValidator')
 const stores = require('../Repository/StoresRepository')
 const dateUtils = require('../Common/DateUtils')
 const dateFormat = require('dateformat')
 const csvGeneration = require('../Common/CsvUtils')
 const HashMap = require('hashmap')
 const _ = require('lodash')
+
+
+const errorHandler = (message, status) => {
+  let output = {}
+  output.key = message
+  output.status = status
+  return output
+}
 /**
  * This Service is used to Generate the Summary reports details for
  *provided details
@@ -193,23 +202,90 @@ function prepareResponsObject (result, departTimeStampMap, rawCarDataList, rawCa
   return rawCarDataList
 }
 
-const settingsDevices = (input, response) => {
-  stores.settingsDevices(input, result => {
-    if (result.status === true) {
-      response.status(200).send(result)
-    } else {
-      response.status(400).send(result)
+const settingsDevices = (request, callback) => {
+  const input = {
+    duid: (request.query.duid ? request.query.duid : null)
+  }
+  storeValidator.settingsDevices(input, (err) => {
+    if (err) {
+      callback(err)
     }
+    stores.settingsDevices(input, (result) => {
+      console.log('result', result);
+      if (result.data && result.data.length > 0) {
+        let output = {}
+        output.data = result.data[0]
+        output.status = true
+        callback(output)
+      } else {
+        callback(errorHandler(messages.LISTGROUP.notfound, false))
+      }
+    })
   })
 }
 
-const settingsStores = (input, response) => {
-  stores.settingsStores(input, result => {
-    if (result.status === true) {
-      response.status(200).send(result)
-    } else {
-      response.status(400).send(result)
+const settingsStores = (request, callback) => {
+  const input = {
+    suid: (request.query.suid ? request.query.suid : null)
+  }
+  storeValidator.settingsStores(input, (err) => {
+    if (err) {
+      callback(err)
     }
+    stores.settingsStores(input, (result) => {
+      if (result.data && result.data.length > 0) {
+        let output = {}
+        output.data = result.data[0]
+        output.status = true
+        callback(output)
+      } else {
+        callback(errorHandler(messages.LISTGROUP.notfound, false))
+      }
+    })
+  })
+}
+
+const getMasterSettings = (request, callback) => {
+  const input = {
+    duid: (request.query.duid ? request.query.duid : null)
+  }
+  storeValidator.getMasterSettings(input, (err) => {
+    if (err) {
+      callback(err)
+    }
+    stores.getMasterSettings(input, (result) => {
+      if (result.data && result.data.length > 0) {
+        let output = {}
+        output.data = result.data[0]
+        output.status = true
+        callback(output)
+      } else {
+        callback(errorHandler(messages.LISTGROUP.notfound, false))
+      }
+    })
+  })
+}
+
+const saveMasterSettings = (request, callback) => {
+  const input = {
+    duid: (request.params.duid ? request.params.duid : null),
+    settings: (request.params.settings.length ? request.params.settings : null),
+    destination: (request.params.destination.length ? request.params.destination : null)
+  }
+  storeValidator.saveMasterSettings(input, (err) => {
+    if (err) {
+      callback(err)
+    }
+    stores.saveMasterSettings(input, (result) => {
+      if (result.data && result.data.length > 0) {
+        let output = {}
+        output.data = result.data[0]
+        output.status = true
+        callback(output)
+      } else {
+        callback(errorHandler(messages.LISTGROUP.notfound, false))
+      }
+    })
   })
 }
 /**
@@ -265,6 +341,8 @@ module.exports = {
   getRawCarDataReport,
   settingsDevices,
   settingsStores,
+  getMasterSettings,
+  saveMasterSettings,
   getStores,
   getStoreByUid,
   removeDeviceById

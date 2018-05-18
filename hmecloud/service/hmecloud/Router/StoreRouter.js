@@ -3,7 +3,8 @@ const router = express.Router()
 const VerifyToken = require('../Controllers/AuthenticationController')
 const storeValidator = require('../Validators/StoreValidator')
 const authValidator = require('../Controllers/AuthenticationController')
-
+const hmeRouter = require('./HmeRouter')
+const storeController = require('../Controllers/StoreController')
 /**
  * This Service is used to Generate the Summary reports details for
  *provided details
@@ -89,24 +90,20 @@ router.post('/remove', authValidator, VerifyToken, (request, response) => {
   })
 })
 
-router.get('/settingsDevices', authValidator, (request, response) => {
-  storeValidator.settingsDevices(request, result => {
-    if (result.status === true) {
-      response.status(200).send(result)
-    } else {
-      response.status(400).send(result)
-    }
-  })
+router.get('/settingsDevices', VerifyToken, (request, response) => {
+  storeController.settingsDevices(request, result => hmeRouter.handelResult(result, response))
 })
 
-router.get('/settingsStores', authValidator, (request, response) => {
-  storeValidator.settingsStores(request, result => {
-    if (result.status === true) {
-      response.status(200).send(result)
-    } else {
-      response.status(400).send(result)
-    }
-  })
+router.get('/settingsStores', VerifyToken, (request, response) => {
+  storeController.settingsStores(request, result => hmeRouter.handelResult(result, response))
+})
+
+router.get('/getMasterSettings', VerifyToken, (request, response) => {
+  storeController.getMasterSettings(request, result => hmeRouter.handelResult(result, response))
+})
+
+router.post('/saveMasterSettings', VerifyToken, (request, response) => {
+  storeController.saveMasterSettings(request, result => hmeRouter.handelResult(result, response))
 })
 
 module.exports = router

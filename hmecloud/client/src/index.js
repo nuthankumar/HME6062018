@@ -26,6 +26,9 @@ import Layout from './components/Common/Layout'
 import Login from './components/Security/Login'
 import Logout from './components/Security/Logout'
 import Systems from './components/Systems/Systems'
+import masterSettings from './components/Stores/MasterSettings'
+import Device from './components/Device/Device'
+import remoteSystemActions from './components/Stores/RemoteSystemActions'
 
 const createStoreWithMiddlewaare = applyMiddleware()(createStore);
 
@@ -50,7 +53,9 @@ ReactDOM.render( <Provider store={createStoreWithMiddlewaare(reducers)}>
         <Route exact path="/settings/stores" render={(props) => <Layout Params={props}><Route path='/settings/stores' component={Authenticate(StoreDetails)} /></Layout>} />  
         <Route exact path="/systemStatus" render={(props) => <Layout Params={props}><Route path='/systemStatus' component={Authenticate(SystemStatus)} /></Layout>} />
         <Route exact path="/systems" render={(props) => <Layout Params={props}><Route path='/systems' component={Authenticate(Systems)} /></Layout>} />
-   
+        <Route exact path="/stores/masterSettings" render={(props) => <Layout Params={props}><Route path='/stores/masterSettings' component={Authenticate(masterSettings)} /></Layout>} />
+        <Route exact path="/stores/device" render={(props) => <Layout Params={props}><Route path='/stores/device' component={Authenticate(Device)} /></Layout>} />
+        <Route exact path="/stores/remoteSystemActions" render={(props) => <Layout Params={props}><Route path='/stores/remoteSystemActions' component={Authenticate(remoteSystemActions)} /></Layout>} />
     </div>
    
     </Router></Provider>, document.getElementById('root'))

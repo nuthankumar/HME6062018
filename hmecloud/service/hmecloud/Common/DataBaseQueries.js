@@ -100,12 +100,31 @@ const sqlQueries = {
   Role: {
     getRoles: '[dbo].[usp_GetRoles]'
   },
+  DeviceStatus: {
+    getStatus: '[dbo].[usp_getDeviceById]'
+  },
+  Country: {
+    getCountries: '[dbo].[usp_GetCountries]'
+  },
+  TimeZone: {
+    getTimeZones: '[dbo].[usp_GetTimeZones]'
+  },
+  Brand: {
+    getBrands: '[dbo].[usp_GetBrands]'
+  },
   Reports: {
     getWeekReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Week_Details_Dynamic]',
     getDayPartReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details_Dynamic]',
     getDayReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Date_Details_Dynamic]',
     getRawCarData: '[dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details_Dynamic]'
   },
+  
+  DeviceUid: {
+    Parameters: {
+      DeviceUid: 'DeviceUid'
+    }
+  },
+
   DeviceIds: {
     Parameters: {
       Device_IDs: 'Device_IDs'

@@ -789,7 +789,23 @@ span.StoreBrand {
       pointer-events: none;
     }
 
-    
+.storesTooltip {
+  position: absolute;
+  z-index: 10000;
+  background-color: white;
+  color: black !important;
+  width: 100%;
+  top: -62px;
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 1px solid #a6c9e2;
+  border-radius: 3px;
+  box-shadow: 2px 2px 9px 1px;
+  }
+
+  .storesTooltip span{
+    color: black !important;
+  }
 
 .selectAStore {
     color:red !important;

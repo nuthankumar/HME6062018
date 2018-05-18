@@ -16,6 +16,9 @@ const summaryReport = require('./Router/StoreRouter')
 const userRouter = require('./Router/UserRouter')
 const roleRouter = require('./Router/RoleRouter')
 const permissionRouter = require('./Router/PermissionRouter')
+const countryRouter = require('./Router/CountryRouter')
+const timeZoneRouter = require('./Router/TimeZoneRouter')
+const brandRouter = require('./Router/BrandRouter')
 
 // JWT - Auth config
 const authentication = require('./Router/AuthenticationRouter')
@@ -65,6 +68,16 @@ app.use('/api/role', roleRouter)
 
 // Permissions
 app.use('/api/permission', permissionRouter)
+
+// Countries
+app.use('/api/country', countryRouter)
+
+// TimeZones
+app.use('/api/timeZone', timeZoneRouter)
+
+// Brands
+app.use('/api/brand', brandRouter)
+
 
 app.use('/api/auth', authentication)
 /**

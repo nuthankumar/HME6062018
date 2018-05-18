@@ -87,6 +87,7 @@ class Report extends Component {
       templateData : [],
       deviceUIds: [],
       disableIncludes:false,
+      showStoresPopUp:false,
       reportData:{
         generate: false,
         weeklyData: false,
@@ -443,7 +444,11 @@ class Report extends Component {
                   <div className="col-md-12 storeWrap">
 
                                     <span className="criteriaHeading">{t[language].stores} :</span>
-                                    {this.state.stores.length ? this.renderStores() : <span className="selectAStore">{t[language].SelectAStore}</span>}
+                                    {this.state.stores.length ? (this.renderStores()) : <span className="selectAStore">{t[language].SelectAStore}</span>}
+
+                                    {
+                                       this.state.stores.length>2 ? this.renderDots() : '' 
+                                    }
                   </div>
                   <div className="col-md-6"> <span className="criteriaHeading">{t[language].from} :</span>{this.state.fromDate} </div>
                   <div className="col-md-6"> <span className="criteriaHeading">{t[language].to} :</span>{this.state.toDate}</div>
@@ -1207,6 +1212,19 @@ class Report extends Component {
     let stores = this.state.stores;
     renderStores = stores.map(function(store, index) {
       return (
+        <span key={index} className={index > 2 ? "hidden" : ""}>
+          <span className={index == 0 ? "hidden" : ""}>,</span> {store}
+        </span>
+      );
+    });
+    return renderStores;
+  }
+
+  renderStoresPopup() {
+    let renderStores;
+    let stores = this.state.stores;
+    renderStores = stores.map(function(store, index) {
+      return (
         <span key={index}>
           <span className={index == 0 ? "hidden" : ""}>,</span> {store}
         </span>
@@ -1214,6 +1232,24 @@ class Report extends Component {
     });
     return renderStores;
   }
+
+  renderDots(){
+        return(
+          <span onMouseOut={() => this.mouseOut()} onMouseOver={() => this.mouseOver()}>...
+          <div className={"storesTooltip "+ (!this.state.showStoresPopUp?'hidden':'')}> {this.renderStoresPopup()} </div>  
+          </span>
+        )
+  }
+
+  mouseOut() {
+    this.setState({showStoresPopUp: false});
+  }
+  
+  mouseOver() {
+    this.setState({showStoresPopUp: true});
+  }
+
+  render
 
   selectAll(e) {
     if (!this.state.selectAll) {

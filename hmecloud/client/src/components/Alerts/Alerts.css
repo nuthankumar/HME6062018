@@ -20,6 +20,12 @@
 .loaderSection {
     margin:0 auto;
 }
+
+.commonLoaderSection{
+    margin:0 auto;
+    padding:50px;
+}
+
 .loaderTxt {
     font-size: 30px;
     margin-bottom: 20px;
