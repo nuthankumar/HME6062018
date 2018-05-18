@@ -28,8 +28,6 @@ CREATE PROCEDURE [dbo].[usp_GetDeviceById]
 AS
 BEGIN
 
-
-SET @DeviceUid = '2A19A147-AE3E-4EBF-82D3-9994E79B6FCB'
     SELECT Distinct stor.*,dinf.* FROM 
 		tbl_Stores stor
 		LEFT JOIN ltbl_Brands bran ON stor.Store_Brand_ID = bran.Brand_ID
@@ -40,8 +38,7 @@ SET @DeviceUid = '2A19A147-AE3E-4EBF-82D3-9994E79B6FCB'
 		LEFT JOIN tbl_Users usrs ON usrs.User_ID = iurs.User_ID
 		LEFT JOIN stbl_Account_Brand_ShareData absr ON stor.Store_Brand_ID = absr.Brand_ID
 	WHERE 0=0
-	AND dinf.Device_UID = CAST(@DeviceUid AS UNIQUEIDENTIFIER) --IN ('2A19A147-AE3E-4EBF-82D3-9994E79B6FCB')
-
+	AND dinf.Device_UID = CAST(@DeviceUid AS UNIQUEIDENTIFIER)
 	SELECT DISTINCT sinf.SettingInfo_Setting_ID, dset.DeviceSetting_Device_ID, sinf.SettingInfo_Name, dinf.Device_Store_ID, 
 	dset.DeviceSetting_SettingValue, sgrp.SettingsGroup_ID, sgrp.SettingsGroup_Name
 	FROM 
@@ -51,9 +48,8 @@ SET @DeviceUid = '2A19A147-AE3E-4EBF-82D3-9994E79B6FCB'
 		INNER JOIN tbl_SettingInfo sinf ON dset.DeviceSetting_Setting_ID = sinf.SettingInfo_Setting_ID 
 		INNER JOIN ltbl_SettingsGroup sgrp ON sinf.SettingInfo_SettingsGroup_ID = sgrp.SettingsGroup_ID
 	WHERE 0=0
-	AND dinf.Device_UID =CONVERT(uniqueidentifier, @DeviceUid)--('2A19A147-AE3E-4EBF-82D3-9994E79B6FCB')
+	AND dinf.Device_UID =CONVERT(uniqueidentifier, @DeviceUid)
 	ORDER BY sgrp.SettingsGroup_Name, sgrp.SettingsGroup_ID, sinf.SettingInfo_Name, sinf.SettingInfo_Setting_ID, dset.DeviceSetting_Device_ID, dinf.Device_Store_ID, dset.DeviceSetting_SettingValue
-
 
 END
 GO
