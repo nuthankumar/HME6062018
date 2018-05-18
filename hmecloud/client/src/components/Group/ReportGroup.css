@@ -230,3 +230,18 @@ width:100%;
 .grouphierarchy-tree  .rc-tree-child-tree  li:nth-child(even) {
   background-color:#f3f3f3;
 } 
+
+/* 
+.grouphierarchy-tree  ul.rc-tree-child-tree.rc-tree-child-tree-open {
+  border-left: 1px solid black;
+  margin-left: 8px;
+} */
+
+
+/* .grouphierarchy-tree ul.rc-tree-child-tree.rc-tree-child-tree-open::after {
+  border-left: 1px solid black;
+  margin-left: 8px;
+} */
+
+ /* .treeNode .group-node::before {
+  content: '--' }  */

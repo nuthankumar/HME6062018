@@ -158,3 +158,214 @@
 }
 
 
+.storeTable.ctable {
+    margin: 0 auto;
+}
+
+.stores .forms h3 {
+    font-size: 30px;
+    margin-bottom: 17px;
+}
+
+.stores span.additem {
+    background-color: #D41B3E;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 13px !important;
+    padding: 10px 20px;
+    margin-right:10px;
+}
+
+.stores .settings_search {
+    height: 90px;
+    padding: 0 0 10px;
+}
+
+
+.stores .forms {
+    margin-bottom: 25px;
+    margin-top: 47px;
+}
+
+.stores .theader, .stores .cheader {
+    border: 1px solid #b9b9b9;
+    color: #757575;
+}
+
+
+.stores #brand_space {
+    width: 115px;
+}
+
+.stores tr.theader th {
+    font-size: 16px !important;
+}
+.stores .ctable th {
+    padding: 10px;
+}
+.stores .forms th {
+    font-size: 14px !important;
+    text-align: left;
+}
+
+
+.stores img.cstat {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 5px;
+}
+
+.stores .ctable td.store_checkbox {
+    line-height: 40px;
+}
+
+.stores .tdata:hover {
+    background-color: #c4e9f1;
+    border-bottom: 1px solid #709da2;
+    border-left: 1px solid #fff;
+    border-right: 1px solid #fff;
+}
+
+.stores .tdata, .stores .cdata {
+    background-color: #ffffff;
+    border-bottom: 1px solid #b9b9b9;
+    border-left: 1px solid #fff;
+    border-right: 1px solid #fff;
+    color: #000000;
+}
+
+.masterSettings{
+   display:flex;
+   width: 100%;
+}
+.masterSettings .versions{
+    font-size: 30px !important;
+    margin: 25px 0px 17px 0px !important;
+    border: none !important;
+}
+
+.masterSettings .form_cbox {
+    border: 1px solid #B9B9B9;
+    height: 125px;
+    margin: 5px 0 0 5px;
+    overflow: auto;
+    padding: 5px;
+    width: 250px;
+}
+
+.masterSettings .forms input[type=submit] {
+    background-color: #d41b3e;
+    border: none;
+    float: right;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 10px 25px;
+}
+
+.sys-settings.forms {
+    margin-bottom: 25px;
+    margin-top: 47px;
+    color: rgb(0, 0, 0);
+}
+.sys-settings h3.clear {
+    font-size: 30px;
+    margin-bottom: 17px;
+}
+.sys-settings .system_header {
+    float: left;
+}
+.sys-settings .device_header {
+    float: left;
+    margin-left:8em;
+}
+.sys-settings .settab {
+    width: 430px;
+    float: left;
+}
+
+.sys-settings .settab tbody, .sys-settings .settab tr, .sys-settings span , .sys-settings th, .sys-settings ul, .sys-settings h3 {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    font-family: Arial;
+    vertical-align: baseline;
+}
+
+.sys-settings td {
+    padding-left: 10px;
+    padding: 10px;
+    font-size: 16px;
+    vertical-align: top;
+}
+
+.sys-settings .settab tbody th {
+    width: 150px;
+    font-size: 14px;
+    padding: 10px;
+    text-align: left;
+}
+
+.sys-settings a {
+    color: #D41B3E;
+    font-size: 16px;
+    text-decoration: underline;
+}
+
+.sys-settings ul {
+    list-style: none;
+}
+/* Remote System Actions */
+
+.RemoteSystemActions h3 {
+    border-radius: 0 0 0 0;
+    color: #000;
+    font-size: 20px;
+    margin: 5px;
+    padding: 5px;
+ }
+
+ .RemoteSystemActions input {
+    border: 1px solid #b9b9b9;
+    margin: 5px;
+    padding: 5px;
+}
+
+.RemoteSystemActions .ui-corner-all,.RemoteSystemActions .ui-corner-bottom,.RemoteSystemActions .ui-corner-right,.RemoteSystemActions .ui-corner-br {
+    border-bottom-right-radius: 6px;
+}
+
+.RemoteSystemActions a.ui-button,.RemoteSystemActions a:link.ui-button,.RemoteSystemActions a:visited.ui-button,.RemoteSystemActions .ui-button {
+    color: #2779aa;
+    text-decoration: none;
+}
+
+.RemoteSystemActions .ui-button .ui-button:active {
+    border: 1px solid #aed0ea;
+    background: #d7ebf9;
+    font-weight: bold;
+    color: #2779aa;
+}
+
+.RemoteSystemActions a{
+width:15em;
+font-size:12px;
+text-align:left;
+text-decoration: none;
+}
+
+.ActionButtons {
+    width: 200px;
+    background: #e4f2fb;
+    padding: 5px;
+    margin: 20px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    border:1px solid #b2b2d8
+}
+
+.ActionButtons:hover {
+    background: #eff7fd;
+}
