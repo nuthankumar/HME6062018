@@ -201,18 +201,6 @@ const settingsStores = (input, callback) => {
   }
 }
 
-const settingsDevices = (input, callback) => {
-  if (!input.duid) {
-      let output = {}
-      output.key = 'requiredDuid';
-      output.status = false
-      callback(output)
-  }
-  if (input.duid) {
-      callback()
-  }
-}
-
 const getMasterSettings = (input, callback) => {
   if (!input.duid) {
       let output = {}

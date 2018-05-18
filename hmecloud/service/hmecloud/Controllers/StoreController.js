@@ -206,10 +206,10 @@ const settingsDevices = (request, callback) => {
   const input = {
     duid: (request.query.duid ? request.query.duid : null)
   }
-  // storeValidator.settingsDevices(input, (err) => {
-  //   if (err) {
-  //     callback(err)
-  //   }
+  storeValidator.settingsDevices(input, (err) => {
+    if (err) {
+      callback(err)
+    }
     stores.settingsDevices(input, (result) => {
       console.log('result', result);
       if (result.data && result.data.length > 0) {
@@ -221,7 +221,7 @@ const settingsDevices = (request, callback) => {
         callback(errorHandler(messages.LISTGROUP.notfound, false))
       }
     })
-  // })
+  })
 }
 
 const settingsStores = (request, callback) => {
