@@ -35,7 +35,7 @@ class RawCarReport extends Component {
   getRawCarData () {
     let data = this.props.history.location.state
     this.state.displayData = data.rawCarData
-    this.state.eventList = data.eventList
+    this.state.eventList = data.rawCarData.eventList
     this.state.rawCarRequest = data.rawCarRequest
     this.state.rawData = true
     this.setState(this.state)

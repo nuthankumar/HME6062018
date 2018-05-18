@@ -211,7 +211,7 @@ export default class SummaryReport extends Component {
                 break
         }
         // this.constructReportRequest(templateData)
-    }   
+    }
 
     handleDrillDown (storeId) {
         // api call for getting the next drilldown
@@ -260,7 +260,7 @@ export default class SummaryReport extends Component {
                  request.fromDate = moment(request.fromDate).format('YYYY-MM-DD')
                  request.toDate =  moment(request.toDate).format('YYYY-MM-DD')
              //   let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
-                 
+
                 let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=reports'
                 this.api.postData(url, request, data => {
                     request.deviceIds = data.deviceIds
@@ -287,8 +287,12 @@ export default class SummaryReport extends Component {
                     // request.toDate = year.concat('/'+monthDay)
                     request.fromDate = moment(request.fromDate).format('YYYY-MM-DD')
                     request.toDate =  moment(request.toDate).format('YYYY-MM-DD')
-                    request.openTime = storeId.daypart.currentDaypart.split("-")[0]
-                    request.closeTime = storeId.daypart.currentDaypart.split("-")[1]
+                    // request.openTime = storeId.Daypart.currentDaypart.split("-")[0]
+                    // request.closeTime = storeId.Daypart.currentDaypart.split("-")[1]
+
+                    // request.openTime = storeId.Daypart.currentDaypart.split("-")[0]
+                    // request.closeTime = storeId.Daypart.timeSpan.split("-")[1]
+
                 }
                // let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rr1'
                 let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=reports'

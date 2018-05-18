@@ -192,6 +192,7 @@
 }
 .reportTableAttributesHeading.blank-heading{
   background: none;
+  width : 125px;
 }
 
 
@@ -339,6 +340,8 @@ h2 .report-start-time-value,h2 .report-end-time-value{
   border: 0px;
   height: 23px;
   font-size: 12px;
+
+  width : 125px;
 }
 
 .goalstatistics-table tr.goalstatistics-row-heading th.blank-heading{
@@ -421,6 +424,7 @@ h2 .report-start-time-value,h2 .report-end-time-value{
   font-weight: 800;
   text-transform: uppercase;
 }
+
 /* Goal Statistics css ends here*/
 
 

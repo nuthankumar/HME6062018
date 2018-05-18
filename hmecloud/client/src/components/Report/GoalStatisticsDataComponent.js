@@ -39,7 +39,7 @@ export default class GoalStatisticsDataComponent extends Component {
         <table className='goalstatistics-table goalstatistics-table-header'>
           <div className='goalStatistics-cover'></div>
           <tbody>
-            <tr>
+            <tr className='goalstats-average-header'>
               <th className='blankHeader' />
               <th className='tableHeading' colSpan={(this.props.reportData.groupStoreColumns? this.props.reportData.response.eventList.length - 4 : this.props.reportData.response.eventList.length - 3)}>
                 <span>{t[language].ReportsAveragePerformancePerEvent}</span><span>(min:sec)</span>
