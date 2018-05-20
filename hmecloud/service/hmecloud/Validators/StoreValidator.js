@@ -225,6 +225,17 @@ const saveMasterSettings = (input, callback) => {
   }
 }
 
+const saveMergeDevices = (input, callback) => {
+  if (!input.suid) {
+      let output = {}
+      output.key = 'requiredDuid';
+      output.status = false
+      callback(output)
+  }
+  if (input.duid) {
+      callback()
+  }
+}
 /**
  *
  * @param {*} request
@@ -272,6 +283,7 @@ module.exports = {
   settingsStores,
   getMasterSettings,
   saveMasterSettings,
+  saveMergeDevices,
   getStores,
   getStoreByUid,
   removeDeviceById

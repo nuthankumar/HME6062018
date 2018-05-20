@@ -255,6 +255,14 @@ const saveMasterSettings = (input, callback) => {
   }, callback);
 }
 
+// Todo: saveMergeDevices Store Procedure
+const saveMergeDevices = (input, callback) => {
+  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
+    return request
+      .input(sqlQuery.DeviceIds.Parameters.Device_IDs, sql.VarChar(36), input.duid)
+  }, callback);
+}
+
 module.exports = {
   getRawCarDataReport,
   getDayDataReport,
@@ -263,6 +271,7 @@ module.exports = {
   settingsStores,
   getMasterSettings,
   saveMasterSettings,
+  saveMergeDevices,
   getStores,
   getStoreByUid,
   removeDeviceById

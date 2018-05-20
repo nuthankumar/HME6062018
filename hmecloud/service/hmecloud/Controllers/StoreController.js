@@ -288,6 +288,30 @@ const saveMasterSettings = (request, callback) => {
     })
   })
 }
+
+const saveMergeDevices = (request, callback) => {
+  const input = {
+    suid: (request.params.suid ? request.params.suid : null),
+    device_Merge_List: (request.params.device_Merge_List.length ? request.params.device_Merge_List : null),
+    tempDevice_Merge_List: (request.params.tempDeviceMergeUIDs.length ? request.params.tempDeviceMergeUIDs : null),
+    isReplacement: 1
+  }
+  storeValidator.saveMergeDevices(input, (err) => {
+    if (err) {
+      callback(err)
+    }
+    stores.saveMergeDevices(input, (result) => {
+      if (result.data && result.data.length > 0) {
+        let output = {}
+        output.data = result.data[0]
+        output.status = true
+        callback(output)
+      } else {
+        callback(errorHandler(messages.LISTGROUP.notfound, false))
+      }
+    })
+  })
+}
 /**
  * @param {*} input
  * @param {*} callBack
@@ -343,6 +367,7 @@ module.exports = {
   settingsStores,
   getMasterSettings,
   saveMasterSettings,
+  saveMergeDevices,
   getStores,
   getStoreByUid,
   removeDeviceById
