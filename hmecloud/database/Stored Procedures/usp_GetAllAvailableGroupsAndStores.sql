@@ -93,7 +93,8 @@ BEGIN
 		g.GroupName,
 		''group'' AS [Type],
 		NULL Device_ID,
-		NULL Device_UID
+		NULL Device_UID,
+		NULL Store_Number
 	FROM [dbo].[Group] AS g 
 	WHERE g.ParentGroup IS NULL AND g.AccountId IN(SELECT Account_ID FROM #AccountIDs)
 	UNION
@@ -102,7 +103,8 @@ BEGIN
 		s.Store_Name, 
 		''store'' AS [Type],
 		d.Device_ID,
-		d.Device_UID 
+		d.Device_UID,
+		s.Store_Number
 	FROM tbl_Stores AS s INNER JOIN tbl_DeviceInfo d ON s.Store_ID = d.Device_Store_ID 
 		LEFT JOIN GroupStore AS gd ON s.Store_ID = gd.StoreID
 		LEFT JOIN ltbl_Brands AS brand ON brand.Brand_ID = s.Store_Brand_ID

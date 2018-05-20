@@ -58,7 +58,7 @@ AS
 		d.Device_UID,
 		s.Store_Number
 	FROM 
-	tbl_Stores AS s INNER JOIN tbl_DeviceInfo d ON s.Store_ID = d.Device_Store_ID 
+	tbl_Stores AS s INNER JOIN tbl_DeviceInfo d ON s.Store_ID = d.Device_Store_ID AND d.device_deviceType_id = 1
 	INNER JOIN GroupStore gd ON s.Store_ID = gd.StoreId 
 	INNER JOIN[dbo].[Group] AS g ON g.Id = gd.GroupId 
 	WHERE 
