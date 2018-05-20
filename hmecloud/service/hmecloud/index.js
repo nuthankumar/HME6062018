@@ -12,7 +12,7 @@ const bodyParser = require('body-parser')
 const groupRouter = require('./Router/GroupRouter')
 const reportsTemplate = require('./Router/TemplateRouter')
 const newReports = require('./Router/ReportsRouter')
-const summaryReport = require('./Router/StoreRouter')
+const store = require('./Router/StoreRouter')
 const userRouter = require('./Router/UserRouter')
 const roleRouter = require('./Router/RoleRouter')
 const permissionRouter = require('./Router/PermissionRouter')
@@ -52,7 +52,7 @@ app.use(bodyParser.json())
 app.use('/api/group', groupRouter)
 
 // summary Report
-app.use('/api/report', summaryReport)
+app.use('/api/store', store)
 
 // Report Templates
 app.use('/api/reportTemplate', reportsTemplate)
@@ -77,7 +77,6 @@ app.use('/api/timeZone', timeZoneRouter)
 
 // Brands
 app.use('/api/brand', brandRouter)
-
 
 app.use('/api/auth', authentication)
 /**

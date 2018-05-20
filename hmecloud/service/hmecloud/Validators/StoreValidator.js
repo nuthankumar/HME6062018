@@ -179,61 +179,61 @@ const getStores = (request, callback) => {
 
 const settingsDevices = (input, callback) => {
   if (!input.duid) {
-      let output = {}
-      output.key = 'requiredDuid';
-      output.status = false
-      callback(output)
+    let output = {}
+    output.key = 'requiredDuid'
+    output.status = false
+    callback(output)
   }
   if (input.duid) {
-      callback()
+    callback()
   }
 }
 
 const settingsStores = (input, callback) => {
   if (!input.suid) {
-      let output = {}
-      output.key = 'requiredSuid';
-      output.status = false
-      callback(output)
+    let output = {}
+    output.key = 'requiredSuid'
+    output.status = false
+    callback(output)
   }
   if (input.duid) {
-      callback()
+    callback()
   }
 }
 
 const getMasterSettings = (input, callback) => {
   if (!input.duid) {
-      let output = {}
-      output.key = 'requiredDuid';
-      output.status = false
-      callback(output)
+    let output = {}
+    output.key = 'requiredDuid'
+    output.status = false
+    callback(output)
   }
   if (input.duid) {
-      callback()
+    callback()
   }
 }
 
 const saveMasterSettings = (input, callback) => {
   if (!input.duid) {
-      let output = {}
-      output.key = 'requiredDuid';
-      output.status = false
-      callback(output)
+    let output = {}
+    output.key = 'requiredDuid'
+    output.status = false
+    callback(output)
   }
   if (input.duid) {
-      callback()
+    callback()
   }
 }
 
 const saveMergeDevices = (input, callback) => {
   if (!input.suid) {
-      let output = {}
-      output.key = 'requiredDuid';
-      output.status = false
-      callback(output)
+    let output = {}
+    output.key = 'requiredDuid'
+    output.status = false
+    callback(output)
   }
   if (input.duid) {
-      callback()
+    callback()
   }
 }
 /**
@@ -255,7 +255,6 @@ const getStoreByUid = (request, callback) => {
     callback(output)
   }
 }
-
 
 /**
  *

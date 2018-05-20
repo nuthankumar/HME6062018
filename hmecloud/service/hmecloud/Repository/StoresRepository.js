@@ -102,52 +102,58 @@ const getWeekReport = (template, callback) => {
   })
 }
 
+const settingsDevices = (input, callback) => {
+  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
+    return request
+      .input(sqlQuery.DeviceUid.Parameters.DeviceUid, sql.VarChar(36), input.duid)
+  }, callback)
+}
+
+// Todo: SettingStores Store Procedure
+const settingsStores = (input, callback) => {
+  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
+    return request
+      .input(sqlQuery.DeviceIds.Parameters.Device_IDs, sql.VarChar(36), input.duid)
+  }, callback)
+}
+
+// Todo: getMasterSettings Store Procedure
+const getMasterSettings = (input, callback) => {
+  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
+    return request
+      .input(sqlQuery.DeviceIds.Parameters.Device_IDs, sql.VarChar(36), input.duid)
+  }, callback)
+}
+
+// Todo: saveMasterSettings Store Procedure
+const saveMasterSettings = (input, callback) => {
+  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
+    return request
+      .input(sqlQuery.DeviceIds.Parameters.Device_IDs, sql.VarChar(36), input.duid)
+  }, callback)
+}
+
+// Todo: saveMergeDevices Store Procedure
+const saveMergeDevices = (input, callback) => {
+  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
+    return request
+      .input(sqlQuery.DeviceIds.Parameters.Device_IDs, sql.VarChar(36), input.duid)
+  }, callback)
+}
+
 const getStores = (input, callback) => {
-  const output = {}
-  const sqlPool = new sql.ConnectionPool(dataBaseSql, err => {
-    if (err) {
-      output.data = err
-      output.status = false
-      callback(output)
-    }
+  repository.executeProcedure(sqlQuery.Stores.getAllStores, request => {
     console.log(input)
-    sqlPool.request()
-      .input('User_UID', sql.VarChar(32), input.userUid)
-      .input('SortingColumnName', sql.VarChar(32), input.query.sort)
-      .input('IsAdmin', sql.VarChar(32), input.query.isAdmin) // number
-
-      // TO DO : Need to decide on number of parameters
-
-    // .input('Brand_Name', sql.VarChar(32), input.query.)
-    // .input('Store_Number', sql.VarChar(32), input.query.Store_Number)
-    // .input('Store_Name', sql.VarChar(32), input.query.Store_Name)
-    // .input('Device_SerialNumber', sql.VarChar(32), input.query.Device_SerialNumber)
-    // .input('Company_Name', sql.VarChar(32), input.query.Company_Name)
-    // .input('Device_MainVersion', sql.VarChar(32), input.query.Device_MainVersion)
-    // .input('Store_AddressLine1', sql.VarChar(32), input.query.Store_AddressLine1)
-    //  search add this varible
-
-      .input('RecordPerPage', sql.SmallInt, input.query.per)
-      .input('PageNumber', sql.SmallInt, input.query.pno)
-      .execute('usp_getUserStoreList1', (err, result) => {
-        if (err) {
-          output.data = err
-          output.status = false
-          callback(output)
-        }
-        if (result && result.recordsets) {
-          output.data = result.recordsets
-          output.status = true
-          callback(output)
-        }
-      })
-  })
-
-  sqlPool.on('error', err => {
-    if (err) {
-      callback(err)
-    }
-  })
+    return request
+      .input(sqlQuery.Stores.Parameters.User_UID, sql.VarChar(32), '68LKBP85C1SKH1FI3M7X40CJHKGU07FZ') //  input.User_UID)
+      .input(sqlQuery.Stores.Parameters.isAdmin, sql.Int, input.isAdmin)
+      .input(sqlQuery.Stores.Parameters.criteria, sql.VarChar(100), input.criteria)
+      .input(sqlQuery.Stores.Parameters.filter, sql.VarChar(100), input.filter)
+      .input(sqlQuery.Stores.Parameters.SortingColumnName, sql.VarChar(50), input.column)
+      .input(sqlQuery.Stores.Parameters.SortingType, sql.VarChar(5), input.sortType)
+      .input(sqlQuery.Stores.Parameters.RecordPerPage, sql.Int, input.per)
+      .input(sqlQuery.Stores.Parameters.PageNumber, sql.Int, input.pno)
+  }, callback)
 }
 
 /**
@@ -156,35 +162,11 @@ const getStores = (input, callback) => {
  * @param {*} callback
  */
 const getStoreByUid = (input, callback) => {
-  const output = {}
-  const sqlPool = new sql.ConnectionPool(dataBaseSql, err => {
-    if (err) {
-      output.data = err
-      output.status = false
-      callback(output)
-    }
+  repository.executeProcedure(sqlQuery.Stores.getStoreDetailsByUID, request => {
     console.log(input)
-    sqlPool.request()
-      .input('store_UID', sql.VarChar(32), input.suid)
-      .execute('usp_getStoreByStoreUid', (err, result) => {
-        if (err) {
-          output.data = err
-          output.status = false
-          callback(output)
-        }
-        if (result && result.recordsets) {
-          output.data = result.recordsets
-          output.status = true
-          callback(output)
-        }
-      })
-  })
-
-  sqlPool.on('error', err => {
-    if (err) {
-      callback(err)
-    }
-  })
+    return request
+      .input(sqlQuery.Stores.Parameters.Store_UID, sql.VarChar(32), input.suid)
+  }, callback)
 }
 
 /**
@@ -193,74 +175,11 @@ const getStoreByUid = (input, callback) => {
  * @param {*} callback
  */
 const removeDeviceById = (input, callback) => {
-  const output = {}
-  const sqlPool = new sql.ConnectionPool(dataBaseSql, err => {
-    if (err) {
-      output.data = err
-      output.status = false
-      callback(output)
-    }
+  repository.executeProcedure(sqlQuery.Device.removeByDUID, request => {
     console.log(input)
-    sqlPool.request()
-      .input('device_UID', sql.VarChar(32), input.duid)
-      .execute('usp_removeDeviceFromStore', (err, result) => {
-        if (err) {
-          output.data = err
-          output.status = false
-          callback(output)
-        }
-        if (result && result.recordsets) {
-          output.data = result.recordsets
-          output.status = true
-          callback(output)
-        }
-      })
-  })
-
-  sqlPool.on('error', err => {
-    if (err) {
-      callback(err)
-    }
-  })
-}
-
-const settingsDevices = (input, callback) => {
-  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
     return request
-      .input(sqlQuery.DeviceUid.Parameters.DeviceUid, sql.VarChar(36), input.duid)
-  }, callback);
-}
-
-// Todo: SettingStores Store Procedure
-const settingsStores = (input, callback) => {
-  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
-    return request
-      .input(sqlQuery.DeviceIds.Parameters.Device_IDs, sql.VarChar(36), input.duid)
-  }, callback);
-}
-
-// Todo: getMasterSettings Store Procedure
-const getMasterSettings = (input, callback) => {
-  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
-    return request
-      .input(sqlQuery.DeviceIds.Parameters.Device_IDs, sql.VarChar(36), input.duid)
-  }, callback);
-}
-
-// Todo: saveMasterSettings Store Procedure
-const saveMasterSettings = (input, callback) => {
-  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
-    return request
-      .input(sqlQuery.DeviceIds.Parameters.Device_IDs, sql.VarChar(36), input.duid)
-  }, callback);
-}
-
-// Todo: saveMergeDevices Store Procedure
-const saveMergeDevices = (input, callback) => {
-  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
-    return request
-      .input(sqlQuery.DeviceIds.Parameters.Device_IDs, sql.VarChar(36), input.duid)
-  }, callback);
+      .input(sqlQuery.Device.Parameters.Device_UIDs, sql.VarChar(500), input.suid)
+  }, callback)
 }
 
 module.exports = {

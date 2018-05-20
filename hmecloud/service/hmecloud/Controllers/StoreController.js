@@ -312,18 +312,87 @@ const saveMergeDevices = (request, callback) => {
     })
   })
 }
+
 /**
- * @param {*} input
- * @param {*} callBack
+ * The method can be used to execute getAll store by user UID
+ * @param  {input} request input from  user request
+ * @param  {funct} callback Function will be called once the input executed.
+ * @public
  */
-const getStores = (input, callBack) => {
+const getAllStores = (request, callBack) => {
+  const input = {
+    userUid: (request.userUid ? request.userUid : null),
+    criteria: (request.query.criteria ? request.query.criteria : null),
+    isAdmin: (request.query.isAdmin ? request.query.isAdmin : null),
+    filter: (request.query.filter ? request.query.filter : null),
+    column: (request.query.column ? request.query.column : null),
+    sortType: (request.query.sortType ? request.query.sortType : null),
+    per: (request.query.per ? request.query.per : null),
+    pno: (request.query.pno ? request.query.pno : null)
+  }
+
+  // validator.validate(input, (err) => {
+  //   if (err) {
+  //     callback(err)
+  //   }
+
   stores.getStores(input, result => {
     if (result.status === true) {
       let response = {}
-      let permessions = _.compact(_.map(result.data[1], 'Permission_Name')) || []
-      response.storeList = result.data[0]
-      response.userPermessions = permessions
-      response.pageDetails = result.data[2][0] || []
+
+      response.storeList = _.groupBy(result.data[0], 'Store_UID')
+      if (input.isAdmin) {
+        let pageDetails = result.data[1] || []
+        response.pageDetails = pageDetails
+      } else {
+        let permessions = _.compact(_.map(result.data[1], 'Permission_Name')) || []
+        response.userPermessions = permessions
+      }
+      response.status = true
+      callBack(response)
+    } else {
+      callBack(result)
+    }
+  })
+}
+
+/**
+ * The method can be used to execute get store by store UID
+ * @param  {input} request input from  user request
+ * @param  {funct} callback Function will be called once the input executed.
+ * @public
+ */
+const getStoreByUid = (request, callBack) => {
+  const input = {
+    suid: (request.query.suid ? request.query.suid : null)
+  }
+
+  // storeValidator.validateStoreUID(input, (err) => {
+  //   if (err) {
+  //     console.log('err', err)
+  //     callBack(err)
+  //   }
+  // })
+
+  stores.getStoreByUid(input, result => {
+    if (result.status === true) {
+      let response = {}
+
+      if (result.data[0][0].Brand_Name === 'NA') {
+        response.key = 'noRecordsFound'
+      } else {
+        response.storeDetails = result.data[0][0]
+        response.storeDetails.timeZone = _.map(result.data[1], 'Name')
+        if (result.data[2][0].Device_Name === 'NA') {
+          response.deviceDetails = { }
+        } else {
+          response.deviceDetails = _.groupBy(result.data[2], 'Device_Name')
+          if (_.has(response, 'deviceDetails.CIB')) {
+            let Email = _.get(response, 'storeDetails.User_EmailAddress')
+            _.set(response, 'deviceDetails.CIB.0.Email', Email) // set Email for CIB settings
+          }
+        }
+      }
       response.status = true
       callBack(response)
     } else {
@@ -336,26 +405,16 @@ const getStores = (input, callBack) => {
  * @param {*} input
  * @param {*} response
  */
-const getStoreByUid = (input, response) => {
-  stores.getStoreByStoreUid(input, result => {
-    if (result.status === true) {
-      response.status(200).send(result)
-    } else {
-      response.status(400).send(result)
-    }
-  })
-}
+const removeDeviceById = (request, callBack) => {
+  const input = {
+    suid: (request.query.duid ? request.query.duid : null)
+  }
 
-/**
- * @param {*} input
- * @param {*} response
- */
-const removeDeviceById = (input, response) => {
   stores.removeDeviceById(input, result => {
     if (result.status === true) {
-      response.status(200).send(result)
+      callBack(result)
     } else {
-      response.status(400).send(result)
+      callBack(result)
     }
   })
 }
@@ -368,7 +427,7 @@ module.exports = {
   getMasterSettings,
   saveMasterSettings,
   saveMergeDevices,
-  getStores,
+  getAllStores,
   getStoreByUid,
   removeDeviceById
 }

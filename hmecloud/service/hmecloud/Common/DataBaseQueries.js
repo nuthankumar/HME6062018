@@ -118,7 +118,7 @@ const sqlQueries = {
     getDayReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Date_Details_Dynamic]',
     getRawCarData: '[dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details_Dynamic]'
   },
-  
+
   DeviceUid: {
     Parameters: {
       DeviceUid: 'DeviceUid'
@@ -183,6 +183,27 @@ const sqlQueries = {
   UserUID: {
     Parameters: {
       UserUID: 'UserUID'
+    }
+  },
+  Stores: {
+    getAllStores: '[dbo].[usp_getUserStoreList]',
+    getStoreDetailsByUID: '[dbo].[usp_getStoreInformations]',
+    Parameters: {
+      User_UID: 'UserUid',
+      isAdmin: 'isAdmin',
+      criteria: 'criteria',
+      filter: 'filter',
+      SortingColumnName: 'SortingColumnName',
+      SortingType: 'SortingType',
+      RecordPerPage: 'RecordPerPage',
+      PageNumber: 'PageNumber',
+      Store_UID: 'Store_UID'
+    }
+  },
+  Device: {
+    removeByDUID: '[dbo].[usp_removeDeviceFromStore]',
+    Parameters: {
+      Device_UIDs: 'Device_UIDs'
     }
   }
 }

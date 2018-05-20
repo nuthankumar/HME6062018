@@ -53,43 +53,40 @@ router.post('/generatecsv', authValidator, VerifyToken, (request, response) => {
   })
 })
 /**
- * TO DO
+ * This service  using getAllStores By user UID
+ * @param  {endpoint} getStore webservice name
+ * @param  {funct} authenticator  check JWT authentication
+ * @param  {request} request  from  user request
+ * @param  {response} callback Function will be called once the request executed.
+ * @public
  */
-router.get('/getAll', authValidator, VerifyToken, (request, response) => {
-  storeValidator.getStores(request, result => {
-    if (result.status === true) {
-      response.status(200).send(result)
-    } else {
-      response.status(400).send(result)
-    }
-  })
-})
-/**
- *
- */
-router.get('/get', authValidator, VerifyToken, (request, response) => {
-  storeValidator.getStoreByUid(request, result => {
-    if (result.status === true) {
-      response.status(200).send(result)
-    } else {
-      response.status(400).send(result)
-    }
-  })
+router.get('/getAllStores', authValidator, VerifyToken, (request, response) => {
+  storeController.getAllStores(request, result => hmeRouter.handelResult(result, response))
 })
 
 /**
- *
+ * This service  using getStore By UID
+ * @param  {endpoint} getStore webservice name
+ * @param  {funct} authenticator  check JWT authentication
+ * @param  {request} request  from  user request
+ * @param  {response} callback Function will be called once the request executed.
+ * @public
  */
-router.post('/remove', authValidator, VerifyToken, (request, response) => {
-  storeValidator.removeDeviceById(request, result => {
-    if (result.status === true) {
-      response.status(200).send(result)
-    } else {
-      response.status(400).send(result)
-    }
-  })
+router.get('/getStore', authValidator, VerifyToken, (request, response) => {
+  storeController.getStoreByUid(request, result => hmeRouter.handelResult(result, response))
 })
 
+/**
+ * This service  using remove device By device UID
+ * @param  {endpoint} removeDevice webservice name
+ * @param  {funct} authenticator  check JWT authentication
+ * @param  {request} request  from  user request
+ * @param  {response} callback Function will be called once the request executed.
+ * @public
+ */
+router.post('/removeDevice', authValidator, VerifyToken, (request, response) => {
+  storeController.removeDeviceById(request, result => hmeRouter.handelResult(result, response))
+})
 router.get('/settingsDevices', VerifyToken, (request, response) => {
   storeController.settingsDevices(request, result => hmeRouter.handelResult(result, response))
 })
