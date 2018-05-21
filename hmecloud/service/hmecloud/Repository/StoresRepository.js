@@ -119,9 +119,13 @@ const settingsStores = (input, callback) => {
 
 // Todo: getMasterSettings Store Procedure
 const getMasterSettings = (input, callback) => {
-  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
+  repository.executeProcedure(sqlQuery.MasterSetting.getStatus, request => {
     return request
-      .input(sqlQuery.DeviceIds.Parameters.Device_IDs, sql.VarChar(36), input.duid)
+      .input(sqlQuery.MasterSettingsIds.Parameters.Device_ID, sql.VarChar(36), input.duid)
+      .input(sqlQuery.MasterSettingsIds.Parameters.LaneConfig_ID, sql.smallint, input.duid)
+      .input(sqlQuery.MasterSettingsIds.Parameters.Device_MainVersion, sql.VarChar(36), input.duid)
+      .input(sqlQuery.MasterSettingsIds.Parameters.Store_Company_ID, sql.int, input.duid)
+      .input(sqlQuery.MasterSettingsIds.Parameters.Store_Brand_ID, sql.int, input.duid)
   }, callback)
 }
 
