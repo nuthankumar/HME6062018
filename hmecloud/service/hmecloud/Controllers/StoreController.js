@@ -256,23 +256,22 @@ const settingsStores = (request, callback) => {
 }
 
 const getMasterSettings = (request, callback) => {
-  console.log('mastersetting', request.params);
   const input = {
-    deviceId: (request.params.deviceId ? request.params.deviceId : null),
-    Device_LaneConfig_ID: (request.params.Device_LaneConfig_ID ? request.params.Device_LaneConfig_ID : null),
-    Device_MainVersion: (request.params.Device_MainVersion ? request.params.Device_MainVersion : null),
-    Store_Company_ID: (request.params.Store_Company_ID ? request.params.Store_Company_ID : null),
-    Store_Brand_ID: (request.params.Store_Brand_ID ? request.params.Store_Brand_ID : null)
+    Device_ID: (request.body.Device_ID ? request.body.Device_ID : null),
+    Device_LaneConfig_ID: (request.body.Device_LaneConfig_ID ? request.body.Device_LaneConfig_ID : null),
+    Device_MainVersion: (request.body.Device_MainVersion ? request.body.Device_MainVersion : null),
+    Store_Company_ID: (request.body.Store_Company_ID ? request.body.Store_Company_ID : null),
+    Store_Brand_ID: (request.body.Store_Brand_ID ? request.body.Store_Brand_ID : null)
   }
   deviceValidator.validateMasterSettings(input, (err) => {
     if (err) {
       callback(err)
     }
     stores.getMasterSettings(input, (result) => {
-      console.log('result', result);
       if (result.data && result.data.length > 0) {
         let output = {}
-        output.data = result.data[0]
+        output.settingsList = result.data[0]
+        output.destinationList = result.data[1]
         output.status = true
         callback(output)
       } else {
@@ -465,3 +464,5 @@ module.exports = {
   getStoreByUid,
   removeDeviceById
 }
+
+

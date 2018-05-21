@@ -40,8 +40,7 @@ const validateMasterSettings = (input, callback) => {
       }
       output.status = false
       callback(output)
-    }
-    if (input.duid) {
+    } else {
       callback()
     }
 }
