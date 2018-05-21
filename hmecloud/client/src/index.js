@@ -21,7 +21,7 @@ import { browserHistory } from 'react-dom';
 import { Provider } from 'react-redux';
 import StoreDetails from './containers/StoreDetails'
 import { createStore, applyMiddleware } from 'redux';
-import reducers from './reducers/index';
+import reducers from './reducers/store/index';
 import Layout from './components/Common/Layout'
 import Login from './components/Security/Login'
 import Logout from './components/Security/Logout'

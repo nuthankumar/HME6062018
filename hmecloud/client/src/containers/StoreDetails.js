@@ -4,11 +4,11 @@ import t from '../components/Language/language'
 import * as languageSettings from '../components/Language/languageSettings'
 import StoreDetailsAdmin from '../components/Stores/StoreDetailsAdmin'
 import StoreDetailsClient from '../components/Stores/StoreDetailsClient'
-
+import { initStoresDetails} from "../actions/stores";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { initViewStoresDetails} from "../actions/stores";
 
-import  actionCreator  from '../actions/index';
 
 class StoreDetails extends Component {
   constructor (props) {
@@ -16,10 +16,12 @@ class StoreDetails extends Component {
     this.state = {
       currentLanguage: languageSettings.getCurrentLanguage(),
     }
-   this.props.getDetails();
+
    console.log(this.props.stores);
 }
-
+componentWillMount() {             
+  this.props.dispatch(initStoresDetails()); 
+}
   render () {
     const language = this.state.currentLanguage
     let displayData = this.props.systemStats
@@ -31,7 +33,7 @@ class StoreDetails extends Component {
       </div>
     )
   }
-}
+} 
 
 function mapStateToProps(state) {
     return {
@@ -40,9 +42,5 @@ function mapStateToProps(state) {
      }
  }
 
- function mapDispatchToProps(dispatch) {
-     return bindActionCreators({  getDetails: actionCreator.getDetails  }, dispatch);
- }
-
- export default connect(mapStateToProps, mapDispatchToProps)(StoreDetails)
+ export default connect(mapStateToProps)(StoreDetails)
 
