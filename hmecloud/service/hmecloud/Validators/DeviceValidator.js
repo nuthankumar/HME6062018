@@ -21,9 +21,23 @@ const validateDevice = (input, callback) => {
 }
 
 const validateMasterSettings = (input, callback) => {
-    if (!input.duid) {
+    if (!input.deviceId && !input.Device_LaneConfig_ID && !input.Device_MainVersion && !input.Store_Company_ID && !input.Store_Brand_ID) {
       let output = {}
-      output.key = 'requiredDuid'
+      if(!input.deviceId) {
+        output.key = 'requiredDeviceId'
+      }
+      if(input.deviceId && !input.Device_LaneConfig_ID) {
+        output.key = 'requiredLaneConfigId'
+      }
+      if(input.deviceId && input.Device_LaneConfig_ID && !input.Device_MainVersion ) {
+        output.key = 'requiredMainVersion'
+      }
+      if(input.deviceId && input.Device_LaneConfig_ID && input.Device_MainVersion && !input.Store_Company_ID) {
+        output.key = 'requiredComponyId'
+      }
+      if(input.deviceId && input.Device_LaneConfig_ID && input.Device_MainVersion && input.Store_Company_ID  && !input.Store_Brand_ID) {
+        output.key = 'requiredBrandId'
+      }
       output.status = false
       callback(output)
     }

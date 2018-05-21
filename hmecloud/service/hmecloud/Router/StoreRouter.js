@@ -95,7 +95,7 @@ router.get('/settingsStores', VerifyToken, (request, response) => {
   storeController.settingsStores(request, result => hmeRouter.handelResult(result, response))
 })
 
-router.get('/getMasterSettings', VerifyToken, (request, response) => {
+router.post('/getMasterSettings', VerifyToken, (request, response) => {
   storeController.getMasterSettings(request, result => hmeRouter.handelResult(result, response))
 })
 
