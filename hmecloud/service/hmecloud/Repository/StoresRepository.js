@@ -121,11 +121,11 @@ const settingsStores = (input, callback) => {
 const getMasterSettings = (input, callback) => {
   repository.executeProcedure(sqlQuery.MasterSetting.getStatus, request => {
     return request
-      .input(sqlQuery.MasterSettingsIds.Parameters.Device_ID, sql.VarChar(36), input.duid)
-      .input(sqlQuery.MasterSettingsIds.Parameters.LaneConfig_ID, sql.smallint, input.duid)
-      .input(sqlQuery.MasterSettingsIds.Parameters.Device_MainVersion, sql.VarChar(36), input.duid)
-      .input(sqlQuery.MasterSettingsIds.Parameters.Store_Company_ID, sql.int, input.duid)
-      .input(sqlQuery.MasterSettingsIds.Parameters.Store_Brand_ID, sql.int, input.duid)
+      .input(sqlQuery.MasterSettingsIds.Parameters.Device_ID, sql.VarChar(36), input.deviceId)
+      .input(sqlQuery.MasterSettingsIds.Parameters.LaneConfig_ID, sql.smallint, input.laneConfigId)
+      .input(sqlQuery.MasterSettingsIds.Parameters.Device_MainVersion, sql.VarChar(36), input.mainVersion)
+      .input(sqlQuery.MasterSettingsIds.Parameters.Store_Company_ID, sql.int, input.companyId)
+      .input(sqlQuery.MasterSettingsIds.Parameters.Store_Brand_ID, sql.int, input.brandId)
   }, callback)
 }
 
