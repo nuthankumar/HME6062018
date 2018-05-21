@@ -29,23 +29,27 @@ Device.prototype.getSingleStoreValues = function () {
   const filter = this.reportFilter
   let storeDetails = this.result
   let getColors = []
-  getColors = this.colors[0].ColourCode.split('|')
+  if (this.colors && this.colors.length > 0 && this.colors[0].ColourCode)
+    getColors = this.colors[0].ColourCode.split('|')
   let getColor = (event, eventValue) => {
-    let color = getColors[2]
-    _.pickBy(this.goalSettings[0], (value, key) => {
-      if (key.toLowerCase().includes(event.toLowerCase())) {
-        if (value && eventValue < value) {
-          if (key.includes('GoalA')) {
-            color = getColors[0]
-          } else if (key.includes('GoalB')) {
-            color = getColors[1]
-          } else if (key.includes('GoalC')) {
-            color = getColors[2]
+    let color = "";
+    if (getColors && getColors.length > 0) {
+      color = getColors[2]
+      _.pickBy(this.goalSettings[0], (value, key) => {
+        if (key.toLowerCase().includes(event.toLowerCase())) {
+          if (value && eventValue < value) {
+            if (key.includes('GoalA')) {
+              color = getColors[0]
+            } else if (key.includes('GoalB')) {
+              color = getColors[1]
+            } else if (key.includes('GoalC')) {
+              color = getColors[2]
+            }
+            return true
           }
-          return true
         }
-      }
-    })
+      })
+    }
     return color
   }
   let deviceInfo = []
@@ -57,11 +61,11 @@ Device.prototype.getSingleStoreValues = function () {
     let newValue
     _.forEach(storeDetails[index], function (value, key) {
       if (key === 'WeekStartDate') {
-        reportInfo['WeekStartDate'] = {'value': dateUtils.convertmmddyyyy(`${value}`)}
-        startDate = {'value': `${value}`}
+        reportInfo['WeekStartDate'] = { 'value': dateUtils.convertmmddyyyy(`${value}`) }
+        startDate = { 'value': `${value}` }
       } else if (key === 'WeekEndDate') {
-        reportInfo['WeekEndDate'] = {'value': dateUtils.convertmmddyyyy(`${value}`)}
-        endDate = {'value': `${value}`}
+        reportInfo['WeekEndDate'] = { 'value': dateUtils.convertmmddyyyy(`${value}`) }
+        endDate = { 'value': `${value}` }
       } else if (key === 'DayPartIndex') {
         dayPartValue = `${value}`
       } else if (key === 'StoreDate') {
@@ -69,71 +73,78 @@ Device.prototype.getSingleStoreValues = function () {
           if (value === 'Total Day') {
             reportInfo['Day'] = {
               'timeSpan': 'Total Day',
-              'currentWeekpart': messages.COMMON.WAVG}
+              'currentWeekpart': messages.COMMON.WAVG
+            }
           } else {
             reportInfo['Day'] = {
               'timeSpan': `${value}`,
-              'currentWeekpart': messages.COMMON.DAYOPENCLOSE}
+              'currentWeekpart': messages.COMMON.DAYOPENCLOSE
+            }
           }
         } else if (filter === 'daypart') {
           if (value === 'Total Daypart') {
             reportInfo['Daypart'] = {
               'timeSpan': 'Total DayPart',
-              'currentWeekpart': messages.COMMON.WAVG}
+              'currentWeekpart': messages.COMMON.WAVG
+            }
           } else {
             if (!Number.isNaN(parseInt(dayPartValue))) {
               let dateSplit = `${value}`.split('-')
               reportInfo['Daypart'] = {
                 'timeSpan': `${dateSplit[1]}/${dateSplit[2]}-Daypart${dayPartValue}`,
-                'currentWeekpart': messages.COMMON.DAYOPENCLOSE}
+                'currentWeekpart': messages.COMMON.DAYOPENCLOSE
+              }
             } else if (Number.isNaN(parseInt(dayPartValue))) {
               reportInfo['Daypart'] = {
                 'timeSpan': 'Total Daypart',
-                'currentWeekpart': messages.COMMON.WAVG}
+                'currentWeekpart': messages.COMMON.WAVG
+              }
             }
           }
         }
-        reportInfo[`${key}`] = {'value': `${value}`}
+        reportInfo[`${key}`] = { 'value': `${value}` }
       } else if (key === 'StoreNo') {
         if (filter === 'week') {
           if (value === 'Total Week') {
             reportInfo['Week'] = {
               'timeSpan': 'Total Week',
-              'currentWeekpart': messages.COMMON.WAVG}
+              'currentWeekpart': messages.COMMON.WAVG
+            }
           } else {
             reportInfo['Week'] = {
               'timeSpan': startDate.value + ' - ' + endDate.value,
-              'currentWeekpart': messages.COMMON.DAYOPENCLOSE}
+              'currentWeekpart': messages.COMMON.DAYOPENCLOSE
+            }
           }
-          reportInfo[`${key}`] = {'value': `${value}`}
+          reportInfo[`${key}`] = { 'value': `${value}` }
         }
-        reportInfo[`${key}`] = {'value': `${value}`}
+        reportInfo[`${key}`] = { 'value': `${value}` }
       } else if (key === 'GroupName') {
-        reportInfo['Groups'] = {'value': `${value}`}
+        reportInfo['Groups'] = { 'value': `${value}` }
       } else if (key === 'StoreID') {
-        reportInfo['storeId'] = {'value': `${value}`}
+        reportInfo['storeId'] = { 'value': `${value}` }
       } else if (key === 'Store_Name') {
-        reportInfo['Stores'] = {'value': `${value}`}
+        reportInfo['Stores'] = { 'value': `${value}` }
       } else if (key === 'Device_UID') {
-        reportInfo['deviceUid'] = {'value': `${value}`}
+        reportInfo['deviceUid'] = { 'value': `${value}` }
       } else if (key === 'Device_ID') {
-        reportInfo['deviceId'] = {'value': `${value}`}
+        reportInfo['deviceId'] = { 'value': `${value}` }
       } else if (key === 'WeekIndex') {
-        reportInfo['index'] = {'value': `${value}`}
+        reportInfo['index'] = { 'value': `${value}` }
       } else if (key === 'Total_Car') {
-        reportInfo['Total Cars'] = {'value': (value || null)}
+        reportInfo['Total Cars'] = { 'value': (value || null) }
       } else if (timeFormat === 2) {
         newValue = value
         if (newValue === 0 || newValue === null) {
           newValue = 'N/A'
         }
-        reportInfo[`${key}`] = {'value': `${dateUtils.convertSecondsToMinutes(parseInt(newValue), timeFormat)}`, 'color': `${getColor(key, newValue)}`}
+        reportInfo[`${key}`] = { 'value': `${dateUtils.convertSecondsToMinutes(parseInt(newValue), timeFormat)}`, 'color': `${getColor(key, newValue)}` }
       } else if (timeFormat === 1) {
         newValue = value
         if (newValue === 0 || newValue === null) {
           newValue = 'N/A'
         }
-        reportInfo[`${key}`] = {'value': `${newValue}`, 'color': `${getColor(key, newValue)}`}
+        reportInfo[`${key}`] = { 'value': `${newValue}`, 'color': `${getColor(key, newValue)}` }
       }
     })
     deviceInfo.push(reportInfo)
@@ -181,7 +192,7 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
   } else {
     colorSettings = this.colors[0].ColourCode.split('|')
   }
-  function CalculatePercetage (value, totalCarsCount) {
+  function CalculatePercetage(value, totalCarsCount) {
     if (value === 0 || value === null || isNaN(value) || _.isUndefined(value) || totalCarsCount === 0) {
       return `0%`
     } else {
@@ -189,7 +200,7 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
     }
   }
   _.map(deviceGoalInfo[0], (value, key) => {
-    let obj = {goal: '', cars: '0', percentage: '0%'}
+    let obj = { goal: '', cars: '0', percentage: '0%' }
     let rowKey = {}
     let row = _.clone(obj)
     if (eventGoalList.indexOf(key) > -1) {
@@ -210,7 +221,7 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
       }
     }
   })
-  function getColorForGoal (goal) {
+  function getColorForGoal(goal) {
     if (goal === 'GoalA') {
       return colorSettings[0]
     } else if (goal === 'GoalB') {
