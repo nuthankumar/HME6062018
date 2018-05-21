@@ -257,7 +257,11 @@ const settingsStores = (request, callback) => {
 
 const getMasterSettings = (request, callback) => {
   const input = {
-    duid: (request.query.duid ? request.query.duid : null)
+    deviceId: (request.query.deviceId ? request.query.deviceId : null),
+    Device_LaneConfig_ID: (request.query.Device_LaneConfig_ID ? request.query.Device_LaneConfig_ID : null),
+    Device_MainVersion: (request.query.Device_MainVersion ? request.query.Device_MainVersion : null),
+    Store_Company_ID: (request.query.Store_Company_ID ? request.query.Store_Company_ID : null),
+    Store_Brand_ID: (request.query.Store_Brand_ID ? request.query.Store_Brand_ID : null)
   }
   storeValidator.getMasterSettings(input, (err) => {
     if (err) {

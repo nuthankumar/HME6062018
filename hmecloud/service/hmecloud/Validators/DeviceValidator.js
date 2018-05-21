@@ -7,19 +7,6 @@ const validator = require('validator')
  * @param  {response} callback Function will be called once the request executed.
  * @public
  */
-const validate = (input, callback) => {
-
-    if (!input.accountId && !input.userUid) {
-        let output = {}
-        output.key = !input.accountId ? 'requiredAccountId' : 'requiredUserUid'
-        output.status = false
-        callback(output)
-    }
-    if (input.accountId || input.userUid) {
-        callback()
-    }
-
-}
 
 const validateDevice = (input, callback) => {
     if (!input.duid) {

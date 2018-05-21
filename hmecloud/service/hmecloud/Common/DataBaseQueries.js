@@ -136,7 +136,7 @@ const sqlQueries = {
   MasterSettingsIds: {
     Parameters: {
       Device_ID: 'Device_ID',
-      LaneConfig_ID: 'LaneConfig_ID',
+      Device_LaneConfig_ID: 'Device_LaneConfig_ID',
       Device_MainVersion: 'Device_MainVersion',
       Store_Company_ID: 'Store_Company_ID',
       Store_Brand_ID: 'Store_Brand_ID'

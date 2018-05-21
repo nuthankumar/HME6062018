@@ -26,7 +26,7 @@ GO
 
 ALTER PROCEDURE [dbo].[usp_GetMasterSettings]
     @Device_ID				VARCHAR(36),
-	@LaneConfig_ID			smallint,
+	@Device_LaneConfig_ID	smallint,
 	@Device_MainVersion		VARCHAR(36),
 	@Store_Company_ID		int,
 	@Store_Brand_ID			int
@@ -43,7 +43,7 @@ BEGIN
 	FROM 
 		[dbo].tbl_Stores stor
 		LEFT JOIN [dbo].tbl_DeviceInfo dinf ON dinf.Device_Store_ID = stor.Store_ID  AND dinf.Device_ID != @Device_ID
-		AND dinf.Device_LaneConfig_ID =  @LaneConfig_ID and dinf.Device_IsActive = 1
+		AND dinf.Device_LaneConfig_ID =  @Device_LaneConfig_ID and dinf.Device_IsActive = 1
 		AND dinf.Device_MainVersion = @Device_MainVersion
 		LEFT JOIN [dbo].tbl_DeviceConfigDetectors dtct ON  dtct.Device_ID = dinf.Device_ID 
 	WHERE 
