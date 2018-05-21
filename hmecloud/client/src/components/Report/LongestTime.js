@@ -98,7 +98,7 @@ class LongestTime extends Component {
     renderLongestTimes() {
          let LongestTimes = this.props.LongestTimes;
         // let LongestTimes = this.state.LongestTimes   
-         return LongestTimes.map((LongestTime, index) => {
+         return LongestTimes.slice(0, 3).map((LongestTime, index) => {
                     /* <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{(LongestTimes.Menu ? LongestTimes.Menu.Value : 'N/A' )}</span><br /><span className="longtime-timeSpan">{(LongestTimes.Menu ? LongestTimes.Menu.Date : 'N/A')}<br />{(LongestTimes.Menu ? LongestTimes.Menu.Time : 'N/A')}</span></td>
                     <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{(LongestTimes.Greet ? LongestTimes.Greet.Value : 'N/A')}</span><br /><span className="longtime-timeSpan">{(LongestTimes.Greet ? LongestTimes.Greet.Date : 'N/A')}<br />{(LongestTimes.Greet ? LongestTimes.Menu.Time : 'N/A')}</span></td>
                     <td className={"colWidth5 " + (index % 2 === 0 ? "rshade" : "rnshade")}><span className="boldin">{(LongestTimes.Service ? LongestTimes.Service.Value : 'N/A')}</span><br /><span className="longtime-timeSpan">{(LongestTimes.Service ? LongestTimes.Service.Date : 'N/A')}<br />{(LongestTimes.Service ? LongestTimes.Service.Time : 'N/A')}</span></td>
