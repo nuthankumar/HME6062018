@@ -116,7 +116,6 @@ class Report extends Component {
   }
 
   getTreeHierarchy() {
-    debugger;
       let url = Config.apiBaseUrl + CommonConstants.apiUrls.getGroupHierarchyTree
       if(this.authService.getUUID())
         url +="?uuId="+this.authService.getUUID()
@@ -453,7 +452,7 @@ class Report extends Component {
                                     {this.state.stores.length ? (this.renderStores()) : <span className="selectAStore">{t[language].SelectAStore}</span>}
 
                                     {
-                                       this.state.stores.length>2 ? this.renderDots() : '' 
+                                       this.state.stores.length>3 ? this.renderDots() : '' 
                                     }
                   </div>
                   <div className="col-md-6"> <span className="criteriaHeading">{t[language].from} :</span>{this.state.fromDate} </div>
@@ -1241,7 +1240,7 @@ class Report extends Component {
 
   renderDots(){
         return(
-          <span onMouseOut={() => this.mouseOut()} onMouseOver={() => this.mouseOver()}>...
+          <span className="storesDots" onMouseOut={() => this.mouseOut()} onMouseOver={() => this.mouseOver()}>...
           <div className={"storesTooltip "+ (!this.state.showStoresPopUp?'hidden':'')}> {this.renderStoresPopup()} </div>  
           </span>
         )
@@ -1293,7 +1292,7 @@ class Report extends Component {
 
 
     renderStoresAndBrand(item,level) {
-        return (<div className={"storeTree level-"+level}><span className="StoreTitile">{item.Name ? (item.StoreNumber ? item.StoreNumber + '-' : '') + item.Name : item.StoreNumber ? item.StoreNumber : ''}</span> <span className="StoreBrand">{item.Brand ? item.Brand : ''}</span> </div>)
+        return (<div className={"storeTree level-"+level}><span className={"StoreTitile level-"+level} >{item.Name ? (item.StoreNumber ? item.StoreNumber + '-' : '') + item.Name : item.StoreNumber ? item.StoreNumber : ''}</span> <span className="StoreBrand">{item.Brand ? item.Brand : ''}</span> </div>)
 }
 }
 

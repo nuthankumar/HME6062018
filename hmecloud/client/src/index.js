@@ -19,6 +19,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { browserHistory } from 'react-dom';
 
 import { Provider } from 'react-redux';
+import thunkMiddleware from 'redux-thunk';
 import StoreDetails from './containers/StoreDetails'
 import { createStore, applyMiddleware } from 'redux';
 import reducers from './reducers/store/index';
@@ -29,10 +30,16 @@ import Systems from './components/Systems/Systems'
 import masterSettings from './components/Stores/MasterSettings'
 import Device from './components/Device/Device'
 import remoteSystemActions from './components/Stores/RemoteSystemActions'
+import { composeWithDevTools } from 'redux-devtools-extension';
+const createStoreWithMiddlewaare = applyMiddleware(thunkMiddleware, composeWithDevTools)(createStore);
 
-const createStoreWithMiddlewaare = applyMiddleware()(createStore);
 
-ReactDOM.render( <Provider store={createStoreWithMiddlewaare(reducers)}>
+const store = createStore(reducers, composeWithDevTools(
+    applyMiddleware(thunkMiddleware),
+    // other store enhancers if any
+  ));
+
+ReactDOM.render( <Provider store={store}>
 <Router history={browserHistory}>
     <div>
         <Route exact path="/" render={(props) => <Layout Params={props}><Route path='/' component={(Login)} /></Layout>} />

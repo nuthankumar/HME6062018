@@ -810,7 +810,10 @@ span.StoreBrand {
   .storesTooltip span{
     color: black !important;
   }
-
+.storesDots:hover{
+  color:red !important;
+  text-decoration:underline !important;
+}
 .selectAStore {
     color:red !important;
 }
