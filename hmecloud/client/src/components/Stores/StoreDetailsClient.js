@@ -5,12 +5,13 @@ import t from '../Language/language'
 import * as languageSettings from '../Language/languageSettings'
 const Online = require("../../images/connection_online.png");
 const Offline = require("../../images/connection_offline.png");
-//export default class BookList extends Component {
+
 class StoreDetail extends Component { //ensure you dont export component directly
     
     constructor (props) {
         super(props)
-        this.state = {
+        debugger
+        this.state = {          
           showStores: this.props.showStores,
           currentLanguage: languageSettings.getCurrentLanguage(),
         }
@@ -21,7 +22,7 @@ class StoreDetail extends Component { //ensure you dont export component directl
     render() {
     console.log(this.props.showStores);
    
-    const language = this.state.language
+    const language = this.state.currentLanguage
    
    
    

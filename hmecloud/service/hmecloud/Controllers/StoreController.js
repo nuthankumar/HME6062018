@@ -8,7 +8,6 @@ const csvGeneration = require('../Common/CsvUtils')
 const HashMap = require('hashmap')
 const _ = require('lodash')
 
-
 const errorHandler = (message, status) => {
   let output = {}
   output.key = message
@@ -350,9 +349,27 @@ const getAllStores = (request, callBack) => {
   stores.getStores(input, result => {
     if (result.status === true) {
       let response = {}
+      let storeList = [] // _.groupBy(result.data[0], 'Store_UID')
 
-      response.storeList = _.groupBy(result.data[0], 'Store_UID')
-      if (input.isAdmin) {
+      _.map(_.groupBy(result.data[0], 'Store_UID'), function (store, key) {
+        let storeObject = {}
+        let DeviceDetails = []
+        store.forEach(element => {
+          let deviceObject = {}
+          _.map(element, function (value, key) {
+            if (key.indexOf('Device') > -1 || key.indexOf('Subscription_Name') > -1) {
+              deviceObject[key] = value
+            } else {
+              storeObject[key] = value
+            }
+          })
+          DeviceDetails.push(deviceObject)
+        })
+        storeObject.Device_Details = DeviceDetails
+        storeList.push(storeObject)
+      })
+      response.storeList = storeList
+      if (input.isAdmin === 1) {
         let pageDetails = result.data[1] || []
         response.pageDetails = pageDetails
       } else {

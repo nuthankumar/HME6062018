@@ -14,7 +14,7 @@ class App extends Component {
           <img src={logo} className='App-logo' alt='logo' />
 
           <h2>Welcome {this.props.user.username}</h2>
-        //  <a href='http://localhost:3002?token:++'>asd</a>
+       <a href='http://localhost:3002?token:++'>asd</a>
         </div>
         <p className='App-intro'>
           <button type='button' className='form-submit' onClick={this.handleLogout.bind(this)}>Logout</button>

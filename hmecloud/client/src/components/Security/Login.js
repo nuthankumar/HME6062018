@@ -54,12 +54,12 @@ class Login extends Component {
                   <table className="user_login">
                     <tbody>
                       <tr>
-                        <th><label for="Username">{t[language].username}</label></th>
-                        <td><input className='loginInputs' type="text" maxlength="100" name="username" onChange={this.handleChange.bind(this)} /></td>
+                        <th><label htmlFor="Username">{t[language].username}</label></th>
+                        <td><input className='loginInputs' type="text" maxLength="100" name="username" onChange={this.handleChange.bind(this)} /></td>
                       </tr>
                       <tr>
-                        <th><label for="Password">{t[language].password}</label></th>
-                        <td><input className='loginInputs' type="password" maxlength="16" name="password" onChange={this.handleChange.bind(this)} />
+                        <th><label htmlFor="Password">{t[language].password}</label></th>
+                        <td><input className='loginInputs' type="password" maxLength="16" name="password" onChange={this.handleChange.bind(this)} />
                         </td>
                       </tr>
                       <tr>

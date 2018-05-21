@@ -8,6 +8,7 @@ class SystemStatus extends Component {
     constructor (props) {
         super(props)
         this.state = {
+            showStores: this.props.showStores,
             currentLanguage: languageSettings.getCurrentLanguage(),
         }
         this.state.isMasterSettings =  window.location.pathname.indexOf("/masterSettings") !== -1  ? false : true;
@@ -24,25 +25,25 @@ class SystemStatus extends Component {
             <div class='sys-settings forms'>
                 <div class='settings_plug clear'>
                     <div class="clear">			
-			            <h3 class="clear system_header">System Status</h3>
+			            <h3 class="clear system_header">{t[language].settingsStoresSystemStatus}</h3>
 		            </div>
                     <table class="settab">
                         <tbody>
                             <tr>
-                                <th><span translate="" key="StoreSettingsHeaderName">System Name</span></th>
+                                <th><span>{t[language].settingsStoresSystemName}</span></th>
                                 <td>ZOOM</td>
                             </tr>
                             <tr>
-                                <th><span translate="" key="StoreSettingsHeaderVersion">System Version</span></th>
+                                <th><span>{t[language].settingsStoresSystemVersion}</span></th>
                                 <td>2.31.7</td>
                             </tr>
                             <tr>
-                                <th><span translate="" key="settingsDevicesSettingVersion">Settings Version</span></th>
+                                <th><span>{t[language].settingsStoresSystemVersion}</span></th>
                                 <td>A.2.31</td>
                             </tr>
                             
                             <tr>
-                                <th><span translate="" key="settingsDevicesRegisteredToStoreInfo">Registered to Store Info</span></th>
+                                <th><span>{t[language].settingsDevicesRegisteredToStoreInfo}</span></th>
                                 <td>
                                     <ul>
                                         <li><a href="./?pg=SettingsStores&amp;st=Edit&amp;suid=5D8B2DED97894183927020E4CCB0700E">McDonald's - 3001</a></li>
@@ -51,29 +52,29 @@ class SystemStatus extends Component {
                                 </td>
                             </tr>
                             <tr>
-                                <th><span translate="" key="settingsDevicesLaneConfiguration">Lane Configuration</span></th>
-                                <td><span translate="" key="SingleLane">Single Lane</span></td>
+                                <th><span>{t[language].settingsDevicesLaneConfiguration}</span></th>
+                                <td><span>Single Lane</span></td>
                             </tr>
                             <tr className = {(this.state.isMasterSettings?'':'hidden')}>
-                                <th><span translate="" key="settingsStoresSerialNumber">Serial Number</span></th>
+                                <th><span>{t[language].settingsStoresSerialNumber}</span></th>
                                 <td>E07X0508</td>
                             </tr>
                             <tr className = {(this.state.isMasterSettings?'':'hidden')}>						
-                                <th><span translate="" key="StoreSettingsHeaderStatus">System Status</span></th>
+                                <th><span>{t[language].StoreSettingsHeaderStatus}</span></th>
                                 <td>
-                                    <img src="/images/connection_offline.png" class="cstat" alt="Device Offline"/><span class="cstat" translate="" key="settingsStoresOffline">Offline</span>
+                                    <img src="/images/connection_offline.png" class="cstat" alt="Device Offline"/><span class="cstat">Offline</span>
                                 </td>
                             </tr>
                             <tr className = {(this.state.isMasterSettings?'':'hidden')}>
-                                <th><span translate="" key="settingsDevicesFirstActivity">First Activity</span></th>
+                                <th><span>{t[language].settingsDevicesFirstActivity}</span></th>
                                 <td>February 23, 2018 14:51</td>
                             </tr>
                             <tr className = {(this.state.isMasterSettings?'':'hidden')}>
-                                <th><span translate="" key="settingsDevicesLastActivity">Last Activity</span></th>
+                                <th><span>{t[language].settingsDevicesLastActivity}</span></th>
                                 <td>February 23, 2018 18:18 </td>
                             </tr>
                             <tr className = {(this.state.isMasterSettings?'':'hidden')}>
-                                <th><span translate="" key="settingsDevicesNumberOfRecords">Number of Records</span></th>
+                                <th><span>{t[language].settingsDevicesNumberOfRecords}</span></th>
                                 <td>207</td>
                             </tr>
                         </tbody>
