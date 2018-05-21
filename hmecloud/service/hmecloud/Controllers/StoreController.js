@@ -1,5 +1,6 @@
 const messages = require('../Common/Message')
-const storeValidator = require('../Validators/StoreValidator')
+const validator = require('../Validators/StoreValidator')
+const deviceValidator = require('../Validators/DeviceValidator')
 const stores = require('../Repository/StoresRepository')
 const dateUtils = require('../Common/DateUtils')
 const dateFormat = require('dateformat')
@@ -144,7 +145,7 @@ const generateCsv = (input, response) => {
  * @param {*} storeData
  * @param {*} input
  */
-function prepareStoreDetails (rawCarData, storeData, input) {
+function prepareStoreDetails(rawCarData, storeData, input) {
   rawCarData.storeName = storeData.Store_Name
   rawCarData.storeDescription = storeData.Brand_Name
   rawCarData.storeNumber = (storeData.Store_Number ? storeData.Store_Number : 'N/A')
@@ -165,7 +166,7 @@ function prepareStoreDetails (rawCarData, storeData, input) {
  * @param {*} dayPartData
  * @param {*} input
  */
-function prepareResponsObject (result, departTimeStampMap, rawCarDataList, rawCarData, len, dayPartData, input) {
+function prepareResponsObject(result, departTimeStampMap, rawCarDataList, rawCarData, len, dayPartData, input) {
   result.forEach(item => {
     let rawCarTempId = item.RawDataID
     if (rawCarTempId && !departTimeStampMap.has(rawCarTempId)) {
@@ -206,15 +207,25 @@ const settingsDevices = (request, callback) => {
   const input = {
     duid: (request.query.duid ? request.query.duid : null)
   }
-  storeValidator.settingsDevices(input, (err) => {
+  
+  deviceValidator.validateDevice(input, (err) => {
     if (err) {
       callback(err)
     }
     stores.settingsDevices(input, (result) => {
-      console.log('result', result);
       if (result.data && result.data.length > 0) {
         let output = {}
-        output.data = result.data[0]
+        var tempSettingsArray = []
+        
+        output.systemStatus = result.data[0];
+        let grouppedArray =_.groupBy(result.data[1],'SettingsGroup_Name')
+        _.keys(grouppedArray).forEach(function (key, value) {
+            let settingsObj = {};
+            settingsObj.name = key;
+            settingsObj.value = grouppedArray[key]
+            tempSettingsArray.push(settingsObj)
+        })
+        output.systemSettings = tempSettingsArray
         output.status = true
         callback(output)
       } else {
@@ -228,7 +239,7 @@ const settingsStores = (request, callback) => {
   const input = {
     suid: (request.query.suid ? request.query.suid : null)
   }
-  storeValidator.settingsStores(input, (err) => {
+  validator.settingsStores(input, (err) => {
     if (err) {
       callback(err)
     }
@@ -384,7 +395,7 @@ const getStoreByUid = (request, callBack) => {
         response.storeDetails = result.data[0][0]
         response.storeDetails.timeZone = _.map(result.data[1], 'Name')
         if (result.data[2][0].Device_Name === 'NA') {
-          response.deviceDetails = { }
+          response.deviceDetails = {}
         } else {
           response.deviceDetails = _.groupBy(result.data[2], 'Device_Name')
           if (_.has(response, 'deviceDetails.CIB')) {
