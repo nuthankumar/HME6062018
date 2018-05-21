@@ -175,16 +175,22 @@ class Report extends Component {
   render() {
     const language = this.state.currentLanguage
     const { date, format, mode, inputFormat } = this.state;
-    const loop = data => {
+    //let level=0;
+    const loop = (data,level=0) => {
+      
         return data.map(item => {
         if (item.Children && item.Children.length) {
+          //level++;
             return (
-                <TreeNode title={this.renderStoresAndBrand(item) } className={item.StoreNumber} key={item.Id} value={item.Type == 'store' ? item.DeviceUID : null} type={item.Type}>
-              {loop(item.Children)}
+                <TreeNode title={this.renderStoresAndBrand(item,level) } className={item.StoreNumber} key={item.Id} value={item.Type == 'store' ? item.DeviceUID : null} type={item.Type}>
+              {
+                loop(item.Children,level+1)            
+              }
+
             </TreeNode>
           );
         }
-        return <TreeNode title={this.renderStoresAndBrand(item)} className={item.StoreNumber} key={item.Id} value={item.Type == 'store' ? item.DeviceUID : null} type={item.Type} />;
+        return <TreeNode title={this.renderStoresAndBrand(item,level)} className={item.StoreNumber} key={item.Id} value={item.Type == 'store' ? item.DeviceUID : null} type={item.Type} />;
       });
     };
 
@@ -1286,8 +1292,8 @@ class Report extends Component {
 
 
 
-    renderStoresAndBrand(item) {
-        return (<div className="storeTree"><span className="StoreTitile">{item.Name ? (item.StoreNumber ? item.StoreNumber + '-' : '') + item.Name : item.StoreNumber ? item.StoreNumber : ''}</span> <span className="StoreBrand">{item.Brand ? item.Brand : ''}</span> </div>)
+    renderStoresAndBrand(item,level) {
+        return (<div className={"storeTree level-"+level}><span className="StoreTitile">{item.Name ? (item.StoreNumber ? item.StoreNumber + '-' : '') + item.Name : item.StoreNumber ? item.StoreNumber : ''}</span> <span className="StoreBrand">{item.Brand ? item.Brand : ''}</span> </div>)
 }
 }
 
