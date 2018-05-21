@@ -119,9 +119,13 @@ const settingsStores = (input, callback) => {
 
 // Todo: getMasterSettings Store Procedure
 const getMasterSettings = (input, callback) => {
-  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
+  repository.executeProcedure(sqlQuery.MasterSetting.getStatus, request => {
     return request
-      .input(sqlQuery.DeviceIds.Parameters.Device_IDs, sql.VarChar(36), input.duid)
+      .input(sqlQuery.MasterSettingsIds.Parameters.Device_ID, sql.VarChar(36), input.duid)
+      .input(sqlQuery.MasterSettingsIds.Parameters.LaneConfig_ID, sql.smallint, input.duid)
+      .input(sqlQuery.MasterSettingsIds.Parameters.Device_MainVersion, sql.VarChar(36), input.duid)
+      .input(sqlQuery.MasterSettingsIds.Parameters.Store_Company_ID, sql.int, input.duid)
+      .input(sqlQuery.MasterSettingsIds.Parameters.Store_Brand_ID, sql.int, input.duid)
   }, callback)
 }
 
@@ -143,9 +147,8 @@ const saveMergeDevices = (input, callback) => {
 
 const getStores = (input, callback) => {
   repository.executeProcedure(sqlQuery.Stores.getAllStores, request => {
-    console.log(input)
     return request
-      .input(sqlQuery.Stores.Parameters.User_UID, sql.VarChar(32), '68LKBP85C1SKH1FI3M7X40CJHKGU07FZ') //  input.User_UID)
+      .input(sqlQuery.Stores.Parameters.User_UID, sql.VarChar(32), input.User_UID)
       .input(sqlQuery.Stores.Parameters.isAdmin, sql.Int, input.isAdmin)
       .input(sqlQuery.Stores.Parameters.criteria, sql.VarChar(100), input.criteria)
       .input(sqlQuery.Stores.Parameters.filter, sql.VarChar(100), input.filter)
@@ -163,7 +166,6 @@ const getStores = (input, callback) => {
  */
 const getStoreByUid = (input, callback) => {
   repository.executeProcedure(sqlQuery.Stores.getStoreDetailsByUID, request => {
-    console.log(input)
     return request
       .input(sqlQuery.Stores.Parameters.Store_UID, sql.VarChar(32), input.suid)
   }, callback)

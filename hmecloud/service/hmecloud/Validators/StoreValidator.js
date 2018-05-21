@@ -177,17 +177,6 @@ const getStores = (request, callback) => {
   })
 }
 
-const settingsDevices = (input, callback) => {
-  if (!input.duid) {
-    let output = {}
-    output.key = 'requiredDuid'
-    output.status = false
-    callback(output)
-  }
-  if (input.duid) {
-    callback()
-  }
-}
 
 const settingsStores = (input, callback) => {
   if (!input.suid) {
@@ -278,7 +267,6 @@ const removeDeviceById = (request, callback) => {
 module.exports = {
   reportValidator,
   csvValidator,
-  settingsDevices,
   settingsStores,
   getMasterSettings,
   saveMasterSettings,

@@ -103,6 +103,9 @@ const sqlQueries = {
   DeviceStatus: {
     getStatus: '[dbo].[usp_getDeviceById]'
   },
+  MasterSetting: {
+    getStatus: '[dbo].[usp_GetMasterSettings]'
+  },
   Country: {
     getCountries: '[dbo].[usp_GetCountries]'
   },
@@ -128,6 +131,15 @@ const sqlQueries = {
   DeviceIds: {
     Parameters: {
       Device_IDs: 'Device_IDs'
+    }
+  },
+  MasterSettingsIds: {
+    Parameters: {
+      Device_ID: 'Device_ID',
+      LaneConfig_ID: 'LaneConfig_ID',
+      Device_MainVersion: 'Device_MainVersion',
+      Store_Company_ID: 'Store_Company_ID',
+      Store_Brand_ID: 'Store_Brand_ID'
     }
   },
   StartDate: {
