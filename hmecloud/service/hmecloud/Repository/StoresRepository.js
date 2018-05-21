@@ -148,7 +148,7 @@ const saveMergeDevices = (input, callback) => {
 const getStores = (input, callback) => {
   repository.executeProcedure(sqlQuery.Stores.getAllStores, request => {
     return request
-      .input(sqlQuery.Stores.Parameters.User_UID, sql.VarChar(32), input.User_UID)
+      .input(sqlQuery.Stores.Parameters.User_UID, sql.VarChar(32), input.userUid)
       .input(sqlQuery.Stores.Parameters.isAdmin, sql.Int, input.isAdmin)
       .input(sqlQuery.Stores.Parameters.criteria, sql.VarChar(100), input.criteria)
       .input(sqlQuery.Stores.Parameters.filter, sql.VarChar(100), input.filter)
