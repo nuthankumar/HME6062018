@@ -21,7 +21,7 @@ GO
 --  1.  	20-APRIL-2018	Selvendran K	Procedure created
 --	
 -- ===========================================================
--- EXEC [dbo].[usp_GetMasterSettings]  @Device_ID = 4498, @LaneConfig_ID = 1, @Device_MainVersion = '2.01.17', @Store_Company_ID = 1353, @Store_Brand_ID = 17
+-- EXEC [dbo].[usp_GetMasterSettings]  @Device_ID = 4498, @Device_LaneConfig_ID = 1, @Device_MainVersion = '2.01.17', @Store_Company_ID = 1353, @Store_Brand_ID = 17
 -- ===========================================================
 
 ALTER PROCEDURE [dbo].[usp_GetMasterSettings]
