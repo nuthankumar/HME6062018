@@ -257,11 +257,11 @@ const settingsStores = (request, callback) => {
 
 const getMasterSettings = (request, callback) => {
   const input = {
-    deviceId: (request.query.deviceId ? request.query.deviceId : null),
-    Device_LaneConfig_ID: (request.query.Device_LaneConfig_ID ? request.query.Device_LaneConfig_ID : null),
-    Device_MainVersion: (request.query.Device_MainVersion ? request.query.Device_MainVersion : null),
-    Store_Company_ID: (request.query.Store_Company_ID ? request.query.Store_Company_ID : null),
-    Store_Brand_ID: (request.query.Store_Brand_ID ? request.query.Store_Brand_ID : null)
+    Device_ID: (request.body.Device_ID ? request.body.Device_ID : null),
+    Device_LaneConfig_ID: (request.body.Device_LaneConfig_ID ? request.body.Device_LaneConfig_ID : null),
+    Device_MainVersion: (request.body.Device_MainVersion ? request.body.Device_MainVersion : null),
+    Store_Company_ID: (request.body.Store_Company_ID ? request.body.Store_Company_ID : null),
+    Store_Brand_ID: (request.body.Store_Brand_ID ? request.body.Store_Brand_ID : null)
   }
   deviceValidator.validateMasterSettings(input, (err) => {
     if (err) {
@@ -270,7 +270,8 @@ const getMasterSettings = (request, callback) => {
     stores.getMasterSettings(input, (result) => {
       if (result.data && result.data.length > 0) {
         let output = {}
-        output.data = result.data[0]
+        output.settingsList = result.data[0]
+        output.destinationList = result.data[1]
         output.status = true
         callback(output)
       } else {
@@ -282,11 +283,12 @@ const getMasterSettings = (request, callback) => {
 
 const saveMasterSettings = (request, callback) => {
   const input = {
-    duid: (request.params.duid ? request.params.duid : null),
-    settings: (request.params.settings.length ? request.params.settings : null),
-    destination: (request.params.destination.length ? request.params.destination : null)
+    Task_UID: '',
+    duid: (request.body.duid ? request.body.duid : null),
+    settingsList: (request.body.settingsList ? request.body.settingsList : null),
+    destinationList: (request.body.destinationList ? request.body.destinationList : null)
   }
-  storeValidator.saveMasterSettings(input, (err) => {
+  deviceValidator.saveMasterSettings(input, (err) => {
     if (err) {
       callback(err)
     }
@@ -463,3 +465,5 @@ module.exports = {
   getStoreByUid,
   removeDeviceById
 }
+
+

@@ -1,3 +1,5 @@
+import { max } from 'moment';
+
 const repository = require('./Repository')
 const dataBase = require('../DataBaseConnection/Configuration').db
 const dataBaseSql = require('../DataBaseConnection/Configuration').sqlConfig
@@ -121,19 +123,21 @@ const settingsStores = (input, callback) => {
 const getMasterSettings = (input, callback) => {
   repository.executeProcedure(sqlQuery.MasterSetting.getStatus, request => {
     return request
-      .input(sqlQuery.MasterSettingsIds.Parameters.Device_ID, sql.VarChar(36), input.deviceId)
-      .input(sqlQuery.MasterSettingsIds.Parameters.LaneConfig_ID, sql.smallint, input.laneConfigId)
-      .input(sqlQuery.MasterSettingsIds.Parameters.Device_MainVersion, sql.VarChar(36), input.mainVersion)
-      .input(sqlQuery.MasterSettingsIds.Parameters.Store_Company_ID, sql.int, input.companyId)
-      .input(sqlQuery.MasterSettingsIds.Parameters.Store_Brand_ID, sql.int, input.brandId)
+      .input(sqlQuery.MasterSettingsIds.Parameters.Device_ID, sql.VarChar(36), input.Device_ID)
+      .input(sqlQuery.MasterSettingsIds.Parameters.Device_LaneConfig_ID, sql.TinyInt, input.Device_LaneConfig_ID)
+      .input(sqlQuery.MasterSettingsIds.Parameters.Device_MainVersion, sql.VarChar(36), input.Device_MainVersion)
+      .input(sqlQuery.MasterSettingsIds.Parameters.Store_Company_ID, sql.Int, input.Store_Company_ID)
+      .input(sqlQuery.MasterSettingsIds.Parameters.Store_Brand_ID, sql.Int, input.Store_Brand_ID)
   }, callback)
 }
 
 // Todo: saveMasterSettings Store Procedure
 const saveMasterSettings = (input, callback) => {
-  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
+  repository.executeProcedure(sqlQuery.MasterSetting.saveStatus, request => {
     return request
-      .input(sqlQuery.DeviceIds.Parameters.Device_IDs, sql.VarChar(36), input.duid)
+      .input(sqlQuery.MasterSettingsSave.Parameters.Task_UID, sql.VarChar(36), input.Task_UID)
+      .input(sqlQuery.MasterSettingsSave.Parameters.DestinationDevice_IDS, sql.VarChar(max), input.destinationList)
+      .input(sqlQuery.MasterSettingsSave.Parameters.SourceDevice_UID, sql.VarChar(36), input.settingsList)
   }, callback)
 }
 
