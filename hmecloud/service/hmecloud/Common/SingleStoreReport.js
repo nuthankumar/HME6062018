@@ -29,6 +29,7 @@ Device.prototype.getSingleStoreValues = function () {
   const filter = this.reportFilter
   let storeDetails = this.result
   let getColors = []
+  //checking color code is empty or not
   if (this.colors && this.colors.length > 0 && this.colors[0].ColourCode)
     getColors = this.colors[0].ColourCode.split('|')
   let getColor = (event, eventValue) => {
