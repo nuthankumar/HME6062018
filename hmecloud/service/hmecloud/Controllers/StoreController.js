@@ -335,9 +335,9 @@ const getAllStores = (request, callBack) => {
     criteria: (request.query.criteria ? request.query.criteria : null),
     isAdmin: (request.query.isAdmin ? request.query.isAdmin : null),
     filter: (request.query.filter ? request.query.filter : null),
-    column: (request.query.column ? request.query.column : null),
+    column: (request.query.column ? request.query.Sortby : null),
     sortType: (request.query.sortType ? request.query.sortType : null),
-    per: (request.query.per ? request.query.per : null),
+    per: (request.query.per ? request.query.psize : null),
     pno: (request.query.pno ? request.query.pno : null)
   }
 
