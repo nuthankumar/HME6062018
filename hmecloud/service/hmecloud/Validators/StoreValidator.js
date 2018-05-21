@@ -190,18 +190,6 @@ const settingsStores = (input, callback) => {
   }
 }
 
-const getMasterSettings = (input, callback) => {
-  if (!input.duid) {
-    let output = {}
-    output.key = 'requiredDuid'
-    output.status = false
-    callback(output)
-  }
-  if (input.duid) {
-    callback()
-  }
-}
-
 const saveMasterSettings = (input, callback) => {
   if (!input.duid) {
     let output = {}
@@ -268,7 +256,6 @@ module.exports = {
   reportValidator,
   csvValidator,
   settingsStores,
-  getMasterSettings,
   saveMasterSettings,
   saveMergeDevices,
   getStores,

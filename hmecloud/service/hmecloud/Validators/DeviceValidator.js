@@ -18,7 +18,21 @@ const validateDevice = (input, callback) => {
     if (input.duid) {
       callback()
     }
-  }
+}
+
+const validateMasterSettings = (input, callback) => {
+    if (!input.duid) {
+      let output = {}
+      output.key = 'requiredDuid'
+      output.status = false
+      callback(output)
+    }
+    if (input.duid) {
+      callback()
+    }
+}
+
 module.exports = {
-    validateDevice
+    validateDevice,
+    validateMasterSettings
 }

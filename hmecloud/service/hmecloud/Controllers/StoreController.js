@@ -263,7 +263,7 @@ const getMasterSettings = (request, callback) => {
     Store_Company_ID: (request.query.Store_Company_ID ? request.query.Store_Company_ID : null),
     Store_Brand_ID: (request.query.Store_Brand_ID ? request.query.Store_Brand_ID : null)
   }
-  storeValidator.getMasterSettings(input, (err) => {
+  deviceValidator.validateMasterSettings(input, (err) => {
     if (err) {
       callback(err)
     }
