@@ -346,7 +346,7 @@ const getAllStores = (request, callBack) => {
         store.forEach(element => {
           let deviceObject = {}
           _.map(element, function (value, key) {
-            if (key.indexOf('Device') > -1) {
+            if (key.indexOf('Device') > -1 || key.indexOf('Subscription_Name') > -1) {
               deviceObject[key] = value
             } else {
               storeObject[key] = value
