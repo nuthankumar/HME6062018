@@ -283,11 +283,12 @@ const getMasterSettings = (request, callback) => {
 
 const saveMasterSettings = (request, callback) => {
   const input = {
-    duid: (request.params.duid ? request.params.duid : null),
-    settings: (request.params.settings.length ? request.params.settings : null),
-    destination: (request.params.destination.length ? request.params.destination : null)
+    Task_UID: '',
+    duid: (request.body.duid ? request.body.duid : null),
+    settingsList: (request.body.settingsList ? request.body.settingsList : null),
+    destinationList: (request.body.destinationList ? request.body.destinationList : null)
   }
-  storeValidator.saveMasterSettings(input, (err) => {
+  deviceValidator.saveMasterSettings(input, (err) => {
     if (err) {
       callback(err)
     }

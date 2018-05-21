@@ -45,7 +45,29 @@ const validateMasterSettings = (input, callback) => {
     }
 }
 
+const saveMasterSettings = (input, callback) => {
+  if (!input.Task_UID && !input.duid && !input.settingsList && !input.destinationList) {
+    let output = {}
+    if(!input.Task_UID) {
+      output.key = 'requiredTaskId'
+    }
+    if(input.Task_UID && !input.duid) {
+      output.key = 'requiredDuid'
+    }
+    if(input.Task_UID && input.duid && !input.settingsList ) {
+      output.key = 'requiredSettingsList'
+    }
+    if(input.Task_UID && input.duid && input.settingsList && !input.destinationList) {
+      output.key = 'requiredDestinationList'
+    }
+    output.status = false
+    callback(output)
+  } else {
+    callback()
+  }
+}
 module.exports = {
     validateDevice,
-    validateMasterSettings
+    validateMasterSettings,
+    saveMasterSettings
 }

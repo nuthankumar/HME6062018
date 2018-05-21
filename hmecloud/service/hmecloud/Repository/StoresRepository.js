@@ -1,3 +1,5 @@
+import { max } from 'moment';
+
 const repository = require('./Repository')
 const dataBase = require('../DataBaseConnection/Configuration').db
 const dataBaseSql = require('../DataBaseConnection/Configuration').sqlConfig
@@ -131,9 +133,11 @@ const getMasterSettings = (input, callback) => {
 
 // Todo: saveMasterSettings Store Procedure
 const saveMasterSettings = (input, callback) => {
-  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
+  repository.executeProcedure(sqlQuery.MasterSetting.saveStatus, request => {
     return request
-      .input(sqlQuery.DeviceIds.Parameters.Device_IDs, sql.VarChar(36), input.duid)
+      .input(sqlQuery.MasterSettingsSave.Parameters.Task_UID, sql.VarChar(36), input.Task_UID)
+      .input(sqlQuery.MasterSettingsSave.Parameters.DestinationDevice_IDS, sql.VarChar(max), input.destinationList)
+      .input(sqlQuery.MasterSettingsSave.Parameters.SourceDevice_UID, sql.VarChar(36), input.settingsList)
   }, callback)
 }
 
