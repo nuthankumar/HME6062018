@@ -106,4 +106,9 @@ router.post('/saveMasterSettings', VerifyToken, (request, response) => {
 router.post('/saveMergeDevices', VerifyToken, (request, response) => {
   storeController.saveMergeDevices(request, result => hmeRouter.handelResult(result, response))
 })
+
+router.get('/unRegisterDevicesSearch', VerifyToken, (request, response) => {
+  storeController.unRegisterDevicesSearch(request, result => hmeRouter.handelResult(result, response))
+})
+
 module.exports = router

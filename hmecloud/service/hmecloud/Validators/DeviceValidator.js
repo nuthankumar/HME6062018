@@ -66,6 +66,34 @@ const saveMasterSettings = (input, callback) => {
     callback()
   }
 }
+
+const unRegisterDevicesSearch = (input, callback) => {
+  if (!input.page && !input.perPage && !input.filter) {
+    let output = {}
+    if(!input.page) {
+      output.key = 'requiredPageNumber'
+    }
+    if(input.page && !input.perPage) {
+      output.key = 'requiredPerPageItems'
+    }
+    if(input.page && input.perPage && !input.filter ) {
+      output.key = 'requiredFilter'
+    }
+    output.status = false
+    callback(output)
+  } else {
+    if(input.filter.toLowerCase() !== 'all') {
+      if(!input.search) {
+        output.key = 'requiredSearch'
+      } else {
+        callback()
+      }
+    } else {
+      callback()
+    }
+  }
+}
+
 module.exports = {
     validateDevice,
     validateMasterSettings,

@@ -119,7 +119,6 @@ const settingsStores = (input, callback) => {
   }, callback)
 }
 
-// Todo: getMasterSettings Store Procedure
 const getMasterSettings = (input, callback) => {
   repository.executeProcedure(sqlQuery.MasterSetting.getStatus, request => {
     return request
@@ -146,6 +145,16 @@ const saveMergeDevices = (input, callback) => {
   repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
     return request
       .input(sqlQuery.DeviceIds.Parameters.Device_IDs, sql.VarChar(36), input.duid)
+  }, callback)
+}
+
+// Todo: unRegisterDevicesSearch Store Procedure
+const unRegisterDevicesSearch = (input, callback) => {
+  repository.executeProcedure(sqlQuery.unRegisterDevicesSearch.getStatus, request => {
+    return request
+      .input(sqlQuery.unRegisterDevicesSearch.Parameters.page, sql.VarChar(36), input.page)
+      .input(sqlQuery.unRegisterDevicesSearch.Parameters.perPage, sql.VarChar(max), input.perPage)
+      .input(sqlQuery.unRegisterDevicesSearch.Parameters.filter, sql.VarChar(36), input.filter)
   }, callback)
 }
 
