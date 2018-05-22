@@ -1,34 +1,21 @@
 import * as storeDetails from "../../actionTypes/StoreDetails/storeDetails";
 
-const  viewDetails=[
-                    {
-                        header: "System Settings Group",
-                        items: [{
-                            Settings: "Store_ID",
-                            Value: 3001
-                        }, {
-                            Settings: "Deprecated",
-                            Value: 0,
-                        }, {
-                            Settings: "Manager Code",
-                            Value: 0
-                        }]
-                    },
-                    {
-                        header: "Installer Settings Group",
-                        items: [{
-                            Settings: "Store_ID",
-                            Value: 3001
-                        },
-                        {
-                            Settings: "Deprecated",
-                            Value: 0,
-                        }, {
-                            Settings: "Manager Code",
-                            Value: 0
-                        }]
-                    }
-                ]
+const  viewDetails = 
+[
+    {
+        header: "System Settings Group",
+        items: [{
+            Settings: "Store_ID",
+            Value: 3001
+        }, {
+            Settings: "Deprecated",
+            Value: 0,
+        }, {
+            Settings: "Manager Code",
+            Value: 0
+        }]
+    }
+]
                
 
 export default function (state = viewDetails, action) {
@@ -37,8 +24,7 @@ export default function (state = viewDetails, action) {
         debugger
             return {
                 ...state,
-            storeViewDetails:action.storeViewDetails
-
+                storeViewDetails:action.storeViewDetails
             };
     }
     return state;
