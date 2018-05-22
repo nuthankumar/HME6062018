@@ -18,12 +18,8 @@ class SystemSettings extends Component {
         }
     }
 
-
-
     render() {
         const language = this.state.currentLanguage
-        let displayData = this.props.systemStats
-
         return (
             <div className="system">
                 <h3 className="device-header">  System Settings</h3>
@@ -35,16 +31,16 @@ class SystemSettings extends Component {
     }
 
     renderAccordian() {
-        debugger
-        const values = this.props.data
-        if (values) {
+        debugger        
+        if (this.props.data!=undefined) {
+            const values = this.props.data.systemSettings
             let roleOptions = values.map(function (value, index) {
                 return (<AccordionItem key={index}>
                     <AccordionItemTitle>
-                        <h3>{value.header}</h3>
+                        <h3>{value.name}</h3>
                     </AccordionItemTitle>
                     <AccordionItemBody>
-                        <Table data={value.items} />
+                        <Table data={value.value} />
                     </AccordionItemBody>
                 </AccordionItem>)
             });
@@ -78,15 +74,13 @@ const PersonRow = (props) => {
     return (
         <tr>
             <td>
-                {props.data.Settings}
+                {props.data.SettingInfo_Name}
             </td>
             <td>
-                {props.data.Value}
+                {props.data.DeviceSetting_SettingValue}
             </td>
         </tr>
     );
 }
-
-
 
 export default SystemSettings

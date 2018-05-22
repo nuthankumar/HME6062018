@@ -6,7 +6,7 @@ import SystemSettings from '../components/Stores/SystemSettings'
 import SystemStatus from '../components/Stores/SystemStatus'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { initViewStoresDetails} from "../actions/viewDetails";
+import { initViewStore} from "../actions/viewDetails";
 
 class ViewDetails extends Component {
     constructor(props) {
@@ -18,25 +18,33 @@ class ViewDetails extends Component {
     }
     componentWillMount() {  
            
-            this.props.dispatch(initViewStoresDetails());       
+            this.props.dispatch(initViewStore());       
       
     }
     render() {
+        debugger
         const language = this.state.currentLanguage
         let displayData = this.props.systemStats
-        console.log(this.props.storeViewDetails)
+        console.log('okkkk', this.props.storeViewDetails)
+        if(this.props.storeViewDetails !=undefined){
         return (
             <div>
                 <SystemSettings data={this.props.storeViewDetails}/>
-                <SystemStatus />
+                <SystemStatus data={this.props.storeViewDetails}/>
             </div>
-        )
+        )}
+        else{
+            return(
+                <div>Loading
+                    </div>
+            )
+        }
     }
 }
 
 function mapStateToProps(state) {
     return {
-        storeViewDetails: state.viewDetails
+        storeViewDetails: state.viewDetails.storeViewDetails
     }
 }
 
