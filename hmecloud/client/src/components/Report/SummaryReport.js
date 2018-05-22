@@ -70,6 +70,13 @@ export default class SummaryReport extends Component {
         this.state.templateData = this.props.history.location.state;
         this.setState(this.state)
     }
+    
+    translateDate(date){
+        let language = this.state.currentLanguage
+        let dateTobeTranslated = date.split(" ");
+        let translatedDate =  t[language][dateTobeTranslated[0]]+' '+dateTobeTranslated[1]+' '+(dateTobeTranslated[2]?dateTobeTranslated[2]:'');
+        return translatedDate;
+    }
 
     headerDetails () {
         let language = this.state.currentLanguage
@@ -85,12 +92,12 @@ export default class SummaryReport extends Component {
                           <span>{t[language].ReportsStart}</span>
                         </th>
                         <td>
-                          {this.state.reportData.response.startTime ? this.state.reportData.response.startTime +' '+ t[language].OPEN : 'N/A'}&nbsp;
+                          {this.state.reportData.response.startTime ? this.translateDate(this.state.reportData.response.startTime)  +' '+ t[language].OPEN : 'N/A'}&nbsp;
                         </td>
                         <th>
                           <span>{t[language].ReportsPrintDate}</span>
                         </th>
-                        <td> {this.state.reportData.response.printDate ? this.state.reportData.response.printDate : 'N/A'} </td>
+                        <td> {this.state.reportData.response.printDate ? this.translateDate(this.state.reportData.response.printDate) : 'N/A'} </td>
                     </tr>
                     <tr>
                         <th>
@@ -101,7 +108,7 @@ export default class SummaryReport extends Component {
                             <span>{t[language].ReportsStop}</span>
                         </th>
                         <td>
-                            {this.state.reportData.response.stopTime ? this.state.reportData.response.stopTime +' '+ t[language].CLOSE : 'N/A'}&nbsp;
+                            {this.state.reportData.response.stopTime ? this.translateDate(this.state.reportData.response.stopTime)  +' '+ t[language].CLOSE : 'N/A'}&nbsp;
                         </td>
                         <th>
                           <span>{t[language].ReportsPrintTime}</span>
@@ -115,20 +122,24 @@ export default class SummaryReport extends Component {
                 <div className='col-xs-3 left-padding-none'>
                     <h2 className='report-start-time-header'>
                         <span className='report-start-time'>{t[language].ReportsStart}</span>
-                        <span className='report-start-time-value'>{moment(this.state.reportData.drillDownRequestData.fromDate).format("MMM D YYYY")} {t[language].OPEN}</span>
+                        <span className='report-start-time-value'>{
+                            this.translateDate(moment(this.state.reportData.drillDownRequestData.fromDate).format("MMM D,YYYY"))
+                            } {t[language].OPEN}</span>
                     </h2>
                 </div>
                 <div className='col-xs-3 left-padding-none'>
                     <h2 className='report-end-time-header'>
                         <span className='report-end-time'>{t[language].ReportsEnd}</span>
-                        <span className='report-end-time-value'>{moment(this.state.reportData.drillDownRequestData.toDate).format("MMM D YYYY")} {t[language].CLOSE}</span>
+                        <span className='report-end-time-value'>
+                       { this.translateDate(moment(this.state.reportData.drillDownRequestData.toDate).format("MMM D,YYYY"))} {t[language].CLOSE}</span>
                     </h2>
                 </div>
 
                 <div className='col-xs-4 left-padding-none'>
                     <h2 className='report-print-time-header'>
                         <span className='report-print-time'> {t[language].ReportsPrintTime}</span>
-                        <span className='report-print-time-value'> {moment(new Date()).format("MMM D YYYY hh:mm")}</span>
+                        <span className='report-print-time-value'>
+                              { this.translateDate(moment(new Date()).format("MMM D,YYYY hh:mm"))} </span>
                     </h2>
                 </div>
             </div>)
