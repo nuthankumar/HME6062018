@@ -17,7 +17,7 @@ import SystemStatus from './components/Stores/SystemStatus'
 import './i18n'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { browserHistory } from 'react-dom';
-
+import { Set, Map } from 'hash-set-map'
 import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import StoreDetails from './containers/StoreDetails'

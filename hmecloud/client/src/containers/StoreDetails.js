@@ -12,14 +12,16 @@ import { bindActionCreators } from 'redux';
 
 class StoreDetails extends Component {
   constructor (props) {
-    super(props)
+    super(props);
     this.state = {
       currentLanguage: languageSettings.getCurrentLanguage()
     }
  }
-componentWillMount() {             
-  this.props.dispatch(initStoresDetails()); 
-  this.props.dispatch(adminStoresDetails()); 
+componentWillMount() {   
+
+  this.props.initStoresDetails(); 
+  console.log(this.props);
+ // this.props.dispatch(adminStoresDetails()); 
 }
 
 
@@ -44,6 +46,20 @@ function mapStateToProps(state) {
      }
  }
 
+//  function mapDispatchToProps(dispatch) {
+//   return bindActionCreators({
+//     initStoresDetails:initStoresDetails }, dispatch);
+//   } 
 
- export default connect(mapStateToProps)(StoreDetails)
+
+  function matchDispatchToProps(dispatch) {
+    return bindActionCreators(
+      {
+        initStoresDetails:initStoresDetails
+      },    dispatch
+    );
+  } 
+
+
+ export default connect(mapStateToProps, matchDispatchToProps)(StoreDetails)
 
