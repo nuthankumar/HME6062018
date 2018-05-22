@@ -8,6 +8,7 @@ import ReportGroup from './components/Group/ReportGroup'
 import ReportGroupHierarchy from './components/Group/ReportGroupHierarchy'
 import SummaryReport from './components/Report/SummaryReport'
 import RawCarDataReport from './components/Report/RawCarDataReport'
+import ModalContainer from './containers/ModalContainer'
 import LongestTime from './components/Report/LongestTime'
 import User from './components/User/User'
 import registerServiceWorker from './registerServiceWorker'
@@ -66,6 +67,7 @@ ReactDOM.render( <Provider store={store}>
         <Route exact path="/settings/ViewDetails" render={(props) => <Layout Params={props}><Route path='/settings/ViewDetails' component={Authenticate(ViewDetails)} /></Layout>} />
         <Route exact path="/stores/device" render={(props) => <Layout Params={props}><Route path='/stores/device' component={Authenticate(Device)} /></Layout>} />
         <Route exact path="/stores/remoteSystemActions" render={(props) => <Layout Params={props}><Route path='/stores/remoteSystemActions' component={Authenticate(remoteSystemActions)} /></Layout>} />
+        <Route exact path="/storePopup" render={(props) => <Layout Params={props}><Route path='/storePopup' component={(ModalContainer)} /></Layout>} />  			
     </div>
    
     </Router></Provider>, document.getElementById('root'))
