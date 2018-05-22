@@ -24,6 +24,8 @@ import * as Enum from '../../Enums'
 import t from '../Language/language'
 import * as languageSettings from '../Language/languageSettings'
 import AuthenticationService from '../Security/AuthenticationService'
+import CommonLoader from '../Alerts/CommonLoader'
+
 
 const ProductLogo = require("../../images/ProductLogo-1.png");
 const HMELogo = require("../../images/HMELogo.png");
@@ -103,7 +105,8 @@ class Report extends Component {
         singleStore: false,
         longestTime: false,
 	      systemStatistics: false
-      }
+      },
+      showCommonLoader: false
     };
     this.authService = new AuthenticationService(Config.authBaseUrl)
 
@@ -116,11 +119,14 @@ class Report extends Component {
   }
 
   getTreeHierarchy() {
+      this.state.showCommonLoader = true;
+      this.setState(this.state);
       let url = Config.apiBaseUrl + CommonConstants.apiUrls.getGroupHierarchyTree
       if(this.authService.getUUID())
         url +="?uuId="+this.authService.getUUID()
       this.api.getData(url,data => {
         this.state.treeData = data.data
+        this.state.showCommonLoader = false;
         this.setState(this.state)
       })
   }
@@ -197,9 +203,16 @@ class Report extends Component {
     //  <I18n ns="translations">
     //{
     //  (t, { i18n }) => (
+
+
+    
+
+
+
       <section className="reportsPage">
+        <CommonLoader showLoader={this.state.showCommonLoader} message={"Loading..."}/>
         <Loader showLoader = {this.state.showLoader} />
-        <div className={"reports " + (this.state.showLoader ? 'hide' : 'show')}>
+        <div className={"reports " + ((this.state.showLoader || this.state.showCommonLoader) ? 'hide' : 'show')}>
           <SuccessAlert successMessage={this.state.successMessage} />
           <ErrorAlert errorMessage={this.state.errorMessage} />
           <header className="reports-header">{t[language].summaryReport}</header>
