@@ -1,136 +1,4 @@
 
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
---TABLES
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-/****** Dropping the Table [dbo].[Group] if already exists *****/
-IF (EXISTS(SELECT *
-FROM sys.objects
-WHERE [name] = 'Group' AND [type] ='U'))
-	DROP TABLE [dbo].[Group]
-GO
-
--- ===========================================================
---      Copyright © 2018, HME, All Rights Reserved
--- ===========================================================
--- Name			:	Group
--- Author		:	Swathi Kumar
--- Created		:	6-April-2018
--- Tables		:	Group
--- Purpose		:	To update a one of the existing Group
--- ===========================================================
---				Modification History
--- -----------------------------------------------------------
--- Sl.No.	Date			Developer		Descriptopn   
--- -----------------------------------------------------------
--- 1.		13/04/2018		Swathi Kumar	Added Subtotal calculation
--- ===========================================================
--- 
--- ===========================================================
-
-CREATE TABLE [dbo].[Group]
-(
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[GroupName] [varchar](50) NOT NULL,
-	[Description] [varchar](250) NULL,
-	[AccountId] [int] NOT NULL,
-	[CreatedBy] [varchar](50) NOT NULL,
-	[UpdatedBy] [varchar](50) NOT NULL,
-	[CreatedDateTime] [datetime] NOT NULL,
-	[UpdatedDateTime] [datetime] NOT NULL,
-	[ParentGroup] [int] NULL,
-	CONSTRAINT [PK_Group] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
-	CONSTRAINT [UK_GroupName_AccountID] UNIQUE NONCLUSTERED 
-(
-	[GroupName] ASC,
-	[AccountId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-ALTER TABLE [dbo].[Group] ADD  CONSTRAINT [DF_CreatedDateTime]  DEFAULT (getdate()) FOR [CreatedDateTime]
-GO
-
-ALTER TABLE [dbo].[Group] ADD  CONSTRAINT [DF_UpdatedDateTime]  DEFAULT (getdate()) FOR [UpdatedDateTime]
-GO
-
-ALTER TABLE [dbo].[Group]  WITH CHECK ADD  CONSTRAINT [FK_Group_Parent_Group] FOREIGN KEY([ParentGroup])
-REFERENCES [dbo].[Group] ([Id])
-GO
-
-ALTER TABLE [dbo].[Group] CHECK CONSTRAINT [FK_Group_Parent_Group]
-GO
-
-
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-/****** Dropping the Table [dbo].[GroupStore] if already exists *****/
-IF (EXISTS(SELECT *
-FROM sys.objects
-WHERE [name] = 'GroupStore' AND [type] ='U'))
-	DROP TABLE [dbo].[GroupStore]
-GO
-
--- ===========================================================
---      Copyright © 2018, HME, All Rights Reserved
--- ===========================================================
--- Name			:	GroupStore
--- Author		:	Swathi Kumar
--- Created		:	12-April-2018
--- Tables		:	GroupStore
--- Purpose		:	To update a one of the existing Group
--- ===========================================================
---				Modification History
--- -----------------------------------------------------------
--- Sl.No.	Date			Developer		Descriptopn   
--- -----------------------------------------------------------
--- 1.       12-April-2018   Swathi Kumar    Table Created
--- ===========================================================
--- 
--- ===========================================================
-
-CREATE TABLE [dbo].[GroupStore]
-(
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[GroupId] [int] NOT NULL,
-	[StoreId] [int] NULL,
-	CONSTRAINT [PK_GroupStore] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
-	CONSTRAINT [UK_GroupId_StoreId] UNIQUE NONCLUSTERED 
-(
-	[GroupId] ASC,
-	[StoreId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-ALTER TABLE [dbo].[GroupStore]  WITH CHECK ADD  CONSTRAINT [FK_Group_GroupStore] FOREIGN KEY([GroupId])
-REFERENCES [dbo].[Group] ([Id])
-ON DELETE CASCADE
-GO
-
-ALTER TABLE [dbo].[GroupStore] CHECK CONSTRAINT [FK_Group_GroupStore]
-GO
-
-ALTER TABLE [dbo].[GroupStore]  WITH CHECK ADD  CONSTRAINT [FK_GroupStore_Store] FOREIGN KEY([StoreId])
-REFERENCES [dbo].[tbl_Stores] ([Store_ID])
-ON DELETE CASCADE
-GO
-
-ALTER TABLE [dbo].[GroupStore] CHECK CONSTRAINT [FK_GroupStore_Store]
-GO
-
-
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 /****** Dropping the StoredProcedure [dbo].[usp_GetAllAvailableGroupsAndStores] if already exists *****/
 IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_GetAllAvailableGroupsAndStores' AND [type] ='P'))
 	DROP PROCEDURE [dbo].[usp_GetAllAvailableGroupsAndStores]
@@ -257,7 +125,7 @@ BEGIN
 	
 	EXEC (@sqlQuery)
 END
-
+GO
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 /****** Dropping the StoredProcedure [dbo].[usp_DeleteUser] if already exists *****/
@@ -719,7 +587,7 @@ BEGIN
 	EXEC (@sqlQuery)
 	
 END
-
+GO
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 /****** Dropping the StoredProcedure [dbo].[usp_GetGroupDetailsByGroupId] if already exists *****/
@@ -1032,7 +900,7 @@ BEGIN
 
 END
 
-
+GO
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 /****** Dropping the StoredProcedure [dbo].[usp_GetUserAudit] if already exists *****/
@@ -1095,7 +963,7 @@ BEGIN
 
 END
 
-
+GO
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 /****** Dropping the StoredProcedure [dbo].[usp_GetRoles] if already exists *****/
@@ -1154,7 +1022,7 @@ BEGIN
         AND lrol.Role_OwnerAccount_ID=@AccountId
     ORDER BY lrol.Role_Name
 END
-
+GO
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 IF (EXISTS(SELECT *
@@ -1722,7 +1590,7 @@ BEGIN
     WHERE User_UID=@UserUid
     ORDER BY perm.[Permission_Name]
 END
-
+GO
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 /****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details] if already exists *****/
 IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_HME_Cloud_Get_Report_By_Daypart_Details_Dynamic' AND [type] ='P'))
@@ -2369,7 +2237,7 @@ BEGIN
 	RETURN(0)
 
 END
-
+GO
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 /****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details] if already exists *****/
 IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_HME_Cloud_Get_Report_By_Date_Details_Dynamic' AND [type] ='P'))
@@ -2915,6 +2783,7 @@ BEGIN
 	RETURN(0)
 
 END
+GO
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 /****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details] if already exists *****/
 IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_HME_Cloud_Get_Report_Raw_Data_Details_Dynamic' AND [type] ='P'))
@@ -3245,7 +3114,7 @@ EXECUTE(@query);
 
 RETURN(0)
 
-
+GO
 
 -- exec usp_HME_Cloud_Get_Report_Raw_Data '2955', '2015-01-28', '2015-01-28', NULL, NULL, '11' --'2014-07-09 10:00:00', '2014-07-09 12:02:00', '11', 'AC'
 -- exec usp_HME_Cloud_Get_Report_Raw_Data '2979', '2015-01-13', '2015-01-13', NULL, NULL, '11' --'2014-07-09 10:00:00', '2014-07-09 12:02:00', '11', 'AC'
