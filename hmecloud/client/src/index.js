@@ -31,6 +31,8 @@ import masterSettings from './components/Stores/MasterSettings'
 import Device from './components/Device/Device'
 import remoteSystemActions from './components/Stores/RemoteSystemActions'
 import { composeWithDevTools } from 'redux-devtools-extension';
+import ViewDetails from './containers/ViewDetails'
+import viewDetails from './reducers/store/viewDetails';
 const createStoreWithMiddlewaare = applyMiddleware(thunkMiddleware, composeWithDevTools)(createStore);
 
 
@@ -61,6 +63,7 @@ ReactDOM.render( <Provider store={store}>
         <Route exact path="/systemStatus" render={(props) => <Layout Params={props}><Route path='/systemStatus' component={Authenticate(SystemStatus)} /></Layout>} />
         <Route exact path="/systems" render={(props) => <Layout Params={props}><Route path='/systems' component={Authenticate(Systems)} /></Layout>} />
         <Route exact path="/stores/masterSettings" render={(props) => <Layout Params={props}><Route path='/stores/masterSettings' component={Authenticate(masterSettings)} /></Layout>} />
+        <Route exact path="/stores/ViewDetails" render={(props) => <Layout Params={props}><Route path='/stores/ViewDetails' component={Authenticate(ViewDetails)} /></Layout>} />
         <Route exact path="/stores/device" render={(props) => <Layout Params={props}><Route path='/stores/device' component={Authenticate(Device)} /></Layout>} />
         <Route exact path="/stores/remoteSystemActions" render={(props) => <Layout Params={props}><Route path='/stores/remoteSystemActions' component={Authenticate(remoteSystemActions)} /></Layout>} />
     </div>
