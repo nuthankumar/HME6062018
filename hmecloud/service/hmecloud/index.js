@@ -51,7 +51,7 @@ app.use(bodyParser.json())
  */
 app.use('/api/group', groupRouter)
 
-// summary Report
+// store details
 app.use('/api/store', store)
 
 // Report Templates
