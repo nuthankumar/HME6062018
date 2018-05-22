@@ -1,25 +1,58 @@
-import React, { Component } from 'react'
-import t from '../Language/language'
-import * as languageSettings from '../Language/languageSettings'
-import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
-import '../Report/SummaryReport.css'
-import '../../../node_modules/font-awesome/css/font-awesome.min.css'
-
-export default class PaginationComponent extends Component {
-  constructor (props) {
-    super(props)
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import ReactPaginate from 'react-paginate';
+import $ from 'jquery';
+ class PaginationComponent extends Component {
+  constructor(props) {
+    super(props);
     this.state = {
-        currentLanguage: languageSettings.getCurrentLanguage()
+      value: 10
     }
+    this.PageSizeChange = this.PageSizeChange.bind(this)
   }
+  PageSizeChange(event) {
+    this.setState({ value: event.target.value });
+    this.props.PageSizeValueChange(parseInt(event.target.value));
+  }
+  OnPageChange = (data) => {
+    let selected = data.selected;
+    let offset = Math.ceil(selected * this.props.perPage);
+    this.props.offset(offset);
+  };
 
-    render() {
-      const language = this.state.currentLanguage
-      return (<div id='page-navigations'>
-              <div className='page-navs'>
-            Page <span className='start-page'>{this.props.curPage}</span> <span translate='' className='ReportsOf'>{t[language].ReportsOf} </span> {this.props.totalPages}</div>
-              <div className={'previous-link ' + (this.props.disablePrevButton || this.props.totalPages === 1 ? 'disable' : '' )} onClick={() => this.props.handlePreviousPage(this.props.curPage, this.props.totalPages)} ><i className='fa fa-angle-left previous-page' /></div>
-              <div className={'next-link ' + (this.props.disableNextButton || this.props.totalPages === 1 ? 'disable' : '' )} onClick={() => this.props.handleNextPage(this.props.curPage, this.props.totalPages)} ><i className='fa fa-angle-right next-page' /></div>
-            </div>)
-      }
-}
+  render() {
+    return (
+
+      <div>
+        <select id="per_show" onChange={this.PageSizeChange} value={this.state.value}>
+          <option value="10">10</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+          <option value="10000">All</option>
+        </select>
+        <ReactPaginate previousLabel={"<<"}
+          nextLabel={">>"}
+          breakLabel={<a>...</a>}
+          breakClassName={"break-me"}
+          pageCount={this.props.pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={6}
+          onPageChange={this.OnPageChange}
+          containerClassName={"pagination"}
+          subContainerClassName={"pages pagination"}
+          activeClassName={"active"} />
+        <span class="results">Showing 1 - 10 of ({this.props.pageCount}) Results</span>
+      </div>
+    );
+  }
+};
+
+
+export default PaginationComponent
+
+ //   tag to add in other components
+// <App
+// perPage={this.state.pageSize}
+// PageSizeValueChange={this.PageSizeValueDropdown}
+// offset={this.PageClicked}
+// pageCount={this.state.pageCount} />
