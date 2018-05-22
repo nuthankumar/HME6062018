@@ -7,6 +7,7 @@ import * as languageSettings from '../Language/languageSettings'
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './SummaryReport.css'
 import '../../../node_modules/font-awesome/css/font-awesome.min.css'
+import moment from 'moment'
 export default class SummaryReportDataComponent extends Component {
   constructor(props) {
     super(props)
@@ -20,6 +21,24 @@ export default class SummaryReportDataComponent extends Component {
     this.displayLongestTimes = this.displayLongestTimes.bind(this)
     this.summaryDataTableCell = this.summaryDataTableCell.bind(this)
   }
+  
+
+
+  translateDate(date){
+    let language = this.state.currentLanguage
+    let dateTobeTranslated = date.split(" ");
+    let translatedDate =  t[language][dateTobeTranslated[0]]+' '+dateTobeTranslated[1]+' '+(dateTobeTranslated[2]?dateTobeTranslated[2]:'');
+    return translatedDate;
+  }
+
+  translateFromTo(fromTo){
+    // to-do split od text to be removed
+    let language = this.state.currentLanguage
+    console.log(fromTo)
+    let string = fromTo.split(" ")
+    let fromToModified = (string[0]? this.translateDate(moment(string[0]).format("MMM D,YYYY")):'')+' - '+(string[2] ? this.translateDate(moment(string[2]).format("MMM D,YYYY")):'') + (t[language][string[3]]?t[language][string[3]]: string[3])
+    return fromToModified;
+  }
 
   displaySummarizedData(reportData) {
     console.log("drilldown report data",reportData)
@@ -32,7 +51,7 @@ export default class SummaryReportDataComponent extends Component {
           return reportData.response.timeMeasureType.map((reportItem) => {
           return (
             <div className='report-data-unit'>
-              <div className={'col-xs-12 from-to-detail ' + this.dynamicColumnData.showFromToTime}><span>{reportItem.title}</span></div>
+              <div className={'col-xs-12 from-to-detail ' + this.dynamicColumnData.showFromToTime}><span>{this.translateFromTo(reportItem.title)}</span></div>
               <table className='summaryreport-table'>
                 <tbody>
                   {this.getSummarytableHeader(reportData.response.eventList)}
@@ -66,13 +85,14 @@ export default class SummaryReportDataComponent extends Component {
   }
 
   getSummaryTableSubHeader(reportItem,headerList){
+    let language = this.state.currentLanguage
     let eventLength =headerList.length
     let colWidth = this.props.reportData.groupStoreColumns ? eventLength-3 : eventLength - 2 
     return headerList.map((headerItem) => {
      return( 
       // <th className={(headerItem === 'Groups' ? 'groupsColHeader' : '') + (headerItem == 'Store_Name' ? 'storesColHeader' : '') + (headerItem === 'Store_Name' || headerItem === 'Groups' || headerItem === 'week' || headerItem === 'day' || headerItem === 'daypart' ? 'reporttable-attributes-heading-dynamic'+colWidth : 'reportTableAttributesHeading')}><span>{headerItem}</span></th>
       <th className={(headerItem === 'Groups' ? 'groupsColHeader ' : '') + (headerItem == 'Stores' ? 'storesColHeader ' : '') + (headerItem === 'Stores' || headerItem === 'Groups' || headerItem === 'Week' || headerItem === 'Day' || headerItem === 'Daypart' ? 'reporttable-attributes-heading-dynamic ' : 'reportTableAttributesHeading'+colWidth) + (headerItem === 'Total Cars' ? ' total-cars' : '')}>
-        <span>{headerItem}</span>
+        <span>{t[language][headerItem]? t[language][headerItem]:headerItem}</span>
       </th>
       )
       
@@ -121,6 +141,7 @@ export default class SummaryReportDataComponent extends Component {
   }
 
   summaryDataTableCell(reportItem,headers){
+    let language = this.state.currentLanguage
     let self = this
     let dataColour = '#ffffff'
     return headers.map((headerItem,index) =>{
@@ -134,21 +155,21 @@ export default class SummaryReportDataComponent extends Component {
       }else if(headerItem === 'Daypart'){
         return(
         <td className={'timeMeasureColumn ' + (headerItem === 'Daypart' ? 'show-table-cell' : 'hide-table-cell')} onClick={(e) => {e.preventDefault(); this.props.handleDrillDown(reportItem)}}> 
-        <span className={'timeSpan ' + (self.props.reportData.dayPartColumn &&  reportItem[headerItem] !== undefined && reportItem[headerItem] !== undefined ? 'show' : 'hide')}>{ headerItem === 'Daypart' ? reportItem[headerItem].timeSpan : ''}</span>  <span className={'currentMeasure ' + (self.props.reportData.dayPartColumn && reportItem[headerItem] !== undefined && reportItem[headerItem].currentWeekpart !== undefined ? 'show' : 'hide')}>{(headerItem !== undefined && headerItem === 'Daypart' ? reportItem[headerItem].currentWeekpart : '')}</span> 
+        <span className={'timeSpan ' + (self.props.reportData.dayPartColumn &&  reportItem[headerItem] !== undefined && reportItem[headerItem] !== undefined ? 'show' : 'hide')}>{ headerItem === 'Daypart' ? (t[language][reportItem[headerItem].timeSpan] ? t[language][reportItem[headerItem].timeSpan]: reportItem[headerItem].timeSpan )  : ''}</span>  <span className={'currentMeasure ' + (self.props.reportData.dayPartColumn && reportItem[headerItem] !== undefined && reportItem[headerItem].currentWeekpart !== undefined ? 'show' : 'hide')}>{(headerItem !== undefined && headerItem === 'Daypart' ? (t[language][reportItem[headerItem].currentWeekpart]? t[language][reportItem[headerItem].currentWeekpart] : reportItem[headerItem].currentWeekpart) : '')}</span> 
         </td>
         )
       } else if(headerItem === 'Day'){
         return(
           <td className={'timeMeasureColumn ' + (headerItem === 'Day' ? 'show-table-cell' : 'hide-table-cell')} onClick={() => this.props.handleDrillDown(reportItem)}> 
-            <span className={'timeSpan ' + (self.props.reportData.dayColumn &&  reportItem[headerItem] !== undefined && reportItem[headerItem] !== undefined ? 'show' : 'hide')}>{ headerItem === 'Day' ? reportItem[headerItem].timeSpan : ''}</span> 
-            <span className={'currentMeasure ' + (self.props.reportData.dayColumn && reportItem[headerItem] !== undefined && reportItem[headerItem].currentWeekpart !== undefined ? 'show' : 'hide')}>{(headerItem !== undefined && headerItem === 'Day' ? reportItem[headerItem].currentWeekpart : '')}</span> 
+            <span className={'timeSpan ' + (self.props.reportData.dayColumn &&  reportItem[headerItem] !== undefined && reportItem[headerItem] !== undefined ? 'show' : 'hide')}>{ headerItem === 'Day' ? (t[language][reportItem[headerItem].timeSpan] ? t[language][reportItem[headerItem].timeSpan]: reportItem[headerItem].timeSpan ) : ''}</span> 
+            <span className={'currentMeasure ' + (self.props.reportData.dayColumn && reportItem[headerItem] !== undefined && reportItem[headerItem].currentWeekpart !== undefined ? 'show' : 'hide')}>{(headerItem !== undefined && headerItem === 'Day' ? (t[language][reportItem[headerItem].currentWeekpart]? t[language][reportItem[headerItem].currentWeekpart] : reportItem[headerItem].currentWeekpart) : '')}</span> 
           </td>
           )
       }else if(headerItem === 'Week'){ 
         return(
           <td className={'timeMeasureColumn ' + (headerItem === 'Week' ? 'show-table-cell' : 'hide-table-cell')} onClick={() => this.props.handleDrillDown(reportItem)}> 
-            <span className={'timeSpan ' + (self.props.reportData.weekColumn &&  reportItem[headerItem] !== undefined && reportItem[headerItem] !== undefined ? 'show' : 'hide')}>{ headerItem === 'Week' ? reportItem[headerItem].timeSpan : ''}</span> 
-            <span className={'currentMeasure ' + (self.props.reportData.weekColumn && reportItem[headerItem] !== undefined && reportItem[headerItem].currentWeekpart !== undefined ? 'show' : 'hide')}>{(headerItem !== undefined && headerItem === 'Week' ? reportItem[headerItem].currentWeekpart : '')}</span> 
+            <span className={'timeSpan ' + (self.props.reportData.weekColumn &&  reportItem[headerItem] !== undefined && reportItem[headerItem] !== undefined ? 'show' : 'hide')}>{ headerItem === 'Week' ?(t[language][reportItem[headerItem].timeSpan] ? t[language][reportItem[headerItem].timeSpan]: reportItem[headerItem].timeSpan ) : ''}</span> 
+            <span className={'currentMeasure ' + (self.props.reportData.weekColumn && reportItem[headerItem] !== undefined && reportItem[headerItem].currentWeekpart !== undefined ? 'show' : 'hide')}>{(headerItem !== undefined && headerItem === 'Week' ? (t[language][reportItem[headerItem].currentWeekpart]? t[language][reportItem[headerItem].currentWeekpart] : reportItem[headerItem].currentWeekpart) : '')}</span> 
           </td>
           )
       }else if(headerItem === 'Groups'){

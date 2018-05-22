@@ -11,15 +11,7 @@ export default class GoalStatisticsDataComponent extends Component {
     super(props)
     this.state = {
       currentLanguage: languageSettings.getCurrentLanguage(),
-      goalStatisticsType: '',
-      eventList: [
-        "Menu Board",
-        "Greet",
-        "Service",
-        "Lane Queue",
-        "Lane Total",
-        "totalCars"
-      ]
+      goalStatisticsType: ''
     }
     this.displayGoalStatisticsData = this.displayGoalStatisticsData.bind(this)
     this.displayGoalStatisticsRowData = this.displayGoalStatisticsRowData.bind(this)
@@ -46,7 +38,7 @@ export default class GoalStatisticsDataComponent extends Component {
               </th>
             </tr>
             <tr className='goalstatistics-row-heading'>
-              {this.goalStatisticsTableHeader}
+              {this.goalStatisticsTableHeader} 
             </tr>
             {/* <tr className='goalstatistics-row-heading'>
                 <th className='reportTableAttributesHeading blank-heading'><span></span></th>
@@ -71,12 +63,13 @@ export default class GoalStatisticsDataComponent extends Component {
   }
 
   goalStatisticsTableHeader() {
+    let language = this.state.currentLanguage
     let colWidth = this.props.reportData.response.eventList.length
     return this.props.reportData.response.eventList.map((headerItem) => {
       return (
         // <th className={(headerItem === 'Groups' ? 'groupsColHeader' : '') + (headerItem == 'Store_Name' ? 'storesColHeader' : '') + (headerItem === 'Store_Name' || headerItem === 'Groups' || headerItem === 'week' || headerItem === 'day' || headerItem === 'daypart' ? 'reporttable-attributes-heading-dynamic'+colWidth : 'reportTableAttributesHeading')}><span>{headerItem}</span></th>
         <th className={(headerItem === 'Groups' || headerItem === 'Stores' || headerItem === 'Week' || headerItem === 'Day' || headerItem === 'Daypart' || headerItem === 'Total Cars' ? 'hide-table-cell ' : 'show-table-cell ') + ('reportTableAttributesHeading' + colWidth)}>
-          <span>{headerItem}</span>
+          <span>{t[language][headerItem]? t[language][headerItem]:headerItem}</span>
         </th>
       )
 

@@ -66,3 +66,84 @@
 select.wide_select {
 	width:260px;
 }
+
+
+/* Modal popup css */
+.modal-popup{
+  position: absolute !important;
+  top: 159px;
+  left: 353.5px;
+  height: auto;
+  width: 550px !important;
+  display: block;
+  z-index: 101;
+}
+.modal-popup .modal-content{
+  height: 613px;
+}
+div.tab-content #store-tabs-pane-1, #store-tabs-pane-2, #store-tabs-pane-3, #store-tabs-pane-4 {
+  height: 490px;
+  border-right: 2px solid #ccc;
+  border-bottom: 2px solid #ccc;
+  border-left: 2px solid #ccc; 
+  outline: none;
+  background-color: rgb(255, 255, 255);
+  padding: 1em 1.4em;
+}
+
+.modal-popup .modal-body{
+  width: 460px;
+  margin-left: 30px;
+  margin-top: 10px;
+}    
+#store-tabs{
+  border: none;
+}
+#store-tabs ul.nav-tabs li.active > a {
+  color: #222222;
+  font-size: 16px;
+} 
+#store-tabs ul.nav-tabs li > a{
+  font-size : 16px;
+  color: #2779aa;
+}
+
+
+table.user_form tr th label {
+  /* margin-top: 12px; */
+  width: 110px;
+  font-weight: normal;
+  margin-bottom: 0px;
+
+
+    color: #757575;
+    font-size: 14px;
+    text-align: right;
+    /* margin-top: 12px; */
+    padding-right: 5px;
+}
+
+
+table.user_form tr td input[type="text"],table.user_form tr td select{
+  width: 200px;
+  border: 1px solid #757575;
+  padding: 0;
+  margin: 0;
+  height: 22px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  text-indent: 4px;
+  font-size: 12px;
+}
+
+
+table.user_form tr td{
+  /* padding-bottom: 10px;
+  padding-top: 11px; */
+  padding-top: 9px;
+}
+
+table.user_form tr th{
+   padding-top: 8px; 
+}

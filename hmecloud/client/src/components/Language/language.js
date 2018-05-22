@@ -115,6 +115,7 @@ const language = [
     'advancedoptions': 'Advanced Options',
     'open': 'Open',
     'close': 'Close',
+    'OPEN-CLOSE':'OPEN-CLOSE',
     'type': 'Type',
     'timeslice': 'Time Slice',
     'cumulative': 'Cumulative',
@@ -775,7 +776,21 @@ const language = [
     'useragreementUrl' : 'HMECLOUD_Terms_and_Conditions.pdf',
     'privacypolicyUrl' : 'HMECLOUD_Privacy_Policy.pdf',
     'californiasupplyUrl' : 'California_Transparency_Supply_Chains_Agreement.pdf',
-    'cookiepolicyUrl' : 'HMECLOUD_Privacy_Policy.pdf'
+    'cookiepolicyUrl' : 'HMECLOUD_Privacy_Policy.pdf',
+
+    'Jan':'Jan',
+    'Feb':'Feb',
+    'Mar':'Mar',
+    'Apr':'Apr',
+    'May':'May',
+    'Jun':'Jun',
+    'Jul':'Jul',
+    'Aug':'Aug',
+    'Sept':'Sept',
+    'Oct':'Oct',
+    'Nov':'Nov',
+    'Dec':'Déc',
+
   },
 
   // French
@@ -898,6 +913,7 @@ const language = [
     'advancedoptions': 'Options avanc\u00E9es',
     'open': 'Ouvert',
     'close': 'Ferm\u00E9',
+    'OPEN-CLOSE': 'OUVRIR - FERMER',
     'type': 'Type',
     'timeslice': 'Intervalle de temps',
     'cumulative': 'Cumulatif',
@@ -1559,7 +1575,19 @@ const language = [
     'useragreementUrl' : 'HMECLOUD_Terms_and_Conditions_fr.pdf',
     'privacypolicyUrl' : 'HMECLOUD_Privacy_Policy_fr.pdf',
     'californiasupplyUrl' : 'California_Transparency_Supply_Chains_Agreement_fr.pdf',
-    'cookiepolicyUrl' : 'HMECLOUD_Privacy_Policy_fr.pdf'
+    'cookiepolicyUrl' : 'HMECLOUD_Privacy_Policy_fr.pdf',
+    'Jan':'Janv',
+    'Feb':'Févr',
+    'Mar':'Mars',
+    'Apr':'Avril',
+    'May':'Mai',
+    'Jun':'Juin',
+    'Jul':'Juil',
+    'Aug':'Août',
+    'Sept':'Sept',
+    'Oct':'Oct',
+    'Nov':'Nov',
+    'Dec':'Déc',
   }
 ]
 export default language

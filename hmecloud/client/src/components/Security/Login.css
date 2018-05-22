@@ -315,10 +315,20 @@ width:197px;
     display: flex;
     align-items: center;
  }
-.selectAllLabel{
-    padding-left: 33px;
 
-}
+@media screen and (max-width: 1280px) {
+    .selectAllLabel{
+        padding-left: 33px;
+        width: 351px;
+    }
+  }
+
+  @media screen and (min-width: 1281px) {
+    .selectAllLabel{
+        padding-left: 33px;
+        width:260px;
+    }
+  }
 
 .BrandTitle
 {
