@@ -1,5 +1,3 @@
-import { max } from 'moment';
-
 const repository = require('./Repository')
 const dataBase = require('../DataBaseConnection/Configuration').db
 const dataBaseSql = require('../DataBaseConnection/Configuration').sqlConfig
