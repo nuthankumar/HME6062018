@@ -29,11 +29,10 @@ Device.prototype.getSingleStoreValues = function () {
   const filter = this.reportFilter
   let storeDetails = this.result
   let getColors = []
-  //checking color code is empty or not
-  if (this.colors && this.colors.length > 0 && this.colors[0].ColourCode)
-    getColors = this.colors[0].ColourCode.split('|')
+  // checking color code is empty or not
+  if (this.colors && this.colors.length > 0 && this.colors[0].ColourCode) { getColors = this.colors[0].ColourCode.split('|') }
   let getColor = (event, eventValue) => {
-    let color = "";
+    let color = ''
     if (getColors && getColors.length > 0) {
       color = getColors[2]
       _.pickBy(this.goalSettings[0], (value, key) => {
@@ -106,6 +105,7 @@ Device.prototype.getSingleStoreValues = function () {
         reportInfo[`${key}`] = { 'value': `${value}` }
       } else if (key === 'StoreNo') {
         if (filter === 'week') {
+          console.log('week', value)
           if (value === 'Total Week') {
             reportInfo['Week'] = {
               'timeSpan': 'Total Week',
@@ -159,22 +159,31 @@ Device.prototype.getSingleStoreValues = function () {
 Device.prototype.getLongestTime = function (longestTime, deviceHeaders) {
   const timeFormat = this.request.body.format
   let deviceLongestTime = []
-  _.forEach(longestTime, (items) => {
+  let temp = {}
+  deviceLongestTime.push(temp)
+  _.forEach(longestTime, (items, index) => {
     let timeDetails = {}
-    _.forEach(deviceHeaders, (value, key) => {
-      if (items['DeviceTimeStamp'] !== null) {
-        if (items[`${value}`] !== null) {
-          timeDetails[`${value}`] = {
-            'Value': dateUtils.convertSecondsToMinutes(items.DetectorTime, timeFormat),
-            'Date': dateUtils.convertMMMddMM(items.DeviceTimeStamp),
-            'Time': dateUtils.converthhmmsstt(items.DeviceTimeStamp)
-          }
+    var getValues
+    _.forEach(deviceLongestTime, (item) => {
+      if (item[items.headerName] === undefined) {
+        item[items.headerName] = {
+          'Value': dateUtils.convertSecondsToMinutes(items.DetectorTime, timeFormat),
+          'Date': dateUtils.convertMMMddMM(items.DeviceTimeStamp),
+          'Time': dateUtils.converthhmmsstt(items.DeviceTimeStamp)
         }
-        deviceLongestTime.push(timeDetails)
-      } else {
-        deviceLongestTime = []
+        getValues = true
+        return false
       }
     })
+    if (!getValues) {
+      let tempItem = {}
+      tempItem[items.headerName] = {
+        'Value': dateUtils.convertSecondsToMinutes(items.DetectorTime, timeFormat),
+        'Date': dateUtils.convertMMMddMM(items.DeviceTimeStamp),
+        'Time': dateUtils.converthhmmsstt(items.DeviceTimeStamp)
+      }
+      deviceLongestTime.push(tempItem)
+    }
   })
   return deviceLongestTime
 }
@@ -193,7 +202,7 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
   } else {
     colorSettings = this.colors[0].ColourCode.split('|')
   }
-  function CalculatePercetage(value, totalCarsCount) {
+  function CalculatePercetage (value, totalCarsCount) {
     if (value === 0 || value === null || isNaN(value) || _.isUndefined(value) || totalCarsCount === 0) {
       return `0%`
     } else {
@@ -222,7 +231,7 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
       }
     }
   })
-  function getColorForGoal(goal) {
+  function getColorForGoal (goal) {
     if (goal === 'GoalA') {
       return colorSettings[0]
     } else if (goal === 'GoalB') {

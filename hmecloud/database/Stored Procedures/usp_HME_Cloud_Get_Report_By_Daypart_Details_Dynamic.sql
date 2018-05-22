@@ -15,11 +15,10 @@ GO
 -- -----------------------------------------------------------
 -- Sl.No.	Date			Developer		Descriptopn
 -- -----------------------------------------------------------
--- 1.
+-- 1.		22/05/2018		Ramesh 			Add (LinkedServerName,DatabaseName)
 -- ===========================================================
 -- exec usp_HME_Cloud_Get_Report_By_Daypart_Details_Dynamic @Device_IDs='15',@StoreStartDate='2018-03-23',@StoreEndDate='2018-03-24',@InputStartDateTime=N'2018-03-23 00:00:00',@InputEndDateTime=N'2018-03-24 10:30:00',@CarDataRecordType_ID='11',@ReportType='AC',@LaneConfig_ID=1,@PageNumber=1,@UserUID=null
 -- ===========================================================
-
 CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details_Dynamic]
 (
 	@Device_IDs varchar(500),
@@ -32,7 +31,9 @@ CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details_Dynamic]
 	@LaneConfig_ID tinyint = 1,
 	--@RecordPerPage smallint = 4,
 	@PageNumber smallint = 0,
-	@UserUID NVARCHAR(50)
+	@UserUID NVARCHAR(50),
+	@LinkedServerName VARCHAR(100) = 'POWCLOUDBI_UAT_R',
+	@DatabaseName VARCHAR(100) ='db_qsrdrivethrucloud_ods_engdev'
 )
 AS
 BEGIN
@@ -165,8 +166,13 @@ BEGIN
 		User_Preferences_User_ID =(SELECT USER_ID FROM  tbl_Users WHERE User_UID = @UserUID ) AND User_Preferences_Preference_ID=9
 
 	-- pull in raw data from proc
-	INSERT INTO #raw_data
-	EXECUTE dbo.usp_HME_Cloud_Get_Report_Raw_Data @Device_IDs, @StoreStartDate, @StoreEndDate, @StartDateTime, @EndDateTime, @CarDataRecordType_ID, @ReportType, @LaneConfig_ID
+		-- pull in raw data from proc
+	SET @query ='INSERT INTO #raw_data
+	EXECUTE ['+@LinkedServerName+'].['+@DatabaseName+'].dbo.usp_HME_Cloud_Get_Report_Raw_Data '''+@Device_IDs +''', '''+CONVERT(VARCHAR(20), @StoreStartDate,23) +''', '
+	+ ''''+CONVERT(VARCHAR(20),@StoreEndDate,23) +''', ''' + CONVERT(VARCHAR(30),@StartDateTime, 21)+''', '''+ CONVERT(VARCHAR(30),@EndDateTime, 21) +''', '''+@CarDataRecordType_ID+''', '''+ @ReportType+''''
+
+	EXEC(@query)
+	SET @query =''
 
 	INSERT INTO #GroupDetails(GroupName, Store_ID, Device_ID)
 	SELECT DISTINCT g.GroupName, ts.Store_ID , td.Device_ID
@@ -465,7 +471,7 @@ BEGIN
 		ORDER BY StoreDate, ID, SortOrder, DayPartIndex, StoreNo;'
 	ELSE
 		SET @query = N'
-		SELECT	*
+		SELECT	ID, DayPartIndex, StartTime, EndTime, StoreNo, Store_Name, Device_UID, StoreDate, Device_ID, GroupName, Store_ID, Total_Car, SortOrder
 		FROM	#rollup_data
 		ORDER BY StoreDate, ID, SortOrder, DayPartIndex, StoreNo'
 

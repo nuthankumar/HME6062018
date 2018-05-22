@@ -17,6 +17,7 @@ GO
 -- Sl.No.	Date			Developer		Descriptopn
 -- -----------------------------------------------------------
 -- 1.		13/04/2018		Swathi Kumar	Added Subtotal calculation
+-- 2.		22/05/2018		Ramesh			Add (LinkedServerName,DatabaseName)
 -- ===========================================================
 -- EXEC [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details_Dynamic] '19','2018-02-24','2018-03-26',N'2018-02-24 00:00:00',N'2018-03-26 10:30:00','11','AC',1,N'68LKBP85C1SKH1FI3M7X40CJHKGU07FZ'
 -- ===========================================================
@@ -24,15 +25,17 @@ GO
 -- use the below UserUid for testing in local data base
 -- --,@UserUID=N'68LKBP85C1SKH1FI3M7X40CJHKGU07FZ'
 CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details_Dynamic](
-	@Device_IDs varchar(500),
-	@StoreStartDate date,
-	@StoreEndDate date,
+	@Device_IDs VARCHAR(500),
+	@StoreStartDate DATE,
+	@StoreEndDate DATE,
 	@InputStartDateTime NVARCHAR(50) = '1900-01-01 00:00:00',  -- 2018-04-09 20:00:00
 	@InputEndDateTime NVARCHAR(50) = '3000-01-01 23:59:59',
 	@CarDataRecordType_ID varchar(255) = '11',
-	@ReportType char(2) = 'AC',   -- AC: cumulative  TC: Time Slice
-	@LaneConfig_ID tinyint = 1,
-	@UserUID NVARCHAR(50)
+	@ReportType CHAR(2) = 'AC',   -- AC: cumulative  TC: Time Slice
+	@LaneConfig_ID TINYINT = 1,
+	@UserUID NVARCHAR(50),
+	@LinkedServerName VARCHAR(100) = 'POWCLOUDBI_UAT_R',
+	@DatabaseName VARCHAR(100) ='db_qsrdrivethrucloud_ods_engdev'
 )
 AS
 BEGIN
@@ -175,9 +178,12 @@ BEGIN
 	SET @CarDataRecordType_ID = CASE WHEN ISNULL(@CarDataRecordType_ID,'') ='' THEN '11' ELSE @CarDataRecordType_ID END
 
 	-- pull in raw data from proc
-	INSERT INTO #raw_data
-	EXECUTE dbo.usp_HME_Cloud_Get_Report_Raw_Data @Device_IDs, @StoreStartDate, @StoreEndDate, @StartDateTime, @EndDateTime, @CarDataRecordType_ID, @ReportType, @LaneConfig_ID
+	SET @query ='INSERT INTO #raw_data
+	EXECUTE ['+@LinkedServerName+'].['+@DatabaseName+'].dbo.usp_HME_Cloud_Get_Report_Raw_Data '''+@Device_IDs +''', '''+CONVERT(VARCHAR(20), @StoreStartDate,23) +''', '
+	+ ''''+CONVERT(VARCHAR(20),@StoreEndDate,23) +''', ''' + CONVERT(VARCHAR(30),@StartDateTime, 21)+''', '''+ CONVERT(VARCHAR(30),@EndDateTime, 21) +''', '''+@CarDataRecordType_ID+''', '''+ @ReportType+''''
 
+	EXEC(@query)
+	SET @query =''
 	-- get each of the store date from the range
 	INSERT INTO #Week(StoreDate)
 	SELECT	ThisDate
@@ -398,8 +404,8 @@ BEGIN
 		ORDER BY WeekIndex, StoreNo;'
 	ELSE
 		SET @query = N'
-		SELECT	*
-		FROM	#rollup_data'
+		SELECT	WeekIndex, WeekStartDate, WeekEndDate, StoreNo, Store_Name, Device_UID, Device_ID, GroupName, StoreID, Total_Car
+		FROM	#rollup_data ORDER BY WeekIndex'
 
 	/***********************************
 		step 3. return result sets

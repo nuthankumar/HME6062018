@@ -18,7 +18,8 @@ export const CommonConstants = {
     'getUser': 'api/user/get', 
     'deleteUser': 'api/user/delete',
     'getAudit': 'api/user/getAudit',
-    'getStores': 'api/store/getAllStores'
+    'getStores': 'api/store/getAllStores',
+    'getSettingsDevices': 'api/store/settingsDevices'
   },
   'TimeMeasureValidations': {
     'TwoMonths': 62,
