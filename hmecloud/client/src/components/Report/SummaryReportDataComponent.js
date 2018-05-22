@@ -162,7 +162,8 @@ export default class SummaryReportDataComponent extends Component {
       }else if(headerItem === 'Stores'){
         return(
           <td calssName=''>
-          <a href='#' className={(headerItem === 'Stores' ? 'store-name-number' : '')} onClick={(e) => { e.preventDefault(); this.props.handleDrillDown(reportItem) }}>{reportItem[headerItem] ? reportItem[headerItem].value : ''} </a>
+          {/* <a href='#' className={(headerItem === 'Stores' ? 'store-name-number' : '')} onClick={(e) => { e.preventDefault(); this.props.handleDrillDown(reportItem) }}>{reportItem[headerItem] ? reportItem[headerItem].value : ''} </a> */}
+          <a href='#' className={(headerItem === 'Stores' ? 'store-name-number' : '')} onClick={(e) => { e.preventDefault(); this.props.handleDrillDown(reportItem) }}>{(headerItem === 'Stores' && reportItem[headerItem].value !== null ? reportItem[headerItem].value + '-' + reportItem.StoreNo.value  :  reportItem.StoreNo.value !== undefined ? reportItem.StoreNo.value : '')} </a>
           </td>
         )
       }

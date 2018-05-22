@@ -24,10 +24,10 @@ class ViewDetails extends Component {
     render() {
         const language = this.state.currentLanguage
         let displayData = this.props.systemStats
-        console.log(this.props.viewStoresDetails)
+        console.log(this.props.storeViewDetails)
         return (
             <div>
-                <SystemSettings data={this.props.viewStoresDetails}/>
+                <SystemSettings data={this.props.storeViewDetails}/>
                 <SystemStatus />
             </div>
         )
@@ -36,7 +36,7 @@ class ViewDetails extends Component {
 
 function mapStateToProps(state) {
     return {
-        viewStoresDetails: state.store.viewDetails,
+        storeViewDetails: state.viewDetails
     }
 }
 

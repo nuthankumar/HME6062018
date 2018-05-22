@@ -17,8 +17,9 @@ import SystemStatus from './components/Stores/SystemStatus'
 import './i18n'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { browserHistory } from 'react-dom';
-
+import { Set, Map } from 'hash-set-map'
 import { Provider } from 'react-redux';
+import thunkMiddleware from 'redux-thunk';
 import StoreDetails from './containers/StoreDetails'
 import { createStore, applyMiddleware } from 'redux';
 import reducers from './reducers/store/index';
@@ -29,10 +30,18 @@ import Systems from './components/Systems/Systems'
 import masterSettings from './components/Stores/MasterSettings'
 import Device from './components/Device/Device'
 import remoteSystemActions from './components/Stores/RemoteSystemActions'
+import { composeWithDevTools } from 'redux-devtools-extension';
+import ViewDetails from './containers/ViewDetails'
+import viewDetails from './reducers/store/viewDetails';
+const createStoreWithMiddlewaare = applyMiddleware(thunkMiddleware, composeWithDevTools)(createStore);
 
-const createStoreWithMiddlewaare = applyMiddleware()(createStore);
 
-ReactDOM.render( <Provider store={createStoreWithMiddlewaare(reducers)}>
+const store = createStore(reducers, composeWithDevTools(
+    applyMiddleware(thunkMiddleware),
+    // other store enhancers if any
+  ));
+
+ReactDOM.render( <Provider store={store}>
 <Router history={browserHistory}>
     <div>
         <Route exact path="/" render={(props) => <Layout Params={props}><Route path='/' component={(Login)} /></Layout>} />
@@ -54,6 +63,7 @@ ReactDOM.render( <Provider store={createStoreWithMiddlewaare(reducers)}>
         <Route exact path="/systemStatus" render={(props) => <Layout Params={props}><Route path='/systemStatus' component={Authenticate(SystemStatus)} /></Layout>} />
         <Route exact path="/systems" render={(props) => <Layout Params={props}><Route path='/systems' component={Authenticate(Systems)} /></Layout>} />
         <Route exact path="/stores/masterSettings" render={(props) => <Layout Params={props}><Route path='/stores/masterSettings' component={Authenticate(masterSettings)} /></Layout>} />
+        <Route exact path="/settings/ViewDetails" render={(props) => <Layout Params={props}><Route path='/settings/ViewDetails' component={Authenticate(ViewDetails)} /></Layout>} />
         <Route exact path="/stores/device" render={(props) => <Layout Params={props}><Route path='/stores/device' component={Authenticate(Device)} /></Layout>} />
         <Route exact path="/stores/remoteSystemActions" render={(props) => <Layout Params={props}><Route path='/stores/remoteSystemActions' component={Authenticate(remoteSystemActions)} /></Layout>} />
     </div>

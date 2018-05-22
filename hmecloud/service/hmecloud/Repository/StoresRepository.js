@@ -1,5 +1,3 @@
-import { max } from 'moment';
-
 const repository = require('./Repository')
 const dataBase = require('../DataBaseConnection/Configuration').db
 const dataBaseSql = require('../DataBaseConnection/Configuration').sqlConfig
@@ -119,7 +117,6 @@ const settingsStores = (input, callback) => {
   }, callback)
 }
 
-// Todo: getMasterSettings Store Procedure
 const getMasterSettings = (input, callback) => {
   repository.executeProcedure(sqlQuery.MasterSetting.getStatus, request => {
     return request
@@ -149,10 +146,20 @@ const saveMergeDevices = (input, callback) => {
   }, callback)
 }
 
+// Todo: unRegisterDevicesSearch Store Procedure
+const unRegisterDevicesSearch = (input, callback) => {
+  repository.executeProcedure(sqlQuery.unRegisterDevicesSearch.getStatus, request => {
+    return request
+      .input(sqlQuery.unRegisterDevicesSearch.Parameters.page, sql.VarChar(36), input.page)
+      .input(sqlQuery.unRegisterDevicesSearch.Parameters.perPage, sql.VarChar(max), input.perPage)
+      .input(sqlQuery.unRegisterDevicesSearch.Parameters.filter, sql.VarChar(36), input.filter)
+  }, callback)
+}
+
 const getStores = (input, callback) => {
   repository.executeProcedure(sqlQuery.Stores.getAllStores, request => {
     return request
-      .input(sqlQuery.Stores.Parameters.User_UID, sql.VarChar(32), input.User_UID)
+      .input(sqlQuery.Stores.Parameters.User_UID, sql.VarChar(32), input.userUid)
       .input(sqlQuery.Stores.Parameters.isAdmin, sql.Int, input.isAdmin)
       .input(sqlQuery.Stores.Parameters.criteria, sql.VarChar(100), input.criteria)
       .input(sqlQuery.Stores.Parameters.filter, sql.VarChar(100), input.filter)

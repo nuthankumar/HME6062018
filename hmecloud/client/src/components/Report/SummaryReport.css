@@ -725,10 +725,9 @@ span.redFont {
     margin-left: 7px;
 }
 
-span.StoreTitile {
-  width: 72px;
+span.StoreTitile.level-0 {
     display: inline-block;
-    width: 379px !important;
+    width: 400px !important;
     white-space: nowrap;
     overflow: hidden;
     -o-text-overflow: ellipsis;
@@ -810,7 +809,10 @@ span.StoreBrand {
   .storesTooltip span{
     color: black !important;
   }
-
+.storesDots:hover{
+  color:red !important;
+  text-decoration:underline !important;
+}
 .selectAStore {
     color:red !important;
 }

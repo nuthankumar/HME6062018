@@ -80,10 +80,3 @@
     border-right: 1px solid #fff;
 }
 
-.theader th.actcold:after {
-    content: " \2193";
-}
-
-.theader th.actcol::after {
-    content: " ↑";
-}

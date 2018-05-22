@@ -1,36 +1,54 @@
-{/* <div class="per_page_cont">
-<span class="per_page">
-    Show 
-    <select id="per_show">
-        <option value="10">10&nbsp;</option>
-        <option value="25">25&nbsp;</option>
-        <option value="50">50&nbsp;</option>
-        <option value="10000">All&nbsp;</option>
-    </select>
-    items per page
-</span>
-</div>
-<div class="cloud_pagination">
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import ReactPaginate from 'react-paginate';
+import $ from 'jquery';
 
-<div class="pagination ">
 
-<span class="previous">&lt;&lt;</span>
+ class Pagination extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: 10
+    }
+    this.PageSizeChange = this.PageSizeChange.bind(this)
+  }
+  PageSizeChange(event) {
+    this.setState({ value: event.target.value });
+    this.props.PageSizeValueChange(parseInt(event.target.value));
+  }
+  OnPageChange = (data) => {
+    let selected = data.selected;
+    let offset = Math.ceil(selected * this.props.perPage);
+    this.props.offset(offset);
+  };
 
-    <span class="current">1</span>
+  render() {
+    return (
 
-    <a href="/index.cfm?pg=SettingsDevices&amp;path=Main&amp;page=2">2</a>
+      <div>
+        <select id="per_show" onChange={this.PageSizeChange} value={this.state.value}>
+          <option value="10">10</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+          <option value="10000">All</option>
+        </select>
+        <ReactPaginate previousLabel={"<<"}
+          nextLabel={">>"}
+          breakLabel={<a>...</a>}
+          breakClassName={"break-me"}
+          pageCount={this.props.recordCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={6}
+          onPageChange={this.OnPageChange}
+          containerClassName={"pagination"}
+          subContainerClassName={"pages pagination"}
+          activeClassName={"active"} />
+        <span class="results">Showing 1 - 10 of ({this.props.recordCount}) Results</span>
+      </div>
+    );
+  }
+};
 
-    <a href="/index.cfm?pg=SettingsDevices&amp;path=Main&amp;page=3">3</a>
 
-    <a href="/index.cfm?pg=SettingsDevices&amp;path=Main&amp;page=4">4</a>
-... 
-    <a href="/index.cfm?pg=SettingsDevices&amp;path=Main&amp;page=11230">11230</a>
+export default Pagination;
 
-    <a href="/index.cfm?pg=SettingsDevices&amp;path=Main&amp;page=11231">11231</a>
-
-<a href="/index.cfm?pg=SettingsDevices&amp;path=Main&amp;page=2" class="next">&gt;&gt;</a>
-
-</div>
-
-</div>
-<span class="results">Showing 1 - 10 of (112310) Results</span> */}
