@@ -4,7 +4,7 @@ import ReactPaginate from 'react-paginate';
 import $ from 'jquery';
 
 
- class Pagination extends Component {
+class Pagination extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,26 +24,31 @@ import $ from 'jquery';
 
   render() {
     return (
-
-      <div>
-        <select id="per_show" onChange={this.PageSizeChange} value={this.state.value}>
-          <option value="10">10</option>
-          <option value="25">25</option>
-          <option value="50">50</option>
-          <option value="10000">All</option>
-        </select>
-        <ReactPaginate previousLabel={"<<"}
-          nextLabel={">>"}
-          breakLabel={<a>...</a>}
-          breakClassName={"break-me"}
-          pageCount={this.props.recordCount}
-          marginPagesDisplayed={2}
-          pageRangeDisplayed={6}
-          onPageChange={this.OnPageChange}
-          containerClassName={"pagination"}
-          subContainerClassName={"pages pagination"}
-          activeClassName={"active"} />
-        <span class="results">Showing 1 - 10 of ({this.props.recordCount}) Results</span>
+      <div >
+        <div>
+          <div className="dropDown_show">
+            Show <span></span>
+            <select id="per_show" onChange={this.PageSizeChange} value={this.state.value}>
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="10000">All</option>
+            </select>
+            <span></span> items per page
+       </div>
+          <ReactPaginate previousLabel={"<<"}
+            nextLabel={">>"}
+            breakLabel={<a>...</a>}
+            breakClassName={"break-me"}
+            pageCount={this.props.pageCount}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={6}
+            onPageChange={this.OnPageChange}
+            containerClassName={"pagination"}
+            subContainerClassName={"pages pagination"}
+            activeClassName={"active"} />
+          <span class="results">Showing 1 - 10 of ({this.props.pageCount}) Results</span>
+        </div>
       </div>
     );
   }
