@@ -3,6 +3,8 @@ import './Stores.css'
 
 import t from '../Language/language'
 import * as languageSettings from '../Language/languageSettings'
+const Online = require("../../images/connection_online.png");
+const Offline = require("../../images/connection_offline.png");
 
 class SystemStatus extends Component {
     constructor(props) {
@@ -32,18 +34,18 @@ class SystemStatus extends Component {
                                 </tr>
                                 <tr>
                                     <th><span>{t[language].settingsStoresSystemVersion}</span></th>
-                                    <td>2.31.7</td>
+                                    <td>{displayData.Device_MainVersion}</td>
                                 </tr>
                                 <tr>
                                     <th><span>{t[language].settingsStoresSystemVersion}</span></th>
-                                    <td>A.2.31</td>
+                                    <td>{displayData.Device_SettingVersion}</td>
                                 </tr>
 
                                 <tr>
                                     <th><span>{t[language].settingsDevicesRegisteredToStoreInfo}</span></th>
                                     <td>
                                         <ul>
-                                            <li><a href="./?pg=SettingsStores&amp;st=Edit&amp;suid=5D8B2DED97894183927020E4CCB0700E">{displayData.Store_Name}</a></li>
+                                            <li><a href="./?pg=SettingsStores&amp;st=Edit&amp;suid=5D8B2DED97894183927020E4CCB0700E">{displayData.Store_Name} - {displayData.Store_Number}</a></li>
                                             <li>,</li>
                                         </ul>
                                     </td>
@@ -54,21 +56,21 @@ class SystemStatus extends Component {
                                 </tr>
                                 <tr className={(this.state.isMasterSettings ? '' : 'hidden')}>
                                     <th><span>{t[language].settingsStoresSerialNumber}</span></th>
-                                    <td>E07X0508</td>
+                                    <td>{displayData.Device_SerialNumber}</td>
                                 </tr>
                                 <tr className={(this.state.isMasterSettings ? '' : 'hidden')}>
                                     <th><span>{t[language].StoreSettingsHeaderStatus}</span></th>
                                     <td>
-                                        <img src="/images/connection_offline.png" class="cstat" alt="Device Offline" /><span class="cstat">Offline</span>
+                                    <img src={Offline} className="cstat on_img_margin" alt="Device Offline"/><span className="cstat">Offline</span>
                                     </td>
                                 </tr>
                                 <tr className={(this.state.isMasterSettings ? '' : 'hidden')}>
                                     <th><span>{t[language].settingsDevicesFirstActivity}</span></th>
-                                    <td>February 23, 2018 14:51</td>
+                                    <td>{displayData.Device_Created_DTS}</td>
                                 </tr>
                                 <tr className={(this.state.isMasterSettings ? '' : 'hidden')}>
                                     <th><span>{t[language].settingsDevicesLastActivity}</span></th>
-                                    <td>February 23, 2018 18:18 </td>
+                                    <td>{displayData.Device_LastMod_DTS}</td>
                                 </tr>
                                 <tr className={(this.state.isMasterSettings ? '' : 'hidden')}>
                                     <th><span>{t[language].settingsDevicesNumberOfRecords}</span></th>

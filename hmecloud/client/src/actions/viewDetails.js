@@ -10,7 +10,7 @@ function getStoreSuccess(stores){
     }
 } 
 
-export const initViewStore = (duid='AD3525BB-2647-479C-8F37-34157ED67854') => {
+export const initViewStore = (duid='5D665CCD-83B6-4A48-9483-E4CB3450578E') => {
     debugger
     this.api = new Api()
     let stores = {}

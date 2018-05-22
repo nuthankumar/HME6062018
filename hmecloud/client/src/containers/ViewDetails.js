@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import './ViewDetails.css'
 import t from '../components/Language/language'
 import * as languageSettings from '../components/Language/languageSettings'
 import SystemSettings from '../components/Stores/SystemSettings'
@@ -28,15 +28,18 @@ class ViewDetails extends Component {
         console.log('okkkk', this.props.storeViewDetails)
         if(this.props.storeViewDetails !=undefined){
         return (
-            <div>
-                <SystemSettings data={this.props.storeViewDetails}/>
-                <SystemStatus data={this.props.storeViewDetails}/>
+            <div className='deviceDetails'>
+                <div className='col-xs-4'>
+                    <SystemStatus data={this.props.storeViewDetails}/>
+                </div>
+                <div className='col-xs-8'>
+                    <SystemSettings data={this.props.storeViewDetails}/>
+                </div>
             </div>
         )}
         else{
             return(
-                <div>Loading
-                    </div>
+                <div>Loading</div>
             )
         }
     }
