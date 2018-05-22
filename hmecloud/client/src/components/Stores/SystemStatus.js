@@ -46,7 +46,8 @@ class SystemStatus extends Component {
                                     <td>
                                         <ul>
                                             <li><a href="./?pg=SettingsStores&amp;st=Edit&amp;suid=5D8B2DED97894183927020E4CCB0700E">{displayData.Store_Name} - {displayData.Store_Number}</a></li>
-                                            <li>,</li>
+                                            <li>{displayData.Store_AddressLine1}</li>
+                                            <li>{displayData.Store_Locality}, {displayData.Store_Region}</li>
                                         </ul>
                                     </td>
                                 </tr>

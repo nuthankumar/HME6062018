@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import './Stores.css'
 import {
     Accordion,
     AccordionItem,
