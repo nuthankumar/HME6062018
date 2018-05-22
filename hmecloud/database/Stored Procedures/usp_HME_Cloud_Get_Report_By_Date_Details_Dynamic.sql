@@ -18,16 +18,9 @@ GO
 -- -----------------------------------------------------------
 -- 1.		13/04/2018		Swathi Kumar	Added Subtotal calculation
 -- 2.		14/05/2018		Jayaram			Dynamic events include
+-- 3.		22/05/2018		Ramesh			Add LinkedServerName,DatabaseName
 -- ===========================================================
-
---select * from tbl_Users
---EXEC [dbo].[usp_GetGroupHierarchy] @AccountId = 1333, @UserUid='qwe43567yu89076tyuio9876tgbvt54r'
--- exec [usp_HME_Cloud_Get_Report_By_Date_Details_dynamic] '14,15', '2018-02-23', '2018-02-26', '2018-02-23 00:00:00' , '2018-02-26 12:00:00', 11, 'AC',1, '68LKBP85C1SKH1FI3M7X40CJHKGU07FZ'
---
---exec usp_HME_Cloud_Get_Report_By_Week_Details @Device_IDs='14,15',@StoreStartDate='2018-02-23',@StoreEndDate='2018-02-26',@InputStartDateTime=N'2018-02-23 00:00:00',@InputEndDateTime=N'2018-02-26 23:59:59',@ReportType='AC',@LaneConfig_ID=1,@UserUID=N'68LKBP85C1SKH1FI3M7X40CJHKGU07FZ'
--- ===========================================================
---exec usp_HME_Cloud_Get_Report_By_Daypart_Details @Device_IDs='15,16',@StoreStartDate='2018-03-24',@StoreEndDate='2018-03-24',@InputStartDateTime=N'2018-03-24 00:00:00',@InputEndDateTime=N'2018-03-24 23:59:59',@ReportType='AC',@UserUID=NULL
---exec usp_HME_Cloud_Get_Report_By_Date_Details_Dynamic '','2018-03-20','2018-03-26',N'2018-03-20 00:00:00',N'2018-03-26 10:30:00','11','AC',1
+--exec usp_HME_Cloud_Get_Report_By_Date_Details_Dynamic '111447,111446','2018-03-20','2018-03-26',N'2018-03-20 00:00:00',N'2018-03-26 10:30:00','11','AC',1,'CEO7JK0VUSRJZFXXC0J1WW0I0E4CHD2M'
 
 CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details_Dynamic](
 	@Device_IDs varchar(500),
@@ -38,7 +31,9 @@ CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details_Dynamic](
 	@CarDataRecordType_ID varchar(255) = '11',
 	@ReportType char(2) = 'AC',   -- AC: cumulative  TC: Time Slice
 	@LaneConfig_ID tinyint = 1,
-	@UserUID NVARCHAR(50)
+	@UserUID NVARCHAR(50),
+	@LinkedServerName VARCHAR(100) = 'POWCLOUDBI_UAT_R',
+	@DatabaseName VARCHAR(100) ='db_qsrdrivethrucloud_ods_engdev'
 )
 AS
 BEGIN
@@ -119,9 +114,12 @@ BEGIN
 	*************************************/
 
 	-- pull in raw data from proc
-	INSERT INTO #raw_data
-	EXECUTE dbo.usp_HME_Cloud_Get_Report_Raw_Data @Device_IDs, @StoreStartDate, @StoreEndDate, @StartDateTime, @EndDateTime, @CarDataRecordType_ID, @ReportType, @LaneConfig_ID
+	SET @query ='INSERT INTO #raw_data
+	EXECUTE ['+@LinkedServerName+'].['+@DatabaseName+'].dbo.usp_HME_Cloud_Get_Report_Raw_Data '''+@Device_IDs +''', '''+CONVERT(VARCHAR(20), @StoreStartDate,23) +''', '
+	+ ''''+CONVERT(VARCHAR(20),@StoreEndDate,23) +''', ''' + CONVERT(VARCHAR(30),@StartDateTime, 21)+''', '''+ CONVERT(VARCHAR(30),@EndDateTime, 21) +''', '''+@CarDataRecordType_ID+''', '''+ @ReportType+''''
 
+	EXEC(@query)
+	SET @query =''
 	INSERT INTO #GroupDetails(GroupName, Store_ID, Store_Name, Device_ID)
 	SELECT DISTINCT g.GroupName,ts.Store_ID, ts.Store_Name , td.Device_ID
 	FROM tbl_Stores ts INNER JOIN tbl_DeviceInfo td ON ts.Store_ID = td.Device_Store_ID
@@ -318,7 +316,8 @@ BEGIN
 		ORDER BY  ID,StoreDate, StoreNo;'
 	ELSE
 		SET @query = N'
-		SELECT	*, RANK () OVER (ORDER BY ID, Storedate) DayID
+		SELECT	ID , StoreNo, Store_Name, Device_UID, StoreDate, Device_ID, GroupName, Store_ID, Total_Car
+		 , RANK () OVER (ORDER BY ID, Storedate) DayID
 		FROM #rollup_data ORDER BY ID, StoreDate, StoreNo;'
 
 	/***********************************
