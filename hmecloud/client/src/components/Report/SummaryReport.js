@@ -120,7 +120,7 @@ export default class SummaryReport extends Component {
             </table>)
         } else {
             return (<div>
-                <div className='col-xs-3 left-padding-none'>
+                <div className='col-xs-3 left-padding-none right-padding-none'>
                     <h2 className='report-start-time-header'>
                         <span className='report-start-time'>{t[language].ReportsStart}</span>
                         <span className='report-start-time-value'>{
@@ -543,7 +543,7 @@ export default class SummaryReport extends Component {
 
                     <div className='row'>
                       <div className={'col-xs-4 pull-left show-page-toggle ' + (this.state.reportData.singleStore ? 'hide' : 'show' )}> <span className='show-label'>Show:</span> <span className={(this.state.reportData.pagination) ? 'inactive-link' : 'active-link'} onClick={() => this.switchAllPage("all")}>All /</span><span className={(this.state.reportData.pagination) ? 'active-link' : 'inactive-link'} onClick={() => this.switchAllPage("pages")}>Pages</span></div>
-                      <div className={'col-xs-6 reports-terms ' + (this.state.reportData.singleStore ? 'hide' : 'show')}> <span className= 'asterics'>*</span>Derived performance to goal (Lane Queue goal = Lane Total goal - Menu goal - Service goal)</div>
+                      <div className={'col-xs-6 reports-terms ' + (this.state.reportData.singleStore ? 'hide' : 'show')}> <span className= 'asterics'>*</span>{t[language].ReportsDerivedPerformancetoGoal}</div>
                       <div className={'col-xs-2 left-padding-none pull-right ' + (this.state.reportData.pagination &&  this.state.reportData.singleStore ? 'show' : 'hide')}>
                           <PaginationComponent pagination={this.state.reportData.pagination} totalPages={this.state.reportData.NoOfPages}  curPage={this.state.reportData.curPage} handlePreviousPage={(curPage, totalPages) => this.handlePreviousPage(curPage, totalPages)} handleNextPage={(curPage, totalPages) => this.handleNextPage(curPage, totalPages)} disablePrevButton={this.state.reportData.disablePrevButton} disableNextButton={this.state.reportData.disableNextButton} />
                       </div>
