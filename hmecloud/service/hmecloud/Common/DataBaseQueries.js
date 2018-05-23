@@ -208,6 +208,7 @@ const sqlQueries = {
   Stores: {
     getAllStores: '[dbo].[usp_getUserStoreList]',
     getStoreDetailsByUID: '[dbo].[usp_getStoreInformations]',
+    saveStoreDetails: '[dbo].[usp_HME_updateStoreDetails]',
     Parameters: {
       User_UID: 'UserUid',
       isAdmin: 'isAdmin',
@@ -217,7 +218,12 @@ const sqlQueries = {
       SortingType: 'SortingType',
       RecordPerPage: 'RecordPerPage',
       PageNumber: 'PageNumber',
-      Store_UID: 'Store_UID'
+      Store_UID: 'Store_UID',
+      Company_ID: 'Company_ID',
+      AzureData: 'AzureData',
+      Store_ID: 'Store_ID',
+      timeZone: 'timeZone'
+
     }
   },
   Device: {
