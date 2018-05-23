@@ -258,17 +258,39 @@ export default class SummaryReport extends Component {
             }
 
             if (request.timeMeasure < 4) {
-                 if(storeId.Day){
-                    request.fromDate = storeId.Day.timeSpan
-                    request.toDate = storeId.Day.timeSpan
-                 }else if(storeId.Week){
-                    //  let fromYear  = request.fromDate.split("-")[0]
-                    //  let toYear = request.toDate.split("-")[0]
-                    //  request.fromDate = fromYear.concat('/'+storeId.Week.timeSpan.split("-")[0])
-                    //  request.toDate = toYear.concat('/'+storeId.Week.timeSpan.split("-")[1])
-                     request.fromDate = storeId.WeekStartDate.value
-                     request.toDate = storeId.WeekEndDate.value
-                 }
+                //  if(storeId.Day || request.timeMeasure === 1){
+                //      if(storeId.Day){
+                //         request.fromDate = storeId.Day.timeSpan
+                //         request.toDate = storeId.Day.timeSpan
+                //      }else if(storeId.Day === undefined && request.timeMeasure === 1){
+                //         request.fromDate = storeId.StoreDate.value
+                //         request.toDate = storeId.StoreDate.value
+                //      }
+                //  }else if(storeId.Week || request.timeMeasure === 3){
+                //     //  let fromYear  = request.fromDate.split("-")[0]
+                //     //  let toYear = request.toDate.split("-")[0]
+                //     //  request.fromDate = fromYear.concat('/'+storeId.Week.timeSpan.split("-")[0])
+                //     //  request.toDate = toYear.concat('/'+storeId.Week.timeSpan.split("-")[1])
+                //      request.fromDate = storeId.WeekStartDate.value
+                //      request.toDate = storeId.WeekEndDate.value
+                //  }else if(storeId.Daypart || request.timeMeasure === 2){
+                //     if(storeId.Daypart){
+                //         request.fromDate = storeId.Daypart.timeSpan
+                //         request.toDate = storeId.Daypart.timeSpan
+                //      }else if(storeId.Day === undefined && request.timeMeasure === 2){
+                //         request.fromDate = storeId.StoreDate.value
+                //         request.toDate = storeId.StoreDate.value
+                //      }
+                //  }
+
+                if( this.state.reportData.reportType === 'd' || this.state.reportData.reportType === 'md' || this.state.reportData.reportType === 'mdp' || this.state.reportData.reportType === 'dp'){
+                    request.fromDate = storeId.StoreDate.value
+                    request.toDate = storeId.StoreDate.value
+                }else if(this.state.reportData.reportType === 'w' || this.state.reportData.reportType === 'mw'){
+                    request.fromDate = storeId.WeekStartDate.value
+                    request.toDate = storeId.WeekEndDate.value
+                }
+
                  request.fromDate = moment(request.fromDate).format('YYYY-MM-DD')
                  request.toDate =  moment(request.toDate).format('YYYY-MM-DD')
              //   let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
