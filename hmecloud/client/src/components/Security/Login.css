@@ -335,6 +335,22 @@ width:197px;
 }
 }
 
+@media screen and (max-width: 1892px) and (min-width: 1541px)
+{
+.selectAllLabel {
+    padding-left: 33px;
+    width: 275px;
+}
+}
+@media screen and (max-width: 1920px) and (min-width: 1892px)
+{
+.selectAllLabel {
+    padding-left: 33px;
+    width: 260px;
+}
+}
+
+
 .BrandTitle
 {
     width: 100%;
