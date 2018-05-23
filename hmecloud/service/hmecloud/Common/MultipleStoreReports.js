@@ -121,6 +121,8 @@ Device.prototype.multipleStore = function () {
         reportInfo['WeekEndDate'] = {'value': (value || null)}
       } else if (key === 'Total_Car') {
         reportInfo['Total Cars'] = {'value': (value || null)}
+      } else if (key === 'StoreDate') {
+        reportInfo['StoreDate'] = {'value': (value || null)}
       } else {
         reportInfo[`${key}`] = {'value': `${dateUtils.convertSecondsToMinutes(parseInt(value), timeFormat)}`, 'color': `${getColor(key, value)}`}
       }
