@@ -98,6 +98,8 @@ const sqlQueries = {
     }
   },
   Role: {
+    Parameters: {
+    },
     getRoles: '[dbo].[usp_GetRoles]'
   },
   DeviceStatus: {
@@ -203,6 +205,12 @@ const sqlQueries = {
   UserUID: {
     Parameters: {
       UserUID: 'UserUID'
+    }
+  },
+  Server: {
+    Parameters: {
+      DatabaseName: 'DatabaseName',
+      LinkedServerName:'LinkedServerName'
     }
   },
   Stores: {
