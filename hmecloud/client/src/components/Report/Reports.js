@@ -592,6 +592,8 @@ class Report extends Component {
   getSavedReports() {
       let url = Config.apiBaseUrl + CommonConstants.apiUrls.getSavedTemplates
       this.api.getData(url, data => {
+
+          console.log(data);
           this.state.savedTemplates = []
           this.setState({
           savedTemplates: data.data

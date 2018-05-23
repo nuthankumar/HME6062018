@@ -8,6 +8,7 @@ import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './SummaryReport.css'
 import '../../../node_modules/font-awesome/css/font-awesome.min.css'
 import moment from 'moment'
+const _ = require("underscore");
 export default class SummaryReportDataComponent extends Component {
   constructor(props) {
     super(props)
@@ -21,24 +22,28 @@ export default class SummaryReportDataComponent extends Component {
     this.displayLongestTimes = this.displayLongestTimes.bind(this)
     this.summaryDataTableCell = this.summaryDataTableCell.bind(this)
   }
-  
 
-
-  translateDate(date){
-    let language = this.state.currentLanguage
-    let dateTobeTranslated = date.split(" ");
-    let translatedDate =  t[language][dateTobeTranslated[0]]+' '+dateTobeTranslated[1]+' '+(dateTobeTranslated[2]?dateTobeTranslated[2]:'');
-    return translatedDate;
-  }
-
-  // translateFromTo(fromTo){
-  //   // to-do split od text to be removed
-  //   let language = this.state.currentLanguage
-  //   console.log(fromTo)
-  //   let string = fromTo.split(" ")
-  //   let fromToModified = (string[0]? this.translateDate(moment(string[0]).format("MMM D,YYYY")):'')+' - '+(string[2] ? this.translateDate(moment(string[2]).format("MMM D,YYYY")):'') + (t[language][string[3]]?t[language][string[3]]: string[3])
-  //   return fromToModified;
-  // }
+  translateFromTo(fromTo){
+    // to-do split od text to be removed
+    if(fromTo) {
+      let language = this.state.currentLanguage
+      let string = fromTo.split(" ")
+       string =  _.filter(string,function (value) {
+        return value;
+       })
+      let fromToModified = null;
+      if (this.props.reportData.response.timeMeasure  == 1) {
+        fromToModified = (t[language][string[0]]? t[language][string[0]] :string[0])+' '+string[1]+' '+ (t[language][string[2]]?t[language][string[2]]:string[2])+' '+ string[3] +' '+(t[language][string[4]]? t[language][string[4]] :string[4])+' '+ string[5] +' '+ (t[language][string[6]]?t[language][string[6]]:string[6]);
+      }
+      else if(this.props.reportData.response.timeMeasure  == 2) {
+        fromToModified = (t[language][string[0]]? t[language][string[0]] :string[0])+' '+string[1]+' '+string[2]+' '+(t[language][string[3]]?t[language][string[3]]:string[3])+' '+ string[4];
+      }
+      else if (this.props.reportData.response.timeMeasure  == 3) {
+        fromToModified = (t[language][string[0]]? t[language][string[0]] :string[0])+' '+string[1]+' '+ (t[language][string[2]]?t[language][string[2]]:string[2])+' '+ string[3] +' '+(t[language][string[4]]? t[language][string[4]] :string[4])+' '+ string[5] +' '+ (t[language][string[6]]?t[language][string[6]]:string[6]);
+      }
+      return fromToModified;
+    }
+   }
 
   displaySummarizedData(reportData) {
     let language = this.state.currentLanguage
@@ -50,7 +55,7 @@ export default class SummaryReportDataComponent extends Component {
           return reportData.response.timeMeasureType.map((reportItem) => {
           return (
             <div className='report-data-unit'>
-              <div className={'col-xs-12 from-to-detail ' + this.dynamicColumnData.showFromToTime}><span>{reportItem.title}</span></div>
+              <div className={'col-xs-12 from-to-detail ' + this.dynamicColumnData.showFromToTime}><span>{this.translateFromTo(reportItem.title)}</span></div>
               <table className='summaryreport-table'>
                 <tbody>
                   {this.getSummarytableHeader(reportData.response.eventList)}

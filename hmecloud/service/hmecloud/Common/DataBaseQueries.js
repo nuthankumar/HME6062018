@@ -98,10 +98,22 @@ const sqlQueries = {
     }
   },
   Role: {
+    Parameters: {
+    },
     getRoles: '[dbo].[usp_GetRoles]'
   },
   DeviceStatus: {
     getStatus: '[dbo].[usp_getDeviceById]'
+  },
+  merge: {
+    parameters: {
+      StoreUid: 'StoreUid',
+      DeviceUid: 'DeviceUid'
+    },
+    getStatus: {
+      check: '[dbo].[usp_MergeStoresCheck]',
+      info: '[dbo].[usp_MergeStoresDeviceInfo]'
+    }
   },
   MasterSetting: {
     getStatus: '[dbo].[usp_GetMasterSettings]',
@@ -205,9 +217,16 @@ const sqlQueries = {
       UserUID: 'UserUID'
     }
   },
+  Server: {
+    Parameters: {
+      DatabaseName: 'DatabaseName',
+      LinkedServerName:'LinkedServerName'
+    }
+  },
   Stores: {
     getAllStores: '[dbo].[usp_getUserStoreList]',
     getStoreDetailsByUID: '[dbo].[usp_getStoreInformations]',
+    saveStoreDetails: '[dbo].[usp_HME_updateStoreDetails]',
     Parameters: {
       User_UID: 'UserUid',
       isAdmin: 'isAdmin',
@@ -217,7 +236,12 @@ const sqlQueries = {
       SortingType: 'SortingType',
       RecordPerPage: 'RecordPerPage',
       PageNumber: 'PageNumber',
-      Store_UID: 'Store_UID'
+      Store_UID: 'Store_UID',
+      Company_ID: 'Company_ID',
+      AzureData: 'AzureData',
+      Store_ID: 'Store_ID',
+      timeZone: 'timeZone'
+
     }
   },
   Device: {

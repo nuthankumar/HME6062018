@@ -22,15 +22,16 @@ const execute = (query, parameters, callback) => {
 
 /**
  * The method can be used to execute the SQL procedure
+ * @param  {obj} connectionString SQL config to run in database
  * @param  {obj} procedure SQL procedure to run in database
  * @param  {obj} prepareParameters SQL paramters to be used to execute the procedure
  * @param  {funct} callback Function will be called once the query executed.
  * @public
  */
-const executeProcedure = (procedure, prepareParameters, callback) => {
+const executeSQL = (config, procedure, prepareParameters, callback) => {
   const output = {}
 
-  const sqlPool = new sql.ConnectionPool(dataBase.sqlConfig, err => {
+  const sqlPool = new sql.ConnectionPool(config, err => {
     if (err) {
       output.data = err
       output.status = false
@@ -60,7 +61,30 @@ const executeProcedure = (procedure, prepareParameters, callback) => {
   })
 }
 
+/**
+ * The method can be used to execute the SQL procedure
+ * @param  {obj} procedure SQL procedure to run in database
+ * @param  {obj} prepareParameters SQL paramters to be used to execute the procedure
+ * @param  {funct} callback Function will be called once the query executed.
+ * @public
+ */
+const executeProcedure = (procedure, prepareParameters, callback) => {
+  executeSQL(dataBase.sqlConfig, procedure, prepareParameters, callback)
+}
+
+/**
+ * The method can be used to execute the SQL procedure
+ * @param  {obj} procedure SQL procedure to run in database
+ * @param  {obj} prepareParameters SQL paramters to be used to execute the procedure
+ * @param  {funct} callback Function will be called once the query executed.
+ * @public
+ */
+const executeOdsProcedure = (procedure, prepareParameters, callback) => {
+  executeSQL(dataBase.ods, procedure, prepareParameters, callback)
+}
+
 module.exports = {
   execute,
-  executeProcedure
+  executeProcedure,
+  executeOdsProcedure
 }

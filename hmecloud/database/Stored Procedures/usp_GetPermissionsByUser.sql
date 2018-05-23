@@ -1,5 +1,5 @@
 
-/****** Dropping the StoredProcedure [dbo].[usp_GetRoles] if already exists *****/
+/****** Dropping the StoredProcedure [dbo].[usp_GetPermissionsByUser] if already exists *****/
 IF (EXISTS(SELECT *
 FROM sys.objects
 WHERE [name] = 'usp_GetPermissionsByUser' AND [type] ='P'))

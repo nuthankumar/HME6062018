@@ -528,6 +528,7 @@ const language = [
     'ReportsWeightedAverage': '(W-Avg)',
     'ReportsShow': 'Show',
     'ReportsTotalCars': 'Total Cars',
+    'Total Cars': 'Total Cars',
     'ReportsPages': 'Pages',
     'ReportsOpen': 'OPEN',
     'ReportsClose': 'CLOSE',
@@ -544,6 +545,7 @@ const language = [
     'Cashier': 'Cashier',
     'Pickup': 'Pickup',
     'LaneQueue': 'Lane Queue',
+    'Lane Queue': 'Lane Queue',
     'Metrics': 'Metrics:',
     'LaneTotal': 'Lane Total',
     'LaneTotal2': 'Lane Total 2',
@@ -791,6 +793,13 @@ const language = [
     'Nov':'Nov',
     'Dec':'Déc',
 
+    'Merge': 'Merge',
+    'SelectSystem': 'Select System(s)',
+    'System': 'System',
+    'SelectTargetStore': 'Select Target Store',
+    'EnterStoreNumber': 'Enter Store Number',
+    'Search':'Search',
+    'MustSelectStLeastOneSystem': 'Must select at least one system'
   },
 
   // French
@@ -1330,6 +1339,7 @@ const language = [
     'ReportsWeightedAverage': '(W-Moy)',
     'ReportsShow': 'Afficher',
     'ReportsTotalCars': 'Total voitures',
+    'Total Cars': 'Total voitures',
     'ReportsPages': 'Pages',
     'ReportsOr': 'OU',
     'Order': 'Ordre',
@@ -1343,6 +1353,7 @@ const language = [
     'Cashier': 'Caisse',
     'Pickup': 'Ramassage',
     'LaneQueue': 'File d\u2019attente de l\u2019all\u00E9e',
+    'Lane Queue': 'File d\u2019attente de l\u2019all\u00E9e',
     'Metrics': 'Metriques:',
     'LaneTotal': 'Total all\u00E9e',
     'Lane Total 2': 'Total all\u00E9e 2',
@@ -1568,10 +1579,9 @@ const language = [
     'userDeleteFailed': "La suppression de l'utilisateur a échoué",
     'W-Avg':'W-Avg',
     'Total Day':'Total Jour',
-    'Total Daypart':'Total Daypart',
+    'Total Daypart':'Total Partie du jour',
     'Total Week':'Total de la semaine',
     'SubTotal':'Sous total',
-
     'useragreementUrl' : 'HMECLOUD_Terms_and_Conditions_fr.pdf',
     'privacypolicyUrl' : 'HMECLOUD_Privacy_Policy_fr.pdf',
     'californiasupplyUrl' : 'California_Transparency_Supply_Chains_Agreement_fr.pdf',
