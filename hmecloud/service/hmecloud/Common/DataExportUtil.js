@@ -25,8 +25,8 @@ const generateCSVReport = (results, input, csvInput, reportType, eventHeaders, c
         store.Week = moment(item.WeekStartDate).format('MM/DD/YYYY') + '-' + moment(item.WeekEndDate).format('MM/DD/YYYY')
       } else if (input.body.deviceIds.length > 1) {
         store.Week = moment(item.WeekStartDate).format('MM/DD/YYYY') + '-' + moment(item.WeekEndDate).format('MM/DD/YYYY')
-        store.Groups = item.GroupName
-        store.Store = item.Store_Name
+        store.Groups = item.GroupName ? item.GroupName : ''
+        store.Store = item.Store_Name ? item.Store_Name : ''
         if (item.StoreNo === 'Total Week' && item.Store_Name === null) {
           store.Week = 'Total Week'
           store.Store = ''
@@ -39,42 +39,40 @@ const generateCSVReport = (results, input, csvInput, reportType, eventHeaders, c
       }
     }
     // Daypart
-    if (reportType.reportName === 'Daypart') {
+    if (reportType.reportName === 'daypart') {
       if (item.StoreNo === 'Total Daypart') {
         store.Daypart = 'Total Daypart'
       } else if (input.body.deviceIds.length === 1) {
         store.Daypart = moment(item.StoreDate).format('MM/DD/YYYY')
       } else if (input.body.deviceIds.length > 1) {
-        store.Groups = item.GroupName
-        store.Stores = item.Store_Name
+        store.Daypart = moment(item.StoreDate).format('MM/DD/YYYY')
+        store.Groups = item.GroupName ? item.GroupName : ''
+        store.Stores = item.Store_Name ? item.Store_Name : ''
         if (item.StoreNo === 'Total Daypart') {
           store.Daypart = 'Total Daypart'
           store.Stores = ''
         } else if (item.StoreNo === 'SubTotal') {
           store.Daypart = 'SubTotal'
           store.Stores = ''
-        } else {
-          store.Daypart = moment(item.StoreDate).format('MM/DD/YYYY')
         }
       }
     }
     // Day
-    if (reportType.reportName === 'Day') {
+    if (reportType.reportName === 'day') {
       if (item.StoreNo === 'Total Day') {
         store.Day = 'Total Day'
       } else if (input.body.deviceIds.length === 1) {
         store.Day = moment(item.StoreDate).format('MM/DD/YYYY')
       } else if (input.body.deviceIds.length > 1) {
-        store.Groups = item.GroupName
-        store.Stores = item.Store_Name
+        store.Day = moment(item.StoreDate).format('MM/DD/YYYY')
+        store.Groups = item.GroupName ? item.GroupName : ''
+        store.Stores = item.Store_Name ? item.Store_Name : ''
         if (item.StoreNo === 'Total Day') {
           store.Day = 'Total Day'
           store.Stores = ''
         } else if (item.StoreNo === 'Subtotal') {
           store.Day = 'SubTotal'
           store.Stores = ''
-        } else {
-          store.Day = moment(item.StoreDate).format('MM/DD/YYYY')
         }
       }
     }
@@ -119,5 +117,6 @@ const JsonForPDF = (data, input, reportName, pdfInput, isMultiStore) => {
 }
 
 module.exports = {
-  generateCSVReport, JsonForPDF
+  generateCSVReport,
+  JsonForPDF
  }
