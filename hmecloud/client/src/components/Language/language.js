@@ -791,6 +791,13 @@ const language = [
     'Nov':'Nov',
     'Dec':'Déc',
 
+    'Merge': 'Merge',
+    'SelectSystem': 'Select System(s)',
+    'System': 'System',
+    'SelectTargetStore': 'Select Target Store',
+    'EnterStoreNumber': 'Enter Store Number',
+    'Search':'Search',
+    'MustSelectStLeastOneSystem': 'Must select at least one system'
   },
 
   // French
