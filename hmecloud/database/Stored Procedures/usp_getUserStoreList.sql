@@ -94,7 +94,8 @@ BEGIN
 		Device_EmailAccount varchar(200),
 		Device_Timezone_ID tinyint,
 		Store_Company_ID int,
-		Group_Name varchar(200)
+		Group_Name  varchar(200),
+		GroupName varchar(200)
 	)
 
 	SET @sqlAdmin = '
@@ -163,6 +164,7 @@ SET @sqlQueryPublicPortal = 'select	Brand_Name,
 		Device_EmailAccount,
 		Device_Timezone_ID,
 		Store_Company_ID,
+		CASE WHEN grp.Group_Name IS NULL THEN ''Drive-thru'' ELSE grp.Group_Name END AS Group_Name,
 		g.GroupName
 		FROM 
 		tbl_Stores stor
@@ -209,7 +211,7 @@ IF (@isAdmin = 1)
 
 	SET @sqlAdmin = @sqlAdmin + IIF(ISNULL(@SortingColumnName,'')<>'', ' ORDER BY '+@SortingColumnName,'')
 	
-	print @sqlAdmin
+	
 	EXEC (@sqlAdmin)
 
 	IF(EXISTS(SELECT 1 FROM #Store_Details))
@@ -339,7 +341,7 @@ ELSE
 	  BEGIN
 		SET @sqlQuery = @sqlQueryPublicPortal + @StoreCond + IIF(ISNULL(@SortingColumnName,'')<>'', ' ORDER BY '+@SortingColumnName,'')
 	  END
-	 
+	 print @sqlQuery
 	  EXEC (@sqlQuery)
 
 	  EXEC usp_getUserPermissions @UserUid, @User_Department, @IsAdmin
