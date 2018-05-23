@@ -24,7 +24,7 @@ GO
 -- EXEC [dbo].[usp_GetMasterSettings]  @Device_ID = 4498, @Device_LaneConfig_ID = 1, @Device_MainVersion = '2.01.17', @Store_Company_ID = 1353, @Store_Brand_ID = 17
 -- ===========================================================
 
-ALTER PROCEDURE [dbo].[usp_GetMasterSettings]
+CREATE PROCEDURE [dbo].[usp_GetMasterSettings]
     @Device_ID				VARCHAR(36),
 	@Device_LaneConfig_ID	smallint,
 	@Device_MainVersion		VARCHAR(36),
