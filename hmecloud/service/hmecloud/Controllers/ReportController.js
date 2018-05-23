@@ -138,6 +138,7 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
     } else {
       deviceValues.eventList = []
     }
+    deviceValues.timeMeasure = this.request.body.timeMeasure
     return deviceValues
   }
 }
@@ -200,35 +201,41 @@ reports.prototype.generateCSV = function (reportResult, filter, totalPages, resp
     }
   })
 }
-// reports.prototype.generatePDF = function (reportResult, filter, totalPages, response) {
-//   let pdfInput = {}
-//   let DeviceDetails
-//   pdfInput.type = `${messages.COMMON.PDFTYPE}`
-//   if (filter === 'week') {
-//     pdfInput.reportName = `${messages.COMMON.WEEKREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
-//     pdfInput.subject = `${messages.COMMON.WEEKREPORTTITLE} ${this.request.body.openTime} ${this.request.body.toDate + (this.request.body.format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
-//   } else if (filter === 'daypart') {
-//     pdfInput.reportName = `${messages.COMMON.DAYPARTREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
-//     pdfInput.subject = `${messages.COMMON.DAYPARTREPORTNAME} ${this.request.body.openTime} ${this.request.body.toDate + (this.request.body.format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
-//   } else if (filter === 'day') {
-//     pdfInput.reportName = `${messages.COMMON.DAYREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
-//     pdfInput.subject = `${messages.COMMON.DAYREPORTNAME} ${this.request.body.openTime} ${this.request.body.toDate + (this.request.body.format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
-//   }
-//   pdfInput.email = this.request.UserEmail
-//   if (this.isSingleStore) {
-//     let singleStore = this.deviceDataPreparation(reportResult, filter, totalPages)
-//     //console.log('singleStore', JSON.stringify(singleStore))
-//     Pdfmail.singleStore(singleStore, pdfInput, isMailSent => {
-//       console.log('its starts')
-//       console.log(isMailSent)
-//     })
-//   } else {
-//     let multipleStore = this.deviceDataPreparation(reportResult, filter, totalPages)
-//     Pdfmail.mutipleStore(multipleStore, pdfInput, isMailSent => {
-//       console.log(isMailSent)
-//     })
-//   }
-// }
+reports.prototype.generatePDF = function (reportResult, filter, totalPages, response) {
+  let pdfInput = {}
+  let DeviceDetails
+  pdfInput.type = `${messages.COMMON.PDFTYPE}`
+  if (filter === 'week') {
+    pdfInput.reportName = `${messages.COMMON.WEEKREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
+    pdfInput.subject = `${messages.COMMON.WEEKREPORTTITLE} ${this.request.body.openTime} ${this.request.body.toDate + (this.request.body.format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
+  } else if (filter === 'daypart') {
+    pdfInput.reportName = `${messages.COMMON.DAYPARTREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
+    pdfInput.subject = `${messages.COMMON.DAYPARTREPORTNAME} ${this.request.body.openTime} ${this.request.body.toDate + (this.request.body.format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
+  } else if (filter === 'day') {
+    pdfInput.reportName = `${messages.COMMON.DAYREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
+    pdfInput.subject = `${messages.COMMON.DAYREPORTNAME} ${this.request.body.openTime} ${this.request.body.toDate + (this.request.body.format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
+  }
+  pdfInput.email = this.request.UserEmail
+  if (this.isSingleStore) {
+    let singleStore = this.deviceDataPreparation(reportResult, filter, totalPages)
+    Pdfmail.singleStore(singleStore, pdfInput, isMailSent => {
+      if (isMailSent) {
+        response.status(200).send(isMailSent)
+      } else {
+        response.status(400).send(isMailSent)
+      }
+    })
+  } else {
+    let multipleStore = this.deviceDataPreparation(reportResult, filter, totalPages)
+    Pdfmail.mutipleStore(multipleStore, pdfInput, isMailSent => {
+      if (isMailSent) {
+        response.status(200).send(isMailSent)
+      } else {
+        response.status(400).send(isMailSent)
+      }
+    })
+  }
+}
 // create Report
 reports.prototype.createReports = function (response) {
   let isValidation = this.validation()
@@ -236,7 +243,6 @@ reports.prototype.createReports = function (response) {
     let totalPages = this.pagination(isValidation.reportName)
     repository.getReport(this.request, isValidation.reportName, reportResult => {
       let Output
-      console.log('ReportResults', JSON.stringify(reportResult))
       if (reportResult.status) {
         if (isValidation.reportName === 'rawcardata') {
           if (this.isCSV) {
@@ -256,19 +262,18 @@ reports.prototype.createReports = function (response) {
             }
           }
         } else {
-          // if (this.isPDF) {
-          //   this.generatePDF(reportResult, isValidation, totalPages, response)
-          // } else
-          if (this.isCSV) {
+          if (this.isPDF) {
+            this.generatePDF(reportResult, isValidation, totalPages, response)
+          } else if (this.isCSV) {
             this.generateCSV(reportResult, isValidation, totalPages, response)
           } else {
             Output = this.deviceDataPreparation(reportResult, isValidation, totalPages)
-          }
-          Output.status = true
-          if (Output.status === true) {
-            response.status(200).send(Output)
-          } else {
-            response.status(400).send(Output)
+            Output.status = true
+            if (Output.status === true) {
+              response.status(200).send(Output)
+            } else {
+              response.status(400).send(Output)
+            }
           }
         }
       } else {

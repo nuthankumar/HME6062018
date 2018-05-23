@@ -8,7 +8,7 @@ const generateCSVReport = (results, input, csvInput, reportType, eventHeaders, c
   let storeDataList = []
   let format = input.body.format
   let reportDetails
-  if (reportType === 'rawcardata') {
+  if (reportType.reportName === 'rawcardata') {
     reportDetails = results
   } else {
     if (results && results.length > 0) {
@@ -18,7 +18,7 @@ const generateCSVReport = (results, input, csvInput, reportType, eventHeaders, c
   _.forEach(reportDetails, (item, key) => {
     let store = {}
     // Week
-    if (reportType === 'week') {
+    if (reportType.reportName === 'week') {
       if (item.StoreNo === 'Total Week') {
         store.Week = 'Total Week'
       } else if (input.body.deviceIds.length === 1) {
@@ -39,7 +39,7 @@ const generateCSVReport = (results, input, csvInput, reportType, eventHeaders, c
       }
     }
     // Daypart
-    if (reportType === 'Daypart') {
+    if (reportType.reportName === 'Daypart') {
       if (item.StoreNo === 'Total Daypart') {
         store.Daypart = 'Total Daypart'
       } else if (input.body.deviceIds.length === 1) {
@@ -59,7 +59,7 @@ const generateCSVReport = (results, input, csvInput, reportType, eventHeaders, c
       }
     }
     // Day
-    if (reportType === 'Day') {
+    if (reportType.reportName === 'Day') {
       if (item.StoreNo === 'Total Day') {
         store.Day = 'Total Day'
       } else if (input.body.deviceIds.length === 1) {
@@ -78,14 +78,14 @@ const generateCSVReport = (results, input, csvInput, reportType, eventHeaders, c
         }
       }
     }
-    if (reportType !== 'rawcardata') {
+    if (reportType.reportName !== 'rawcardata') {
       _.forEach(eventHeaders, (value, key) => {
         if (item[`${value}`] !== null) {
           store[`${value}`] = (dateUtils.convertSecondsToMinutes(item[`${value}`].value, format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item[`${value}`].value, format))
         }
       })
     }
-    if (reportType === 'rawcardata') {
+    if (reportType.reportName === 'rawcardata') {
       _.forEach(reportDetails[key], (value, key) => {
         store[`${key}`] = `${value}` === 'N/A' ? '' : `${value}`
       })
@@ -119,4 +119,5 @@ const JsonForPDF = (data, input, reportName, pdfInput, isMultiStore) => {
 }
 
 module.exports = {
-  generateCSVReport, JsonForPDF }
+  generateCSVReport, JsonForPDF
+ }
