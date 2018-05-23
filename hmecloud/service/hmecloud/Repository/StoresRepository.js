@@ -139,16 +139,18 @@ const saveMasterSettings = (input, callback) => {
 }
 
 const checkMergeDevices = (input, callback) => {
-  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
+  repository.executeProcedure(sqlQuery.merge.getStatus, request => {
     return request
-      .input(sqlQuery.DeviceIds.Parameters.Device_IDs, sql.VarChar(36), input.duid)
+      .input(sqlQuery.merge.Parameters.StoreUid, sql.VarChar(36), input.suids)
+      .input(sqlQuery.merge.Parameters.DeviceUid, sql.VarChar(36), input.duid)
   }, callback)
 }
 
 const mergeDevicesInfo = (input, callback) => {
-  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
+  repository.executeProcedure(sqlQuery.merge.getStatus, request => {
     return request
-      .input(sqlQuery.DeviceIds.Parameters.Device_IDs, sql.VarChar(36), input.duid)
+      .input(sqlQuery.merge.Parameters.StoreUid, sql.VarChar(36), input.suids)
+      .input(sqlQuery.merge.Parameters.DeviceUid, sql.VarChar(36), input.duid)
   }, callback)
 }
 
