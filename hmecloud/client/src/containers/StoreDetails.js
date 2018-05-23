@@ -20,9 +20,8 @@ class StoreDetails extends Component {
 componentWillMount() {   
 
   this.props.initStoresDetails(); 
-  console.log(this.props);
- // this.props.dispatch(adminStoresDetails()); 
-}
+  this.props.adminStoresDetails();
+ }
 
 
   render () {
@@ -32,8 +31,8 @@ componentWillMount() {
     let displayData = this.props.systemStats
      return (
         <div>
-          <StoreDetailsClient showStores={true} stores={this.props.storesDetails}/>
-          <StoreDetailsAdmin showStores={false} stores={this.props.storesDetails}/>
+          <StoreDetailsClient showStores={false} stores={this.props.storesDetails}/>
+          <StoreDetailsAdmin showStores={true} stores={this.props.storesDetails}/>
         </div>
       )
   }
@@ -46,16 +45,11 @@ function mapStateToProps(state) {
      }
  }
 
-//  function mapDispatchToProps(dispatch) {
-//   return bindActionCreators({
-//     initStoresDetails:initStoresDetails }, dispatch);
-//   } 
-
-
-  function matchDispatchToProps(dispatch) {
+ function matchDispatchToProps(dispatch) {
     return bindActionCreators(
       {
-        initStoresDetails:initStoresDetails
+        initStoresDetails:initStoresDetails,
+        adminStoresDetails:adminStoresDetails
       },    dispatch
     );
   } 
