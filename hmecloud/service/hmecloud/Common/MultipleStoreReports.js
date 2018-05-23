@@ -58,7 +58,7 @@ Device.prototype.multipleStore = function () {
           title: '',
           data: []
         }
-        deviceInfo.title = item['WeekStartDate'] + ' - ' + item['WeekEndDate'] + ' ' + messages.COMMON.DAYOPENCLOSE
+        deviceInfo.title = moment(item['WeekStartDate']).format('MMM D,YYYY') + ' ' + messages.COMMON.OPENVALUE + ' - ' + moment(item['WeekEndDate']).format('MMM D,YYYY') + ' ' + messages.COMMON.CLOSEVALUE
         deviceInfo.data = []
         index = item['WeekIndex']
         deviceValues.push(deviceInfo)
@@ -70,7 +70,7 @@ Device.prototype.multipleStore = function () {
           title: '',
           data: []
         }
-        deviceInfo.title = moment(item['StoreDate']).format('LL') + '- DAYPART' + ' ' + item['DayPartIndex']
+        deviceInfo.title = moment(item['StoreDate']).format('MMM D,YYYY') + ' - DAYPART' + ' ' + item['DayPartIndex']
         deviceInfo.data = []
         index = item['DayPartIndex']
         deviceValues.push(deviceInfo)
@@ -82,7 +82,7 @@ Device.prototype.multipleStore = function () {
           title: '',
           data: []
         }
-        deviceInfo.title = moment(item['StoreDate']).format('LL') + messages.COMMON.OPENVALUE + ' - ' + moment(item['StoreDate']).format('LL') + messages.COMMON.CLOSEVALUE
+        deviceInfo.title = moment(item['StoreDate']).format('MMM D,YYYY') + messages.COMMON.OPENVALUE + ' - ' + moment(item['StoreDate']).format('MMM D,YYYY') + messages.COMMON.CLOSEVALUE
         deviceInfo.data = []
         index = item['ID']
         deviceValues.push(deviceInfo)

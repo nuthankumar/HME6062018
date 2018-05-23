@@ -130,8 +130,10 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
     } else {
       deviceValues.timeMeasureType = []
     }
-    if (reportResult.data[6] && reportResult.data[6].length > 0 && reportResult.data[6][0].EventNames !== null) {
-      let eventHeaders = reportResult.data[6][0].EventNames.split('|$|')
+    let eventNames
+    reportFilter === 'daypart' ? eventNames = reportResult.data[4] : eventNames = reportResult.data[6]
+    if (eventNames && eventNames.length > 0 && eventNames[0].EventNames !== null) {
+      let eventHeaders = eventNames[0].EventNames.split('|$|')
       eventHeaders = ['Groups', 'Stores', ...eventHeaders]
       eventHeaders.push('Total Cars')
       deviceValues.eventList = eventHeaders
@@ -139,6 +141,8 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
       deviceValues.eventList = []
     }
     deviceValues.timeMeasure = this.request.body.timeMeasure
+    deviceValues.startTime = this.request.body.fromDate
+    deviceValues.endTime = this.request.body.toDate
     return deviceValues
   }
 }
@@ -186,8 +190,12 @@ reports.prototype.generateCSV = function (reportResult, filter, totalPages, resp
     let getReports = this.deviceDataPreparation(reportResult, filter, totalPages)
     DeviceDetails = getReports.timeMeasureType
     let deviceHeaders
-    filter === 'daypart' ? deviceHeaders = reportResult.data[8] : deviceHeaders = reportResult.data[9]
-    if (deviceHeaders && deviceHeaders.length > 0 && deviceHeaders[0].EventNames !== null) {
+    if (this.isSingleStore) {
+      filter.reportName === 'daypart' ? deviceHeaders = reportResult.data[8] : deviceHeaders = reportResult.data[9]
+    } else {
+      filter.reportName === 'daypart' ? deviceHeaders = reportResult.data[4] : deviceHeaders = reportResult.data[6]
+    }
+    if (deviceHeaders && deviceHeaders.length > 0 && deviceHeaders[0].EventNames !== null && deviceHeaders[0].EventNames !== undefined) {
       eventHeaders = deviceHeaders[0].EventNames.split('|$|')
     } else {
       eventHeaders = []

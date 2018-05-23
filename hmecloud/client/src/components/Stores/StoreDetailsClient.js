@@ -45,15 +45,14 @@ class StoreDetail extends Component { //ensure you dont export component directl
         this.setState({
             stores: this.props.stores
         })
-        //  this.setState(this.state);
+       this.props.dispatch(storesFunctions.sortStores({ 'sortBy': 'Brand_Name', 'sortType': 'DESC' }))
     }
 
 
     render() {
         const { language } = this.state
-
-
-
+         let sortParams = this.props.storesDetails.sortParams ? this.props.storesDetails.sortParams :  { 'sortBy': 'Brand_Name', 'sortType': 'DESC' }
+        
         return (
             <section className={"stores " + (this.state.showStores ? 'show' : 'hidden')}>
                 <div className="settings forms">
@@ -72,15 +71,15 @@ class StoreDetail extends Component { //ensure you dont export component directl
                                 <tbody>
                                     <tr className="theader clear">
                                         <th>&nbsp;</th>
-                                        <th id="brand_space" className="actcold"><a><span id='Brand_Name' onClick={this.sortStores.bind(this)}>{t[language].StoreSettingsHeaderBrand}</span></a></th>
-                                        <th><a><span id='Store_Number' onClick={this.sortStores.bind(this)}>{t[language].StoreSettingsHeaderStore}</span></a></th>
-                                        <th><a><span id='Store_AddressLine1' onClick={this.sortStores.bind(this)}>{t[language].StoreSettingsHeaderAddress}</span></a></th>
-                                        <th><a><span id='Store_Locality' onClick={this.sortStores.bind(this)}>{t[language].StoreSettingsHeaderCityState}</span></a></th>
-                                        <th><a><span id='Group_Name' onClick={this.sortStores.bind(this)}>{t[language].StoreSettingsLeaderboardGroup}</span></a></th>
-                                        <th><a><span id='Group_Name' onClick={this.sortStores.bind(this)}>{t[language].StoreSettingsReportGroup}</span></a></th>
-                                        <th><a><span id='Device_Name' onClick={this.sortStores.bind(this)}>{t[language].StoreSettingsHeaderName}</span></a></th>
-                                        <th><a><span id='Device_MainVersion' onClick={this.sortStores.bind(this)}>{t[language].StoreSettingsHeaderVersion}</span></a></th>
-                                        <th><a><span id='Device_IsActive' onClick={this.sortStores.bind(this)}>{t[language].StoreSettingsHeaderStatus}</span></a></th>
+                                        <th id="brand_space" className={(sortParams.sortBy == 'Brand_Name' && sortParams.sortType == 'ASC')?'actcol':((sortParams.sortBy == 'Brand_Name' && sortParams.sortType == 'DESC')?'actcold':'')}><a><span id='Brand_Name' onClick={this.sortStores.bind(this)}>{t[language].StoreSettingsHeaderBrand}</span></a></th>
+                                        <th className={(sortParams.sortBy == 'Store_Number' && sortParams.sortType == 'ASC')?'actcol':((sortParams.sortBy == 'Store_Number' && sortParams.sortType == 'DESC')?'actcold':'')}><a><span id='Store_Number' onClick={this.sortStores.bind(this)}>{t[language].StoreSettingsHeaderStore}</span></a></th>
+                                        <th className={(sortParams.sortBy == 'Store_AddressLine1' && sortParams.sortType == 'ASC')?'actcol':((sortParams.sortBy == 'Store_AddressLine1' && sortParams.sortType == 'DESC')?'actcold':'')}><a><span id='Store_AddressLine1' onClick={this.sortStores.bind(this)}>{t[language].StoreSettingsHeaderAddress}</span></a></th>
+                                        <th className={(sortParams.sortBy == 'Store_Locality' && sortParams.sortType == 'ASC')?'actcol':((sortParams.sortBy == 'Store_Locality' && sortParams.sortType == 'DESC')?'actcold':'')}><a><span id='Store_Locality' onClick={this.sortStores.bind(this)}>{t[language].StoreSettingsHeaderCityState}</span></a></th>
+                                        <th className={(sortParams.sortBy == 'Group_Name' && sortParams.sortType == 'ASC')?'actcol':((sortParams.sortBy == 'Group_Name' && sortParams.sortType == 'DESC')?'actcold':'')}><a><span id='Group_Name' onClick={this.sortStores.bind(this)}>{t[language].StoreSettingsLeaderboardGroup}</span></a></th>
+                                        <th className={(sortParams.sortBy == 'Group_Name' && sortParams.sortType == 'ASC')?'actcol':((sortParams.sortBy == 'Group_Name' && sortParams.sortType == 'DESC')?'actcold':'')}><a><span id='Group_Name' onClick={this.sortStores.bind(this)}>{t[language].StoreSettingsReportGroup}</span></a></th>
+                                        <th className={(sortParams.sortBy == 'Device_Name' && sortParams.sortType == 'ASC')?'actcol':((sortParams.sortBy == 'Device_Name' && sortParams.sortType == 'DESC')?'actcold':'')}><a><span id='Device_Name' onClick={this.sortStores.bind(this)}>{t[language].StoreSettingsHeaderName}</span></a></th>
+                                        <th className={(sortParams.sortBy == 'Device_MainVersion' && sortParams.sortType == 'ASC')?'actcol':((sortParams.sortBy == 'Device_MainVersion' && sortParams.sortType == 'DESC')?'actcold':'')}><a><span id='Device_MainVersion' onClick={this.sortStores.bind(this)}>{t[language].StoreSettingsHeaderVersion}</span></a></th>
+                                        <th className={(sortParams.sortBy == 'Device_IsActive' && sortParams.sortType == 'ASC')?'actcol':((sortParams.sortBy == 'Device_IsActive' && sortParams.sortType == 'DESC')?'actcold':'')}><a><span id='Device_IsActive' onClick={this.sortStores.bind(this)}>{t[language].StoreSettingsHeaderStatus}</span></a></th>
                                     </tr>
                                     {this.renderStores()}
                                 </tbody>
