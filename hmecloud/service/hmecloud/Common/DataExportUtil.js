@@ -8,7 +8,7 @@ const generateCSVReport = (results, input, csvInput, reportType, eventHeaders, c
   let storeDataList = []
   let format = input.body.format
   let reportDetails
-  if (reportType === 'rawcardata') {
+  if (reportType.reportName === 'rawcardata') {
     reportDetails = results
   } else {
     if (results && results.length > 0) {
@@ -18,15 +18,15 @@ const generateCSVReport = (results, input, csvInput, reportType, eventHeaders, c
   _.forEach(reportDetails, (item, key) => {
     let store = {}
     // Week
-    if (reportType === 'week') {
+    if (reportType.reportName === 'week') {
       if (item.StoreNo === 'Total Week') {
         store.Week = 'Total Week'
       } else if (input.body.deviceIds.length === 1) {
         store.Week = moment(item.WeekStartDate).format('MM/DD/YYYY') + '-' + moment(item.WeekEndDate).format('MM/DD/YYYY')
       } else if (input.body.deviceIds.length > 1) {
         store.Week = moment(item.WeekStartDate).format('MM/DD/YYYY') + '-' + moment(item.WeekEndDate).format('MM/DD/YYYY')
-        store.Groups = item.GroupName
-        store.Store = item.Store_Name
+        store.Groups = item.GroupName ? item.GroupName : ''
+        store.Store = item.Store_Name ? item.Store_Name : ''
         if (item.StoreNo === 'Total Week' && item.Store_Name === null) {
           store.Week = 'Total Week'
           store.Store = ''
@@ -39,53 +39,51 @@ const generateCSVReport = (results, input, csvInput, reportType, eventHeaders, c
       }
     }
     // Daypart
-    if (reportType === 'Daypart') {
+    if (reportType.reportName === 'daypart') {
       if (item.StoreNo === 'Total Daypart') {
         store.Daypart = 'Total Daypart'
       } else if (input.body.deviceIds.length === 1) {
         store.Daypart = moment(item.StoreDate).format('MM/DD/YYYY')
       } else if (input.body.deviceIds.length > 1) {
-        store.Groups = item.GroupName
-        store.Stores = item.Store_Name
+        store.Daypart = moment(item.StoreDate).format('MM/DD/YYYY')
+        store.Groups = item.GroupName ? item.GroupName : ''
+        store.Stores = item.Store_Name ? item.Store_Name : ''
         if (item.StoreNo === 'Total Daypart') {
           store.Daypart = 'Total Daypart'
           store.Stores = ''
         } else if (item.StoreNo === 'SubTotal') {
           store.Daypart = 'SubTotal'
           store.Stores = ''
-        } else {
-          store.Daypart = moment(item.StoreDate).format('MM/DD/YYYY')
         }
       }
     }
     // Day
-    if (reportType === 'Day') {
+    if (reportType.reportName === 'day') {
       if (item.StoreNo === 'Total Day') {
         store.Day = 'Total Day'
       } else if (input.body.deviceIds.length === 1) {
         store.Day = moment(item.StoreDate).format('MM/DD/YYYY')
       } else if (input.body.deviceIds.length > 1) {
-        store.Groups = item.GroupName
-        store.Stores = item.Store_Name
+        store.Day = moment(item.StoreDate).format('MM/DD/YYYY')
+        store.Groups = item.GroupName ? item.GroupName : ''
+        store.Stores = item.Store_Name ? item.Store_Name : ''
         if (item.StoreNo === 'Total Day') {
           store.Day = 'Total Day'
           store.Stores = ''
         } else if (item.StoreNo === 'Subtotal') {
           store.Day = 'SubTotal'
           store.Stores = ''
-        } else {
-          store.Day = moment(item.StoreDate).format('MM/DD/YYYY')
         }
       }
     }
-    if (reportType !== 'rawcardata') {
+    if (reportType.reportName !== 'rawcardata') {
       _.forEach(eventHeaders, (value, key) => {
         if (item[`${value}`] !== null) {
           store[`${value}`] = (dateUtils.convertSecondsToMinutes(item[`${value}`].value, format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item[`${value}`].value, format))
         }
       })
     }
-    if (reportType === 'rawcardata') {
+    if (reportType.reportName === 'rawcardata') {
       _.forEach(reportDetails[key], (value, key) => {
         store[`${key}`] = `${value}` === 'N/A' ? '' : `${value}`
       })
@@ -119,4 +117,6 @@ const JsonForPDF = (data, input, reportName, pdfInput, isMultiStore) => {
 }
 
 module.exports = {
-  generateCSVReport, JsonForPDF }
+  generateCSVReport,
+  JsonForPDF
+ }

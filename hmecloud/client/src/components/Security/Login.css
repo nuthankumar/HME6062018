@@ -207,8 +207,6 @@ width:197px;
         cursor:pointer;
     }
 
-
-
 .save-template {
     width: 100%;
     height: 29px;
@@ -322,13 +320,20 @@ width:197px;
         width: 351px;
     }
   }
-
-  @media screen and (min-width: 1281px) {
+  @media screen and (max-width: 1415px) and (min-width: 1281px) {
     .selectAllLabel{
         padding-left: 33px;
-        width:260px;
+        width: 361px;
     }
   }
+
+  @media screen and (max-width: 1540px) and (min-width: 1416px)
+{
+.selectAllLabel {
+    padding-left: 33px;
+    width: 325px;
+}
+}
 
 .BrandTitle
 {

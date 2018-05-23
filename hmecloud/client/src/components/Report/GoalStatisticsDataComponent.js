@@ -105,7 +105,7 @@ export default class GoalStatisticsDataComponent extends Component {
           if (eventHeader !== 'Day' && eventHeader !== 'Daypart' && eventHeader !== 'Week' &&
             eventHeader !== 'Groups' && eventHeader !== 'Stores' && eventHeader !== 'Total Cars') {
             //this.goalStatsTableCell(goalItem, type, title, eventHeader)
-            return (<td className={'reportTableAttributesHeading'+this.props.reportData.response.eventList.length}>{goalItem[eventHeader][type]}</td>)
+            return (<td className={'reportTableAttributesHeading'+this.props.reportData.response.eventList.length + (goalItem[eventHeader] !== undefined ? 'show-table-cell' : 'hide-table-cell')}>{(goalItem[eventHeader] !== undefined ? goalItem[eventHeader][type] : '')}</td>)
           }
         })
         }

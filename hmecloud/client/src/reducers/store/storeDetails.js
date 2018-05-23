@@ -66,6 +66,10 @@ const initialState = {
         "userPermessions": [
          ],
         "status": null
+      },
+      "sortParams": {
+          "sortBy":null,
+          "sortType":null
       }
     }
 

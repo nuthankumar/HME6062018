@@ -948,90 +948,48 @@
             </tr>
         </table>
 
-        {{#each details.storeDetails}}
+        {{#each details.storeDetails as |stores|}}
         <div style="width:100% ">
-
         </div>
         <div class="multi-cont">
-
             <div class="row  alignHeader" style="float:left">
-                <h2>{{title}}</h2>
+                <h2>{{stores.title}}</h2>
             </div>
-
             <table cellspacing="0" class=" nobreak table-layout daypart "
-             style="border-bottom:0px solid white;
-                bottom: 800px;margin-top:4px;width:90%;
-                padding-bottom: 10px;
-                padding-bottom: 100px; ">
-                <tbody>
-                    <tr>
-                        <th class="clear"></th>
-                        <th class="clear"></th>
-                        <th class="grayhead" colspan=4 "">AVERAGE TIME
-                            <span>(min:sec)</span>
-                        </th>
+            style="border-bottom:0px solid white;
+               bottom: 800px;margin-top:4px;width:90%;
+               padding-bottom: 10px;
+               padding-bottom: 100px; ">
+               <tbody>
+                   <tr>
+                       <th class="clear"></th>
+                       <th class="clear"></th>
+                       <th class="grayhead" colspan=4 "">AVERAGE TIME
+                           <span>(min:sec)</span>
+                       </th>
+                   </tr>
+                   <tr>
+                         {{#each details.mainEvents as |childValue childKey|}}
+                       <th class="colWidth5 blueback ">
+                          {{childValue}}
+                       </th>
+                       {{/each}}
                     </tr>
-
-                    <tr>
-                        <th class="wide blueback colWidth ">Group</th>
-                        <th class="wide blueback colWidth ">Stores</th>
-                        <th class="colWidth5 blueback ">
-                            <span>Menu</span>
-                        </th>
-                        <th class="colWidth5 blueback ">
-                            <span>Greet</span>
-                        </th>
-                        <th class="colWidth5 blueback ">
-                            <span>Service</span>
-                        </th>
-                        <th class="colWidth5 blueback">
-                            <span>Lane Queue</span>
-                            <span class="redFont">*</span>
-                        </th>
-                        <th class="colWidth5 blueback ">
-                            <span>Lane Total</span>
-                        </th>
-                        <th class="colWidth5 blueback grayhead">Total Cars</th>
-                    </tr>
-
-                    {{#data}}
+                    {{#each details.deviceHeaders as |header| }}
                     <tr class="table-row-data">
-
-                        <td class="rnshade boldin">
-                     <span class="timeSpan">{{groupId.value}}</span>
-                     <br>
-                     <span class="currentMeasure">{{groupId.timeSpan}}</span>
+                        {{#each header as |rcd| }}
+                        <td class="rnshade boldin" style="{{#if rcd.value}}background-color:{{rcd.color}}{{/if}}">
+                            {{#if rcd.value}}{{rcd.value}}{{/if}} {{#if rcd.timeSpan}}{{rcd.timeSpan}}{{/if}} {{#if rcd.currentWeekpart}}{{rcd.currentWeekpart}}{{/if}}
                         </td>
-                        <td class="rnshade boldin">
-                            <a>
-                                <strong>{{store.name}}</strong>
-                            </a>
-                        </td>
-                        <td class="rnshade boldin " style="background-color:{{menu.color}}">
-                            {{#if menu.value}}{{menu.value}}{{else}}N/A{{/if}}</td>
-                        <td class="rnshade boldin  " style="background-color:{{greet.color}}">
-                            {{#if greet.value}}{{greet.value}}{{else}}N/A{{/if}}</td>
-                        <td class="rnshade boldin " style="background-color:{{service.color}}">
-                            {{#if service.value}}{{service.value}}{{else}}N/A{{/if}}</td>
-                        <td class="rnshade boldin  " style="background-color:{{laneQueue.color}}">
-                            {{#if laneQueue.value}}{{laneQueue.value}}{{else}}N/A{{/if}}</td>
-                        <td class="rnshade boldin " style="background-color:{{laneTotal.color}}">
-                            {{#if laneTotal.value}}{{laneTotal.value}}{{else}}N/A{{/if}}</td>
-                        <td class="rnshade boldin totalCar ">
-                            {{#if totalCars.value}}{{totalCars.value}}{{else}} {{/if}}</td>
-                    </tr>
-                    {{/data}}
-                </tbody>
-            </table>
-         <div style="page-break-after: always;">
-       <p style="color:white;">this is Page break</p>
-         </div>
-
-        </div>
+                        {{/each}}
+                        </tr>
+                        {{/each}}
+               </tbody>
+           </table>
         {{/each}}
 
     </div>
-
+</div>
 </body>
 
 </html>

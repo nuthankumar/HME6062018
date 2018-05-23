@@ -103,7 +103,7 @@ class RawCarReport extends Component {
 
   displayRawCarContent () {
     const language = this.state.currentLanguage
-    if (this.state.displayData.key === 'ReportsNoRecordsFound' && this.state.displayData.key !== undefined) {
+    if ((this.state.displayData.key === 'ReportsNoRecordsFound' && this.state.displayData.key !== undefined) || this.state.eventList === undefined) {
       return (<h3 className='rawcar-no-data'><span >{t[language][this.state.displayData.key]}</span></h3>)
     } else {
       return (<div className='rawcar-content'>

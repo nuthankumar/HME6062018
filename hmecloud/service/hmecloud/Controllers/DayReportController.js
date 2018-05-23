@@ -4,7 +4,7 @@ const reportUtil = require('../Common/ReportGenerateUtils')
 const _ = require('lodash')
 const HashMap = require('hashmap')
 const messages = require('../Common/Message')
-const dataExportUtil = require('../Common/DataExportUtil')
+const dataExportUtil = require('../Common/DataExportUtil').default
 const dateFormat = require('dateformat')
 const message = require('../Common/Message')
 

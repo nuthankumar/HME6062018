@@ -31,17 +31,16 @@ export default class SummaryReportDataComponent extends Component {
     return translatedDate;
   }
 
-  translateFromTo(fromTo){
-    // to-do split od text to be removed
-    let language = this.state.currentLanguage
-    console.log(fromTo)
-    let string = fromTo.split(" ")
-    let fromToModified = (string[0]? this.translateDate(moment(string[0]).format("MMM D,YYYY")):'')+' - '+(string[2] ? this.translateDate(moment(string[2]).format("MMM D,YYYY")):'') + (t[language][string[3]]?t[language][string[3]]: string[3])
-    return fromToModified;
-  }
+  // translateFromTo(fromTo){
+  //   // to-do split od text to be removed
+  //   let language = this.state.currentLanguage
+  //   console.log(fromTo)
+  //   let string = fromTo.split(" ")
+  //   let fromToModified = (string[0]? this.translateDate(moment(string[0]).format("MMM D,YYYY")):'')+' - '+(string[2] ? this.translateDate(moment(string[2]).format("MMM D,YYYY")):'') + (t[language][string[3]]?t[language][string[3]]: string[3])
+  //   return fromToModified;
+  // }
 
   displaySummarizedData(reportData) {
-    console.log("drilldown report data",reportData)
     let language = this.state.currentLanguage
     // let headers = this.state.timeMeasureTypeWrap.eventList
     if (reportData.response.status === true) {
@@ -51,7 +50,7 @@ export default class SummaryReportDataComponent extends Component {
           return reportData.response.timeMeasureType.map((reportItem) => {
           return (
             <div className='report-data-unit'>
-              <div className={'col-xs-12 from-to-detail ' + this.dynamicColumnData.showFromToTime}><span>{this.translateFromTo(reportItem.title)}</span></div>
+              <div className={'col-xs-12 from-to-detail ' + this.dynamicColumnData.showFromToTime}><span>{reportItem.title}</span></div>
               <table className='summaryreport-table'>
                 <tbody>
                   {this.getSummarytableHeader(reportData.response.eventList)}

@@ -87,7 +87,8 @@ export default class SummaryReport extends Component {
                         <th className='thin-header'>
                           <span>{t[language].store}</span>:
                         </th>
-                        <td className='thin-header'>{this.state.reportData.response.storeName ? this.state.reportData.response.storeName : this.state.reportData.response.storeNumber}</td>
+                        {/* <td className='thin-header'>{this.state.reportData.response.storeName ? this.state.reportData.response.storeName : this.state.reportData.response.storeNumber}</td> */}
+                        <td className='thin-header'>{this.state.reportData.response.storeNumber ? this.state.reportData.response.storeNumber : 'N/A'}</td>
                         <th>
                           <span>{t[language].ReportsStart}</span>
                         </th>
