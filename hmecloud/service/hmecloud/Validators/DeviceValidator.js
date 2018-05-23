@@ -67,6 +67,19 @@ const saveMasterSettings = (input, callback) => {
   }
 }
 
+const mergePreValidator = (input, callback) => {
+  if (!input.suids && !input.duid.length) {
+    let output = {}
+    output.key = !input.suids ? 'requiredStoreId' : 'requiredDeviceUid'
+    output.status = false
+    callback(output)
+  }
+  if (input.accountId || input.userUid) {
+    callback()
+  }
+}
+
+
 const unRegisterDevicesSearch = (input, callback) => {
   if (!input.page && !input.perPage && !input.filter) {
     let output = {}
@@ -97,5 +110,6 @@ const unRegisterDevicesSearch = (input, callback) => {
 module.exports = {
     validateDevice,
     validateMasterSettings,
-    saveMasterSettings
+    saveMasterSettings,
+    mergePreValidator
 }

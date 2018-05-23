@@ -103,6 +103,14 @@ router.post('/saveMasterSettings', VerifyToken, (request, response) => {
   storeController.saveMasterSettings(request, result => hmeRouter.handelResult(result, response))
 })
 
+router.post('/checkMergeDevices', VerifyToken, (request, response) => {
+  storeController.checkMergeDevices(request, result => hmeRouter.handelResult(result, response))
+})
+
+router.post('/mergeDevicesInfo', VerifyToken, (request, response) => {
+  storeController.mergeDevicesInfo(request, result => hmeRouter.handelResult(result, response))
+})
+
 router.post('/saveMergeDevices', VerifyToken, (request, response) => {
   storeController.saveMergeDevices(request, result => hmeRouter.handelResult(result, response))
 })

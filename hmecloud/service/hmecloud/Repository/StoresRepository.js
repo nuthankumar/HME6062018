@@ -138,6 +138,20 @@ const saveMasterSettings = (input, callback) => {
   }, callback)
 }
 
+const checkMergeDevices = (input, callback) => {
+  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
+    return request
+      .input(sqlQuery.DeviceIds.Parameters.Device_IDs, sql.VarChar(36), input.duid)
+  }, callback)
+}
+
+const mergeDevicesInfo = (input, callback) => {
+  repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
+    return request
+      .input(sqlQuery.DeviceIds.Parameters.Device_IDs, sql.VarChar(36), input.duid)
+  }, callback)
+}
+
 // Todo: saveMergeDevices Store Procedure
 const saveMergeDevices = (input, callback) => {
   repository.executeProcedure(sqlQuery.DeviceStatus.getStatus, request => {
