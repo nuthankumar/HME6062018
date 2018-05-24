@@ -157,6 +157,7 @@ export default class SummaryReportDataComponent extends Component {
           </td>
         )
       }else if(headerItem === 'Daypart'){
+        //date value change date
         let date,number,value
         if(reportItem[headerItem] && reportItem[headerItem].timeSpan!=='Total Daypart'){
          date= reportItem[headerItem].timeSpan.split("D")[0];
