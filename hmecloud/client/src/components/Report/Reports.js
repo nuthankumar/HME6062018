@@ -106,7 +106,8 @@ class Report extends Component {
         weekColumn: false,
         singleStore: false,
         longestTime: false,
-	      systemStatistics: false
+        systemStatistics: false,
+        errors:[]
       },
       showCommonLoader: false
     };
@@ -216,7 +217,7 @@ class Report extends Component {
         <Loader showLoader = {this.state.showLoader} />
         <div className={"reports " + ((this.state.showLoader || this.state.showCommonLoader) ? 'hide' : 'show')}>
           <SuccessAlert successMessage={this.state.successMessage} />
-          <ErrorAlert errorMessage={this.state.errorMessage} />
+          <ErrorAlert errorMessage={this.state.errorMessage} errors={this.state.errors} />
           <header className="reports-header">{t[language].summaryReport}</header>
           {/* <Trans i18nKey="title">
           </Trans> */}
@@ -897,37 +898,48 @@ class Report extends Component {
     this.state.templateData = template;
     this.setState(this.state);
 
+
+    let errors = [];
     //validations
+    if (this.state.toDate < this.state.fromDate) {
+      errors.push(t[language].daterangeinvalidbeyond);
+      this.state.errorMessage = t[language].daterangeinvalidbeyond ;
+      this.setState(this.state);
+    }
+
+    if (this.state.selectedList.length == 0) {
+      errors.push(t[language].pleaseselectstore);
+      this.state.errorMessage = t[language].pleaseselectstore;
+      this.setState(this.state);
+      isError = true;
+    }
+
     if (!this.state.open && !this.openTime ) {
+     
+      errors.push(t[language].pleaseselectopentime);
       this.state.errorMessage = t[language].pleaseselectopentime;
       this.setState(this.state);
       isError = true;
     }
 
-    if (!this.state.close && !this.closeTime ) {
+    if (!this.state.close && !this.closeTime ) {      
+      errors.push(t[language].pleaseselectclosetime);
       this.state.errorMessage = t[language].pleaseselectclosetime;
       this.setState(this.state);
       isError = true;
     }
 
 
-    if (this.state.toDate < this.state.fromDate) {
-        this.state.errorMessage = t[language].daterangeinvalidbeyond ;
-      this.setState(this.state);
-    }
 
-    if (this.state.selectedList.length == 0) {
-        this.state.errorMessage = t[language].pleaseselectstore;
-      this.setState(this.state);
-      isError = true;
-    }
         if (moment(this.state.toDate, "MM/DD/YYYY") < moment(this.state.fromDate, "MM/DD/YYYY")) {
-            this.state.errorMessage = t[language].daterangeinvalidbeyond;
-            this.setState(this.state);
-            isError = true;
+          errors.push(t[language].daterangeinvalidbeyond);  
+          this.state.errorMessage = t[language].daterangeinvalidbeyond;
+          this.setState(this.state);
+          isError = true;
     }
     if (this.state.deviceUIds.length >= 250) {
-        this.state.errorMessage = t[language].storeselectioninvalid250;
+      errors.push(t[language].storeselectioninvalid250);  
+      this.state.errorMessage = t[language].storeselectioninvalid250;
             this.setState(this.state);
             isError = true;
         }
@@ -952,6 +964,7 @@ class Report extends Component {
                 moment(this.state.fromDate, "MM/DD/YYYY"),
                     "days"
                 ) > CommonConstants.TimeMeasureValidations.Month){
+                  errors.push(t[language].daterangeinvalid1month);  
                   this.state.errorMessage = t[language].daterangeinvalid1month;
                   this.setState(this.state);
                   isError = true;
@@ -961,6 +974,7 @@ class Report extends Component {
                 moment(this.state.fromDate, "MM/DD/YYYY"),
                     "days"
                 ) > CommonConstants.TimeMeasureValidations.ThreeMonths){
+                  errors.push(t[language].daterangeinvalid3month); 
                   this.state.errorMessage = t[language].daterangeinvalid3month;
                   this.setState(this.state);
                   isError = true;
@@ -973,7 +987,8 @@ class Report extends Component {
                     "days"
                 ) > CommonConstants.TimeMeasureValidations.Month
             ) {
-                this.state.errorMessage = t[language].daterangeinvalid1month;
+              errors.push(t[language].daterangeinvalid1month);  
+              this.state.errorMessage = t[language].daterangeinvalid1month;
               this.setState(this.state);
               isError = true;
             }
@@ -1001,6 +1016,7 @@ class Report extends Component {
                       "days"
                   ) > CommonConstants.TimeMeasureValidations.TwoWeeks
               ) {
+                errors.push(t[language].daterangeinvalid2week);
                 this.state.errorMessage = t[language].daterangeinvalid2week;
                 this.setState(this.state);
                 isError = true;
@@ -1011,6 +1027,7 @@ class Report extends Component {
                 moment(this.state.fromDate, "MM/DD/YYYY"),
                     "days"
                 ) > CommonConstants.TimeMeasureValidations.ThreeMonths){
+                  errors.push(t[language].daterangeinvalid3month);
                   this.state.errorMessage = t[language].daterangeinvalid3month;
                   this.setState(this.state);
                   isError = true;
@@ -1023,7 +1040,8 @@ class Report extends Component {
                     "days"
                 ) > CommonConstants.TimeMeasureValidations.TwoWeeks
             ) {
-                this.state.errorMessage = t[language].daterangeinvalid2week;
+              errors.push(t[language].daterangeinvalid2week);
+              this.state.errorMessage = t[language].daterangeinvalid2week;
               this.setState(this.state);
               isError = true;
             }
@@ -1051,6 +1069,7 @@ class Report extends Component {
                   ) > CommonConstants.TimeMeasureValidations.TwoMonths
               ) {
                 
+              errors.push(t[language].daterangeinvalid2month);
                 this.state.errorMessage = t[language].daterangeinvalid2month;
                 this.setState(this.state);
                 isError = true;
@@ -1061,6 +1080,8 @@ class Report extends Component {
                 moment(this.state.fromDate, "MM/DD/YYYY"),
                     "days"
                 ) > CommonConstants.TimeMeasureValidations.ThreeMonths){
+                  
+                  errors.push(t[language].daterangeinvalid3month);
                   this.state.errorMessage = t[language].daterangeinvalid3month;
                   this.setState(this.state);
                   isError = true;
@@ -1073,6 +1094,8 @@ class Report extends Component {
                     "days"
                 ) > CommonConstants.TimeMeasureValidations.TwoMonths
             ) {
+              
+              errors.push(t[language].daterangeinvalid2month);
                 this.state.errorMessage = t[language].daterangeinvalid2month;
               this.setState(this.state);
               isError = true;
@@ -1083,6 +1106,7 @@ class Report extends Component {
 
     if (this.state.templateName) {
         if (!this.state.saveAsTemplate) {
+            errors.push(t[language].pleasechecksaveastemplate);
             this.state.errorMessage = t[language].pleasechecksaveastemplate
             this.setState(this.state)
             isError = true;
@@ -1090,6 +1114,7 @@ class Report extends Component {
     }
     if (this.state.saveAsTemplate) {
       if (!this.state.templateName || this.state.templateName.trim().length == 0) {
+        errors.push(t[language].pleaseneteratemplatename);
         this.state.errorMessage = t[language].pleaseneteratemplatename
         this.setState(this.state)
         isError = true;
@@ -1101,6 +1126,7 @@ class Report extends Component {
           }
         })
         if(sameTemplate){
+          errors.push(t[language].pleaseenterauniquetemplate);
           this.state.errorMessage = t[language].pleaseenterauniquetemplate
           this.setState(this.state);
           isError = true;
@@ -1114,6 +1140,7 @@ class Report extends Component {
               this.setState(this.state);
               this.getSavedReports();
           }, error => {
+              errors.push("ERROR");
               this.state.errorMessage = "ERROR";
               this.state.successMessage = "";
               this.setState(this.state);
@@ -1173,6 +1200,9 @@ class Report extends Component {
           break
         }
 
+    }
+    else{
+    this.setState({errors: errors});
     }
   }
 

@@ -182,10 +182,24 @@ export default class SummaryReportDataComponent extends Component {
             <span className={'currentMeasure ' + (self.props.reportData.dayColumn && reportItem[headerItem] !== undefined && reportItem[headerItem].currentWeekpart !== undefined ? 'show' : 'hide')}>{(headerItem !== undefined && headerItem === 'Day' ? (t[language][reportItem[headerItem].currentWeekpart]? t[language][reportItem[headerItem].currentWeekpart] : reportItem[headerItem].currentWeekpart) : '')}</span> 
           </td>
           )
-      }else if(headerItem === 'Week'){ 
+      }else if(headerItem === 'Week') { 
+        let value = reportItem[headerItem].timeSpan
+        if(value === 'Total Week' || value === '' ||value ===null){
+          value = t[language][reportItem[headerItem].timeSpan] ? t[language][reportItem[headerItem].timeSpan]: reportItem[headerItem].timeSpan
+        }else{
+          let val1 = moment(value.split(' ')[0]).format('MM/DD')
+          let val2= moment(value.split(' ')[2]).format('MM/DD')
+          value = val1 + '-' + val2
+        }
         return(
           <td className={'timeMeasureColumn ' + (headerItem === 'Week' ? 'show-table-cell' : 'hide-table-cell')} onClick={() => this.props.handleDrillDown(reportItem)}> 
-            <span className={'timeSpan ' + (self.props.reportData.weekColumn &&  reportItem[headerItem] !== undefined && reportItem[headerItem] !== undefined ? 'show' : 'hide')}>{ headerItem === 'Week' ?(t[language][reportItem[headerItem].timeSpan] ? t[language][reportItem[headerItem].timeSpan]: reportItem[headerItem].timeSpan ) : ''}</span> 
+            <span className={'timeSpan ' + (self.props.reportData.weekColumn &&  reportItem[headerItem] !== undefined && reportItem[headerItem] !== undefined ? 'show' : 'hide')}>
+              { 
+                headerItem === 'Week' ?
+                value  : 
+                ''
+              }
+            </span> 
             <span className={'currentMeasure ' + (self.props.reportData.weekColumn && reportItem[headerItem] !== undefined && reportItem[headerItem].currentWeekpart !== undefined ? 'show' : 'hide')}>{(headerItem !== undefined && headerItem === 'Week' ? (t[language][reportItem[headerItem].currentWeekpart]? t[language][reportItem[headerItem].currentWeekpart] : reportItem[headerItem].currentWeekpart) : '')}</span> 
           </td>
           )
