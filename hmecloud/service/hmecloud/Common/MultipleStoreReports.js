@@ -89,10 +89,12 @@ Device.prototype.multipleStore = function () {
       }
     }
     _.forEach(storeDetails[key], function (value, key) {
+     
       if (key === 'StoreID') {
         reportInfo['storeId'] = {'value': ` ${value}`}
       } else if (key === 'GroupName') {
         groupName = ` ${value}`
+        reportInfo['Groups'] = {'value': (value || null)}
       } else if (key === 'StoreNo') {
         if (filter === 'week' || filter === 'daypart' || filter === 'day') {
           storeNo = ` ${value}`
@@ -101,7 +103,7 @@ Device.prototype.multipleStore = function () {
           } else if (value === 'Total Week' || value === 'Total Daypart' || value === 'Total Day') {
             reportInfo['Groups'] = {'value': storeNo, 'timeSpan': messages.COMMON.WAVG}
           } else {
-            reportInfo['Groups'] = {'value': (groupName || null)}
+            reportInfo['Groups'] = {'value': (value || null)}
           }
         }
         reportInfo[`${key}`] = {'value': `${value}`}
