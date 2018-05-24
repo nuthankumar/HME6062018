@@ -192,7 +192,7 @@ export default class SummaryReportDataComponent extends Component {
         return(
           <td calssName=''>
           {/* <a href='#' className={(headerItem === 'Stores' ? 'store-name-number' : '')} onClick={(e) => { e.preventDefault(); this.props.handleDrillDown(reportItem) }}>{reportItem[headerItem] ? reportItem[headerItem].value : ''} </a> */}
-          <a href='#' className={(headerItem === 'Stores' ? 'store-name-number' : '')} onClick={(e) => { e.preventDefault(); this.props.handleDrillDown(reportItem) }}>{(headerItem === 'Stores' && reportItem[headerItem].value !== null ? reportItem[headerItem].value + '-' + reportItem.StoreNo.value  :  reportItem.StoreNo.value !== undefined && reportItem.StoreNo.value!=='Total Week'&& reportItem.StoreNo.value!=='Total Day'&& reportItem.StoreNo.value!=='Total Daypart'? reportItem.StoreNo.value : '')} </a>
+          <a href='#' className={(headerItem === 'Stores' ? 'store-name-number' : '')} onClick={(e) => { e.preventDefault(); this.props.handleDrillDown(reportItem) }}>{(headerItem === 'Stores' && reportItem[headerItem].value !== null && reportItem.StoreNo.value!=='Total Week'&& reportItem.StoreNo.value!=='Total Day'&& reportItem.StoreNo.value!=='Total Daypart'? reportItem[headerItem].value + '-' + reportItem.StoreNo.value  :  reportItem.StoreNo.value !== undefined && reportItem.StoreNo.value!=='Total Week'&& reportItem.StoreNo.value!=='Total Day'&& reportItem.StoreNo.value!=='Total Daypart'? reportItem.StoreNo.value : '')} </a>
           </td>
         )
       }
