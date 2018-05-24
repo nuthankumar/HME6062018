@@ -10,7 +10,7 @@ class Logout extends Component {
   componentWillMount() {
       if(this.authService.isAdmin()){
        this.authService.clear()
-       window.location.href = Config.adminColdFusionUrl + '/admin'
+       window.location.href = Config.adminColdFusionUrl + '?pg=Login'
       }
       else{
        this.authService.clear()
