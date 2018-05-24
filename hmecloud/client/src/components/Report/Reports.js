@@ -13,6 +13,7 @@ import DateTimeField from "react-datetime";
 import DateTime from "react-datetime";
 import "rc-time-picker/assets/index.css";
 import moment from "moment";
+
 import TimePicker from "rc-time-picker";
 import SuccessAlert from "../Alerts/SuccessAlert";
 import ErrorAlert from "../Alerts/ErrorAlert";
@@ -25,6 +26,7 @@ import t from '../Language/language'
 import * as languageSettings from '../Language/languageSettings'
 import AuthenticationService from '../Security/AuthenticationService'
 import CommonLoader from '../Alerts/CommonLoader'
+require('moment/locale/fr');
 
 
 const ProductLogo = require("../../images/ProductLogo-1.png");
@@ -171,7 +173,7 @@ class Report extends Component {
 
   showFromDatePicker(){
     this.refs.fromDate.openCalendar();
-  }
+}
 
   showToDatePicker(){
     this.refs.toDate.openCalendar();
@@ -282,6 +284,7 @@ class Report extends Component {
                         <img src={Calendar} aria-hidden="true" onClick={this.showFromDatePicker.bind(this)}  />
                       </div>
                       <DateTimeField
+                        locale={this.state.currentLanguage == 1? "fr-ca" : 'en'}
                         className="date-time"
                         mode={date}
                         timeFormat={false}
@@ -306,6 +309,7 @@ class Report extends Component {
                         <img src={Calendar} aria-hidden="true" onClick={this.showToDatePicker.bind(this)} />
                       </div>
                       <DateTimeField
+                        locale={this.state.currentLanguage == 1? "fr-ca" : 'en'}
                         className="date-time"
                         mode={date}
                         timeFormat={false}
