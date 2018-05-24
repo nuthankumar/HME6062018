@@ -592,6 +592,8 @@ class Report extends Component {
   getSavedReports() {
       let url = Config.apiBaseUrl + CommonConstants.apiUrls.getSavedTemplates
       this.api.getData(url, data => {
+
+          console.log(data);
           this.state.savedTemplates = []
           this.setState({
           savedTemplates: data.data
@@ -1126,7 +1128,7 @@ class Report extends Component {
       "close": template.close,
       "type": template.type,
       "include": template.include,
-      "format": template.format,
+      "format": parseInt(template.format),
       "deviceIds":template.deviceIds,
       "advancedOption": template.advancedOption,
       "longestTime": template.longestTime,
@@ -1159,6 +1161,7 @@ class Report extends Component {
             this.setState(this.state)
         })
     }else{
+      console.log(JSON.stringify(request))
      // let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
      let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=reports'
       this.api.postData(url, request, data => {

@@ -1,6 +1,7 @@
 const dateUtils = require('./DateUtils')
 const _ = require('lodash')
 const messages = require('./Message')
+const moment = require('moment')
 // deviceData, color, goalSettings, this.request, reportFilter
 const Device = function (result, colors, goalSettings, request, reportFilter) {
   this.result = result
@@ -77,7 +78,7 @@ Device.prototype.getSingleStoreValues = function () {
             }
           } else {
             reportInfo['Day'] = {
-              'timeSpan': `${value}`,
+              'timeSpan': moment(`${value}`).format('MM-DD-YYYY'),
               'currentWeekpart': messages.COMMON.DAYOPENCLOSE
             }
           }
@@ -113,7 +114,7 @@ Device.prototype.getSingleStoreValues = function () {
             }
           } else {
             reportInfo['Week'] = {
-              'timeSpan': startDate.value + ' - ' + endDate.value,
+              'timeSpan': moment(startDate.value).format('MM-DD-YYYY') + ' - ' + moment(endDate.value).format('MM-DD-YYYY'),
               'currentWeekpart': messages.COMMON.DAYOPENCLOSE
             }
           }

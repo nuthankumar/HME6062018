@@ -120,7 +120,7 @@ export default class SummaryReport extends Component {
             </table>)
         } else {
             return (<div>
-                <div className='col-xs-3 left-padding-none'>
+                <div className='col-xs-3 left-padding-none right-padding-none'>
                     <h2 className='report-start-time-header'>
                         <span className='report-start-time'>{t[language].ReportsStart}</span>
                         <span className='report-start-time-value'>{
@@ -258,17 +258,39 @@ export default class SummaryReport extends Component {
             }
 
             if (request.timeMeasure < 4) {
-                 if(storeId.Day){
-                    request.fromDate = storeId.Day.timeSpan
-                    request.toDate = storeId.Day.timeSpan
-                 }else if(storeId.Week){
-                    //  let fromYear  = request.fromDate.split("-")[0]
-                    //  let toYear = request.toDate.split("-")[0]
-                    //  request.fromDate = fromYear.concat('/'+storeId.Week.timeSpan.split("-")[0])
-                    //  request.toDate = toYear.concat('/'+storeId.Week.timeSpan.split("-")[1])
-                     request.fromDate = storeId.WeekStartDate.value
-                     request.toDate = storeId.WeekEndDate.value
-                 }
+                //  if(storeId.Day || request.timeMeasure === 1){
+                //      if(storeId.Day){
+                //         request.fromDate = storeId.Day.timeSpan
+                //         request.toDate = storeId.Day.timeSpan
+                //      }else if(storeId.Day === undefined && request.timeMeasure === 1){
+                //         request.fromDate = storeId.StoreDate.value
+                //         request.toDate = storeId.StoreDate.value
+                //      }
+                //  }else if(storeId.Week || request.timeMeasure === 3){
+                //     //  let fromYear  = request.fromDate.split("-")[0]
+                //     //  let toYear = request.toDate.split("-")[0]
+                //     //  request.fromDate = fromYear.concat('/'+storeId.Week.timeSpan.split("-")[0])
+                //     //  request.toDate = toYear.concat('/'+storeId.Week.timeSpan.split("-")[1])
+                //      request.fromDate = storeId.WeekStartDate.value
+                //      request.toDate = storeId.WeekEndDate.value
+                //  }else if(storeId.Daypart || request.timeMeasure === 2){
+                //     if(storeId.Daypart){
+                //         request.fromDate = storeId.Daypart.timeSpan
+                //         request.toDate = storeId.Daypart.timeSpan
+                //      }else if(storeId.Day === undefined && request.timeMeasure === 2){
+                //         request.fromDate = storeId.StoreDate.value
+                //         request.toDate = storeId.StoreDate.value
+                //      }
+                //  }
+
+                if( this.state.reportData.reportType === 'd' || this.state.reportData.reportType === 'md' || this.state.reportData.reportType === 'mdp' || this.state.reportData.reportType === 'dp'){
+                    request.fromDate = storeId.StoreDate.value
+                    request.toDate = storeId.StoreDate.value
+                }else if(this.state.reportData.reportType === 'w' || this.state.reportData.reportType === 'mw'){
+                    request.fromDate = storeId.WeekStartDate.value
+                    request.toDate = storeId.WeekEndDate.value
+                }
+
                  request.fromDate = moment(request.fromDate).format('YYYY-MM-DD')
                  request.toDate =  moment(request.toDate).format('YYYY-MM-DD')
              //   let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
@@ -521,7 +543,7 @@ export default class SummaryReport extends Component {
 
                     <div className='row'>
                       <div className={'col-xs-4 pull-left show-page-toggle ' + (this.state.reportData.singleStore ? 'hide' : 'show' )}> <span className='show-label'>Show:</span> <span className={(this.state.reportData.pagination) ? 'inactive-link' : 'active-link'} onClick={() => this.switchAllPage("all")}>All /</span><span className={(this.state.reportData.pagination) ? 'active-link' : 'inactive-link'} onClick={() => this.switchAllPage("pages")}>Pages</span></div>
-                      <div className={'col-xs-6 reports-terms ' + (this.state.reportData.singleStore ? 'hide' : 'show')}> <span className= 'asterics'>*</span>Derived performance to goal (Lane Queue goal = Lane Total goal - Menu goal - Service goal)</div>
+                      <div className={'col-xs-6 reports-terms ' + (this.state.reportData.singleStore ? 'hide' : 'show')}> <span className= 'asterics'>*</span>{t[language].ReportsDerivedPerformancetoGoal}</div>
                       <div className={'col-xs-2 left-padding-none pull-right ' + (this.state.reportData.pagination &&  this.state.reportData.singleStore ? 'show' : 'hide')}>
                           <PaginationComponent pagination={this.state.reportData.pagination} totalPages={this.state.reportData.NoOfPages}  curPage={this.state.reportData.curPage} handlePreviousPage={(curPage, totalPages) => this.handlePreviousPage(curPage, totalPages)} handleNextPage={(curPage, totalPages) => this.handleNextPage(curPage, totalPages)} disablePrevButton={this.state.reportData.disablePrevButton} disableNextButton={this.state.reportData.disableNextButton} />
                       </div>

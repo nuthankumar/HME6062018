@@ -51,6 +51,9 @@ const getReport = (input, reportName, callback) => {
     if (reportName !== 'rawcardata') {
       request.input(sqlQuery.UserUID.Parameters.UserUID, sql.NVarChar(50), input.userUid)
     }
+
+    request.input(sqlQuery.Server.Parameters.DatabaseName, sql.NVarChar(100), process.env.DatabaseName)
+    request.input(sqlQuery.Server.Parameters.LinkedServerName, sql.NVarChar(100), process.env.LinkedServerName)
     return request
   }, callback)
 }

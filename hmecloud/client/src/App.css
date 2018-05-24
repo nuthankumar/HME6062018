@@ -111,8 +111,8 @@ div.tab-content #store-tabs-pane-1, #store-tabs-pane-2, #store-tabs-pane-3, #sto
 
 table.user_form tr th label {
   /* margin-top: 12px; */
-  width: 110px;
-  font-weight: normal;
+  /* width: 110px;*/
+  font-weight: normal; 
   margin-bottom: 0px;
 
 

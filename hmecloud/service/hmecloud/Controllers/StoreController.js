@@ -305,6 +305,50 @@ const saveMasterSettings = (request, callback) => {
   })
 }
 
+const checkMergeDevices = (request, callback) => {
+  const input = {
+    suids: (request.body.suid ? request.body.suidList : null),
+    duid: (request.body.duid.length ? request.body.duid : null)
+  }
+  deviceValidator.mergePreValidator(input, (err) => {
+    if (err) {
+      callback(err)
+    }
+    stores.checkMergeDevices(input, (result) => {
+      if (result.data && result.data.length > 0) {
+        let output = {}
+        output.data = result.data[0]
+        output.status = true
+        callback(output)
+      } else {
+        callback(errorHandler(messages.LISTGROUP.notfound, false))
+      }
+    })
+  })
+}
+
+const mergeDevicesInfo = (request, callback) => {
+  const input = {
+    suids: (request.body.suid ? request.body.suidList : null),
+    duid: (request.body.duid.length ? request.body.duid : null)
+  }
+  deviceValidator.mergePreValidator(input, (err) => {
+    if (err) {
+      callback(err)
+    }
+    stores.mergeDevicesInfo(input, (result) => {
+      if (result.data && result.data.length > 0) {
+        let output = {}
+        output.data = result.data[0]
+        output.status = true
+        callback(output)
+      } else {
+        callback(errorHandler(messages.LISTGROUP.notfound, false))
+      }
+    })
+  })
+}
+
 const saveMergeDevices = (request, callback) => {
   const input = {
     suid: (request.params.suid ? request.params.suid : null),
@@ -475,6 +519,8 @@ module.exports = {
   settingsStores,
   getMasterSettings,
   saveMasterSettings,
+  checkMergeDevices,
+  mergeDevicesInfo,
   saveMergeDevices,
   getAllStores,
   getStoreByUid,

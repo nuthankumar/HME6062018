@@ -33,8 +33,10 @@ import remoteSystemActions from './components/Stores/RemoteSystemActions'
 import { composeWithDevTools } from 'redux-devtools-extension';
 import ViewDetails from './containers/ViewDetails'
 import viewDetails from './reducers/store/viewDetails';
+//import { Set, Map } from 'hash-set-map'
+//var Joi = require('joi-browser');
+//require('core-js/fn/map'); 
 const createStoreWithMiddlewaare = applyMiddleware(thunkMiddleware, composeWithDevTools)(createStore);
-
 
 const store = createStore(reducers, composeWithDevTools(
     applyMiddleware(thunkMiddleware),

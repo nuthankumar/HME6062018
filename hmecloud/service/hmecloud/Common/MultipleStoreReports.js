@@ -94,11 +94,11 @@ Device.prototype.multipleStore = function () {
       } else if (key === 'GroupName') {
         groupName = ` ${value}`
       } else if (key === 'StoreNo') {
-        if (filter === 'week' || filter === 'daypart') {
+        if (filter === 'week' || filter === 'daypart' || filter === 'day') {
           storeNo = ` ${value}`
           if ((key === 'StoreID') && key.includes('Subtotal')) {
             reportInfo['Groups'] = {'value': groupName + ' ' + storeNo}
-          } else if (value === 'Total Week' || value === 'Total Daypart') {
+          } else if (value === 'Total Week' || value === 'Total Daypart' || value === 'Total Day') {
             reportInfo['Groups'] = {'value': storeNo, 'timeSpan': messages.COMMON.WAVG}
           } else {
             reportInfo['Groups'] = {'value': (groupName || null)}
@@ -121,6 +121,8 @@ Device.prototype.multipleStore = function () {
         reportInfo['WeekEndDate'] = {'value': (value || null)}
       } else if (key === 'Total_Car') {
         reportInfo['Total Cars'] = {'value': (value || null)}
+      } else if (key === 'StoreDate') {
+        reportInfo['StoreDate'] = {'value': (value || null)}
       } else {
         reportInfo[`${key}`] = {'value': `${dateUtils.convertSecondsToMinutes(parseInt(value), timeFormat)}`, 'color': `${getColor(key, value)}`}
       }

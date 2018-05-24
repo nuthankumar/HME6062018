@@ -18,8 +18,8 @@ export default class EmailAlert extends React.Component {
     }
     render() {
         const language = this.state.currentLanguage
-        let user = this.authService.isMasquerade() ? this.authService.getAdminProfile() : this.authService.getProfile();
-        let emailId =  user.User_EmailAddress 
+        let user = this.authService.isAdmin() ? this.authService.getAdminProfile() : this.authService.getProfile();
+        let emailId =  user.User_EmailAddress? user.User_EmailAddress : user.unique_name;
         return (
             <section>
                     <div id="Content">

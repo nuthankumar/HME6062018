@@ -1,5 +1,5 @@
 
-/****** Dropping the StoredProcedure [dbo].[usp_GetUserById] if already exists *****/
+/****** Dropping the StoredProcedure [dbo].[usp_GetUserByEmail] if already exists *****/
 IF (EXISTS(SELECT *
 FROM sys.objects
 WHERE [name] = 'usp_GetUserByEmail' AND [type] ='P'))
