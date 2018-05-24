@@ -13,6 +13,7 @@ import DateTimeField from "react-datetime";
 import DateTime from "react-datetime";
 import "rc-time-picker/assets/index.css";
 import moment from "moment";
+
 import TimePicker from "rc-time-picker";
 import SuccessAlert from "../Alerts/SuccessAlert";
 import ErrorAlert from "../Alerts/ErrorAlert";
@@ -25,6 +26,7 @@ import t from '../Language/language'
 import * as languageSettings from '../Language/languageSettings'
 import AuthenticationService from '../Security/AuthenticationService'
 import CommonLoader from '../Alerts/CommonLoader'
+require('moment/locale/fr');
 
 
 const ProductLogo = require("../../images/ProductLogo-1.png");
@@ -171,7 +173,7 @@ class Report extends Component {
 
   showFromDatePicker(){
     this.refs.fromDate.openCalendar();
-  }
+}
 
   showToDatePicker(){
     this.refs.toDate.openCalendar();
@@ -282,6 +284,7 @@ class Report extends Component {
                         <img src={Calendar} aria-hidden="true" onClick={this.showFromDatePicker.bind(this)}  />
                       </div>
                       <DateTimeField
+                        locale={this.state.currentLanguage == 1? "fr-ca" : 'en'}
                         className="date-time"
                         mode={date}
                         timeFormat={false}
@@ -306,6 +309,7 @@ class Report extends Component {
                         <img src={Calendar} aria-hidden="true" onClick={this.showToDatePicker.bind(this)} />
                       </div>
                       <DateTimeField
+                        locale={this.state.currentLanguage == 1? "fr-ca" : 'en'}
                         className="date-time"
                         mode={date}
                         timeFormat={false}
@@ -929,62 +933,153 @@ class Report extends Component {
         }
 
 
-    if (this.state.timeMeasure == 1) {
-      if (
-        moment(this.state.toDate, "MM/DD/YYYY").diff(
-          moment(this.state.fromDate, "MM/DD/YYYY"),
-              "days"
-          ) > CommonConstants.TimeMeasureValidations.Month
-      ) {
-          this.state.errorMessage = t[language].daterangeinvalid1month;
-        this.setState(this.state);
-        isError = true;
-      }
-    }
+        if (this.state.timeMeasure == 1) {
 
-
-    if (this.state.timeMeasure == 2) {
-      if (
-        moment(this.state.toDate, "MM/DD/YYYY").diff(
-          moment(this.state.fromDate, "MM/DD/YYYY"),
-              "days"
-          ) > CommonConstants.TimeMeasureValidations.TwoWeeks
-      ) {
-          this.state.errorMessage = t[language].daterangeinvalid2week;
-        this.setState(this.state);
-        isError = true;
-      }
-    }
-
-    if (this.state.timeMeasure == 3) {
-      if (
-        moment(this.state.toDate, "MM/DD/YYYY").diff(
-          moment(this.state.fromDate, "MM/DD/YYYY"),
-              "days"
-          ) > CommonConstants.TimeMeasureValidations.TwoMonths
-      ) {
-          this.state.errorMessage = t[language].daterangeinvalid2month;
-        this.setState(this.state);
-        isError = true;
-      }
-    }
-    if (this.state.timeMeasure == 4) {
-      if (
-        moment(this.state.toDate, "MM/DD/YYYY").diff(
-          moment(this.state.fromDate, "MM/DD/YYYY"),
-              "days"
-          ) > CommonConstants.TimeMeasureValidations.Today
-      ) {
-          this.state.errorMessage = t[language].daterangeinvalidsingleday
-        this.setState(this.state);
-        isError = true;
+          // if (
+          //   moment(this.state.toDate, "MM/DD/YYYY").diff(
+          //     moment(this.state.fromDate, "MM/DD/YYYY"),
+          //         "days"
+          //     ) > CommonConstants.TimeMeasureValidations.Month
+          // ) {
+          //     this.state.errorMessage = t[language].daterangeinvalid1month;
+          //   this.setState(this.state);
+          //   isError = true;
+          // }
+    
+          if(!this.state.open || !this.state.close) {
+            if(template[0].deviceIds.length > 100) {
+              if( moment(this.state.toDate, "MM/DD/YYYY").diff(
+                moment(this.state.fromDate, "MM/DD/YYYY"),
+                    "days"
+                ) > CommonConstants.TimeMeasureValidations.Month){
+                  this.state.errorMessage = t[language].daterangeinvalid1month;
+                  this.setState(this.state);
+                  isError = true;
+              }
+            } else {
+              if( moment(this.state.toDate, "MM/DD/YYYY").diff(
+                moment(this.state.fromDate, "MM/DD/YYYY"),
+                    "days"
+                ) > CommonConstants.TimeMeasureValidations.ThreeMonths){
+                  this.state.errorMessage = t[language].daterangeinvalid3month;
+                  this.setState(this.state);
+                  isError = true;
+                }
+            }
+          } else {
+            if (
+              moment(this.state.toDate, "MM/DD/YYYY").diff(
+                moment(this.state.fromDate, "MM/DD/YYYY"),
+                    "days"
+                ) > CommonConstants.TimeMeasureValidations.Month
+            ) {
+                this.state.errorMessage = t[language].daterangeinvalid1month;
+              this.setState(this.state);
+              isError = true;
+            }
+          }
         }
-        if (this.state.deviceUIds.length > 1) {
-            this.state.errorMessage = t[language].invalidselectiononestore
-          this.setState(this.state);
-          isError = true;
-      }
-    }
+    
+    
+        if (this.state.timeMeasure == 2) {
+          // if (
+          //   moment(this.state.toDate, "MM/DD/YYYY").diff(
+          //     moment(this.state.fromDate, "MM/DD/YYYY"),
+          //         "days"
+          //     ) > CommonConstants.TimeMeasureValidations.TwoWeeks
+          // ) {
+          //     this.state.errorMessage = t[language].daterangeinvalid2week;
+          //   this.setState(this.state);
+          //   isError = true;
+          // }
+    
+          if(!this.state.open || !this.state.close) {
+            if(template[0].deviceIds.length > 100) {
+              if (
+                moment(this.state.toDate, "MM/DD/YYYY").diff(
+                  moment(this.state.fromDate, "MM/DD/YYYY"),
+                      "days"
+                  ) > CommonConstants.TimeMeasureValidations.TwoWeeks
+              ) {
+                this.state.errorMessage = t[language].daterangeinvalid2week;
+                this.setState(this.state);
+                isError = true;
+              }
+             
+            } else {
+              if( moment(this.state.toDate, "MM/DD/YYYY").diff(
+                moment(this.state.fromDate, "MM/DD/YYYY"),
+                    "days"
+                ) > CommonConstants.TimeMeasureValidations.ThreeMonths){
+                  this.state.errorMessage = t[language].daterangeinvalid3month;
+                  this.setState(this.state);
+                  isError = true;
+                }
+            }
+          }else{
+            if (
+              moment(this.state.toDate, "MM/DD/YYYY").diff(
+                moment(this.state.fromDate, "MM/DD/YYYY"),
+                    "days"
+                ) > CommonConstants.TimeMeasureValidations.TwoWeeks
+            ) {
+                this.state.errorMessage = t[language].daterangeinvalid2week;
+              this.setState(this.state);
+              isError = true;
+            }
+          }
+        }
+    
+        if (this.state.timeMeasure == 3) {
+          // if (
+          //   moment(this.state.toDate, "MM/DD/YYYY").diff(
+          //     moment(this.state.fromDate, "MM/DD/YYYY"),
+          //         "days"
+          //     ) > CommonConstants.TimeMeasureValidations.TwoMonths
+          // ) {
+          //     this.state.errorMessage = t[language].daterangeinvalid2month;
+          //   this.setState(this.state);
+          //   isError = true;
+          // }
+    
+          if(!this.state.open || !this.state.close) {
+            if(template[0].deviceIds.length > 100) {
+              if (
+                moment(this.state.toDate, "MM/DD/YYYY").diff(
+                  moment(this.state.fromDate, "MM/DD/YYYY"),
+                      "days"
+                  ) > CommonConstants.TimeMeasureValidations.TwoMonths
+              ) {
+                
+                this.state.errorMessage = t[language].daterangeinvalid2month;
+                this.setState(this.state);
+                isError = true;
+              }
+             
+            } else {
+              if( moment(this.state.toDate, "MM/DD/YYYY").diff(
+                moment(this.state.fromDate, "MM/DD/YYYY"),
+                    "days"
+                ) > CommonConstants.TimeMeasureValidations.ThreeMonths){
+                  this.state.errorMessage = t[language].daterangeinvalid3month;
+                  this.setState(this.state);
+                  isError = true;
+                }
+            }
+          }else{
+            if (
+              moment(this.state.toDate, "MM/DD/YYYY").diff(
+                moment(this.state.fromDate, "MM/DD/YYYY"),
+                    "days"
+                ) > CommonConstants.TimeMeasureValidations.TwoMonths
+            ) {
+                this.state.errorMessage = t[language].daterangeinvalid2month;
+              this.setState(this.state);
+              isError = true;
+            }
+          }
+    
+        }
 
     if (this.state.templateName) {
         if (!this.state.saveAsTemplate) {
