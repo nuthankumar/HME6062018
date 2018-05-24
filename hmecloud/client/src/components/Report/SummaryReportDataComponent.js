@@ -157,9 +157,22 @@ export default class SummaryReportDataComponent extends Component {
           </td>
         )
       }else if(headerItem === 'Daypart'){
+        let date,number,value
+        if(reportItem[headerItem] && reportItem[headerItem].timeSpan!=='Total Daypart'){
+         date= reportItem[headerItem].timeSpan.split("D")[0];
+         number=reportItem[headerItem].timeSpan.slice(13,14)
+         value=reportItem[headerItem].timeSpan.slice(6,13);
+        }
+        else{
+          value=reportItem[headerItem].timeSpan
+          date=''
+          number=''
+        }
         return(
         <td className={'timeMeasureColumn ' + (headerItem === 'Daypart' ? 'show-table-cell' : 'hide-table-cell')} onClick={(e) => {e.preventDefault(); this.props.handleDrillDown(reportItem)}}> 
-        <span className={'timeSpan ' + (self.props.reportData.dayPartColumn &&  reportItem[headerItem] !== undefined && reportItem[headerItem] !== undefined ? 'show' : 'hide')}>{ headerItem === 'Daypart' ? (t[language][reportItem[headerItem].timeSpan] ? t[language][reportItem[headerItem].timeSpan]: reportItem[headerItem].timeSpan )  : ''}</span>  <span className={'currentMeasure ' + (self.props.reportData.dayPartColumn && reportItem[headerItem] !== undefined && reportItem[headerItem].currentWeekpart !== undefined ? 'show' : 'hide')}>{(headerItem !== undefined && headerItem === 'Daypart' ? (t[language][reportItem[headerItem].currentWeekpart]? t[language][reportItem[headerItem].currentWeekpart] : reportItem[headerItem].currentWeekpart) : '')}</span> 
+        {/* <span className={'timeSpan ' + (self.props.reportData.dayPartColumn &&  reportItem[headerItem] !== undefined && reportItem[headerItem] !== undefined ? 'show' : 'hide')}>{ headerItem === 'Daypart' ? (t[language][reportItem[headerItem].timeSpan] ? t[language][reportItem[headerItem].timeSpan]: reportItem[headerItem].timeSpan )  : ''}</span>  <span className={'currentMeasure ' + (self.props.reportData.dayPartColumn && reportItem[headerItem] !== undefined && reportItem[headerItem].currentWeekpart !== undefined ? 'show' : 'hide')}>{(headerItem !== undefined && headerItem === 'Daypart' ? (t[language][reportItem[headerItem].currentWeekpart]? t[language][reportItem[headerItem].currentWeekpart] : reportItem[headerItem].currentWeekpart) : '')}</span>  */}
+        <span className={'timeSpan ' + (self.props.reportData.dayPartColumn &&  reportItem[headerItem] !== undefined && reportItem[headerItem] !== undefined ? 'show' : 'hide')}>{ headerItem === 'Daypart' ?  date+t[language][value]+number  : ''}</span>  <span className={'currentMeasure ' + (self.props.reportData.dayPartColumn && reportItem[headerItem] !== undefined && reportItem[headerItem].currentWeekpart !== undefined ? 'show' : 'hide')}>{(headerItem !== undefined && headerItem === 'Daypart' ? (t[language][reportItem[headerItem].currentWeekpart]? t[language][reportItem[headerItem].currentWeekpart] : reportItem[headerItem].currentWeekpart) : '')}</span> 
+    
         </td>
         )
       } else if(headerItem === 'Day'){
