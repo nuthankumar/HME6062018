@@ -1284,6 +1284,7 @@ class Report extends Component {
         if (type == 'PDF') {
            url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=pdf';
         }
+        request.localTime= moment(new Date()).format("MMM D,YYYY hh:mm")
         this.setState({ showLoader: true });
         this.api.postData(url, request, data => {
             if (data.status) {
