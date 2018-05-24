@@ -103,7 +103,7 @@ Device.prototype.multipleStore = function () {
           } else if (value === 'Total Week' || value === 'Total Daypart' || value === 'Total Day') {
             reportInfo['Groups'] = {'value': storeNo, 'timeSpan': messages.COMMON.WAVG}
           } else {
-            reportInfo['Groups'] = {'value': (value || null)}
+            reportInfo['Groups'] = {'value': (groupName || null)}
           }
         }
         reportInfo[`${key}`] = {'value': `${value}`}

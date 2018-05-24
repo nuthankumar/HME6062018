@@ -210,10 +210,11 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
       return `${Math.round(value / totalCarsCount * 100)}%`
     }
   }
-  _.map(deviceGoalInfo[0], (value, key) => {
+  _.map(goalSetting[0], (value, key) => {
     let obj = { goal: '', cars: '0', percentage: '0%' }
     let rowKey = {}
     let row = _.clone(obj)
+  //  console.log(eventGoalList)
     if (eventGoalList.indexOf(key) > -1) {
       row.cars = value || '0'
       row.percentage = CalculatePercetage(value, totalCars)
@@ -224,6 +225,7 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
         if (_.has(goalGrade, goal)) {
           goalGrade[goal][event] = row
         } else {
+          console.log('goal', goal)
           rowKey[event] = row
           goalGrade[goal] = rowKey
           goalGrade[goal].title = (goal === 'GoalF' ? `> GoalD (min:sec)` : `<${goal} (min:sec)`)
