@@ -792,7 +792,7 @@ const language = [
     'Oct':'Oct',
     'Nov':'Nov',
     'Dec':'Déc',
-
+    'Loading...':'Loading...',
     'Merge': 'Merge',
     'SelectSystem': 'Select System(s)',
     'System': 'System',
@@ -800,6 +800,8 @@ const language = [
     'EnterStoreNumber': 'Enter Store Number',
     'Search':'Search',
     'MustSelectStLeastOneSystem': 'Must select at least one system'
+
+
   },
 
   // French
@@ -1598,6 +1600,8 @@ const language = [
     'Oct':'Oct',
     'Nov':'Nov',
     'Dec':'Déc',
+    'Loading...':'Chargement...'
+
   }
 ]
 export default language

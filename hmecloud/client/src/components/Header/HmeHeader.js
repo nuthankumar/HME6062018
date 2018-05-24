@@ -11,6 +11,7 @@ import Api from '../../Api'
 import AuthenticationService from '../Security/AuthenticationService'
 //import * as UserContext from '../Common/UserContext'
 
+import 'url-search-params-polyfill';
 const ProductLogo = require('../../images/ProductLogo-1.png')
 
 const AdminProductLogo = require('../../images/ProductLogo-2.png')
@@ -41,6 +42,8 @@ export default class HmeHeader extends React.Component {
         this.setWrapperRef = this.setWrapperRef.bind(this);
         this.handleClickOutside = this.handleClickOutside.bind(this);
 
+        this.state.isLogIn = (window.location.pathname == '/admin'  || window.location.pathname == '/');
+
         // this.contextUser = {}
     }
 
@@ -67,7 +70,7 @@ export default class HmeHeader extends React.Component {
     renderAdminMenuItems() {
 
         const { language, showSubMenu, token, url } = this.state;
-        if (this.authService.isAdmin() && this.authService.isLoggedIn()) {
+        if (this.authService.isAdmin() && this.authService.isLoggedIn() && !this.state.isLogIn) {
             return (
                 <ul>
                     <li><a className="headerMenu" href={url + "?token=" + token}>{t[language].navbarWelcome}</a></li>
@@ -84,7 +87,7 @@ export default class HmeHeader extends React.Component {
     }
     renderClientMenuItems() {
         const { language, showSubMenu, token, url } = this.state;
-        if (!this.authService.isAdmin() && this.authService.isLoggedIn()) {
+        if (!this.authService.isAdmin() && this.authService.isLoggedIn() && !this.state.isLogIn) {
             return (
                 <ul>
                     <li><a className="headerMenu" href={url + "?token=" + token}>{t[language].navbarWelcome}</a></li>
