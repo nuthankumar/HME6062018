@@ -16,6 +16,7 @@ GO
 -- Sl.No.	Date			Developer		Descriptopn
 -- -----------------------------------------------------------
 -- 1.		22/05/2018		Ramesh 			Add (LinkedServerName,DatabaseName)
+-- 2.		24/05/2018		Ramesh			Add Total Daypart in single result
 -- ===========================================================
 -- exec usp_HME_Cloud_Get_Report_By_Daypart_Details_Dynamic @Device_IDs='15',@StoreStartDate='2018-03-23',@StoreEndDate='2018-03-24',@InputStartDateTime=N'2018-03-23 00:00:00',@InputEndDateTime=N'2018-03-24 10:30:00',@CarDataRecordType_ID='11',@ReportType='AC',@LaneConfig_ID=1,@PageNumber=1,@UserUID=null
 -- ===========================================================
@@ -249,7 +250,7 @@ BEGIN
 					GROUP BY
 						DayPartIndex, CAST(d.StoreDate AS varchar(25)),
 						r.EventType_Category
-					HAVING COUNT(d.Device_ID)>1
+					HAVING COUNT(d.Device_ID)>0
 				) A'
 		END
 	ELSE
@@ -291,7 +292,7 @@ BEGIN
 					GROUP BY
 						CAST(d.StoreDate AS varchar(25)),
 						r.EventType_Name
-					HAVING COUNT(d.Device_ID)>1
+					HAVING COUNT(d.Device_ID)>0
 				'
 		END
 
