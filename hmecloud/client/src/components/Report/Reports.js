@@ -894,6 +894,19 @@ class Report extends Component {
     this.setState(this.state);
 
     //validations
+    if (!this.state.open && !this.openTime ) {
+      this.state.errorMessage = t[language].pleaseselectopentime;
+      this.setState(this.state);
+      isError = true;
+    }
+
+    if (!this.state.close && !this.closeTime ) {
+      this.state.errorMessage = t[language].pleaseselectclosetime;
+      this.setState(this.state);
+      isError = true;
+    }
+
+
     if (this.state.toDate < this.state.fromDate) {
         this.state.errorMessage = t[language].daterangeinvalidbeyond ;
       this.setState(this.state);
