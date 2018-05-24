@@ -177,9 +177,11 @@ export default class SummaryReportDataComponent extends Component {
           </td>
           )
       }else if(headerItem === 'Groups'){
+        let value=reportItem[headerItem] ? reportItem[headerItem].value : ''       
+        if(value !=null) { value=value.trim()}    
         return(
           <td className = {(this.props.reportData.groupStoreColumns ? 'show-table-cell' : 'hide-table-cell')}>
-            <span className='timeSpan'>{reportItem[headerItem] ? reportItem[headerItem].value : ''}</span>
+            <span className='timeSpan'> <span className='timeSpan'>{(value=='Total Day'||value=='Total Daypart'||value=='Total Week')?t[language][value]:value}</span></span>
             {/* <br />
             <span className='currentMeasure'>{reportItem[headerItem] ? reportItem[headerItem].timeSpan : ''}</span> */}
           </td>
@@ -188,7 +190,7 @@ export default class SummaryReportDataComponent extends Component {
         return(
           <td calssName=''>
           {/* <a href='#' className={(headerItem === 'Stores' ? 'store-name-number' : '')} onClick={(e) => { e.preventDefault(); this.props.handleDrillDown(reportItem) }}>{reportItem[headerItem] ? reportItem[headerItem].value : ''} </a> */}
-          <a href='#' className={(headerItem === 'Stores' ? 'store-name-number' : '')} onClick={(e) => { e.preventDefault(); this.props.handleDrillDown(reportItem) }}>{(headerItem === 'Stores' && reportItem[headerItem].value !== null ? reportItem[headerItem].value + '-' + reportItem.StoreNo.value  :  reportItem.StoreNo.value !== undefined ? reportItem.StoreNo.value : '')} </a>
+          <a href='#' className={(headerItem === 'Stores' ? 'store-name-number' : '')} onClick={(e) => { e.preventDefault(); this.props.handleDrillDown(reportItem) }}>{(headerItem === 'Stores' && reportItem[headerItem].value !== null ? reportItem[headerItem].value + '-' + reportItem.StoreNo.value  :  reportItem.StoreNo.value !== undefined || reportItem.StoreNo.value==='Total Week'|| reportItem.StoreNo.value==='Total Day'|| reportItem.StoreNo.value=='Total Daypart' ? reportItem.StoreNo.value : '')} </a>
           </td>
         )
       }
