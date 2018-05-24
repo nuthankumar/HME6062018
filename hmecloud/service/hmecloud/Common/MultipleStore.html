@@ -896,18 +896,21 @@
     padding-bottom: 1px;
     border-top: 1px solid white;
     height: 36px;
-}
-.report-print-time-header {
-    color: #959595;
-    margin-top: 0;
-}
-.currentMeasure {
-    font-size: 10px;
-    font-weight: 500;
-}
-.timeSpan {
-    font-weight: 700;
-}
+    }
+    .report-print-time-header {
+        color: #959595;
+        margin-top: 0;
+    }
+    .currentMeasure {
+        font-size: 10px;
+        font-weight: 500;
+    }
+    .timeSpan {
+        font-weight: 700;
+    }
+    .insideData{
+        color:white
+    }
 
     /* Mutilsingle */
 </style>
@@ -942,50 +945,61 @@
                 </td>
                 <td class="printDate">
                     <h2>
-                        <span class="lightCap report-print-time-header">PRINT DATE: {{details.printDate}} {{details.reportPrintTime}}</span>
+                        <span class="lightCap report-print-time-header">PRINT DATE: {{details.reportPrintTime}}</span>
                     </h2>
                 </td>
             </tr>
         </table>
-
-        {{#each details.storeDetails as |stores|}}
         <div style="width:100% ">
         </div>
         <div class="multi-cont">
+                {{#each details.events as |store|}}
             <div class="row  alignHeader" style="float:left">
-                <h2>{{stores.title}}</h2>
+                    {{#each store as |childvalue childkey|}}
+                    {{#each childvalue.title as |value key|}}
+                    <h2>{{value}}</h2>
+                    {{/each}}
+                    {{/each}}
             </div>
-            <table cellspacing="0" class=" nobreak table-layout daypart "
-            style="border-bottom:0px solid white;
-               bottom: 800px;margin-top:4px;width:90%;
-               padding-bottom: 10px;
-               padding-bottom: 100px; ">
-               <tbody>
-                   <tr>
-                       <th class="clear"></th>
-                       <th class="clear"></th>
-                       <th class="grayhead" colspan=4 "">AVERAGE TIME
-                           <span>(min:sec)</span>
-                       </th>
-                   </tr>
-                   <tr>
-                         {{#each details.mainEvents as |childValue childKey|}}
-                       <th class="colWidth5 blueback ">
-                          {{childValue}}
-                       </th>
-                       {{/each}}
+            <table cellspacing="0" class="table-layout goalW goalMain  daypart " style="border-bottom:0px solid white;margin-bottom:0px;margin-top:4px;/* position: relative; */width: 785px;">
+                <tr>
+                    <th class="clear"></th>
+                    <th class="clear"></th>
+                    <th class="grayhead" colspan=4 "">AVERAGE TIME
+                        <span>(min:sec)</span>
+                    </th>
+                </tr>
+                <tr>
+                    <tr>
+                        {{#each store as |childvalue childkey|}}
+                        {{#each childvalue.headers as |value key|}}
+                           <th class="colWidth5 blueback ">
+                                   <span> {{value}}</span>
+                               </th>
+                           {{/each}}
+                           {{/each}}
                     </tr>
-                    {{#each details.deviceHeaders as |header| }}
-                    <tr class="table-row-data">
-                        {{#each header as |rcd| }}
-                        <td class="rnshade boldin" style="{{#if rcd.value}}background-color:{{rcd.color}}{{/if}}">
-                            {{#if rcd.value}}{{rcd.value}}{{/if}} {{#if rcd.timeSpan}}{{rcd.timeSpan}}{{/if}} {{#if rcd.currentWeekpart}}{{rcd.currentWeekpart}}{{/if}}
+                </tr>
+
+                         {{#each store as |childvalue childkey|}}
+                         {{#each childvalue.rcds as |item|}}
+                         <tr class="table-row-data">
+                         {{#each item as |childvalue|}}
+                        <td class="rnshade boldin  {{#if childvalue.value}}insideData{{/if}} "
+                        style=" {{#if childvalue.value}}background-color:{{childvalue.color}}{{/if}}">
+                          {{#if childvalue.value}}{{childvalue.value}}{{else}}N/A{{/if}}
+                          {{#if childvalue.timeSpan}}{{childvalue.timeSpan}}{{/if}}
                         </td>
-                        {{/each}}
+                          {{/each}}
                         </tr>
-                        {{/each}}
-               </tbody>
+                          {{/each}}
+                          {{/each}}
+
            </table>
+           <div style="page-break-after: always;">
+                <p style="color:white;">this is Page break</p>
+            </div>
+            </div>
         {{/each}}
 
     </div>

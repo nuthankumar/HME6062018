@@ -114,7 +114,7 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
     } else {
       deviceValues.totalRecordCount = totalPages
     }
-
+    deviceValues.localTime = this.request.body.localTime
     return deviceValues
   } else {
     // MutipleReport
@@ -143,6 +143,7 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
     deviceValues.timeMeasure = this.request.body.timeMeasure
     deviceValues.startTime = this.request.body.fromDate
     deviceValues.endTime = this.request.body.toDate
+    deviceValues.localTime = this.request.body.localTime
     return deviceValues
   }
 }
@@ -226,6 +227,11 @@ reports.prototype.generatePDF = function (reportResult, filter, totalPages, resp
   pdfInput.email = this.request.UserEmail
   if (this.isSingleStore) {
     let singleStore = this.deviceDataPreparation(reportResult, filter, totalPages)
+    if (singleStore.eventList.length > 0) {
+      singleStore.goalHeaders = singleStore.goalData
+    } else {
+      singleStore.goalHeaders  = []
+    }
     Pdfmail.singleStore(singleStore, pdfInput, isMailSent => {
       if (isMailSent) {
         response.status(200).send(isMailSent)

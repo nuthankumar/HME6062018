@@ -878,6 +878,9 @@
         margin-top: 10px;
 
     }
+    .goalmargin{
+        margin-right: 0;
+    }
 
     /* GOAL */
 
@@ -930,9 +933,12 @@
     .timeSpan {
         font-weight: 700;
     }
+    .insideData{
+        color:white
+    }
 </style>
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
 <body>
     <div class="page-container clear">
         <table cellspacing="0" class="noBotBord" style="margin-top: -60px;">
@@ -965,7 +971,7 @@
                     <th align="left">
                         <span>Print Date: </span>
                     </th>
-                    <td>{{details.printDate}}</td>
+                    <td>{{details.reportPrintTime}}</td>
                 </tr>
                 <tr>
                     <th align="left">
@@ -1005,7 +1011,7 @@
 
                     <tr class="table-row-data">
                         {{#each header as |rcd| }}
-                        <td class="rnshade boldin" style="{{#if rcd.value}}background-color:{{rcd.color}}{{/if}}">
+                        <td class="rnshade boldin  {{#if rcd.value}}insideData{{/if}}" style="{{#if rcd.value}}background-color:{{rcd.color}}{{/if}}">
                             {{#if rcd.value}}{{rcd.value}}{{/if}} {{#if rcd.timeSpan}}{{rcd.timeSpan}}{{/if}} {{#if rcd.currentWeekpart}}{{rcd.currentWeekpart}}{{/if}}
                         </td>
                         {{/each}}
@@ -1050,16 +1056,16 @@
 
             </div>
         </div>
-        <div style="page-break-after: always;">
-            <p style="color:white;">this is Page break</p>
-        </div>
         {{/if}}
-    </div>
+        <div style="page-break-after: always;">
+                <p style="color:white;">this is Page break</p>
+            </div>
+            </div>
         {{#if details.isgoalData }}
             <!--
     GOALS STATISTICS FOR Daypart -->
             <div class="multi-cont">
-                <div class="row  alignHeader">
+                <div class="row  alignHeader goalmargin">
                     <h2>GOALS STATISTICS FOR {{details.reportName}}</h2>
                 </div>
                 <div class="multi-cont">
@@ -1081,30 +1087,29 @@
                                 </tr>
                             </tr>
                         </table>
-                        {{#each details.goalData as |goalInfo|}}
+                        {{#each details.goalData as |goals|}}
                         <table cellspacing="0" class="table-layout goalW goalMain  daypart " style="border-bottom:0px solid white;margin-bottom:0px;width: 785px;padding-left:24px">
-                                <tr class="greenBox" style=" background-color:{{goalInfo.color}}">
+                                <tr class="greenBox" style=" background-color:{{goals.color}}">
                                     <td class="wide">&lt;
-                                        <span translate="">{{goalInfo.title}}</span>
-                                        <span>(min:sec)</span>
+                                        <span translate="">{{goals.title}}</span>
                                     </td>
-                                {{#each goalInfo as |childValue childKey| }}
+                                    {{#each goals.events as |childValue childKey| }}
                                 <td class="greenBord colWidth5">{{childValue.goal}}</td>
-                            {{/each}}
+                                {{/each}}
                         </tr>
                             <tr class="rshade">
                                     <td class="boldin">
                                         <span translate="" key="cars">Cars</span>
                                     </td>
-                                    {{#each goalInfo as |childValue childKey| }}
-                                    <td class="whiteBord">{{childValue.cars}}</td>
-                                    {{/each}}
+                                    {{#each goals.events as |childValue childKey| }}
+                                <td class="greenBord colWidth5">{{childValue.cars}}</td>
+                            {{/each}}
                                 </tr>
                                 <tr>
-                                        <td class="boldin">%</td>
-                                        {{#each goalInfo as |childValue childKey| }}
-                                        <td>{{childValue.cars}}</td>
-                                        {{/each}}
+                                  <td class="boldin">%</td>
+                                        {{#each goals.events as |childValue childKey| }}
+                                    <td class="greenBord colWidth5">{{childValue.percentage}}</td>
+                                {{/each}}
                                     </tr>
                             </table>
                             {{/each}}
@@ -1180,7 +1185,7 @@
             <div style="page-break-after: always;">
                     <p style="color:white;">this is Page break</p>
                       </div>
-
+                    </div>
 </body>
 
 </html>

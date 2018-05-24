@@ -26,16 +26,51 @@ const mutipleStore = (reportData, pdfInput, callback) => {
   let isTimeMeasureType
   let rcds = []
   if (reportData.timeMeasureType && reportData.timeMeasureType.length > 0) {
-    _.forEach(reportData.timeMeasureType[0].data, (items) => {
+    _.forEach(reportData.timeMeasureType, (item) => {
       let storeDeviceHeaders = []
-      _.forEach(reportData.eventList, (event) => {
-        storeDeviceHeaders.push(items[event])
+      _.forEach(item.data,(details)=>{
+        let deviceDetails=[]
+        _.forEach(reportData.eventList, (event) => {
+          deviceDetails.push(details[event])
+        })
+        storeDeviceHeaders.push(deviceDetails)
       })
       rcds.push(storeDeviceHeaders)
     })
     isTimeMeasureType = true
   } else {
     isTimeMeasureType = false
+  }
+  let Headers = []
+  if (reportData.eventList && reportData.eventList.length > 0 && reportData.eventList !== undefined) {
+    for (let i = 0; i < reportData.timeMeasureType.length; i++) {
+      Headers.push(reportData.eventList)
+    }
+  } else {
+    Headers = []
+  }
+  let titles = []
+  if (reportData.timeMeasureType && reportData.timeMeasureType.length > 0) {
+    _.forEach(reportData.timeMeasureType, (item) => {
+      let deviceTitles = {}
+      _.forEach(item, (value, key) => {
+        if (key === 'title') {
+          deviceTitles.title = value
+        }
+      })
+      titles.push(deviceTitles)
+    })
+    isTimeMeasureType = true
+  } else {
+    isTimeMeasureType = false
+  }
+  let mainData = []
+  for (let i = 0; i < reportData.timeMeasureType.length; i++) {
+    let temp = []
+    temp.push({headers: Headers[i]})
+    temp.push({rcds: rcds[i]})
+    temp.push({title: titles[i]})
+    mainData.push(temp)
   }
   const html = fs.readFileSync(__dirname + '/MultipleStore.html', 'utf8')
   const options = {
@@ -51,18 +86,21 @@ const mutipleStore = (reportData, pdfInput, callback) => {
       details: {
         reportName: reportName,
         startTime: reportData.startTime,
-        stopTime: reportData.stopTime,
+        stopTime: reportData.endTime,
         printDate: moment().format('ll'),
-        reportPrintTime: moment().format('LT'),
+        reportPrintTime: reportData.localTime,
         mainEvents: mainEvents,
         isEventHeader: isEventHeader,
         isTimeMeasureType: isTimeMeasureType,
         storeDetails: reportData.timeMeasureType,
+        events: mainData,
+        titles: titles,
+        headers: Headers,
         deviceHeaders: rcds
       }
     }
   }
- // console.log('reports Input', JSON.stringify(document.context.details))
+
   PdfBuffer.create(document, options)
     .then(response => {
       if (response) {
@@ -86,7 +124,6 @@ const mutipleStore = (reportData, pdfInput, callback) => {
     })
     .catch(error => {
       let output = {}
-      console.log('error', error)
       output.error = error
       return output
     })
@@ -139,7 +176,7 @@ const singleStore = (reportData, pdfInput, callback) => {
     goalEvents = _.clone(reportData.eventList)
     mainEvents = _.clone(reportData.eventList)
     _.forEach(goalEvents, (item, index) => {
-      if (goalEvents[index] === 'Week' || goalEvents[index] === 'Day'||goalEvents[index] === 'Daypart' ||goalEvents[index] === 'Total Cars' ) {
+      if (goalEvents[index] === 'Week' || goalEvents[index] === 'Day' || goalEvents[index] === 'Daypart' || goalEvents[index] === 'Total Cars') {
         goalEvents.splice(index, 1)
       }
     })
@@ -161,6 +198,25 @@ const singleStore = (reportData, pdfInput, callback) => {
     isTimeMeasureType = false
   }
 
+  let goalsHeaders = []
+  if (reportData.goalData && reportData.goalData.length > 0) {
+    _.forEach(reportData.goalData, (events) => {
+      let goals = {}
+      let goal = {}
+      _.forEach(events, (value, key) => {
+        if (key !== 'title' && key !== 'color') {
+          goals[`${key}`] = value
+        } else {
+          goal[`${key}`] = value
+        }
+      })
+      goal['events'] = goals
+      goalsHeaders.push(goal)
+    })
+  } else {
+    goalsHeaders = []
+  }
+
   const document = {
     type: 'buffer',
     template: html,
@@ -172,7 +228,7 @@ const singleStore = (reportData, pdfInput, callback) => {
         startTime: reportData.startTime,
         stopTime: reportData.stopTime,
         printDate: reportData.printDate,
-        reportPrintTime: reportData.printTime,
+        reportPrintTime: reportData.localTime,
         isTimeMeasureType: isTimeMeasureType,
         deviceDetails: reportData.timeMeasureType[0].data,
         deviceHeaders: rcds,
@@ -182,8 +238,9 @@ const singleStore = (reportData, pdfInput, callback) => {
         isLongTime: isLongTime,
         longTime: reportData.LongestTimes,
         isgoalData: isgoalData,
-        goalData: reportData.goalData,
+        goalData: goalsHeaders,
         goalEvents: goalEvents,
+        goalHeaders: goalsHeaders,
         isSystemStatistics: isSystemStatistics,
         systemStatistics: reportData.systemStatistics
       }
@@ -198,15 +255,12 @@ const singleStore = (reportData, pdfInput, callback) => {
           content: Buffer.from(response, 'base64'),
           contentType: 'application/pdf'
         }]
-        console.log('Buffer', attachment[0].content)
         mail.send(pdfInput.email, pdfInput.subject, attachment, isMailSent => {
           let output = {}
           if (isMailSent) {
-            console.log('success')
             output.data = pdfInput.email
             output.status = true
           } else {
-            console.log('fail')
             output.data = pdfInput.email
             output.status = false
           }
@@ -215,7 +269,6 @@ const singleStore = (reportData, pdfInput, callback) => {
       }
     })
     .catch(error => {
-      console.log('error', error)
       let output = {}
       output.error = error
       return output
