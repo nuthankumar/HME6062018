@@ -901,31 +901,31 @@ class Report extends Component {
 
     let errors = [];
     //validations
-    if (this.state.toDate < this.state.fromDate) {
-      errors.push(t[language].daterangeinvalidbeyond);
-      this.state.errorMessage = t[language].daterangeinvalidbeyond ;
-      this.setState(this.state);
-    }
+    // if (Date.parse(this.state.toDate) < Date.parse(this.state.fromDate)) {
+    //   errors.push(t[language].daterangeinvalidbeyond);
+    //   //this.state.errorMessage = t[language].daterangeinvalidbeyond ;
+    //   this.setState(this.state);
+    // }
 
     if (this.state.selectedList.length == 0) {
       errors.push(t[language].pleaseselectstore);
-      this.state.errorMessage = t[language].pleaseselectstore;
-      this.setState(this.state);
+     // this.state.errorMessage = t[language].pleaseselectstore;
+      // this.setState(this.state);
       isError = true;
     }
 
     if (!this.state.open && !this.openTime ) {
      
       errors.push(t[language].pleaseselectopentime);
-      this.state.errorMessage = t[language].pleaseselectopentime;
-      this.setState(this.state);
+     // this.state.errorMessage = t[language].pleaseselectopentime;
+      //this.setState(this.state);
       isError = true;
     }
 
     if (!this.state.close && !this.closeTime ) {      
       errors.push(t[language].pleaseselectclosetime);
-      this.state.errorMessage = t[language].pleaseselectclosetime;
-      this.setState(this.state);
+   //   this.state.errorMessage = t[language].pleaseselectclosetime;
+    //  this.setState(this.state);
       isError = true;
     }
 
@@ -933,14 +933,14 @@ class Report extends Component {
 
         if (moment(this.state.toDate, "MM/DD/YYYY") < moment(this.state.fromDate, "MM/DD/YYYY")) {
           errors.push(t[language].daterangeinvalidbeyond);  
-          this.state.errorMessage = t[language].daterangeinvalidbeyond;
-          this.setState(this.state);
+        //  this.state.errorMessage = t[language].daterangeinvalidbeyond;
+        //  this.setState(this.state);
           isError = true;
     }
     if (this.state.deviceUIds.length >= 250) {
       errors.push(t[language].storeselectioninvalid250);  
-      this.state.errorMessage = t[language].storeselectioninvalid250;
-            this.setState(this.state);
+     // this.state.errorMessage = t[language].storeselectioninvalid250;
+       //     this.setState(this.state);
             isError = true;
         }
 
@@ -965,8 +965,8 @@ class Report extends Component {
                     "days"
                 ) > CommonConstants.TimeMeasureValidations.Month){
                   errors.push(t[language].daterangeinvalid1month);  
-                  this.state.errorMessage = t[language].daterangeinvalid1month;
-                  this.setState(this.state);
+               //   this.state.errorMessage = t[language].daterangeinvalid1month;
+               //   this.setState(this.state);
                   isError = true;
               }
             } else {
@@ -975,8 +975,8 @@ class Report extends Component {
                     "days"
                 ) > CommonConstants.TimeMeasureValidations.ThreeMonths){
                   errors.push(t[language].daterangeinvalid3month); 
-                  this.state.errorMessage = t[language].daterangeinvalid3month;
-                  this.setState(this.state);
+                //  this.state.errorMessage = t[language].daterangeinvalid3month;
+                //  this.setState(this.state);
                   isError = true;
                 }
             }
@@ -988,8 +988,8 @@ class Report extends Component {
                 ) > CommonConstants.TimeMeasureValidations.Month
             ) {
               errors.push(t[language].daterangeinvalid1month);  
-              this.state.errorMessage = t[language].daterangeinvalid1month;
-              this.setState(this.state);
+           //   this.state.errorMessage = t[language].daterangeinvalid1month;
+           //   this.setState(this.state);
               isError = true;
             }
           }
@@ -1017,8 +1017,8 @@ class Report extends Component {
                   ) > CommonConstants.TimeMeasureValidations.TwoWeeks
               ) {
                 errors.push(t[language].daterangeinvalid2week);
-                this.state.errorMessage = t[language].daterangeinvalid2week;
-                this.setState(this.state);
+              //  this.state.errorMessage = t[language].daterangeinvalid2week;
+              //  this.setState(this.state);
                 isError = true;
               }
              
@@ -1028,8 +1028,8 @@ class Report extends Component {
                     "days"
                 ) > CommonConstants.TimeMeasureValidations.ThreeMonths){
                   errors.push(t[language].daterangeinvalid3month);
-                  this.state.errorMessage = t[language].daterangeinvalid3month;
-                  this.setState(this.state);
+                //  this.state.errorMessage = t[language].daterangeinvalid3month;
+                //  this.setState(this.state);
                   isError = true;
                 }
             }
@@ -1041,8 +1041,8 @@ class Report extends Component {
                 ) > CommonConstants.TimeMeasureValidations.TwoWeeks
             ) {
               errors.push(t[language].daterangeinvalid2week);
-              this.state.errorMessage = t[language].daterangeinvalid2week;
-              this.setState(this.state);
+            //  this.state.errorMessage = t[language].daterangeinvalid2week;
+            //  this.setState(this.state);
               isError = true;
             }
           }
@@ -1070,8 +1070,8 @@ class Report extends Component {
               ) {
                 
               errors.push(t[language].daterangeinvalid2month);
-                this.state.errorMessage = t[language].daterangeinvalid2month;
-                this.setState(this.state);
+             //   this.state.errorMessage = t[language].daterangeinvalid2month;
+             //   this.setState(this.state);
                 isError = true;
               }
              
@@ -1082,8 +1082,8 @@ class Report extends Component {
                 ) > CommonConstants.TimeMeasureValidations.ThreeMonths){
                   
                   errors.push(t[language].daterangeinvalid3month);
-                  this.state.errorMessage = t[language].daterangeinvalid3month;
-                  this.setState(this.state);
+              //    this.state.errorMessage = t[language].daterangeinvalid3month;
+              //    this.setState(this.state);
                   isError = true;
                 }
             }
@@ -1096,8 +1096,8 @@ class Report extends Component {
             ) {
               
               errors.push(t[language].daterangeinvalid2month);
-                this.state.errorMessage = t[language].daterangeinvalid2month;
-              this.setState(this.state);
+            //    this.state.errorMessage = t[language].daterangeinvalid2month;
+            //  this.setState(this.state);
               isError = true;
             }
           }
@@ -1107,16 +1107,16 @@ class Report extends Component {
     if (this.state.templateName) {
         if (!this.state.saveAsTemplate) {
             errors.push(t[language].pleasechecksaveastemplate);
-            this.state.errorMessage = t[language].pleasechecksaveastemplate
-            this.setState(this.state)
+         //   this.state.errorMessage = t[language].pleasechecksaveastemplate
+         //   this.setState(this.state)
             isError = true;
         }
     }
     if (this.state.saveAsTemplate) {
       if (!this.state.templateName || this.state.templateName.trim().length == 0) {
         errors.push(t[language].pleaseneteratemplatename);
-        this.state.errorMessage = t[language].pleaseneteratemplatename
-        this.setState(this.state)
+     //   this.state.errorMessage = t[language].pleaseneteratemplatename
+     //   this.setState(this.state)
         isError = true;
       } else {
         let sameTemplate= false;
@@ -1127,8 +1127,8 @@ class Report extends Component {
         })
         if(sameTemplate){
           errors.push(t[language].pleaseenterauniquetemplate);
-          this.state.errorMessage = t[language].pleaseenterauniquetemplate
-          this.setState(this.state);
+     //     this.state.errorMessage = t[language].pleaseenterauniquetemplate
+     //     this.setState(this.state);
           isError = true;
         }else{
           isError = false;
