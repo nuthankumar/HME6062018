@@ -50,7 +50,7 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
   let reportFilter = filter.reportName
   reportFilter === 'daypart' ? colors = reportResult.data[1] : colors = reportResult.data[4]
   reportFilter === 'daypart' ? goalSetting = reportResult.data[3] : goalSetting = reportResult.data[2]
-  
+
   let deviceValues = {}
   if (this.isSingleStore) {
     let Colors
@@ -154,12 +154,12 @@ reports.prototype.getRawCarDataReport = function (reportResult) {
   let deviceStoreInfo = devicesDetails.storeInfo()
   deviceValues = deviceStoreInfo
 
-  if (reportResult.data[0] && reportResult.data[0].length > 0 && reportResult.data[0] !== null && reportResult.data[0] !== undefined) {
-    deviceValues.rawCarData = devicesDetails.generateReports(reportResult.data[0])
-  } else {
-    deviceValues.rawCarData = []
-  }
-  if (deviceValues.rawCarData.length > 0) {
+  new Promise(function (resolve, reject) {
+    if (reportResult.data[0] && reportResult.data[0].length > 0 && reportResult.data[0] !== null && reportResult.data[0] !== undefined) {
+      deviceValues.rawCarData = devicesDetails.generateReports(reportResult.data[0])
+    } else {
+      deviceValues.rawCarData = []
+    }
     let events = []
     if (reportResult.data[1] && reportResult.data[1].length > 0 && reportResult.data[1] !== null && reportResult.data[1] !== undefined) {
       events = reportResult.data[1][0].EventTypeName.split('|$|')
@@ -167,9 +167,20 @@ reports.prototype.getRawCarDataReport = function (reportResult) {
     } else {
       deviceValues.eventList = []
     }
-  } else {
+    if (reportResult.data[0].length > 0) {
+      resolve(deviceValues)
+    } else {
+      deviceValues.key = 'ReportsNoRecordsFound'
+      delete deviceValues['eventList']
+      delete deviceValues['rawCarData']
+    }
+  }).catch((e) => {
     deviceValues.key = 'ReportsNoRecordsFound'
-  }
+    deviceValues.status = true
+    console.log('reject')
+    return deviceValues
+  })
+
   return deviceValues
 }
 reports.prototype.generateCSV = function (reportResult, filter, totalPages, response) {
@@ -273,6 +284,7 @@ reports.prototype.createReports = function (response) {
             }
           } else if (this.isReports) {
             Output = this.getRawCarDataReport(reportResult)
+            console.log(Output)
             Output.status = true
             if (Output.status === true) {
               response.status(200).send(Output)
