@@ -597,8 +597,6 @@ class Report extends Component {
   getSavedReports() {
       let url = Config.apiBaseUrl + CommonConstants.apiUrls.getSavedTemplates
       this.api.getData(url, data => {
-
-          console.log(data);
           this.state.savedTemplates = []
           this.setState({
           savedTemplates: data.data
@@ -915,17 +913,12 @@ class Report extends Component {
     }
 
     if (!this.state.open && !this.openTime ) {
-     
       errors.push(t[language].pleaseselectopentime);
-     // this.state.errorMessage = t[language].pleaseselectopentime;
-      //this.setState(this.state);
       isError = true;
     }
 
     if (!this.state.close && !this.closeTime ) {      
       errors.push(t[language].pleaseselectclosetime);
-   //   this.state.errorMessage = t[language].pleaseselectclosetime;
-    //  this.setState(this.state);
       isError = true;
     }
 
@@ -933,16 +926,16 @@ class Report extends Component {
 
         if (moment(this.state.toDate, "MM/DD/YYYY") < moment(this.state.fromDate, "MM/DD/YYYY")) {
           errors.push(t[language].daterangeinvalidbeyond);  
-        //  this.state.errorMessage = t[language].daterangeinvalidbeyond;
-        //  this.setState(this.state);
           isError = true;
     }
-    if (this.state.deviceUIds.length >= 250) {
+    if (this.state.deviceUIds.length > 250 && template[0].advancedOption) {
       errors.push(t[language].storeselectioninvalid250);  
-     // this.state.errorMessage = t[language].storeselectioninvalid250;
-       //     this.setState(this.state);
             isError = true;
-        }
+    }
+    if (this.state.deviceUIds.length > 100 && !template[0].advancedOption) {
+          errors.push(t[language].storeselectioninvalid100);  
+                isError = true;
+    }
 
 
         if (this.state.timeMeasure == 1) {
@@ -1300,7 +1293,6 @@ class Report extends Component {
             this.setState(this.state)
         })
     }else{
-      console.log(JSON.stringify(request))
      // let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateReport + '?reportType=reports'
      let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=reports'
       this.api.postData(url, request, data => {
