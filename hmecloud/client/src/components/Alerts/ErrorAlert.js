@@ -8,15 +8,6 @@ export default class ErrorAlert extends React.Component {
     this.state = {
         isMultiple: false
     }
-
-    
-//    if (this.props.errorMessage && this.props.errors){
-//     if (_.contains(this.props.errors, this.props.errorMessage))
-//     {
-//        this.state.isMultiple = true;
-//     }
-//  }
-
     }
   
   
@@ -25,7 +16,7 @@ export default class ErrorAlert extends React.Component {
     if (this.props.errorMessage && !this.props.errors){
     if (this.props.errorMessage !== '' && this.props.errorMessage !== undefined && this.props.errorMessage !== null) {
       return (
-        <div className='alert alert-danger'>
+        <div className='alert alert-danger errors'>
           <ul>
              <li>{this.props.errorMessage}</li>
           </ul>
