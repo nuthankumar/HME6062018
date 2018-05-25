@@ -277,7 +277,7 @@ class Report extends Component {
                   <div className="date-from">
                     <span className="span-heading">
                                         <span>  {t[language].from} </span>
-                                        <a data-tip={t[language].choosestartorend}><span className="tip openTip">?</span></a>
+                                        <a data-tip={t[language].choosestartandend}><span className="tip openTip">?</span></a>
                                           <ReactTooltip place="right" type="dark" effect="solid" />
                     </span>
                     <div className="calendar">
@@ -302,7 +302,7 @@ class Report extends Component {
                     <span className="span-heading">
                                         <span>  {t[language].to} </span>
 
-                                        <a data-tip={t[language].choosestartorend}><span className="tip openTip">?</span></a>
+                                        <a data-tip={t[language].choosestartandend}><span className="tip openTip">?</span></a>
                       <ReactTooltip place="right" type="dark" effect="solid" />
                     </span>
                     <div className="calendar">
