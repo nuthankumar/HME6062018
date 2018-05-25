@@ -238,6 +238,7 @@ FROM #StoresDevicesDates sdd
    AND b.StoreDate = sdd.StoreDate
    AND g.Device_ID = b.Device_ID
    AND g.Detector_ID = b.Detector_ID
+   AND b.DepartTimeStamp is not null
    WHERE (b.Detector_ID = 1000 OR b.Goal_ID>0)
 
 UNION
@@ -264,7 +265,7 @@ SELECT sdd.StoreDate,
   et.LaneConfig_ID
 FROM #StoresDevicesDates sdd
   INNER JOIN #DetectorEventType et ON et.Device_ID = sdd.Device_ID
-  INNER JOIN #CarDetectorData cdd ON sdd.Device_ID = cdd.Device_ID AND cdd.Detector_ID = 2000 AND sdd.StoreDate = cdd.StoreDate
+  INNER JOIN #CarDetectorData cdd ON sdd.Device_ID = cdd.Device_ID AND cdd.Detector_ID = 2000 AND sdd.StoreDate = cdd.StoreDate AND cdd.DepartTimeStamp is not null
 WHERE NOT EXISTS(
   SELECT 1
   FROM #CarDetectorData d
