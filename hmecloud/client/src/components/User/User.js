@@ -249,7 +249,7 @@ class User extends Component {
                                                 <input type="button" value={t[language].save} onClick={this.submit.bind(this)} />
                                             </td>
                                             <td>
-                                                &nbsp;|&nbsp;<a class="cancel_butt" href="./?pg=SettingsUsers">{t[language].cancel}</a>
+                                                &nbsp;|&nbsp;<a class="cancel_butt" href={(this.authService.isAdmin()?Config.adminColdFusionUrl:Config.coldFusionUrl)+'?pg=SettingsUsers&token='+this.authService.getToken()}>{t[language].cancel}</a>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -259,8 +259,6 @@ class User extends Component {
                     </div>
                 </div>
             </div>
-
-
             <div className={"ctable " + (this.state.isAdmin ? 'show' : 'hidden')}>
                 <table class="tablesorter tablesorter-default" id="myTable">
                     <caption /*style="font-size:16px; font-weight:600;"*/>User Activity Log</caption>
