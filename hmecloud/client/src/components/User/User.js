@@ -39,6 +39,7 @@ class User extends Component {
             deleteSuceessMessage: 'User Deleted Successfully',
             deleteErrorMessage: 'Unable to delete group data',
             errorMessage: '',
+            errors:''
         }
         this.api = new Api()
         this.authService = new AuthenticationService(Config.authBaseUrl)
@@ -165,7 +166,7 @@ class User extends Component {
                                 </span>
                             </div>
                         </h3>
-                        <ErrorAlert errorMessage={this.state.errorMessage} />
+                        <ErrorAlert errorMessage={this.state.errorMessage} errors={this.state.errors} />
                         <form /*action="./?pg=SettingsUsers&amp;st=confirm&amp;uuid=PWD1L9GMR73VHJMV11RYHTSD7QTPNQG6" method="post" */ onsubmit={this.submit.bind(this)}>
                             <div class="fleft">
                                 <table class="user_form">
@@ -459,23 +460,24 @@ class User extends Component {
     }
 
     submit(e) {
-
         let isError = false;
         const language = this.state.currentLanguage
+        let errors = [];
+        this.setState({errors: errors});
         if (!this.state.firstName) {
-            this.state.errorMessage = t[language].pleasefillinfirstname
+            errors.push(t[language].pleasefillinfirstname)
             isError = true;
         }
         if (!this.state.lastName) {
-            this.state.errorMessage = t[language].pleasefillinlastname
+            errors.push(t[language].pleasefillinlastname)
             isError = true;
         }
         if (!this.state.userEmail) {
-            this.state.errorMessage = t[language].emailinvalid
+            errors.push(t[language].emailinvalid)
             isError = true;
         }
         if (!this.state.userRole) {
-            this.state.errorMessage = t[language].pleaseassignrole
+            errors.push(t[language].pleaseassignrole)
             isError = true;
         }
 
@@ -498,15 +500,18 @@ class User extends Component {
                     this.props.history.push("/message", data.key);
                 }
                 else if (!data.status) {
-                    this.state.errorMessage = "ERROR";
-                    this.state.successMessage = "";
-                    this.setState(this.state);
+                    let errors =[]
+                    errors.push(t[language][data.key])
+                    this.setState({errors: errors});
                 }
             }, error => {
                 this.state.errorMessage = "ERROR";
                 this.state.successMessage = "";
                 this.setState(this.state);
             })
+        }
+    else{
+                this.setState({errors: errors});
         }
     }
 }
