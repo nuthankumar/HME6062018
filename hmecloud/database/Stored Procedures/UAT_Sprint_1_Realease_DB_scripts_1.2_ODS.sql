@@ -1,13 +1,13 @@
 
 GO
-/****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_test] if already exists *****/
-IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_HME_Cloud_Get_Report_Raw_Data_test' AND [type] ='P'))
-	DROP PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_test]
+/****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Dynamic_ODS] if already exists *****/
+IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_HME_Cloud_Get_Report_Raw_Data_Dynamic_ODS' AND [type] ='P'))
+	DROP PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Dynamic_ODS]
 GO
 
 
 --exec [usp_HME_Cloud_Get_Report_Raw_Data] '119913, 119961, 119905, 119748', '2018-05-1', '2018-05-15', '2018-05-1 00:00:00' , '2018-05-15 23:30:00', 11, 'TC'
-CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_test](
+CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Dynamic_ODS](
 	@Device_IDs varchar(MAX),
 	@StoreStartDate date,
 	@StoreEndDate date,
