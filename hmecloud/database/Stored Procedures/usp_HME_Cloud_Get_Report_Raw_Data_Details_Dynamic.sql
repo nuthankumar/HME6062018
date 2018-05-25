@@ -1,8 +1,8 @@
-/****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details] if already exists *****/
+GO
+/****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details_Dynamic] if already exists *****/
 IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_HME_Cloud_Get_Report_Raw_Data_Details_Dynamic' AND [type] ='P'))
 	DROP PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details_Dynamic]
 GO
-
 -- ===========================================================
 --      Copyright © 2018, HME, All Rights Reserved
 -- ===========================================================
@@ -22,7 +22,7 @@ GO
 -- ===========================================================
 
 
-CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details_Dynamic](
+ALTER PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details_Dynamic](
  @Device_IDs varchar(500),
  @StoreStartDate date,
  @StoreEndDate date,
@@ -174,7 +174,7 @@ WHERE EXISTS(SELECT 1 FROM dbo.Split(@Device_IDs, ',') AS Devices WHERE Devices.
 
 
 SET @query ='INSERT INTO #CarDetectorData
-	EXECUTE ['+@LinkedServerName+'].['+@DatabaseName+'].dbo.usp_HME_Cloud_Get_Report_Raw_Data '''+@Device_IDs +''', '''+CONVERT(VARCHAR(20), @StoreStartDate,23) +''', '
+	EXECUTE ['+@LinkedServerName+'].['+@DatabaseName+'].dbo.usp_HME_Cloud_Get_Report_Raw_Data_Test '''+@Device_IDs +''', '''+CONVERT(VARCHAR(20), @StoreStartDate,23) +''', '
 	+ ''''+CONVERT(VARCHAR(20),@StoreEndDate,23) +''', ''' + CONVERT(VARCHAR(30),@StartDateTime, 21)+''', '''+ CONVERT(VARCHAR(30),@EndDateTime, 21) +''', '''+@CarDataRecordType_IDs+''', '''+ @ReportType+''''
 	EXEC (@query)
 
@@ -237,9 +237,9 @@ FROM #StoresDevicesDates sdd
   LEFT JOIN #CarDetectorData b ON b.Device_ID = sdd.Device_ID
    AND b.StoreDate = sdd.StoreDate
    AND g.Device_ID = b.Device_ID
-   AND g.Detector_ID = b.Detector_ID
-   AND b.DepartTimeStamp is not null
+   AND g.Detector_ID = b.Detector_ID   
    WHERE (b.Detector_ID = 1000 OR b.Goal_ID>0)
+   AND b.DepartTimeStamp is not null
 
 UNION
 
@@ -265,7 +265,7 @@ SELECT sdd.StoreDate,
   et.LaneConfig_ID
 FROM #StoresDevicesDates sdd
   INNER JOIN #DetectorEventType et ON et.Device_ID = sdd.Device_ID
-  INNER JOIN #CarDetectorData cdd ON sdd.Device_ID = cdd.Device_ID AND cdd.Detector_ID = 2000 AND sdd.StoreDate = cdd.StoreDate AND cdd.DepartTimeStamp is not null
+  INNER JOIN #CarDetectorData cdd ON sdd.Device_ID = cdd.Device_ID AND cdd.Detector_ID = 2000 AND sdd.StoreDate = cdd.StoreDate 
 WHERE NOT EXISTS(
   SELECT 1
   FROM #CarDetectorData d
@@ -273,7 +273,7 @@ WHERE NOT EXISTS(
   AND  cdd.CarDataRecord_ID = d.CarDataRecord_ID
    AND (d.Detector_ID = 1000 OR d.Goal_ID>0)
 
-)
+) AND cdd.DepartTimeStamp is not null
 ) A
 ORDER BY DepartTimeStamp
 
@@ -297,6 +297,7 @@ WHERE NOT EXISTS(
   FROM #CarDetectorData d
   WHERE et.Detector_ID = d.Detector_ID
   AND  cdd.CarDataRecord_ID = d.CarDataRecord_ID
+
 )
 ORDER BY EventType_Name
 
@@ -335,3 +336,4 @@ RETURN(0)
 -- exec usp_HME_Cloud_Get_Report_Raw_Data '1354,1382', '2014-07-11', '2014-07-11', '2014-08-11 10:00:00', '2014-08-11 10:01:00', '11', 'AC'
 
 -- exec usp_HME_Cloud_Get_Report_Raw_Data '1382', '2015-02-10', '2015-02-10', NULL, NULL, '11' --'2014-07-09 10:00:00', '2014-07-09 12:02:00', '11', 'AC'
+GO
