@@ -791,7 +791,7 @@ const language = [
         'Sept': 'Sept',
         'Oct': 'Oct',
         'Nov': 'Nov',
-        'Dec': 'Déc',
+        'Dec': 'Dec',
 
         'Janv': 'Jan',
         'Févr': 'Feb',
@@ -1627,7 +1627,7 @@ const language = [
         'Nov': 'Nov',
         'Dec': 'Déc',
 
-          'Janv': 'Jan',
+        'Janv': 'Jan',
         'Févr': 'Feb',
         'Mars': 'Mar',
         'Avril': 'Apr',
@@ -1640,8 +1640,8 @@ const language = [
         'Nov': 'Nov',
         'Déc': 'Dec',
 
-       
-        
+
+
         'janv': 'Janv',
         'févr': 'Févr',
         'mars': 'Mars',
