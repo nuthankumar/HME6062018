@@ -28,8 +28,8 @@ const mutipleStore = (reportData, pdfInput, callback) => {
   if (reportData.timeMeasureType && reportData.timeMeasureType.length > 0) {
     _.forEach(reportData.timeMeasureType, (item) => {
       let storeDeviceHeaders = []
-      _.forEach(item.data,(details)=>{
-        let deviceDetails=[]
+      _.forEach(item.data, (details) => {
+        let deviceDetails = []
         _.forEach(reportData.eventList, (event) => {
           deviceDetails.push(details[event])
         })
@@ -197,7 +197,6 @@ const singleStore = (reportData, pdfInput, callback) => {
   } else {
     isTimeMeasureType = false
   }
-
   let goalsHeaders = []
   if (reportData.goalData && reportData.goalData.length > 0) {
     _.forEach(reportData.goalData, (events) => {
@@ -227,7 +226,7 @@ const singleStore = (reportData, pdfInput, callback) => {
         storeDesc: reportData.storeDesc,
         startTime: reportData.startTime,
         stopTime: reportData.stopTime,
-        printDate: reportData.printDate,
+        printDate: moment().format('ll'),
         reportPrintTime: reportData.localTime,
         isTimeMeasureType: isTimeMeasureType,
         deviceDetails: reportData.timeMeasureType[0].data,
