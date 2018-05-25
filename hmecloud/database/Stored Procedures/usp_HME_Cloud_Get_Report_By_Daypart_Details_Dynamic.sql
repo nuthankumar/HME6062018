@@ -1,7 +1,10 @@
-/****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details] if already exists *****/
+
+GO
+/****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details_Dynamic] if already exists *****/
 IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_HME_Cloud_Get_Report_By_Daypart_Details_Dynamic' AND [type] ='P'))
 	DROP PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details_Dynamic]
 GO
+
 
 -- ===========================================================
 --      Copyright © 2018, HME, All Rights Reserved
@@ -20,7 +23,7 @@ GO
 -- ===========================================================
 -- exec usp_HME_Cloud_Get_Report_By_Daypart_Details_Dynamic @Device_IDs='15',@StoreStartDate='2018-03-23',@StoreEndDate='2018-03-24',@InputStartDateTime=N'2018-03-23 00:00:00',@InputEndDateTime=N'2018-03-24 10:30:00',@CarDataRecordType_ID='11',@ReportType='AC',@LaneConfig_ID=1,@PageNumber=1,@UserUID=null
 -- ===========================================================
-CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details_Dynamic]
+ALTER PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details_Dynamic]
 (
 	@Device_IDs varchar(500),
 	@StoreStartDate date,
@@ -169,7 +172,7 @@ BEGIN
 	-- pull in raw data from proc
 		-- pull in raw data from proc
 	SET @query ='INSERT INTO #raw_data
-	EXECUTE ['+@LinkedServerName+'].['+@DatabaseName+'].dbo.usp_HME_Cloud_Get_Report_Raw_Data '''+@Device_IDs +''', '''+CONVERT(VARCHAR(20), @StoreStartDate,23) +''', '
+	EXECUTE ['+@LinkedServerName+'].['+@DatabaseName+'].dbo.usp_HME_Cloud_Get_Report_Raw_Data_Test '''+@Device_IDs +''', '''+CONVERT(VARCHAR(20), @StoreStartDate,23) +''', '
 	+ ''''+CONVERT(VARCHAR(20),@StoreEndDate,23) +''', ''' + CONVERT(VARCHAR(30),@StartDateTime, 21)+''', '''+ CONVERT(VARCHAR(30),@EndDateTime, 21) +''', '''+@CarDataRecordType_ID+''', '''+ @ReportType+''''
 
 	EXEC(@query)
@@ -644,3 +647,5 @@ BEGIN
 	RETURN(0)
 
 END
+
+GO

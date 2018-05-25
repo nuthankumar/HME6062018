@@ -1,6 +1,15 @@
-/****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details] if already exists *****/
+
+/****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details_Dynamic] if already exists *****/
 IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_HME_Cloud_Get_Report_By_Date_Details_Dynamic' AND [type] ='P'))
 	DROP PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details_Dynamic]
+GO
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details_Dynamic]    Script Date: 5/25/2018 3:14:11 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
 GO
 
 -- ===========================================================
@@ -22,7 +31,7 @@ GO
 -- ===========================================================
 --exec usp_HME_Cloud_Get_Report_By_Date_Details_Dynamic '111447,111446','2018-03-20','2018-03-26',N'2018-03-20 00:00:00',N'2018-03-26 10:30:00','11','AC',1,'CEO7JK0VUSRJZFXXC0J1WW0I0E4CHD2M'
 
-CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details_Dynamic](
+ALTER PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details_Dynamic](
 	@Device_IDs varchar(500),
 	@StoreStartDate date,
 	@StoreEndDate date,
@@ -115,7 +124,7 @@ BEGIN
 
 	-- pull in raw data from proc
 	SET @query ='INSERT INTO #raw_data
-	EXECUTE ['+@LinkedServerName+'].['+@DatabaseName+'].dbo.usp_HME_Cloud_Get_Report_Raw_Data '''+@Device_IDs +''', '''+CONVERT(VARCHAR(20), @StoreStartDate,23) +''', '
+	EXECUTE ['+@LinkedServerName+'].['+@DatabaseName+'].dbo.usp_HME_Cloud_Get_Report_Raw_Data_Test '''+@Device_IDs +''', '''+CONVERT(VARCHAR(20), @StoreStartDate,23) +''', '
 	+ ''''+CONVERT(VARCHAR(20),@StoreEndDate,23) +''', ''' + CONVERT(VARCHAR(30),@StartDateTime, 21)+''', '''+ CONVERT(VARCHAR(30),@EndDateTime, 21) +''', '''+@CarDataRecordType_ID+''', '''+ @ReportType+''''
 
 	EXEC(@query)
@@ -542,3 +551,4 @@ BEGIN
 	RETURN(0)
 
 END
+GO
