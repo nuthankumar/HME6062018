@@ -89,24 +89,23 @@ Device.prototype.multipleStore = function () {
       }
     }
     _.forEach(storeDetails[key], function (value, key) {
-     
+      let total = null
       if (key === 'StoreID') {
         reportInfo['storeId'] = {'value': ` ${value}`}
       } else if (key === 'GroupName') {
-        groupName = ` ${value}`
-        reportInfo['Groups'] = {'value': (value || null)}
+        groupName = `${value}`
+        if (reportInfo['Groups'] === null) {
+          reportInfo['Groups'] = {'value': (groupName || null)}
+        }
       } else if (key === 'StoreNo') {
-        if (filter === 'week' || filter === 'daypart' || filter === 'day') {
-          storeNo = ` ${value}`
-          if ((key === 'StoreID') && key.includes('Subtotal')) {
-            reportInfo['Groups'] = {'value': groupName + ' ' + storeNo}
-          } else if (value === 'Total Week' || value === 'Total Daypart' || value === 'Total Day') {
-            reportInfo['Groups'] = {'value': storeNo, 'timeSpan': messages.COMMON.WAVG}
-          } else {
-            reportInfo['Groups'] = {'value': (groupName || null)}
-          }
+        storeNo = `${value}`
+        if ((key === 'StoreID') && key.includes('Subtotal')) {
+          total = {'value': groupName + ' ' + storeNo}
+        } else if (value === 'Total Week' || value === 'Total Daypart' || value === 'Total Day') {
+          total = {'value': value, 'timeSpan': messages.COMMON.WAVG}
         }
         reportInfo[`${key}`] = {'value': `${value}`}
+        reportInfo['Groups'] = total
       } else if (key === 'Store_Name') {
         reportInfo['Stores'] = {'value': (value || null)}
       } else if (key === 'Device_UID') {
