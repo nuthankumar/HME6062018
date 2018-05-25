@@ -189,6 +189,10 @@ const singleStore = (reportData, pdfInput, callback) => {
     _.forEach(reportData.timeMeasureType[0].data, (items) => {
       let storeDeviceHeaders = []
       _.forEach(reportData.eventList, (event) => {
+        if (event === 'Total Cars') {
+          let totalcar = {'totalcar': items['Total Cars'].value}
+          storeDeviceHeaders.push(totalcar)
+        }
         storeDeviceHeaders.push(items[event])
       })
       rcds.push(storeDeviceHeaders)
@@ -215,7 +219,8 @@ const singleStore = (reportData, pdfInput, callback) => {
   } else {
     goalsHeaders = []
   }
-
+  console.log('Need work', JSON.stringify(rcds))
+  console.log('eventHeaders', JSON.stringify(mainEvents))
   const document = {
     type: 'buffer',
     template: html,

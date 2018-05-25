@@ -936,6 +936,9 @@
     .insideData{
         color:white
     }
+    .insideHeader{
+        color:black
+    }
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
@@ -1008,14 +1011,18 @@
                         {{/each}}
                     </tr>
                     {{#each details.deviceHeaders as |header| }}
-
                     <tr class="table-row-data">
                         {{#each header as |rcd| }}
-                        <td class="rnshade boldin {{#if rcd.value}}insideData{{/if}}"
+                        <td class="rnshade boldin
+                        {{#if rcd.value}}insideData{{/if}}
+                        {{#if rcd.timeSpan}}insideHeader{{/if}}
+                        {{#if rcd.currentWeekpart}}insideHeader{{/if}}
+                        {{#if rcd.totalcar}}insideHeader{{/if}} "
                         style="{{#if rcd.value}}background-color:{{rcd.color}}{{/if}}">
-                            {{#if rcd.value}}{{rcd.value}}{{/if}}
-                             {{#if rcd.timeSpan}}{{rcd.timeSpan}}{{/if}}
+                              {{#if rcd.timeSpan}}{{rcd.timeSpan}}{{/if}}
                               {{#if rcd.currentWeekpart}}{{rcd.currentWeekpart}}{{/if}}
+                              {{#if rcd.value}}{{rcd.value}}{{/if}}
+                              {{#if rcd.totalcar}}{{rcd.totalcar}}{{/if}}
                         </td>
                         {{/each}}
                     </tr>
