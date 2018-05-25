@@ -158,12 +158,16 @@ reports.prototype.getRawCarDataReport = function (reportResult) {
   } else {
     deviceValues.rawCarData = []
   }
-  let events = []
-  if (reportResult.data[1] && reportResult.data[1].length > 0 && reportResult.data[1] !== null && reportResult.data[1] !== undefined) {
-    events = reportResult.data[1][0].EventTypeName.split('|$|')
-    deviceValues.eventList = ['DepartureTime', 'EventName', 'CarsInQueue', ...events]
+  if (deviceValues.rawCarData.length > 0) {
+    let events = []
+    if (reportResult.data[1] && reportResult.data[1].length > 0 && reportResult.data[1] !== null && reportResult.data[1] !== undefined) {
+      events = reportResult.data[1][0].EventTypeName.split('|$|')
+      deviceValues.eventList = ['DepartureTime', 'EventName', 'CarsInQueue', ...events]
+    } else {
+      deviceValues.eventList = []
+    }
   } else {
-    deviceValues.eventList = []
+    deviceValues.key = 'ReportsNoRecordsFound'
   }
   return deviceValues
 }
@@ -230,7 +234,7 @@ reports.prototype.generatePDF = function (reportResult, filter, totalPages, resp
     if (singleStore.eventList.length > 0) {
       singleStore.goalHeaders = singleStore.goalData
     } else {
-      singleStore.goalHeaders  = []
+      singleStore.goalHeaders = []
     }
     Pdfmail.singleStore(singleStore, pdfInput, isMailSent => {
       if (isMailSent) {

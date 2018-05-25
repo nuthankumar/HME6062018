@@ -18,7 +18,7 @@ Device.prototype.storeInfo = function () {
     getStoreTnfo.stopTime = `${dateUtils.convertMMMdYYYY(this.request.body.toDate)}`
     getStoreTnfo.printDate = dateUtils.convertMMMdYYYY(dateFormat(new Date(), 'isoDate'))
     getStoreTnfo.printTime = dateFormat(new Date(), 'shortTime')
-    if (this.result.data[2] && this.result.data[2].length > 0 && this.result.data[2] !== null && this.result.data[2] !== undefined) {
+    if (this.result.data[0][0] && this.result.data[2] && this.result.data[2].length > 0 && this.result.data[2] !== null && this.result.data[2] !== undefined) {
       let dayPart = this.result.data[0][0].Daypart_ID
       getStoreTnfo.dayPart = 'DP' + dayPart + dateUtils.dayPartTime(dayPart)
     }
