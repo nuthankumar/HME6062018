@@ -198,7 +198,7 @@ export default class HmeHeader extends React.Component {
     }
 
     logout(e) {
-        this.authService.clear()
+      //  this.authService.clear()
         let url = this.state.url + "?pg=Logout&token=" + this.state.token
         window.location.href = url;
     }
