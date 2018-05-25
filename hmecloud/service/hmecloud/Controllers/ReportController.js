@@ -49,7 +49,8 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
   let storeInfo
   let reportFilter = filter.reportName
   reportFilter === 'daypart' ? colors = reportResult.data[1] : colors = reportResult.data[4]
-  goalSetting = reportResult.data[2]
+  reportFilter === 'daypart' ? goalSetting = reportResult.data[3] : goalSetting = reportResult.data[2]
+  
   let deviceValues = {}
   if (this.isSingleStore) {
     let Colors
