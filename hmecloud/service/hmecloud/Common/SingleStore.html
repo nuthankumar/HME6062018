@@ -1011,8 +1011,11 @@
 
                     <tr class="table-row-data">
                         {{#each header as |rcd| }}
-                        <td class="rnshade boldin  {{#if rcd.value}}insideData{{/if}}" style="{{#if rcd.value}}background-color:{{rcd.color}}{{/if}}">
-                            {{#if rcd.value}}{{rcd.value}}{{/if}} {{#if rcd.timeSpan}}{{rcd.timeSpan}}{{/if}} {{#if rcd.currentWeekpart}}{{rcd.currentWeekpart}}{{/if}}
+                        <td class="rnshade boldin {{#if rcd.value}}insideData{{/if}}"
+                        style="{{#if rcd.value}}background-color:{{rcd.color}}{{/if}}">
+                            {{#if rcd.value}}{{rcd.value}}{{/if}}
+                             {{#if rcd.timeSpan}}{{rcd.timeSpan}}{{/if}}
+                              {{#if rcd.currentWeekpart}}{{rcd.currentWeekpart}}{{/if}}
                         </td>
                         {{/each}}
                     </tr>

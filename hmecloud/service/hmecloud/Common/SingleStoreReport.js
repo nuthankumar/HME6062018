@@ -13,7 +13,7 @@ const Device = function (result, colors, goalSettings, request, reportFilter) {
 Device.prototype.getStoreInfo = (input, storeInformation) => {
   let storeInfo = {}
   if (storeInformation && storeInformation[0]) {
-    storeInfo.storeName = storeInformation[0].Store_Name ? storeInformation[0].Store_Name : 'N/A'
+    storeInfo.storeName = storeInformation[0].Store_Name ? storeInformation[0].Store_Name + '-' + storeInformation[0].Store_Number : storeInformation[0].Store_Number
     storeInfo.storeNumber = storeInformation[0].Store_Number ? storeInformation[0].Store_Number : 'N/A'
     storeInfo.storeDesc = storeInformation[0].Brand_Name ? storeInformation[0].Brand_Name : 'N/A'
   }
@@ -106,7 +106,6 @@ Device.prototype.getSingleStoreValues = function () {
         reportInfo[`${key}`] = { 'value': `${value}` }
       } else if (key === 'StoreNo') {
         if (filter === 'week') {
-          console.log('week', value)
           if (value === 'Total Week') {
             reportInfo['Week'] = {
               'timeSpan': 'Total Week',
@@ -134,19 +133,33 @@ Device.prototype.getSingleStoreValues = function () {
       } else if (key === 'WeekIndex') {
         reportInfo['index'] = { 'value': `${value}` }
       } else if (key === 'Total_Car') {
-        reportInfo['Total Cars'] = { 'value': (value || null) }
+        let carValue
+        if (value === 0) {
+          carValue = ''
+        } else {
+          carValue = value
+        }
+        reportInfo['Total Cars'] = { 'value': carValue }
       } else if (timeFormat === 2) {
         newValue = value
+        let color
         if (newValue === 0 || newValue === null) {
           newValue = 'N/A'
+          color = messages.COMMON.NACOLOR
+        } else {
+          color = `${getColor(key, newValue)}`
         }
-        reportInfo[`${key}`] = { 'value': `${dateUtils.convertSecondsToMinutes(parseInt(newValue), timeFormat)}`, 'color': `${getColor(key, newValue)}` }
+        reportInfo[`${key}`] = { 'value': `${dateUtils.convertSecondsToMinutes(parseInt(newValue), timeFormat)}`, 'color': color }
       } else if (timeFormat === 1) {
         newValue = value
+        let color
         if (newValue === 0 || newValue === null) {
           newValue = 'N/A'
+          color = messages.COMMON.NACOLOR
+        } else {
+          color = `${getColor(key, newValue)}`
         }
-        reportInfo[`${key}`] = { 'value': `${newValue}`, 'color': `${getColor(key, newValue)}` }
+        reportInfo[`${key}`] = { 'value': `${newValue}`, 'color': color }
       }
     })
     deviceInfo.push(reportInfo)
@@ -214,7 +227,6 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
     let obj = { goal: '', cars: '0', percentage: '0%' }
     let rowKey = {}
     let row = _.clone(obj)
-  //  console.log(eventGoalList)
     if (eventGoalList.indexOf(key) > -1) {
       row.cars = value || '0'
       row.percentage = CalculatePercetage(value, totalCars)
@@ -225,7 +237,6 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
         if (_.has(goalGrade, goal)) {
           goalGrade[goal][event] = row
         } else {
-          console.log('goal', goal)
           rowKey[event] = row
           goalGrade[goal] = rowKey
           goalGrade[goal].title = (goal === 'GoalF' ? `> GoalD (min:sec)` : `<${goal} (min:sec)`)
