@@ -383,3 +383,85 @@ text-decoration: none;
 #react-paginate .break a {
     cursor: default;
 }
+
+.search { position: relative;  display: inline-block; }
+.search input { text-indent: 30px;}
+.search .fa-search { 
+    position: absolute;
+    right: 17px;
+    top: -23px;
+}
+
+.search_pos{
+    /* border: 1px solid #E8E8E8; */
+    display:inline-block;
+    position: relative;
+    width: 199px;
+    height: auto;
+    left: 0;
+    top: 1px;
+    margin: -45px 0px 8px 0px;
+    padding: 0;
+    float: right;
+    background-position: 170px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -khtml-border-radius: 4px;
+    border-radius: 4px;
+}
+.search_pos .search .searchBox{
+    position: absolute;
+    border: 0px solid #b9b9b9;
+    margin: 0px 34px;
+    /* padding: 1px; */
+    width: 140px;
+    top: -31px;
+    left: -35px;
+}
+.settings.forms div.storeHeight {
+    height: 40px;
+}
+
+.search_pos .dropdown{
+    width: 35px;
+    display: inline-block;
+}
+.search_pos .search{
+    width : 150px;
+    display:inline-block;
+}
+/* .dropdown-toggle{
+
+} */
+
+.react-confirm-alert-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 4;
+}
+.custom-ui{
+    position: absolute;
+    height: auto;
+    width: 400px;
+    top: 234px;
+    left: 375px;
+    display: block;
+    z-index: 103;
+}
+
+/* .merge-dialog{
+    font-size: 14px;
+    font-weight: bold;
+    width: auto;
+    min-height: 49px;
+    max-height: none;
+    height: auto;
+} */
+
+.custom-ui h1{
+    border: 2px solid red;
+    padding: 10px;
+    border-radius: 25px;
+    font-size: 16px;
+}

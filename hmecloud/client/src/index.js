@@ -32,6 +32,7 @@ import Device from './components/Device/Device'
 import remoteSystemActions from './components/Stores/RemoteSystemActions'
 import { composeWithDevTools } from 'redux-devtools-extension';
 import ViewDetails from './containers/ViewDetails'
+import StoreMerge from './components/Stores/StoreMerge';
 import viewDetails from './reducers/store/viewDetails';
 //import { Set, Map } from 'hash-set-map'
 //var Joi = require('joi-browser');
@@ -68,6 +69,7 @@ ReactDOM.render( <Provider store={store}>
         <Route exact path="/settings/ViewDetails" render={(props) => <Layout Params={props}><Route path='/settings/ViewDetails' component={Authenticate(ViewDetails)} /></Layout>} />
         <Route exact path="/stores/device" render={(props) => <Layout Params={props}><Route path='/stores/device' component={Authenticate(Device)} /></Layout>} />
         <Route exact path="/stores/remoteSystemActions" render={(props) => <Layout Params={props}><Route path='/stores/remoteSystemActions' component={Authenticate(remoteSystemActions)} /></Layout>} />
+        <Route exact path="/store/Merge" render={(props) => <Layout Params={props}><Route path='/store/Merge' component={(StoreMerge)} /></Layout>} />  			
         <Route exact path="/storePopup" render={(props) => <Layout Params={props}><Route path='/storePopup' component={(ModalContainer)} /></Layout>} />  			
     </div>
    
