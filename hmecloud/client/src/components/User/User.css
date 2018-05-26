@@ -71,10 +71,10 @@ table.user_form {
     display: inline;
     font-weight: bold;
 }
-
+/* 
 .editUser th.req {
-    /* padding: 10px; */
-}
+    padding: 10px;
+} */
 
 .editUser label {
     display: inline-block;
