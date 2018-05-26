@@ -838,11 +838,11 @@ span.StoreBrand {
     color: black !important;
   }
 .storesDots:hover{
-  color:red !important;
+  color:rgb(212, 27, 62) !important;
   text-decoration:underline !important;
 }
 .selectAStore {
-    color:red !important;
+    color:rgb(212, 27, 62) !important;
 }
 .storeWrap span:not(:first-child) {
     color: #696969;
