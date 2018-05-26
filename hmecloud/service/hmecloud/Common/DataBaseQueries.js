@@ -220,7 +220,7 @@ const sqlQueries = {
   Server: {
     Parameters: {
       DatabaseName: 'DatabaseName',
-      LinkedServerName:'LinkedServerName'
+      LinkedServerName: 'LinkedServerName'
     }
   },
   Stores: {
@@ -241,7 +241,6 @@ const sqlQueries = {
       AzureData: 'AzureData',
       Store_ID: 'Store_ID',
       timeZone: 'timeZone'
-
     }
   },
   Device: {
