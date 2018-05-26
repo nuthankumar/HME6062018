@@ -9,10 +9,10 @@ const validator = require('../Validators/CountryValidator')
  * @public
  */
 const errorHandler = (message, status) => {
-    let output = {}
-    output.key = message
-    output.status = status
-    return output
+  let output = {}
+  output.key = message
+  output.status = status
+  return output
 }
 
 /**
@@ -22,24 +22,24 @@ const errorHandler = (message, status) => {
  * @public
  */
 const getAll = (request, callback) => {
-    const input = {}
-    validator.validate(input, (err) => {
-        if (err) {
-            callback(err)
-        }
-        repository.getAll(input, (result) => {
-            if (result.data && result.data.length > 0) {
-                let output = {}
-                output.data = result.data[0]
-                output.status = true
-                callback(output)
-            } else {
-                callback(errorHandler(messages.LISTGROUP.notfound, false))
-            }
-        })
+  const input = {}
+  validator.validate(input, (err) => {
+    if (err) {
+      callback(err)
+    }
+    repository.getAll(input, (result) => {
+      if (result.data && result.data.length > 0) {
+        let output = {}
+        output.data = result.data[0]
+        output.status = true
+        callback(output)
+      } else {
+        callback(errorHandler(messages.LISTGROUP.notfound, false))
+      }
     })
+  })
 }
 
 module.exports = {
-    getAll
+  getAll
 }

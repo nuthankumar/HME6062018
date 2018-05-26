@@ -11,12 +11,12 @@ const messages = require('../Common/Message')
  * @public
  */
 const create = (user, callback) => {
-    let output = {}
-    let generatePassword = passwordUtil.generatePassword(messages.COMMON.PASSWORDLENGTH)
-    let salt = passwordUtil.generateSalt(messages.COMMON.SALTLENGTH)
-    let hashValue = passwordUtil.computeHash(generatePassword.toLowerCase(), salt)
+  let output = {}
+  let generatePassword = passwordUtil.generatePassword(messages.COMMON.PASSWORDLENGTH)
+  let salt = passwordUtil.generateSalt(messages.COMMON.SALTLENGTH)
+  let hashValue = passwordUtil.computeHash(generatePassword.toLowerCase(), salt)
 
-    const values = {
+  const values = {
     Uid: uuidv4().toUpperCase(),
     IsActive: user.isActive,
     IsVerified: 0,
@@ -26,8 +26,8 @@ const create = (user, callback) => {
     FirstName: user.firstName,
     LastName: user.lastName,
     EmailAddress: user.userEmail,
-    PasswordHash: hashValue.toUpperCase(), 
-    PasswordSalt: salt, 
+    PasswordHash: hashValue.toUpperCase(),
+    PasswordSalt: salt,
     CreatedDTS: user.createdDTS,
     CreatedBy: user.userUid,
     Stores: user.storeIds.toString(),
@@ -91,7 +91,7 @@ const update = (user, callback) => {
  */
 const get = (user, callback) => {
   let output = {}
-    repository.get(user.uuId, (result) => {
+  repository.get(user.uuId, (result) => {
     if (result.length > 0) {
       let userProfile = result[0]
       let userRole = result[1]
@@ -111,8 +111,8 @@ const get = (user, callback) => {
       user.storeIds = []
       if (userStores) {
         let storeIds = []
-          for (let i = 2; i < result.length; i++) {
-              let userStore = result[i]
+        for (let i = 2; i < result.length; i++) {
+          let userStore = result[i]
           storeIds.push(userStore.Store_UID)
         }
         user.storeIds = storeIds

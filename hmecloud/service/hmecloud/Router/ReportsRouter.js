@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const VerifyToken = require('../Controllers/AuthenticationController')
-const storeValidator = require('../Validators/StoreValidator')
+// const VerifyToken = require('../Controllers/AuthenticationController')
+// const storeValidator = require('../Validators/StoreValidator')
 const ReportController = require('../Controllers/ReportController')
 const authValidator = require('../Controllers/AuthenticationController')
 

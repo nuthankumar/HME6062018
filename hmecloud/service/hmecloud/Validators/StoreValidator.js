@@ -177,7 +177,6 @@ const getStores = (request, callback) => {
   })
 }
 
-
 const settingsStores = (input, callback) => {
   if (!input.suid) {
     let output = {}

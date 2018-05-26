@@ -13,7 +13,7 @@ const hmeRouter = require('./HmeRouter')
  * @public
  */
 router.get('/getAll', authenticator, (request, response) => {
-    controller.getAll(request, result => hmeRouter.handelResult(result, response))
+  controller.getAll(request, result => hmeRouter.handelResult(result, response))
 })
 
 module.exports = router
