@@ -1,34 +1,28 @@
 import React from 'react'
-const _ = require("underscore");
 
 export default class ErrorAlert extends React.Component {
-  
-  constructor(props){
+  constructor (props) {
     super(props)
     this.state = {
-        isMultiple: false
-    }
-    }
-  
-  
-  
-  render () {
-    if (this.props.errorMessage && !this.props.errors){
-    if (this.props.errorMessage !== '' && this.props.errorMessage !== undefined && this.props.errorMessage !== null) {
-      return (
-        <div className='alert alert-danger errors'>
-          <ul>
-             <li>{this.props.errorMessage}</li>
-          </ul>
-        </div>
-      )
+      isMultiple: false
     }
   }
-    else if (this.props.errors) {
+  render () {
+    if (this.props.errorMessage && !this.props.errors) {
+      if (this.props.errorMessage !== '' && this.props.errorMessage !== undefined && this.props.errorMessage !== null) {
+        return (
+          <div className='alert alert-danger errors'>
+            <ul>
+              <li>{this.props.errorMessage}</li>
+            </ul>
+          </div>
+        )
+      }
+    } else if (this.props.errors) {
       return (
         <div className='alert alert-danger errors'>
           <ul>
-          {this.renderErrors(this.props.errors)}
+            {this.renderErrors(this.props.errors)}
           </ul>
         </div>
       )
@@ -40,12 +34,12 @@ export default class ErrorAlert extends React.Component {
     }
   }
 
-  renderErrors(errors) {
-     if (errors) {
-        let errorList  = errors.map(function (error, index) {
-                 return (<li key={index}>{error}</li>)
-         });
-        return errorList;
+  renderErrors (errors) {
+    if (errors) {
+      let errorList = errors.map(function (error, index) {
+        return (<li key={index}>{error}</li>)
+      })
+      return errorList
     }
-}
+  }
 }
