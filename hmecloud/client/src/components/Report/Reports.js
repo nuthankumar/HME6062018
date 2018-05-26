@@ -936,6 +936,10 @@ class Report extends Component {
           errors.push(t[language].storeselectioninvalid100);  
                 isError = true;
     }
+    if (this.state.deviceUIds.length > 1 && this.state.timeMeasure == 4) {
+      errors.push(t[language].invalidselectiononestore);  
+            isError = true;
+    }
 
 
         if (this.state.timeMeasure == 1) {
