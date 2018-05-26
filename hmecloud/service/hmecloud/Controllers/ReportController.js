@@ -80,7 +80,7 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
     deviceValues.goalData = goalStatistics
     if (this.request.body.longestTime) {
       let deviceLongestTimes
-      if (deviceHeaders && deviceHeaders.length > 0 && deviceHeaders[0].EventNames !== null && deviceHeaders[0].EventNames !== undefined) {
+      if (deviceHeaders && deviceHeaders.length > 0 && deviceHeaders[0].EventNames !== null && deviceHeaders[0].EventNames !== undefined) {
         let eventHeaders = deviceHeaders[0].EventNames.split('|$|')
         reportFilter === 'daypart' ? deviceLongestTimes = reportResult.data[2] : deviceLongestTimes = reportResult.data[1]
         let getLongestTime = deviceRecords.getLongestTime(deviceLongestTimes, eventHeaders)
@@ -96,7 +96,7 @@ reports.prototype.deviceDataPreparation = function (reportResult, filter, totalP
       let DeviceLaneInfo = reportResult.data[7]
       deviceValues.systemStatistics = deviceRecords.getSystemStatistics(DeviceSystemInfo, DeviceLaneInfo)
     }
-    if (deviceHeaders && deviceHeaders.length > 0 && deviceHeaders[0].EventNames !== null && deviceHeaders[0].EventNames !== undefined) {
+    if (deviceHeaders && deviceHeaders.length > 0 && deviceHeaders[0].EventNames !== null && deviceHeaders[0].EventNames !== undefined) {
       let eventHeaders = deviceHeaders[0].EventNames.split('|$|')
       if (reportFilter === 'daypart') {
         eventHeaders = ['Daypart', ...eventHeaders]
@@ -163,7 +163,7 @@ reports.prototype.getRawCarDataReport = function (reportResult) {
     let events = []
     if (reportResult.data[1] && reportResult.data[1].length > 0 && reportResult.data[1] !== null && reportResult.data[1] !== undefined) {
       events = reportResult.data[1][0].EventTypeName.split('|$|')
-      deviceValues.eventList = _.uniq(['DepartureTime','DepartureTime', 'EventName', 'CarsInQueue', ...events])
+      deviceValues.eventList = _.uniq(['DepartureTime', 'DepartureTime', 'EventName', 'CarsInQueue', ...events])
     } else {
       deviceValues.eventList = []
     }
@@ -212,7 +212,7 @@ reports.prototype.generateCSV = function (reportResult, filter, totalPages, resp
     } else {
       filter.reportName === 'daypart' ? deviceHeaders = reportResult.data[4] : deviceHeaders = reportResult.data[6]
     }
-    if (deviceHeaders && deviceHeaders.length > 0 && deviceHeaders[0].EventNames !== null && deviceHeaders[0].EventNames !== undefined) {
+    if (deviceHeaders && deviceHeaders.length > 0 && deviceHeaders[0].EventNames !== null && deviceHeaders[0].EventNames !== undefined) {
       eventHeaders = deviceHeaders[0].EventNames.split('|$|')
     } else {
       eventHeaders = []
@@ -228,7 +228,7 @@ reports.prototype.generateCSV = function (reportResult, filter, totalPages, resp
 }
 reports.prototype.generatePDF = function (reportResult, filter, totalPages, response) {
   let pdfInput = {}
-  let DeviceDetails
+  // let DeviceDetails
   pdfInput.type = `${messages.COMMON.PDFTYPE}`
   if (filter === 'week') {
     pdfInput.reportName = `${messages.COMMON.WEEKREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
