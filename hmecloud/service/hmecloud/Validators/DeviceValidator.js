@@ -1,4 +1,4 @@
-const validator = require('validator')
+
 /**
  * get all validate method to validate the arguments which has been passed
  * to controller is valida or not
@@ -82,7 +82,6 @@ const mergePreValidator = (input, callback) => {
 const unRegisterDevicesSearch = (input, callback) => {
   let output = {}
   if (!input.page && !input.perPage && !input.filter) {
-
     if (!input.page) {
       output.key = 'requiredPageNumber'
     }
