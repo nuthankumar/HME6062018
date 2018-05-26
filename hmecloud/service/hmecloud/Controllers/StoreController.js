@@ -524,5 +524,6 @@ module.exports = {
   saveMergeDevices,
   getAllStores,
   getStoreByUid,
-  removeDeviceById
+  removeDeviceById,
+  unRegisterDevicesSearch
 }

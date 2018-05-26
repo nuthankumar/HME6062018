@@ -133,7 +133,7 @@ const saveMasterSettings = (input, callback) => {
   repository.executeProcedure(sqlQuery.MasterSetting.saveStatus, request => {
     return request
       .input(sqlQuery.MasterSettingsSave.Parameters.Task_UID, sql.VarChar(36), input.Task_UID)
-      .input(sqlQuery.MasterSettingsSave.Parameters.DestinationDevice_IDS, sql.VarChar(max), input.destinationList)
+      .input(sqlQuery.MasterSettingsSave.Parameters.DestinationDevice_IDS, sql.VarChar(4000), input.destinationList)
       .input(sqlQuery.MasterSettingsSave.Parameters.SourceDevice_UID, sql.VarChar(36), input.settingsList)
   }, callback)
 }
@@ -167,7 +167,7 @@ const unRegisterDevicesSearch = (input, callback) => {
   repository.executeProcedure(sqlQuery.unRegisterDevicesSearch.getStatus, request => {
     return request
       .input(sqlQuery.unRegisterDevicesSearch.Parameters.page, sql.VarChar(36), input.page)
-      .input(sqlQuery.unRegisterDevicesSearch.Parameters.perPage, sql.VarChar(max), input.perPage)
+      .input(sqlQuery.unRegisterDevicesSearch.Parameters.perPage, sql.VarChar(4000), input.perPage)
       .input(sqlQuery.unRegisterDevicesSearch.Parameters.filter, sql.VarChar(36), input.filter)
   }, callback)
 }
@@ -222,5 +222,8 @@ module.exports = {
   saveMergeDevices,
   getStores,
   getStoreByUid,
-  removeDeviceById
+  removeDeviceById,
+  checkMergeDevices,
+  mergeDevicesInfo,
+  unRegisterDevicesSearch
 }

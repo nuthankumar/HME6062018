@@ -6,13 +6,13 @@
  * @public
  */
 const handelResult = (result, response) => {
-    if (result.status === true) {
-        response.status(200).send(result)
-    } else {
-        response.status(204).send(result)
-    }
+  if (result.status === true) {
+    response.status(200).send(result)
+  } else {
+    response.status(204).send(result)
+  }
 }
 
 module.exports = {
-    handelResult
+  handelResult
 }
