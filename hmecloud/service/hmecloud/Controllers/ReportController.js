@@ -163,7 +163,7 @@ reports.prototype.getRawCarDataReport = function (reportResult) {
     let events = []
     if (reportResult.data[1] && reportResult.data[1].length > 0 && reportResult.data[1] !== null && reportResult.data[1] !== undefined) {
       events = reportResult.data[1][0].EventTypeName.split('|$|')
-      deviceValues.eventList = _.uniq(['DepartureTime', 'DepartureTime', 'EventName', 'CarsInQueue', ...events])
+      deviceValues.eventList = _.uniq(['departureTime', 'eventName', 'carsInQueue', ...events])
     } else {
       deviceValues.eventList = []
     }
