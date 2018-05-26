@@ -125,7 +125,14 @@ Device.prototype.multipleStore = function () {
       } else if (key === 'StoreDate') {
         reportInfo['StoreDate'] = {'value': (value || null)}
       } else {
-        reportInfo[`${key}`] = {'value': `${dateUtils.convertSecondsToMinutes(parseInt(value), timeFormat)}`, 'color': `${getColor(key, value)}`}
+        let color
+        if (value === 0 || value === null) {
+          value = 'N/A'
+          color = messages.COMMON.NACOLOR
+        } else {
+          color = `${getColor(key, value)}`
+        }
+        reportInfo[`${key}`] = {'value': `${dateUtils.convertSecondsToMinutes(parseInt(value), timeFormat)}`, 'color': color}
       }
     })
     deviceInfo.data.push(reportInfo)

@@ -31,6 +31,10 @@ const mutipleStore = (reportData, pdfInput, callback) => {
       _.forEach(item.data, (details) => {
         let deviceDetails = []
         _.forEach(reportData.eventList, (event) => {
+          if (event === 'Total Cars') {
+            let totalcar = {'totalcar': details['Total Cars'].value}
+            deviceDetails.push(totalcar)
+          }
           deviceDetails.push(details[event])
         })
         storeDeviceHeaders.push(deviceDetails)
@@ -219,8 +223,6 @@ const singleStore = (reportData, pdfInput, callback) => {
   } else {
     goalsHeaders = []
   }
-  console.log('Need work', JSON.stringify(rcds))
-  console.log('eventHeaders', JSON.stringify(mainEvents))
   const document = {
     type: 'buffer',
     template: html,
