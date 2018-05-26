@@ -1,6 +1,6 @@
 
 const repository = require('./Repository')
-const dataBase = require('../DataBaseConnection/Configuration').db
+// const dataBase = require('../DataBaseConnection/Configuration').db
 const sqlQuery = require('../Common/DataBaseQueries')
 const sql = require('mssql')
 
@@ -16,7 +16,7 @@ const getAll = (input, callback) => {
     return request
       .input(sqlQuery.Account.Parameters.AccountId, sql.Int, input.accountId)
       .input(sqlQuery.User.Parameters.UserUid, sql.VarChar(32), input.userUid)
-  }, callback);
+  }, callback)
 }
 module.exports = {
   getAll

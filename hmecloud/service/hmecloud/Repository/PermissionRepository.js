@@ -1,6 +1,6 @@
 
 const repository = require('./Repository')
-const dataBase = require('../DataBaseConnection/Configuration').db
+// const dataBase = require('../DataBaseConnection/Configuration').db
 const sqlQuery = require('../Common/DataBaseQueries')
 const sql = require('mssql')
 
@@ -11,11 +11,11 @@ const sql = require('mssql')
  * @public
  */
 const getAll = (input, callback) => {
-    repository.executeProcedure(sqlQuery.Permission.GetByUser, request => {
-        return request.input(sqlQuery.User.Parameters.UserUid, sql.VarChar(32), input.userUid)
-    }, callback);
+  repository.executeProcedure(sqlQuery.Permission.GetByUser, request => {
+    return request.input(sqlQuery.User.Parameters.UserUid, sql.VarChar(32), input.userUid)
+  }, callback)
 }
 
 module.exports = {
-    getAll
+  getAll
 }

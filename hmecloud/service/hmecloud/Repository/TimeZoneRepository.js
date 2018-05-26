@@ -1,19 +1,19 @@
 
 const repository = require('./Repository')
-const dataBase = require('../DataBaseConnection/Configuration').db
+// const dataBase = require('../DataBaseConnection/Configuration').db
 const sqlQuery = require('../Common/DataBaseQueries')
-const sql = require('mssql')
+// const sql = require('mssql')
 
 /**
- * The method can be used to execute getall TimeZone 
+ * The method can be used to execute getall TimeZone
  * @param  {funct} callback Function will be called once the input executed.
  * @public
  */
 const getAll = (input, callback) => {
-    repository.executeProcedure(sqlQuery.TimeZone.getTimeZones, request => {
-        return request
-    }, callback);
+  repository.executeProcedure(sqlQuery.TimeZone.getTimeZones, request => {
+    return request
+  }, callback)
 }
 module.exports = {
-    getAll
+  getAll
 }

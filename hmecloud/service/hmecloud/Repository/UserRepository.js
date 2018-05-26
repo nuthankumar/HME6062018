@@ -10,10 +10,10 @@ const sqlQuery = require('../Common/DataBaseQueries')
  * @public
  */
 const create = (user, callback) => {
-    repository.execute(sqlQuery.users.createuser, {
-        replacements: user,
-        type: dataBase.QueryTypes.SELECT
-    }, callback)
+  repository.execute(sqlQuery.users.createuser, {
+    replacements: user,
+    type: dataBase.QueryTypes.SELECT
+  }, callback)
 }
 
 /**
@@ -23,10 +23,10 @@ const create = (user, callback) => {
  * @public
  */
 const get = (userUUId, callback) => {
-    repository.execute(sqlQuery.users.getuser, {
-        replacements: { id: userUUId },
-        type: dataBase.QueryTypes.SELECT
-    }, callback)
+  repository.execute(sqlQuery.users.getuser, {
+    replacements: { id: userUUId },
+    type: dataBase.QueryTypes.SELECT
+  }, callback)
 }
 
 /**
@@ -36,12 +36,11 @@ const get = (userUUId, callback) => {
  * @public
  */
 const getAudit = (userUid, callback) => {
-    repository.execute(sqlQuery.users.getUserAudit, {
-        replacements: { id: userUid },
-        type: dataBase.QueryTypes.SELECT
-    }, callback)
+  repository.execute(sqlQuery.users.getUserAudit, {
+    replacements: { id: userUid },
+    type: dataBase.QueryTypes.SELECT
+  }, callback)
 }
-
 
 /**
  * The method can be used to execute getall user
@@ -51,10 +50,10 @@ const getAudit = (userUid, callback) => {
  * @public
  */
 const getAll = (UserUid, callback) => {
-    repository.execute(sqlQuery.users.getAllReportsTemplates, {
-        replacements: { UserUid: UserUid },
-        type: dataBase.QueryTypes.SELECT
-    }, callback)
+  repository.execute(sqlQuery.users.getAllReportsTemplates, {
+    replacements: { UserUid: UserUid },
+    type: dataBase.QueryTypes.SELECT
+  }, callback)
 }
 
 /**
@@ -64,10 +63,10 @@ const getAll = (UserUid, callback) => {
  * @public
  */
 const deleteById = (userUUId, callback) => {
-    repository.execute(sqlQuery.users.deleteuser, {
-        replacements: { id: userUUId },
-        type: dataBase.QueryTypes.SELECT
-    }, callback)
+  repository.execute(sqlQuery.users.deleteuser, {
+    replacements: { id: userUUId },
+    type: dataBase.QueryTypes.SELECT
+  }, callback)
 }
 
 /**
@@ -77,16 +76,16 @@ const deleteById = (userUUId, callback) => {
  * @public
  */
 const update = (user, callback) => {
-    repository.execute(sqlQuery.users.updateuser, {
-        replacements: user,
-        type: dataBase.QueryTypes.SELECT
-    }, callback)
+  repository.execute(sqlQuery.users.updateuser, {
+    replacements: user,
+    type: dataBase.QueryTypes.SELECT
+  }, callback)
 }
 module.exports = {
-    create,
-    deleteById,
-    get,
-    getAudit,
-    getAll,
-    update
+  create,
+  deleteById,
+  get,
+  getAudit,
+  getAll,
+  update
 }
