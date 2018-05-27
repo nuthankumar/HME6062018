@@ -1671,7 +1671,14 @@ const language = [
         'oct': 'oct',
         'nov': 'nov',
         'dec': 'déc',
-        'Loading...': 'Chargement...'
+        'Loading...': 'Chargement...',
+		'Merge': 'Fusionner',
+		'SelectSystem': 'Sélectionnez le (s) système (s)',
+		'System': 'Système',
+		'SelectTargetStore': 'Sélectionnez le magasin cible',
+		'EnterStoreNumber': 'Entrez le numéro de magasin',
+		'Search':'Chercher',
+		'MustSelectStLeastOneSystem': 'Doit sélectionner au moins un système'
 
     }
 ]
