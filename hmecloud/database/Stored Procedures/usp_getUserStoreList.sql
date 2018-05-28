@@ -30,7 +30,8 @@ CREATE PROCEDURE [dbo].[usp_getUserStoreList]
 @SortingType varchar(5) = 'ASC',   -- sorting type
 @RecordPerPage smallint = 10,
 @PageNumber smallint = 1,
-@User_Department varchar(100)=''
+@User_Department varchar(100)='',
+@Store_UID varchar(100)=NULL
 
 AS
 BEGIN
@@ -208,8 +209,16 @@ IF (@isAdmin = 1)
 			SET @sqlAdmin = @sqlAdmin + @filterSearch
 		END	
 
-
-	SET @sqlAdmin = @sqlAdmin + IIF(ISNULL(@SortingColumnName,'')<>'', ' ORDER BY '+@SortingColumnName,'')
+	IF (@Store_UID is not null) 
+		BEGIN
+			SET @sqlAdmin = @sqlAdmin + 'AND stor.Store_UID <> '''+ @Store_UID +''' ORDER BY stor.Store_Number'
+			
+		END
+	ELSE
+		BEGIN
+			SET @sqlAdmin = @sqlAdmin + IIF(ISNULL(@SortingColumnName,'')<>'', ' ORDER BY '+@SortingColumnName,'')
+			 
+		END
 	
 	
 	EXEC (@sqlAdmin)
