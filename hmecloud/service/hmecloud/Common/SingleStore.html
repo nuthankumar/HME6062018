@@ -939,6 +939,18 @@
     .insideHeader{
         color:black
     }
+    .goalNote {
+    color: #777;
+    font-size: 12px;
+    margin-right: 125px;
+    margin-bottom: 3px;
+    text-align: right;
+}
+span.redFont {
+    color: #d41b3e;
+    font-size: 18px;
+    line-height: 0;
+}
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
@@ -968,7 +980,7 @@
                     <th align="left">
                         <span>Start Time: </span>
                     </th>
-                    <td>{{details.startTime}}&nbsp;
+                    <td>{{details.startTime}} OPEN
                         <span "OPEN"></span>
                     </td>
                     <th align="left">
@@ -984,7 +996,7 @@
                         <span>Stop Time: </span>
                     </th>
 
-                    <td>{{details.stopTime}}&nbsp;
+                    <td>{{details.stopTime}} CLOSE
                     </td>
                     <th align="left">
                         <span>Print Time: </span>
@@ -999,7 +1011,7 @@
                 <tbody>
                     <tr>
                         <th class="clear"></th>
-                        <th class="grayhead" colspan=4 "">AVERAGE TIME
+                        <th class="grayhead" colspan="{{details.goalsEventLength}}">AVERAGE TIME
                             <span>(min:sec)</span>
                         </th>
                     </tr>
@@ -1082,7 +1094,7 @@
                         <table cellspacing="0" class="table-layout goalW goalMain  daypart " style="border-bottom:0px solid white;margin-bottom:0px;margin-top:4px;/* position: relative; */width: 785px;">
                             <tr>
                                 <th class="clear"></th>
-                                <th class="grayhead" colspan=4 "">AVERAGE TIME
+                                <th class="grayhead" colspan="{{details.goalsEventLength}}">AVERAGE TIME
                                     <span>(min:sec)</span>
                                 </th>
                             </tr>
@@ -1124,6 +1136,7 @@
                             </table>
                             {{/each}}
                         </div>
+                        <div class="goalNote show"> <span class="redFont">* </span> Derived performance to goal (Lane Queue goal = Lane Total goal - Menu goal - Service goal) </div>
                 </div>
                 {{/if}}
 

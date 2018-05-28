@@ -7,7 +7,7 @@ const _ = require('lodash')
 
 const mutipleStore = (reportData, pdfInput, callback) => {
   let reportName
-  let goalEvents
+  let eventLength
   let mainEvents
   if (reportData.timeMeasure === 3) {
     reportName = 'Weekly Report'
@@ -19,6 +19,7 @@ const mutipleStore = (reportData, pdfInput, callback) => {
   let isEventHeader
   if (reportData.eventList && reportData.eventList.length > 0 && reportData.eventList !== undefined) {
     isEventHeader = true
+    eventLength = reportData.eventList.length - 4
     mainEvents = _.clone(reportData.eventList)
   } else {
     isEventHeader = false
@@ -100,7 +101,8 @@ const mutipleStore = (reportData, pdfInput, callback) => {
         events: mainData,
         titles: titles,
         headers: Headers,
-        deviceHeaders: rcds
+        deviceHeaders: rcds,
+        goalsEventLength: eventLength
       }
     }
   }
@@ -136,18 +138,19 @@ const mutipleStore = (reportData, pdfInput, callback) => {
 const singleStore = (reportData, pdfInput, callback) => {
   let reportName
   let headerName
+  let eventLength
   let storeDeviceValues = []
   let goalEvents = []
   let mainEvents = []
   if (reportData.timeMeasure === 3) {
     reportName = 'Weekly Report'
-    headerName = 'Week'
+    headerName = 'WEEK'
   } else if (reportData.timeMeasure === 2) {
     reportName = 'Daypart Report'
-    headerName = 'Daypart'
+    headerName = 'DAYPART'
   } else if (reportData.timeMeasure === 1) {
     reportName = 'Day Report'
-    headerName = 'Day'
+    headerName = 'DAY'
   }
   var html = fs.readFileSync(__dirname + '/SingleStore.html', 'utf8')
   var options = {
@@ -179,6 +182,7 @@ const singleStore = (reportData, pdfInput, callback) => {
     isEventHeader = true
     goalEvents = _.clone(reportData.eventList)
     mainEvents = _.clone(reportData.eventList)
+    eventLength = reportData.eventList.length - 3
     _.forEach(goalEvents, (item, index) => {
       if (goalEvents[index] === 'Week' || goalEvents[index] === 'Day' || goalEvents[index] === 'Daypart' || goalEvents[index] === 'Total Cars') {
         goalEvents.splice(index, 1)
@@ -223,6 +227,7 @@ const singleStore = (reportData, pdfInput, callback) => {
   } else {
     goalsHeaders = []
   }
+
   const document = {
     type: 'buffer',
     template: html,
@@ -248,7 +253,8 @@ const singleStore = (reportData, pdfInput, callback) => {
         goalEvents: goalEvents,
         goalHeaders: goalsHeaders,
         isSystemStatistics: isSystemStatistics,
-        systemStatistics: reportData.systemStatistics
+        systemStatistics: reportData.systemStatistics,
+        goalsEventLength: eventLength
       }
     }
   }
