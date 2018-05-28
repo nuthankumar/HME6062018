@@ -125,10 +125,11 @@ class RawCarReport extends Component {
   }
 
   getRawCardColumnHeaders () {
+    const language = this.state.currentLanguage
     return this.state.eventList.map((headerItem) => {
       if (headerItem !== 'departureTime' && headerItem !== 'eventName' && headerItem !== 'carsInQueue') {
         return (<th>
-          <span>{headerItem}</span>
+          <span>{t[language][headerItem] ? t[language][headerItem] : headerItem}</span>
         </th>)
       }
     })
