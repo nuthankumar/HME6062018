@@ -1132,7 +1132,12 @@ class Report extends Component {
         if (type == 'PDF') {
            url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=pdf'
         }
-        request.localTime = moment(new Date()).locale('en').format('MMM D,YYYY hh:mm')
+        if (this.state.reportData.singleStore) {
+          request.localTime = moment(new Date()).format('hh:mm A')
+        } else {
+          request.localTime = moment(new Date()).locale('en').format('MMM D,YYYY hh:mm A')
+        }
+        // request.localTime = moment(new Date()).locale('en').format('MMM D,YYYY hh:mm')
         this.setState({ showLoader: true })
         this.api.postData(url, request, data => {
             if (data.status) {
