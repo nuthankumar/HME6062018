@@ -23,16 +23,19 @@ const generateCSVReport = (results, input, csvInput, reportType, eventHeaders, c
         store.Week = 'Total Week'
       } else if (input.body.deviceIds.length === 1) {
         store.Week = moment(item.WeekStartDate).format('MM/DD/YYYY') + '-' + moment(item.WeekEndDate).format('MM/DD/YYYY')
+        if (item.Week) {
+          store.Week = item.Week.timeSpan + ' ' + item.Week.currentWeekpart
+        }
       } else if (input.body.deviceIds.length > 1) {
         store.Week = moment(item.WeekStartDate).format('MM/DD/YYYY') + '-' + moment(item.WeekEndDate).format('MM/DD/YYYY')
-        store.Groups = item.GroupName ? item.GroupName : ''
-        store.Store = item.Store_Name ? item.Store_Name : ''
-        if (item.StoreNo === 'Total Week' && item.Store_Name === null) {
-          store.Week = 'Total Week'
-          store.Store = ''
-        } else if (item.StoreNo === 'Subtotal' && item.Store_Name === null) {
-          store.Week = 'Subtotal'
-          store.Store = ''
+        store.Groups = item.Groups.value ? item.Groups.value : ''
+        store.Stores = item.StoreNo.value ? item.StoreNo.value : ''
+        if (item.StoreNo.value === 'Total Week') {
+          store.Groups = 'Total Week'
+          store.Stores = ''
+        } else if (item.StoreNo.value === 'Subtotal') {
+          store.Groups = item.Groups.value
+          store.Stores = item.StoreNo.value
         } else {
           store.Week = moment(item.WeekStartDate).format('MM/DD/YYYY') + '-' + moment(item.WeekEndDate).format('MM/DD/YYYY')
         }
@@ -44,16 +47,19 @@ const generateCSVReport = (results, input, csvInput, reportType, eventHeaders, c
         store.Daypart = 'Total Daypart'
       } else if (input.body.deviceIds.length === 1) {
         store.Daypart = moment(item.StoreDate).format('MM/DD/YYYY')
+        if (item.Daypart) {
+          store.Daypart = item.Daypart.timeSpan + ' ' + item.Daypart.currentWeekpart
+        }
       } else if (input.body.deviceIds.length > 1) {
         store.Daypart = moment(item.StoreDate).format('MM/DD/YYYY')
-        store.Groups = item.GroupName ? item.GroupName : ''
-        store.Stores = item.Store_Name ? item.Store_Name : ''
-        if (item.StoreNo === 'Total Daypart') {
-          store.Daypart = 'Total Daypart'
+        store.Groups = item.Groups.value ? item.Groups.value : ''
+        store.Stores = item.StoreNo.value ? item.StoreNo.value : ''
+        if (item.StoreNo.value === 'Total Daypart') {
+          store.Groups = 'Total Daypart'
           store.Stores = ''
-        } else if (item.StoreNo === 'SubTotal') {
-          store.Daypart = 'SubTotal'
-          store.Stores = ''
+        } else if (item.StoreNo.value === 'SubTotal') {
+          store.Groups = item.Groups.value
+          store.Stores = item.StoreNo.value
         }
       }
     }
@@ -63,22 +69,25 @@ const generateCSVReport = (results, input, csvInput, reportType, eventHeaders, c
         store.Day = 'Total Day'
       } else if (input.body.deviceIds.length === 1) {
         store.Day = moment(item.StoreDate).format('MM/DD/YYYY')
+        if (item.Day) {
+          store.Day = item.Day.timeSpan + ' ' + item.Day.currentWeekpart
+        }
       } else if (input.body.deviceIds.length > 1) {
         store.Day = moment(item.StoreDate).format('MM/DD/YYYY')
-        store.Groups = item.GroupName ? item.GroupName : ''
-        store.Stores = item.Store_Name ? item.Store_Name : ''
-        if (item.StoreNo === 'Total Day') {
-          store.Day = 'Total Day'
+        store.Groups = item.Groups.value ? item.Groups.value : ''
+        store.Stores = item.StoreNo.value ? item.StoreNo.value : ''
+        if (item.StoreNo.value === 'Total Day') {
+          store.Groups = 'Total Day'
           store.Stores = ''
-        } else if (item.StoreNo === 'Subtotal') {
-          store.Day = 'SubTotal'
-          store.Stores = ''
+        } else if (item.StoreNo.value === 'Subtotal') {
+          store.Groups = item.Groups.value
+          store.Stores = item.StoreNo.value
         }
       }
     }
     if (reportType.reportName !== 'rawcardata') {
       _.forEach(eventHeaders, (value, key) => {
-        if (item[`${value}`] !== null) {
+        if (item[`${value}`] !== null && item[`${value}`] !== 'N/A') {
           store[`${value}`] = (dateUtils.convertSecondsToMinutes(item[`${value}`].value, format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item[`${value}`].value, format))
         }
       })
@@ -119,4 +128,4 @@ const JsonForPDF = (data, input, reportName, pdfInput, isMultiStore) => {
 module.exports = {
   generateCSVReport,
   JsonForPDF
- }
+}
