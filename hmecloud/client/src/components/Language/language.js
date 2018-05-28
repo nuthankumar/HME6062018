@@ -827,8 +827,8 @@ const language = [
         'SelectTargetStore': 'Select Target Store',
         'EnterStoreNumber': 'Enter Store Number',
         'Search': 'Search',
-        'MustSelectStLeastOneSystem': 'Must select at least one system'
-
+        'MustSelectStLeastOneSystem': 'Must select at least one system',
+        'Timezone' :'Timezone'
 
     },
 
@@ -1678,7 +1678,8 @@ const language = [
 		'SelectTargetStore': 'Sélectionnez le magasin cible',
 		'EnterStoreNumber': 'Entrez le numéro de magasin',
 		'Search':'Chercher',
-		'MustSelectStLeastOneSystem': 'Doit sélectionner au moins un système'
+        'MustSelectStLeastOneSystem': 'Doit sélectionner au moins un système',
+        'Timezone' :'Fuseau horaire'
 
     }
 ]

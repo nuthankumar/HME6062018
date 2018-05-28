@@ -1,21 +1,24 @@
 import React, { Component } from 'react'
 import './Stores.css'
-// import t from '../Language/language'
-// import * as languageSettings from '../Language/languageSettings'
+import t from '../Language/language'
+import * as languageSettings from '../Language/languageSettings'
 class StoreDetailsComponent extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      currentLanguage: languageSettings.getCurrentLanguage(),
       showStores: this.props.showStores
     }
   }
 
   render () {
+    const language = this.state.currentLanguage
+    // {t[language].}
     return (
       <table className='user_form'>
         <tbody>
           <tr>
-            <th><label for='Store_Brand_ID'>Brand: <span class='redText'>*</span></label></th>
+            <th><label for='Store_Brand_ID'>{t[language].settingsStoresCIBBrand}: <span class='redText'>*</span></label></th>
             <td>
               <select name='Store_Brand_ID' id='Store_Brand_ID' disabled='disabled'>
                 <option value="Checker's" selected='selected'>Checker's</option>
@@ -59,33 +62,33 @@ class StoreDetailsComponent extends Component {
             </td>
           </tr>
           <tr>
-            <th><label for='Store_Name'>Store Name:</label></th>
+            <th><label for='Store_Name'> {t[language].settingsStoresStoreName}:</label></th>
             <td><input type='text' maxLength='100' name='Store_Name' id='Store_Name' value='' disabled='disabled' />
               <input type='hidden' name='Store_ID' id='Store_ID' value='112480' />
             </td>
           </tr>
           <tr>
-            <th><label for='Store_Number'>Store Number: <span class='redText'>*</span></label></th>
+            <th><label for='Store_Number'>{t[language].settingsStoresStoreNumber}: <span class='redText'>*</span></label></th>
             <td><input type='text' maxLength='100' name='Store_Number' id='Store_Number' value='' disabled='disabled' /></td>
           </tr>
           <tr>
-            <th><label for='Store_AddressLine1'>Address Line 1:<span class='redText'>*</span></label></th>
+            <th><label for='Store_AddressLine1'>{t[language].address1}:<span class='redText'>*</span></label></th>
             <td><input type='text' maxLength='100' name='Store_AddressLine1' id='Store_AddressLine1' value='' disabled='disabled' /></td>
           </tr>
           <tr>
-            <th><label for='Store_AddressLine2'>Address Line 2:</label></th>
+            <th><label for='Store_AddressLine2'>{t[language].address2}:</label></th>
             <td><input type='text' maxLength='100' name='Store_AddressLine2' id='Store_AddressLine2' value='' disabled='disabled' /></td>
           </tr>
           <tr>
-            <th><label for='Store_AddressLine3'>Address Line 3:</label></th>
+            <th><label for='Store_AddressLine3'>{t[language].address3}:</label></th>
             <td><input type='text' maxLength='100' name='Store_AddressLine3' id='Store_AddressLine3' value='' disabled='disabled' /></td>
           </tr>
           <tr>
-            <th><label for='Store_AddressLine4'>Address Line 4:</label></th>
+            <th><label for='Store_AddressLine4'>{t[language].address4}:</label></th>
             <td><input type='text' maxLength='100' name='Store_AddressLine4' id='Store_AddressLine4' value='' disabled='disabled' /></td>
           </tr>
           <tr>
-            <th><label for='Store_Locality'>City: <span class='redText'>*</span></label></th>
+            <th><label for='Store_Locality'>{t[language].settingsStoresStoreCity}: <span class='redText'>*</span></label></th>
             <td>
               <table class='locale'>
                 <tbody>
@@ -97,7 +100,7 @@ class StoreDetailsComponent extends Component {
             </td>
           </tr>
           <tr>
-            <th><label for='Store_Region'>Region: <span class='redText'>*</span></label></th>
+            <th><label for='Store_Region'>{t[language].region}: <span class='redText'>*</span></label></th>
             <td>
               <table class='locale'>
                 <tbody>
@@ -109,11 +112,11 @@ class StoreDetailsComponent extends Component {
             </td>
           </tr>
           <tr>
-            <th><label for='Store_PostCode'>Zip: <span class='redText'>*</span></label></th>
+            <th><label for='Store_PostCode'>{t[language].zip}: <span class='redText'>*</span></label></th>
             <td><input type='text' maxLength='100' name='Store_PostCode' id='Store_PostCode' value='' disabled='disabled' /></td>
           </tr>
           <tr>
-            <th><label for='Store_Country'>Country: <span class='redText'>*</span></label></th>
+            <th><label for='Store_Country'>{t[language].settingsStoresCountry}: <span class='redText'>*</span></label></th>
             <td>
               <select name='Store_Country_ID' id='Store_Country_ID' disabled='disabled'>
                 <option value='1'>United States</option>
@@ -368,7 +371,7 @@ class StoreDetailsComponent extends Component {
             </td>
           </tr>
           <tr>
-            <th><label for='Store_TZ'>Timezone: <span class='redText'>*</span></label></th>
+            <th><label for='Store_TZ'>{t[language].Timezone}: <span class='redText'>*</span></label></th>
             <td>
               <select name='Store_TZ' id='Store_TZ'>
                 <option value='none'>
@@ -515,11 +518,11 @@ class StoreDetailsComponent extends Component {
             </td>
           </tr>
           <tr>
-            <th><label for='Store_PhoneNumber'>Phone: <span class='redText'>*</span></label></th>
+            <th><label for='Store_PhoneNumber'>{t[language].phone}: <span class='redText'>*</span></label></th>
             <td><input type='text' maxLength='100' name='Store_PhoneNumber' id='Store_PhoneNumber' value='' disabled='disabled' /></td>
           </tr>
           <tr>
-            <th><label for='Store_FaxNumber'>Fax:</label></th>
+            <th><label for='Store_FaxNumber'>{t[language].settingsStoresFax}:</label></th>
             <td><input type='text' maxLength='100' name='Store_FaxNumber' id='Store_FaxNumber' value='' disabled='disabled' /></td>
           </tr>
           <tr />
