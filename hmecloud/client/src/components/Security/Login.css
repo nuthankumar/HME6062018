@@ -225,30 +225,28 @@ width:197px;
 
 .save-template {
     width: 100%;
-    height: 29px;
-    margin: 20px 0px 65px 0px;
+    height: 35px;
+    margin-top: 7px;
 }
 
 .generate-reports {
-    padding: 15px;
+    padding: 12px;
+    text-align: center;
+    font-size: 16px;
     color: white;
+    margin-top: 30px;
+    width: 314px;
     background-color: #d41b3e;
-    display: -ms-flexbox;
-    display: flex;
     -ms-flex-pack: center;
-    justify-content: center;
-    position: absolute;
-    bottom: 20px;
     cursor: pointer;
-    left: 25px;
-    right: 25px;
 }
 
 .criteria {
     width: 100% !important;
     min-height: 100px;
     padding: 10px 0px !important;
-    margin: 10px 0px !important;
+    margin-top: 10px;
+    margin-bottom: 18px;
     border: 1px solid #B9B9B9;
     background-color: #f5f5f5;
     color: black;
@@ -266,6 +264,10 @@ width:197px;
 
 .form-control[readonly] {
     color: black;
+    background: white !important;
+    width: 108px;
+    margin-left: 5px;
+    border-radius: 0px;
 }
 .checkbox-sections {
     display: flex;
@@ -273,7 +275,7 @@ width:197px;
     color: black;
     border: 1px solid #c2c2c2;
     justify-content: space-around;
-    height: 40px;
+    height: 35px;
     align-items: center;
     margin: 10px 0px;
     font-size: 12px;
@@ -308,12 +310,15 @@ width:197px;
 .calendar-section {
     display: flex;
     padding: 0 0 15px 0px;
+    margin-bottom: 13px;
 }
 
 .date-from {
     width: 100%;
 }
-
+.date-from span, .date-to  span {
+    margin-bottom: 5px;
+}
 .date-to {
     width: 100%;
 }
@@ -505,7 +510,7 @@ td.repTemplateRow:hover {
 .textPaddingSmall-reports {
     padding: 0px 15px;
     position: absolute;
-    top: -7px;
+    top: -9px;
     background-color: #EBEBEB;
     color: #d31b3d; 
 }
@@ -554,9 +559,13 @@ td.repTemplateRow:hover {
     border-top: 1px solid #cac7c7;
 }
 .container.criteria div {
-    margin: 5px auto;
+    font-size: 14px;
+    margin-bottom: 5px;
 }
 
+.container.criteria div:last-child {
+    margin-bottom: 0;
+}
 
 .rshadeg {
     background-color: #f5f5f5;
@@ -628,8 +637,8 @@ padding:5px 5px;
     }
     .showIcon{
         position: absolute;
-        left: 69%;
-        top: -1px !important;
+        left: 67%;
+        top: -3px !important;
         padding-left: 3px;
         width:  10px !important;
         background: #EBEBEB;
