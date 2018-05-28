@@ -135,8 +135,8 @@ class Report extends Component {
   onCheck(checkedKeys, node) {
     this.state.selectedList = checkedKeys
     this.state.defaultCheckedKeys = checkedKeys
-    this.state.stores = _.pluck(_.where(_.pluck(node.checkedNodes, 'props'), { type: 'store' }),'className')
-    let deviceUIds = _.pluck(_.where(_.pluck(node.checkedNodes, 'props'), { type: 'store' }), 'value')
+    this.state.stores = _.pluck(_.where(_.pluck(node.checkedNodes, 'props'), { type: CommonConstants.Type.Store }),'className')
+    let deviceUIds = _.pluck(_.where(_.pluck(node.checkedNodes, 'props'), { type: CommonConstants.Type.Store }), 'value')
     this.state.deviceUIds = deviceUIds
     this.setState(this.state)
 
@@ -180,7 +180,7 @@ class Report extends Component {
         if (item.Children && item.Children.length) {
           //level++
             return (
-                <TreeNode title={this.renderStoresAndBrand(item,level) } className={item.StoreNumber} key={item.Id} value={item.Type == 'store' ? item.DeviceUID : null} type={item.Type}>
+                <TreeNode title={this.renderStoresAndBrand(item,level) } className={item.StoreNumber} key={item.Id} value={item.Type === CommonConstants.Type.Store ? item.DeviceUID : null} type={item.Type}>
               {
                 loop(item.Children,level+1)            
               }
@@ -188,7 +188,7 @@ class Report extends Component {
             </TreeNode>
           )
         }
-        return <TreeNode title={this.renderStoresAndBrand(item,level)} className={item.StoreNumber} key={item.Id} value={item.Type == 'store' ? item.DeviceUID : null} type={item.Type} />
+        return <TreeNode title={this.renderStoresAndBrand(item,level)} className={item.StoreNumber} key={item.Id} value={item.Type === CommonConstants.Type.Store ? item.DeviceUID : null} type={item.Type} />
       })
     }
 
@@ -246,7 +246,7 @@ class Report extends Component {
                     <ReactTooltip place='right' type='dark' effect='solid' />
                 </span>
                 <div>
-                                <select name='timeMeasure' className='time-measures' onChange={this.changeTimeMeasure.bind(this)}>
+                  <select name='timeMeasure' className='time-measures' onChange={this.changeTimeMeasure.bind(this)}>
                                     <option selected={this.state.timeMeasure == 1} value='1'>{t[language].day}</option>
                                     <option selected={this.state.timeMeasure == 2} value='2'>{t[language].daypart}</option>
                                     <option selected={this.state.timeMeasure == 3} value='3'>{t[language].week}</option>
@@ -460,13 +460,13 @@ class Report extends Component {
                   <div className='col-md-6'> <span className='criteriaHeading'>{t[language].from} :</span>{this.state.fromDate} </div>
                   <div className='col-md-6'> <span className='criteriaHeading'>{t[language].to} :</span>{this.state.toDate}</div>
                   <div className='col-md-12'>
-                      <span className='criteriaHeading'>{t[language].timemeasure} :</span>{this.state.timeMeasure == 1
+                      <span className='criteriaHeading'>{t[language].timemeasure} :</span>{parseInt(this.state.timeMeasure) === CommonConstants.TimeMeasure.Day
                        ? t[language].day
-                      : this.state.timeMeasure == 2
+                      : parseInt(this.state.timeMeasure) === CommonConstants.TimeMeasure.Daypart
                                             ? t[language].daypart
-                                            : this.state.timeMeasure == 3
+                                            : parseInt(this.state.timeMeasure) === CommonConstants.TimeMeasure.Week
                                                 ? t[language].week
-                                                : this.state.timeMeasure == 4
+                                                : parseInt(this.state.timeMeasure) === CommonConstants.TimeMeasure.RawCarData
                                                     ? t[language].rawdatareport
                             : ''}
                   </div>
@@ -475,9 +475,7 @@ class Report extends Component {
                   </div>
                   <div className='col-md-12'>
                                     <span className='criteriaHeading'>{t[language].format}  :</span>
-                                    {this.state.format == 1
-                                        ? t[language].secondswformat
-                                        : this.state.format == 2 ? t[language].minuteswformat : ''}
+                                    {this.state.format == 1? t[language].secondswformat: this.state.format == 2 ? t[language].minuteswformat : ''}
                   </div>
                 </div>
                 <div className='alignCenter'>
@@ -490,20 +488,10 @@ class Report extends Component {
                   <span className='textPaddingLarge'> {t[language].saveastemplate}  </span>
                 </div>
                 <div>
-                  <input
-                    name='templateName'
-                    className='save-template'
-                    placeholder={t[language].namethistemplate}
-                    value={this.state.templateName}
-                    onChange={this.handleOnChange.bind(this)}
-                    maxLength={25}
-                  />
+                  <input name='templateName' className='save-template' placeholder={t[language].namethistemplate} value={this.state.templateName}
+                    onChange={this.handleOnChange.bind(this)} maxLength={25}/>
                 </div>
-                <div
-                  type='submit'
-                  className='generate-reports'
-                  onClick={this.generate.bind(this)}
-                >
+                <div type='submit' className='generate-reports' onClick={this.generate.bind(this)}>
                   {t[language].generatereport}
                 </div>
               </div>
@@ -532,7 +520,6 @@ class Report extends Component {
   }
 
   handleOnChange(e) {
-    const { name, value } = e.target
     this.setState({
       [e.target.name]: e.target.value
     })
@@ -628,13 +615,12 @@ class Report extends Component {
       })
     }
 
-    findStore(list)
+  findStore(list)
     this.setState({
       selectedList: selectedList
     })
     return selectedItems
   }
-
 
   findMatchedClassName(list, keys) {
       let selectedItems = []
@@ -716,23 +702,19 @@ class Report extends Component {
     e.target.id
     this.api.getData (url,data => {
         let template = data.data
-        this.setState({ format: template.Format })
-        this.setState({ type: template.Type })
-        this.setState({ open: template.Open })
-        this.setState({ close: template.Close })
-        this.setState({ timeMeasure: template.TimeMeasure })
+        this.setState({ format: template.Format, type: template.Type, open: template.Open, close: template.Close, timeMeasure: template.TimeMeasure})
         let fromDate = moment(template.FromDate).format('MM/DD/YYYY')
         this.setState({ fromDate: fromDate })
         let toDate = moment(template.ToDate).format('MM/DD/YYYY')
         this.setState({ toDate: toDate })
         this.state.defaultCheckedKeys =  this.findMatchedIds(this.state.treeData, item => {
-          return item.Type === 'store' && _.contains(template.DeviceUUIds, item.DeviceUID)
+          return item.Type === CommonConstants.Type.Store && _.contains(template.DeviceUUIds, item.DeviceUID)
         }).map(String)
         this.setState(this.state)
         this.setState({
           stores: this.findMatchedClassName(this.state.treeData, item => {
             return (
-              item.Type === 'store' &&
+              item.Type === CommonConstants.Type.Store &&
               template.DeviceUUIds.indexOf(item.DeviceUID.toString()) > -1
             )
           })
@@ -804,14 +786,14 @@ class Report extends Component {
       templateName: this.state.templateName, open: this.state.open, close: this.state.close,
       type: this.state.type, include: this.state.include, format: this.state.format, deviceUIds: this.state.deviceUIds,
       deviceIds: this.findMatchedDeviceIds(this.state.treeData, item => {
-          return (item.Type === 'store' && _.contains(self.state.deviceUIds, item.DeviceUID))
+          return (item.Type === CommonConstants.Type.Store && _.contains(self.state.deviceUIds, item.DeviceUID))
       }), 
       CreatedDateTime: moment().format('YYYY-MM-DD HH:mm:ss a'), UpdatedDateTime: moment().format('YYYY-MM-DD HH:mm:ss a'),
       advancedOption: (!this.state.open || !this.state.close), longestTime: _.contains(this.state.include, '1'),systemStatistics: _.contains(this.state.include, '2'),
     })
 
     createTemplateData.push({
-     timeMeasure: this.state.timeMeasure,fromDate: this.state.fromDate,toDate: this.state.toDate,
+      timeMeasure: this.state.timeMeasure,fromDate: this.state.fromDate,toDate: this.state.toDate,
       openTime: this.openTime,closeTime: this.closeTime,
       templateName: this.state.templateName, open: this.state.open, close: this.state.close,
       type: this.state.type, format: this.state.format, deviceUUIds: this.state.deviceUIds,
@@ -868,7 +850,7 @@ class Report extends Component {
     }
 
 
-        if (this.state.timeMeasure === 1) {
+        if (parseInt(this.state.timeMeasure) === CommonConstants.TimeMeasure.Day) {
           if(!this.state.open || !this.state.close) {
             if(template[0].deviceIds.length > 100) {
               if( moment(this.state.toDate, 'MM/DD/YYYY').diff(
@@ -899,7 +881,7 @@ class Report extends Component {
             }
           }
         }
-        if (this.state.timeMeasure === 2) {
+        if (parseInt(this.state.timeMeasure) === CommonConstants.TimeMeasure.Daypart) {
           if(!this.state.open || !this.state.close) {
             if(template[0].deviceIds.length > 100) {
               if (
@@ -934,7 +916,7 @@ class Report extends Component {
           }
         }
     
-        if (this.state.timeMeasure === 3) {
+        if (parseInt(this.state.timeMeasure) === CommonConstants.TimeMeasure.Week) {
           if(!this.state.open || !this.state.close) {
             if(template[0].deviceIds.length > 100) {
               if (
@@ -964,14 +946,25 @@ class Report extends Component {
                 moment(this.state.fromDate, 'MM/DD/YYYY'),
                     'days'
                 ) > CommonConstants.TimeMeasureValidations.TwoMonths
-            ) {
-              
+            ) {              
               errors.push(t[language].daterangeinvalid2month)
               isError = true
             }
           }
     
         }
+
+        if (parseInt(this.state.timeMeasure) === CommonConstants.TimeMeasure.RawCarData) {
+              if (
+                moment(this.state.toDate, 'MM/DD/YYYY').diff(
+                  moment(this.state.fromDate, 'MM/DD/YYYY'),
+                      'days'
+                  ) > CommonConstants.TimeMeasureValidations.ThreeMonths
+              ) {
+                errors.push(t[language].daterangeinvalid3month)
+                isError = true
+              }             
+            }
 
     if (this.state.templateName) {
         if (!this.state.saveAsTemplate) {
@@ -1268,14 +1261,14 @@ class Report extends Component {
       this.setState({
         defaultCheckedKeys: _.pluck(this.state.treeData, 'Id').map(String),
         stores: this.findMatchedClassName(this.state.treeData, item => {
-          return item.Type === 'store'
+          return item.Type === CommonConstants.Type.Store
         }),
 
         selectedList: this.findMatchedIds(this.state.treeData, item => {
           return true
         }),
         deviceUIds: this.findMatchedDeviceUIds(this.state.treeData, item => {
-          return item.Type === 'store'
+          return item.Type === CommonConstants.Type.Store
         })
         })
 
