@@ -8,7 +8,7 @@ class SystemStatistics extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      currentLanguage: languageSettings.getCurrentLanguage(),
+      currentLanguage: languageSettings.getCurrentLanguage()
     }
   }
 

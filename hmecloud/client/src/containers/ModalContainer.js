@@ -23,7 +23,7 @@ class ModalContainer extends Component {
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
-    let initTab = { name: 'Store Details', isActive: true }
+    let initTab =  'Store Details';
     this.state = {
       show: false,
       key: 1,
@@ -60,15 +60,16 @@ class ModalContainer extends Component {
   }
 
 
-  handleClick(tab) {
-    this.setState({activetab: tab});
+  handleClick(event) {
+   // let tab
+   // this.setState({activetab: tab});  
   }
 
   storeTabs(){
     let Tab = ReactBootstrap.Tab
     return this.state.tabData.map((tabItem, index) => {
       return (
-        <Tab eventKey={index+1} title={tabItem.name}>
+        <Tab eventKey={index+1} title={tabItem.name} onClick={this.handleClick}>
           {this.renderTabComponent(tabItem.comp)}
          </Tab>
       )

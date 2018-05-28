@@ -38,7 +38,7 @@ class RegisteredDeviceContainer extends Component {
 
 function mapStateToProps(state) {
     return {
-         deviceDetails: state.storePopupDetails.deviceDetails,
+         deviceDetails: state.StorePopupDetails.storePopupDetails.deviceDetails,
      }
  }
 

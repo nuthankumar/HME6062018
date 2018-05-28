@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import moment from 'moment'
 import './SummaryReport.css'
-import fetch from 'isomorphic-fetch'
 import {Config} from '../../Config'
 import PageHeader from '../Header/PageHeader'
 import t from '../Language/language'
@@ -19,7 +18,7 @@ class RawCarReport extends Component {
       pageHeading: 'Raw Car Data Report',
       displayData: '',
       eventList: [
-      ],
+      ]
     }
     this.api = new Api()
     this.displayRawCarHeader = this.displayRawCarHeader.bind(this)
@@ -68,12 +67,12 @@ class RawCarReport extends Component {
             <th className='thin-header'>
               <span>{t[language].store}</span>:
             </th>
-            <td className='thin-header'>{this.state.displayData.storeName ? this.state.displayData.storeName :this.state.displayData.storeNumber }</td>
+            <td className='thin-header'>{this.state.displayData.storeName ? this.state.displayData.storeName : this.state.displayData.storeNumber }</td>
             <th>
               <span>{t[language].ReportsStart}</span>
             </th>
             <td>
-              {this.state.displayData.startTime ? (this.state.displayData.startTime +' '+ t[language].OPEN) : 'N/A'}&nbsp;
+              {this.state.displayData.startTime ? (this.state.displayData.startTime + ' ' + t[language].OPEN) : 'N/A'}&nbsp;
             </td>
             <th>
               <span>{t[language].ReportsPrintDate}</span>
@@ -89,12 +88,12 @@ class RawCarReport extends Component {
               <span>{t[language].ReportsStop}</span>
             </th>
             <td>
-              {this.state.displayData.stopTime ? (this.state.displayData.stopTime +' '+ t[language].CLOSE) : 'N/A' }&nbsp;
+              {this.state.displayData.stopTime ? (this.state.displayData.stopTime + ' ' + t[language].CLOSE) : 'N/A' }&nbsp;
             </td>
             <th>
               <span>{t[language].ReportsPrintTime} </span>
             </th>
-            <td>{this.state.displayData.printTime ? new moment().format("hh:mm A") : 'N/A' }</td>
+            <td>{this.state.displayData.printTime ? new moment().format('hh:mm A') : 'N/A' }</td>
           </tr>
         </tbody>
       </table>
@@ -112,25 +111,10 @@ class RawCarReport extends Component {
         </div>
         <table className='display-records table-layout table-layoutRawCar'>
           <tbody>
-            <tr className ='raw-car-subheaders'>
+            <tr className='raw-car-subheaders'>
               <th>{t[language].ReportsDepartureTime}</th>
               <th>{t[language].ReportsEventName}</th>
               <th>{t[language].ReportsCarsinQueue}</th>
-              {/* <th>
-                <span>{t[language].MenuBoard}</span>
-              </th>
-              <th>
-                <span>{t[language].Greet}</span>
-              </th>
-              <th>
-                <span>{t[language].Service}</span>
-              </th>
-              <th>
-                <span>{t[language].LaneQueue}</span>
-              </th>
-              <th>
-                <span>{t[language].LaneTotal}</span>
-              </th> */}
               {this.getRawCardColumnHeaders()}
             </tr>
             {this.displayItems()}
@@ -140,15 +124,14 @@ class RawCarReport extends Component {
     }
   }
 
-  getRawCardColumnHeaders(){
-   return  this.state.eventList.map((headerItem) => {
-      if(headerItem !== 'DepartureTime' && headerItem !== 'EventName' && headerItem !== 'CarsInQueue'){
-        return(<th>
-        <span>{headerItem}</span>
-      </th>)
+  getRawCardColumnHeaders () {
+    return this.state.eventList.map((headerItem) => {
+      if (headerItem !== 'DepartureTime' && headerItem !== 'EventName' && headerItem !== 'CarsInQueue') {
+        return (<th>
+          <span>{headerItem}</span>
+        </th>)
       }
     })
-    
   }
 
   displayItems () {
@@ -164,14 +147,14 @@ class RawCarReport extends Component {
         //   <td> {items.laneQueue ? items.laneQueue : 'N/A'}</td>
         //   <td> {items.laneTotal ? items.laneTotal : 'N/A'}</td>
         // </tr>
-          <tr className='display-result'>
+        <tr className='display-result'>
           {this.displayRawCarCell(items)}
         </tr>
       )
     })
   }
 
-  displayRawCarCell(items){
+  displayRawCarCell (items) {
     let eventHeaders = this.state.eventList
     return eventHeaders.map((headerItem) => {
       return (
@@ -208,7 +191,7 @@ class RawCarReport extends Component {
       }
     }, error => {
       this.state.successMessage = ''
-      this.state.errorMessage = 'Failed sending Email'
+      this.state.errorMessage = error.message
       this.setState(this.state)
     })
   }
