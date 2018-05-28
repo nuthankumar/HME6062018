@@ -1,4 +1,3 @@
-import * as moment from 'moment';
 export const CommonConstants = {
   'apiUrls': {
     'getGroupHierarchyTree': 'api/group/getAll',
@@ -27,6 +26,16 @@ export const CommonConstants = {
     'TwoWeeks': 14,
     'Today': 0,
     'ThreeMonths': 93
+  },
+  'TimeMeasure': {
+    'Day': 1,
+    'Daypart': 2,
+    'Week': 3,
+    'RawCarData': 4
+  },
+  'Type': {
+    'Group': 'group',
+    'Store': 'store'
   },
   'Drilldown': [2, 4, 1]
 }

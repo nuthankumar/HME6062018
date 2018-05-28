@@ -24,7 +24,7 @@ GO
 
 -- use the below UserUid for testing in local data base
 -- --,@UserUID=N'68LKBP85C1SKH1FI3M7X40CJHKGU07FZ'
-ALTER PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details_Dynamic](
+CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details_Dynamic](
 	@Device_IDs VARCHAR(500),
 	@StoreStartDate DATE,
 	@StoreEndDate DATE,

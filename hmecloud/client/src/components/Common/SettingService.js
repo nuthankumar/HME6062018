@@ -1,25 +1,24 @@
 
-import { Config } from '../../Config';
+import { Config } from '../../Config'
 import AuthenticationService from '../Security/AuthenticationService'
 
 export default class SettingService {
-
-    constructor() {
+    constructor () {
         this.authService = new AuthenticationService(Config.authBaseUrl)
     }
 
-    canShowAdminHeader() {
+    canShowAdminHeader () {
         return this.authService.isAdmin() && this.authService.isLoggedIn()
     }
 
-    canShowAdminSubHeader() {
+    canShowAdminSubHeader () {
         if (this.authService.getUUID())
             return this.authService.isAdmin() && this.authService.isLoggedIn()
         else
             return false;
     }
 
-    canShowPortalHeader() {
+    canShowPortalHeader () {
         return !this.authService.isAdmin() && this.authService.isLoggedIn()
     }
 
