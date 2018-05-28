@@ -22,7 +22,7 @@ GO
 -- ===========================================================
 
 
-ALTER PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details_Dynamic](
+CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details_Dynamic](
  @Device_IDs varchar(500),
  @StoreStartDate date,
  @StoreEndDate date,

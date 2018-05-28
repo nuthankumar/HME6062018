@@ -7,7 +7,7 @@ GO
 
 
 --exec [usp_HME_Cloud_Get_Report_Raw_Data] '119913, 119961, 119905, 119748', '2018-05-1', '2018-05-15', '2018-05-1 00:00:00' , '2018-05-15 23:30:00', 11, 'TC'
-ALTER PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_test](
+CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_test](
 	@Device_IDs varchar(MAX),
 	@StoreStartDate date,
 	@StoreEndDate date,
