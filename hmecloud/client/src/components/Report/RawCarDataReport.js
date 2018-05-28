@@ -67,7 +67,7 @@ class RawCarReport extends Component {
             <th className='thin-header'>
               <span>{t[language].store}</span>:
             </th>
-            <td className='thin-header'>{this.state.displayData.storeName ? this.state.displayData.storeName : this.state.displayData.storeNumber }</td>
+            <td className='thin-header'>{this.state.displayData.storeNumber ? this.state.displayData.storeNumber : this.state.displayData.storeName }</td>
             <th>
               <span>{t[language].ReportsStart}</span>
             </th>
