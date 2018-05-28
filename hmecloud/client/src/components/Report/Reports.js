@@ -1054,8 +1054,7 @@ class Report extends Component {
         case '4' : this.generateRawCarDataReport(template)
           break
         }
-
-    }
+      }
     else{
     this.setState({errors: errors})
     }
