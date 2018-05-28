@@ -11,6 +11,38 @@ const errorHandler = (message, status) => {
   return output
 }
 
+const settingsDevices = (request, callback) => {
+  const input = {
+    duid: (request.query.duid ? request.query.duid : null)
+  }
+
+  deviceValidator.validateDevice(input, (err) => {
+    if (err) {
+      callback(err)
+    }
+    stores.settingsDevices(input, (result) => {
+      if (result.data && result.data.length > 0) {
+        let output = {}
+        var tempSettingsArray = []
+
+        output.systemStatus = result.data[0]
+        let grouppedArray = _.groupBy(result.data[1], 'SettingsGroup_Name')
+        _.keys(grouppedArray).forEach(function (key, value) {
+          let settingsObj = {}
+          settingsObj.name = key
+          settingsObj.value = grouppedArray[key]
+          tempSettingsArray.push(settingsObj)
+        })
+        output.systemSettings = tempSettingsArray
+        output.status = true
+        callback(output)
+      } else {
+        callback(errorHandler(messages.LISTGROUP.notfound, false))
+      }
+    })
+  })
+}
+
 const settingsStores = (request, callback) => {
   const input = {
     suid: (request.query.suid ? request.query.suid : null)
@@ -289,6 +321,7 @@ const removeDeviceById = (request, callBack) => {
   })
 }
 module.exports = {
+  settingsDevices,
   settingsStores,
   getMasterSettings,
   saveMasterSettings,

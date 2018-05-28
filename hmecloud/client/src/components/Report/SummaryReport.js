@@ -457,7 +457,8 @@ export default class SummaryReport extends Component {
 
   downloadPdf (type, e) {
     let request = this.state.reportData.drillDownRequestData
-    request.localTime = moment(new Date()).format('MMM D,YYYY hh:mm')
+    // request.localTime = moment(new Date()).format('MMM D,YYYY hh:mm')
+    request.localTime = moment(new Date()).locale('en').format('MMM D,YYYY hh:mm')
     let url
     if (type === 'CSV') {
       url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=csv'
