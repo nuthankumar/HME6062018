@@ -164,7 +164,7 @@ class Report extends Component {
 
   showFromDatePicker(){
     this.refs.fromDate.openCalendar()
-}
+  }
 
   showToDatePicker(){
     this.refs.toDate.openCalendar()
@@ -622,7 +622,6 @@ class Report extends Component {
           findStore(item.Children)
         }
         if (keys(item)) {
-          // if ( item.Type === 'store' && keys.indexOf(item.Id.toString()) > -1) {
           selectedItems.push(item.Name)
           selectedList.push(item.Id)
         }
@@ -646,7 +645,6 @@ class Report extends Component {
                   findStore(item.Children)
               }
               if (keys(item)) {
-                  // if ( item.Type === 'store' && keys.indexOf(item.Id.toString()) > -1) {
                   selectedItems.push(item.StoreNumber)
                   selectedList.push(item.Id)
               }
@@ -870,7 +868,7 @@ class Report extends Component {
     }
 
 
-        if (this.state.timeMeasure == 1) {
+        if (this.state.timeMeasure === 1) {
           if(!this.state.open || !this.state.close) {
             if(template[0].deviceIds.length > 100) {
               if( moment(this.state.toDate, 'MM/DD/YYYY').diff(
@@ -901,7 +899,7 @@ class Report extends Component {
             }
           }
         }
-        if (this.state.timeMeasure == 2) {
+        if (this.state.timeMeasure === 2) {
           if(!this.state.open || !this.state.close) {
             if(template[0].deviceIds.length > 100) {
               if (
@@ -936,7 +934,7 @@ class Report extends Component {
           }
         }
     
-        if (this.state.timeMeasure == 3) {
+        if (this.state.timeMeasure === 3) {
           if(!this.state.open || !this.state.close) {
             if(template[0].deviceIds.length > 100) {
               if (
@@ -1171,7 +1169,6 @@ class Report extends Component {
           this.setState(this.state)
       })
     }
-   
   }
 
   changeDate(date, dateSelection) {
@@ -1297,13 +1294,9 @@ class Report extends Component {
       selectAll: !this.state.selectAll
     })
   }
-
-
-
-
-    renderStoresAndBrand(item,level) {
-        return (<div className={'storeTree level-'+level}><span className={'StoreTitile level-'+level} >{item.Name ? (item.StoreNumber ? item.StoreNumber + '-' : '') + item.Name : item.StoreNumber ? item.StoreNumber : ''}</span> <span className='StoreBrand'>{item.Brand ? item.Brand : ''}</span> </div>)
-}
+  renderStoresAndBrand(item,level) {
+          return (<div className={'storeTree level-'+level}><span className={'StoreTitile level-'+level} >{item.Name ? (item.StoreNumber ? item.StoreNumber + '-' : '') + item.Name : item.StoreNumber ? item.StoreNumber : ''}</span> <span className='StoreBrand'>{item.Brand ? item.Brand : ''}</span> </div>)
+  }
 }
 
 export default Report
