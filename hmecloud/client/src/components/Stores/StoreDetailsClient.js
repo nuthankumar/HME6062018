@@ -49,7 +49,7 @@ class StoreDetail extends Component { //ensure you dont export component directl
   render () {
     const { language } = this.state
     let sortParams = this.props.storesDetails.sortParams ? this.props.storesDetails.sortParams :  { 'sortBy': 'Brand_Name', 'sortType': 'DESC' }
-        
+
     return (
       <section className={'stores ' + (this.state.showStores ? 'show' : 'hidden')}>
         <div className='settings forms'>
@@ -148,8 +148,11 @@ class StoreDetail extends Component { //ensure you dont export component directl
     let sortType = this.state.Ascending ? 'DESC' : 'ASC'
     let sortParams = { 'sortBy': sortBy, 'sortType': sortType }
     this.props.dispatch(storesFunctions.sortStores(sortParams))
+    this.props.dispatch(storesFunctions.initStoresDetails())
+    // this.props.dispatch(storesFunctions.sortStores(sortParams)).then(() => {
+    //   console.log(this.props.value)
+    // })
   }
-
 }
 
 function mapStateToProps (state) {
