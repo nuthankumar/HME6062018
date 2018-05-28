@@ -17,7 +17,9 @@ table.user_login {
     text-align: center;
 }
 
-
+.rc-time-picker-input[disabled] { 
+    border-radius: 0 !important;
+}
 .user_login tbody tr th label {
     display: inline-block;
     max-width: 100%;
@@ -289,6 +291,7 @@ width:197px;
     -ms-flex-align: center;
     align-items: center;
     font-size: 12px;
+    margin-bottom: 5px;
 }
 
 .user-info-section {
@@ -394,7 +397,7 @@ width:197px;
     }
 
 .note {
-    font-size: 9px;
+    font-size: 8.5px;
     color: gray;
     margin-left: -2px;
 }
