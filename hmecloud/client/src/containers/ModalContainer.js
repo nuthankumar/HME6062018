@@ -6,6 +6,7 @@ import StoredetailsComponent from '../components/Stores/StoreDetailsComponent'
 import ZoomComponent from '../components/Stores/ZoomComponent'
 import CIBComponent from '../components/Stores/CIBComponent'
 import EOSComponent from '../components/Stores/EOSComponent'
+import IONComponent from '../components/Stores/IONComponent'
 import * as ReactBootstrap from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -13,7 +14,7 @@ import { closePopup, initModal } from '../actions/modalAction'
 // import  actionCreator  from '../actions/modalAction';
 
 class ModalContainer extends Component {
-  constructor(props, context) {
+  constructor (props, context) {
     super(props, context)
     // this.handleShow = this.handleShow.bind(this)
     this.handleClose = this.handleClose.bind(this)
@@ -27,6 +28,7 @@ class ModalContainer extends Component {
         { name: 'Store Details', isActive: true, comp: 'store' },
         { name: 'CIB', isActive: false, comp: 'cib' },
         { name: 'EOS', isActive: false, comp: 'eos' },
+        { name: 'ION', isActive: false, comp: 'ion'},
         { name: 'ZOOM', isActive: false, comp: 'zoom' }
       ]
     }
@@ -39,11 +41,11 @@ class ModalContainer extends Component {
   //   this.props.dispatch(initModal())
   // }
 
-  handleSelect(key) {
+  handleSelect (key) {
     this.setState({ key })
   }
 
-  handleClose() {
+  handleClose () {
     this.setState({ state: null })
     this.props.dispatch(closePopup())
   }
@@ -57,7 +59,7 @@ class ModalContainer extends Component {
   //   // this.setState({activetab: tab});
   // }
 
-  storeTabs() {
+  storeTabs () {
     let Tab = ReactBootstrap.Tab
     return this.state.tabData.map((tabItem, index) => {
       return (
@@ -68,7 +70,7 @@ class ModalContainer extends Component {
     })
   }
 
-  renderTabComponent(tabcomponent, isAdmin) {
+  renderTabComponent (tabcomponent, isAdmin) {
     switch (tabcomponent) {
       case 'store':
         return <StoredetailsComponent isAdmin={isAdmin} data={this.props.stores} />
@@ -79,13 +81,16 @@ class ModalContainer extends Component {
       case 'eos':
         return <EOSComponent />
         break
+      case 'ion' :
+        return <IONComponent />
+        break
       case 'zoom':
         return <ZoomComponent />
         break
     }
   }
 
-  render() {
+  render () {
     // const language = this.state.currentLanguage
     let Modal = ReactBootstrap.Modal
     let Button = ReactBootstrap.Button
@@ -117,7 +122,7 @@ class ModalContainer extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     stores: state.StorePopupDetails
   }
