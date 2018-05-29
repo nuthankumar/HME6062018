@@ -20,12 +20,13 @@ GO
 -- -----------------------------------------------------------
 -- 1.		22/05/2018		Ramesh 			Add (LinkedServerName,DatabaseName)
 -- 2.		24/05/2018		Ramesh			Add Total Daypart in single result
+-- 3.		29/05/2018		Jayaram			Add MAX size in Device_ID
 -- ===========================================================
 -- exec usp_HME_Cloud_Get_Report_By_Daypart_Details_Dynamic @Device_IDs='15',@StoreStartDate='2018-03-23',@StoreEndDate='2018-03-24',@InputStartDateTime=N'2018-03-23 00:00:00',@InputEndDateTime=N'2018-03-24 10:30:00',@CarDataRecordType_ID='11',@ReportType='AC',@LaneConfig_ID=1,@PageNumber=1,@UserUID=null
 -- ===========================================================
 CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details_Dynamic]
 (
-	@Device_IDs varchar(500),
+	@Device_IDs varchar(MAX),
 	@StoreStartDate date,
 	@StoreEndDate date,
 	@InputStartDateTime NVARCHAR(50) = '1900-01-01 00:00:00',  -- 2018-04-09 20:00:00

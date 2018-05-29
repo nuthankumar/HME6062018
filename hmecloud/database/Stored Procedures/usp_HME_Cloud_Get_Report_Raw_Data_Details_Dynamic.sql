@@ -16,14 +16,15 @@ GO
 -- -----------------------------------------------------------
 -- Sl.No.   Date         Developer            Descriptopn
 -- -----------------------------------------------------------
--- 1.     22/05/2018     Ramesh              Add (LinkedServerName,DatabaseName)
+-- 1.     22/05/2018      Ramesh              Add (LinkedServerName,DatabaseName)
+-- 2.	  	29/05/2018	  	Jayaram			        Add MAX size in Device_ID
 -- ===========================================================
 -- exec [usp_HME_Cloud_Get_Report_Raw_Data_Details_Dynamic] '15', '2018-03-24', '2018-03-24', '2018-03-24 00:00:00' , '2018-03-24 12:00:00', 11, 'TC',1
 -- ===========================================================
 
 
 CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details_Dynamic](
- @Device_IDs varchar(500),
+ @Device_IDs varchar(MAX),
  @StoreStartDate date,
  @StoreEndDate date,
  @StartDateTime datetime = '1900-01-01 00:00:00',
@@ -237,7 +238,7 @@ FROM #StoresDevicesDates sdd
   LEFT JOIN #CarDetectorData b ON b.Device_ID = sdd.Device_ID
    AND b.StoreDate = sdd.StoreDate
    AND g.Device_ID = b.Device_ID
-   AND g.Detector_ID = b.Detector_ID   
+   AND g.Detector_ID = b.Detector_ID
    WHERE (b.Detector_ID = 1000 OR b.Goal_ID>0)
    AND b.DepartTimeStamp is not null
 
@@ -265,7 +266,7 @@ SELECT sdd.StoreDate,
   et.LaneConfig_ID
 FROM #StoresDevicesDates sdd
   INNER JOIN #DetectorEventType et ON et.Device_ID = sdd.Device_ID
-  INNER JOIN #CarDetectorData cdd ON sdd.Device_ID = cdd.Device_ID AND cdd.Detector_ID = 2000 AND sdd.StoreDate = cdd.StoreDate 
+  INNER JOIN #CarDetectorData cdd ON sdd.Device_ID = cdd.Device_ID AND cdd.Detector_ID = 2000 AND sdd.StoreDate = cdd.StoreDate
 WHERE NOT EXISTS(
   SELECT 1
   FROM #CarDetectorData d
