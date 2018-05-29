@@ -28,7 +28,7 @@ Device.prototype.storeInfo = function () {
   return getStoreTnfo
 }
 Device.prototype.generateReports = function (deviceDetails) {
-  function timeFormat (dateValue) {
+  function timeFormat(dateValue) {
     if (dateValue !== null || (_.isUndefined(dateValue))) {
       return moment.utc(dateValue, 'YYYY-MM-DDTHH:mm:ss Z').format('YYYY-MM-DD HH:mm a')
     } else {
@@ -39,16 +39,19 @@ Device.prototype.generateReports = function (deviceDetails) {
   let events = []
   let rawCarData = {}
   _.forEach(deviceDetails, (item, key) => {
-    if (events.includes(item['EventType_Name'])) {
-      rawCarDataList.push(rawCarData)
-      rawCarData = {}
-      events = []
-    }
+    // if (events.includes(item['EventType_Name'])) {
+    //   rawCarDataList.push(rawCarData)
+    //   rawCarData = {}
+    //   events = []
+    // }
+    let departureTime;
     if (item['DepartTimeStamp']) {
-      rawCarData.departureTime = timeFormat(item['DepartTimeStamp'])
-    } else {
-      rawCarData.departureTime = 'N/A'
+      departureTime = timeFormat(item['DepartTimeStamp'])
     }
+    //   rawCarData.departureTime = timeFormat(item['DepartTimeStamp'])
+    // } else {
+    //   rawCarData.departureTime = 'N/A'
+    // }
     if (item['CarRecordDataType_Name']) {
       rawCarData.eventName = item['CarRecordDataType_Name'] ? item['CarRecordDataType_Name'] : 'N/A'
     } else {
@@ -60,13 +63,23 @@ Device.prototype.generateReports = function (deviceDetails) {
       rawCarData.carsInQueue = 'N/A'
     }
     events.push(item['EventType_Name'])
+
+    rawCarData[`${item['EventType_Name'].toString()}`] = dateUtils.convertSecondsToMinutes(item['DetectorTime'], this.request.body.format)
+    
+    if (rawCarData.departureTime && rawCarData.departureTime != departureTime) {
+      rawCarDataList.push(rawCarData)
+      rawCarData = {}
+      events = []
+    }else {     
+        rawCarData.departureTime = departureTime
+      }
   })
-  _.forEach(deviceDetails, (item) => {
-    _.forEach(events, (value, key) => {
-      rawCarData[`${item['EventType_Name'].toString()}`] = dateUtils.convertSecondsToMinutes(item['DetectorTime'], this.request.body.format)
-    })
-    rawCarDataList.push(rawCarData)
-  })
+  // _.forEach(deviceDetails, (item) => {
+  //   _.forEach(events, (value, key) => {
+  //     rawCarData[`${item['EventType_Name'].toString()}`] = dateUtils.convertSecondsToMinutes(item['DetectorTime'], this.request.body.format)
+  //   })
+     rawCarDataList.push(rawCarData)
+  // })
   return rawCarDataList
 }
 module.exports = Device

@@ -5,18 +5,15 @@ const offlineImage = require('../../images/connection_offline.png')
 // import * as languageSettings from '../Language/languageSettings'
 
 // export default class BookList extends Component {
-class ZoomComponent extends Component { // ensure you dont export component directly
-  constructor (props) {
-    super(props)
-    this.state = {
-      showStores: this.props.showStores
-    }
-  }
+class IONComponent extends Component {
+  // constructor (props) {
+  //   super(props)
+  // }
 
   render () {
     return (
       <div>
-        <h4 className='header'>Registered ZOOM</h4>
+        <h4 className='header'>Registered ION</h4>
         <table className='sys_table_widget sys_table'>
           <tbody>
             <tr className='theader'>
@@ -56,4 +53,4 @@ class ZoomComponent extends Component { // ensure you dont export component dire
   }
 }
 
-export default ZoomComponent
+export default IONComponent

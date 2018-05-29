@@ -26,12 +26,12 @@ class ViewDetails extends Component {
     if (this.props.storeViewDetails !== undefined) {
       return (
         <div className='deviceDetails'>
-          <div className='col-xs-4'>
-            <SystemStatus data={this.props.storeViewDetails} />
-          </div>
-          <div className='col-xs-8'>
-            <SystemSettings data={this.props.storeViewDetails} />
-          </div>
+          {/* <div className='col-xs-4'> */}
+          <SystemStatus data={this.props.storeViewDetails} />
+          {/* </div> */}
+          {/* <div className='col-xs-8'> */}
+          <SystemSettings data={this.props.storeViewDetails} />
+          {/* </div> */}
         </div>
       )
     } else {

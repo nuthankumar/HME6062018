@@ -465,3 +465,132 @@ text-decoration: none;
     border-radius: 25px;
     font-size: 16px;
 }
+
+/*********** Store merge Modal Popup *******************/
+
+ .merge-modal-popup{
+    position: absolute;
+    top: 298.5px;
+    left: 170.5px;
+    display: block;
+    height: auto;
+    width: 1000px;
+    z-index: 102;
+}
+
+.system-status-table {
+    width: 430px;
+    margin-left: 50px;
+    float: left;
+}
+
+.syatem-status-table tr td {
+    padding-left: 10px;
+    vertical-align: top;
+}
+
+table.system-status-table th {
+    width: 150px;
+}
+.system-settings-status th {
+    padding: 10px;
+    font-size: 14px;
+    font-weight : normal; 
+    text-align: left;
+}
+
+.list-style-none {
+    list-style: none;
+}
+
+.system-settings-container {
+    float: right;
+    margin-bottom: 20px;
+    margin-right: 8px;
+    min-height: 500px;
+    width: 590px;
+}
+
+.system-settings-header, .system_header {
+    border-radius: 0 0 0 0;
+    color: #000;
+    padding: 5px;
+    font-size: 30px !important;
+    margin: 25px 0px 17px 0px !important;
+    border: none !important;
+}
+
+.settings-accordion-item div[aria-selected='true'] h3{
+    background: #3baae3;
+    font-weight: bold;
+}
+
+.system-settings-status{
+    display:inline-block;
+}
+.system-settings-accordion {
+    width: 590px;
+}
+.registered-store-list {
+    padding-left: 0px;
+}
+.settings-accordion-header{
+    display: block;
+    cursor: pointer;
+    position: relative;
+    margin: 2px 0 0 0;
+    padding: .5em .5em .5em .7em;
+    font-size: 12px;
+    background:#e8f3fc;
+
+    border: 1px solid #B9B9B9;
+    border-radius: 0 0 0 0;
+    color: #000;
+
+    font-weight: bold;    
+}
+
+.settings-accordion-content { 
+    padding: 1em 2.2em;
+    border-top: 0;
+    overflow: auto;
+    margin-left: 35px;
+
+    height: 170px;
+    width: 500px;
+}
+
+tr.settings-table-header th {
+    width: 220px
+}
+
+tr.settings-table-header{
+    border: 1px solid #b9b9b9;
+    color: #757575;
+}
+
+tr.system-settings-row-data{
+    background-color: #ffffff;
+    border-bottom: 1px solid #b9b9b9;
+    border-left: 1px solid #fff;
+    border-right: 1px solid #fff;
+    color: #000000;
+    font-size:12px;
+}
+
+.text-right {
+    text-align: right
+}
+
+tr.system-settings-row-data:hover{
+    background-color: #c4e9f1;
+    border-bottom: 1px solid #709da2;
+    border-left: 1px solid #fff;
+    border-right: 1px solid #fff;
+}
+
+.store-link {
+    color: #D41B3E;
+    text-decoration: underline;
+} 
+

@@ -41,7 +41,7 @@
   display: block;
   margin-left: auto;
   margin-right:auto;
- /* width: 1130px;*/ 
+ /* width: 1130px;*/
 }
 .forms *{
   font-size: 12px;
@@ -85,7 +85,7 @@ div.tab-content #store-tabs-pane-1, #store-tabs-pane-2, #store-tabs-pane-3, #sto
   height: 490px;
   border-right: 2px solid #ccc;
   border-bottom: 2px solid #ccc;
-  border-left: 2px solid #ccc; 
+  border-left: 2px solid #ccc;
   outline: none;
   background-color: rgb(255, 255, 255);
   padding: 1em 1.4em;
@@ -95,14 +95,14 @@ div.tab-content #store-tabs-pane-1, #store-tabs-pane-2, #store-tabs-pane-3, #sto
   width: 460px;
   margin-left: 30px;
   margin-top: 10px;
-}    
+}
 #store-tabs{
   border: none;
 }
 #store-tabs ul.nav-tabs li.active > a {
   color: #222222;
   font-size: 16px;
-} 
+}
 #store-tabs ul.nav-tabs li > a{
   font-size : 16px;
   color: #2779aa;
@@ -112,7 +112,7 @@ div.tab-content #store-tabs-pane-1, #store-tabs-pane-2, #store-tabs-pane-3, #sto
 table.user_form tr th label {
   /* margin-top: 12px; */
   /* width: 110px;*/
-  font-weight: normal; 
+  font-weight: normal;
   margin-bottom: 0px;
 
 
@@ -145,5 +145,80 @@ table.user_form tr td{
 }
 
 table.user_form tr th{
-   padding-top: 8px; 
+   padding-top: 8px;
 }
+
+/* ION Components */
+ .header{
+  margin-top: 35px;
+  margin-bottom: 7px;
+  font-size: 26px;
+}
+.cib_header{
+  margin-bottom: 5px;
+  font-size: 26px;
+}
+.sys_table_widget{
+  margin: 0 auto;
+  outline: none;
+}
+.sys_table{
+    text-align: left;
+}
+.theader{
+  border: 1px solid #b9b9b9;
+  color: #757575;
+}
+.sys_table_widget th {
+  padding: 10px;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+ tr{
+  display: table-row;
+}
+.sys-table tr.theader th {
+  font-size: 10px;
+}
+.tdata{
+  background-color: #ffffff;
+  border-bottom: 1px solid #b9b9b9;
+  border-left: 1px solid #fff;
+  border-right: 1px solid #fff;
+  color: #000000;
+}
+.sys_table_widget td.sys-ctr {
+    text-align: left;
+    padding-right: 10px;
+}
+.sys-ion-check{
+  padding: 5px;
+}
+.sys_table_widget.sys-table tr td {
+  vertical-align: middle;
+}
+.sys_table_widget td {
+  padding: 10px;
+}
+td a{
+  color: #D41B3E;
+  font-weight: 600px;
+}
+.remove-sys{
+  margin-top: 20px;
+}
+.remove-button{
+    right: 10px;
+    padding: 10px;
+    background-color: #D41B3E;
+    color:white;
+    text-align: center;
+    border: none;
+    vertical-align: middle;
+    margin: auto;
+} 
+
+
+/* END ION Components */
