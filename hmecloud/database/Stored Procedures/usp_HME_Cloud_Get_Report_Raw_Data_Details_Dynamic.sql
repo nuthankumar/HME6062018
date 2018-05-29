@@ -16,15 +16,14 @@ GO
 -- -----------------------------------------------------------
 -- Sl.No.   Date         Developer            Descriptopn
 -- -----------------------------------------------------------
--- 1.     22/05/2018      Ramesh              Add (LinkedServerName,DatabaseName)
--- 2.	  	29/05/2018	  	Jayaram			        Add MAX size in Device_ID
+-- 1.     22/05/2018     Ramesh              Add (LinkedServerName,DatabaseName)
 -- ===========================================================
 -- exec [usp_HME_Cloud_Get_Report_Raw_Data_Details_Dynamic] '15', '2018-03-24', '2018-03-24', '2018-03-24 00:00:00' , '2018-03-24 12:00:00', 11, 'TC',1
 -- ===========================================================
 
 
 CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details_Dynamic](
- @Device_IDs varchar(MAX),
+ @Device_IDs varchar(500),
  @StoreStartDate date,
  @StoreEndDate date,
  @StartDateTime datetime = '1900-01-01 00:00:00',
@@ -76,18 +75,7 @@ CREATE TABLE #StoresDevicesDates(
  Device_ID int
 )
 
---CREATE TABLE #CarDetectorData(
---  Device_ID int,
---  Daypart_ID tinyint,
---  StoreDate date,
---  DepartTimeStamp datetime,
---  Detector_ID int,
---  DetectorTime smallint,
---  CarDataRecord_ID bigint,
---  Goal_ID smallint,
---  CarRecordDataType_Name varchar(20),
---  CarsInQueue tinyint
---)
+
 CREATE TABLE #CarDetectorData(
 		StoreDate date,
 		DepartTimeStamp datetime,
@@ -110,12 +98,9 @@ CREATE TABLE #CarDetectorData(
 		LaneConfig_ID tinyint
 	)
 CREATE TABLE #EventTypeNames(
+EventType_Category_ID int ,
  EventTypeName Varchar(200)
 )
--- Getting the DeviceIds for the given StoreId
---SET @Device_IDs = (select dinf.Device_ID from tbl_DeviceInfo as dinf inner join tbl_Stores strs on dinf.Device_Store_ID = strs.Store_ID where dinf.Device_Store_ID IN (@StoreId));
---SET @Device_UID = (select dinf.Device_UID from tbl_DeviceInfo as dinf inner join tbl_Stores strs on dinf.Device_Store_ID = strs.Store_ID where dinf.Device_Store_ID IN (@StoreId));
-
 
 -- report type is "Time Slice", then calculate each store date with the time slice
 IF @ReportType = 'TC'
@@ -179,27 +164,6 @@ SET @query ='INSERT INTO #CarDetectorData
 	+ ''''+CONVERT(VARCHAR(20),@StoreEndDate,23) +''', ''' + CONVERT(VARCHAR(30),@StartDateTime, 21)+''', '''+ CONVERT(VARCHAR(30),@EndDateTime, 21) +''', '''+@CarDataRecordType_IDs+''', '''+ @ReportType+''''
 	EXEC (@query)
 
---SELECT b.Device_ID ,
---  b.Daypart_ID,
---  b.StoreDate,
---  CAST(b.DepartTimeStamp AS DATETIME) AS DepartTimeStamp,
---  a.DetectorData_ID AS Detector_ID,
---  a.DetectorTime,
---  a.CarDataRecord_ID,
---  a.Goal_ID,
---  [CarRecordDataType_Name] = CASE b.CarDataRecordType_ID WHEN 11 THEN 'Car_Departure' WHEN 4 THEN 'Car_Pull_In' ELSE 'Other' END,
---  b.CarsInQueue
---FROM tbl_DetectorData a
---  INNER JOIN tbl_CarRecordData b ON b.CarDataRecord_ID = a.CarDataRecord_ID
---  --INNER JOIN ltbl_CarDataRecordType c ON c.CarRecordDataType_ID = b.CarDataRecordType_ID
---WHERE 1 = 1
---AND  b.StoreDate BETWEEN @StoreStartDate AND @StoreEndDate
---AND  EXISTS(SELECT 1 FROM #DateTimeSlice AS dts WHERE dts.StoreDate = b.StoreDate AND CAST(b.DepartTimeStamp AS DATETIME) BETWEEN dts.StartDateTime AND dts.EndDateTime)
---AND  EXISTS(SELECT 1 FROM dbo.Split(@Device_IDs, ',') AS Devices WHERE Devices.cValue = b.Device_ID)
---AND  EXISTS(SELECT 1 FROM dbo.Split(@CarDataRecordType_IDs, ',') AS drt WHERE drt.cValue = b.CarDataRecordType_ID)
---AND  (a.Goal_ID > 0 OR a.DetectorData_ID = 1000)  -- except land queue, do not include records with Goal_id = 0
-
-
 -- add index to above temp table
 CREATE NONCLUSTERED INDEX [IX_tbl_CarRecordData_Device_ID] ON #CarDetectorData
 (
@@ -213,7 +177,6 @@ CREATE NONCLUSTERED INDEX [IX_tbl_CarRecordData_Device_ID] ON #CarDetectorData
 
 SET @query = ''
 
-SELECT *, RANK () OVER (ORDER BY Storedate,DepartTimeStamp) RawDataID FROM (
 SELECT sdd.StoreDate,
   CAST(b.DepartTimeStamp AS DATETIME) AS DepartTimeStamp,
   sdd.Store_id,
@@ -222,89 +185,39 @@ SELECT sdd.StoreDate,
   sdd.Device_ID,
   b.CarRecordDataType_Name,
   b.CarsInQueue,
-  g.EventType_ID,
-  g.EventType_Name,
-  g.EventType_Category_ID,
-  g.EventType_Category,
-  b.DetectorTime,
+  b.CarRecordDataType_Name,
+  b.CarsInQueue,
+  b.EventType_ID,
+  b.EventType_Name,
+  b.EventType_Category,
+  b.DetectorTime,  b.EventType_Category_ID,
   b.Goal_ID,
   b.Daypart_ID,
   b.CarDataRecord_ID,
-  g.Detector_ID,
-  g.EventType_Sort,
-  g.LaneConfig_ID
+  b.Detector_ID,
+  b.EventType_Sort,
+  b.LaneConfig_ID
 FROM #StoresDevicesDates sdd
-  LEFT JOIN #DetectorEventType g ON g.Device_ID = sdd.Device_ID
+ -- LEFT JOIN #DetectorEventType g ON g.Device_ID = sdd.Device_ID
   LEFT JOIN #CarDetectorData b ON b.Device_ID = sdd.Device_ID
    AND b.StoreDate = sdd.StoreDate
-   AND g.Device_ID = b.Device_ID
-   AND g.Detector_ID = b.Detector_ID
+   --AND g.Device_ID = b.Device_ID
+   --AND g.Detector_ID = b.Detector_ID   
    WHERE (b.Detector_ID = 1000 OR b.Goal_ID>0)
    AND b.DepartTimeStamp is not null
-
-UNION
-
--- add records for any events that do not have detecter data
-SELECT sdd.StoreDate,
-  CAST(cdd.DepartTimeStamp AS datetime) AS DepartTimeStamp,
-  sdd.Store_id,
-  sdd.Store_Number,
-  sdd.Device_UID,
-  sdd.Device_ID,
-  cdd.CarRecordDataType_Name,
-  cdd.CarsInQueue,
-  et.EventType_ID,
-  et.EventType_Name,
-  et.EventType_Category_ID,
-  et.EventType_Category,
-  NULL AS [DetectorTime],
-  NULL AS [Goal_ID],
-  cdd.Daypart_ID,
-  cdd.CarDataRecord_ID,
-  et.Detector_ID,
-  et.EventType_Sort,
-  et.LaneConfig_ID
-FROM #StoresDevicesDates sdd
-  INNER JOIN #DetectorEventType et ON et.Device_ID = sdd.Device_ID
-  INNER JOIN #CarDetectorData cdd ON sdd.Device_ID = cdd.Device_ID AND cdd.Detector_ID = 2000 AND sdd.StoreDate = cdd.StoreDate
-WHERE NOT EXISTS(
-  SELECT 1
-  FROM #CarDetectorData d
-  WHERE et.Detector_ID = d.Detector_ID
-  AND  cdd.CarDataRecord_ID = d.CarDataRecord_ID
-   AND (d.Detector_ID = 1000 OR d.Goal_ID>0)
-
-) AND cdd.DepartTimeStamp is not null
-) A
-ORDER BY DepartTimeStamp
+ ORDER BY DepartTimeStamp
 
 --Test
-INSERT INTO #EventTypeNames SELECT DISTINCT
-  g.EventType_Name
-FROM #StoresDevicesDates sdd
-  LEFT JOIN #DetectorEventType g ON g.Device_ID = sdd.Device_ID
-  LEFT JOIN #CarDetectorData b ON b.Device_ID = sdd.Device_ID
-   AND b.StoreDate = sdd.StoreDate
-   AND g.Device_ID = b.Device_ID
-   AND g.Detector_ID = b.Detector_ID
-UNION ALL
-SELECT
-  et.EventType_Name
-FROM #StoresDevicesDates sdd
-  INNER JOIN #DetectorEventType et ON et.Device_ID = sdd.Device_ID
-  INNER JOIN #CarDetectorData cdd ON sdd.Device_ID = cdd.Device_ID AND cdd.Detector_ID = 2000 AND sdd.StoreDate = cdd.StoreDate
-WHERE NOT EXISTS(
-  SELECT 1
-  FROM #CarDetectorData d
-  WHERE et.Detector_ID = d.Detector_ID
-  AND  cdd.CarDataRecord_ID = d.CarDataRecord_ID
-
-)
-ORDER BY EventType_Name
+INSERT INTO #EventTypeNames
+SELECT 
+  sdd.EventType_Category_ID, sdd.EventType_Name
+FROM #CarDetectorData sdd
+GROUP by sdd.EventType_Category_ID, sdd.EventType_Name
+ORDER BY sdd.EventType_Category_ID asc
 
 DECLARE @listStr VARCHAR(MAX)
 SELECT  @listStr = COALESCE(@listStr+'|$|' ,'') + EventTypeName
-FROM #EventTypeNames
+FROM #EventTypeNames ORDER BY EventType_Category_ID
 SELECT @listStr as 'EventTypeName'
 --Test end
 
@@ -337,4 +250,3 @@ RETURN(0)
 -- exec usp_HME_Cloud_Get_Report_Raw_Data '1354,1382', '2014-07-11', '2014-07-11', '2014-08-11 10:00:00', '2014-08-11 10:01:00', '11', 'AC'
 
 -- exec usp_HME_Cloud_Get_Report_Raw_Data '1382', '2015-02-10', '2015-02-10', NULL, NULL, '11' --'2014-07-09 10:00:00', '2014-07-09 12:02:00', '11', 'AC'
-GO
