@@ -464,6 +464,9 @@ span.tip:hover {
     display: block;
 }
 
+.inline-block {
+    display: inline-block;
+}
 .advanced-option-section {
     border: 1px solid #cac7c7;
     /* border-top: none; */
