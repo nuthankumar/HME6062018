@@ -829,8 +829,8 @@ const language = [
         'EnterStoreNumber': 'Enter Store Number',
         'Search': 'Search',
         'MustSelectStLeastOneSystem': 'Must select at least one system',
-        'Timezone' :'Timezone'
-
+        'Timezone' :'Timezone',
+        'TandemLinesError':'ERROR: Tandem Lanes may not be selected in multiple store reports.'
     },
 
     // French
@@ -1681,8 +1681,8 @@ const language = [
 		'EnterStoreNumber': 'Entrez le numéro de magasin',
 		'Search':'Chercher',
         'MustSelectStLeastOneSystem': 'Doit sélectionner au moins un système',
-        'Timezone' :'Fuseau horaire'
-
+        'Timezone' :'Fuseau horaire',
+        'TandemLinesError':'ERREUR: Les couloirs en tandem peuvent ne pas être sélectionnés dans plusieurs rapports de magasin.'
     }
 ]
 export default language
