@@ -6,16 +6,22 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap'
 import * as storesFunctions from '../../actions/stores'
+import * as modalAction from '../../actions/modalAction'
+import ModalContainer from '../../containers/ModalContainer'
 const Online = require('../../images/connection_online.png')
 const Offline = require('../../images/connection_offline.png')
 
 class StoreDetail extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       showStores: this.props.showStores,
       stores: {},
-      Ascending: true
+      Ascending: true,
+      pageSize: 10,
+      offset: 0,
+      data: [],
+      recordCount: 5000
     }
     this.renderDevices = this.renderDevices.bind(this)
     this.PageSizeValueDropdown = this.PageSizeValueDropdown.bind(this)
@@ -23,13 +29,13 @@ class StoreDetail extends Component {
     this.onSelectAlert = this.onSelectAlert.bind(this)
     this.Search = this.Search.bind(this)
   }
-  componentWillMount () {
+  componentWillMount() {
     this.props.dispatch(storesFunctions.sortStores({ 'sortBy': 'Company_Name', 'sortType': 'DESC' }))
   }
-  PageSizeValueDropdown (pageSize) {
+  PageSizeValueDropdown(pageSize) {
     this.setState({ pageSize })
   }
-  PageClicked (value) {
+  PageClicked(value) {
     if (value === null) {
       return this.state.offset
     } else {
@@ -37,17 +43,23 @@ class StoreDetail extends Component {
       return this.state.offset
     }
   }
-  onSelectAlert (eventKey) {
+
+  viewDetails(data) {
+    this.props.dispatch(modalAction.initStoreDetail(data.Store_UID))
+    this.props.dispatch(modalAction.openPopup(true))
+  }
+
+  onSelectAlert(eventKey) {
     window.alert(`Alert from menu item.\neventKey: ${eventKey}`)
   }
-  Search (e) {
+  Search(e) {
     if (e.key === 'Enter') {
       console.log(e.target.value)
     }
   }
 
-  render () {
-    let sortParams = this.props.storesDetails.sortParams ? this.props.storesDetails.sortParams :  { 'sortBy': 'Brand_Name', 'sortType': 'DESC' }
+  render() {
+    let sortParams = this.props.storesDetails.sortParams ? this.props.storesDetails.sortParams : { 'sortBy': 'Brand_Name', 'sortType': 'DESC' }
     return (
       <section className={'stores ' + (this.state.showStores ? 'show' : 'hidden')}>
         <div className='settings forms'>
@@ -106,11 +118,11 @@ class StoreDetail extends Component {
 
           </div>
         </div>
-
+        <ModalContainer onHide={this.smClose} />
       </section>
     )
   }
-  renderDevices (devices) {
+  renderDevices(devices) {
     let deviceRows = devices.map(function (device, index) {
       return (
         <tr key={index}>
@@ -130,14 +142,14 @@ class StoreDetail extends Component {
     return deviceRows
   }
 
-  renderStores () {
+  renderStores() {
     let self = this
-    console.log(this.props.stores.adminStoreDetails);
+    console.log(this.props.stores.adminStoreDetails)
     let storeRows = this.props.stores.adminStoreDetails.storeList.map(function (store, index) {
       return (
         <tr class='tdata clear' key={index}>
           <td class='cdet store_checkbox'><input type='checkbox' name='edit_selected1' id='edit_selected1' onchange="addRemoveStores('F5EE2F75C7CE4725849E4B5626A888D9','1');" value='F5EE2F75C7CE4725849E4B5626A888D9' disabled='disabled' /></td>
-          <td>{store.Company_Name} <br /><span class='edit_settings'><a href='#' class='opener view_details' onclick="passViewDetails('F5EE2F75C7CE4725849E4B5626A888D9','', '00000159', 'shomhme+serversplit19622@gmail.com', 'Wendy\'s', 'ZOOM');">View Details</a></span></td>
+          <td>{store.Company_Name} <br /><span class='edit_settings'><a href='#' class='opener view_details' onClick={self.viewDetails.bind(self, store)}>View Details</a></span></td>
           <td>{store.Brand_Name}</td>
           <td>{store.Store_Number}</td>
           <td>{store.Store_Name}</td>
@@ -153,7 +165,7 @@ class StoreDetail extends Component {
     })
     return storeRows
   }
-  sortStores (e) {
+  sortStores(e) {
     this.state.Ascending = !this.state.Ascending
     this.setState(this.state)
     let sortBy = e.target.id
@@ -165,7 +177,9 @@ class StoreDetail extends Component {
 }
 function mapStateToProps(state) {
   return {
-    storesDetails: state.storeDetails
+    storesDetails: state.storeDetails,
+    storeModelPopup: state.StorePopupDetails.storePopUpAdmin,
+    storeModelPopupIsAdmin: state.StorePopupDetails.storePopUpDetailisAdmin
   }
 }
 

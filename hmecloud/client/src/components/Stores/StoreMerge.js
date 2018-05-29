@@ -7,9 +7,10 @@ import { Modal, Button } from 'react-bootstrap'
 import Api from '../../Api'
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import { confirmAlert } from 'react-confirm-alert'
-
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 class StoreMerge extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.api = new Api()
     this.state = {
@@ -25,44 +26,42 @@ class StoreMerge extends Component {
     this.handleClose = this.handleClose.bind(this)
   }
 
-  componentDidMount () {
-    this.api.deviceData().then(data => {
-      this.setState({ data })
-    })
-  }
-  rowClicked (value) {
+  // componentDidMount() {
+
+  // }
+  rowClicked(value) {
 
   }
-  handleClose () {
+  handleClose() {
     this.setState({ show: false })
   }
-  handleShow () {
+  handleShow() {
     this.setState({ show: true })
   }
-  selectSystemChecked (value) {
+  selectSystemChecked(value) {
     if (value != null) {
       this.setState({ deviceSelected: [...this.state.deviceSelected, this.state.data.Device_Details[value]] })
     } else {
       this.setState({ deviceSelected: null })
     }
   }
-  targetStoreChecked (value) {
+  targetStoreChecked(value) {
     if (value != null) {
       this.setState({ storeSelected: this.state.DeviceData.storeList[value] })
     } else {
       this.setState({ storeSelected: null })
     }
   }
-  SearchApi (serialNumber) {
+  SearchApi(serialNumber) {
     this.api.MergeStoreData(serialNumber).then(data => {
       this.setState({ DeviceData: data })
     })
   }
-  ConfirmMerge () {
+  ConfirmMerge() {
     // api to hit merge
 
   }
-  MergeClick () {
+  MergeClick() {
     if (this.state.deviceSelected != null && this.state.storeSelected != null) {
       confirmAlert({
         customUI: ({ onClose }) => {
@@ -101,44 +100,32 @@ class StoreMerge extends Component {
   }
   /* <Button bsStyle="primary" bsSize="large" onClick={this.props.handleShow}> */
   /* <Button onClick={this.props.onHide}>Close</Button> */
-  render () {
+  render() {
     //   const language = this.state.currentLanguage
     // let displayData = this.props.systemStats
+    let show = (this.props.mergeModelPopup !== undefined) ? this.props.mergeModelPopup : false
 
     return (
-      <div>
-        <Button bsStyle='primary' bsSize='large' onClick={this.handleShow}>
-                    Launch demo modal
-        </Button>
-        <Modal
-          // show={this.state.show} onHide={this.props.onHide}
-          show={this.state.show} onHide={this.handleClose}
-          bsSize='large'
-          aria-labelledby='contained-modal-title-lg'
-        >
-          <Modal.Header closeButton>
-            <Modal.Title id='contained-modal-title-lg'>Merge</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <div className='merge'>
-              <div className='row'>
-                <SelectSystem data={this.state.data} selectSystemChecked={this.selectSystemChecked.bind(this)} />
-                <TargetStore search={this.SearchApi.bind(this)} targetStoreChecked={this.targetStoreChecked.bind(this)} data={this.state.DeviceData} />
-              </div>
+      <Modal show={show} dialogClassName='modal-popup' >
+        <Modal.Body>
+          <div className='merge'>
+            <div className='row'>
+              <SelectSystem data={this.props.storesDetails.storePopupDetails} selectSystemChecked={this.selectSystemChecked.bind(this)} />
+              <TargetStore search={this.SearchApi.bind(this)} targetStoreChecked={this.targetStoreChecked.bind(this)} data={this.state.DeviceData} />
             </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <p>{this.state.error}</p>
-            <Button onClick={this.handleClose}>Close</Button>
-            <Button onClick={this.MergeClick.bind(this)}>Merge</Button>
-          </Modal.Footer>
-        </Modal>
-      </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <p>{this.state.error}</p>
+          <Button onClick={this.handleClose}>Close</Button>
+          <Button onClick={this.MergeClick.bind(this)}>Merge</Button>
+        </Modal.Footer>
+      </Modal >
     )
   }
 }
 class SelectSystem extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       storeNumber: '1',
@@ -147,14 +134,14 @@ class SelectSystem extends Component {
     this.rowClicked = this.rowClicked.bind(this)
   }
 
-  rowClicked (event) {
+  rowClicked(event) {
     let value = (event.target.checked) ? event.target.value : null
     this.props.selectSystemChecked(value)
   }
-  render () {
+  render() {
     //  const language = this.state.currentLanguage
     let displayData = this.props.data.storeDetails
-    let device = this.props.data.Device_Details
+    let device = this.props.data.deviceDetails
     let headers = [' ', 'System', 'Serial Number']
     return (
       <div className='col-1-2'>
@@ -174,10 +161,10 @@ class SelectSystem extends Component {
 }
 
 class Table extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
   }
-  render () {
+  render() {
     let row = this.props.data
     let rows
     if (row) {
@@ -220,7 +207,7 @@ class Table extends Component {
 }
 
 class TargetStore extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       serialNumber: 0
@@ -229,15 +216,15 @@ class TargetStore extends Component {
     this.handleOnClick = this.handleOnClick.bind(this)
     this.rowClicked = this.rowClicked.bind(this)
   }
-  handleOnClick () {
+  handleOnClick() {
     this.props.search(this.state.serialNumber)
   }
-  rowClicked (event) {
+  rowClicked(event) {
     let value = (event.target.checked) ? event.target.value : null
     this.props.targetStoreChecked(value)
   }
 
-  render () {
+  render() {
     //  const language = this.state.currentLanguage
     // let displayData = this.props.systemStats
     let data = (this.props.data.storeList !== undefined) ? this.props.data.storeList : null
@@ -260,13 +247,13 @@ class TargetStore extends Component {
 }
 
 class TargetTable extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
   }
-  render () {
+  render() {
     let row = this.props.data
     let rows
-    if (row !== undefined) {
+    if (row !== null) {
       rows = row.map((data, index) => {
         return (
           <tr>
@@ -318,4 +305,10 @@ class TargetTable extends Component {
   }
 }
 
-export default StoreMerge
+function mapStateToProps(state) {
+  return {
+    storesDetails: state.StorePopupDetails,
+    mergeModelPopup: state.StorePopupDetails.mergePopUp
+  }
+}
+export default connect(mapStateToProps)(StoreMerge)

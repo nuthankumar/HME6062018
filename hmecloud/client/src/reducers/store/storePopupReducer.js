@@ -77,13 +77,46 @@ const initialState = {
 
 }
 
-export default function StorePopupDetails (state = initialState, action) {
+export default function StorePopupDetails(state = initialState, action) {
   switch (action.type) {
     case storePopupDetails.INIT_STORE_POPUP:
       return {
         ...state,
         storePopupDetails: action.payload
       }
+      break
+    case 'OPEN_POPUP':
+      if (action.payload) {
+        state.storePopUpAdmin = true
+        state.storePopUpDetailisAdmin = action.payload
+      } else {
+        state.storePopUpClient = true
+        state.storePopUpDetailisAdmin = action.payload
+      }
+
+      return {
+        ...state,
+      }
+      break
+    case 'CLOSE_POPUP':
+      state.storePopUpAdmin = false
+      state.storePopUpClient = false
+      return {
+        ...state
+
+      }
+    case 'MERGE_OPEN_POPUP':
+      state.mergePopUp = true
+      return {
+        ...state
+      }
+      break
+    case 'MERGE_CLOSE_POPUP':
+      state.mergePopUp = false
+      return {
+        ...state
+      }
+      break
     default:
       return state
   }
