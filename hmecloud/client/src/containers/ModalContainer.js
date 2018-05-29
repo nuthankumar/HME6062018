@@ -99,7 +99,10 @@ class ModalContainer extends Component {
     // let Tab = ReactBootstrap.Tab
     // let show = (this.props.stores.storePopUpClient !== undefined) ? this.props.stores.storePopUpClient : (this.props.stores.storePopUpAdmin !== undefined) ? this.props.stores.storePopUpAdmin : false
     return (
-      <Modal show={show} dialogClassName='modal-popup' >
+      <Modal show={show} dialogClassName='modal-popup' onHide={this.handleClose} >
+        <Modal.Header closeButton>
+          <Modal.Title />
+        </Modal.Header>
         <Modal.Body>
           <Tabs
             activeKey={this.state.key}
@@ -109,9 +112,6 @@ class ModalContainer extends Component {
             {this.storeTabs()}
           </Tabs>
         </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={this.handleClose}>Close</Button>
-        </Modal.Footer>
       </Modal >
     )
   }
