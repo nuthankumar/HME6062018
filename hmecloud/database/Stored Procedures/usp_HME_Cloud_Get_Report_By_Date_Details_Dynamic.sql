@@ -28,11 +28,12 @@
 	-- 1.		13/04/2018		Swathi Kumar	Added Subtotal calculation
 	-- 2.		14/05/2018		Jayaram			Dynamic events include
 	-- 3.		22/05/2018		Ramesh			Add LinkedServerName,DatabaseName
+	-- 4.		29/05/2018		Jayaram			Add MAX size in Device_ID
 	-- ===========================================================
 	--exec usp_HME_Cloud_Get_Report_By_Date_Details_Dynamic '111447,111446','2018-03-20','2018-03-26',N'2018-03-20 00:00:00',N'2018-03-26 10:30:00','11','AC',1,'CEO7JK0VUSRJZFXXC0J1WW0I0E4CHD2M'
 
 	CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Date_Details_Dynamic](
-		@Device_IDs varchar(500),
+		@Device_IDs varchar(MAX),
 		@StoreStartDate date,
 		@StoreEndDate date,
 		@InputStartDateTime NVARCHAR(50) = '1900-01-01 00:00:00',  -- 2018-04-09 20:00:00

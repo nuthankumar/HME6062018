@@ -18,6 +18,7 @@ GO
 -- -----------------------------------------------------------
 -- 1.		13/04/2018		Swathi Kumar	Added Subtotal calculation
 -- 2.		22/05/2018		Ramesh			Add (LinkedServerName,DatabaseName)
+-- 3.		29/05/2018		Jayaram			Add MAX size in Device_ID
 -- ===========================================================
 -- EXEC [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details_Dynamic] '19','2018-02-24','2018-03-26',N'2018-02-24 00:00:00',N'2018-03-26 10:30:00','11','AC',1,N'68LKBP85C1SKH1FI3M7X40CJHKGU07FZ'
 -- ===========================================================
@@ -25,7 +26,7 @@ GO
 -- use the below UserUid for testing in local data base
 -- --,@UserUID=N'68LKBP85C1SKH1FI3M7X40CJHKGU07FZ'
 CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_Report_By_Week_Details_Dynamic](
-	@Device_IDs VARCHAR(500),
+	@Device_IDs VARCHAR(MAX),
 	@StoreStartDate DATE,
 	@StoreEndDate DATE,
 	@InputStartDateTime NVARCHAR(50) = '1900-01-01 00:00:00',  -- 2018-04-09 20:00:00
