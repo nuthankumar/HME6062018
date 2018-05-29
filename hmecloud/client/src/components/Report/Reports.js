@@ -356,7 +356,7 @@ class Report extends Component {
                       <input type='checkbox' id='open'   name='open'  checked={this.state.open}
                               onChange={this.check.bind(this, this.state.open)}/>
 								<label className='label-heading' for='open'> {t[language].open}</label>
-                                   <span> <a data-tip={t[language].leavetheopencloseboxes}><span className='tip openTip'>?</span></a>
+                                   <span> <a className='inline-block'  data-tip={t[language].leavetheopencloseboxes}><span className='tip openTip'>?</span></a>
                           <ReactTooltip place='right' type='dark' effect='solid' /> </span>
                       </div>
                       <div className='timings'>
@@ -364,7 +364,7 @@ class Report extends Component {
                           onChange={this.check.bind(this, this.state.close)}/>
 								<label className='label-heading' for='close'>  {t[language].close}</label>
                          <span>
-                          <a data-tip={t[language].leavetheopencloseboxes}><span className='tip openTip'>?</span></a>
+                          <a className='inline-block'  data-tip={t[language].leavetheopencloseboxes}><span className='tip openTip'>?</span></a>
                           <ReactTooltip place='right' type='dark' effect='solid' />
                         </span>
                       </div>
@@ -377,7 +377,7 @@ class Report extends Component {
                           onChange={this.handleOnChange.bind(this)} value={1}/>
 								<label className='label-heading' for='type1'>   {t[language].timeslice}</label>                     
                                  <span>
-                                                  <a data-tip={t[language].choosetimeslice}><span className='tip openTip'>?</span></a>
+                                                  <a className='inline-block' data-tip={t[language].choosetimeslice}><span className='tip openTip'>?</span></a>
                           <ReactTooltip place='right' type='dark' effect='solid' />
                         </span>
                       </div>
@@ -385,7 +385,7 @@ class Report extends Component {
                          <input type='radio' id='type2'   name='type'   checked={this.state.type == 2 ? true : false} onChange={this.handleOnChange.bind(this)} value={2}/>
 								<label className='label-heading' for='type2'>   {t[language].cumulative}</label>     
                                             <span>
-                          <a data-tip={t[language].choosecumulative}><span className='tip openTip'>?</span></a>
+                          <a className='inline-block' data-tip={t[language].choosecumulative}><span className='tip openTip'>?</span></a>
                           <ReactTooltip place='right' type='dark' effect='solid' />
                         </span>
                       </div>
