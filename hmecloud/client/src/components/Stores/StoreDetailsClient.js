@@ -49,7 +49,7 @@ class StoreDetail extends Component { // ensure you dont export component direct
   render () {
     const { language } = this.state
     let sortParams = this.props.storesDetails.sortParams ? this.props.storesDetails.sortParams : { 'sortBy': 'Brand_Name', 'sortType': 'DESC' }
-
+    this.state.recordCount = this.props.storesDetails.adminStoreDetails.storeList.length
     return (
       <section className={'stores ' + (this.state.showStores ? 'show' : 'hidden')}>
         <div className='settings forms'>
