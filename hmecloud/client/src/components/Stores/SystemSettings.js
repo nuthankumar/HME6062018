@@ -20,9 +20,9 @@ class SystemSettings extends Component {
   render () {
     // const language = this.state.currentLanguage
     return (
-      <div className='system'>
-        <h3 className='device-header'>  System Settings</h3>
-        <Accordion>
+      <div className='system-settings-container'>
+        <h3 className='system-settings-header'>System Settings</h3>
+        <Accordion className='system-settings-accordion'>
           {this.renderAccordian()}
         </Accordion>
       </div>
@@ -33,11 +33,11 @@ class SystemSettings extends Component {
     if (this.props.data !== undefined) {
       const values = this.props.data.systemSettings
       let roleOptions = values.map(function (value, index) {
-        return (<AccordionItem key={index}>
-          <AccordionItemTitle>
-            <h3>{value.name}</h3>
+        return (<AccordionItem key={index} className='settings-accordion-item'>
+          <AccordionItemTitle className='settings-accordion-title'>
+            <h3 className='settings-accordion-header'>{value.name}</h3>
           </AccordionItemTitle>
-          <AccordionItemBody>
+          <AccordionItemBody className='settings-accordion-content'>
             <Table data={value.value} />
           </AccordionItemBody>
         </AccordionItem>)
@@ -59,9 +59,9 @@ class Table extends Component {
       />
     })
     return (<table > <thead>
-      <tr>
+      <tr className='settings-table-header'>
         <th>Settings</th>
-        <th>Value</th>
+        <th className='text-right'>Value</th>
       </tr>
     </thead><tbody > {rows} </tbody> </table>)
   }
@@ -69,11 +69,11 @@ class Table extends Component {
 
 const PersonRow = (props) => {
   return (
-    <tr>
+    <tr className='system-settings-row-data'>
       <td>
-        {props.data.SettingInfo_Name}
+        <strong>{props.data.SettingInfo_Name}</strong>
       </td>
-      <td>
+      <td className='text-right'>
         {props.data.DeviceSetting_SettingValue}
       </td>
     </tr>
