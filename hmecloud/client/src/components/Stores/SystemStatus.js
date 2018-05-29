@@ -21,7 +21,7 @@ class SystemStatus extends Component {
     if (this.props.data !== undefined) {
       let displayData = this.props.data.systemStatus[0]
       return (
-        <div class='settings_plug clear'>
+        <div class='system-settings-status clear'>
           <table class='system-status-table'>
             <tbody>
               <tr>

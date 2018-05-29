@@ -467,7 +467,8 @@ text-decoration: none;
 }
 
 /*********** Store merge Modal Popup *******************/
-.merge-modal-popup{
+
+ .merge-modal-popup{
     position: absolute;
     top: 298.5px;
     left: 170.5px;
@@ -491,7 +492,7 @@ text-decoration: none;
 table.system-status-table th {
     width: 150px;
 }
-.settings_plug th {
+.system-settings-status th {
     padding: 10px;
     font-size: 14px;
     font-weight : normal; 
@@ -524,7 +525,7 @@ table.system-status-table th {
     font-weight: bold;
 }
 
-.settings_plug{
+.system-settings-status{
     display:inline-block;
 }
 .system-settings-accordion {
@@ -539,7 +540,6 @@ table.system-status-table th {
     position: relative;
     margin: 2px 0 0 0;
     padding: .5em .5em .5em .7em;
-    /* font-size: 100%; */
     font-size: 12px;
     background:#e8f3fc;
 
@@ -592,5 +592,5 @@ tr.system-settings-row-data:hover{
 .store-link {
     color: #D41B3E;
     text-decoration: underline;
-}
+} 
 
