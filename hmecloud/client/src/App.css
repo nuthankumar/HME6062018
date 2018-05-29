@@ -149,7 +149,7 @@ table.user_form tr th{
 }
 
 /* ION Components */
-.header{
+ .header{
   margin-top: 35px;
   margin-bottom: 7px;
   font-size: 26px;
@@ -218,7 +218,7 @@ td a{
     border: none;
     vertical-align: middle;
     margin: auto;
-}
+} 
 
 
 /* END ION Components */

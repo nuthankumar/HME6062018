@@ -12,7 +12,7 @@ const Online = require('../../images/connection_online.png')
 const Offline = require('../../images/connection_offline.png')
 
 class StoreDetail extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       showStores: this.props.showStores,
@@ -29,16 +29,16 @@ class StoreDetail extends Component {
     this.onSelectAlert = this.onSelectAlert.bind(this)
     this.Search = this.Search.bind(this)
   }
-  componentWillMount () {
+  componentWillMount() {
     this.props.dispatch(storesFunctions.sortStores({ 'sortBy': 'Company_Name', 'sortType': 'DESC' }))
   }
-  PageSizeValueDropdown (pageSize) {
+  PageSizeValueDropdown(pageSize) {
     this.setState({ pageSize })
     let paginationParams = { pageSize: pageSize, pageNumber: ((this.state.offset / 10) + 1) }
     this.props.dispatch(storesFunctions.paginationAdminStores(paginationParams))
     this.props.dispatch(storesFunctions.adminStoresDetails())
   }
-  PageClicked (value) {
+  PageClicked(value) {
     let paginationParams = { pageSize: this.state.pageSize, pageNumber: ((value / 10) + 1) }
     this.props.dispatch(storesFunctions.paginationAdminStores(paginationParams))
     this.props.dispatch(storesFunctions.adminStoresDetails())
@@ -50,21 +50,22 @@ class StoreDetail extends Component {
     }
   }
 
-  viewDetails (data) {
+  viewDetails(data) {
     this.props.dispatch(modalAction.initStoreDetail(data.Store_UID))
     this.props.dispatch(modalAction.openPopup(true))
   }
 
-  onSelectAlert (eventKey) {
+  onSelectAlert(eventKey) {
     window.alert(`Alert from menu item.\neventKey: ${eventKey}`)
   }
-  Search (e) {
+  Search(e) {
     if (e.key === 'Enter') {
       console.log(e.target.value)
     }
   }
 
-  render () {
+  render() {
+    this.state.recordCount = this.props.storesDetails.adminStoreDetails.storeList.length
     let sortParams = this.props.storesDetails.sortParams ? this.props.storesDetails.sortParams : { 'sortBy': 'Brand_Name', 'sortType': 'DESC' }
     return (
       <section className={'stores ' + (this.state.showStores ? 'show' : 'hidden')}>
@@ -128,7 +129,7 @@ class StoreDetail extends Component {
       </section>
     )
   }
-  renderDevices (devices) {
+  renderDevices(devices) {
     let deviceRows = devices.map(function (device, index) {
       return (
         <tr key={index}>
@@ -148,7 +149,7 @@ class StoreDetail extends Component {
     return deviceRows
   }
 
-  renderStores () {
+  renderStores() {
     let self = this
     console.log(this.props.stores.adminStoreDetails)
     let storeRows = this.props.stores.adminStoreDetails.storeList.map(function (store, index) {
@@ -171,7 +172,7 @@ class StoreDetail extends Component {
     })
     return storeRows
   }
-  sortStores (e) {
+  sortStores(e) {
     this.state.Ascending = !this.state.Ascending
     this.setState(this.state)
     let sortBy = e.target.id
@@ -181,7 +182,7 @@ class StoreDetail extends Component {
     this.props.dispatch(storesFunctions.adminStoresDetails())
   }
 }
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
     storesDetails: state.storeDetails,
     storeModelPopup: state.StorePopupDetails.storePopUpAdmin,
@@ -189,7 +190,7 @@ function mapStateToProps (state) {
   }
 }
 
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps(dispatch) {
   return bindActionCreators({ storesFunctions: storesFunctions }, dispatch)
 }
 

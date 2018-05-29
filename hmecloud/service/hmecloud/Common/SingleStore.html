@@ -674,7 +674,7 @@
     }
 
     .table-layout th.wide {
-        width: 125px;
+        width: 126px;
     }
 
     .table-layout td.wide {
@@ -945,12 +945,12 @@
     margin-right: 125px;
     margin-bottom: 3px;
     text-align: right;
-}
-span.redFont {
+    }
+    span.redFont {
     color: #d41b3e;
     font-size: 18px;
     line-height: 0;
-}
+    }
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
@@ -1099,20 +1099,16 @@ span.redFont {
                                 </th>
                             </tr>
                             <tr>
-                                <tr>
                                     <th class="colWidth5"></th>
                                     {{#each details.goalEvents as |childValue childKey|}}
                                     <th class="colWidth5 blueback ">
                                         <span>{{childValue}}</span>
                                     </th>
                                     {{/each}}
-                                </tr>
                             </tr>
-                        </table>
                         {{#each details.goalData as |goals|}}
-                        <table cellspacing="0" class="table-layout goalW goalMain  daypart " style="border-bottom:0px solid white;margin-bottom:0px;width: 785px;padding-left:24px">
                                 <tr class="greenBox" style=" background-color:{{goals.color}}">
-                                    <td class="wide">
+                                    <td class="colWidth5">
                                         <span translate="">{{goals.title}}</span>
                                     </td>
                                     {{#each goals.events as |childValue childKey| }}
@@ -1133,8 +1129,9 @@ span.redFont {
                                     <td class="greenBord colWidth5">{{childValue.percentage}}</td>
                                 {{/each}}
                                     </tr>
-                            </table>
+
                             {{/each}}
+                        </table>
                         </div>
                         <div class="goalNote show"> <span class="redFont">* </span> Derived performance to goal (Lane Queue goal = Lane Total goal - Menu goal - Service goal) </div>
                 </div>

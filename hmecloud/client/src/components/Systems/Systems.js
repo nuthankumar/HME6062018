@@ -59,7 +59,7 @@ class Systems extends Component {
   render() {
     const { language } = this.state
     console.log(this.props.systems)
-
+    // this.state.recordCount = this.props.storesDetails.adminStoreDetails.storeList.length
     let sortParams = (this.props.systems.sortParams) ? this.props.systems.sortParams : { 'sortBy': 'Brand_Name', 'sortType': 'DESC' }
     return (
       <section className='systems'>

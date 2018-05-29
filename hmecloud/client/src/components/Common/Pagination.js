@@ -7,8 +7,11 @@ import $ from 'jquery';
 class Pagination extends Component {
   constructor(props) {
     super(props);
+    let pageCount;
+    if(this.props.recordCount % this.props.perPage==0){ pageCount=this.props.recordCount / this.props.perPage}else{pageCount=(Math.floor(this.props.recordCount / this.props.perPage)+1)}
     this.state = {
-      value: 10
+      value: 10,
+      pageCount:pageCount
     }
     this.PageSizeChange = this.PageSizeChange.bind(this)
   }
@@ -40,14 +43,14 @@ class Pagination extends Component {
             nextLabel={">>"}
             breakLabel={<a>...</a>}
             breakClassName={"break-me"}
-            pageCount={this.props.pageCount}
+            pageCount={this.state.pageCount}
             marginPagesDisplayed={2}
             pageRangeDisplayed={6}
             onPageChange={this.OnPageChange}
             containerClassName={"pagination"}
             subContainerClassName={"pages pagination"}
             activeClassName={"active"} />
-          <span class="results">Showing 1 - 10 of ({this.props.pageCount}) Results</span>
+          <span class="results">Showing 1 - 10 of ({this.props.recordCount}) Results</span>
         </div>
       </div>
     );

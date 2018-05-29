@@ -358,25 +358,103 @@ width:197px;
     align-items: center;
  }
 
-@media screen and (max-width: 1280px) {
+ @media screen and (max-width: 1280px) {
     .selectAllLabel{
         padding-left: 33px;
         width: 351px;
     }
+
+    .BrandTitle {
+        padding-left: 0px !important;
+    }
+    span.StoreTitile.level-0 {
+        width: 400px;
+      }
+      span.StoreTitile.level-1 {
+        width: 269px;
+      }
+      
+      span.StoreTitile.level-2 {
+        width: 177px;
+      }
+      
+      span.StoreTitile.level-3 {
+        width: 109px;
+      }
+      
+      span.StoreTitile.level-4 {
+        width: 59px;
+      }
+      
+      span.StoreTitile.level-5 {
+        width: 400px;
+      }
+      
   }
   @media screen and (max-width: 1415px) and (min-width: 1281px) {
     .selectAllLabel{
         padding-left: 33px;
         width: 361px;
     }
+    .BrandTitle {
+        padding-left: 0px !important;
+    }
+
+    span.StoreTitile.level-0 {
+        width: 400px;
+      }
+      span.StoreTitile.level-1 {
+        width: 269px;
+      }
+      
+      span.StoreTitile.level-2 {
+        width: 177px;
+      }
+      
+      span.StoreTitile.level-3 {
+        width: 109px;
+      }
+      
+      span.StoreTitile.level-4 {
+        width: 59px;
+      }
+      
+      span.StoreTitile.level-5 {
+        width: 400px;
+      }
   }
 
-  @media screen and (max-width: 1540px) and (min-width: 1416px)
+@media screen and (max-width: 1540px) and (min-width: 1416px)
 {
 .selectAllLabel {
     padding-left: 33px;
     width: 325px;
 }
+.BrandTitle {
+    padding-left: 0px !important;
+}
+span.StoreTitile.level-0 {
+    width: 400px;
+  }
+  span.StoreTitile.level-1 {
+    width: 269px;
+  }
+  
+  span.StoreTitile.level-2 {
+    width: 177px;
+  }
+  
+  span.StoreTitile.level-3 {
+    width: 109px;
+  }
+  
+  span.StoreTitile.level-4 {
+    width: 59px;
+  }
+  
+  span.StoreTitile.level-5 {
+    width: 400px;
+  }
 }
 
 @media screen and (max-width: 1892px) and (min-width: 1541px)
@@ -385,6 +463,32 @@ width:197px;
     padding-left: 33px;
     width: 275px;
 }
+.BrandTitle {
+    padding-left: 34px !important;
+}
+
+span.StoreTitile.level-0 {
+    width: 500px;
+  }
+  span.StoreTitile.level-1 {
+    width: 320px;
+  }
+  
+  span.StoreTitile.level-2 {
+    width: 206px;
+  }
+  
+  span.StoreTitile.level-3 {
+    width: 140px;
+  }
+  
+  span.StoreTitile.level-4 {
+    width: 81px;
+  }
+  
+  span.StoreTitile.level-5 {
+    width: 34px;
+  }
 }
 @media screen and (max-width: 1920px) and (min-width: 1892px)
 {
@@ -392,6 +496,31 @@ width:197px;
     padding-left: 33px;
     width: 260px;
 }
+.BrandTitle {
+    padding-left: 40px !important;
+}
+span.StoreTitile.level-0 {
+    width: 500px;
+  }
+  span.StoreTitile.level-1 {
+    width: 320px;
+  }
+  
+  span.StoreTitile.level-2 {
+    width: 206px;
+  }
+  
+  span.StoreTitile.level-3 {
+    width: 140px;
+  }
+  
+  span.StoreTitile.level-4 {
+    width: 81px;
+  }
+  
+  span.StoreTitile.level-5 {
+    width: 34px;
+  }
 }
 
 
