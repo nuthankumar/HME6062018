@@ -69,7 +69,7 @@ const initialState = {
   }
 }
 
-export default function StoreDetails (state = initialState, action) {
+export default function StoreDetails(state = initialState, action) {
   switch (action.type) {
     case storeDetails.INIT_STORESDETAILS:
       state.storeDetails = action.storeDetails
@@ -86,6 +86,11 @@ export default function StoreDetails (state = initialState, action) {
       state.adminStoreDetails = action.adminStoreDetails
       return {
         ...state
+      }
+    case storeDetails.PAGINATION_STORESDETAILS:
+      return {
+        ...state,
+        paginationParams: action.paginationParams
       }
     default:
       return state

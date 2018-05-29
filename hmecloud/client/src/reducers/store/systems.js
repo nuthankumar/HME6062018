@@ -154,6 +154,12 @@ export default function systemDetails (state = initialState, action) {
         ...state
         // storeDetails: action.storeDetails
       }
+      case systems.SET_PAGINATION_PARAMS:
+      state.paginationParams = action.paginationParams
+      return {
+        ...state
+        // storeDetails: action.storeDetails
+      }
 
     case systems.SET_SEARCH_PARAMS_SYSTEMS:
       state.searchParams = action.searchParams

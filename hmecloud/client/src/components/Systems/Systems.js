@@ -3,36 +3,61 @@ import './Systems.css'
 import * as languageSettings from '../Language/languageSettings'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import Pagination from '../Common/Pagination'
 import t from '../Language/language'
-import { getSystems, sortSystems, setSearchParams } from '../../actions/systems'
+import { getSystems, sortSystems, setSearchParams, paginationSystems } from '../../actions/systems'
 import { ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap'
 const Online = require('../../images/connection_online.png')
 const Offline = require('../../images/connection_offline.png')
 
 class Systems extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       showStores: this.props.showStores,
       language: languageSettings.getCurrentLanguage(),
-      Ascending: true
+      Ascending: true,
+      pageSize: 10,
+      offset: 0,
+      data: [],
+      recordCount: 5000
     }
+    this.PageSizeValueDropdown = this.PageSizeValueDropdown.bind(this)
+    this.PageClicked = this.PageClicked.bind(this)
   }
-  componentWillMount () {
+  componentWillMount() {
     this.props.sortSystems({ 'sortBy': 'Brand_Name', 'sortType': 'DESC' })
-    this.props.setSearchParams({'filter': null, 'criteria': null})
-   // this.props.getSystems()
+    this.props.setSearchParams({ 'filter': null, 'criteria': null })
+    // this.props.getSystems()
   }
-  onSelectAlert (eventKey) {
+  onSelectAlert(eventKey) {
     window.alert(`Alert from menu item.\neventKey: ${eventKey}`)
   }
-  Search (e) {
+  Search(e) {
     if (e.key === 'Enter') {
       console.log(e.target.value)
     }
   }
-  render () {
-    const {language} = this.state
+
+  PageSizeValueDropdown(pageSize) {
+    this.setState({ pageSize })
+    let paginationParams = { pageSize: pageSize, pageNumber: ((this.state.offset / 10) + 1) }
+    this.props.paginationSystems(paginationParams)
+    // this.props.getSystems()
+  }
+  PageClicked(value) {
+    let paginationParams = { pageSize: this.state.pageSize, pageNumber: ((value / 10) + 1) }
+    this.props.paginationSystems(paginationParams)
+    // this.props.getSystems()
+    if (value === null) {
+      return this.state.offset
+    } else {
+      this.setState({ offset: value })
+      return this.state.offset
+    }
+  }
+  render() {
+    const { language } = this.state
     console.log(this.props.systems)
 
     let sortParams = (this.props.systems.sortParams) ? this.props.systems.sortParams : { 'sortBy': 'Brand_Name', 'sortType': 'DESC' }
@@ -54,15 +79,15 @@ class Systems extends Component {
                       bsStyle='default'
                       title=''
                       id='dropdown-no-caret'
-                     // onSelect={this.onSelectAlert}
+                    // onSelect={this.onSelectAlert}
                     >
-                    <MenuItem eventKey='Brand_Name'>  
-                      <input type="radio" name="searchItems" value="" checked={!this.props.systems.searchParams.filter}/> search all<br />
-                      <input type="radio" name="searchItems" value="female" /> Search brand<br />
-                      <input type="radio" name="searchItems" value="other" /> Search store # <br />
-                      <input type="radio" name="searchItems" value="male" /> Search serial #<br />
-                      <input type="radio" name="searchItems" value="asd" /> Search<br />
-                    </MenuItem>
+                      <MenuItem eventKey='Brand_Name'>
+                        <input type='radio' name='searchItems' value='' checked={!this.props.systems.searchParams.filter} /> search all<br />
+                        <input type='radio' name='searchItems' value='female' /> Search brand<br />
+                        <input type='radio' name='searchItems' value='other' /> Search store # <br />
+                        <input type='radio' name='searchItems' value='male' /> Search serial #<br />
+                        <input type='radio' name='searchItems' value='asd' /> Search<br />
+                      </MenuItem>
                     </DropdownButton>
                   </ButtonToolbar>
                 </div>
@@ -104,6 +129,11 @@ class Systems extends Component {
                       </th>
                     </tr>  {this.renderSystems()}
                   </tbody></table>
+                <Pagination
+                  perPage={this.state.pageSize}
+                  PageSizeValueChange={this.PageSizeValueDropdown}
+                  offset={this.PageClicked}
+                  recordCount={this.state.recordCount} />
               </div>
             </div>
           </div>
@@ -112,7 +142,7 @@ class Systems extends Component {
       </section>
     )
   }
-  sortStores (e) {
+  sortStores(e) {
     this.state.Ascending = !this.state.Ascending
     this.setState(this.state)
     let sortBy = e.target.id
@@ -122,7 +152,7 @@ class Systems extends Component {
     this.props.getSystems()
   }
 
-  renderSystems () {
+  renderSystems() {
     const { language } = this.state
     let self = this
     if (this.props.systems) {
@@ -153,17 +183,18 @@ class Systems extends Component {
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
     systems: state.systems
   }
 }
-function matchDispatchToProps (dispatch) {
-  return bindActionCreators(
+function matchDispatchToProps(dispatch) {
+  return bindActionCreators(
     {
       getSystems: getSystems,
       sortSystems: sortSystems,
-      setSearchParams: setSearchParams
+      setSearchParams: setSearchParams,
+      paginationSystems: paginationSystems
     }, dispatch
   )
 }

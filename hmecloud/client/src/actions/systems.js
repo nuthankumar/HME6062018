@@ -61,6 +61,12 @@ export const sortSystems = (sortParams) => {
     sortParams: sortParams
   }
 }
+export const paginationSystems = (paginationParams) => {
+  return {
+    type: systems.SET_PAGINATION_PARAMS,
+    paginationParams: paginationParams
+  }
+}
 
 export const setSearchParams = (searchParams) => {
   return {

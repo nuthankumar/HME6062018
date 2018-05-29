@@ -4,7 +4,7 @@ import { Config } from '../Config'
 import { CommonConstants } from '../Constants'
 // import AuthenticationService from '../components/Security/AuthenticationService'
 
-function getNotesSuccess (stores) {
+function getNotesSuccess(stores) {
   return {
     type: storeDetails.INIT_STORESDETAILS,
     storeDetails: stores
@@ -24,7 +24,7 @@ export const initStoresDetails = () => {
   }
 }
 
-function getAdminStoresSuccess (stores) {
+function getAdminStoresSuccess(stores) {
   return {
     type: storeDetails.ADMIN_STORESDETAILS,
     adminStoreDetails: stores
@@ -33,9 +33,14 @@ function getAdminStoresSuccess (stores) {
 
 export const adminStoresDetails = () => {
   this.api = new Api()
-  let url = Config.apiBaseUrl + CommonConstants.apiUrls.getStores + '?isAdmin=1&psize=10&pno=1'
+  let url = Config.apiBaseUrl + CommonConstants.apiUrls.getStores + '?isAdmin=1'
   return (dispatch, getState) => {
     const state = getState()
+    if (state.storeDetails.paginationParams) {
+      url = url + '&psize=' + state.storeDetails.paginationParams.pageSize + '&pno=' + state.storeDetails.paginationParams.pageNumber
+    } else {
+      url = url + '&psize=10&pno=1'
+    }
     if (state.storeDetails.sortParams) {
       url = url + '&Sortby=' + state.storeDetails.sortParams.sortBy + '&sortType=' + state.storeDetails.sortParams.sortType
     }
@@ -50,6 +55,12 @@ export const sortStores = (sortParams) => {
   return {
     type: storeDetails.SET_SORT_PARAMS,
     sortParams: sortParams
+  }
+}
+export const paginationAdminStores = (paginationParams) => {
+  return {
+    type: storeDetails.PAGINATION_STORESDETAILS,
+    paginationParams: paginationParams
   }
 }
 
