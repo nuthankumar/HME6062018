@@ -198,7 +198,6 @@ SELECT sdd.StoreDate,
   b.EventType_Name,
   b.EventType_Category,
   b.DetectorTime,  b.EventType_Category_ID,
-
   b.Goal_ID,
   b.Daypart_ID,
   b.CarDataRecord_ID,
@@ -216,7 +215,7 @@ FROM #StoresDevicesDates sdd
    ORDER BY DepartTimeStamp
  
 --Test
-INSERT INTO #EventTypeNames 
+INSERT INTO #EventTypeNames
 SELECT 
   sdd.EventType_Category_ID, sdd.EventType_Name
 FROM #CarDetectorData sdd
