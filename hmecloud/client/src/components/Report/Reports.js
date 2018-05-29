@@ -34,6 +34,7 @@ const Calendar = require('../../images/mini-cal.jpg')
 const Asc = require('../../images/Arrow_red_asc.png')
 const Desc = require('../../images/Arrow_red_desc.png')
 const Delete = require('../../images/redEx.png')
+const downArrow = require('../../images/arrow_back.jpg')
 const _ = require('underscore')
 
 class Report extends Component {
@@ -245,7 +246,8 @@ class Report extends Component {
                     <a data-tip={t[language].thereportwillsummarize}><span className='tip openTip'>?</span></a>
                     <ReactTooltip place='right' type='dark' effect='solid' />
                 </span>
-                <div>
+                <div className='cover-select'>
+                  <img className='cover-select-image' src={downArrow} aria-hidden='true'/>
                   <select name='timeMeasure' className='time-measures' onChange={this.changeTimeMeasure.bind(this)}>
                                     <option selected={this.state.timeMeasure == 1} value='1'>{t[language].day}</option>
                                     <option selected={this.state.timeMeasure == 2} value='2'>{t[language].daypart}</option>
@@ -1132,7 +1134,12 @@ class Report extends Component {
         if (type == 'PDF') {
            url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=pdf'
         }
-        request.localTime = moment(new Date()).locale('en').format('MMM D,YYYY hh:mm')
+        if (this.state.reportData.singleStore) {
+          request.localTime = moment(new Date()).format('hh:mm A')
+        } else {
+          request.localTime = moment(new Date()).locale('en').format('MMM D,YYYY hh:mm A')
+        }
+        // request.localTime = moment(new Date()).locale('en').format('MMM D,YYYY hh:mm')
         this.setState({ showLoader: true })
         this.api.postData(url, request, data => {
             if (data.status) {

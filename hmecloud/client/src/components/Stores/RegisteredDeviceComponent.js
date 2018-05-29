@@ -1,14 +1,18 @@
 import React, { Component } from 'react'
 import './Stores.css'
-// import t from '../Language/language'
-// import * as languageSettings from '../Language/languageSettings'
+import t from '../Language/language'
+import * as languageSettings from '../Language/languageSettings'
 // export default class BookList extends Component {
 class RegisteredDeviceComponent extends Component {
   constructor (props) {
     super(props)
+    this.state = {
+      currentLanguage: languageSettings.getCurrentLanguage()
+    }
   }
 
   renderTableContent () {
+   
     return (
       this.props.deviceDetails.CIB.map((device) => {
         return (<tr>
@@ -21,6 +25,8 @@ class RegisteredDeviceComponent extends Component {
     )
   }
   render () {
+    const language = this.state.currentLanguage
+    // {t[language].}
     return (
       <div>
         <h4>Registered CIB</h4>
@@ -28,9 +34,9 @@ class RegisteredDeviceComponent extends Component {
           <tbody>
             <tr className='theader clear'>
               {/* <th></th> */}
-              <th>System Version</th>
-              <th>Serial Number</th>
-              <th>System Status</th>
+              <th>{t[language].settingsStoresSystemVersion}</th>
+              <th>{t[language].settingsStoresSerialNumber}</th>
+              <th>{t[language].settingsStoresSystemStatus}</th>
               <th />
             </tr>
             {this.renderTableContent()}

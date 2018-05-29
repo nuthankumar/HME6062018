@@ -278,6 +278,7 @@ const getStoreByUid = (request, callBack) => {
   }
 
   stores.getStoreByUid(input, result => {
+    console.log(result.data)
     if (result.status === true) {
       let response = {}
       if (result.data[0][0].Brand_Name === 'NA') {
@@ -285,10 +286,12 @@ const getStoreByUid = (request, callBack) => {
       } else {
         response.storeDetails = result.data[0][0]
         response.storeDetails.timeZone = _.map(result.data[1], 'Name')
-        if (result.data[2][0].Device_Name === 'NA') {
+        response.storeDetails.brandList = result.data[2]
+        response.storeDetails.countryList = result.data[3]
+        if (result.data[4][0].Device_Name === 'NA') {
           response.deviceDetails = {}
         } else {
-          response.Device_Details = result.data[2] || []
+          response.Device_Details = result.data[4] || []
           // if (_.has(response, 'deviceDetails.CIB')) {
           //   let Email = _.get(response, 'storeDetails.User_EmailAddress')
           //   _.set(response, 'deviceDetails.CIB.0.Email', Email) // set Email for CIB settings

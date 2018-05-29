@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import * as languageSettings from '../components/Language/languageSettings'
 import StoreDetailsAdmin from '../components/Stores/StoreDetailsAdmin'
 import StoreDetailsClient from '../components/Stores/StoreDetailsClient'
-import { initStoresDetails } from '../actions/stores'
+import { initStoresDetails, adminStoresDetails } from '../actions/stores'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 class StoreDetails extends Component {
@@ -14,13 +14,14 @@ class StoreDetails extends Component {
   }
   componentWillMount () {
     this.props.initStoresDetails()
+    this.props.adminStoresDetails()
   }
 
   render () {
     return (
       <div>
-        <StoreDetailsClient showStores={true} stores={this.props.storesDetails} />
-        <StoreDetailsAdmin showStores={false} stores={this.props.storesDetails} />
+        <StoreDetailsClient showStores={false} stores={this.props.storesDetails} />
+        <StoreDetailsAdmin showStores={true} stores={this.props.storesDetails} />
       </div>
     )
   }
@@ -35,7 +36,8 @@ function mapStateToProps (state) {
 function matchDispatchToProps (dispatch) {
   return bindActionCreators(
     {
-      initStoresDetails: initStoresDetails
+      initStoresDetails: initStoresDetails,
+      adminStoresDetails: adminStoresDetails
     }, dispatch
   )
 }

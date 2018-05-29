@@ -548,6 +548,7 @@ const language = [
         'Pickup': 'Pickup',
         'LaneQueue': 'Lane Queue',
         'Lane Queue': 'Lane Queue',
+        'Lane Queue 2': 'Lane Queue 2',
         'Metrics': 'Metrics:',
         'LaneTotal': 'Lane Total',
         'LaneTotal2': 'Lane Total 2',
@@ -827,8 +828,8 @@ const language = [
         'SelectTargetStore': 'Select Target Store',
         'EnterStoreNumber': 'Enter Store Number',
         'Search': 'Search',
-        'MustSelectStLeastOneSystem': 'Must select at least one system'
-
+        'MustSelectStLeastOneSystem': 'Must select at least one system',
+        'Timezone' :'Timezone'
 
     },
 
@@ -1386,6 +1387,7 @@ const language = [
         'Pickup': 'Ramassage',
         'LaneQueue': 'File d\u2019attente de l\u2019all\u00E9e',
         'Lane Queue': 'File d\u2019attente de l\u2019all\u00E9e',
+        'Lane Queue 2': 'File d\u2019attente de l\u2019all\u00E9e 2',
         'Metrics': 'Metriques:',
         'LaneTotal': 'Total all\u00E9e',
         'Lane Total 2': 'Total all\u00E9e 2',
@@ -1678,7 +1680,8 @@ const language = [
 		'SelectTargetStore': 'Sélectionnez le magasin cible',
 		'EnterStoreNumber': 'Entrez le numéro de magasin',
 		'Search':'Chercher',
-		'MustSelectStLeastOneSystem': 'Doit sélectionner au moins un système'
+        'MustSelectStLeastOneSystem': 'Doit sélectionner au moins un système',
+        'Timezone' :'Fuseau horaire'
 
     }
 ]

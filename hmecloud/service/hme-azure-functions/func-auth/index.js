@@ -18,8 +18,14 @@ Promise.promisifyAll(requestPromise)
 module.exports = function (context, req) {
   var AuthenticationContext = adal.AuthenticationContext;
 
-  let params = req.body,
-    email = params.username,
+  let body = req.body
+
+  let params = {
+    username: (body.username.lastIndexOf("@") === -1) ? body.username + "@" + config.domain : body.username,
+    password: body.password,
+    isAdmin: body.isAdmin
+  }
+  let email = params.username,
     name = email.substring(0, email.lastIndexOf("@")),
     domain = email.substring(email.lastIndexOf("@") + 1)
   // if (domain !== config.domain) {
@@ -137,7 +143,7 @@ module.exports = function (context, req) {
 
         sqlPool.request()
           .query(
-          `SELECT [User_ID]
+            `SELECT [User_ID]
             , [User_UID]
             , [User_OwnerAccount_ID]
             , [User_Company_ID]
@@ -152,43 +158,43 @@ module.exports = function (context, req) {
         FROM [dbo].[tbl_Users] usr
             LEFT JOIN tbl_Accounts acct ON acct.Account_User_ID = usr.[User_ID]
         WHERE [User_IsActive] = 1 AND [User_EmailAddress]='${email}'`, (err, result) => {
-            if (err) {
-              context.res = {
-                status: 404,
-                body: err.stack
-              }
-              context.done()
-            }
-            if (result && result.recordsets) {
-              let user = result.recordset[0]
-
-              if (isAuthenticated(user.User_PasswordHash, params.password, user.User_PasswordSalt)) {
-                let jwtToken = jwt.sign(user, config.secret, {
-                  expiresIn: '24h' // expires in 60 mins
-                }, (err, token) => {
-                  context.res = {
-                    status: 200,
-                    body: {
-                      tokenType: 'Bearer',
-                      expiresIn: '24h',
-                      accessToken: token,
-                      refreshToken: token,
-                      userId: user.User_EmailAddress,
-                      familyName: user.User_LastName,
-                      givenName: user.User_FirstName
-                    }
-                  }
-                  context.done()
-                })
-              } else {
+              if (err) {
                 context.res = {
-                  status: 403,
-                  body: "Unauthorized"
+                  status: 404,
+                  body: err.stack
                 }
                 context.done()
               }
-            }
-          })
+              if (result && result.recordsets) {
+                let user = result.recordset[0]
+
+                if (isAuthenticated(user.User_PasswordHash, params.password, user.User_PasswordSalt)) {
+                  let jwtToken = jwt.sign(user, config.secret, {
+                    expiresIn: '24h' // expires in 60 mins
+                  }, (err, token) => {
+                    context.res = {
+                      status: 200,
+                      body: {
+                        tokenType: 'Bearer',
+                        expiresIn: '24h',
+                        accessToken: token,
+                        refreshToken: token,
+                        userId: user.User_EmailAddress,
+                        familyName: user.User_LastName,
+                        givenName: user.User_FirstName
+                      }
+                    }
+                    context.done()
+                  })
+                } else {
+                  context.res = {
+                    status: 403,
+                    body: "Unauthorized"
+                  }
+                  context.done()
+                }
+              }
+            })
       })
 
       sqlPool.on('error', err => {
