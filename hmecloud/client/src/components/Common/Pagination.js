@@ -28,7 +28,7 @@ class Pagination extends Component {
   render() {
     return (
       <div >
-        <div>
+        <div class="paginationSection">
           <div className="dropDown_show">
             Show <span></span>
             <select id="per_show" onChange={this.PageSizeChange} value={this.state.value}>
@@ -38,7 +38,7 @@ class Pagination extends Component {
               <option value="10000">All</option>
             </select>
             <span></span> items per page
-       </div>
+          </div>
           <ReactPaginate previousLabel={"<<"}
             nextLabel={">>"}
             breakLabel={<a>...</a>}

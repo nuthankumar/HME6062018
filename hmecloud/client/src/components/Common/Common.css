@@ -58,6 +58,13 @@
     border-color:#000 !important;
     
 }
+
+.paginationSection{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
 .pagination {  
     font-size: 10px;
     margin-left: 145px;
@@ -86,15 +93,14 @@
 }
 
 .dropDown_show{
-display: inline-block;
 font-size: 10px;
 float: left;
-margin-top: 24px;
+display: flex;
+    align-items: center;
 }
 .results{
      font-size: 10px;
     float: right;
-    margin-top: 24px;
     }
 
     /* pagination css over */
