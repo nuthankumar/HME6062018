@@ -111,7 +111,7 @@ div.tab-content #store-tabs-pane-1, #store-tabs-pane-2, #store-tabs-pane-3, #sto
 
 table.user_form tr th label {
   /* margin-top: 12px; */
-  /* width: 110px;*/
+   width: 110px;
   font-weight: normal;
   margin-bottom: 0px;
 
@@ -120,7 +120,7 @@ table.user_form tr th label {
     font-size: 14px;
     text-align: right;
     /* margin-top: 12px; */
-    /* padding-right: 5px; */
+    padding-right: 5px;
 }
 
 
@@ -249,5 +249,22 @@ span.remove-device-item.disable-remove-device {
 .hide { 
   display: none;
 }
+
+.store-info-save {
+  background-color: #d41b3e;
+  border: none;
+  float: right;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 10px 25px;
+  text-indent: 4px;
+  font-size: 12px;
+  margin-top: 15px;
+}
+
+.redText{
+  color: #D41B3E;
+}
+
 
 /* END ION Components */

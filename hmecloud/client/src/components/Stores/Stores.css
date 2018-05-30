@@ -466,7 +466,8 @@ text-decoration: none;
     font-size: 16px;
 }
 
-/*********** Store merge Modal Popup *******************/
+
+/*********** System settings and system status css begins *******************/
 
  .merge-modal-popup{
     position: absolute;
@@ -594,3 +595,4 @@ tr.system-settings-row-data:hover{
     text-decoration: underline;
 } 
 
+/*********** System settings and system status css ends here *******************/
