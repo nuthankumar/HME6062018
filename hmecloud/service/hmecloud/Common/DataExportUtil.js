@@ -4,102 +4,59 @@ const Pdfmail = require('./PDFUtils')
 const moment = require('moment')
 const _ = require('lodash')
 
-const generateCSVReport = (results, input, csvInput, reportType, eventHeaders, callback) => {
-  let storeDataList = []
-  let format = input.body.format
-  let reportDetails
-  if (reportType.reportName === 'rawcardata') {
-    reportDetails = results
-  } else {
-    if (results && results.length > 0) {
-      reportDetails = results[0].data
-    }
-  }
-  _.forEach(reportDetails, (item, key) => {
-    let store = {}
-    // Week
+const singleStore = (deviceDetails, reportType, input, eventHeaders, format,csvInput, callback) => {
+  let storeDeviceDetails = []
+  _.forEach(deviceDetails, (item, key) => {
+    let deviceInfo = {}
+    // Week Report
     if (reportType.reportName === 'week') {
       if (item.StoreNo === 'Total Week') {
-        store.Week = 'Total Week'
+        deviceInfo.Week = 'Total Week'
       } else if (input.body.deviceIds.length === 1) {
-        store.Week = moment(item.WeekStartDate).format('MM/DD/YYYY') + '-' + moment(item.WeekEndDate).format('MM/DD/YYYY')
+        deviceInfo.Week = moment(item.WeekStartDate).format('MM/DD/YYYY') + '-' + moment(item.WeekEndDate).format('MM/DD/YYYY')
         if (item.Week) {
-          store.Week = item.Week.timeSpan + ' ' + item.Week.currentWeekpart
-        }
-      } else if (input.body.deviceIds.length > 1) {
-        store.Week = moment(item.WeekStartDate).format('MM/DD/YYYY') + '-' + moment(item.WeekEndDate).format('MM/DD/YYYY')
-        store.Groups = item.Groups.value ? item.Groups.value : ''
-        store.Stores = item.StoreNo.value ? item.StoreNo.value : ''
-        if (item.StoreNo.value === 'Total Week') {
-          store.Groups = 'Total Week'
-          store.Stores = ''
-        } else if (item.StoreNo.value === 'Subtotal') {
-          store.Groups = item.Groups.value
-          store.Stores = item.StoreNo.value
-        } else {
-          store.Week = moment(item.WeekStartDate).format('MM/DD/YYYY') + '-' + moment(item.WeekEndDate).format('MM/DD/YYYY')
+          deviceInfo.Week = item.Week.timeSpan + ' ' + item.Week.currentWeekpart
         }
       }
     }
-    // Daypart
+    // Daypart Report
     if (reportType.reportName === 'daypart') {
       if (item.StoreNo === 'Total Daypart') {
-        store.Daypart = 'Total Daypart'
+        deviceInfo.Daypart = 'Total Daypart'
       } else if (input.body.deviceIds.length === 1) {
-        store.Daypart = moment(item.StoreDate).format('MM/DD/YYYY')
+        deviceInfo.Daypart = moment(item.StoreDate).format('MM/DD/YYYY')
         if (item.Daypart) {
-          store.Daypart = item.Daypart.timeSpan + ' ' + item.Daypart.currentWeekpart
-        }
-      } else if (input.body.deviceIds.length > 1) {
-        store.Daypart = moment(item.StoreDate).format('MM/DD/YYYY')
-        store.Groups = item.Groups.value ? item.Groups.value : ''
-        store.Stores = item.StoreNo.value ? item.StoreNo.value : ''
-        if (item.StoreNo.value === 'Total Daypart') {
-          store.Groups = 'Total Daypart'
-          store.Stores = ''
-        } else if (item.StoreNo.value === 'SubTotal') {
-          store.Groups = item.Groups.value
-          store.Stores = item.StoreNo.value
+          deviceInfo.Daypart = item.Daypart.timeSpan + ' ' + item.Daypart.currentWeekpart
         }
       }
     }
-    // Day
+    // Day Report
     if (reportType.reportName === 'day') {
       if (item.StoreNo === 'Total Day') {
-        store.Day = 'Total Day'
+        deviceInfo.Day = 'Total Day'
       } else if (input.body.deviceIds.length === 1) {
-        store.Day = moment(item.StoreDate).format('MM/DD/YYYY')
+        deviceInfo.Day = moment(item.StoreDate).format('MM/DD/YYYY')
         if (item.Day) {
-          store.Day = item.Day.timeSpan + ' ' + item.Day.currentWeekpart
-        }
-      } else if (input.body.deviceIds.length > 1) {
-        store.Day = moment(item.StoreDate).format('MM/DD/YYYY')
-        store.Groups = item.Groups.value ? item.Groups.value : ''
-        store.Stores = item.StoreNo.value ? item.StoreNo.value : ''
-        if (item.StoreNo.value === 'Total Day') {
-          store.Groups = 'Total Day'
-          store.Stores = ''
-        } else if (item.StoreNo.value === 'Subtotal') {
-          store.Groups = item.Groups.value
-          store.Stores = item.StoreNo.value
+          deviceInfo.Day = item.Day.timeSpan + ' ' + item.Day.currentWeekpart
         }
       }
     }
     if (reportType.reportName !== 'rawcardata') {
       _.forEach(eventHeaders, (value, key) => {
         if (item[`${value}`] !== null && item[`${value}`] !== 'N/A') {
-          store[`${value}`] = (dateUtils.convertSecondsToMinutes(item[`${value}`].value, format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item[`${value}`].value, format))
+          deviceInfo[`${value}`] = (dateUtils.convertSecondsToMinutes(item[`${value}`].value, format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item[`${value}`].value, format))
+          deviceInfo['Total Cars'] = item['Total Cars'].value
         }
       })
     }
     if (reportType.reportName === 'rawcardata') {
-      _.forEach(reportDetails[key], (value, key) => {
-        store[`${key}`] = `${value}` === 'N/A' ? '' : `${value}`
+      _.forEach(deviceDetails[key], (value, key) => {
+        deviceInfo[`${key}`] = `${value}` === 'N/A' ? '' : `${value}`
       })
     }
-    storeDataList.push(store)
+    storeDeviceDetails.push(deviceInfo)
   })
-  csvInput.reportinput = storeDataList
+  csvInput.reportinput = storeDeviceDetails
   CSVGeneration.generateCsvAndEmail(csvInput, result => {
     let output = {}
     if (result) {
@@ -111,6 +68,115 @@ const generateCSVReport = (results, input, csvInput, reportType, eventHeaders, c
     }
     callback(output)
   })
+}
+
+const mutipleStore = (deviceDetails, reportType, input, eventHeaders, format,csvInput, callback) => {
+  let storeDeviceDetails = []
+  let rcd = []
+  _.map(deviceDetails, (item) => {
+    _.map(item.data, (deviceValues) => {
+      storeDeviceDetails.push(deviceValues)
+    })
+  })
+  // Week
+  if (storeDeviceDetails && storeDeviceDetails.length > 0) {
+    _.forEach(storeDeviceDetails, (item, key) => {
+      let deviceInfo = {}
+      if (reportType.reportName === 'week') {
+        let groupname = null
+        deviceInfo.Week = moment(item.WeekStartDate.value).format('L') + '-' + moment(item.WeekEndDate.value).format('L')
+        if (item.Groups.value === 'null') {
+          groupname = ''
+        } else {
+          groupname = item.Groups.value
+        }
+        deviceInfo.Groups = groupname
+        deviceInfo.Stores = item.StoreNo.value ? item.StoreNo.value : ''
+        if (item.StoreNo.value === 'Total Week') {
+          deviceInfo.Groups = 'Total Week'
+          deviceInfo.Stores = ''
+        } else if (item.StoreNo.value === 'Subtotal') {
+          deviceInfo.Groups = groupname
+          deviceInfo.Stores = item.StoreNo.value
+        }
+      }
+      // Daypart
+      if (reportType.reportName === 'daypart') {
+        let groupname = null
+        deviceInfo.Daypart = moment(item.StoreDate.value).format('L')
+        if (item.Groups.value === 'null') {
+          groupname = ''
+        } else {
+          groupname = item.Groups.value
+        }
+        deviceInfo.Groups = groupname
+        deviceInfo.Stores = item.StoreNo.value ? item.StoreNo.value : ''
+        if (item.StoreNo.value === 'Total Daypart') {
+          deviceInfo.Groups = 'Total Daypart'
+          deviceInfo.Stores = ''
+        } else if (item.StoreNo.value === 'Subtotal') {
+          deviceInfo.Groups = groupname
+          deviceInfo.Stores = item.StoreNo.value
+        }
+      }
+      // Day
+      if (reportType.reportName === 'day') {
+        let groupname = null
+        deviceInfo.Daypart = moment(item.StoreDate.value).format('L')
+        if (item.Groups.value === 'null') {
+          groupname = ''
+        } else {
+          groupname = item.Groups.value
+        }
+        deviceInfo.Groups = groupname
+        deviceInfo.Stores = item.StoreNo.value ? item.StoreNo.value : ''
+        if (item.StoreNo.value === 'Total Day') {
+          deviceInfo.Groups = 'Total Day'
+          deviceInfo.Stores = ''
+        } else if (item.StoreNo.value === 'Subtotal') {
+          deviceInfo.Groups = groupname
+          deviceInfo.Stores = item.StoreNo.value
+        }
+      }
+
+      _.forEach(eventHeaders, (value, key) => {
+        if (item[`${value}`] !== null || item[`${value}`] !== 'N/A') {
+          deviceInfo[`${value}`] = (dateUtils.convertSecondsToMinutes(item[`${value}`].value, format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item[`${value}`].value, format))
+          deviceInfo['Total Cars'] = item['Total Cars'].value
+        }
+      })
+      rcd.push(deviceInfo)
+    })
+  }
+  csvInput.reportinput = rcd
+  CSVGeneration.generateCsvAndEmail(csvInput, result => {
+    let output = {}
+    if (result) {
+      output.data = input.UserEmail
+      output.status = true
+    } else {
+      output.data = input.UserEmail
+      output.status = false
+    }
+    callback(output)
+  })
+}
+
+const generateCSVReport = (results, input, csvInput, reportType, eventHeaders, callback) => {
+  let format = input.body.format
+  let reportDetails
+  // console.log('JSON',JSON.stringify(results))
+  if (input.body.deviceIds.length === 1) {
+    reportDetails = results[0].data
+    singleStore(reportDetails, reportType, input, eventHeaders, format, csvInput, result => {
+      callback(result)
+    })
+  } else {
+    reportDetails = results
+    mutipleStore(reportDetails, reportType, input, eventHeaders, format, csvInput, result => {
+      callback(result)
+    })
+  }
 }
 
 const JsonForPDF = (data, input, reportName, pdfInput, isMultiStore) => {

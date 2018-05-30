@@ -1,6 +1,5 @@
 const moment = require('moment')
 const messages = require('../Common/Message')
-const momentDurationFormatSetup = require('moment-duration-format')
 const dateFormat = require('dateformat')
 const _ = require('lodash')
 
@@ -8,16 +7,17 @@ const defaultFromTime = '00:00:00'
 const defaultEndTime = '23:59:59'
 
 const convertSecondsToMinutes = (avgTime, formatFlag) => {
-  momentDurationFormatSetup(moment)
-  if (avgTime) {
+  let avarageTime
+  if (avgTime !== undefined && !isNaN(avgTime)) {
     if (formatFlag === 2) {
-      return moment.duration(avgTime, 'seconds').format()
+      avarageTime = (Math.floor(avgTime / 60) + ':' + (avgTime % 60 ? avgTime % 60 : '00'))
     } else {
-      return avgTime
+      avarageTime = avgTime
     }
   } else {
-    return 'N/A'
+    avarageTime = 'N/A'
   }
+  return avarageTime
 }
 
 const dayPartTime = (dayPartId) => {
