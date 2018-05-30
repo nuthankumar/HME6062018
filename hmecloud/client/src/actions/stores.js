@@ -42,10 +42,10 @@ export const adminStoresDetails = () => {
       url = url + '&psize=10&pno=1'
     }
     if (state.storeDetails.sortParams) {
-      url = url + '&Sortby=' + state.storeDetails.sortParams.sortBy + '&sortType=' + state.storeDetails.sortParams.sortType
+      url = url + '&Sortby=' + (state.storeDetails.sortParams.sortBy ? state.storeDetails.sortParams.sortBy : '') + '&sortType=' + (state.storeDetails.sortParams.sortType ? state.storeDetails.sortParams.sortType : '')
     }
     if (state.storeDetails.searchParams) {
-      url = url + '&criteria=' + state.storeDetails.searchParams.criteria + '&filter=' + state.storeDetails.searchParams.filter 
+      url = url + '&criteria=' + (state.storeDetails.searchParams.criteria ? state.storeDetails.searchParams.criteria : '') + '&filter=' + (state.storeDetails.searchParams.filter ? state.storeDetails.searchParams.filter : '')  
     }
     console.log(url)
     this.api.getData(url, data => {

@@ -20,7 +20,7 @@ export const getSystems = () => {
       url = url + '&criteria=' + (state.systems.searchParams.criteria ? state.systems.searchParams.criteria : '') + '&filter=' + (state.systems.searchParams.filter ? state.systems.searchParams.filter : '')
     }
     if (state.systems.sortParams) {
-      url = url + '&Sortby=' + state.systems.sortParams.sortBy + '&sortType=' + state.systems.sortParams.sortType
+      url = url + '&Sortby=' + (state.systems.sortParams.sortBy ? state.systems.sortParams.sortBy : '') + '&sortType=' + (state.systems.sortParams.sortType ? state.systems.sortParams.sortType : '')
     }
     console.log(url)
     this.api.getData(url, data => {
