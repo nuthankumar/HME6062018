@@ -284,17 +284,10 @@ const getStoreByUid = (request, callBack) => {
         response.key = 'noRecordsFound'
       } else {
         response.storeDetails = result.data[0][0]
-        response.storeDetails.timeZone = _.map(result.data[1], 'Name')
-        response.storeDetails.brandList = result.data[2]
-        response.storeDetails.countryList = result.data[3]
-        if (result.data[4][0].Device_Name === 'NA') {
+        if (result.data[1][0].Device_Name === 'NA') {
           response.deviceDetails = {}
         } else {
-          response.Device_Details = result.data[4] || []
-          // if (_.has(response, 'deviceDetails.CIB')) {
-          //   let Email = _.get(response, 'storeDetails.User_EmailAddress')
-          //   _.set(response, 'deviceDetails.CIB.0.Email', Email) // set Email for CIB settings
-          // }
+          response.Device_Details = result.data[1] || []
         }
       }
       response.status = true
@@ -322,6 +315,47 @@ const removeDeviceById = (request, callBack) => {
     }
   })
 }
+
+/**
+ * The method can be used to execute save store by store UID
+ * @param  {input} request input from  user request
+ * @param  {funct} callback Function will be called once the input executed.
+ * @public
+ */
+const saveStoreDetails = (request, callBack) => {
+  const input = {
+    isAdmin: (request.query.isAdmin ? request.query.isAdmin : null),
+    suid: (request.body.suid ? request.body.suid : null),
+    storeNumber: (request.body.StoreNumber ? request.body.StoreNumber : null),
+    storeID: (request.body.StoreID ? request.body.StoreID : null),
+    storeName: (request.body.StoreName ? request.body.StoreName : null),
+    companyId: (request.body.Company_ID ? request.body.Company_ID : null),
+    timeZone: (request.body.timeZone ? request.body.timeZone : null)
+    // Format to be mapped
+    // {"StoreNumber":"Store X","StoreUID":"C5B3795ACA0A4612A961A36B39DC6C5D","StoreName":"123"}
+  }
+
+  if (input.isAdmin === 0) {
+    let azure = {}
+    azure.StoreNumber = input.storeNumber
+    azure.StoreUID = input.storeNumber
+    azure.StoreName = input.storeName
+    input.AzureData = azure
+  }
+  console.log(input)
+  stores.saveStoreDetails(input, result => {
+    console.log(result)
+    let response = {}
+    if (result.data[0][0] > 0) {
+      callBack(result)
+      response.status = true
+    } else {
+      response.status = false
+      callBack(result)
+    }
+  })
+}
+
 module.exports = {
   settingsDevices,
   settingsStores,
@@ -333,5 +367,6 @@ module.exports = {
   getAllStores,
   getStoreByUid,
   removeDeviceById,
-  unRegisterDevicesSearch
+  unRegisterDevicesSearch,
+  saveStoreDetails
 }
