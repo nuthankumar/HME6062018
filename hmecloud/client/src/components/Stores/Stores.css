@@ -446,6 +446,28 @@ button#dropdown-no-caret {
     width: 31px;
     background: #aed0ea;
 }
+
+.dropdown-menu>li>a {
+    display: flex;
+    align-items: center;
+    padding: 1px 10px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+}
+.dropdown-menu>li>a input {
+    margin-right: 3px !important;
+   
+}
+.dropdown-menu{
+    background: #f2f5f7;
+}
+
+.dropdown-menu {
+    min-width: 198px;
+}
 /* .dropdown-toggle{
 
 } */

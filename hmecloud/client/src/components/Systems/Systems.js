@@ -94,11 +94,21 @@ class Systems extends Component {
                     >
                       <MenuItem eventKey='Brand_Name'>
                         <input type='radio' name='search_all' value='' checked={!this.props.systems.searchParams.filter} onClick={this.handleSearchChange.bind(this)} /> search all<br />
+                      </MenuItem>
+                      <MenuItem eventKey='Brand_Name'>
                         <input type='radio' name='Brand_Name' value='Brand_Name' checked={this.props.systems.searchParams.filter === 'Brand_Name'} onClick={this.handleSearchChange.bind(this)} /> Search brand<br />
+                      </MenuItem>
+                      <MenuItem eventKey='Brand_Name'>
                         <input type='radio' name='Store_Number' value='Store_Number' checked={this.props.systems.searchParams.filter === 'Store_Number'} onClick={this.handleSearchChange.bind(this)} /> Search store # <br />
+                      </MenuItem>
+                      <MenuItem eventKey='Brand_Name'>
                         <input type='radio' name='Device_SerialNumber' value='Device_SerialNumber' checked={this.props.systems.searchParams.filter === 'Device_SerialNumber'} onClick={this.handleSearchChange.bind(this)} /> Search serial #<br />
+                      </MenuItem>
+                      <MenuItem eventKey='Brand_Name'>
                         <input type='radio' name='Device_MainVersion' value='Device_MainVersion' checked={this.props.systems.searchParams.filter === 'Device_MainVersion'} onClick={this.handleSearchChange.bind(this)} /> Search system version <br />
                       </MenuItem>
+                   
+
                     </DropdownButton>
                   </ButtonToolbar>
                 </div>
