@@ -224,9 +224,9 @@ const sqlQueries = {
     }
   },
   Stores: {
-    getAllStores: '[dbo].[usp_HME_Cloud_Get_UserStores]',
-    getStoreDetailsByUID: '[dbo].[usp_HME_Cloud_Get_StoreInformation]',
-    saveStoreDetails: '[dbo].[usp_HME_Cloud_update_Store_Details]',
+    getAllStores: '[dbo].[usp_GetAllStores]',
+    getStoreDetailsByUID: '[dbo].[usp_GetStoreById]',
+    saveStoreDetails: '[dbo].[usp_UpdateStoreDetails]',
     Parameters: {
       User_UID: 'UserUid',
       isAdmin: 'isAdmin',
@@ -244,8 +244,8 @@ const sqlQueries = {
     }
   },
   Device: {
-    removeByDUID: '[dbo].[usp_HME_Cloud_Remove_Device_From_Store]',
-    getunRegisterDevices: '[dbo].[usp_HME_Cloud_Get_UnregisteredSystems]',
+    removeByDUID: '[dbo].[usp_RemoveDeviceByUID]',
+    getunRegisterDevices: '[dbo].[usp_GetUnregisteredSystems]',
     Parameters: {
       Device_UIDs: 'Device_UIDs'
     }

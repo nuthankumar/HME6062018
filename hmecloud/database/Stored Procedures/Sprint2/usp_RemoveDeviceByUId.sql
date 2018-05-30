@@ -1,12 +1,12 @@
-/****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Remove_Device_From_Store] if already exists *****/
-IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_HME_Cloud_Remove_Device_From_Store' AND [type] ='P'))
-	DROP PROCEDURE [dbo].[usp_HME_Cloud_Remove_Device_From_Store]
+/****** Dropping the StoredProcedure [dbo].[usp_RemoveDeviceByUID] if already exists *****/
+IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_RemoveDeviceByUID' AND [type] ='P'))
+	DROP PROCEDURE [dbo].[usp_RemoveDeviceByUID]
 GO
 
 -- ===========================================================
 --      Copyright © 2018, HME, All Rights Reserved
 -- ===========================================================
--- Name			:	usp_HME_Cloud_Remove_Device_From_Store
+-- Name			:	usp_RemoveDeviceByUID
 -- Author		:	jaffer
 -- Created		:	05-May-2018
 -- Tables		:	tbl_DeviceInfo, tbl_Stores
@@ -18,11 +18,11 @@ GO
 -- -----------------------------------------------------------
 --  1.  	05-May-2018	jaffer	Procedure created
 -- ===========================================================
--- EXEC [dbo].[usp_HME_Cloud_Remove_Device_From_Store] @Device_UIDs = ''
+-- EXEC [dbo].[usp_RemoveDeviceByUID] @Device_UIDs = ''
 -- ===========================================================
 
 
-CREATE PROCEDURE [dbo].[usp_HME_Cloud_Remove_Device_From_Store] 
+CREATE PROCEDURE [dbo].[usp_RemoveDeviceByUID] 
 	@Device_UIDs VARCHAR(500)
 AS
 
