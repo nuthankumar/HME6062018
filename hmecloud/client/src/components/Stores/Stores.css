@@ -634,3 +634,280 @@ tr.system-settings-row-data:hover{
 } 
 
 /*********** System settings and system status css ends here *******************/
+
+
+/*********** System settings and system status css ends here *******************/
+
+/******* store merge css starts here **************/
+.store-merge-popup{
+    position: absolute;
+    /* top: 99px; */
+    top: 65px;
+    /* left: 170.5px; */
+    left: 124.5px;
+    height: auto;
+    width: 1000px;
+    display: block;
+     /* z-index: 102;  */
+     overflow:none;
+}
+
+.store-merge-popup .modal-content{
+    width: auto;
+    min-height: 0px;
+    max-height: none;
+    height: 446px;
+
+    overflow: hidden;
+    padding-left: 35px;
+
+    position: relative;
+    border: 0;
+    /* padding: .5em 1em; */
+    background: none;
+    border: 1px solid #aed0ea;
+    border-bottom-right-radius: 6px;
+    background: #f2f5f7;
+    color: #362b36;
+}
+
+.merge-store-header {
+    /* padding-top: 20px; */
+    padding-bottom: 20px;
+    padding-left: 0px;
+}
+.merge-store-header h2 {
+    font-size: 28px;
+    margin: 0;
+    padding-bottom: 0px;
+}
+.merge-store-wrapper{
+    width: 900px;
+    font-size: 12px;
+}
+
+.store-merge-body {
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.merge-store-row {
+    display: table;
+    width: 100%;
+}
+
+.select-sys-col {
+    box-sizing: border-box;
+    width: 39%;
+    float: left;
+    position: relative;
+    min-height: 1px;
+}
+
+.select-system-content {
+    border: 1px solid #ccc;
+    padding: 0px;
+    height: 156px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    width: 323px;
+    font-size: 12px;
+}
+
+
+.target-results-content table table tr th:nth-child(1) {
+    width: 1%;
+}
+.target-results-content table table tr th:nth-child(2) {
+    width: 27%;
+}
+.target-results-content table table tr th:nth-child(3) {
+    width: 47%;
+}
+.target-results-content table table tr th:nth-child(4) {
+    width: 27%;
+}
+
+
+
+.select-system-content table , .target-results-content table {
+    width: 100%;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.select-system-content table tr th:nth-child(1) {
+    width: 10%;
+} 
+.select-system-content table tr th:nth-child(2) {
+    width: 43%;
+}
+.select-system-content table tr th:nth-child(3) {
+    width: 47%;
+}
+
+.select-system-content table tr th , .target-results-content table tr th{
+    background-color: #ddd;
+    color: #555;
+    padding: 5px 10px;
+    border-right: 1px solid #f5f5f5;
+    padding-top: 7px;
+    padding-bottom: 6px;
+}
+
+.select-system-content table tr td , .target-results-content table tr td {
+    padding: 5px 10px;
+    border-right: 1px solid #f5f5f5;
+    padding-top: 7px;
+    padding-bottom: 6px;
+}
+
+.select-system-content table tr:nth-child(even) , .target-results-content table tr:nth-child(even) {
+    background: #ffffff;
+}
+
+.select-system-content table tr:nth-child(odd) , .target-results-content table tr:nth-child(odd) {
+    background: #f5f5f5;
+}
+
+.target-store-col {
+    border-left: 1px solid #ddd;
+    padding-left: 28px;
+    width: 57%;
+    float: left;
+    position: relative;
+    min-height: 1px;
+}
+
+
+.select-system-col {
+    width: 39%;
+    float: left;
+    position: relative;
+    min-height: 1px;
+    box-sizing: border-box
+}
+.select-system-col h3 {
+    font-size: 16px;
+    margin: 15px 0;
+    font-weight: normal;
+}
+.target-store-col h3 {
+    font-size: 16px;
+    margin: 15px 0;
+    font-weight: normal;
+}
+
+.form-group.target-store-group {
+    padding: 10px 0;
+    padding-top: 0px;
+}
+
+.merge-search-btn {
+    display: inline-block;
+    padding: 2px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+
+    background-image: none;
+    border: 1px solid transparent;
+
+    color: #555;
+    background-color: #ccc
+
+}
+
+.target-store-group .store-number-input {
+    height: 22px;
+    padding-left: 7px;
+    margin-right: 5px;
+}
+
+.target-store-search {
+    /* padding: 10px 0; */
+    padding: 19px 0;
+    padding-top: 0px;
+}
+
+.select-system-col .store-brand-info {
+    height: 36px;
+    padding-top: 0px;
+}
+
+.store-brand-info div {
+    margin-top: 5px;
+}
+
+.merge-storenobrand-label {
+    color: green;
+}
+
+.target-results-content {
+    border: 1px solid #ccc;
+    padding: 0px;
+    height: 156px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.merger-popup-close {
+    font-size: 20px;
+    color: #d41b3e;
+    float: left;
+    margin-left: 25px;
+    margin-top: 13px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 25px;
+}
+
+.store-merge-footer {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-right: 0px;
+}
+
+.merger-error-block {
+    width: 39%;
+    float: left;
+    position: relative;
+    min-height: 1px;
+    box-sizing: border-box;
+}
+
+.save-merge-block {
+    padding-right:0px;
+    float:right;
+    width: 57%;
+    position: relative;
+    min-height: 1px;
+}
+
+.merge-cancel {
+    font-size: 14px!important;
+    font-weight: 700;
+    vertical-align: middle;
+    line-height: 2.5;
+    color: #D41B3E;
+    text-decoration: none;
+}
+
+.merge-submit-btn {
+    background-color: #d41b3e;
+    border: none;
+    float: right;
+    color: #fff;
+    cursor: pointer;
+    padding: 10px 25px;
+    font-size: 1em;
+}
