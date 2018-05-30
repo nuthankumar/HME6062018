@@ -46,7 +46,9 @@ class EOSComponent extends Component {
           </tbody>
         </table>
         <div className='remove-sys'>
-          <input className='remove-button' value='Remove System' />
+          <a class='remove-system-device' href=''>
+            <span className='remove-device-item disable-remove-device'>Remove System</span>
+          </a>
         </div>
       </div>
     )

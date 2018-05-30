@@ -220,5 +220,34 @@ td a{
     margin: auto;
 } 
 
+.remove-system-device{
+  color: #D41B3E;
+  font-size: 12px;
+  text-decoration: none
+}
+
+a.remove-system-device:hover {
+  text-decoration:none;
+}
+
+span.remove-device-item {
+    background-color: #D41B3E;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 13px;
+    padding: 10px 20px;
+}
+
+span.remove-device-item.disable-remove-device {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.show {
+  display: block;
+}
+.hide { 
+  display: none;
+}
 
 /* END ION Components */

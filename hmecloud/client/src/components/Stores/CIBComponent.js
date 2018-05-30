@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import './Stores.css'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+
 const offlineImage = require('../../images/connection_offline.png')
 // import t from '../Language/language'
 // import * as languageSettings from '../Language/languageSettings'
@@ -9,8 +12,14 @@ class CIBComponent extends Component { // ensure you dont export component direc
   constructor (props) {
     super(props)
     this.state = {
-      showStores: this.props.showStores
+      showStores: this.props.showStores,
+      disableRemove: false
     }
+    this.enableRemoveBtn = this.enableRemoveBtn.bind(this)
+  }
+
+  enableRemoveBtn (e) {
+    return e.currentTarget.checked ? this.setState({disableRemove: true}) : this.setState({disableRemove: false})
   }
 
   render () {
@@ -63,17 +72,7 @@ class CIBComponent extends Component { // ensure you dont export component direc
             </tr>
             <tr className='tdata'>
               <td className='sys-ctr'>
-                <input type='checkbox' name='checkbox' id='idname' className='sys-ion-check' onchange="enableRemove('ion');" />
-              </td>
-              <td >1.22 C-</td>
-              <td >00-1D-06-00-10-1E</td>
-              <td>
-                <img src={offlineImage} /><span>Offline</span></td>
-              <td><a>View <span>Details</span></a></td>
-            </tr>
-            <tr className='tdata'>
-              <td className='sys-ctr'>
-                <input type='checkbox' name='checkbox' id='idname' className='sys-ion-check' onchange="enableRemove('ion');" />
+                <input type='checkbox' name='checkbox' id='idname' className='sys-ion-check' onChange={this.enableRemoveBtn} />
               </td>
               <td >1.22 C-</td>
               <td >00-1D-06-00-10-1E</td>
@@ -83,12 +82,25 @@ class CIBComponent extends Component { // ensure you dont export component direc
             </tr>
           </tbody>
         </table>
-        <div className='remove-sys'>
+        {/* <div className='remove-sys'>
           <input className='remove-button' value='Remove System' />
+        </div> */}
+        {/* <div className={'remove-sys ' + (this.state.disableRemove ? 'show' : 'hide')}> */}
+        <div className={'remove-sys ' + (this.props.storeModelPopupIsAdmin ? 'show' : 'hide')}>
+          <a class='remove-system-device' href=''>
+            <span className={'remove-device-item ' + (this.state.disableRemove ? 'disable-remove-device' : '')}>Remove System</span>
+          </a>
         </div>
       </div>
     )
   }
 }
 
-export default CIBComponent
+function mapStateToProps (state) {
+  return {
+    storesDetails: state.StorePopupDetails,
+    storeModelPopup: state.StorePopupDetails.storePopUpClient,
+    storeModelPopupIsAdmin: state.StorePopupDetails.storePopUpDetailisAdmin
+  }
+}
+export default connect(mapStateToProps)(CIBComponent)

@@ -76,16 +76,16 @@ class ModalContainer extends Component {
         return <StoredetailsComponent isAdmin={isAdmin} data={this.props.stores} />
         break
       case 'cib':
-        return <CIBComponent />
+        return <CIBComponent isAdmin={isAdmin} data={this.props.stores} />
         break
       case 'eos':
-        return <EOSComponent />
+        return <EOSComponent isAdmin={isAdmin} data={this.props.stores} />
         break
       case 'ion' :
-        return <IONComponent />
+        return <IONComponent isAdmin={isAdmin} data={this.props.stores} />
         break
       case 'zoom':
-        return <ZoomComponent />
+        return <ZoomComponent isAdmin={isAdmin} data={this.props.stores} />
         break
     }
   }
