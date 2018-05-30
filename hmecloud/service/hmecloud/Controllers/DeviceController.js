@@ -23,7 +23,6 @@ const getAllUnregisteredDevices = (request, callBack) => {
   //   }
 
   device.getunRegisterDevices(input, result => {
-    console.log(result.data)
     if (result.status === true) {
       let response = {}
       response.deviceList = result.data[0]
