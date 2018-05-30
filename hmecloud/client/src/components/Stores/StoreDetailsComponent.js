@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './Stores.css'
 import t from '../Language/language'
-import StoreMerge from './StoreMerge'
+
 import * as languageSettings from '../Language/languageSettings'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -23,12 +23,12 @@ class StoreDetailsComponent extends Component {
     this.setState({
       show: true
     })
-    this.props.dispatch(modalAction.closePopup())
     this.props.dispatch(modalAction.mergeOpenPopup())
+    this.props.dispatch(modalAction.closePopup())
   }
 
   storeTabs() {
-    if (this.props.isAdmin) {
+    if (this.props.storeModelPopupIsAdmin) {
       return (
         <div>To merge and/or remove duplicates <a href='#' onClick={this.mergePopUp}> click here</a></div>
       )
@@ -43,11 +43,11 @@ class StoreDetailsComponent extends Component {
         <table className='user_form'>
           <tbody>
             <tr>
-              <th><label for='Store_Brand_ID'>{t[language].settingsStoresCIBBrand} <span class='redText'>*</span></label></th>
+              <th><label htmlFor='Store_Brand_ID'>{t[language].settingsStoresCIBBrand} <span class='redText'>*</span></label></th>
               <td>
                 <select name='Store_Brand_ID' id='Store_Brand_ID' disabled='disabled'>
-                  <option value="Checker's" selected='selected'>Checker's</option>
-                  <option value='Dairy Queen' selected='selected'>Dairy Queen</option>
+                  <option value="Checker's" selected='selected'>{this.props.storesDetails.Brand_Name}</option>
+                  {/* <option value='Dairy Queen' selected='selected'>Dairy Queen</option>
                   <option value='Del Taco' selected='selected'>Del Taco</option>
                   <option value="Dunkin' Donuts" selected='selected'>Dunkin' Donuts</option>
                   <option value='KFC' selected='selected'>KFC</option>
@@ -82,38 +82,46 @@ class StoreDetailsComponent extends Component {
                   <option value='Panera Bread' selected='selected'>Panera Bread</option>
                   <option value="Seattle's Best Coffee" selected='selected'>Seattle's Best Coffee</option>
                   <option value='Taco Time' selected='selected'>Taco Time</option>
-                  <option value='White Castle' selected='selected'>White Castle</option>
+                  <option value='White Castle' selected='selected'>White Castle</option> */}
                 </select>
               </td>
             </tr>
             <tr>
-              <th><label for='Store_Name'> {t[language].settingsStoresStoreName}</label></th>
-              <td><input type='text' maxLength='100' name='Store_Name' id='Store_Name' value='' disabled='disabled' />
+              <th><label htmlFor='Store_Name'> {t[language].settingsStoresStoreName}</label></th>
+              <td><input type='text' maxLength='100' name='Store_Name' id='Store_Name' value={this.props.storesDetails.Store_Name} disabled='disabled' />
                 <input type='hidden' name='Store_ID' id='Store_ID' value='112480' />
               </td>
             </tr>
             <tr>
-              <th><label for='Store_Number'>{t[language].settingsStoresStoreNumber} <span class='redText'>*</span></label></th>
-              <td><input type='text' maxLength='100' name='Store_Number' id='Store_Number' value='' disabled='disabled' /></td>
+              <th><label htmlFor='Store_Number'>{t[language].settingsStoresStoreNumber} <span class='redText'>*</span></label></th>
+              <td><input type='text' maxLength='100' name='Store_Number' id='Store_Number' value={this.props.storesDetails.Store_Number} disabled='disabled' /></td>
             </tr>
             <tr>
-              <th><label for='Store_AddressLine1'>{t[language].address1}:<span class='redText'>*</span></label></th>
+              <th><label htmlFor='Group_Name'>{t[language].groupname}:<span class='redText'>*</span></label></th>
+              <td><input type='text' maxLength='100' name='Group_Name' id='Group_Name' value={this.props.storesDetails.Group_Name} disabled='disabled' /></td>
+            </tr>
+            <tr>
+              <th><label htmlFor='Report_Group'>{t[language].StoreSettingsReportGroup}:<span class='redText'>*</span></label></th>
+              <td><input type='text' maxLength='100' name='Report_Group' id='Report_Group' value={this.props.storesDetails.Report_Group} disabled='disabled' /></td>
+            </tr>
+            <tr>
+              <th><label htmlFor='Store_AddressLine1'>{t[language].address1}:<span class='redText'>*</span></label></th>
               <td><input type='text' maxLength='100' name='Store_AddressLine1' id='Store_AddressLine1' value='' disabled='disabled' /></td>
             </tr>
             <tr>
-              <th><label for='Store_AddressLine2'>{t[language].address2}</label></th>
+              <th><label htmlFor='Store_AddressLine2'>{t[language].address2}</label></th>
               <td><input type='text' maxLength='100' name='Store_AddressLine2' id='Store_AddressLine2' value='' disabled='disabled' /></td>
             </tr>
             <tr>
-              <th><label for='Store_AddressLine3'>{t[language].address3}</label></th>
+              <th><label htmlFor='Store_AddressLine3'>{t[language].address3}</label></th>
               <td><input type='text' maxLength='100' name='Store_AddressLine3' id='Store_AddressLine3' value='' disabled='disabled' /></td>
             </tr>
             <tr>
-              <th><label for='Store_AddressLine4'>{t[language].address4}</label></th>
+              <th><label htmlFor='Store_AddressLine4'>{t[language].address4}</label></th>
               <td><input type='text' maxLength='100' name='Store_AddressLine4' id='Store_AddressLine4' value='' disabled='disabled' /></td>
             </tr>
             <tr>
-              <th><label for='Store_Locality'>{t[language].settingsStoresStoreCity} <span class='redText'>*</span></label></th>
+              <th><label htmlFor='Store_Locality'>{t[language].settingsStoresStoreCity} <span class='redText'>*</span></label></th>
               <td>
                 <table class='locale'>
                   <tbody>
@@ -125,7 +133,7 @@ class StoreDetailsComponent extends Component {
               </td>
             </tr>
             <tr>
-              <th><label for='Store_Region'>{t[language].region} <span class='redText'>*</span></label></th>
+              <th><label htmlFor='Store_Region'>{t[language].region} <span class='redText'>*</span></label></th>
               <td>
                 <table class='locale'>
                   <tbody>
@@ -137,11 +145,11 @@ class StoreDetailsComponent extends Component {
               </td>
             </tr>
             <tr>
-              <th><label for='Store_PostCode'>{t[language].zip}: <span class='redText'>*</span></label></th>
+              <th><label htmlFor='Store_PostCode'>{t[language].zip}: <span class='redText'>*</span></label></th>
               <td><input type='text' maxLength='100' name='Store_PostCode' id='Store_PostCode' value='' disabled='disabled' /></td>
             </tr>
             <tr>
-              <th><label for='Store_Country'>{t[language].settingsStoresCountry} <span class='redText'>*</span></label></th>
+              <th><label htmlFor='Store_Country'>{t[language].settingsStoresCountry} <span class='redText'>*</span></label></th>
               <td>
                 <select name='Store_Country_ID' id='Store_Country_ID' disabled='disabled'>
                   <option value='1'>United States</option>
@@ -396,7 +404,7 @@ class StoreDetailsComponent extends Component {
               </td>
             </tr>
             <tr>
-              <th><label for='Store_TZ'>{t[language].Timezone}: <span class='redText'>*</span></label></th>
+              <th><label htmlFor='Store_TZ'>{t[language].Timezone}: <span class='redText'>*</span></label></th>
               <td>
                 <select name='Store_TZ' id='Store_TZ'>
                   <option value='none'>
@@ -543,11 +551,11 @@ class StoreDetailsComponent extends Component {
               </td>
             </tr>
             <tr>
-              <th><label for='Store_PhoneNumber'>{t[language].phone} <span class='redText'>*</span></label></th>
+              <th><label htmlFor='Store_PhoneNumber'>{t[language].phone} <span class='redText'>*</span></label></th>
               <td><input type='text' maxLength='100' name='Store_PhoneNumber' id='Store_PhoneNumber' value='' disabled='disabled' /></td>
             </tr>
             <tr>
-              <th><label for='Store_FaxNumber'>{t[language].settingsStoresFax}</label></th>
+              <th><label htmlFor='Store_FaxNumber'>{t[language].settingsStoresFax}</label></th>
               <td><input type='text' maxLength='100' name='Store_FaxNumber' id='Store_FaxNumber' value='' disabled='disabled' /></td>
             </tr>
             <tr />
@@ -555,15 +563,15 @@ class StoreDetailsComponent extends Component {
         </table>
         <input className='store-info-save' type='submit' value='Save' />
         {this.storeTabs()}
-        <StoreMerge show={this.state.show} onHide={() => this.setState({ show: false })} data={this.props.storesDetails.storePopupDetails} />
+        
       </div>
     )
   }
 }
 function mapStateToProps(state) {
   return {
-    storesDetails: state.StorePopupDetails,
-    storeModelPopup: state.StorePopupDetails.storePopUpClient,
+    storesDetails: state.StorePopupDetails.storePopupDetails.storeDetails,
+    storeModelPopup: state.StorePopupDetails,
     storeModelPopupIsAdmin: state.StorePopupDetails.storePopUpDetailisAdmin
   }
 }

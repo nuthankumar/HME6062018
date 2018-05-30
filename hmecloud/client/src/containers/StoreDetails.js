@@ -21,7 +21,7 @@ class StoreDetails extends Component {
     return (
       <div>
         <StoreDetailsClient showStores={false} stores={this.props.storesDetails} />
-        <StoreDetailsAdmin showStores stores={this.props.storesDetails} />
+        <StoreDetailsAdmin showStores={true} stores={this.props.storesDetails} />
       </div>
     )
   }

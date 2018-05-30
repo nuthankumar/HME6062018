@@ -40,7 +40,8 @@ export const initStoreDetail = (suid, isAdmin) => {
   let url = 'https://hme-dev-public-cloud-func.azurewebsites.net/api/store/getStore?suid=' + suid
   return (dispatch) => {
     this.api.getData(url, data => {
-      dispatch(initModal(data))   
+      dispatch(initModal(data))
+      dispatch(openPopup(isAdmin))
     })
   }
 }

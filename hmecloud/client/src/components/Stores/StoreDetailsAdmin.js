@@ -4,6 +4,7 @@ import Pagination from '../Common/Pagination'
 import t from '../Language/language'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import StoreMerge from './StoreMerge'
 import { ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap'
 import * as storesFunctions from '../../actions/stores'
 import * as modalAction from '../../actions/modalAction'
@@ -13,17 +14,16 @@ const Offline = require('../../images/connection_offline.png')
 const Search = require('../../images/search.jpg')
 
 class StoreDetail extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       showStores: this.props.showStores,
       stores: {},
-      Ascending: true,  
+      Ascending: true,
       criteria: null,
       pageSize: 10,
       offset: 0,
-      data: [],
-      recordCount: 5000
+      data: []
     }
     this.renderDevices = this.renderDevices.bind(this)
     this.PageSizeValueDropdown = this.PageSizeValueDropdown.bind(this)
@@ -31,18 +31,18 @@ class StoreDetail extends Component {
     this.onSelectAlert = this.onSelectAlert.bind(this)
     this.search = this.search.bind(this)
   }
-  componentWillMount () {
+  componentWillMount() {
     this.props.dispatch(storesFunctions.sortStores({ 'sortBy': 'Company_Name', 'sortType': 'DESC' }))
     this.props.dispatch(storesFunctions.setStoresSearchParams({ 'filter': null, 'criteria': null }))
     // this.props.setSearchParams({ 'filter': null, 'criteria': null })
   }
-  PageSizeValueDropdown (pageSize) {
+  PageSizeValueDropdown(pageSize) {
     this.setState({ pageSize })
     let paginationParams = { pageSize: pageSize, pageNumber: ((this.state.offset / 10) + 1) }
     this.props.dispatch(storesFunctions.paginationAdminStores(paginationParams))
     this.props.dispatch(storesFunctions.adminStoresDetails())
   }
-  PageClicked (value) {
+  PageClicked(value) {
     let paginationParams = { pageSize: this.state.pageSize, pageNumber: ((value / 10) + 1) }
     this.props.dispatch(storesFunctions.paginationAdminStores(paginationParams))
     this.props.dispatch(storesFunctions.adminStoresDetails())
@@ -54,30 +54,31 @@ class StoreDetail extends Component {
     }
   }
 
-  viewDetails (data) {
-    this.props.dispatch(modalAction.initStoreDetail(data.Store_UID))
-    this.props.dispatch(modalAction.openPopup(true))
+  viewDetails(data) {
+    this.props.dispatch(modalAction.initStoreDetail(data.Store_UID, true))
+    // this.props.dispatch(modalAction.openPopup(true))
   }
 
-  onSelectAlert (eventKey) {
+  onSelectAlert(eventKey) {
     window.alert(`Alert from menu item.\neventKey: ${eventKey}`)
   }
-  search (e) {
+  search(e) {
     // this.props.setStoresSearchParams({ 'filter': this.props.systems.searchParams.filter, 'criteria': this.state.criteria })
     this.props.dispatch(storesFunctions.setStoresSearchParams({ 'filter': this.props.storesDetails.searchParams.filter, 'criteria': this.state.criteria }))
     this.props.dispatch(storesFunctions.adminStoresDetails())
   }
-  handleSearchChange (e) {
+  handleSearchChange(e) {
     this.props.dispatch(storesFunctions.setStoresSearchParams({ 'filter': e.target.value, 'criteria': null }))
     // this.props.setSearchParams({ 'filter': e.target.value, 'criteria': null })
   }
-  handleCriteria (e) {
-    this.setState({ [ e.target.name ]: e.target.value })
+  handleCriteria(e) {
+    this.setState({ [e.target.name]: e.target.value })
   }
-  render () {
-    this.state.recordCount = this.props.storesDetails.adminStoreDetails.storeList.length
+  render() {
     let sortParams = this.props.storesDetails.sortParams ? this.props.storesDetails.sortParams : { 'sortBy': 'Brand_Name', 'sortType': 'DESC' }
     let searchParams = this.props.storesDetails.searchParams
+    let recordCount = (this.props.storesDetails.adminStoreDetails.pageDetails !== undefined) ? this.props.storesDetails.adminStoreDetails.pageDetails[0].RecordCount : 10
+    let pageCount = (this.props.storesDetails.adminStoreDetails.pageDetails !== undefined) ? this.props.storesDetails.adminStoreDetails.pageDetails[0].TotalPages : 10
     return (
       <section className={'stores ' + (this.state.showStores ? 'show' : 'hidden')}>
         <div className='settings forms'>
@@ -93,7 +94,7 @@ class StoreDetail extends Component {
                     bsStyle='default'
                     title=''
                     id='dropdown-no-caret'
-                    // onSelect={this.onSelectAlert}
+                  // onSelect={this.onSelectAlert}
                   >
                     <MenuItem>
                       <input type='radio' name='search_all' value='' checked={!searchParams.filter} onClick={this.handleSearchChange.bind(this)} /> search all<br />
@@ -144,16 +145,18 @@ class StoreDetail extends Component {
                 perPage={this.state.pageSize}
                 PageSizeValueChange={this.PageSizeValueDropdown}
                 offset={this.PageClicked}
-                recordCount={this.state.recordCount} />
+                recordCount={recordCount}
+                pageCount={pageCount} />
             </div>
 
           </div>
         </div>
         <ModalContainer onHide={this.smClose} />
+        <StoreMerge onHide={this.smClose} />
       </section>
     )
   }
-  renderDevices (devices) {
+  renderDevices(devices) {
     let deviceRows = devices.map(function (device, index) {
       return (
         <tr key={index}>
@@ -173,7 +176,7 @@ class StoreDetail extends Component {
     return deviceRows
   }
 
-  renderStores () {
+  renderStores() {
     let self = this
     console.log(this.props.stores.adminStoreDetails)
     let storeRows = this.props.stores.adminStoreDetails.storeList.map(function (store, index) {
@@ -196,7 +199,7 @@ class StoreDetail extends Component {
     })
     return storeRows
   }
-  sortStores (e) {
+  sortStores(e) {
     this.state.Ascending = !this.state.Ascending
     this.setState(this.state)
     let sortBy = e.target.id
@@ -206,7 +209,7 @@ class StoreDetail extends Component {
     this.props.dispatch(storesFunctions.adminStoresDetails())
   }
 }
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
     storesDetails: state.storeDetails,
     storeModelPopup: state.StorePopupDetails.storePopUpAdmin,
@@ -214,7 +217,7 @@ function mapStateToProps (state) {
   }
 }
 
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps(dispatch) {
   return bindActionCreators({ storesFunctions: storesFunctions, setStoresSearchParams: storesFunctions.setStoresSearchParams }, dispatch)
 }
 

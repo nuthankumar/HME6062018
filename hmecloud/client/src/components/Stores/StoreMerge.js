@@ -9,6 +9,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css'
 import { confirmAlert } from 'react-confirm-alert'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { mergeClosePopup } from '../../actions/modalAction'
 class StoreMerge extends Component {
   constructor(props) {
     super(props)
@@ -33,7 +34,7 @@ class StoreMerge extends Component {
 
   }
   handleClose() {
-    this.setState({ show: false })
+    this.props.dispatch(mergeClosePopup())
   }
   handleShow() {
     this.setState({ show: true })
@@ -103,24 +104,37 @@ class StoreMerge extends Component {
   render() {
     //   const language = this.state.currentLanguage
     // let displayData = this.props.systemStats
-    let show = (this.props.mergeModelPopup !== undefined) ? this.props.mergeModelPopup : false
+    let Show = (this.props.mergeModelPopup !== undefined) ? this.props.mergeModelPopup : false
 
     return (
-      <Modal show={show} dialogClassName='modal-popup' >
-        <Modal.Body>
-          <div className='merge'>
-            <div className='row'>
-              <SelectSystem data={this.props.storesDetails.storePopupDetails} selectSystemChecked={this.selectSystemChecked.bind(this)} />
-              <TargetStore search={this.SearchApi.bind(this)} targetStoreChecked={this.targetStoreChecked.bind(this)} data={this.state.DeviceData} />
+      <Modal show={Show} dialogClassName='store-merge-popup' >
+        <Modal.Body className='store-merge-popup-content'>
+          <div className='merge-store-wrapper'>
+            <div class='merge-store-header'>
+              <h2 className=''>Merge</h2>
+            </div>
+            <div className='store-merge-body'>
+              <div className='merge-store-row'>
+
+                <SelectSystem data={this.props.storesDetails.storePopupDetails} selectSystemChecked={this.selectSystemChecked.bind(this)} />
+                <TargetStore search={this.SearchApi.bind(this)} targetStoreChecked={this.targetStoreChecked.bind(this)} data={this.state.DeviceData} />
+              </div>
             </div>
           </div>
+          <div class='store-merge-footer'>
+            <div class='merge-store-row'>
+              <div class='merger-error-block'>
+                <ul class='merge-error-list' />
+              </div>
+              <div class='save-merge-block text-right'>
+                <a class='btn-cancel merge-cancel' href=''>Cancel</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                <button type='button' class='btn-submit merge-submit-btn'>Merge</button>
+              </div>
+            </div>
+          </div>
+          <div class='merger-popup-close' onClick={this.handleClose}>X</div>
         </Modal.Body>
-        <Modal.Footer>
-          <p>{this.state.error}</p>
-          <Button onClick={this.handleClose}>Close</Button>
-          <Button onClick={this.MergeClick.bind(this)}>Merge</Button>
-        </Modal.Footer>
-      </Modal >
+      </Modal>
     )
   }
 }
@@ -144,15 +158,15 @@ class SelectSystem extends Component {
     let device = this.props.data.deviceDetails
     let headers = [' ', 'System', 'Serial Number']
     return (
-      <div className='col-1-2'>
+      <div className='select-system-col'>
         <h3>Select System(s)</h3>
         <div className='form-group'>
-          <div className='merge_store_devices'>
-            <div>Store Number:&nbsp;&nbsp;<span className='merge_store_num_label'>{displayData.Store_Number}</span></div>
-            <div>Store Brand:&nbsp;&nbsp;<span className='merge_store_brand_label'>{displayData.Brand_Name}</span></div>
+          <div className='store-brand-info'>
+            <div>Store Number:&nbsp;&nbsp;<span className='merge-storenobrand-label'>{displayData.Store_Name}</span></div>
+            <div>Store Brand:&nbsp;&nbsp;<span className='merge-storenobrand-label'>{displayData.Brand_Name}</span></div>
           </div>
         </div>
-        <div className='select-cont'>
+        <div className='select-system-content'>
           <Table data={device} header={headers} rowClicked={this.rowClicked} />
         </div>
       </div>
@@ -171,7 +185,7 @@ class Table extends Component {
       rows = row.map((data, index) => {
         return (
           <tr>
-            <td className='sys-merge-name sys-merge-ctr'>
+            <td>
               <input type='checkbox' name='sys-merge-check' class='sys-merge-check' value={index} onClick={this.props.rowClicked} />
             </td>
             <td>
@@ -185,19 +199,19 @@ class Table extends Component {
       })
     }
     let Header = this.props.header.map((data, index) => {
-      console.log(data, index)
       return (
-        <tr key={index}>
-          <th className='merge_device_name'>
-            {data}
-          </th>
-        </tr>
+        <th className='merge_device_name'>
+          {data}
+        </th>
+
       )
     })
     return (
       <table >
         <thead>
-          {Header}
+          <tr>
+            {Header}
+          </tr>
         </thead>
         <tbody >
           {rows}
@@ -230,15 +244,15 @@ class TargetStore extends Component {
     let data = (this.props.data.storeList !== undefined) ? this.props.data.storeList : null
     let headers = [' ', 'Store', 'Company', 'Brand']
     return (
-      <div className='col-2-2 vert-line'>
+      <div className='target-store-col'>
         <h3>Select Target Store</h3>
-        <form className='form-inline search-box' id='nameform' >
-          <div className='form-group'>
-            <input type='text' className='form-control' id='merge_store_search' placeholder='Enter Store Number' onChange={(event => { this.setState({ serialNumber: event.target.value }) })} />
+        <form className='form-inline target-store-search'>
+          <div className='form-group target-store-group'>
+            <input type='text' className='form-control store-number-input' placeholder='Enter Store Number' />
           </div>
-          <button type='button' form='nameform' className='btn btn-default merge_search_btn' onClick={this.handleOnClick}>Search</button>
+          <button type='button' className='btn btn-default merge-search-btn' onClick={this.handleOnClick.bind(this)}>Search</button>
         </form>
-        <div className='results-cont'>
+        <div className='target-results-content'>
           <TargetTable data={data} header={headers} rowClicked={this.rowClicked} />
         </div>
       </div>
@@ -257,7 +271,7 @@ class TargetTable extends Component {
       rows = row.map((data, index) => {
         return (
           <tr>
-            <td className='sys-merge-name sys-merge-ctr'>
+            <td>
               <input type='radio' name='sys' class='sys-merge-check' value={index} onClick={this.props.rowClicked} />
             </td>
             <td>
@@ -276,18 +290,18 @@ class TargetTable extends Component {
     let Header = this.props.header.map((data, index) => {
       console.log(data, index)
       return (
-        <tr key={index}>
-          <th className='merge_device_name'>
-            {data}
-          </th>
-        </tr>
+        <th className='merge_device_name'>
+          {data}
+        </th>
       )
     })
     if (row !== undefined) {
       return (
         <table >
           <thead>
-            {Header}
+            <tr>
+              {Header}
+            </tr>
           </thead>
           <tbody >
             {rows}
@@ -297,7 +311,9 @@ class TargetTable extends Component {
       return (
         <table >
           <thead>
-            {Header}
+            <tr>
+              {Header}
+            </tr>
           </thead>
           <tbody />
         </table>)

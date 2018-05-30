@@ -14,8 +14,8 @@ import { closePopup, initModal } from '../actions/modalAction'
 // import  actionCreator  from '../actions/modalAction';
 
 class ModalContainer extends Component {
-  constructor (props, context) {
-    super(props, context)
+  constructor(props) {
+    super(props)
     // this.handleShow = this.handleShow.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
@@ -24,73 +24,57 @@ class ModalContainer extends Component {
       show: false,
       key: 1,
       activetab: initTab,
-      tabData: [
-        { name: 'Store Details', isActive: true, comp: 'store' },
-        { name: 'CIB', isActive: false, comp: 'cib' },
-        { name: 'EOS', isActive: false, comp: 'eos' },
-        { name: 'ION', isActive: false, comp: 'ion'},
-        { name: 'ZOOM', isActive: false, comp: 'zoom' }
-      ]
+      tabData: []
     }
     // this.handleClick = this.handleClick.bind(this)
     this.renderTabComponent = this.renderTabComponent.bind(this)
     this.storeTabs = this.storeTabs.bind(this)
   }
 
-  // componentWillMount() {
-  //   this.props.dispatch(initModal())
-  // }
-
-  handleSelect (key) {
+  handleSelect(key) {
     this.setState({ key })
   }
 
-  handleClose () {
+  handleClose() {
     this.setState({ state: null })
     this.props.dispatch(closePopup())
   }
 
-  // handleShow () {
-  //   this.setState({ show: true })
-  // }
-
-  // handleClick (event) {
-  //   // let tab
-  //   // this.setState({activetab: tab});
-  // }
-
-  storeTabs () {
+  storeTabs(array) {
+    // let array = []
+    // array = this.props.stores.storePopupDetails.Device_Details
+    // array.push({ Device_Name: 'Store Details', isActive: true })
     let Tab = ReactBootstrap.Tab
-    return this.state.tabData.map((tabItem, index) => {
+    return array.map((tabItem, index) => {
       return (
-        <Tab eventKey={index + 1} title={tabItem.name} onClick={this.handleClick}>
-          {this.renderTabComponent(tabItem.comp, this.props.stores.storePopUpDetailisAdmin)}
+        <Tab eventKey={index + 1} title={tabItem.Device_Name} onClick={this.handleClick}>
+          {this.renderTabComponent(tabItem.Device_Name, this.props.stores.storePopUpDetailisAdmin)}
         </Tab>
       )
     })
   }
 
-  renderTabComponent (tabcomponent, isAdmin) {
+  renderTabComponent(tabcomponent, isAdmin) {
     switch (tabcomponent) {
-      case 'store':
-        return <StoredetailsComponent isAdmin={isAdmin} data={this.props.stores} />
+      case 'Store Details':
+        return <StoredetailsComponent isAdmin={isAdmin} />
         break
-      case 'cib':
-        return <CIBComponent isAdmin={isAdmin} data={this.props.stores} />
+      case 'CIB':
+        return <CIBComponent isAdmin={isAdmin} />
         break
-      case 'eos':
-        return <EOSComponent isAdmin={isAdmin} data={this.props.stores} />
+      case 'EOS':
+        return <EOSComponent isAdmin={isAdmin} />
         break
-      case 'ion' :
-        return <IONComponent isAdmin={isAdmin} data={this.props.stores} />
+      case 'ION':
+        return <IONComponent isAdmin={isAdmin} />
         break
-      case 'zoom':
-        return <ZoomComponent isAdmin={isAdmin} data={this.props.stores} />
+      case 'ZOOM':
+        return <ZoomComponent isAdmin={isAdmin} />
         break
     }
   }
 
-  render () {
+  render() {
     // const language = this.state.currentLanguage
     let Modal = ReactBootstrap.Modal
     let Button = ReactBootstrap.Button
@@ -101,8 +85,11 @@ class ModalContainer extends Component {
     } else if (this.props.stores.storePopUpAdmin !== undefined && this.props.stores.storePopUpAdmin) {
       show = this.props.stores.storePopUpAdmin
     }
-    // let Tab = ReactBootstrap.Tab
-    // let show = (this.props.stores.storePopUpClient !== undefined) ? this.props.stores.storePopUpClient : (this.props.stores.storePopUpAdmin !== undefined) ? this.props.stores.storePopUpAdmin : false
+    let array = []
+    let tabArray;
+    array.push({ Device_Name: 'Store Details', isActive: true })
+    array = array.concat(this.props.stores.storePopupDetails.Device_Details)
+
     return (
       <Modal show={show} dialogClassName='modal-popup' onHide={this.handleClose} >
         <Modal.Header closeButton>
@@ -114,15 +101,16 @@ class ModalContainer extends Component {
             onSelect={this.handleSelect}
             id='store-tabs'
           >
-            {this.storeTabs()}
+            {this.storeTabs(array)}
           </Tabs>
         </Modal.Body>
-      </Modal >
+      </Modal>
+
     )
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
     stores: state.StorePopupDetails
   }

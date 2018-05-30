@@ -16,6 +16,11 @@ export const getSystems = () => {
   let url = Config.apiBaseUrl + CommonConstants.apiUrls.getUnregisteredDevices + '?isAdmin=1&psize=10&pno=1'
   return (dispatch, getState) => {
     const state = getState()
+    if (state.systems.paginationParams) {
+      url = url + '&psize=' + state.systems.paginationParams.pageSize + '&pno=' + state.systems.paginationParams.pageNumber
+    } else {
+      url = url + '&psize=10&pno=1'
+    }
     if (state.systems.searchParams) {
       url = url + '&criteria=' + (state.systems.searchParams.criteria ? state.systems.searchParams.criteria : '') + '&filter=' + (state.systems.searchParams.filter ? state.systems.searchParams.filter : '')
     }

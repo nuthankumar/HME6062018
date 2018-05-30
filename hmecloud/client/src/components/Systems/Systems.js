@@ -12,7 +12,7 @@ const Offline = require('../../images/connection_offline.png')
 const Search = require('../../images/search.jpg')
 
 class Systems extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       showStores: this.props.showStores,
@@ -28,15 +28,15 @@ class Systems extends Component {
     this.PageClicked = this.PageClicked.bind(this)
     this.search = this.search.bind(this)
   }
-  componentWillMount () {
+  componentWillMount() {
     this.props.sortSystems({ 'sortBy': 'Brand_Name', 'sortType': 'DESC' })
     this.props.setSearchParams({ 'filter': null, 'criteria': null })
     this.props.getSystems()
   }
-  onSelectAlert (eventKey) {
+  onSelectAlert(eventKey) {
     window.alert(`Alert from menu item.\neventKey: ${eventKey}`)
   }
-  search (e) {
+  search(e) {
     // if (e.key === 'Enter') {
     //   console.log(e.target.value)
     // }
@@ -44,13 +44,13 @@ class Systems extends Component {
     this.props.getSystems()
   }
 
-  PageSizeValueDropdown (pageSize) {
+  PageSizeValueDropdown(pageSize) {
     this.setState({ pageSize })
     let paginationParams = { pageSize: pageSize, pageNumber: ((this.state.offset / 10) + 1) }
     this.props.paginationSystems(paginationParams)
     this.props.getSystems()
   }
-  PageClicked (value) {
+  PageClicked(value) {
     let paginationParams = { pageSize: this.state.pageSize, pageNumber: ((value / 10) + 1) }
     this.props.paginationSystems(paginationParams)
     this.props.getSystems()
@@ -61,17 +61,19 @@ class Systems extends Component {
       return this.state.offset
     }
   }
-  handleSearchChange (e) {
+  handleSearchChange(e) {
     this.props.setSearchParams({ 'filter': e.target.value, 'criteria': null })
   }
-  handleCriteria (e) {
-    this.setState({[ e.target.name ]: e.target.value })
+  handleCriteria(e) {
+    this.setState({ [e.target.name]: e.target.value })
   }
-  render () {
+  render() {
     const { language } = this.state
     console.log(this.props.systems)
 
     let sortParams = (this.props.systems.sortParams) ? this.props.systems.sortParams : { 'sortBy': 'Brand_Name', 'sortType': 'DESC' }
+    let recordCount = (this.props.systems.systemDetails.pageDetails !== undefined) ? this.props.systems.systemDetails.pageDetails[0].RecordCount : 10
+    let pageCount = (this.props.systems.systemDetails.pageDetails !== undefined) ? this.props.systems.systemDetails.pageDetails[0].TotalPages : 10
     return (
       <section className='systems'>
         <div className='settings forms'>
@@ -153,7 +155,8 @@ class Systems extends Component {
                   perPage={this.state.pageSize}
                   PageSizeValueChange={this.PageSizeValueDropdown}
                   offset={this.PageClicked}
-                  recordCount={this.state.recordCount} />
+                  recordCount={recordCount}
+                  pageCount={pageCount} />
               </div>
             </div>
           </div>
@@ -162,7 +165,7 @@ class Systems extends Component {
       </section>
     )
   }
-  sortStores (e) {
+  sortStores(e) {
     this.state.Ascending = !this.state.Ascending
     this.setState(this.state)
     let sortBy = e.target.id
@@ -172,11 +175,11 @@ class Systems extends Component {
     this.props.getSystems()
   }
 
-  send (e) {
+  send(e) {
     console.log(e)
   }
 
-  renderSystems () {
+  renderSystems() {
     const { language } = this.state
     let self = this
     if (this.props.systems) {
@@ -207,12 +210,12 @@ class Systems extends Component {
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
     systems: state.systems
   }
 }
-function matchDispatchToProps (dispatch) {
+function matchDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       getSystems: getSystems,

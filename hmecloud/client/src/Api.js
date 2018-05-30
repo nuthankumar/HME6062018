@@ -74,7 +74,6 @@ class Api {
 
 
   deviceData(callback) {
-
     //let token = UserContext.getToken()
     return fetch('https://hme-dev-public-cloud-func.azurewebsites.net/api/store/getStore?suid=7F671C950B924E4CA61A5E7975765BB0', {
       method: 'GET',
