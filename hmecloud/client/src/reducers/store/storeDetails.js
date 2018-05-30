@@ -66,10 +66,11 @@ const initialState = {
     'userPermessions': [
     ],
     'status': null
-  }
+  },
+  searchParams: {filter: null, criteria: null}
 }
 
-export default function StoreDetails(state = initialState, action) {
+export default function StoreDetails (state = initialState, action) {
   switch (action.type) {
     case storeDetails.INIT_STORESDETAILS:
       state.storeDetails = action.storeDetails
@@ -91,6 +92,12 @@ export default function StoreDetails(state = initialState, action) {
       return {
         ...state,
         paginationParams: action.paginationParams
+      }
+    case storeDetails.SET_SEARCH_PARAMS_STORES:
+      state.searchParams = action.searchParams
+      return {
+        ...state
+        // storeDetails: action.storeDetails
       }
     default:
       return state

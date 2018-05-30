@@ -135,9 +135,9 @@ const initialState = {
       }
     ],
     'status': true
-  },  
+  },
   sortParams: {sortBy: 'Company_Name', sortType: 'ASC'},
-  searchParams: {filter: null, criteria: 'ASC'}
+  searchParams: {filter: null, criteria: null}
 }
 
 export default function systemDetails (state = initialState, action) {

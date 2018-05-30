@@ -44,6 +44,9 @@ export const adminStoresDetails = () => {
     if (state.storeDetails.sortParams) {
       url = url + '&Sortby=' + state.storeDetails.sortParams.sortBy + '&sortType=' + state.storeDetails.sortParams.sortType
     }
+    if (state.storeDetails.searchParams) {
+      url = url + '&criteria=' + state.storeDetails.searchParams.criteria + '&filter=' + state.storeDetails.searchParams.filter 
+    }
     console.log(url)
     this.api.getData(url, data => {
       dispatch(getAdminStoresSuccess(data))
@@ -57,6 +60,14 @@ export const sortStores = (sortParams) => {
     sortParams: sortParams
   }
 }
+
+export const setStoresSearchParams = (searchParams) => {
+  return {
+    type: storeDetails.SET_SEARCH_PARAMS_STORES,
+    searchParams: searchParams
+  }
+}
+
 export const paginationAdminStores = (paginationParams) => {
   return {
     type: storeDetails.PAGINATION_STORESDETAILS,

@@ -10,14 +10,16 @@ import * as modalAction from '../../actions/modalAction'
 import ModalContainer from '../../containers/ModalContainer'
 const Online = require('../../images/connection_online.png')
 const Offline = require('../../images/connection_offline.png')
+const Search = require('../../images/search.jpg')
 
 class StoreDetail extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       showStores: this.props.showStores,
       stores: {},
-      Ascending: true,
+      Ascending: true,  
+      criteria: null,
       pageSize: 10,
       offset: 0,
       data: [],
@@ -27,18 +29,20 @@ class StoreDetail extends Component {
     this.PageSizeValueDropdown = this.PageSizeValueDropdown.bind(this)
     this.PageClicked = this.PageClicked.bind(this)
     this.onSelectAlert = this.onSelectAlert.bind(this)
-    this.Search = this.Search.bind(this)
+    this.search = this.search.bind(this)
   }
-  componentWillMount() {
+  componentWillMount () {
     this.props.dispatch(storesFunctions.sortStores({ 'sortBy': 'Company_Name', 'sortType': 'DESC' }))
+    this.props.dispatch(storesFunctions.setStoresSearchParams({ 'filter': null, 'criteria': null }))
+    // this.props.setSearchParams({ 'filter': null, 'criteria': null })
   }
-  PageSizeValueDropdown(pageSize) {
+  PageSizeValueDropdown (pageSize) {
     this.setState({ pageSize })
     let paginationParams = { pageSize: pageSize, pageNumber: ((this.state.offset / 10) + 1) }
     this.props.dispatch(storesFunctions.paginationAdminStores(paginationParams))
     this.props.dispatch(storesFunctions.adminStoresDetails())
   }
-  PageClicked(value) {
+  PageClicked (value) {
     let paginationParams = { pageSize: this.state.pageSize, pageNumber: ((value / 10) + 1) }
     this.props.dispatch(storesFunctions.paginationAdminStores(paginationParams))
     this.props.dispatch(storesFunctions.adminStoresDetails())
@@ -50,23 +54,30 @@ class StoreDetail extends Component {
     }
   }
 
-  viewDetails(data) {
+  viewDetails (data) {
     this.props.dispatch(modalAction.initStoreDetail(data.Store_UID))
     this.props.dispatch(modalAction.openPopup(true))
   }
 
-  onSelectAlert(eventKey) {
+  onSelectAlert (eventKey) {
     window.alert(`Alert from menu item.\neventKey: ${eventKey}`)
   }
-  Search(e) {
-    if (e.key === 'Enter') {
-      console.log(e.target.value)
-    }
+  search (e) {
+    // this.props.setStoresSearchParams({ 'filter': this.props.systems.searchParams.filter, 'criteria': this.state.criteria })
+    this.props.dispatch(storesFunctions.setStoresSearchParams({ 'filter': this.props.storesDetails.searchParams.filter, 'criteria': this.state.criteria }))
+    this.props.dispatch(storesFunctions.adminStoresDetails())
   }
-
-  render() {
+  handleSearchChange (e) {
+    this.props.dispatch(storesFunctions.setStoresSearchParams({ 'filter': e.target.value, 'criteria': null }))
+    // this.props.setSearchParams({ 'filter': e.target.value, 'criteria': null })
+  }
+  handleCriteria (e) {
+    this.setState({ [ e.target.name ]: e.target.value })
+  }
+  render () {
     this.state.recordCount = this.props.storesDetails.adminStoreDetails.storeList.length
     let sortParams = this.props.storesDetails.sortParams ? this.props.storesDetails.sortParams : { 'sortBy': 'Brand_Name', 'sortType': 'DESC' }
+    let searchParams = this.props.storesDetails.searchParams
     return (
       <section className={'stores ' + (this.state.showStores ? 'show' : 'hidden')}>
         <div className='settings forms'>
@@ -82,20 +93,33 @@ class StoreDetail extends Component {
                     bsStyle='default'
                     title=''
                     id='dropdown-no-caret'
-                    onSelect={this.onSelectAlert}
+                    // onSelect={this.onSelectAlert}
                   >
-                    <MenuItem eventKey='1'>Search all</MenuItem>
-                    <MenuItem eventKey='2'>Search brand</MenuItem>
-                    <MenuItem eventKey='3'>Search store #</MenuItem>
-                    <MenuItem eventKey='4'>Search store name</MenuItem>
-                    <MenuItem eventKey='5'>Search serial #</MenuItem>
-                    <MenuItem eventKey='6'>Search system version</MenuItem>
+                    <MenuItem>
+                      <input type='radio' name='search_all' value='' checked={!searchParams.filter} onClick={this.handleSearchChange.bind(this)} /> search all<br />
+                    </MenuItem>
+                    <MenuItem>
+                      <input type='radio' name='Brand_Name' value='Brand_Name' checked={searchParams.filter === 'Brand_Name'} onClick={this.handleSearchChange.bind(this)} /> Search brand<br />
+                    </MenuItem>
+                    <MenuItem>
+                      <input type='radio' name='Store_Number' value='Store_Number' checked={searchParams.filter === 'Store_Number'} onClick={this.handleSearchChange.bind(this)} /> Search store # <br />
+                    </MenuItem>
+                    <MenuItem>
+                      <input type='radio' name='Store_Name' value='Store_Name' checked={searchParams.filter === 'Store_Name'} onClick={this.handleSearchChange.bind(this)} /> Search store name <br />
+                    </MenuItem>
+                    <MenuItem>
+                      <input type='radio' name='Device_SerialNumber' value='Device_SerialNumber' checked={searchParams.filter === 'Device_SerialNumber'} onClick={this.handleSearchChange.bind(this)} /> Search serial #<br />
+                    </MenuItem>
+                    <MenuItem>
+                      <input type='radio' name='Device_MainVersion' value='Device_MainVersion' checked={searchParams.filter === 'Device_MainVersion'} onClick={this.handleSearchChange.bind(this)} /> Search system version <br />
+                    </MenuItem>
+
                   </DropdownButton>
                 </ButtonToolbar>
               </div>
               <div class='search'>
-                <input type='text' className='searchBox' onKeyPress={this.Search} />
-                <span class='fa fa-search' />
+                <input type='text' name='criteria' className='searchBox' value={this.state.criteria} onChange={this.handleCriteria.bind(this)} />
+                <img src={Search} className='searchImage' alt='Device Online' onClick={this.search} />
               </div>
             </div>
           </div>
@@ -129,7 +153,7 @@ class StoreDetail extends Component {
       </section>
     )
   }
-  renderDevices(devices) {
+  renderDevices (devices) {
     let deviceRows = devices.map(function (device, index) {
       return (
         <tr key={index}>
@@ -149,7 +173,7 @@ class StoreDetail extends Component {
     return deviceRows
   }
 
-  renderStores() {
+  renderStores () {
     let self = this
     console.log(this.props.stores.adminStoreDetails)
     let storeRows = this.props.stores.adminStoreDetails.storeList.map(function (store, index) {
@@ -172,7 +196,7 @@ class StoreDetail extends Component {
     })
     return storeRows
   }
-  sortStores(e) {
+  sortStores (e) {
     this.state.Ascending = !this.state.Ascending
     this.setState(this.state)
     let sortBy = e.target.id
@@ -182,7 +206,7 @@ class StoreDetail extends Component {
     this.props.dispatch(storesFunctions.adminStoresDetails())
   }
 }
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     storesDetails: state.storeDetails,
     storeModelPopup: state.StorePopupDetails.storePopUpAdmin,
@@ -190,8 +214,8 @@ function mapStateToProps(state) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ storesFunctions: storesFunctions }, dispatch)
+function mapDispatchToProps (dispatch) {
+  return bindActionCreators({ storesFunctions: storesFunctions, setStoresSearchParams: storesFunctions.setStoresSearchParams }, dispatch)
 }
 
 export default connect(mapStateToProps)(StoreDetail)
