@@ -13,7 +13,7 @@ const deviceController = require('../Controllers/DeviceController')
  * @param  {response} callback Function will be called once the request executed.
  * @public
  */
-router.get('/getAllDevices', authValidator, VerifyToken, (request, response) => {
+router.get('/getAllUnregisterdDevices', authValidator, VerifyToken, (request, response) => {
   deviceController.getAllUnregisteredDevices(request, result => hmeRouter.handelResult(result, response))
 })
 

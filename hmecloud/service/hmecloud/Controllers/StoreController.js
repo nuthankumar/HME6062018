@@ -278,7 +278,6 @@ const getStoreByUid = (request, callBack) => {
   }
 
   stores.getStoreByUid(input, result => {
-    console.log(result.data)
     if (result.status === true) {
       let response = {}
       if (result.data[0][0].Brand_Name === 'NA') {

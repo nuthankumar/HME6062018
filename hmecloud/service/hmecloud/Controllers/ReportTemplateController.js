@@ -100,7 +100,6 @@ const get = (reportTemplate, request, callback) => {
 const getAll = (input, request, callback) => {
   let output = {}
   repository.getAll(input.UserUid, (result) => {
-    console.log('The result==', JSON.stringify(result))
     if (result.length > 0) {
       output.data = result
       output.status = true
