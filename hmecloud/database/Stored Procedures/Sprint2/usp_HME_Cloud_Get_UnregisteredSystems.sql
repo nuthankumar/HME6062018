@@ -1,15 +1,15 @@
 
 GO
-/****** Dropping the StoredProcedure [dbo].[usp_Get_UnregisteredSystems] if already exists *****/
-IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_Get_UnregisteredSystems' AND [type] ='P'))
-	DROP PROCEDURE [dbo].usp_Get_UnregisteredSystems
+/****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_UnregisteredSystems] if already exists *****/
+IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_HME_Cloud_Get_UnregisteredSystems' AND [type] ='P'))
+	DROP PROCEDURE [dbo].usp_HME_Cloud_Get_UnregisteredSystems
 GO
 
 --select * from tbl_stores where Store_Account_ID=2499
 -- ===========================================================
 --      Copyright © 2018, HME, All Rights Reserved
 -- ===========================================================
--- Name			:	usp_Get_UnregisteredSystems
+-- Name			:	usp_HME_Cloud_Get_UnregisteredSystems
 -- Author		:	Jayaram
 -- Created		:	17-MAY-2018
 -- Tables		:	tbl_DeviceInfo,tbl_DeviceType,
@@ -23,13 +23,13 @@ GO
 --  1.  	17-May-2018		Jayaram			 Procedure created
 --
 -- ===========================================================
--- EXEC [dbo].[usp_Get_UnregisteredSystems] @PageNumber=1, @criteria='2.00',@filter=Device_MainVersion , @RecordPerPage=20
+-- EXEC [dbo].[usp_HME_Cloud_Get_UnregisteredSystems] @PageNumber=1, @criteria='2.00',@filter=Device_MainVersion , @RecordPerPage=20
 
 -- sorting
--- EXEC [dbo].[usp_Get_UnregisteredSystems] @PageNumber=1,@SortingColumnName=Device_MainVersion,@SortingType='DESC'
+-- EXEC [dbo].[usp_HME_Cloud_Get_UnregisteredSystems] @PageNumber=1,@SortingColumnName=Device_MainVersion,@SortingType='DESC'
 -- ===========================================================
 
-CREATE PROCEDURE [dbo].[usp_Get_UnregisteredSystems]
+CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_UnregisteredSystems]
 (
 	   @criteria varchar (100) = NULL,
 	   @filter varchar (50) = NULL,
