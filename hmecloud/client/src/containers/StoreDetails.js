@@ -20,7 +20,7 @@ class StoreDetails extends Component {
   render () {
     return (
       <div>
-        <StoreDetailsClient showStores={true} stores={this.props.storesDetails} />
+        <StoreDetailsClient showStores stores={this.props.storesDetails} />
         <StoreDetailsAdmin showStores={false} stores={this.props.storesDetails} />
       </div>
     )

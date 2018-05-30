@@ -393,30 +393,30 @@ text-decoration: none;
 }
 
 .search_pos{
-    /* border: 1px solid #E8E8E8; */
-    display:inline-block;
+    border: 1px solid #E8E8E8;
+    display: -ms-flexbox;
+    display: flex;
     position: relative;
-    width: 199px;
-    height: auto;
+    width: 200px;
+    height: 27px;
     left: 0;
-    top: 1px;
-    margin: -45px 0px 8px 0px;
-    padding: 0;
+    top: 0px;
+    margin: 0px 0px 8px 2px;
+    padding: 1px 1px 1px 1px;
     float: right;
-    background-position: 170px;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    -khtml-border-radius: 4px;
+    /* background-position: 168px; */
     border-radius: 4px;
 }
 .search_pos .search .searchBox{
-    position: absolute;
+    /* position: absolute; */
     border: 0px solid #b9b9b9;
-    margin: 0px 34px;
+    /* margin: 0px 34px; */
     /* padding: 1px; */
     width: 140px;
-    top: -31px;
-    left: -35px;
+    height: 25px;
+    outline: none;
+    /* top: -31px; */
+    /* left: -35px; */
 }
 .settings.forms div.storeHeight {
     height: 40px;
@@ -428,7 +428,23 @@ text-decoration: none;
 }
 .search_pos .search{
     width : 150px;
-    display:inline-block;
+    display:flex;
+    align-items: center;
+}
+.searchImage {
+    margin-left: -11px;
+    height: 15px;
+}
+.search input {
+    text-indent: 0px;
+}
+button#dropdown-no-caret {
+    color: blue;
+}
+#dropdown-no-caret{
+    line-height: 9px;
+    width: 31px;
+    background: #aed0ea;
 }
 /* .dropdown-toggle{
 

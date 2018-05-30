@@ -9,6 +9,7 @@ import { getSystems, sortSystems, setSearchParams, paginationSystems } from '../
 import { ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap'
 const Online = require('../../images/connection_online.png')
 const Offline = require('../../images/connection_offline.png')
+const Search = require('../../images/search.jpg')
 
 class Systems extends Component {
   constructor (props) {
@@ -102,8 +103,8 @@ class Systems extends Component {
                   </ButtonToolbar>
                 </div>
                 <div class='search'>
-                  <input type='text' name='criteria' className='searchBox' value={this.state.criteria} onChange={this.handleCriteria.bind(this)} />
-                  <span class='fa fa-search' onClick={this.search} />
+                   <input type='text' name='criteria' className='searchBox' value={this.state.criteria} onChange={this.handleCriteria.bind(this)} /> 
+                   <img src={Search} className="searchImage" alt='Device Online' onClick={this.search} />
                 </div>
               </div>
             </div>
