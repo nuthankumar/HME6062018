@@ -33,7 +33,6 @@ export default class ErrorAlert extends React.Component {
       )
     }
   }
-
   renderErrors (errors) {
     if (errors) {
       let errorList = errors.map(function (error, index) {
