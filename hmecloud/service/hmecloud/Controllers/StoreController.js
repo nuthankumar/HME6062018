@@ -3,6 +3,8 @@ const validator = require('../Validators/StoreValidator')
 const deviceValidator = require('../Validators/DeviceValidator')
 const stores = require('../Repository/StoresRepository')
 const _ = require('lodash')
+const dateFormat = require('dateformat')
+const csvGeneration = require('../Common/CsvUtils')
 
 const errorHandler = (message, status) => {
   let output = {}
@@ -182,12 +184,51 @@ const saveMergeDevices = (request, callback) => {
   })
 }
 
+const generateCSV = (result, request, callback) => {
+  let csvData = []
+  let csvInput = {}
+  _.forEach(result, (item) => {
+    let output = {}
+    item.Device_Name ? output.System = item.Device_Name : output.System = null
+    item.Device_SerialNumber ? output['Serial Number'] = item.Device_SerialNumber : output.Device_SerialNumber = null
+    item.Device_MainVersion ? output['Firmware Version'] = item.Device_MainVersion : output['Firmware Version'] = null
+    item.LaneConfig_Name ? output['Lane Config'] = item.LaneConfig_Name : output['Lane Config'] = null
+    csvData.push(output)
+  })
+  csvInput.type = `${messages.COMMON.CSVTYPE}`
+  csvInput.reportName = `${messages.COMMON.UNREGISTERED} ${dateFormat(new Date(), 'isoDate')}`
+  csvInput.email = request.UserEmail
+  csvInput.subject = `${messages.COMMON.UNREGISTEREDTITLE} `
+  csvInput.reportinput = csvData
+  csvGeneration.generateCsvAndEmail(csvInput, csvOutput => {
+    let output = {}
+    if (csvOutput) {
+      output.data = request.UserEmail
+      output.status = true
+    } else {
+      output.data = request.UserEmail
+      output.status = false
+    }
+    callback(output)
+  })
+}
+/**
+ * The method can be used to execute get unRegisterDevices
+ * @param  {input} request input from  user request
+ * @param  {funct} callback Function will be called once the input executed.
+ * @public
+ */
 const unRegisterDevicesSearch = (request, callback) => {
   const input = {
-    suid: (request.params.suid ? request.params.suid : null),
-    device_Merge_List: (request.params.device_Merge_List.length ? request.params.device_Merge_List : null),
-    tempDevice_Merge_List: (request.params.tempDeviceMergeUIDs.length ? request.params.tempDeviceMergeUIDs : null),
-    isReplacement: 1
+    criteria: (request.query.criteria ? request.query.criteria : null),
+    filter: (request.query.filter ? request.query.filter : null),
+    SortingColumnName: (request.query.Sortby ? request.query.Sortby : 'Store_Number'),
+    sortType: (request.query.sortType ? request.query.sortType : 'ASC'),
+    RecordPerPage: (request.query.psize ? request.query.psize : 10),
+    PageNumber: (request.query.pno ? request.query.pno : 1)
+  }
+  if (!_.isUndefined(request.query.reportType) && (request.query.reportType.toLowerCase().trim() === 'csv')) {
+    input.PageNumber = 0
   }
   deviceValidator.unRegisterDevicesSearch(input, (err) => {
     if (err) {
@@ -195,10 +236,16 @@ const unRegisterDevicesSearch = (request, callback) => {
     }
     stores.unRegisterDevicesSearch(input, (result) => {
       if (result.data && result.data.length > 0) {
-        let output = {}
-        output.data = result.data[0]
-        output.status = true
-        callback(output)
+        if (!_.isUndefined(request.query.reportType) && (request.query.reportType.toLowerCase().trim() === 'reports')) {
+          let output = {}
+          output.data = result.data[0]
+          output.status = true
+          callback(output)
+        } else if (!_.isUndefined(request.query.reportType) && (request.query.reportType.toLowerCase().trim() === 'csv')) {
+          generateCSV(result.data[0], request, csvResult => {
+            callback(csvResult)
+          })
+        }
       } else {
         callback(errorHandler(messages.LISTGROUP.notfound, false))
       }

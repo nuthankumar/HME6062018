@@ -65,14 +65,16 @@ const saveMergeDevices = (input, callback) => {
 
 // Todo: unRegisterDevicesSearch Store Procedure
 const unRegisterDevicesSearch = (input, callback) => {
-  repository.executeProcedure(sqlQuery.unRegisterDevicesSearch.getStatus, request => {
+  repository.executeProcedure(sqlQuery.Device.getunRegisterDevices, request => {
     return request
-      .input(sqlQuery.unRegisterDevicesSearch.Parameters.page, sql.VarChar(36), input.page)
-      .input(sqlQuery.unRegisterDevicesSearch.Parameters.perPage, sql.VarChar(4000), input.perPage)
-      .input(sqlQuery.unRegisterDevicesSearch.Parameters.filter, sql.VarChar(36), input.filter)
+      .input(sqlQuery.util.Parameters.criteria, sql.VarChar(100), input.criteria)
+      .input(sqlQuery.util.Parameters.filter, sql.VarChar(50), input.filter)
+      .input(sqlQuery.util.Parameters.SortingColumnName, sql.VarChar(100), input.SortingColumnName)
+      .input(sqlQuery.util.Parameters.SortingType, sql.VarChar(5), input.SortingType)
+      .input(sqlQuery.util.Parameters.RecordPerPage, sql.SmallInt, input.RecordPerPage)
+      .input(sqlQuery.util.Parameters.PageNumber, sql.SmallInt, input.PageNumber)
   }, callback)
 }
-
 const getStores = (input, callback) => {
   repository.executeProcedure(sqlQuery.Stores.getAllStores, request => {
     return request

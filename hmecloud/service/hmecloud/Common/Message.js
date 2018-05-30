@@ -89,7 +89,9 @@ exports.COMMON = {
   WEEKREPORTTITLEPDF: ' PDF Weekly Report',
   PASSWORDLENGTH: 10,
   SALTLENGTH: 32,
-  NACOLOR: '#959595'
+  NACOLOR: '#959595',
+  UNREGISTERED: 'Unregistered Systems CSV Report',
+  UNREGISTEREDTITLE: 'Unregistered Systems CSV Report',
 }
 
 exports.JWT = {

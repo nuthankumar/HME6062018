@@ -81,11 +81,11 @@ const mergePreValidator = (input, callback) => {
 
 const unRegisterDevicesSearch = (input, callback) => {
   let output = {}
-  if (!input.page && !input.perPage && !input.filter) {
-    if (!input.page) {
+  if (!input.PageNumber && !input.RecordPerPage && !input.filter) {
+    if (!input.PageNumber) {
       output.key = 'requiredPageNumber'
     }
-    if (input.page && !input.perPage) {
+    if (input.RecordPerPage && !input.RecordPerPage) {
       output.key = 'requiredPerPageItems'
     }
     if (input.page && input.perPage && !input.filter) {
@@ -93,17 +93,8 @@ const unRegisterDevicesSearch = (input, callback) => {
     }
     output.status = false
     callback(output)
-  } else {
-    if (input.filter.toLowerCase() !== 'all') {
-      if (!input.search) {
-        output.key = 'requiredSearch'
-      } else {
-        callback()
-      }
-    } else {
-      callback()
-    }
   }
+  callback()
 }
 
 module.exports = {
