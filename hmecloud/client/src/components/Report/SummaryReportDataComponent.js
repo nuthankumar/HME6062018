@@ -180,7 +180,7 @@ export default class SummaryReportDataComponent extends Component {
         if (value != null) { value = value.trim() }
         return (
           <td className={(this.props.reportData.groupStoreColumns ? 'show-table-cell' : 'hide-table-cell')}>
-            <span className='timeSpan'> <span className='timeSpan'>{(value === 'Total Day' || value === 'Total Daypart' || value === 'Total Week') ? t[language][value] : value}</span></span>
+            <span className='timeSpan'> <span className='timeSpan'>{(value === 'Total Day' || value === 'Total Daypart' || value === 'Total Week') ? t[language][value] : (value ? value: '') }</span></span>
             {/* <br />
             <span className='currentMeasure'>{reportItem[headerItem] ? reportItem[headerItem].timeSpan : ''}</span> */}
           </td>

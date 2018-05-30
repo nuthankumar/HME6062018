@@ -254,10 +254,9 @@ class Report extends Component {
                                     <option selected={this.state.timeMeasure == 3} value='3'>{t[language].week}</option>
                                     <option selected={this.state.timeMeasure == 4} value='4'>{t[language].rawdatareport}</option>
                   </select>
-                  <div class={'store-error ' + ((this.state.deviceUIds.length > 1 && this.state.timeMeasure == 4)?'show':'hide')} >
+                </div>
+                <div class={'store-error ' + ((this.state.deviceUIds.length > 1 && this.state.timeMeasure == 4)?'show':'hide')} >
                     <p>{t[language].warningselect1stores}</p>
-                    
-                    </div>
                 </div>
                 <div className='calendar-section'>
                   <div className='date-from'>

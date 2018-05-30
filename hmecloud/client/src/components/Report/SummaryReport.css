@@ -787,13 +787,16 @@ span.StoreBrand {
   color:black;
 }
 
-.summaryreport-table tr:last-child {
-    border: 2px solid #06B1CB !important;
-}
+    .summaryreport-table tr:last-child {
+        border: 2px solid #06B1CB !important;
+    }
 
-    .summaryreport-table tr:last-child > td > span {
+    .summaryreport-table tr:last-child > td:first-child > span {
         color: #000;
-    } 
+    }
+    .summaryreport-table tr:last-child > td > span {
+      color: white;
+   }  
     .summaryreport-table tr:last-child > td{
       pointer-events: none;
     }

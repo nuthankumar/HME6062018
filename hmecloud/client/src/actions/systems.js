@@ -17,7 +17,7 @@ export const getSystems = () => {
   return (dispatch, getState) => {
     const state = getState()
     if (state.systems.searchParams) {
-      url = url + '&criteria=' + state.systems.searchParams.criteria + '&filter=' + state.systems.searchParams.filter
+      url = url + '&criteria=' + (state.systems.searchParams.criteria ? state.systems.searchParams.criteria : '') + '&filter=' + (state.systems.searchParams.filter ? state.systems.searchParams.filter : '')
     }
     if (state.systems.sortParams) {
       url = url + '&Sortby=' + state.systems.sortParams.sortBy + '&sortType=' + state.systems.sortParams.sortType
