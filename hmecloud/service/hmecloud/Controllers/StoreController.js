@@ -263,7 +263,7 @@ const getAllStores = (request, callBack) => {
   const input = {
     userUid: (request.userUid ? request.userUid : null),
     criteria: (request.query.criteria ? request.query.criteria : null),
-    isAdmin: (request.query.isAdmin ? request.query.isAdmin : null),
+    isAdmin: (parseInt(request.query.isAdmin) ? parseInt(request.query.isAdmin) : null),
     filter: (request.query.filter ? request.query.filter : null),
     column: (request.query.column ? request.query.Sortby : null),
     sortType: (request.query.sortType ? request.query.sortType : null),
