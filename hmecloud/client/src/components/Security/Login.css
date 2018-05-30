@@ -288,6 +288,11 @@ width:197px;
     font-size: 12px;
 }
 
+.cover-select {
+    position: relative;
+    height: 50px;
+}
+
 .cover-select-image {
     position: absolute;
     width: 315px;
@@ -325,7 +330,7 @@ width:197px;
     display: flex;
     padding: 0 0 15px 0px;
     margin-bottom: 13px;
-    margin-top: 66px;
+    margin-top: 16px;
 }
 
 .date-from {

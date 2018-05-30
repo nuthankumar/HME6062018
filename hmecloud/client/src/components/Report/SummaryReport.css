@@ -243,8 +243,8 @@ h2 .report-start-time-value,h2 .report-end-time-value{
 }
 .store-error{
   font-size: 9px;
+  position: absolute;
   color:#d41b3e;
-
 }
 
 .report-start-time-header, .report-end-time-header{
