@@ -1,13 +1,13 @@
 
-/****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_UserStoreList] if already exists *****/
-IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_HME_Cloud_Get_UserStoreList' AND [type] ='P'))
-	DROP PROCEDURE [dbo].[usp_HME_Cloud_Get_UserStoreList]
+/****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_UserStores] if already exists *****/
+IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_HME_Cloud_Get_UserStores' AND [type] ='P'))
+	DROP PROCEDURE [dbo].[usp_HME_Cloud_Get_UserStores]
 GO
 
 -- ===========================================================
 --      Copyright © 2018, HME, All Rights Reserved
 -- ===========================================================
--- Name			:	usp_HME_Cloud_Get_UserStoreList
+-- Name			:	usp_HME_Cloud_Get_UserStores
 -- Author		:	Jaffer sherif
 -- Created		:	20-May-2018
 -- Purpose		:	To get the All Store details of the user 
@@ -19,9 +19,9 @@ GO
 --  1.  	
 --	2.
 -- ===========================================================
--- exec [dbo].[usp_HME_Cloud_Get_UserStoreList] @UserUid='68LKBP85C1SKH1FI3M7X40CJHKGU07FZ',@isAdmin=0,@criteria=NULL,@filter=NULL,@SortingColumnName=NULL,@SortingType=NULL,@RecordPerPage=25,@PageNumber=0
+-- exec [dbo].[usp_HME_Cloud_Get_UserStores] @UserUid='68LKBP85C1SKH1FI3M7X40CJHKGU07FZ',@isAdmin=0,@criteria=NULL,@filter=NULL,@SortingColumnName=NULL,@SortingType=NULL,@RecordPerPage=25,@PageNumber=0
 -- ===========================================================
-CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_UserStoreList] 
+CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_UserStores] 
 @UserUid varchar(32) = NULL,
 @isAdmin int = 0,
 @criteria varchar (50) = NULL,
