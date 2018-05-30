@@ -780,7 +780,7 @@ const language = [
         'SubTotal': 'SubTotal',
         'useragreementUrl': 'HMECLOUD_Terms_and_Conditions.pdf',
         'privacypolicyUrl': 'HMECLOUD_Privacy_Policy.pdf',
-        'californiasupplyUrl': 'California_Transparency_Supply_Chains_Agreement.pdf',
+        'californiasupplyUrl': 'California_Transparency_Supply_Chains_Act_Disclosures.pdf',
         'cookiepolicyUrl': 'HMECLOUD_Privacy_Policy.pdf',
 
         'Jan': 'Jan',

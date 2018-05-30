@@ -23,13 +23,13 @@ export default class Footer extends React.Component {
         <div className='copyright'>
           <span><b>HM Electronics, Inc. &copy;2018 </b>
    |
-            <a className='terms black_link' href={url + 'images/' + t[language].useragreementUrl + '?token=' + token} target='_blank'>{t[language].useragreement}</a>
+            <a className='terms red_link' href={url + 'images/' + t[language].useragreementUrl + '?token=' + token} target='_blank'>{t[language].useragreement}</a>
                     |
-            <a className='privacy black_link' href={url + 'images/' + t[language].privacypolicyUrl + '?token=' + token} target='_blank'>{t[language].privacypolicy}</a>
+            <a className='privacy red_link' href={url + 'images/' + t[language].privacypolicyUrl + '?token=' + token} target='_blank'>{t[language].privacypolicy}</a>
     |
-            <a className='supply black_link' href={url + 'images/' + t[language].californiasupplyUrl + '?token=' + token} target='_blank'>{t[language].californiasupply}</a>
+            <a className='supply red_link' href={url + 'images/' + t[language].californiasupplyUrl + '?token=' + token} target='_blank'>{t[language].californiasupply}</a>
                     |
-            <a className='cookie black_link' href={url + 'images/' + t[language].cookiepolicyUrl + '?token=' + token} target='_blank'>{t[language].cookiepolicy}</a>
+            <a className='cookie red_link' href={url + 'images/' + t[language].cookiepolicyUrl + '?token=' + token} target='_blank'>{t[language].cookiepolicy}</a>
           </span></div>
       </div>
     </div>)

@@ -31,7 +31,7 @@ class Systems extends Component {
   componentWillMount () {
     this.props.sortSystems({ 'sortBy': 'Brand_Name', 'sortType': 'DESC' })
     this.props.setSearchParams({ 'filter': null, 'criteria': null })
-    // this.props.getSystems()
+    this.props.getSystems()
   }
   onSelectAlert (eventKey) {
     window.alert(`Alert from menu item.\neventKey: ${eventKey}`)
@@ -172,8 +172,8 @@ class Systems extends Component {
     this.props.getSystems()
   }
 
-  send(e){
-    
+  send (e) {
+    console.log(e)
   }
 
   renderSystems () {
