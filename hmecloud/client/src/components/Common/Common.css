@@ -92,6 +92,10 @@
    background-color:#fff
 }
 
+.paginationSection select#per_show {
+ cursor: pointer
+}
+
 .dropDown_show{
 font-size: 10px;
 float: left;

@@ -48,12 +48,12 @@ class Systems extends Component {
     this.setState({ pageSize })
     let paginationParams = { pageSize: pageSize, pageNumber: ((this.state.offset / 10) + 1) }
     this.props.paginationSystems(paginationParams)
-    // this.props.getSystems()
+    this.props.getSystems()
   }
   PageClicked (value) {
     let paginationParams = { pageSize: this.state.pageSize, pageNumber: ((value / 10) + 1) }
     this.props.paginationSystems(paginationParams)
-    // this.props.getSystems()
+    this.props.getSystems()
     if (value === null) {
       return this.state.offset
     } else {
@@ -79,7 +79,7 @@ class Systems extends Component {
             <div className='settings_search clear'>
               <h3 className='clear'>Systems</h3>
               <div>
-                <a href='./?pg=SettingsDevices&amp;st=odcsv'><span className='additem'>Unregistered Systems</span></a>
+                <span className='additem' onClick={this.send.bind(this)}>Unregistered Systems</span>
               </div>
             </div> <div className='settings_plug clear storeHeight'>
 
@@ -107,14 +107,13 @@ class Systems extends Component {
                       <MenuItem eventKey='Brand_Name'>
                         <input type='radio' name='Device_MainVersion' value='Device_MainVersion' checked={this.props.systems.searchParams.filter === 'Device_MainVersion'} onClick={this.handleSearchChange.bind(this)} /> Search system version <br />
                       </MenuItem>
-                   
 
                     </DropdownButton>
                   </ButtonToolbar>
                 </div>
                 <div class='search'>
-                   <input type='text' name='criteria' className='searchBox' value={this.state.criteria} onChange={this.handleCriteria.bind(this)} /> 
-                   <img src={Search} className="searchImage" alt='Device Online' onClick={this.search} />
+                  <input type='text' name='criteria' className='searchBox' value={this.state.criteria} onChange={this.handleCriteria.bind(this)} />
+                  <img src={Search} className='searchImage' alt='Device Online' onClick={this.search} />
                 </div>
               </div>
             </div>
@@ -171,6 +170,10 @@ class Systems extends Component {
     let sortParams = { 'sortBy': sortBy, 'sortType': sortType }
     this.props.sortSystems(sortParams)
     this.props.getSystems()
+  }
+
+  send(e){
+    
   }
 
   renderSystems () {

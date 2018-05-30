@@ -262,6 +262,7 @@ width:197px;
     width: 315px;
     padding-left: 8px;
     -webkit-appearance: none;
+    -moz-appearance: none;
     background: transparent;
     margin-top: 11px;
     border: 1px solid #c2c2c2;

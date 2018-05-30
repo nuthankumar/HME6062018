@@ -12,3 +12,6 @@ body {
 .theader th.actcol::after {
   content: " ↑";
 }
+.search_pos .search img {
+cursor:pointer
+}

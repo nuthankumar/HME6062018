@@ -16,7 +16,13 @@ export const getSystems = () => {
   let url = Config.apiBaseUrl + CommonConstants.apiUrls.getStores + '?isAdmin=1&psize=10&pno=1'
   return (dispatch, getState) => {
     const state = getState()
-    console.log(state)
+    if (state.systems.searchParams) {
+      url = url + '&criteria=' + state.systems.searchParams.criteria + '&filter=' + state.systems.searchParams.filter
+    }
+    if (state.systems.sortParams) {
+      url = url + '&Sortby=' + state.systems.sortParams.sortBy + '&sortType=' + state.systems.sortParams.sortType
+    }
+    console.log(url)
     this.api.getData(url, data => {
       let systems = {
         'deviceList': [
@@ -157,7 +163,6 @@ export const getSystems = () => {
         },
         'status': true
       }
-
       dispatch(getSystemsSuccess(systems))
     })
   }
