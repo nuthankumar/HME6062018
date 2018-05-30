@@ -119,15 +119,16 @@ const removeDeviceById = (input, callback) => {
  * @param {*} callback
  */
 const saveStoreDetails = (input, callback) => {
+  console.log(input)
   repository.executeProcedure(sqlQuery.Stores.saveStoreDetails, request => {
-    console.log(input)
+  
     return request
       .input(sqlQuery.Stores.Parameters.isAdmin, sql.Int, input.isAdmin)
       .input(sqlQuery.Stores.Parameters.Store_UID, sql.VarChar(32), input.suid)
-      .input(sqlQuery.Stores.Parameters.Company_ID, sql.int, input.companyId)
+      .input(sqlQuery.Stores.Parameters.Company_ID, sql.Int, input.companyId)
       // .input(sqlQuery.Stores.Parameters.AzureData, sql.VarChar(1000), input.AzureData)
-      .input(sqlQuery.Stores.Parameters.Store_ID, sql.int, input.storeID)
-      .input(sqlQuery.Stores.Parameters.timeZone, sql.VarChar(500), input.timeZone)
+      .input(sqlQuery.Stores.Parameters.Store_ID, sql.Int, input.storeID)
+      .input(sqlQuery.Stores.Parameters.timeZone, sql.NVarChar(200), input.timeZone)
   }, callback)
 }
 

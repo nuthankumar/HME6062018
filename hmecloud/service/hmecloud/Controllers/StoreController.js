@@ -370,6 +370,7 @@ const removeDeviceById = (request, callBack) => {
  * @public
  */
 const saveStoreDetails = (request, callBack) => {
+  console.log('hi')
   const input = {
     isAdmin: (request.query.isAdmin ? request.query.isAdmin : null),
     suid: (request.body.suid ? request.body.suid : null),
@@ -389,15 +390,20 @@ const saveStoreDetails = (request, callBack) => {
     azure.StoreName = input.storeName
     input.AzureData = azure
   }
-  console.log(input)
   stores.saveStoreDetails(input, result => {
-    console.log(result)
     let response = {}
-    if (result.data[0][0] > 0) {
-      callBack(result)
-      response.status = true
+    console.log(result)
+    if (result) {
+      if (result.data.length > 0) {
+        response = result.data[0][0]
+        response.status = true
+        callBack(response)
+      } else {
+        response = 'noUpdation'
+        response.status = true
+      }
     } else {
-      response.status = false
+      result.status = false
       callBack(result)
     }
   })
