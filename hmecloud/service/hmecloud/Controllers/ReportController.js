@@ -177,7 +177,6 @@ reports.prototype.getRawCarDataReport = function (reportResult) {
   }).catch((e) => {
     deviceValues.key = 'ReportsNoRecordsFound'
     deviceValues.status = true
-    console.log('reject')
     return deviceValues
   })
 
@@ -203,6 +202,8 @@ reports.prototype.generateCSV = function (reportResult, filter, totalPages, resp
     let rawCarReports = this.getRawCarDataReport(reportResult)
     DeviceDetails = rawCarReports.rawCarData
     eventHeaders = []
+    csvInput.reportName = `${messages.COMMON.RAWCARREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
+    csvInput.subject = `${messages.COMMON.RAWCARDATAREPORTTITLE} ${this.request.body.openTime} ${this.request.body.toDate + (this.request.body.format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
   } else {
     let getReports = this.deviceDataPreparation(reportResult, filter, totalPages)
     DeviceDetails = getReports.timeMeasureType
@@ -276,15 +277,9 @@ reports.prototype.createReports = function (response) {
       if (reportResult.status) {
         if (isValidation.reportName === 'rawcardata') {
           if (this.isCSV) {
-            Output = this.generateCSV(reportResult, isValidation.reportName, totalPages)
-            if (Output.status === true) {
-              response.status(200).send(Output)
-            } else {
-              response.status(400).send(Output)
-            }
+            this.generateCSV(reportResult, isValidation, totalPages, response)
           } else if (this.isReports) {
             Output = this.getRawCarDataReport(reportResult)
-            console.log(Output)
             Output.status = true
             if (Output.status === true) {
               response.status(200).send(Output)

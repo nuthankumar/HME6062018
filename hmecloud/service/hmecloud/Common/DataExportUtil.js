@@ -4,7 +4,7 @@ const Pdfmail = require('./PDFUtils')
 const moment = require('moment')
 const _ = require('lodash')
 
-const singleStore = (deviceDetails, reportType, input, eventHeaders, format,csvInput, callback) => {
+const singleStore = (deviceDetails, reportType, input, eventHeaders, format, csvInput, callback) => {
   let storeDeviceDetails = []
   _.forEach(deviceDetails, (item, key) => {
     let deviceInfo = {}
@@ -41,6 +41,7 @@ const singleStore = (deviceDetails, reportType, input, eventHeaders, format,csvI
         }
       }
     }
+
     if (reportType.reportName !== 'rawcardata') {
       _.forEach(eventHeaders, (value, key) => {
         if (item[`${value}`] !== null && item[`${value}`] !== 'N/A') {
@@ -51,7 +52,7 @@ const singleStore = (deviceDetails, reportType, input, eventHeaders, format,csvI
     }
     if (reportType.reportName === 'rawcardata') {
       _.forEach(deviceDetails[key], (value, key) => {
-        deviceInfo[`${key}`] = `${value}` === 'N/A' ? '' : `${value}`
+        deviceInfo[`${key}`] = (`${value}` === 'N/A' || `${value}` !== undefined) ? '' : `${value}`
       })
     }
     storeDeviceDetails.push(deviceInfo)
@@ -70,7 +71,7 @@ const singleStore = (deviceDetails, reportType, input, eventHeaders, format,csvI
   })
 }
 
-const mutipleStore = (deviceDetails, reportType, input, eventHeaders, format,csvInput, callback) => {
+const mutipleStore = (deviceDetails, reportType, input, eventHeaders, format, csvInput, callback) => {
   let storeDeviceDetails = []
   let rcd = []
   _.map(deviceDetails, (item) => {
@@ -165,9 +166,12 @@ const mutipleStore = (deviceDetails, reportType, input, eventHeaders, format,csv
 const generateCSVReport = (results, input, csvInput, reportType, eventHeaders, callback) => {
   let format = input.body.format
   let reportDetails
-  // console.log('JSON',JSON.stringify(results))
   if (input.body.deviceIds.length === 1) {
-    reportDetails = results[0].data
+    if (reportType.reportName === 'rawcardata') {
+      reportDetails = results
+    } else {
+      reportDetails = results[0].data
+    }
     singleStore(reportDetails, reportType, input, eventHeaders, format, csvInput, result => {
       callback(result)
     })
