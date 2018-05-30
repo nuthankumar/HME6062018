@@ -49,10 +49,6 @@ BEGIN
 		'NA' Store_AddressLine4, 'NA' Store_PhoneNumber, 'NA' Store_FaxNumber, 'NA' Store_Locality, 'NA' Store_Region, 'NA' Store_PostCode, 'NA' Country_ID, 
 		'NA' Country_Name
 
-	-- Get Store Time zone
-	SELECT Name FROM Azure_TimeZones
-
-
 	-- Get List of Stores Device Names
 	SELECT dtyp.Device_Name, dinf.Device_UID, dinf.Device_IsActive, dinf.Device_SettingVersion, dinf.Device_SerialNumber, dinf.Device_MainVersion, 
 		stor.Store_Number, bran.Brand_Name INTO #DeviceNames
