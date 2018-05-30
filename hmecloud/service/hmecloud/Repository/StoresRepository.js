@@ -111,6 +111,24 @@ const removeDeviceById = (input, callback) => {
   }, callback)
 }
 
+/**
+ *
+ * @param {*} input
+ * @param {*} callback
+ */
+const saveStoreDetails = (input, callback) => {
+  repository.executeProcedure(sqlQuery.Stores.saveStoreDetails, request => {
+    console.log(input)
+    return request
+      .input(sqlQuery.Stores.Parameters.isAdmin, sql.Int, input.isAdmin)
+      .input(sqlQuery.Stores.Parameters.Store_UID, sql.VarChar(32), input.suid)
+      .input(sqlQuery.Stores.Parameters.Company_ID, sql.int, input.companyId)
+      // .input(sqlQuery.Stores.Parameters.AzureData, sql.VarChar(1000), input.AzureData)
+      .input(sqlQuery.Stores.Parameters.Store_ID, sql.int, input.storeID)
+      .input(sqlQuery.Stores.Parameters.timeZone, sql.VarChar(500), input.timeZone)
+  }, callback)
+}
+
 module.exports = {
   settingsDevices,
   settingsStores,
@@ -122,5 +140,6 @@ module.exports = {
   removeDeviceById,
   checkMergeDevices,
   mergeDevicesInfo,
-  unRegisterDevicesSearch
+  unRegisterDevicesSearch,
+  saveStoreDetails
 }

@@ -30,6 +30,18 @@ router.get('/getStore', authValidator, VerifyToken, (request, response) => {
 })
 
 /**
+ * This service  using saveStore details
+ * @param  {endpoint} getStore webservice name
+ * @param  {funct} authenticator  check JWT authentication
+ * @param  {request} request  from  user request
+ * @param  {response} callback Function will be called once the request executed.
+ * @public
+ */
+router.post('/saveStore', authValidator, VerifyToken, (request, response) => {
+  storeController.saveStoreDetails(request, result => hmeRouter.handelResult(result, response))
+})
+
+/**
  * This service  using remove device By device UID
  * @param  {endpoint} removeDevice webservice name
  * @param  {funct} authenticator  check JWT authentication
