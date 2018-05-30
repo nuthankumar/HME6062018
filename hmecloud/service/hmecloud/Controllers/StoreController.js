@@ -2,6 +2,7 @@ const messages = require('../Common/Message')
 const validator = require('../Validators/StoreValidator')
 const deviceValidator = require('../Validators/DeviceValidator')
 const stores = require('../Repository/StoresRepository')
+const webService = require('../Common/WebService')
 const _ = require('lodash')
 const dateFormat = require('dateformat')
 const csvGeneration = require('../Common/CsvUtils')
@@ -299,7 +300,7 @@ const getAllStores = (request, callBack) => {
       })
       response.storeList = storeList
       if (input.isAdmin === 1) {
-        let pageDetails = result.data[1] || []
+        let pageDetails = result.data[1][0] || []
         response.pageDetails = pageDetails
       } else {
         let permessions = _.compact(_.map(result.data[1], 'Permission_Name')) || []
@@ -356,6 +357,16 @@ const removeDeviceById = (request, callBack) => {
 
   stores.removeDeviceById(input, result => {
     if (result.status === true) {
+
+      // :TODO webservice call being done for remote execution
+      // let response = result.data[0]
+      // let url = `${process.env.RemoteExecutionEndPoint}
+      //     ?deviceId=${response.deviceId}
+      //     &deviceUID=${response.deviceId}
+      //     &deviceVersion=${response.deviceId}
+      //     &storeID=${response.deviceId}`
+      // webService.getcall(url)
+
       callBack(result)
     } else {
       callBack(result)

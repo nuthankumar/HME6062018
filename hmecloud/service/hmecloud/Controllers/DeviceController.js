@@ -26,7 +26,7 @@ const getAllUnregisteredDevices = (request, callBack) => {
     if (result.status === true) {
       let response = {}
       response.deviceList = result.data[0]
-      let pageDetails = result.data[1] || []
+      let pageDetails = result.data[1][0] || []
       response.pageDetails = pageDetails
       response.status = true
       callBack(response)
