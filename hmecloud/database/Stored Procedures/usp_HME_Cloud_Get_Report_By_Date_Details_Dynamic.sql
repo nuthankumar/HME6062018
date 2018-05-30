@@ -205,6 +205,7 @@
 
 				SET @headerSourceCol = 'EventType_Name'
 				SET @sum_query = '
+				;WITH TotalCar AS (SELECT COUNT(CarDataRecord_ID) Total_Car,EventType_Name  FROM	#raw_data GROUP BY EventType_Name)
 					SELECT	NULL StoreNo,
 						NULL Store_Name,
 						NULL Device_UID,
@@ -214,7 +215,8 @@
 						NULL Store_ID,
 						EventType_Name Category,
 						AVG(DetectorTime) AVG_DetectorTime,
-						COUNT(CarDataRecord_ID) Total_Car
+						(SELECT MAX(Total_Car) FROM TotalCar) Total_Car
+						--COUNT(CarDataRecord_ID) Total_Car
 					FROM	#raw_data
 					--WHERE DetectorTime IS NOT NULL
 					GROUP BY  EventType_Name'
