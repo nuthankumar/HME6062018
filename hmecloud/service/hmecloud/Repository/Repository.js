@@ -38,6 +38,7 @@ const executeSQL = (config, procedure, prepareParameters, callback) => {
       callback(output)
     }
     var request = prepareParameters(sqlPool.request())
+    console.log('request.parameters', request.parameters)
     request.execute(procedure, (err, result) => {
       if (err) {
         output.data = err

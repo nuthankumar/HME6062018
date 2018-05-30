@@ -245,8 +245,19 @@ const sqlQueries = {
   },
   Device: {
     removeByDUID: '[dbo].[usp_removeDeviceFromStore]',
+    getunRegisterDevices: '[dbo].[usp_Get_UnregisteredSystems]',
     Parameters: {
       Device_UIDs: 'Device_UIDs'
+    }
+  },
+  util: {
+    Parameters: {
+      criteria: 'criteria',
+      filter: 'filter',
+      SortingColumnName: 'SortingColumnName',
+      SortingType: 'SortingType',
+      RecordPerPage: 'RecordPerPage',
+      PageNumber: 'PageNumber'
     }
   }
 }

@@ -13,6 +13,7 @@ const groupRouter = require('./Router/GroupRouter')
 const reportsTemplate = require('./Router/TemplateRouter')
 const newReports = require('./Router/ReportsRouter')
 const store = require('./Router/StoreRouter')
+const device = require('./Router/DeviceRouter')
 const userRouter = require('./Router/UserRouter')
 const roleRouter = require('./Router/RoleRouter')
 const permissionRouter = require('./Router/PermissionRouter')
@@ -53,6 +54,9 @@ app.use('/api/group', groupRouter)
 
 // store details
 app.use('/api/store', store)
+
+// device details
+app.use('/api/device', device)
 
 // Report Templates
 app.use('/api/reportTemplate', reportsTemplate)
