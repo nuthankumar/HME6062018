@@ -1,6 +1,6 @@
-/****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_update_Store_Details] if already exists *****/
-IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_HME_Cloud_update_Store_Details' AND [type] ='P'))
-	DROP PROCEDURE [dbo].[usp_HME_Cloud_update_Store_Details]
+/****** Dropping the StoredProcedure [dbo].[usp_UpdateStoreDetails] if already exists *****/
+IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_UpdateStoreDetails' AND [type] ='P'))
+	DROP PROCEDURE [dbo].[usp_UpdateStoreDetails]
 GO
 
 -- ===========================================================
@@ -18,13 +18,13 @@ GO
 --  1.  	
 --	2.
 -- ===========================================================
--- exec [dbo].[usp_HME_Cloud_update_Store_Details] @UserUid='68LKBP85C1SKH1FI3M7X40CJHKGU07FZ',@isAdmin=0,@criteria=NULL,@filter=NULL,@SortingColumnName=NULL,@SortingType=NULL,@RecordPerPage=25,@PageNumber=0
+-- exec [dbo].[usp_UpdateStoreDetails] @UserUid='68LKBP85C1SKH1FI3M7X40CJHKGU07FZ',@isAdmin=0,@criteria=NULL,@filter=NULL,@SortingColumnName=NULL,@SortingType=NULL,@RecordPerPage=25,@PageNumber=0
 -- non admin
--- exec [dbo].usp_HME_Cloud_update_Store_Details  @isAdmin = 0, @Store_Name '',@Store_UID ='',@Company_ID ='',@Store_ID ='', @timeZone ='',@AzureData = ''
+-- exec [dbo].usp_UpdateStoreDetails  @isAdmin = 0, @Store_Name '',@Store_UID ='',@Company_ID ='',@Store_ID ='', @timeZone ='',@AzureData = ''
 -- admin
--- exec [dbo].[usp_HME_Cloud_update_Store_Details]  @isAdmin = 1, @Store_ID ='83499' , @timeZone ='(GMT-08:00) Pacific Time (US & Canada)'
+-- exec [dbo].[usp_UpdateStoreDetails]  @isAdmin = 1, @Store_ID ='83499' , @timeZone ='(GMT-08:00) Pacific Time (US & Canada)'
 -- ===========================================================
-CREATE PROCEDURE [dbo].[usp_HME_Cloud_update_Store_Details] 
+CREATE PROCEDURE [dbo].[usp_UpdateStoreDetails] 
 
 -- for non admin
 @isAdmin int = 0,

@@ -1,11 +1,12 @@
-/****** Dropping the StoredProcedure [dbo].[usp_HME_Cloud_Get_StoreInformation] if already exists *****/
-IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_HME_Cloud_Get_StoreInformation' AND [type] ='P'))
-	DROP PROCEDURE [dbo].[usp_HME_Cloud_Get_StoreInformation]
+/****** Dropping the StoredProcedure [dbo].[usp_GetStoreById] if already exists *****/
+IF (EXISTS(SELECT * FROM sys.objects WHERE [name] = 'usp_GetStoreById' AND [type] ='P'))
+	DROP PROCEDURE [dbo].[usp_GetStoreById]
 GO
+
 -- ===========================================================
 --      Copyright © 2018, HME, All Rights Reserved
 -- ===========================================================
--- Name			:	usp_HME_Cloud_Get_StoreInformation
+-- Name			:	usp_GetStoreById
 -- Author		:	jaffer
 -- Created		:	20-May-2018
 -- Tables		:	tbl_Stoers, ltbl_Brands, .. etc // TO DO
@@ -17,9 +18,9 @@ GO
 -- -----------------------------------------------------------
 --  1.  	20-May-2018	jaffer Procedure created
 -- ===========================================================
--- EXEC [dbo].[usp_HME_Cloud_Get_StoreInformation] '5F63771D76474EF2805F39C533BA63A9'
+-- EXEC [dbo].[usp_GetStoreById] '5F63771D76474EF2805F39C533BA63A9'
 -- ===========================================================
-CREATE PROCEDURE [dbo].[usp_HME_Cloud_Get_StoreInformation]
+CREATE PROCEDURE [dbo].[usp_GetStoreById]
 (
 	@Store_UID varchar(32)
 )
