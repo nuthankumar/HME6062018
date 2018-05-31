@@ -103,7 +103,7 @@ Device.prototype.getSingleStoreValues = function () {
             }
           }
         }
-        reportInfo[`${key}`] = { 'value': `${value}` }
+        reportInfo[`${key}`] = { 'value': value }
       } else if (key === 'StoreNo') {
         if (filter === 'week') {
           if (value === 'Total Week') {
@@ -117,21 +117,21 @@ Device.prototype.getSingleStoreValues = function () {
               'currentWeekpart': messages.COMMON.DAYOPENCLOSE
             }
           }
-          reportInfo[`${key}`] = { 'value': `${value}` }
+          reportInfo[`${key}`] = { 'value': value }
         }
-        reportInfo[`${key}`] = { 'value': `${value}` }
+        reportInfo[`${key}`] = { 'value': value }
       } else if (key === 'GroupName') {
-        reportInfo['Groups'] = { 'value': `${value}` }
+        reportInfo['Groups'] = { 'value': value || null }
       } else if (key === 'StoreID') {
-        reportInfo['storeId'] = { 'value': `${value}` }
+        reportInfo['storeId'] = { 'value': value }
       } else if (key === 'Store_Name') {
-        reportInfo['Stores'] = { 'value': `${value}` }
+        reportInfo['Stores'] = { 'value': value }
       } else if (key === 'Device_UID') {
-        reportInfo['deviceUid'] = { 'value': `${value}` }
+        reportInfo['deviceUid'] = { 'value': value }
       } else if (key === 'Device_ID') {
-        reportInfo['deviceId'] = { 'value': `${value}` }
+        reportInfo['deviceId'] = { 'value': value }
       } else if (key === 'WeekIndex') {
-        reportInfo['index'] = { 'value': `${value}` }
+        reportInfo['index'] = { 'value': value }
       } else if (key === 'Total_Car') {
         let carValue
         if (value === 0) {
@@ -223,6 +223,8 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
       return `${Math.round(value / totalCarsCount * 100)}%`
     }
   }
+
+ // console.log(goalSetting[0])
   _.map(goalSetting[0], (value, key) => {
     let obj = { goal: '', cars: '0', percentage: '0%' }
     let rowKey = {}
@@ -254,6 +256,7 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
       return colorSettings[2]
     }
   }
+  console.log(deviceGoalInfo[0])
   _.map(deviceGoalInfo[0], (value, key) => {
     let eventWithGolas = _.split(key, '-', 2)
     let event = _.trim(eventWithGolas[0])

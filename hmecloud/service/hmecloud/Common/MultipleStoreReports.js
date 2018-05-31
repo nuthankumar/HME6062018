@@ -93,9 +93,9 @@ Device.prototype.multipleStore = function () {
       if (key === 'StoreID') {
         reportInfo['storeId'] = {'value': ` ${value}`}
       } else if (key === 'GroupName') {
-        groupName = `${value}`
+        groupName = value
         if (reportInfo['Groups'] === null) {
-          reportInfo['Groups'] = {'value': (groupName || null)}
+          reportInfo['Groups'] = {'value': (groupName)}
         }
       } else if (key === 'StoreNo') {
         storeNo = `${value}`
