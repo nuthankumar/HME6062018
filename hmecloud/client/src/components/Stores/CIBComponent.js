@@ -2,10 +2,11 @@ import React, { Component } from 'react'
 import './Stores.css'
 import * as modalAction from '../../actions/modalAction'
 import * as viewDetail from '../../actions/viewDetails'
+import { bindActionCreators } from 'redux'
 const offlineImage = require('../../images/connection_offline.png')
 
 class CIBComponent extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       showStores: this.props.showStores,
@@ -13,13 +14,14 @@ class CIBComponent extends Component {
     }
     this.enableRemoveBtn = this.enableRemoveBtn.bind(this)
     this.handleClick = this.handleClick.bind(this)
+    this.renderRows = this.renderRows.bind(this)
   }
 
-  enableRemoveBtn (e) {
+  enableRemoveBtn(e) {
     return e.currentTarget.checked ? this.setState({ disableRemove: true }) : this.setState({ disableRemove: false })
   }
 
-  handleClick () {
+  handleClick() {
     this.props.dispatch(viewDetail.initViewStore(this.props.data.Device_UID))
     this.props.dispatch(modalAction.closePopup())
     this.props.history.push({
@@ -27,7 +29,29 @@ class CIBComponent extends Component {
     })
   }
 
-  render () {
+  renderRows() {
+    let row = this.props.data
+    row = row.filter(function (el) {
+      return el.Device_Name !== 'EOS' && el.Device_Name !== 'ION' && el.Device_Name !== 'ZOOM'
+    })
+    let rows = row.map((data, index) => {
+      return (
+        <tr className='tdata'>
+          <td className='sys-ctr'>
+            <input type='checkbox' name='checkbox' id='idname' className='sys-ion-check' onChange={this.enableRemoveBtn} />
+          </td>
+          <td >{data.Device_SettingVersion}</td>
+          <td >{data.Device_SerialNumber}</td>
+          <td>
+            <img src={offlineImage} /><span> {data.Device_IsActive === 0 ? 'Offline' : 'Online'}</span></td>
+          <td onClick={this.handleClick}><a>View <span>Details</span></a></td>
+        </tr>
+      )
+    })
+    return rows
+  }
+
+  render() {
     return (
       <div>
         <div>
@@ -75,28 +99,15 @@ class CIBComponent extends Component {
               <th>System Status</th>
               <th />
             </tr>
-            <tr className='tdata'>
-              <td className='sys-ctr'>
-                <input type='checkbox' name='checkbox' id='idname' className='sys-ion-check' onChange={this.enableRemoveBtn} />
-              </td>
-              <td >{this.props.data.Device_SettingVersion}</td>
-              <td >{this.props.data.Device_SettingVersion}</td>
-              <td>
-                <img src={offlineImage} /><span> {this.props.data.Device_IsActive === 0 ? 'Offline' : 'Online'}</span></td>
-              <td onClick={this.handleClick.bind(this)}><a>View <span>Details</span></a></td>
-            </tr>
+            {this.renderRows()}
           </tbody>
         </table>
-        {/* <div className='remove-sys'>
-          <input className='remove-button' value='Remove System' />
-        </div> */}
-        {/* <div className={'remove-sys ' + (this.state.disableRemove ? 'show' : 'hide')}> */}
-        <div className={'remove-sys ' + (this.props.storeModelPopupIsAdmin ? 'show' : 'hide')}>
+        <div className={'remove-sys ' + (this.props.storeModelPopupIsAdmin ? 'show' : 'hide')} >
           <a class='remove-system-device' href=''>
             <span className={'remove-device-item ' + (this.state.disableRemove ? 'disable-remove-device' : '')}>Remove System</span>
           </a>
-        </div>
-      </div>
+        </div >
+      </div >
     )
   }
 }

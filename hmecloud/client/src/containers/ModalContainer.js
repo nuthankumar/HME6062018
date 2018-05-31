@@ -57,16 +57,16 @@ class ModalContainer extends Component {
         return <StoredetailsComponent isAdmin={isAdmin} />
         break
       case 'CIB':
-        return <CIBComponent isAdmin={isAdmin} email={this.props.stores.storePopupDetails.storeDetails.User_EmailAddress} data={tabItem} />
+        return <CIBComponent isAdmin={isAdmin} history={this.props.history} email={this.props.stores.storePopupDetails.storeDetails.User_EmailAddress} data={this.props.stores.storePopupDetails.Device_Details} />
         break
       case 'EOS':
-        return <EOSComponent isAdmin={isAdmin} data={tabItem} />
+        return <EOSComponent isAdmin={isAdmin} history={this.props.history} data={this.props.stores.storePopupDetails.Device_Details} />
         break
       case 'ION':
-        return <IONComponent isAdmin={isAdmin} data={tabItem} />
+        return <IONComponent isAdmin={isAdmin} history={this.props.history} data={this.props.stores.storePopupDetails.Device_Details} />
         break
       case 'ZOOM':
-        return <ZoomComponent isAdmin={isAdmin} data={tabItem} />
+        return <ZoomComponent isAdmin={isAdmin} history={this.props.history} data={this.props.stores.storePopupDetails.Device_Details} />
         break
     }
   }
@@ -84,7 +84,11 @@ class ModalContainer extends Component {
     let array = []
     array.push({ Device_Name: 'Store Details', isActive: true })
     array = array.concat(this.props.stores.storePopupDetails.Device_Details)
-
+    array = array.filter((thing, index, self) =>
+      index === self.findIndex((t) => (
+        t.Device_Name === thing.Device_Name
+      ))
+    )
     return (
       <Modal show={show} dialogClassName='modal-popup' onHide={this.handleClose} >
         <Modal.Header closeButton>

@@ -5,11 +5,12 @@ import * as viewDetail from '../../actions/viewDetails'
 const offlineImage = require('../../images/connection_offline.png')
 
 class EOSComponent extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.handleClick = this.handleClick.bind(this)
+    this.renderRows = this.renderRows.bind(this)
   }
-  handleClick () {
+  handleClick() {
     this.props.dispatch(viewDetail.initViewStore(this.props.data.Device_UID))
     this.props.dispatch(modalAction.closePopup())
     this.props.history.push({
@@ -17,7 +18,29 @@ class EOSComponent extends Component {
     })
   }
 
-  render () {
+  renderRows() {
+    let row = this.props.data
+    row = row.filter(function (el) {
+      return el.Device_Name !== 'CIB' && el.Device_Name !== 'ION' && el.Device_Name !== 'ZOOM'
+    })
+    let rows = row.map((data, index) => {
+      return (
+        <tr className='tdata'>
+          <td className='sys-ctr'>
+            <input type='checkbox' name='checkbox' id='idname' className='sys-ion-check' onChange={this.enableRemoveBtn} />
+          </td>
+          <td >{data.Device_SettingVersion}</td>
+          <td >{data.Device_SerialNumber}</td>
+          <td>
+            <img src={offlineImage} /><span> {data.Device_IsActive === 0 ? 'Offline' : 'Online'}</span></td>
+          <td onClick={this.handleClick}><a>View <span>Details</span></a></td>
+        </tr>
+      )
+    })
+    return rows
+  }
+
+  render() {
     return (
       <div>
         <h4 className='header'>Registered EOS</h4>
@@ -30,26 +53,7 @@ class EOSComponent extends Component {
               <th>System Status</th>
               <th />
             </tr>
-            <tr className='tdata'>
-              <td className='sys-ctr'>
-                <input type='checkbox' name='checkbox' id='idname' className='sys-ion-check' onchange="enableRemove('ion');" />
-              </td>
-              <td >{this.props.data.Device_SettingVersion}</td>
-              <td >{this.props.data.Device_SerialNumber}</td>
-              <td>
-                <img src={offlineImage} /><span> {this.props.data.Device_IsActive === 0 ? 'Offline' : 'Online'}</span></td>
-              <td onClick={this.handleClick.bind(this)}><a>View <span>Details</span></a></td>
-            </tr>
-            {/* <tr className='tdata'>
-              <td className='sys-ctr'>
-                <input type='checkbox' name='checkbox' id='idname' className='sys-ion-check' onchange="enableRemove('ion');" />
-              </td>
-              <td >1.22 C-</td>
-              <td >00-1D-06-00-10-1E</td>
-              <td>
-                <img src={offlineImage} /><span>Offline</span></td>
-              <td><a>View <span>Details</span></a></td>
-            </tr> */}
+            {this.renderRows()}
           </tbody>
         </table>
         <div className='remove-sys'>
