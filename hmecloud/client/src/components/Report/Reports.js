@@ -122,7 +122,7 @@ class Report extends Component {
       this.setState(this.state)
       let url = Config.apiBaseUrl + CommonConstants.apiUrls.getGroupHierarchyTree
       if(this.authService.getUUID())
-        url +='?uuId='+this.authService.getUUID()
+        url +='?uuid='+this.authService.getUUID()
       this.api.getData(url,data => {
         this.state.treeData = data.data
         this.state.showCommonLoader = false
