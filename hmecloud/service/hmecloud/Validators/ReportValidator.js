@@ -64,14 +64,20 @@ validator.prototype.inputValidator = function () {
 }
 validator.prototype.dateRange = function (date) {
   let output = {}
-  if (!this.request.body.advancedOptions && this.request.body.toDate > dateUtils.getAdvancedSelectionMaxDate(date.dateRangeOne, this.request.body.fromDate)) {
+  if (!this.request.body.advancedOption && this.request.body.toDate > dateUtils.getAdvancedSelectionMaxDate(date.dateRangeOne, this.request.body.fromDate) && this.request.body.deviceIds.length < 101) {
     output.key = date.errorKey
     output.status = false
     return output
-  } else if (this.request.body.advancedOptions &&
-              this.request.body.deviceIds.length > 100 &&
-              this.request.body.deviceIds.length < 250 &&
+  } else if (this.request.body.advancedOption &&
+              this.request.body.deviceIds.length < 101 &&
                   this.request.body.toDate > dateUtils.getAdvancedSelectionMaxDate(date.dateRangeTwo, this.request.body.fromDate)) {
+    output.key = date.advanceErrorKey
+    output.status = false
+    return output
+  } else if (this.request.body.advancedOption &&
+    this.request.body.deviceIds.length > 101 &&
+      this.request.body.deviceIds.length < 251 &&
+          this.request.body.toDate > dateUtils.getAdvancedSelectionMaxDate(date.dateRangeThree, this.request.body.fromDate)) {
     output.key = date.advanceErrorKey
     output.status = false
     return output
@@ -84,17 +90,20 @@ validator.prototype.reportValidator = function (isReportName) {
   let date = {}
   if (isReportName === 'day') {
     date.dateRangeOne = 31
-    date.dateRangeTwo = 31
+    date.dateRangeTwo = 93
+    date.dateRangeThree = 31
     date.errorKey = 'dayInvalidDateRange'
     date.advanceErrorKey = 'advancedDayInvalidDateRange'
   } else if (isReportName === 'daypart') {
     date.dateRangeOne = 14
-    date.dateRangeTwo = 21
+    date.dateRangeTwo = 93
+    date.dateRangeThree = 21
     date.errorKey = 'dayPartInvalidDateRange'
     date.advanceErrorKey = 'advancedDateRangeDayPartInvalid'
   } else if (isReportName === 'week') {
     date.dateRangeOne = 62
-    date.dateRangeTwo = 21
+    date.dateRangeTwo = 93
+    date.dateRangeThree = 62
     date.errorKey = 'weekInvalidDateRange'
     date.advanceErrorKey = 'advancedDateRangeWeekInvalid'
   }
