@@ -8,7 +8,6 @@ const _ = require('lodash')
 const mutipleStore = (reportData, pdfInput, callback) => {
   let reportName
   let eventLength
-  let mainEvents
   if (reportData.timeMeasure === 3) {
     reportName = 'Weekly Report'
   } else if (reportData.timeMeasure === 2) {
@@ -20,7 +19,6 @@ const mutipleStore = (reportData, pdfInput, callback) => {
   if (reportData.eventList && reportData.eventList.length > 0 && reportData.eventList !== undefined) {
     isEventHeader = true
     eventLength = reportData.eventList.length - 4
-    mainEvents = _.clone(reportData.eventList)
   } else {
     isEventHeader = false
   }
@@ -75,6 +73,7 @@ const mutipleStore = (reportData, pdfInput, callback) => {
     temp.push({headers: Headers[i]})
     temp.push({rcds: rcds[i]})
     temp.push({title: titles[i]})
+    temp.push({eventHeaders: {'headerslength': eventLength}})
     mainData.push(temp)
   }
   const html = fs.readFileSync(__dirname + '/MultipleStore.html', 'utf8')
@@ -82,7 +81,10 @@ const mutipleStore = (reportData, pdfInput, callback) => {
     format: 'Letter',
     orientation: 'landscape',
     border: '4mm',
-    paginationOffset: 1
+    paginationOffset: 1,
+    footer: {
+      height: '10mm'
+    }
   }
   const document = {
     type: 'buffer',
@@ -94,10 +96,8 @@ const mutipleStore = (reportData, pdfInput, callback) => {
         stopTime: reportData.endTime,
         printDate: moment().format('ll'),
         reportPrintTime: reportData.localTime,
-        mainEvents: mainEvents,
         isEventHeader: isEventHeader,
         isTimeMeasureType: isTimeMeasureType,
-        storeDetails: reportData.timeMeasureType,
         events: mainData,
         titles: titles,
         headers: Headers,
@@ -106,7 +106,6 @@ const mutipleStore = (reportData, pdfInput, callback) => {
       }
     }
   }
-
   PdfBuffer.create(document, options)
     .then(response => {
       if (response) {
@@ -157,7 +156,10 @@ const singleStore = (reportData, pdfInput, callback) => {
     format: 'Letter',
     orientation: 'landscape',
     border: '4mm',
-    paginationOffset: 1
+    paginationOffset: 1,
+    footer: {
+      height: '10mm'
+    }
   }
   let isLongTime
   if (reportData.LongestTimes && reportData.LongestTimes.length > 0 && reportData.LongestTimes !== undefined) {

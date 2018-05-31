@@ -966,10 +966,14 @@
             </div>
             <table cellspacing="0" class="table-layout goalW goalMain  daypart " style="border-bottom:0px solid white;margin-bottom:0px;margin-top:4px;/* position: relative; */width: 785px;">
                 <tr>
+                        {{#each store as |childvalue childkey|}}
+                        {{#each childvalue.eventHeaders as |value key|}}
                     <th class="clear"></th>
-                    <th class="grayhead" colspan="{{details.goalsEventLength}}">AVERAGE TIME
+                    <th class="grayhead" colspan="{{value}}">AVERAGE TIME
                         <span>(min:sec)</span>
                     </th>
+                    {{/each}}
+                    {{/each}}
                 </tr>
                 <tr>
                     <tr>
