@@ -8,6 +8,7 @@ import PageHeader from '../Header/PageHeader'
 import moment from 'moment'
 import { Config } from '../../Config'
 import { CommonConstants } from '../../Constants'
+// import SummaryReportHandler from '../Common/SummaryReportHandler'
 import t from '../Language/language'
 import * as languageSettings from '../Language/languageSettings'
 import Api from '../../Api'
@@ -226,7 +227,7 @@ export default class SummaryReport extends Component {
     // api call for getting the next drilldown
     this.state.showLoader = true
     this.setState(this.state)
-
+    let language = this.state.currentLanguage
     if (!this.state.reportData.generate) {
       this.state.reportData.generate = false
       // this.state.reportData.response = {}
@@ -294,16 +295,32 @@ export default class SummaryReport extends Component {
 
         let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=reports'
         this.api.postData(url, request, data => {
-          request.deviceIds = data.deviceIds
-          this.setTimeMeasures(request)
-          this.state.showLoader = false
-          this.state.reportData.response = data
-          this.state.reportData.NoOfPages = data.totalRecordCount.NoOfPages
-          this.state.showLoader = false
-          this.setState(this.state)
-          this.props.history.push({
-            state: { reportData: this.state.reportData, reportDataResponse: data, reportRequest: request }
-          })
+          if (data.status) {
+            request.deviceIds = data.deviceIds
+            this.setTimeMeasures(request)
+            this.state.showLoader = false
+            // this.summaryReportHandler = new SummaryReportHandler()
+            // this.summaryReportHandler.handleReportResponse(data, this.state.reportData)
+            this.state.reportData.response = data
+            this.state.reportData.NoOfPages = data.totalRecordCount.NoOfPages
+            this.state.showLoader = false
+            this.setState(this.state)
+            this.props.history.push({
+              state: { reportData: this.state.reportData, reportDataResponse: data, reportRequest: request }
+            })
+          } else {
+            if (data.data.code === 'ETIMEOUT') {
+              this.state.showLoader = false
+              this.state.successMessage = ''
+              this.state.errorMessage = t[language].errorTimeout
+              this.setState(this.state)
+            } else {
+              this.state.showLoader = false
+              this.state.successMessage = ''
+              this.state.errorMessage = t[language][data.key]
+              this.setState(this.state)
+            }
+          }
         }, error => {
           this.state.successMessage = ''
           this.state.errorMessage = error.message
@@ -312,26 +329,32 @@ export default class SummaryReport extends Component {
         })
       } else if (request.timeMeasure === 4) {
         if (storeId.Daypart) {
-          // let year = request.fromDate.split("-")[0]
-          // let monthDay = storeId.daypart.timeSpan.split("-")[0]
-          // request.fromDate = year.concat('/'+monthDay)
-          // request.toDate = year.concat('/'+monthDay)
           request.fromDate = moment(request.fromDate).format('YYYY-MM-DD')
           request.toDate = moment(request.toDate).format('YYYY-MM-DD')
-          // request.openTime = storeId.Daypart.currentDaypart.split("-")[0]
-          // request.closeTime = storeId.Daypart.currentDaypart.split("-")[1]
-
-          // request.openTime = storeId.Daypart.currentDaypart.split("-")[0]
-          // request.closeTime = storeId.Daypart.timeSpan.split("-")[1]
         }
         let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=reports'
         this.api.postData(url, request, data => {
-          this.state.showLoader = false
-          this.setState(this.state)
-          this.props.history.push({
-            pathname: '/rawcardatareport',
-            state: {rawCarRequest: request, rawCarData: data, reportData: this.state.reportData}
-          })
+          if (data.status) {
+            this.state.showLoader = false
+            this.setState(this.state)
+            this.props.history.push({
+              pathname: '/rawcardatareport',
+              state: {rawCarRequest: request, rawCarData: data, reportData: this.state.reportData}
+            })
+          } else {
+            if (data.data.code === 'ETIMEOUT') {
+              this.state.showLoader = false
+              this.state.successMessage = ''
+              this.state.errorMessage = t[language].errorTimeout
+              this.setState(this.state)
+            } else {
+              this.state.showLoader = false
+              this.state.successMessage = ''
+              this.state.errorMessage = t[language][data.key]
+              this.setState(this.state)
+            }
+          }
+         
         }, error => {
           this.state.successMessage = ''
           this.state.errorMessage = error.message
@@ -435,6 +458,7 @@ export default class SummaryReport extends Component {
   }
 
   getPageDetails (curPage) {
+    let language = this.state.currentLanguage
     this.state.showLoader = true
     this.setState(this.state)
     let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=reports'
@@ -443,11 +467,27 @@ export default class SummaryReport extends Component {
                 pathname: '/summaryreport',
                 state: { reportData: this.state.reportData, reportDataResponse: data }
             })  */
-      this.state.reportData = this.state.reportData
-      this.state.reportData.response = data
-      this.setState(this.state)
-      this.state.showLoader = false
-      this.setState(this.state)
+      if (data.status) {
+        this.state.reportData = this.state.reportData
+        // this.summaryReportHandler = new SummaryReportHandler()
+        // this.summaryReportHandler.handleReportResponse(data, this.state.reportData)
+        this.state.reportData.response = data
+        this.setState(this.state)
+        this.state.showLoader = false
+        this.setState(this.state)
+      } else {
+        if (data.data.code === 'ETIMEOUT') {
+          this.state.showLoader = false
+          this.state.successMessage = ''
+          this.state.errorMessage = t[language].errorTimeout
+          this.setState(this.state)
+        } else {
+          this.state.showLoader = false
+          this.state.successMessage = ''
+          this.state.errorMessage = t[language][data.key]
+          this.setState(this.state)
+        }
+      }
     }, error => {
       this.state.successMessage = ''
       this.state.errorMessage = error.message
