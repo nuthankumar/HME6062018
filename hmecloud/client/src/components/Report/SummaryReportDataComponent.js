@@ -21,6 +21,11 @@ export default class SummaryReportDataComponent extends Component {
     this.displayLongestTimes = this.displayLongestTimes.bind(this)
     this.summaryDataTableCell = this.summaryDataTableCell.bind(this)
   }
+  renderDate (date) {
+    let str = date
+    let string = str.split(',')
+    return string[0] + ', ' + string[1]
+  }
 
   translateFromTo (fromTo) {
     // to-do split od text to be removed
@@ -30,13 +35,14 @@ export default class SummaryReportDataComponent extends Component {
       string = _.filter(string, function (value) {
         return value
       })
+
       let fromToModified = null
       if (this.props.reportData.response.timeMeasure  == 1) {
-        fromToModified = (t[language][string[0]] ? t[language][string[0]] : string[0]) + ' ' + string[1] + ' ' + (t[language][string[2]] ? t[language][string[2]] : string[2]) + ' ' + string[3] + ' ' + (t[language][string[4]] ? t[language][string[4]] : string[4]) + ' ' + string[5] + ' ' + (t[language][string[6]] ? t[language][string[6]] : string[6])
+        fromToModified = (t[language][string[0]] ? t[language][string[0]] : string[0]) + ' ' + this.renderDate(string[1]) + ' ' + (t[language][string[2]] ? t[language][string[2]] : string[2]) + ' ' + string[3] + ' ' + (t[language][string[4]] ? t[language][string[4]] : string[4]) + ' ' + this.renderDate(string[5]) + ' ' + (t[language][string[6]] ? t[language][string[6]] : string[6])
       } else if (this.props.reportData.response.timeMeasure  == 2) {
-        fromToModified = (t[language][string[0]] ? t[language][string[0]] : string[0]) + ' ' + string[1] + ' ' + string[2] + ' ' + (t[language][string[3]] ? t[language][string[3]] : string[3]) + ' ' + string[4]
+        fromToModified = (t[language][string[0]] ? t[language][string[0]] : string[0]) + ' ' + this.renderDate(string[1]) + ' ' + string[2] + ' ' + (t[language][string[3]] ? t[language][string[3]] : string[3]) + ' ' + string[4]
       } else if (this.props.reportData.response.timeMeasure  == 3) {
-        fromToModified = (t[language][string[0]] ? t[language][string[0]] : string[0]) + ' ' + string[1] + ' ' + (t[language][string[2]] ? t[language][string[2]] : string[2]) + ' ' + string[3] + ' ' + (t[language][string[4]] ? t[language][string[4]] : string[4]) + ' ' + string[5] + ' ' + (t[language][string[6]] ? t[language][string[6]] : string[6])
+        fromToModified = (t[language][string[0]] ? t[language][string[0]] : string[0]) + ' ' + this.renderDate(string[1]) + ' ' + (t[language][string[2]] ? t[language][string[2]] : string[2]) + ' ' + string[3] + ' ' + (t[language][string[4]] ? t[language][string[4]] : string[4]) + ' ' + this.renderDate(string[5]) + ' ' + (t[language][string[6]] ? t[language][string[6]] : string[6])
       }
       return fromToModified
     }

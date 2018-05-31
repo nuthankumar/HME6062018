@@ -90,12 +90,12 @@ export default class SummaryReport extends Component {
               <span>{t[language].ReportsStart}</span>
             </th>
             <td>
-              {this.state.reportData.response.startTime ? this.translateDate(this.state.reportData.response.startTime) + ' ' + t[language].OPEN : 'N/A'}&nbsp;
+              {this.state.reportData.response.startTime ? (language === 0 ? moment(this.state.reportData.response.startTime).locale('en').format('MMM D, YYYY') : moment(this.state.reportData.response.startTime).locale('fr-ca').format('MMM D, YYYY')) + ' ' + t[language].OPEN : 'N/A'}&nbsp;
             </td>
             <th>
               <span>{t[language].ReportsPrintDate}</span>
             </th>
-            <td> {this.state.reportData.response.printDate ? this.translateDate(this.state.reportData.response.printDate) : 'N/A'} </td>
+            <td> {this.state.reportData.response.printDate ? (language === 0 ? moment(this.state.reportData.response.printDate).locale('en').format('MMM D, YYYY') : moment(this.state.reportData.response.printDate).locale('fr-ca').format('MMM D, YYYY')) : 'N/A'} </td>
           </tr>
           <tr>
             <th>
@@ -106,7 +106,7 @@ export default class SummaryReport extends Component {
               <span>{t[language].ReportsStop}</span>
             </th>
             <td>
-              {this.state.reportData.response.stopTime ? this.translateDate(this.state.reportData.response.stopTime) + ' ' + t[language].CLOSE : 'N/A'}&nbsp;
+              {this.state.reportData.response.stopTime ? (language === 0 ? moment(this.state.reportData.response.stopTime).locale('en').format('MMM D, YYYY') : moment(this.state.reportData.response.stopTime).locale('fr-ca').format('MMM D, YYYY')) + ' ' + t[language].CLOSE : 'N/A'}&nbsp;
             </td>
             <th>
               <span>{t[language].ReportsPrintTime}</span>
@@ -121,7 +121,7 @@ export default class SummaryReport extends Component {
           <h2 className='report-start-time-header'>
             <span className='report-start-time'>{t[language].ReportsStart}</span>
             <span className='report-start-time-value'>{
-              this.translateDate(moment(this.state.reportData.drillDownRequestData.fromDate).format('MMM D,YYYY'))
+              (language === 0 ? moment(this.state.reportData.drillDownRequestData.fromDate).locale('en').format('MMM D, YYYY') : moment(this.state.reportData.drillDownRequestData.fromDate).locale('fr-ca').format('MMM D, YYYY'))
             } {t[language].OPEN}</span>
           </h2>
         </div>
@@ -129,7 +129,10 @@ export default class SummaryReport extends Component {
           <h2 className='report-end-time-header'>
             <span className='report-end-time'>{t[language].ReportsEnd}</span>
             <span className='report-end-time-value'>
-              { this.translateDate(moment(this.state.reportData.drillDownRequestData.toDate).format('MMM D,YYYY'))} {t[language].CLOSE}</span>
+              {(language === 0 ? moment(this.state.reportData.drillDownRequestData.toDate).locale('en').format('MMM D, YYYY') : moment(this.state.reportData.drillDownRequestData.toDate).locale('fr-ca').format('MMM D, YYYY'))}
+
+              {/* { this.translateDate(moment(this.state.reportData.drillDownRequestData.toDate).format('MMM D, YYYY'))} */} {t[language].CLOSE}
+            </span>
           </h2>
         </div>
 
@@ -137,7 +140,11 @@ export default class SummaryReport extends Component {
           <h2 className='report-print-time-header'>
             <span className='report-print-time'> {t[language].ReportsPrintTime}</span>
             <span className='report-print-time-value'>
-              { this.translateDate(moment(new Date()).format('MMM D,YYYY hh:mm'))} </span>
+              {(language === 0 ? moment(new Date()).locale('en').format('MMM D, YYYY hh:mm') : moment(new Date()).locale('fr-ca').format('MMM D, YYYY hh:mm'))}
+
+              {/* { this.translateDate(moment(new Date()).format('MMM D, YYYY hh:mm'))} 
+               */}
+            </span>
           </h2>
         </div>
       </div>)
