@@ -21,8 +21,7 @@ GO
 --	2.      08-APRIL-2018   JAYARAM V		Changed the Query
 --	3.		13-April-2018	Selvendran K	modified to actual correct table
 -- ===========================================================
--- EXEC [dbo].[dbo].[usp_GetReportTemplates] @AccountId and
--- @createdBy
+-- EXEC [dbo].[usp_GetReportTemplates] @UserUid='CEO7JK0VUSRJZFXXC0J1WW0I0E4CHD2M'
 -- ===========================================================
 
 
@@ -37,8 +36,8 @@ BEGIN
 		,ReportTemplate_UID AS [uid]
 		,ReportTemplate_Name AS [templateName]
 	FROM [dbo].[stbl_ReportTemplates]
-	WHERE ReportTemplate_Session_User_UID = @UserUid
+	WHERE ReportTemplate_Session_User_UID = @UserUid 
+	AND ReportTemplate_Name IS NOT NULL 
+	AND ReportTemplate_Name <>''
 END
 GO
-
-
