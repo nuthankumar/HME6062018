@@ -801,6 +801,9 @@ span.StoreBrand {
       pointer-events: none;
     }
 
+    .summaryreport-table tr:last-child > td:last-child > span {
+      color: black;
+   }  
 .storesTooltip {
   position: absolute;
   z-index: 10000;

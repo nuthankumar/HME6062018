@@ -9,10 +9,10 @@ import * as UserContext from '../Common/UserContext'
 import Api from '../../Api'
 
 class Login extends Component {
-  constructor() {
+  constructor () {
     super()
     this.handleChange = this.handleChange.bind(this)
-    //this.handleFormSubmit = this.handleFormSubmit.bind(this)
+    // this.handleFormSubmit = this.handleFormSubmit.bind(this)
     // this.Auth = new AuthenticationService()
     this.state = {
       language: languageSettings.getCurrentLanguage(),
@@ -23,53 +23,50 @@ class Login extends Component {
     this.api = new Api()
     this.authService = new AuthenticationService(Config.authBaseUrl)
   }
-  componentWillMount() {
+  componentWillMount () {
     //  if (this.Auth.loggedIn()) { this.props.history.replace('/') }
     // let isLoggedIn = UserContext.isLoggedIn()
 
-      let isLoggedIn = this.authService.isLoggedIn()
+    let isLoggedIn = this.authService.isLoggedIn()
 
     if (isLoggedIn) {
-      //this.props.history.push("/settings/stores/grouphierarchy");
+      // this.props.history.push("/settings/stores/grouphierarchy");
 
-        if(this.authService.isAdmin()){
-          window.location.href = Config.adminColdFusionUrl +'?token='+this.authService.getToken()
-        }
-        else{
-          window.location.href = Config.coldFusionUrl +'?token='+this.authService.getToken()
-        }
+      if (this.authService.isAdmin()) {
+        window.location.href = Config.adminColdFusionUrl + '?token=' + this.authService.getToken()
+      } else {
+        window.location.href = Config.coldFusionUrl + '?token=' + this.authService.getToken()
+      }
     }
-
   }
-  render() {
-
-    const { language, showSubMenu } = this.state;
+  render () {
+    const { language, showSubMenu } = this.state
     return (
       <div>
         <div>
-          <div id="Content">
-            <div className="col1">
-              <div className="forms clear">
-                <form action="./?pg=Login&amp;st=Validate" method="post">
-                  <table className="user_login">
+          <div id='Content'>
+            <div className='col1'>
+              <div className='forms clear'>
+                <form action='./?pg=Login&amp;st=Validate' method='post'>
+                  <table className='user_login'>
                     <tbody>
                       <tr>
-                        <th><label htmlFor="Username">{t[language].username}</label></th>
-                        <td><input className='loginInputs' type="text" maxLength="100" name="username" onChange={this.handleChange.bind(this)} /></td>
+                        <th><label htmlFor='Username'>{t[language].username}</label></th>
+                        <td><input className='loginInputs' type='text' maxLength='100' name='username' onChange={this.handleChange.bind(this)} /></td>
                       </tr>
                       <tr>
-                        <th><label htmlFor="Password">{t[language].password}</label></th>
-                        <td><input className='loginInputs' type="password" maxLength="16" name="password" onChange={this.handleChange.bind(this)} />
+                        <th><label htmlFor='Password'>{t[language].password}</label></th>
+                        <td><input className='loginInputs' type='password' maxLength='16' name='password' onChange={this.handleChange.bind(this)} />
                         </td>
                       </tr>
                       <tr>
-                        <td></td>
-                        <td><span className="btn_login"><input type="submit" value={t[language].submitBtn} onClick={this.submit.bind(this)} /></span></td>
+                        <td />
+                        <td><span className='btn_login'><input type='submit' value={t[language].submitBtn} onClick={this.submit.bind(this)} /></span></td>
                       </tr>
                     </tbody>
                   </table>
                 </form>
-                <h5 className="forgot_up"><a href="/?pg=ManageAccount&amp;st=rq">{t[language].forgotpass}</a></h5>
+                <h5 className='forgot_up'><a href='/?pg=ManageAccount&amp;st=rq'>{t[language].forgotpass}</a></h5>
               </div>
             </div>
           </div>
@@ -78,7 +75,7 @@ class Login extends Component {
     )
   }
 
-  handleChange(e) {
+  handleChange (e) {
     this.setState(
       {
         [e.target.name]: e.target.value
@@ -86,12 +83,7 @@ class Login extends Component {
     )
   }
 
-
-
-
-  submit(e) {
-
-
+  submit (e) {
     e.preventDefault()
     let user = {
       username: this.state.username,
@@ -103,22 +95,20 @@ class Login extends Component {
     this.api.postData(url, user, data => {
       if (data && data.accessToken) {
         this.authService.setToken(data.accessToken, this.authService.isAdmin())
-
       }
 
-      //to-do: verify if required , move to auth-service
+      // to-do: verify if required , move to auth-service
       if (this.authService.isLoggedIn()) {
-        if(this.authService.isAdmin()){
-          window.location.href = Config.adminColdFusionUrl +'?token='+this.authService.getToken()
-        }
-        else{
-          window.location.href = Config.coldFusionUrl +'?token='+this.authService.getToken()
+        if (this.authService.isAdmin()) {
+          window.location.href = Config.adminColdFusionUrl + '?token=' + this.authService.getToken()
+        } else {
+          window.location.href = Config.coldFusionUrl + '?token=' + this.authService.getToken()
         }
       }
     }, error => {
-      //this.state.errorMessage = "ERROR";
-      //this.state.successMessage = "";
-      //this.setState(this.state);
+      // this.state.errorMessage = "ERROR";
+      // this.state.successMessage = "";
+      // this.setState(this.state);
     })
   }
 }

@@ -1,13 +1,13 @@
-import * as masterSettings from '../actionTypes/MasterSettings/masterSettings'
+import * as MasterSettings from '../actionTypes/MasterSettings/masterSettings'
 import Api from '../Api'
 import { Config } from '../Config'
 import { CommonConstants } from '../Constants'
 // import AuthenticationService from '../components/Security/AuthenticationService'
 
-function getSystemsSuccess (devices) {
+function getMasterSettingsSuccess (device) {
   return {
-    type: masterSettings.GET_SETTINGS,
-    masterSettings: devices
+    type: MasterSettings.GET_SETTINGS,
+    masterSettings: device
   }
 }
 
@@ -15,23 +15,17 @@ export const getMasterSettings = (params) => {
   this.api = new Api()
   let url = Config.apiBaseUrl + CommonConstants.apiUrls.getMasterSettings
   return (dispatch, getState) => {
-    const state = getState()
-    console.log(state)
-    // if (state) {
-    //   url = url + '&psize=' + state.systems.paginationParams.pageSize + '&pno=' + state.systems.paginationParams.pageNumber
-    // } else {
-    //   url = url + '&psize=10&pno=1'
-    // }
-    // if (state.systems.searchParams) {
-    //   url = url + '&criteria=' + (state.systems.searchParams.criteria ? state.systems.searchParams.criteria : '') + '&filter=' + (state.systems.searchParams.filter ? state.systems.searchParams.filter : '')
-    // }
-    // if (state.systems.sortParams) {
-    //   url = url + '&Sortby=' + (state.systems.sortParams.sortBy ? state.systems.sortParams.sortBy : '') + '&sortType=' + (state.systems.sortParams.sortType ? state.systems.sortParams.sortType : '')
-    // }
-    // console.log(url)
-    // this.api.getData(url, data => {
-    //   let systems = data
-    //   dispatch(getSystemsSuccess(systems))
-    // })
+    // const state = getState()
+    let params = {
+      'Device_ID': 4498,
+      'Device_LaneConfig_ID': 1,
+      'Device_MainVersion': '2.01.17',
+      'Store_Company_ID': 1353,
+      'Store_Brand_ID': 17
+    }
+    this.api.postData(url, params, data => {
+      let device = data
+      dispatch(getMasterSettingsSuccess(device))
+    })  
   }
 }

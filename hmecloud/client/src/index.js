@@ -61,7 +61,7 @@ ReactDOM.render(<Provider store={store}>
       <Route exact path='/summaryreport/:r?' render={(props) => <Layout Params={props}><Route path='/summaryreport/:r?' component={Authenticate(SummaryReport)} /></Layout>} />
       <Route exact path='/settings/users/user/:uuid?' render={(props) => <Layout Params={props}><Route path='/settings/users/user/:uuid?' component={Authenticate(User)} /></Layout>} />
       <Route exact path='/user/:uuid?' render={(props) => <Layout Params={props}><Route path='/user/:uuid?' component={Authenticate(User)} /></Layout>} />
-      <Route exact path='/logout' render={(props) => <Layout Params={props}><Route path='/logout' component={Authenticate(Logout)} /></Layout>} />
+      <Route exact path='/logout' render={(props) => <Layout Params={props}><Route path='/logout' component={Logout} /></Layout>} />
       <Route exact path='/settings/stores' render={(props) => <Layout Params={props}><Route path='/settings/stores' component={Authenticate(StoreDetails)} /></Layout>} />
       <Route exact path='/systemStatus' render={(props) => <Layout Params={props}><Route path='/systemStatus' component={Authenticate(SystemStatus)} /></Layout>} />
       <Route exact path='/systems' render={(props) => <Layout Params={props}><Route path='/systems' component={Authenticate(Systems)} /></Layout>} />
