@@ -106,6 +106,9 @@ validator.prototype.reportValidator = function (isReportName) {
     date.dateRangeThree = 62
     date.errorKey = 'weekInvalidDateRange'
     date.advanceErrorKey = 'advancedDateRangeWeekInvalid'
+  } else if (isReportName === 'rawcardata') {
+    date.dateRangeOne = 0
+    date.errorKey = 'rawcardatareportInvalidDateRange'
   }
   let checkDateRange = this.dateRange(date)
   if (checkDateRange.status === false) {
