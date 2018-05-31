@@ -48,6 +48,7 @@ Device.prototype.multipleStore = function () {
     })
     return color
   }
+
   _.forEach(storeDetails, (item, key) => {
     let reportInfo = {}
     let groupName
@@ -95,10 +96,10 @@ Device.prototype.multipleStore = function () {
       } else if (key === 'GroupName') {
         groupName = value
         if (reportInfo['Groups'] === null) {
-          reportInfo['Groups'] = {'value': (groupName)}
+          reportInfo['Groups'] = {'value': (groupName || null)}
         }
       } else if (key === 'StoreNo') {
-        storeNo = `${value}`
+        storeNo = value || null
         if ((key === 'StoreID') && key.includes('Subtotal')) {
           total = {'value': groupName + ' ' + storeNo}
         } else if (value === 'Total Week' || value === 'Total Daypart' || value === 'Total Day') {

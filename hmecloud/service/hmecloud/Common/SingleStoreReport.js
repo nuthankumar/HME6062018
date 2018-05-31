@@ -10,7 +10,7 @@ const Device = function (result, colors, goalSettings, request, reportFilter) {
   this.request = request
   this.reportFilter = reportFilter
 }
-Device.prototype.getStoreInfo = (input, storeInformation) => {
+Device.prototype.getStoreInfo = (input, stopTime, storeInformation) => {
   let storeInfo = {}
   if (storeInformation && storeInformation[0]) {
     storeInfo.storeName = storeInformation[0].Store_Name ? storeInformation[0].Store_Name + '-' + storeInformation[0].Store_Number : storeInformation[0].Store_Number
@@ -18,7 +18,9 @@ Device.prototype.getStoreInfo = (input, storeInformation) => {
     storeInfo.storeDesc = storeInformation[0].Brand_Name ? storeInformation[0].Brand_Name : 'N/A'
   }
   storeInfo.startTime = `${dateUtils.convertMMMdYYYY(input.body.fromDate)}`
-  storeInfo.stopTime = `${dateUtils.convertMMMdYYYY(input.body.toDate)}`
+
+  storeInfo.stopTime = `${dateUtils.convertMMMdYYYY(stopTime)}`
+
   storeInfo.printDate = dateUtils.convertMMMdYYYY(dateUtils.currentDate())
   storeInfo.printTime = dateUtils.currentTime()
   storeInfo.timeMeasure = input.body.timeMeasure
@@ -223,8 +225,6 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
       return `${Math.round(value / totalCarsCount * 100)}%`
     }
   }
-
- // console.log(goalSetting[0])
   _.map(goalSetting[0], (value, key) => {
     let obj = { goal: '', cars: '0', percentage: '0%' }
     let rowKey = {}
@@ -256,7 +256,6 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
       return colorSettings[2]
     }
   }
-  console.log(deviceGoalInfo[0])
   _.map(deviceGoalInfo[0], (value, key) => {
     let eventWithGolas = _.split(key, '-', 2)
     let event = _.trim(eventWithGolas[0])
