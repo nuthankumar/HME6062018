@@ -314,10 +314,15 @@ export default class SummaryReport extends Component {
               this.state.successMessage = ''
               this.state.errorMessage = t[language].errorTimeout
               this.setState(this.state)
-            } else {
+            } else if (data.key) {
               this.state.showLoader = false
               this.state.successMessage = ''
               this.state.errorMessage = t[language][data.key]
+              this.setState(this.state)
+            } else {
+              this.state.showLoader = false
+              this.state.successMessage = ''
+              this.state.errorMessage = t[language].genericError
               this.setState(this.state)
             }
           }
@@ -347,14 +352,18 @@ export default class SummaryReport extends Component {
               this.state.successMessage = ''
               this.state.errorMessage = t[language].errorTimeout
               this.setState(this.state)
-            } else {
+            } else if (data.key) {
               this.state.showLoader = false
               this.state.successMessage = ''
               this.state.errorMessage = t[language][data.key]
               this.setState(this.state)
+            } else {
+              this.state.showLoader = false
+              this.state.successMessage = ''
+              this.state.errorMessage = t[language].genericError
+              this.setState(this.state)
             }
           }
-         
         }, error => {
           this.state.successMessage = ''
           this.state.errorMessage = error.message
@@ -481,10 +490,15 @@ export default class SummaryReport extends Component {
           this.state.successMessage = ''
           this.state.errorMessage = t[language].errorTimeout
           this.setState(this.state)
-        } else {
+        } else if (data.key) {
           this.state.showLoader = false
           this.state.successMessage = ''
           this.state.errorMessage = t[language][data.key]
+          this.setState(this.state)
+        } else {
+          this.state.showLoader = false
+          this.state.successMessage = ''
+          this.state.errorMessage = t[language].genericError
           this.setState(this.state)
         }
       }
