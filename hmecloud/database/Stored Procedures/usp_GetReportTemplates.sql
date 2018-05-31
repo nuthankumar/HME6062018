@@ -24,7 +24,6 @@ GO
 -- EXEC [dbo].[usp_GetReportTemplates] @UserUid='CEO7JK0VUSRJZFXXC0J1WW0I0E4CHD2M'
 -- ===========================================================
 
-
 CREATE PROCEDURE [dbo].[usp_GetReportTemplates]
 	 @UserUid VARCHAR(32)
 AS
