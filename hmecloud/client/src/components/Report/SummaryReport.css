@@ -829,7 +829,8 @@ span.StoreBrand {
     color: #696969;
 }
 .average-time-label{
-  font-size: 10px
+  font-size: 10px;
+  font-weight: 500;
 }
 tr.summary-row-data:nth-child(even){
   background-color: #ededed;

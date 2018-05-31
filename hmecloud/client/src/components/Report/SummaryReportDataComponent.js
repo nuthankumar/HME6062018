@@ -76,7 +76,7 @@ export default class SummaryReportDataComponent extends Component {
     return (<tr>
       <th className='blankHeader' />
       <th className='tableHeading' colSpan={(this.props.reportData.singleStore ? headerList.length - 3 : headerList.length - 4)}>
-        <span className='average-time-label'>{t[language].ReportsAverageTime}</span><span>(min:sec)</span>
+        <span className='average-time-label'>{t[language].ReportsAverageTime}</span><span className='average-time-label'>{this.props.drillDownRequestData.format === 2 ? ' (min:sec)' : ' (sec)'}</span>
       </th>
     </tr>)
   }
