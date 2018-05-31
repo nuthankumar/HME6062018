@@ -5,6 +5,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import Pagination from '../Common/Pagination'
 import t from '../Language/language'
+import {Config} from '../../Config'
+import Api from '../../Api'
 import { getSystems, sortSystems, setSearchParams, paginationSystems } from '../../actions/systems'
 import { ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap'
 const Online = require('../../images/connection_online.png')
@@ -24,6 +26,7 @@ class Systems extends Component {
       data: [],
       recordCount: 5000
     }
+    this.api = new Api()
     this.PageSizeValueDropdown = this.PageSizeValueDropdown.bind(this)
     this.PageClicked = this.PageClicked.bind(this)
     this.search = this.search.bind(this)
@@ -72,8 +75,8 @@ class Systems extends Component {
     console.log(this.props.systems)
 
     let sortParams = (this.props.systems.sortParams) ? this.props.systems.sortParams : { 'sortBy': 'Brand_Name', 'sortType': 'DESC' }
-    let recordCount = (this.props.systems.systemDetails.pageDetails !== undefined) ? this.props.systems.systemDetails.pageDetails[0].RecordCount : 10
-    let pageCount = (this.props.systems.systemDetails.pageDetails !== undefined) ? this.props.systems.systemDetails.pageDetails[0].TotalPages : 10
+    let recordCount = (this.props.systems.systemDetails.pageDetails !== undefined) ? this.props.systems.systemDetails.pageDetails.RecordCount : 10
+    let pageCount = (this.props.systems.systemDetails.pageDetails !== undefined) ? this.props.systems.systemDetails.pageDetails.TotalPages : 10
     return (
       <section className='systems'>
         <div className='settings forms'>
@@ -109,7 +112,6 @@ class Systems extends Component {
                       <MenuItem eventKey='Brand_Name'>
                         <input type='radio' name='Device_MainVersion' value='Device_MainVersion' checked={this.props.systems.searchParams.filter === 'Device_MainVersion'} onClick={this.handleSearchChange.bind(this)} /> Search system version <br />
                       </MenuItem>
-
                     </DropdownButton>
                   </ButtonToolbar>
                 </div>
@@ -175,8 +177,21 @@ class Systems extends Component {
     this.props.getSystems()
   }
 
-  send(e) {
-    console.log(e)
+  send (e) {
+    this.setState({
+      showLoader: true
+    })
+    let url = Config.apiBaseUrl + 'api/store/unRegisterDevicesSearch?reportType=csv'
+    this.api.postData(url, this.state.rawCarRequest, data => {
+      if (data.status) {
+        this.setState({
+          showLoader: false
+        })
+        this.props.history.push('/emailSent', data.data)
+      }
+    }, error => {
+      console.log(error)
+    })
   }
 
   renderSystems() {

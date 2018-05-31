@@ -4,6 +4,7 @@ import './ViewDetails.css'
 import * as languageSettings from '../components/Language/languageSettings'
 import SystemSettings from '../components/Stores/SystemSettings'
 import SystemStatus from '../components/Stores/SystemStatus'
+import RemoteSystemActions from '../components/Stores/RemoteSystemActions'
 import { connect } from 'react-redux'
 // import { bindActionCreators } from 'redux'
 import { initViewStore } from '../actions/viewDetails'
@@ -31,6 +32,7 @@ class ViewDetails extends Component {
           {/* </div> */}
           {/* <div className='col-xs-8'> */}
           <SystemSettings data={this.props.storeViewDetails} />
+          <RemoteSystemActions systemActions={this.props.storeViewDetails} history={this.props.history} />
           {/* </div> */}
         </div>
       )

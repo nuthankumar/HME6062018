@@ -1,25 +1,35 @@
 import React, { Component } from 'react'
 import './Stores.css'
+import { bindActionCreators, getState } from 'redux'
+import { connect } from 'react-redux'
+//import viewDetails from '../../reducers/store/storeDetails'
+import store from '../../reducers/store'
 
 import SystemStatus from './SystemStatus'
 // import t from '../Language/language'
 import * as languageSettings from '../Language/languageSettings'
+
 const _ = require('underscore')
 
 class MasterSettings extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       currentLanguage: languageSettings.getCurrentLanguage(),
       selectAll: false,
-      settings: [{label: 'one', id: '1', 'checked': false}, {label: 'two', id: '2', 'checked': false}, {label: 'three', id: '3', 'checked': false}, {label: 'four', id: '4', 'checked': false}],
-      destinations: [{label: 'one', id: '21', 'checked': true}, {label: 'two', id: '22', 'checked': false}, {label: 'three', id: '23', 'checked': true}, {label: 'four', id: '24', 'checked': true}],
+      settings: [{ label: 'one', id: '1', 'checked': false }, { label: 'two', id: '2', 'checked': false }, { label: 'three', id: '3', 'checked': false }, { label: 'four', id: '4', 'checked': false }],
+      destinations: [{ label: 'one', id: '21', 'checked': true }, { label: 'two', id: '22', 'checked': false }, { label: 'three', id: '23', 'checked': true }, { label: 'four', id: '24', 'checked': true }],
       selectAllSettings: false,
       selectAllDestination: false
 
     }
   }
 
+
+  
+  componentWillMount () {
+  }
+  
   render () {
     // const language = this.state.currentLanguage
     // let displayData = this.props.systemStats
@@ -27,10 +37,11 @@ class MasterSettings extends Component {
     const destinations = this.state.destinations
     const settingsAll = this.state.selectAllSettings
     const destinationsAll = this.state.selectAllSettings
+    console.log(this.props.viewDetails)
     return (
       <section className='masterSettings'>
         <section>
-          <SystemStatus />
+          <SystemStatus data={this.props.viewDetails.storeViewDetails} />
           <div className='settingsSection'>
             <h3 class='clear versions'>Settings</h3>
             <div>
@@ -62,13 +73,13 @@ class MasterSettings extends Component {
           </div>
           <div id='settings-content'>
             <input id='settings-btn' type='submit' value='Apply' onClick={this.submit.bind(this)} />
-                                    &nbsp;|&nbsp;<a class='cancel_butt' href='./?pg=SettingsGroups'>Cancel</a>
+            &nbsp;|&nbsp;<a class='cancel_butt' href='./?pg=SettingsGroups'>Cancel</a>
           </div>
         </section>
       </section>
     )
   }
-  onCheckSettings (id, e) {
+  onCheckSettings(id, e) {
     const Options = this.state.settings
     Options.map(function (Option, index) {
       if (Option.id === id) {
@@ -77,7 +88,7 @@ class MasterSettings extends Component {
     })
     this.setState({ settings: Options })
   }
-  onCheckDestinations (id, e) {
+  onCheckDestinations(id, e) {
     const Options = this.state.destinations
     Options.map(function (Option, index) {
       if (Option.id === id) {
@@ -87,7 +98,7 @@ class MasterSettings extends Component {
     this.setState({ destinations: Options })
   }
 
-  renderSettings () {
+  renderSettings() {
     let self = this
     if (this.state.settings) {
       const Options = this.state.settings
@@ -103,7 +114,7 @@ class MasterSettings extends Component {
     }
   }
 
-  renderDestinations () {
+  renderDestinations() {
     let self = this
     if (this.state.destinations) {
       let Options = this.state.destinations
@@ -119,32 +130,43 @@ class MasterSettings extends Component {
     }
   }
 
-  selectAllSettigs (Options, state, e) {
+  selectAllSettigs(Options, state, e) {
     let settingsState = this.state.selectAll
     Options.map(function (Option, index) {
       Option.checked = !settingsState
     })
     this.state.selectAll = !this.state.selectAll
     this.setState(this.state)
-    this.setState({settings: Options})
+    this.setState({ settings: Options })
   }
 
-  selectAllDestinations (Options, state, e) {
+  selectAllDestinations(Options, state, e) {
     let destinationState = this.state.selectAllDestination
     Options.map(function (Option, index) {
       Option.checked = !destinationState
     })
     this.state.selectAllDestination = !this.state.selectAllDestination
     this.setState(this.state)
-    this.setState({destinations: Options})
+    this.setState({ destinations: Options })
   }
 
-  submit () {
-    let settings = _.where(this.state.settings, {checked: true})
-    let destinations = _.where(this.state.destinations, {checked: true})
+  submit() {
+    let settings = _.where(this.state.settings, { checked: true })
+    let destinations = _.where(this.state.destinations, { checked: true })
     console.log(settings)
     console.log(destinations)
   }
 }
 
-export default MasterSettings
+function mapStateToProps(state) {
+  return {
+    viewDetails: state.viewDetails
+  }
+}
+function matchDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+    }, dispatch
+  )
+}
+export default connect(mapStateToProps, matchDispatchToProps, store)(MasterSettings)

@@ -19,7 +19,8 @@ export const CommonConstants = {
     'getAudit': 'api/user/getAudit',
     'getStores': 'api/store/getAllStores',
     'getSettingsDevices': 'api/store/settingsDevices',
-    'getUnregisteredDevices': 'api/device/getAllUnregisterdDevices'
+    'getUnregisteredDevices': 'api/device/getAllUnregisterdDevices',
+    'getMasterSettings': 'api/store/getMasterSettings'
   },
   'TimeMeasureValidations': {
     'TwoMonths': 62,

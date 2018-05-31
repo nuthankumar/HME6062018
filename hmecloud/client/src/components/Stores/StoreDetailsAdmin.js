@@ -77,8 +77,8 @@ class StoreDetail extends Component {
   render() {
     let sortParams = this.props.storesDetails.sortParams ? this.props.storesDetails.sortParams : { 'sortBy': 'Brand_Name', 'sortType': 'DESC' }
     let searchParams = this.props.storesDetails.searchParams
-    let recordCount = (this.props.storesDetails.adminStoreDetails.pageDetails !== undefined) ? this.props.storesDetails.adminStoreDetails.pageDetails[0].RecordCount : 10
-    let pageCount = (this.props.storesDetails.adminStoreDetails.pageDetails !== undefined) ? this.props.storesDetails.adminStoreDetails.pageDetails[0].TotalPages : 10
+    let recordCount = (this.props.storesDetails.adminStoreDetails.pageDetails !== undefined) ? this.props.storesDetails.adminStoreDetails.pageDetails.RecordCount : 10
+    let pageCount = (this.props.storesDetails.adminStoreDetails.pageDetails !== undefined) ? this.props.storesDetails.adminStoreDetails.pageDetails.TotalPages : 10
     return (
       <section className={'stores ' + (this.state.showStores ? 'show' : 'hidden')}>
         <div className='settings forms'>

@@ -2,10 +2,22 @@ import React, { Component } from 'react'
 // import ReactDOM from 'react-dom';
 import './Stores.css'
 
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+
 class RemoteSystemActions extends Component {
   constructor (props) {
     super(props)
+    this.state = {
+      systemActions: this.props.systemActions
+    }
   }
+
+  masterSettings (e) {
+    this.props.history.push('/stores/masterSettings')
+    // this.props.history.location.pathName = '/stores/masterSettings'
+  }
+
   render () {
     return (
       <div className='RemoteSystemActions'>
@@ -19,11 +31,17 @@ class RemoteSystemActions extends Component {
           <a id='reconnect-btn'><div class='ActionButtons'>Force Reconnect</div></a>
         </div>
         <div id='master-settings'>
-          <a id='settings2-btn'><div class='ActionButtons'>Master Settings</div></a>
+          <a id='settings2-btn'><div class='ActionButtons' onClick={this.masterSettings.bind(this)}>Master Settings</div></a>
         </div>
       </div>
     )
   }
 }
 
-export default RemoteSystemActions
+function mapStateToProps (state) {
+  return {
+    storeViewDetails: state.viewDetails.storeViewDetails
+  }
+}
+
+export default connect(mapStateToProps)(RemoteSystemActions)
