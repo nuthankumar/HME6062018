@@ -10,12 +10,15 @@ const messages = require('./Message')
  * @param {*} goalSettings   goalSettings form database
  * @param {*} reportFilter reportFilter like (day,daypart,week)
  */
-const Device = function (result, colors, goalSettings, request, reportFilter) {
+const Device = function (result, colors, groupName, goalSettings, request, reportFilter) {
+  console.log('timeFormat', request)
   this.result = result
   this.colors = colors
+  this.groupName = groupName
   this.goalSettings = goalSettings
   this.request = request
   this.reportFilter = reportFilter
+
 }
 
 /**
