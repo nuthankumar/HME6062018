@@ -176,12 +176,12 @@ class Report extends Component {
     const { date, format, mode, inputFormat } = this.state
     //let level=0
     const loop = (data,level=0) => {
-      
+       console.log(data);
         return data.map(item => {
         if (item.Children && item.Children.length) {
           //level++
             return (
-                <TreeNode title={this.renderStoresAndBrand(item,level) } className={item.StoreNumber} key={item.Id} value={item.Type === CommonConstants.Type.Store ? item.DeviceUID : null} type={item.Type}>
+                <TreeNode title={this.renderStoresAndBrand(item,level) } className={item.Name ? item.Name : item.StoreNumber} key={item.Id} value={item.Type === CommonConstants.Type.Store ? item.DeviceUID : null} type={item.Type}>
               {
                 loop(item.Children,level+1)            
               }
@@ -189,7 +189,7 @@ class Report extends Component {
             </TreeNode>
           )
         }
-        return <TreeNode title={this.renderStoresAndBrand(item,level)} className={item.StoreNumber} key={item.Id} value={item.Type === CommonConstants.Type.Store ? item.DeviceUID : null} type={item.Type} />
+        return <TreeNode title={this.renderStoresAndBrand(item,level)} className={item.Name ? item.Name : item.StoreNumber} key={item.Id} value={item.Type === CommonConstants.Type.Store ? item.DeviceUID : null} type={item.Type} />
       })
     }
 
@@ -632,7 +632,7 @@ class Report extends Component {
                   findStore(item.Children)
               }
               if (keys(item)) {
-                  selectedItems.push(item.StoreNumber)
+                  selectedItems.push(item.Name ? item.Name : item.StoreNumber)
                   selectedList.push(item.Id)
               }
           })
@@ -1277,6 +1277,7 @@ class Report extends Component {
   renderStores() {
     let renderStores
     let stores = this.state.stores
+    console.log(stores);
     renderStores = stores.map(function(store, index) {
       return (
         <span key={index} className={index > 2 ? 'hidden' : ''}>
