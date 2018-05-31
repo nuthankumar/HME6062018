@@ -1102,12 +1102,17 @@ class Report extends Component {
           this.state.successMessage = ''
           this.state.errorMessage = t[language].errorTimeout
           this.setState(this.state)
-        } else {
+        } else if (data.key) {
           this.state.showLoader = false
           this.state.successMessage = ''
           this.state.errorMessage = t[language][data.key]
           this.setState(this.state)
-        }
+        } else {
+          this.state.showLoader = false
+          this.state.successMessage = ''
+          this.state.errorMessage = t[language].genericError
+          this.setState(this.state)
+        } 
       }
     }, error => {
         this.state.successMessage = ''
@@ -1168,19 +1173,24 @@ class Report extends Component {
                 this.state.successMessage = ''
                 this.state.errorMessage = t[language].errorTimeout
                 this.setState(this.state)
-              } else {
+              } else if (data.key) {
                 this.state.showLoader = false
                 this.state.successMessage = ''
                 this.state.errorMessage = t[language][data.key]
                 this.setState(this.state)
-              }
+              }else {
+                this.state.showLoader = false
+                this.state.successMessage = ''
+                this.state.errorMessage = t[language].genericError
+                this.setState(this.state)
+              } 
             }
         }, error => {
             this.state.successMessage = ''
             this.state.errorMessage = 'Failed sending Email'
             this.setState(this.state)
         })
-    }else{
+    } else {
      let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=reports'
       this.api.postData(url, request, data => {
         if (data.status) {
@@ -1196,13 +1206,17 @@ class Report extends Component {
             this.state.successMessage = ''
             this.state.errorMessage = t[language].errorTimeout
             this.setState(this.state)
-          } else {
+          } else if (data.key) {
             this.state.showLoader = false
             this.state.successMessage = ''
             this.state.errorMessage = t[language][data.key]
             this.setState(this.state)
-          }
-         
+          } else {
+            this.state.showLoader = false
+            this.state.successMessage = ''
+            this.state.errorMessage = t[language].genericError
+            this.setState(this.state)
+          } 
         }
       }, error => {
           this.state.successMessage = ''

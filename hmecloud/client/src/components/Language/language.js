@@ -830,7 +830,9 @@ const language = [
     'Search': 'Search',
     'MustSelectStLeastOneSystem': 'Must select at least one system',
     'Timezone' :'Timezone',
-    'TandemLinesError':'ERROR: Tandem Lanes may not be selected in multiple store reports.'
+    'TandemLinesError':'ERROR: Tandem Lanes may not be selected in multiple store reports.',
+    'errorTimeout': 'Timeout: Request failed to complete in 15000ms',
+    'genericError':'Error occured , Please contact the administrator.'
   },
 
   // French
@@ -1682,7 +1684,9 @@ const language = [
     'Search':'Chercher',
     'MustSelectStLeastOneSystem': 'Doit sélectionner au moins un système',
     'Timezone' :'Fuseau horaire',
-    'TandemLinesError':'ERREUR: Les couloirs en tandem peuvent ne pas être sélectionnés dans plusieurs rapports de magasin.'
+    'TandemLinesError':'ERREUR: Les couloirs en tandem peuvent ne pas être sélectionnés dans plusieurs rapports de magasin.',
+    'errorTimeout':"Timeout: La requête n'a pas pu aboutir en 15000ms",
+    'genericError':"Une erreur est survenue, veuillez contacter l'administrateur."
   }
 ]
 export default language
