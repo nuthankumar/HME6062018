@@ -10,7 +10,7 @@ function getStoreSuccess (stores) {
   }
 }
 
-export const initViewStore = (duid = '5D665CCD-83B6-4A48-9483-E4CB3450578E') => {
+export const initViewStore = (duid) => {
   this.api = new Api()
   let url = Config.apiBaseUrl + CommonConstants.apiUrls.getSettingsDevices + '?duid=' + duid
   return (dispatch) => {

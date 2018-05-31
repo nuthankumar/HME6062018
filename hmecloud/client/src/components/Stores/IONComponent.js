@@ -1,14 +1,21 @@
 import React, { Component } from 'react'
 import './Stores.css'
+import * as modalAction from '../../actions/modalAction'
+import * as viewDetail from '../../actions/viewDetails'
 const offlineImage = require('../../images/connection_offline.png')
-// import t from '../Language/language'
-// import * as languageSettings from '../Language/languageSettings'
 
-// export default class BookList extends Component {
 class IONComponent extends Component {
-  // constructor (props) {
-  //   super(props)
-  // }
+  constructor (props) {
+    super(props)
+    this.handleClick = this.handleClick.bind(this)
+  }
+  handleClick () {
+    this.props.dispatch(viewDetail.initViewStore(this.props.data.Device_UID))
+    this.props.dispatch(modalAction.closePopup())
+    this.props.history.push({
+      pathname: '/settings/ViewDetails'
+    })
+  }
 
   render () {
     return (
@@ -27,13 +34,13 @@ class IONComponent extends Component {
               <td className='sys-ctr'>
                 <input type='checkbox' name='checkbox' id='idname' className='sys-ion-check' onchange="enableRemove('ion');" />
               </td>
-              <td >1.22 C-</td>
-              <td >00-1D-06-00-10-1E</td>
+              <td >{this.props.data.Device_SettingVersion}</td>
+              <td >{this.props.data.Device_SerialNumber}</td>
               <td>
-                <img src={offlineImage} /><span>Offline</span></td>
-              <td><a>View <span>Details</span></a></td>
+                <img src={offlineImage} /><span> {this.props.data.Device_IsActive === 0 ? 'Offline' : 'Online'}</span></td>
+              <td onClick={this.handleClick.bind(this)}><a>View <span>Details</span></a></td>
             </tr>
-            <tr className='tdata'>
+            {/* <tr className='tdata'>
               <td className='sys-ctr'>
                 <input type='checkbox' name='checkbox' id='idname' className='sys-ion-check' onchange="enableRemove('ion');" />
               </td>
@@ -42,7 +49,7 @@ class IONComponent extends Component {
               <td>
                 <img src={offlineImage} /><span>Offline</span></td>
               <td><a>View <span>Details</span></a></td>
-            </tr>
+            </tr> */}
           </tbody>
         </table>
         <div className='remove-sys'>

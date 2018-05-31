@@ -1,14 +1,10 @@
 import React, { Component } from 'react'
 import './Stores.css'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-
+import * as modalAction from '../../actions/modalAction'
+import * as viewDetail from '../../actions/viewDetails'
 const offlineImage = require('../../images/connection_offline.png')
-// import t from '../Language/language'
-// import * as languageSettings from '../Language/languageSettings'
 
-// export default class BookList extends Component {
-class CIBComponent extends Component { // ensure you dont export component directly
+class CIBComponent extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -16,10 +12,19 @@ class CIBComponent extends Component { // ensure you dont export component direc
       disableRemove: false
     }
     this.enableRemoveBtn = this.enableRemoveBtn.bind(this)
+    this.handleClick = this.handleClick.bind(this)
   }
 
   enableRemoveBtn (e) {
-    return e.currentTarget.checked ? this.setState({disableRemove: true}) : this.setState({disableRemove: false})
+    return e.currentTarget.checked ? this.setState({ disableRemove: true }) : this.setState({ disableRemove: false })
+  }
+
+  handleClick () {
+    this.props.dispatch(viewDetail.initViewStore(this.props.data.Device_UID))
+    this.props.dispatch(modalAction.closePopup())
+    this.props.history.push({
+      pathname: '/settings/ViewDetails'
+    })
   }
 
   render () {
@@ -31,20 +36,20 @@ class CIBComponent extends Component { // ensure you dont export component direc
             <tbody>
               <tr>
                 <th><label for='Store_Name'> Store Number:</label></th>
-                <td><input type='text' maxLength='100' name='Store_Name' id='Store_Name' value='' disabled='disabled' />
+                <td><input type='text' maxLength='100' name='Store_Name' id='Store_Name' value={this.props.data.Store_Number} disabled='disabled' />
                   <input type='hidden' name='Store_ID' id='Store_ID' value='112480' />
                 </td>
               </tr>
               <tr>
                 <th><label for='Store_Name'> Email:</label></th>
-                <td><input type='text' maxLength='100' name='Store_Name' id='Store_Name' value='' disabled='disabled' />
+                <td><input type='text' maxLength='100' name='Store_Name' id='Store_Name' value={this.props.email} disabled='disabled' />
                   <input type='hidden' name='Store_ID' id='Store_ID' value='112480' />
                 </td>
               </tr>
               <tr>
                 <th><label for='Store_Name'> Brand:</label></th>
                 <td> <select name='Store_Brand_ID' id='Store_Brand_ID' disabled='disabled'>
-                  <option value="Checker's" selected='selected'>Checker's</option>
+                  <option value="Checker's" selected='selected'>{this.props.data.Brand_Name}</option>
                   <option value='Dairy Queen' selected='selected'>Dairy Queen</option>
                 </select>
                 </td>
@@ -52,7 +57,7 @@ class CIBComponent extends Component { // ensure you dont export component direc
               <tr>
                 <th><label for='Store_Name'> Time Zone:</label></th>
                 <td> <select name='Store_Brand_ID' id='Store_Brand_ID' disabled='disabled'>
-                  <option value="Checker's" selected='selected'>Checker's</option>
+                  <option value="Checker's" selected='selected'>TimeZone</option>
                   <option value='Dairy Queen' selected='selected'>Dairy Queen</option>
                 </select>
                 </td>
@@ -74,11 +79,11 @@ class CIBComponent extends Component { // ensure you dont export component direc
               <td className='sys-ctr'>
                 <input type='checkbox' name='checkbox' id='idname' className='sys-ion-check' onChange={this.enableRemoveBtn} />
               </td>
-              <td >1.22 C-</td>
-              <td >00-1D-06-00-10-1E</td>
+              <td >{this.props.data.Device_SettingVersion}</td>
+              <td >{this.props.data.Device_SettingVersion}</td>
               <td>
-                <img src={offlineImage} /><span>Offline</span></td>
-              <td><a>View <span>Details</span></a></td>
+                <img src={offlineImage} /><span> {this.props.data.Device_IsActive === 0 ? 'Offline' : 'Online'}</span></td>
+              <td onClick={this.handleClick.bind(this)}><a>View <span>Details</span></a></td>
             </tr>
           </tbody>
         </table>
@@ -96,11 +101,4 @@ class CIBComponent extends Component { // ensure you dont export component direc
   }
 }
 
-function mapStateToProps (state) {
-  return {
-    storesDetails: state.StorePopupDetails,
-    storeModelPopup: state.StorePopupDetails.storePopUpClient,
-    storeModelPopupIsAdmin: state.StorePopupDetails.storePopUpDetailisAdmin
-  }
-}
-export default connect(mapStateToProps)(CIBComponent)
+export default CIBComponent

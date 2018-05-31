@@ -41,35 +41,32 @@ class ModalContainer extends Component {
   }
 
   storeTabs(array) {
-    // let array = []
-    // array = this.props.stores.storePopupDetails.Device_Details
-    // array.push({ Device_Name: 'Store Details', isActive: true })
     let Tab = ReactBootstrap.Tab
     return array.map((tabItem, index) => {
       return (
         <Tab eventKey={index + 1} title={tabItem.Device_Name} onClick={this.handleClick}>
-          {this.renderTabComponent(tabItem.Device_Name, this.props.stores.storePopUpDetailisAdmin)}
+          {this.renderTabComponent(tabItem.Device_Name, this.props.stores.storePopUpDetailisAdmin, tabItem)}
         </Tab>
       )
     })
   }
 
-  renderTabComponent(tabcomponent, isAdmin) {
+  renderTabComponent(tabcomponent, isAdmin, tabItem) {
     switch (tabcomponent) {
       case 'Store Details':
         return <StoredetailsComponent isAdmin={isAdmin} />
         break
       case 'CIB':
-        return <CIBComponent isAdmin={isAdmin} />
+        return <CIBComponent isAdmin={isAdmin} email={this.props.stores.storePopupDetails.storeDetails.User_EmailAddress} data={tabItem} />
         break
       case 'EOS':
-        return <EOSComponent isAdmin={isAdmin} />
+        return <EOSComponent isAdmin={isAdmin} data={tabItem} />
         break
       case 'ION':
-        return <IONComponent isAdmin={isAdmin} />
+        return <IONComponent isAdmin={isAdmin} data={tabItem} />
         break
       case 'ZOOM':
-        return <ZoomComponent isAdmin={isAdmin} />
+        return <ZoomComponent isAdmin={isAdmin} data={tabItem} />
         break
     }
   }
@@ -77,7 +74,6 @@ class ModalContainer extends Component {
   render() {
     // const language = this.state.currentLanguage
     let Modal = ReactBootstrap.Modal
-    let Button = ReactBootstrap.Button
     let Tabs = ReactBootstrap.Tabs
     let show = false
     if (this.props.stores.storePopUpClient !== undefined && this.props.stores.storePopUpClient) {
@@ -86,7 +82,6 @@ class ModalContainer extends Component {
       show = this.props.stores.storePopUpAdmin
     }
     let array = []
-    let tabArray;
     array.push({ Device_Name: 'Store Details', isActive: true })
     array = array.concat(this.props.stores.storePopupDetails.Device_Details)
 
