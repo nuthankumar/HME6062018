@@ -119,7 +119,7 @@ const removeDeviceById = (input, callback) => {
  * @param {*} callback
  */
 const saveStoreDetails = (input, callback) => {
-  console.log(input)
+
   repository.executeProcedure(sqlQuery.Stores.saveStoreDetails, request => {
   
     return request

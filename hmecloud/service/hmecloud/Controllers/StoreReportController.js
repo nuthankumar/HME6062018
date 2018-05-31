@@ -43,10 +43,11 @@ reports.prototype.pagination = function (isReportName) {
   return totalPages.noOfPages()
 }
 // get devices values
-reports.prototype.deviceDataPreparation = function (reportResult, groupName, getSystemInfo, filter, totalPages) {
+reports.prototype.deviceDataPreparation = function (reportResult, stopTime, startTime, groupName, getSystemInfo, filter, totalPages) {
   let colors
   let goalSetting
   let storeInfo
+  console.log('filter', filter)
   let reportFilter = filter.reportName
   let deviceValues = {}
   if (getSystemInfo && getSystemInfo.data.length > 0) {
@@ -63,7 +64,7 @@ reports.prototype.deviceDataPreparation = function (reportResult, groupName, get
     }
     const deviceRecords = new GetDeviceSingleStore(reportResult.data[0], colors, goalSetting, this.request, reportFilter, groupname)
     reportFilter === 'daypart' ? storeInfo = reportResult.data[3] : storeInfo = {}
-    deviceValues = deviceRecords.getStoreInfo(this.request, storeInfo)
+    deviceValues = deviceRecords.getStoreInfo(this.request, stopTime, startTime, storeInfo)
     if (reportResult.data[0] && reportResult.data[0].length > 0 && reportResult.data[0] !== null && reportResult.data[0] !== undefined) {
       deviceValues.timeMeasureType = deviceRecords.getDeviceValues()
     } else {
@@ -170,15 +171,19 @@ reports.prototype.deviceDataPreparation = function (reportResult, groupName, get
 }
 reports.prototype.getRawCarDataReport = function (reportResult) {
   let deviceValues = {}
+
   const devicesDetails = new GetDeviceRawCarDataReport(reportResult, this.request)
   let deviceStoreInfo = devicesDetails.storeInfo()
+
   deviceValues = deviceStoreInfo
   new Promise(function (resolve, reject) {
     if (reportResult.data[0] && reportResult.data[0].length > 0 && reportResult.data[0] !== null && reportResult.data[0] !== undefined) {
       deviceValues.rawCarData = devicesDetails.generateReports(reportResult.data[0])
     } else {
+      deviceValues.key = 'ReportsNoRecordsFound'
       deviceValues.rawCarData = []
     }
+
     let events = []
     if (reportResult.data[1] && reportResult.data[1].length > 0 && reportResult.data[1] !== null && reportResult.data[1] !== undefined) {
       events = reportResult.data[1][0].EventTypeName.split('|$|')
@@ -186,9 +191,9 @@ reports.prototype.getRawCarDataReport = function (reportResult) {
     } else {
       deviceValues.eventList = []
     }
+
     if (reportResult.data[0].length > 0) {
       resolve(deviceValues)
-
     } else {
       deviceValues.key = 'ReportsNoRecordsFound'
       delete deviceValues['eventList']
@@ -197,13 +202,12 @@ reports.prototype.getRawCarDataReport = function (reportResult) {
   }).catch((e) => {
     deviceValues.key = 'ReportsNoRecordsFound'
     deviceValues.status = true
-    console.log('ERRr',e)
     return deviceValues
   })
 
   return deviceValues
 }
-reports.prototype.generateCSV = function (reportResult, filter, totalPages, response) {
+reports.prototype.generateCSV = function (reportResult, stopTime, startTime, filter, totalPages, response) {
   let csvInput = {}
   let DeviceDetails = {}
   let eventHeaders = []
@@ -222,11 +226,12 @@ reports.prototype.generateCSV = function (reportResult, filter, totalPages, resp
   if (filter.reportName === 'rawcardata') {
     let rawCarReports = this.getRawCarDataReport(reportResult)
     DeviceDetails = rawCarReports.rawCarData
+    
     eventHeaders = []
     csvInput.reportName = `${messages.COMMON.RAWCARREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
     csvInput.subject = `${messages.COMMON.RAWCARDATAREPORTTITLE} ${this.request.body.openTime} ${this.request.body.toDate + (this.request.body.format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
   } else {
-    let getReports = this.deviceDataPreparation(reportResult, filter, totalPages)
+    let getReports = this.deviceDataPreparation(reportResult, stopTime, startTime, filter, totalPages)
     DeviceDetails = getReports.timeMeasureType
     let deviceHeaders
     if (this.isSingleStore) {
@@ -248,7 +253,7 @@ reports.prototype.generateCSV = function (reportResult, filter, totalPages, resp
     }
   })
 }
-reports.prototype.generatePDF = function (reportResult, filter, totalPages, response) {
+reports.prototype.generatePDF = function (reportResult, stopTime, startTime, filter, totalPages, response) {
   let pdfInput = {}
   // let DeviceDetails
   pdfInput.type = `${messages.COMMON.PDFTYPE}`
@@ -264,7 +269,7 @@ reports.prototype.generatePDF = function (reportResult, filter, totalPages, resp
   }
   pdfInput.email = this.request.UserEmail
   if (this.isSingleStore) {
-    let singleStore = this.deviceDataPreparation(reportResult, filter, totalPages)
+    let singleStore = this.deviceDataPreparation(reportResult, stopTime, startTime, filter, totalPages)
     if (singleStore.eventList.length > 0) {
       singleStore.goalHeaders = singleStore.goalData
     } else {
@@ -278,7 +283,7 @@ reports.prototype.generatePDF = function (reportResult, filter, totalPages, resp
       }
     })
   } else {
-    let multipleStore = this.deviceDataPreparation(reportResult, filter, totalPages)
+    let multipleStore = this.deviceDataPreparation(reportResult, stopTime, startTime, filter, totalPages)
     Pdfmail.mutipleStore(multipleStore, pdfInput, isMailSent => {
       if (isMailSent) {
         response.status(200).send(isMailSent)
@@ -292,21 +297,28 @@ reports.prototype.generatePDF = function (reportResult, filter, totalPages, resp
 reports.prototype.createReports = function (response) {
   let isValidation = this.validation()
   if (isValidation.status === true) {
+    let stopTime = this.request.body.toDate
+    let startTime = this.request.body.fromDate
     let totalPages = this.pagination(isValidation.reportName)
     repository.getAll(this.request, isValidation.reportName, reportResult => {
       let deviceInfo
       let groupName
       let systemInfo
       let Output
+
       if (reportResult.status) {
         if (isValidation.reportName === 'rawcardata') {
-          this.getRawCarDataReport(reportResult)
-          // Output.status = true
-          // if (Output.status === true) {
-          //   response.status(200).send(Output)
-          // } else {
-          //   response.status(400).send(Output)
-          // }
+          if (this.isCSV) {
+            this.generateCSV(reportResult, stopTime, startTime, isValidation, totalPages, response)
+          } else if (this.isReports) {
+            Output = this.getRawCarDataReport(reportResult, stopTime, startTime)
+            Output.status = true
+            if (Output.status === true) {
+              response.status(200).send(Output)
+            } else {
+              response.status(400).send(Output)
+            }
+          }
         } else {
           // Get group Name
           repository.getGroupName(this.request.body.deviceIds, getGroupName => {
@@ -320,7 +332,8 @@ reports.prototype.createReports = function (response) {
               // } else {
               repository.getSystemStatistics(this.request, getSystemInfo => {
                 if (getSystemInfo.status) {
-                  Output = this.deviceDataPreparation(reportResult, groupName, getSystemInfo, isValidation, totalPages)
+                
+                  Output = this.deviceDataPreparation(reportResult, stopTime, startTime, isValidation, totalPages) // groupName, getSystemInfo,
                   Output.status = true
                   if (Output.status === true) {
                     response.status(200).send(Output)
