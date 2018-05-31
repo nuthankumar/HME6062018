@@ -1097,10 +1097,17 @@ class Report extends Component {
             state: { rawCarRequest: rawCarData[0] , rawCarData : data, reportData: this.state.reportData }
         })
       }else {
-        this.state.showLoader = false
-        this.state.successMessage = ''
-        this.state.errorMessage = t[language][data.key]
-        this.setState(this.state)
+        if(data.data.code === 'ETIMEOUT') {
+          this.state.showLoader = false
+          this.state.successMessage = ''
+          this.state.errorMessage = t[language].errorTimeout
+          this.setState(this.state)
+        } else {
+          this.state.showLoader = false
+          this.state.successMessage = ''
+          this.state.errorMessage = t[language][data.key]
+          this.setState(this.state)
+        }
       }
     }, error => {
         this.state.successMessage = ''
@@ -1156,10 +1163,17 @@ class Report extends Component {
                 this.setState({ showLoader: false })
                 this.props.history.push('/emailSent', data.data)
             } else {
-              this.state.showLoader = false
-              this.state.successMessage = ''
-              this.state.errorMessage = t[language][data.key]
-              this.setState(this.state)
+              if(data.data.code === 'ETIMEOUT') {
+                this.state.showLoader = false
+                this.state.successMessage = ''
+                this.state.errorMessage = t[language].errorTimeout
+                this.setState(this.state)
+              } else {
+                this.state.showLoader = false
+                this.state.successMessage = ''
+                this.state.errorMessage = t[language][data.key]
+                this.setState(this.state)
+              }
             }
         }, error => {
             this.state.successMessage = ''
@@ -1177,10 +1191,18 @@ class Report extends Component {
               state: { reportData: this.state.reportData , reportDataResponse : data, reportRequest: request }
           })
         } else {
-          this.state.showLoader = false
-          this.state.successMessage = ''
-          this.state.errorMessage = t[language][data.key]
-          this.setState(this.state)
+          if(data.data.code === 'ETIMEOUT') {
+            this.state.showLoader = false
+            this.state.successMessage = ''
+            this.state.errorMessage = t[language].errorTimeout
+            this.setState(this.state)
+          } else {
+            this.state.showLoader = false
+            this.state.successMessage = ''
+            this.state.errorMessage = t[language][data.key]
+            this.setState(this.state)
+          }
+         
         }
       }, error => {
           this.state.successMessage = ''
