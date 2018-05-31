@@ -1062,8 +1062,9 @@ class Report extends Component {
   }
 
   generateRawCarDataReport(template) {
-      this.state.showLoader = true
-      this.setState(this.state)
+    let language = this.state.currentLanguage
+    this.state.showLoader = true
+    this.setState(this.state)
     let rawCarData = []
     rawCarData.push(
         {
@@ -1088,12 +1089,19 @@ class Report extends Component {
     })
     let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=reports'
     this.api.postData(url, rawCarData[0], data => {
+      if (data.status) {
         this.state.showLoader = false
         this.setState(this.state)
         this.props.history.push({
             pathname: '/rawcardatareport',
             state: { rawCarRequest: rawCarData[0] , rawCarData : data, reportData: this.state.reportData }
         })
+      }else {
+        this.state.showLoader = false
+        this.state.successMessage = ''
+        this.state.errorMessage = t[language][data.key]
+        this.setState(this.state)
+      }
     }, error => {
         this.state.successMessage = ''
         this.state.errorMessage = error.message
@@ -1102,6 +1110,7 @@ class Report extends Component {
   }
 
   generateDaypartReport(){
+    let language = this.state.currentLanguage
     this.state.showLoader = true
     this.setState(this.state)
     let template = this.state.templateData[0]
@@ -1146,6 +1155,11 @@ class Report extends Component {
                 this.setState(this.state)
                 this.setState({ showLoader: false })
                 this.props.history.push('/emailSent', data.data)
+            } else {
+              this.state.showLoader = false
+              this.state.successMessage = ''
+              this.state.errorMessage = t[language][data.key]
+              this.setState(this.state)
             }
         }, error => {
             this.state.successMessage = ''
@@ -1155,12 +1169,19 @@ class Report extends Component {
     }else{
      let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=reports'
       this.api.postData(url, request, data => {
+        if (data.status) {
           this.state.showLoader = false
           this.setState(this.state)
           this.props.history.push({
               pathname: '/summaryreport',
               state: { reportData: this.state.reportData , reportDataResponse : data, reportRequest: request }
           })
+        } else {
+          this.state.showLoader = false
+          this.state.successMessage = ''
+          this.state.errorMessage = t[language][data.key]
+          this.setState(this.state)
+        }
       }, error => {
           this.state.successMessage = ''
           this.state.errorMessage = error.message
