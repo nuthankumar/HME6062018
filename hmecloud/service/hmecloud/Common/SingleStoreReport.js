@@ -10,14 +10,14 @@ const Device = function (result, colors, goalSettings, request, reportFilter) {
   this.request = request
   this.reportFilter = reportFilter
 }
-Device.prototype.getStoreInfo = (input, stopTime, storeInformation) => {
+Device.prototype.getStoreInfo = (input, stopTime, startTime, storeInformation) => {
   let storeInfo = {}
   if (storeInformation && storeInformation[0]) {
     storeInfo.storeName = storeInformation[0].Store_Name ? storeInformation[0].Store_Name + '-' + storeInformation[0].Store_Number : storeInformation[0].Store_Number
     storeInfo.storeNumber = storeInformation[0].Store_Number ? storeInformation[0].Store_Number : 'N/A'
     storeInfo.storeDesc = storeInformation[0].Brand_Name ? storeInformation[0].Brand_Name : 'N/A'
   }
-  storeInfo.startTime = `${dateUtils.convertMMMdYYYY(input.body.fromDate)}`
+  storeInfo.startTime = `${dateUtils.convertMMMdYYYY(startTime)}`
 
   storeInfo.stopTime = `${dateUtils.convertMMMdYYYY(stopTime)}`
 
