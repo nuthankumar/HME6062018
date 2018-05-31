@@ -47,7 +47,7 @@ class Pagination extends Component {
             containerClassName={"pagination"}
             subContainerClassName={"pages pagination"}
             activeClassName={"active"} />
-          <span class="results">Showing 1 - 10 of ({this.props.recordCount}) Results</span>
+          <span class="results">Showing 1-{this.state.value} of ({this.props.recordCount}) Results</span>
         </div>
       </div>
     );

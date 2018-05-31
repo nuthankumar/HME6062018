@@ -8,7 +8,6 @@ import Api from '../../Api'
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import { confirmAlert } from 'react-confirm-alert'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { mergeClosePopup } from '../../actions/modalAction'
 class StoreMerge extends Component {
   constructor(props) {
@@ -26,10 +25,6 @@ class StoreMerge extends Component {
     this.handleShow = this.handleShow.bind(this)
     this.handleClose = this.handleClose.bind(this)
   }
-
-  // componentDidMount() {
-
-  // }
   rowClicked(value) {
 
   }
@@ -40,10 +35,11 @@ class StoreMerge extends Component {
     this.setState({ show: true })
   }
   selectSystemChecked(value) {
+    this.state.deviceSelected = []
     if (value != null) {
-      this.setState({ deviceSelected: [...this.state.deviceSelected, this.state.data.Device_Details[value]] })
+      this.setState({ deviceSelected: [...this.state.deviceSelected, this.props.storesDetails.storePopupDetails.Device_Details[value]] })
     } else {
-      this.setState({ deviceSelected: null })
+      this.setState({ deviceSelected: [] })
     }
   }
   targetStoreChecked(value) {
@@ -63,7 +59,8 @@ class StoreMerge extends Component {
 
   }
   MergeClick() {
-    if (this.state.deviceSelected != null && this.state.storeSelected != null) {
+    if (this.state.deviceSelected.length !== 0 && this.state.storeSelected != null) {
+      this.props.dispatch(mergeClosePopup())
       confirmAlert({
         customUI: ({ onClose }) => {
           const DeviceItems = this.state.deviceSelected.map((device) => {
@@ -91,19 +88,16 @@ class StoreMerge extends Component {
         }
       })
     } else {
-      if (this.state.deviceSelected == null && this.state.storeSelected == null) {
+      if (this.state.deviceSelected.length === 0 && this.state.storeSelected == null) {
         this.setState({ error: 'Must select at least one system \n Must select a target store.' })
       } else {
-        (this.state.deviceSelected == null) ? this.setState({ error: 'Must select at least one system.' })
+        (this.state.deviceSelected.length === 0) ? this.setState({ error: 'Must select at least one system.' })
           : this.setState({ error: 'Must select a target store.' })
       }
     }
   }
-  /* <Button bsStyle="primary" bsSize="large" onClick={this.props.handleShow}> */
-  /* <Button onClick={this.props.onHide}>Close</Button> */
+
   render() {
-    //   const language = this.state.currentLanguage
-    // let displayData = this.props.systemStats
     let Show = (this.props.mergeModelPopup !== undefined) ? this.props.mergeModelPopup : false
 
     return (
@@ -124,11 +118,13 @@ class StoreMerge extends Component {
           <div class='store-merge-footer'>
             <div class='merge-store-row'>
               <div class='merger-error-block'>
-                <ul class='merge-error-list' />
+                <ul class='merge-error-list'>
+                  {this.state.error}
+                </ul>
               </div>
               <div class='save-merge-block text-right'>
-                <a class='btn-cancel merge-cancel' href=''>Cancel</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-                <button type='button' class='btn-submit merge-submit-btn'>Merge</button>
+                <a class='btn-cancel merge-cancel' onClick={this.handleClose}>Cancel</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                <button type='button' class='btn-submit merge-submit-btn' onClick={this.MergeClick.bind(this)}>Merge</button>
               </div>
             </div>
           </div>
@@ -155,14 +151,14 @@ class SelectSystem extends Component {
   render() {
     //  const language = this.state.currentLanguage
     let displayData = this.props.data.storeDetails
-    let device = this.props.data.deviceDetails
+    let device = this.props.data.Device_Details
     let headers = [' ', 'System', 'Serial Number']
     return (
       <div className='select-system-col'>
         <h3>Select System(s)</h3>
         <div className='form-group'>
           <div className='store-brand-info'>
-            <div>Store Number:&nbsp;&nbsp;<span className='merge-storenobrand-label'>{displayData.Store_Name}</span></div>
+            <div>Store Number:&nbsp;&nbsp;<span className='merge-storenobrand-label'>{displayData.Store_Number}</span></div>
             <div>Store Brand:&nbsp;&nbsp;<span className='merge-storenobrand-label'>{displayData.Brand_Name}</span></div>
           </div>
         </div>
