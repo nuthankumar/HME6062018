@@ -282,4 +282,112 @@ Device.prototype.getSystemStatistics = function (DeviceSystemInfo, DeviceLaneInf
   return displayData
 }
 
+// New ODS report
+
+Device.prototype.getDeviceValues = function () {
+  const timeFormat = this.request.body.format
+  const filter = this.reportFilter
+  let storeDetails = this.result
+  let deviceInfo = []
+  let getColors = []
+  // checking color code is empty or not
+  if (this.colors && this.colors.length > 0 && this.colors[0].ColourCode) { getColors = this.colors[0].ColourCode.split('|') }
+  let getColor = (event, eventValue) => {
+    let color = ''
+    if (getColors && getColors.length > 0) {
+      color = getColors[2]
+      _.pickBy(this.goalSettings, (value, key) => {
+        if (key.toLowerCase().includes(event.toLowerCase())) {
+          if (value && eventValue < value) {
+            if (key.includes('GoalA')) {
+              color = getColors[0]
+            } else if (key.includes('GoalB')) {
+              color = getColors[1]
+            } else if (key.includes('GoalC')) {
+              color = getColors[2]
+            }
+            return true
+          }
+        }
+      })
+    }
+    return color
+  }
+  _.map(storeDetails, (item, index) => {
+    let reportInfo = {}
+    let dayPartValue
+    let newValue
+    _.forEach(storeDetails[index], function (value, key) {
+      if (key === 'DayPartIndex') {
+        dayPartValue = `${value}`
+      } else if (key === 'StoreDate') {
+        if (filter === 'daypart') {
+          if (value === 'Total Daypart') {
+            reportInfo['Daypart'] = {
+              'timeSpan': 'Total DayPart',
+              'currentWeekpart': messages.COMMON.WAVG
+            }
+          } else {
+            if (!Number.isNaN(parseInt(dayPartValue))) {
+              let dateSplit = `${value}`.split('-')
+              reportInfo['Daypart'] = {
+                'timeSpan': `${dateSplit[1]}/${dateSplit[2]}-Daypart${dayPartValue}`,
+                'currentWeekpart': messages.COMMON.DAYOPENCLOSE
+              }
+            } else if (Number.isNaN(parseInt(dayPartValue))) {
+              reportInfo['Daypart'] = {
+                'timeSpan': 'Total Daypart',
+                'currentWeekpart': messages.COMMON.WAVG
+              }
+            }
+          }
+        }
+        reportInfo[`${key}`] = { 'value': value }
+      } else if (key === 'StoreID') {
+        reportInfo['storeId'] = { 'value': value }
+      } else if (key === 'Store_Name') {
+        reportInfo['Stores'] = { 'value': value }
+      } else if (key === 'Device_UID') {
+        reportInfo['deviceUid'] = { 'value': value }
+      } else if (key === 'Device_ID') {
+        reportInfo['deviceId'] = { 'value': value }
+      } else if (key === 'Total_Car') {
+        let carValue
+        if (value === 0) {
+          carValue = ''
+        } else {
+          carValue = value
+        }
+        reportInfo['Total Cars'] = { 'value': carValue }
+      } else if (timeFormat === 2) {
+        newValue = value
+        let color
+        if (newValue === 0 || newValue === null) {
+          newValue = 'N/A'
+          color = messages.COMMON.NACOLOR
+        } else {
+          color = `${getColor(key, newValue)}`
+        }
+        reportInfo[`${key}`] = { 'value': `${dateUtils.convertSecondsToMinutes(parseInt(newValue), timeFormat)}`, 'color': color }
+      } else if (timeFormat === 1) {
+        newValue = value
+        let color
+        if (newValue === 0 || newValue === null) {
+          newValue = 'N/A'
+          color = messages.COMMON.NACOLOR
+        } else {
+          color = `${getColor(key, newValue)}`
+        }
+        reportInfo[`${key}`] = { 'value': `${newValue}`, 'color': color }
+      }
+      reportInfo['Groups'] = { 'value': this.groupName || null }
+    })
+    deviceInfo.push(reportInfo)
+  })
+  let timeMeasureType = []
+  let deviceTime = {}
+  deviceTime.data = deviceInfo
+  timeMeasureType.push(deviceTime)
+  return timeMeasureType
+}
 module.exports = Device

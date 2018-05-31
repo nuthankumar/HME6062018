@@ -140,4 +140,85 @@ Device.prototype.multipleStore = function () {
   })
   return deviceValues
 }
+
+// New ODS Report
+Device.prototype.getDeviceInformation = function () {
+  const timeFormat = this.request.body.format
+  const filter = this.reportFilter
+  let storeDetails = this.result
+  let index = 0
+  let deviceInfo
+  let deviceValues = []
+  let getColors = []
+  // checking color code is empty or not
+  if (this.colors && this.colors.length > 0 && this.colors[0].ColourCode) { getColors = this.colors[0].ColourCode.split('|') }
+  let getColor = (event, eventValue) => {
+    let color = getColors[2]
+    _.pickBy(this.goalSettings, (value, key) => {
+      if (key.toLowerCase().includes(event.toLowerCase())) {
+        if (value && eventValue < value) {
+          if (key.includes('GoalA')) {
+            color = getColors[0]
+          } else if (key.includes('GoalB')) {
+            color = getColors[1]
+          } else if (key.includes('GoalC')) {
+            color = getColors[2]
+          }
+          return true
+        }
+      }
+    })
+    return color
+  }
+  _.forEach(storeDetails, (item, key) => {
+    let reportInfo = {}
+    let groupName
+    let storeNo
+    if (filter === 'daypart') {
+      if (item['DayPartIndex'] !== index) {
+        deviceInfo = {
+          title: '',
+          data: []
+        }
+        deviceInfo.title = moment(item['StoreDate']).format('MMM D,YYYY') + ' - DAYPART' + ' ' + item['DayPartIndex']
+        deviceInfo.data = []
+        index = item['DayPartIndex']
+        deviceValues.push(deviceInfo)
+      }
+    }
+    _.forEach(storeDetails[key], function (value, key) {
+      if (key === 'StoreID') {
+        reportInfo['storeId'] = {'value': ` ${value}`}
+      } else if (key === 'Store_Name') {
+        reportInfo['Stores'] = {'value': (value || null)}
+      } else if (key === 'Device_UID') {
+        reportInfo['Device_UID'] = {'value': (value || null)}
+      } else if (key === 'Device_ID') {
+        reportInfo['deviceId'] = {'value': (value || null)}
+      } else if (key === 'StartTime') {
+        reportInfo['StartTime'] = {'value': (value || null)}
+      } else if (key === 'EndTime') {
+        reportInfo['EndTime'] = {'value': (value || null)}
+      } else if (key === 'Total_Car') {
+        reportInfo['Total Cars'] = {'value': (value || null)}
+      } else if (key === 'StoreDate') {
+        reportInfo['StoreDate'] = {'value': (value || null)}
+      } else {
+        let color
+        if (value === 0 || value === null) {
+          value = 'N/A'
+          color = messages.COMMON.NACOLOR
+        } else {
+          color = `${getColor(key, value)}`
+        }
+        reportInfo[`${key}`] = {'value': `${dateUtils.convertSecondsToMinutes(parseInt(value), timeFormat)}`, 'color': color}
+      }
+      _.forEach(this.groupName, (item) => {
+        reportInfo['Groups'] = { 'value': item.GroupName || null }
+      })
+    })
+    deviceInfo.data.push(reportInfo)
+  })
+  return deviceValues
+}
 module.exports = Device

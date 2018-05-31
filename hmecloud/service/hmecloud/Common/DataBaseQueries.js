@@ -132,7 +132,12 @@ const sqlQueries = {
     getWeekReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Week_Details_Dynamic]',
     getDayPartReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Daypart_Details_Dynamic]',
     getDayReport: '[dbo].[usp_HME_Cloud_Get_Report_By_Date_Details_Dynamic]',
-    getRawCarData: '[dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details_Dynamic]'
+    getRawCarData: '[dbo].[usp_HME_Cloud_Get_Report_Raw_Data_Details_Dynamic]',
+    getODSDaypartReport: '[dbo].[usp_GetReportByDaypart]',
+    getGroupNameByDeviceID: '[dbo].[usp_GetGroupNameByDeviceIDs]',
+    getSystemStatistics: '[dbo].[usp_ReportStatistics]',
+    getODSRawcardataReport: '[dbo].[usp_GetRawCarData]',
+    getODSPReportByDate: '[dbo].[usp_GetReportByDate]'
   },
 
   DeviceUid: {
@@ -144,6 +149,11 @@ const sqlQueries = {
   DeviceIds: {
     Parameters: {
       Device_IDs: 'Device_IDs'
+    }
+  },
+  DeviceID: {
+    Parameters: {
+      DeviceID: 'Device_ID'
     }
   },
   MasterSettingsIds: {
