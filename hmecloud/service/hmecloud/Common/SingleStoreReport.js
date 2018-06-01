@@ -13,7 +13,7 @@ const Device = function (result, colors, goalSettings, request, reportFilter) {
 Device.prototype.getStoreInfo = (input, stopTime, startTime, storeInformation) => {
   let storeInfo = {}
   if (storeInformation && storeInformation[0]) {
-    storeInfo.storeName = storeInformation[0].Store_Name ? storeInformation[0].Store_Name + '-' + storeInformation[0].Store_Number : storeInformation[0].Store_Number
+    storeInfo.storeName = storeInformation[0].Store_Name ? storeInformation[0].Store_Number + '-' + storeInformation[0].Store_Name : storeInformation[0].Store_Number
     storeInfo.storeNumber = storeInformation[0].Store_Number ? storeInformation[0].Store_Number : 'N/A'
     storeInfo.storeDesc = storeInformation[0].Brand_Name ? storeInformation[0].Brand_Name : 'N/A'
   }
