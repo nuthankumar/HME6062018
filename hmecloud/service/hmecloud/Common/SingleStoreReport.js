@@ -315,13 +315,33 @@ Device.prototype.getDeviceValues = function () {
   }
   _.map(storeDetails, (item, index) => {
     let reportInfo = {}
+    let startDate
+    let endDate
     let dayPartValue
     let newValue
     _.forEach(storeDetails[index], function (value, key) {
-      if (key === 'DayPartIndex') {
+      if (key === 'WeekStartDate') {
+        reportInfo['WeekStartDate'] = { 'value': dateUtils.convertmmddyyyy(`${value}`) }
+        startDate = { 'value': `${value}` }
+      } else if (key === 'WeekEndDate') {
+        reportInfo['WeekEndDate'] = { 'value': dateUtils.convertmmddyyyy(`${value}`) }
+        endDate = { 'value': `${value}` }
+      } else if (key === 'DayPartIndex') {
         dayPartValue = `${value}`
       } else if (key === 'StoreDate') {
-        if (filter === 'daypart') {
+        if (filter === 'day') {
+          if (value === 'Total Day') {
+            reportInfo['Day'] = {
+              'timeSpan': 'Total Day',
+              'currentWeekpart': messages.COMMON.WAVG
+            }
+          } else {
+            reportInfo['Day'] = {
+              'timeSpan': moment(`${value}`).format('MM-DD-YYYY'),
+              'currentWeekpart': messages.COMMON.DAYOPENCLOSE
+            }
+          }
+        } else if (filter === 'daypart') {
           if (value === 'Total Daypart') {
             reportInfo['Daypart'] = {
               'timeSpan': 'Total DayPart',
@@ -343,6 +363,24 @@ Device.prototype.getDeviceValues = function () {
           }
         }
         reportInfo[`${key}`] = { 'value': value }
+      } else if (key === 'StoreNo') {
+        if (filter === 'week') {
+          if (value === 'Total Week') {
+            reportInfo['Week'] = {
+              'timeSpan': 'Total Week',
+              'currentWeekpart': messages.COMMON.WAVG
+            }
+          } else {
+            reportInfo['Week'] = {
+              'timeSpan': moment(startDate.value).format('MM-DD-YYYY') + ' - ' + moment(endDate.value).format('MM-DD-YYYY'),
+              'currentWeekpart': messages.COMMON.DAYOPENCLOSE
+            }
+          }
+          reportInfo[`${key}`] = { 'value': value }
+        }
+        reportInfo[`${key}`] = { 'value': value }
+      } else if (key === 'GroupName') {
+        reportInfo['Groups'] = { 'value': value || null }
       } else if (key === 'StoreID') {
         reportInfo['storeId'] = { 'value': value }
       } else if (key === 'Store_Name') {
@@ -351,6 +389,8 @@ Device.prototype.getDeviceValues = function () {
         reportInfo['deviceUid'] = { 'value': value }
       } else if (key === 'Device_ID') {
         reportInfo['deviceId'] = { 'value': value }
+      } else if (key === 'WeekIndex') {
+        reportInfo['index'] = { 'value': value }
       } else if (key === 'Total_Car') {
         let carValue
         if (value === 0) {

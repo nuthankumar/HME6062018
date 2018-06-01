@@ -11,14 +11,12 @@ const messages = require('./Message')
  * @param {*} reportFilter reportFilter like (day,daypart,week)
  */
 const Device = function (result, colors, groupName, goalSettings, request, reportFilter) {
-  console.log('timeFormat', request)
   this.result = result
   this.colors = colors
   this.groupName = groupName
   this.goalSettings = goalSettings
   this.request = request
   this.reportFilter = reportFilter
-
 }
 
 /**
@@ -152,6 +150,7 @@ Device.prototype.getDeviceInformation = function () {
   let index = 0
   let deviceInfo
   let deviceValues = []
+  let groupData = this.groupName
   let getColors = []
   // checking color code is empty or not
   if (this.colors && this.colors.length > 0 && this.colors[0].ColourCode) { getColors = this.colors[0].ColourCode.split('|') }
@@ -177,6 +176,18 @@ Device.prototype.getDeviceInformation = function () {
     let reportInfo = {}
     let groupName
     let storeNo
+    if (filter === 'week') {
+      if (item['WeekIndex'] !== index) {
+        deviceInfo = {
+          title: '',
+          data: []
+        }
+        deviceInfo.title = moment(item['WeekStartDate']).format('MMM D,YYYY') + ' ' + messages.COMMON.OPENVALUE + ' - ' + moment(item['WeekEndDate']).format('MMM D,YYYY') + ' ' + messages.COMMON.CLOSEVALUE
+        deviceInfo.data = []
+        index = item['WeekIndex']
+        deviceValues.push(deviceInfo)
+      }
+    }
     if (filter === 'daypart') {
       if (item['DayPartIndex'] !== index) {
         deviceInfo = {
@@ -189,19 +200,53 @@ Device.prototype.getDeviceInformation = function () {
         deviceValues.push(deviceInfo)
       }
     }
+    if (filter === 'day') {
+      if (item['ID'] !== index) {
+        deviceInfo = {
+          title: '',
+          data: []
+        }
+        deviceInfo.title = moment(item['StoreDate']).format('MMM D,YYYY') + messages.COMMON.OPENVALUE + ' - ' + moment(item['StoreDate']).format('MMM D,YYYY') + messages.COMMON.CLOSEVALUE
+        deviceInfo.data = []
+        index = item['ID']
+        deviceValues.push(deviceInfo)
+      }
+    }
     _.forEach(storeDetails[key], function (value, key) {
+      let total = null
       if (key === 'StoreID') {
-        reportInfo['storeId'] = {'value': ` ${value}`}
+        reportInfo['storeId'] = {'value': `${value}`}
       } else if (key === 'Store_Name') {
         reportInfo['Stores'] = {'value': (value || null)}
       } else if (key === 'Device_UID') {
         reportInfo['Device_UID'] = {'value': (value || null)}
       } else if (key === 'Device_ID') {
         reportInfo['deviceId'] = {'value': (value || null)}
+        let group = _.find(groupData, {'Device_ID': value})
+        if (group) {
+          reportInfo['Groups'] = {'value': group.GroupName}
+        }
+      } else if (key === 'StoreNo') {
+        storeNo = value || null
+        if ((key === 'StoreID') && key.includes('Subtotal')) {
+          if (reportInfo['Groups']) {
+            total = {'value': reportInfo['Groups'].value + ' ' + storeNo}
+          } else {
+            total = {'value': '' + ' ' + storeNo}
+          }
+        } else if (value === 'Total Week' || value === 'Total Daypart' || value === 'Total Day') {
+          total = {'value': value, 'timeSpan': messages.COMMON.WAVG}
+        }
+        reportInfo['Groups'] = total
+        reportInfo[`${key}`] = {'value': `${value}`}
       } else if (key === 'StartTime') {
         reportInfo['StartTime'] = {'value': (value || null)}
       } else if (key === 'EndTime') {
         reportInfo['EndTime'] = {'value': (value || null)}
+      } else if (key === 'WeekStartDate') {
+        reportInfo['WeekStartDate'] = {'value': (value || null)}
+      } else if (key === 'WeekEndDate') {
+        reportInfo['WeekEndDate'] = {'value': (value || null)}
       } else if (key === 'Total_Car') {
         reportInfo['Total Cars'] = {'value': (value || null)}
       } else if (key === 'StoreDate') {
@@ -216,12 +261,10 @@ Device.prototype.getDeviceInformation = function () {
         }
         reportInfo[`${key}`] = {'value': `${dateUtils.convertSecondsToMinutes(parseInt(value), timeFormat)}`, 'color': color}
       }
-      _.forEach(this.groupName, (item) => {
-        reportInfo['Groups'] = { 'value': item.GroupName || null }
-      })
     })
     deviceInfo.data.push(reportInfo)
   })
+
   return deviceValues
 }
 module.exports = Device

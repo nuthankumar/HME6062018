@@ -47,11 +47,10 @@ reports.prototype.deviceDataPreparation = function (reportResult, stopTime, star
   let colors
   let goalSetting
   let storeInfo
-  console.log('filter', filter)
   let reportFilter = filter.reportName
   let deviceValues = {}
   if (getSystemInfo && getSystemInfo.data.length > 0) {
-    reportFilter === 'daypart' ? colors = getSystemInfo.data[0] : colors = []
+    colors = getSystemInfo.data[0]
   } else {
     colors = []
   }
@@ -63,7 +62,7 @@ reports.prototype.deviceDataPreparation = function (reportResult, stopTime, star
       groupname = ''
     }
     const deviceRecords = new GetDeviceSingleStore(reportResult.data[0], colors, goalSetting, this.request, reportFilter, groupname)
-    reportFilter === 'daypart' ? storeInfo = reportResult.data[3] : storeInfo = {}
+    storeInfo = reportResult.data[3]
     deviceValues = deviceRecords.getStoreInfo(this.request, stopTime, startTime, storeInfo)
     if (reportResult.data[0] && reportResult.data[0].length > 0 && reportResult.data[0] !== null && reportResult.data[0] !== undefined) {
       deviceValues.timeMeasureType = deviceRecords.getDeviceValues()
@@ -80,17 +79,21 @@ reports.prototype.deviceDataPreparation = function (reportResult, stopTime, star
       totalCars = 0
     }
     let goalHeader
-    reportFilter === 'daypart' ? goalHeader = reportResult.data[5] : goalHeader = []
+    goalHeader = reportResult.data[5]
     let deviceHeaders
-    reportFilter === 'daypart' ? deviceHeaders = reportResult.data[4] : deviceHeaders = []
-    reportFilter === 'daypart' ? goalSetting = reportResult.data[2] : goalSetting = []
+    if (reportFilter === 'daypart') {
+      deviceHeaders = reportResult.data[4]
+    } else {
+      deviceHeaders = reportResult.data[5]
+    }
+    goalSetting = reportResult.data[2]
     let goalStatistics = deviceRecords.getGoalStatistics(goalSetting, deviceGoalInfo, totalCars, goalHeader, deviceHeaders)
     deviceValues.goalData = goalStatistics
     if (this.request.body.longestTime) {
       let deviceLongestTimes
       if (deviceHeaders && deviceHeaders.length > 0 && deviceHeaders[0].EventNames !== null && deviceHeaders[0].EventNames !== undefined) {
         let eventHeaders = deviceHeaders[0].EventNames.split('|$|')
-        reportFilter === 'daypart' ? deviceLongestTimes = reportResult.data[1] : deviceLongestTimes = []
+        deviceLongestTimes = reportResult.data[1]
         let getLongestTime = deviceRecords.getLongestTime(deviceLongestTimes, eventHeaders)
         if (getLongestTime.length > 0) {
           deviceValues.LongestTimes = getLongestTime
@@ -146,6 +149,11 @@ reports.prototype.deviceDataPreparation = function (reportResult, stopTime, star
     } else {
       deviceValues.totalRecordCount = totalPages
     }
+    if (getSystemInfo && getSystemInfo.data.length > 0) {
+      colors = getSystemInfo.data[0]
+    } else {
+      colors = []
+    }
     if (reportResult.data[0] && reportResult.data[0].length > 0 && reportResult.data[0] !== null && reportResult.data[0] !== undefined) {
       let getDevices = new GetDeviceMultipleStores(reportResult.data[0], colors, groupname, goalSetting, this.request, reportFilter)
       deviceValues.timeMeasureType = getDevices.getDeviceInformation()
@@ -153,7 +161,13 @@ reports.prototype.deviceDataPreparation = function (reportResult, stopTime, star
       deviceValues.timeMeasureType = []
     }
     let eventNames
-    reportFilter === 'daypart' ? eventNames = reportResult.data[3] : eventNames = []
+    if (reportFilter === 'daypart') {
+      eventNames = reportResult.data[3]
+    } else if (reportFilter === 'week') {
+      eventNames = reportResult.data[4]
+    } else {
+      eventNames = reportResult.data[5]
+    }
     if (eventNames && eventNames.length > 0 && eventNames[0].EventNames !== null) {
       let eventHeaders = eventNames[0].EventNames.split('|$|')
       eventHeaders = ['Groups', 'Stores', ...eventHeaders]
@@ -226,7 +240,7 @@ reports.prototype.generateCSV = function (reportResult, stopTime, startTime, fil
   if (filter.reportName === 'rawcardata') {
     let rawCarReports = this.getRawCarDataReport(reportResult)
     DeviceDetails = rawCarReports.rawCarData
-    
+
     eventHeaders = []
     csvInput.reportName = `${messages.COMMON.RAWCARREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
     csvInput.subject = `${messages.COMMON.RAWCARDATAREPORTTITLE} ${this.request.body.openTime} ${this.request.body.toDate + (this.request.body.format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
@@ -305,7 +319,6 @@ reports.prototype.createReports = function (response) {
       let groupName
       let systemInfo
       let Output
-
       if (reportResult.status) {
         if (isValidation.reportName === 'rawcardata') {
           if (this.isCSV) {
@@ -332,8 +345,7 @@ reports.prototype.createReports = function (response) {
               // } else {
               repository.getSystemStatistics(this.request, getSystemInfo => {
                 if (getSystemInfo.status) {
-                
-                  Output = this.deviceDataPreparation(reportResult, stopTime, startTime, isValidation, totalPages) // groupName, getSystemInfo,
+                  Output = this.deviceDataPreparation(reportResult, stopTime, startTime, groupName, getSystemInfo, isValidation, totalPages) // groupName, getSystemInfo,
                   Output.status = true
                   if (Output.status === true) {
                     response.status(200).send(Output)
@@ -344,7 +356,6 @@ reports.prototype.createReports = function (response) {
                   response.status(400).send(reportResult)
                 }
               })
-
               // }
             } else {
               response.status(400).send(reportResult)

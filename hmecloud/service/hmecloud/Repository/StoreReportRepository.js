@@ -14,11 +14,11 @@ const getAll = (input, reportName, callback) => {
   let commandName
   let reportType
   if (reportName === 'day') {
-    commandName = sqlQuery.Reports.getODSPReportByDate
+    commandName = sqlQuery.Reports.getODSReportByDate
   } else if (reportName === 'daypart') {
     commandName = sqlQuery.Reports.getODSDaypartReport
   } else if (reportName === 'week') {
-    commandName = sqlQuery.Reports.getWeekReport
+    commandName = sqlQuery.Reports.getODSWeekReport
   } else if (reportName === 'rawcardata') {
     commandName = sqlQuery.Reports.getODSRawcardataReport
   }

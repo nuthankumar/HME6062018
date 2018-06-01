@@ -136,8 +136,9 @@ const sqlQueries = {
     getODSDaypartReport: '[dbo].[usp_GetReportByDaypart]',
     getGroupNameByDeviceID: '[dbo].[usp_GetGroupNameByDeviceIDs]',
     getSystemStatistics: '[dbo].[usp_ReportStatistics]',
-    getODSRawcardataReport: '[dbo].[usp_GetReportRawData]',
-    getODSPReportByDate: '[dbo].[usp_GetReportByDate]'
+    getODSRawcardataReport: '[dbo].[usp_GetRawCarData]',
+    getODSReportByDate: '[dbo].[usp_GetReportByDate]',
+    getODSWeekReport: '[dbo].[usp_GetReportByWeek]'
   },
 
   DeviceUid: {

@@ -14,12 +14,12 @@ const authValidator = require('../Controllers/AuthenticationController')
 * @param response
 *
 */
-router.post('/generatereport', authValidator, (request, response) => {
+router.post('/oldgeneratereport', authValidator, (request, response) => {
   let getReports = new ReportController(request)
   getReports.createReports(response)
 })
 
-router.post('/generateODSReport', authValidator, (request, response) => {
+router.post('/generatereport', authValidator, (request, response) => {
   let getReports = new StoreReportController(request)
   getReports.createReports(response)
 })
