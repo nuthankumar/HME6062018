@@ -85,7 +85,7 @@ export default class SummaryReport extends Component {
               <span>{t[language].store}</span>:
             </th>
             {/* <td className='thin-header'>{this.state.reportData.response.storeName ? this.state.reportData.response.storeName : this.state.reportData.response.storeNumber}</td> */}
-            <td className='thin-header'>{this.state.reportData.response.storeNumber ? this.state.reportData.response.storeNumber : 'N/A'}</td>
+            <td className='thin-header'>{this.state.reportData.response.storeName ? this.state.reportData.response.storeName : 'N/A'}</td>
             <th>
               <span>{t[language].ReportsStart}</span>
             </th>
@@ -341,8 +341,8 @@ export default class SummaryReport extends Component {
         })
       } else if (request.timeMeasure === 4) {
         if (storeId.Daypart) {
-          request.fromDate = moment(storeId.StoreDate).format('YYYY-MM-DD')
-          request.toDate = moment(storeId.StoreDate).format('YYYY-MM-DD')
+          request.fromDate = moment(storeId.StoreDate.value).format('YYYY-MM-DD')
+          request.toDate = moment(storeId.StoreDate.value).format('YYYY-MM-DD')
         }
         let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=reports'
         this.api.postData(url, request, data => {
