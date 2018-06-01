@@ -86,17 +86,17 @@ const mutipleStore = (deviceDetails, reportType, input, eventHeaders, format, cs
       if (reportType.reportName === 'week') {
         let groupname = null
         deviceInfo.Week = moment(item.WeekStartDate.value).format('L') + '-' + moment(item.WeekEndDate.value).format('L')
-        if (item.Groups.value === 'null') {
+        if (item.Groups && item.Groups.value === 'null') {
           groupname = ''
         } else {
-          groupname = item.Groups.value
+          groupname = item.Groups ? item.Groups.value : ''
         }
         deviceInfo.Groups = groupname
         deviceInfo.Stores = item.StoreNo.value ? item.StoreNo.value : ''
-        if (item.StoreNo.value === 'Total Week') {
+        if (item.StoreNo && item.StoreNo.value === 'Total Week') {
           deviceInfo.Groups = 'Total Week'
           deviceInfo.Stores = ''
-        } else if (item.StoreNo.value === 'Subtotal') {
+        } else if (item.StoreNo && item.StoreNo.value === 'Subtotal') {
           deviceInfo.Groups = groupname
           deviceInfo.Stores = item.StoreNo.value
         }
@@ -105,17 +105,17 @@ const mutipleStore = (deviceDetails, reportType, input, eventHeaders, format, cs
       if (reportType.reportName === 'daypart') {
         let groupname = null
         deviceInfo.Daypart = moment(item.StoreDate.value).format('L')
-        if (item.Groups.value === 'null') {
+        if (item.Groups && item.Groups.value === 'null') {
           groupname = ''
         } else {
-          groupname = item.Groups.value
+          groupname = item.Groups ? item.Groups.value : ''
         }
         deviceInfo.Groups = groupname
         deviceInfo.Stores = item.StoreNo.value ? item.StoreNo.value : ''
-        if (item.StoreNo.value === 'Total Daypart') {
+        if (item.StoreNo && item.StoreNo.value === 'Total Daypart') {
           deviceInfo.Groups = 'Total Daypart'
           deviceInfo.Stores = ''
-        } else if (item.StoreNo.value === 'Subtotal') {
+        } else if (item.StoreNo && item.StoreNo.value === 'Subtotal') {
           deviceInfo.Groups = groupname
           deviceInfo.Stores = item.StoreNo.value
         }
@@ -124,17 +124,17 @@ const mutipleStore = (deviceDetails, reportType, input, eventHeaders, format, cs
       if (reportType.reportName === 'day') {
         let groupname = null
         deviceInfo.Daypart = moment(item.StoreDate.value).format('L')
-        if (item.Groups.value === 'null') {
+        if (item.Groups && item.Groups.value === 'null') {
           groupname = ''
         } else {
-          groupname = item.Groups.value
+          groupname = item.Groups ? item.Groups.value : ''
         }
         deviceInfo.Groups = groupname
         deviceInfo.Stores = item.StoreNo.value ? item.StoreNo.value : ''
-        if (item.StoreNo.value === 'Total Day') {
+        if (item.StoreNo.value && item.StoreNo.value === 'Total Day') {
           deviceInfo.Groups = 'Total Day'
           deviceInfo.Stores = ''
-        } else if (item.StoreNo.value === 'Subtotal') {
+        } else if (item.StoreNo.value && item.StoreNo.value === 'Subtotal') {
           deviceInfo.Groups = groupname
           deviceInfo.Stores = item.StoreNo.value
         }
