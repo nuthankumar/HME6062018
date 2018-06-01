@@ -9,7 +9,7 @@ import { bindActionCreators } from 'redux'
 import * as modalAction from '../../actions/modalAction'
 import ModalContainer from '../../containers/ModalContainer'
 import AuthenticationService from '../Security/AuthenticationService'
-import {Config} from '../../Config'
+import { Config } from '../../Config'
 const Online = require('../../images/connection_online.png')
 const Offline = require('../../images/connection_offline.png')
 class StoreDetail extends Component { // ensure you dont export component directly
@@ -33,6 +33,7 @@ class StoreDetail extends Component { // ensure you dont export component direct
     this.viewDetails = this.viewDetails.bind(this)
     this.state.url = this.authService.getColdFusionAppUrl(this.authService.isAdmin())
     this.state.token = this.authService.getToken()
+    this.routeToViewDetail = this.routeToViewDetail.bind(this)
   }
 
   viewDetails (data) {
@@ -48,13 +49,17 @@ class StoreDetail extends Component { // ensure you dont export component direct
     this.props.dispatch(storesFunctions.sortStores({ 'sortBy': 'Brand_Name', 'sortType': 'DESC' }))
     this.state.userContext = this.authService.getProfile()
   }
+  routeToViewDetail () {
+    this.props.history.push({ pathname: '/settings/ViewDetails' })
+  }
   renderPopUp () {
     if (this.props.storeModelPopup !== undefined) {
       return (
-        <ModalContainer />
+        <ModalContainer routeToViewDetail={this.routeToViewDetail} />
       )
     }
   }
+
   render () {
     const { language, token, url } = this.state
     let sortParams = this.props.storesDetails.sortParams ? this.props.storesDetails.sortParams : { 'sortBy': 'Brand_Name', 'sortType': 'DESC' }
@@ -75,7 +80,7 @@ class StoreDetail extends Component { // ensure you dont export component direct
             <div className='storesTable ctable'>
               <table>
                 <tbody>
-                  <tr className='theader clear'>
+                  <tr className='theader clear storesTable'>
                     <th>&nbsp;</th>
                     <th id='brand_space' className={(sortParams.sortBy == 'Brand_Name' && sortParams.sortType == 'ASC') ? 'actcol' : ((sortParams.sortBy === 'Brand_Name' && sortParams.sortType === 'DESC') ? 'actcold' : '')}><a><span id='Brand_Name' onClick={this.sortStores.bind(this)}>{t[language].StoreSettingsHeaderBrand}</span></a></th>
                     <th className={(sortParams.sortBy === 'Store_Number' && sortParams.sortType == 'ASC') ? 'actcol' : ((sortParams.sortBy === 'Store_Number' && sortParams.sortType === 'DESC') ? 'actcold' : '')}><a><span id='Store_Number' onClick={this.sortStores.bind(this)}>{t[language].StoreSettingsHeaderStore}</span></a></th>
@@ -118,7 +123,7 @@ class StoreDetail extends Component { // ensure you dont export component direct
     return deviceRows
   }
 
-  renderStores() {
+  renderStores () {
     const { language } = this.state
     let self = this
     if (this.props.stores.storeDetails.storeList) {
@@ -146,7 +151,7 @@ class StoreDetail extends Component { // ensure you dont export component direct
     }
   }
 
-  sortStores(e) {
+  sortStores (e) {
     this.state.Ascending = !this.state.Ascending
     this.setState(this.state)
     let sortBy = e.target.id
@@ -157,7 +162,7 @@ class StoreDetail extends Component { // ensure you dont export component direct
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     storesDetails: state.storeDetails,
     storeModelPopup: state.StorePopupDetails.storePopUpClient,
@@ -165,7 +170,7 @@ function mapStateToProps(state) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps (dispatch) {
   return bindActionCreators({ storesFunctions: storesFunctions }, dispatch)
 }
 

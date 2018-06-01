@@ -24,8 +24,8 @@ class StoreDetails extends Component {
   render () {
     return (
       <div>
-        <StoreDetailsClient showStores={!this.authService.isAdmin()} stores={this.props.storesDetails} />
-        <StoreDetailsAdmin showStores={this.authService.isAdmin()} stores={this.props.storesDetails} />
+        <StoreDetailsClient showStores={!this.authService.isAdmin()} stores={this.props.storesDetails} history={this.props.history} />
+        <StoreDetailsAdmin showStores={this.authService.isAdmin()} stores={this.props.storesDetails} history={this.props.history} />
       </div>
     )
   }

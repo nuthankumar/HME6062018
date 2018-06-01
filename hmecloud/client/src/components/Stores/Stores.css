@@ -951,3 +951,7 @@ tr.system-settings-row-data:hover{
     color: #D41B3E !important;
     font-weight: bold;
 }
+
+tr.storeTable th{
+    font-size:16px !important
+}
