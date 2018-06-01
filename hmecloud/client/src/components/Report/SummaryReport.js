@@ -341,8 +341,8 @@ export default class SummaryReport extends Component {
         })
       } else if (request.timeMeasure === 4) {
         if (storeId.Daypart) {
-          request.fromDate = moment(request.fromDate).format('YYYY-MM-DD')
-          request.toDate = moment(request.toDate).format('YYYY-MM-DD')
+          request.fromDate = moment(storeId.StoreDate).format('YYYY-MM-DD')
+          request.toDate = moment(storeId.StoreDate).format('YYYY-MM-DD')
         }
         let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=reports'
         this.api.postData(url, request, data => {
