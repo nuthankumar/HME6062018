@@ -964,7 +964,16 @@ class Report extends Component {
               ) {
                 errors.push(t[language].daterangeinvalid3month)
                 isError = true
-              }             
+              }     
+              if (
+                moment(this.state.toDate, 'MM/DD/YYYY').diff(
+                  moment(this.state.fromDate, 'MM/DD/YYYY'),
+                      'days'
+                  ) > 0
+              ) {
+                errors.push(t[language].daterangeinvalidsingleday)
+                isError = true
+              }  
             }
 
     if (this.state.templateName) {

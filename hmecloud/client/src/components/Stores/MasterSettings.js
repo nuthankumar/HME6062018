@@ -31,7 +31,7 @@ class MasterSettings extends Component {
   render () {
     const destinationsAll = this.state.selectAllSettings
     const settingsAll = this.state.selectAllSettings
-
+    console.log(this.props.viewDetails.storeViewDetails)
     if (this.props.masterSettings) {
       return (
         <section className='masterSettings'>
@@ -60,14 +60,14 @@ class MasterSettings extends Component {
                 </div>
                 <div id='availSettingsBox' class='form_cbox' name=''>
                   <div>
-                   {this.renderDestinations()}
-                 </div>
+                    { this.renderDestinations() }
+                  </div>
                 </div>
               </div>
             </div>
             <div id='settings-content'>
               <input id='settings-btn' type='submit' value='Apply' onClick={this.submit.bind(this)} />
-            &nbsp;|&nbsp;<a className='cancel_btn' href='./?pg=SettingsGroups'>Cancel</a>
+            &nbsp;|&nbsp;<a className='cancel_btn' href='../settings/viewDetails'>Cancel</a>
             </div>
           </section>
         </section>
