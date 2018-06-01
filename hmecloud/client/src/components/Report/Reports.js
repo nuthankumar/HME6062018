@@ -181,7 +181,7 @@ class Report extends Component {
         if (item.Children && item.Children.length) {
           //level++
             return (
-                <TreeNode title={this.renderStoresAndBrand(item,level) } className={item.Name ? item.Name : item.StoreNumber} key={item.Id} value={item.Type === CommonConstants.Type.Store ? item.DeviceUID : null} type={item.Type}>
+                <TreeNode title={this.renderStoresAndBrand(item,level) } className={item.Name ? (item.StoreNumber+ '-' +item.Name) :  item.StoreNumber} key={item.Id} value={item.Type === CommonConstants.Type.Store ? item.DeviceUID : null} type={item.Type}>
               {
                 loop(item.Children,level+1)            
               }
@@ -189,7 +189,7 @@ class Report extends Component {
             </TreeNode>
           )
         }
-        return <TreeNode title={this.renderStoresAndBrand(item,level)} className={item.Name ? item.Name : item.StoreNumber} key={item.Id} value={item.Type === CommonConstants.Type.Store ? item.DeviceUID : null} type={item.Type} />
+        return <TreeNode title={this.renderStoresAndBrand(item,level)} className={item.Name ? (item.StoreNumber+ '-' +item.Name) :  item.StoreNumber} key={item.Id} value={item.Type === CommonConstants.Type.Store ? item.DeviceUID : null} type={item.Type} />
       })
     }
 
@@ -632,7 +632,7 @@ class Report extends Component {
                   findStore(item.Children)
               }
               if (keys(item)) {
-                  selectedItems.push(item.Name ? item.Name : item.StoreNumber)
+                  selectedItems.push(item.Name ? (item.StoreNumber+ '-' +item.Name) :  item.StoreNumber)
                   selectedList.push(item.Id)
               }
           })

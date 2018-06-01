@@ -241,6 +241,8 @@ width:197px;
     background-color: #d41b3e;
     -ms-flex-pack: center;
     cursor: pointer;
+    position: absolute;
+    bottom: 25px;
 }
 
 .criteria {
