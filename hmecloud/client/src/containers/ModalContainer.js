@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import t from '../components/Language/language'
 import * as languageSettings from '../components/Language/languageSettings'
+import * as viewDetail from '../actions/viewDetails'
 // import StoreDetail from '../components/Stores/StoreDetail'
 import StoredetailsComponent from '../components/Stores/StoreDetailsComponent'
 import ZoomComponent from '../components/Stores/ZoomComponent'
@@ -9,12 +10,11 @@ import EOSComponent from '../components/Stores/EOSComponent'
 import IONComponent from '../components/Stores/IONComponent'
 import * as ReactBootstrap from 'react-bootstrap'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { closePopup, initModal } from '../actions/modalAction'
+import { closePopup } from '../actions/modalAction'
 // import  actionCreator  from '../actions/modalAction';
 
 class ModalContainer extends Component {
-  constructor(props) {
+  constructor(props, context) {
     super(props)
     // this.handleShow = this.handleShow.bind(this)
     this.handleClose = this.handleClose.bind(this)
@@ -29,8 +29,14 @@ class ModalContainer extends Component {
     // this.handleClick = this.handleClick.bind(this)
     this.renderTabComponent = this.renderTabComponent.bind(this)
     this.storeTabs = this.storeTabs.bind(this)
+    this.viewDevice = this.viewDevice.bind(this)
   }
 
+  viewDevice(did) {
+    this.props.dispatch(viewDetail.initViewStore(did))
+    this.props.dispatch(closePopup())
+    this.props.routeToViewDetail()
+  }
   handleSelect(key) {
     this.setState({ key })
   }
@@ -57,16 +63,16 @@ class ModalContainer extends Component {
         return <StoredetailsComponent isAdmin={isAdmin} />
         break
       case 'CIB':
-        return <CIBComponent isAdmin={isAdmin} history={this.props.history} email={this.props.stores.storePopupDetails.storeDetails.User_EmailAddress} data={this.props.stores.storePopupDetails.Device_Details} />
+        return <CIBComponent isAdmin={isAdmin} viewDevice={this.viewDevice} />
         break
       case 'EOS':
-        return <EOSComponent isAdmin={isAdmin} history={this.props.history} data={this.props.stores.storePopupDetails.Device_Details} />
+        return <EOSComponent isAdmin={isAdmin} viewDevice={this.viewDevice} />
         break
       case 'ION':
-        return <IONComponent isAdmin={isAdmin} history={this.props.history} data={this.props.stores.storePopupDetails.Device_Details} />
+        return <IONComponent isAdmin={isAdmin} viewDevice={this.viewDevice} />
         break
       case 'ZOOM':
-        return <ZoomComponent isAdmin={isAdmin} history={this.props.history} data={this.props.stores.storePopupDetails.Device_Details} />
+        return <ZoomComponent isAdmin={isAdmin} viewDevice={this.viewDevice} />
         break
     }
   }
@@ -83,7 +89,7 @@ class ModalContainer extends Component {
     }
     let array = []
     array.push({ Device_Name: 'Store Details', isActive: true })
-    array = array.concat(this.props.stores.storePopupDetails.Device_Details)
+    array = (this.props.stores.storePopupDetails !== undefined) ? array.concat(this.props.stores.storePopupDetails.Device_Details) : array
     array = array.filter((thing, index, self) =>
       index === self.findIndex((t) => (
         t.Device_Name === thing.Device_Name
@@ -114,9 +120,5 @@ function mapStateToProps(state) {
     stores: state.StorePopupDetails
   }
 }
-
-//  function mapDispatchToProps(dispatch) {
-//      return bindActionCreators({  closePopup: closePopup() }, dispatch);
-//  }
 
 export default connect(mapStateToProps)(ModalContainer)

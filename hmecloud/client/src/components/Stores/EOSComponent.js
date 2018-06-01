@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './Stores.css'
 import * as modalAction from '../../actions/modalAction'
 import * as viewDetail from '../../actions/viewDetails'
+import { connect } from 'react-redux'
 const offlineImage = require('../../images/connection_offline.png')
 
 class EOSComponent extends Component {
@@ -10,16 +11,12 @@ class EOSComponent extends Component {
     this.handleClick = this.handleClick.bind(this)
     this.renderRows = this.renderRows.bind(this)
   }
-  handleClick() {
-    this.props.dispatch(viewDetail.initViewStore(this.props.data.Device_UID))
-    this.props.dispatch(modalAction.closePopup())
-    this.props.history.push({
-      pathname: '/settings/ViewDetails'
-    })
+  handleClick(id) {
+    this.props.viewDevice(id)
   }
 
   renderRows() {
-    let row = this.props.data
+    let row = this.props.stores.Device_Details
     row = row.filter(function (el) {
       return el.Device_Name !== 'CIB' && el.Device_Name !== 'ION' && el.Device_Name !== 'ZOOM'
     })
@@ -33,7 +30,7 @@ class EOSComponent extends Component {
           <td >{data.Device_SerialNumber}</td>
           <td>
             <img src={offlineImage} /><span> {data.Device_IsActive === 0 ? 'Offline' : 'Online'}</span></td>
-          <td onClick={this.handleClick}><a>View <span>Details</span></a></td>
+          <td onClick={() => this.handleClick(data.Device_UID)}><a>View <span>Details</span></a></td>
         </tr>
       )
     })
@@ -66,4 +63,10 @@ class EOSComponent extends Component {
   }
 }
 
-export default EOSComponent
+function mapStateToProps(state) {
+  return {
+    stores: state.StorePopupDetails.storePopupDetails
+  }
+}
+
+export default connect(mapStateToProps)(EOSComponent)
