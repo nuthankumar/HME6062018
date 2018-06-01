@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
 import './Stores.css'
-import * as modalAction from '../../actions/modalAction'
-import * as viewDetail from '../../actions/viewDetails'
 import { connect } from 'react-redux'
 const offlineImage = require('../../images/connection_offline.png')
 
 class CIBComponent extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       showStores: this.props.showStores,
@@ -17,15 +15,15 @@ class CIBComponent extends Component {
     this.renderRows = this.renderRows.bind(this)
   }
 
-  enableRemoveBtn(e) {
+  enableRemoveBtn (e) {
     return e.currentTarget.checked ? this.setState({ disableRemove: true }) : this.setState({ disableRemove: false })
   }
 
-  handleClick(id) {
+  handleClick (id) {
     this.props.viewDevice(id)
   }
 
-  renderRows() {
+  renderRows () {
     let row = this.props.stores.Device_Details
     row = row.filter(function (el) {
       return el.Device_Name !== 'EOS' && el.Device_Name !== 'ION' && el.Device_Name !== 'ZOOM'
@@ -47,7 +45,7 @@ class CIBComponent extends Component {
     return rows
   }
 
-  render() {
+  render () {
     return (
       <div>
         <div>
@@ -108,7 +106,7 @@ class CIBComponent extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     stores: state.StorePopupDetails.storePopupDetails
   }

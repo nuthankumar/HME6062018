@@ -1,21 +1,19 @@
 import React, { Component } from 'react'
 import './Stores.css'
-import * as modalAction from '../../actions/modalAction'
-import * as viewDetail from '../../actions/viewDetails'
 import { connect } from 'react-redux'
 const offlineImage = require('../../images/connection_offline.png')
 
 class EOSComponent extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.handleClick = this.handleClick.bind(this)
     this.renderRows = this.renderRows.bind(this)
   }
-  handleClick(id) {
+  handleClick (id) {
     this.props.viewDevice(id)
   }
 
-  renderRows() {
+  renderRows () {
     let row = this.props.stores.Device_Details
     row = row.filter(function (el) {
       return el.Device_Name !== 'CIB' && el.Device_Name !== 'ION' && el.Device_Name !== 'ZOOM'
@@ -37,7 +35,7 @@ class EOSComponent extends Component {
     return rows
   }
 
-  render() {
+  render () {
     return (
       <div>
         <h4 className='header'>Registered EOS</h4>
@@ -63,7 +61,7 @@ class EOSComponent extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     stores: state.StorePopupDetails.storePopupDetails
   }

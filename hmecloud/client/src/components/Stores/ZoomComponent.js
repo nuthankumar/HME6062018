@@ -1,20 +1,20 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import './Stores.css'
 import { connect } from 'react-redux'
 const offlineImage = require('../../images/connection_offline.png')
 
 class ZoomComponent extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.handleClick = this.handleClick.bind(this)
     this.renderRows = this.renderRows.bind(this)
   }
 
-  handleClick(id) {
+  handleClick (id) {
     this.props.viewDevice(id)
   }
 
-  renderRows() {
+  renderRows () {
     let row = this.props.stores.Device_Details
     row = row.filter(function (el) {
       return el.Device_Name !== 'CIB' && el.Device_Name !== 'ION' && el.Device_Name !== 'EOS'
@@ -36,7 +36,7 @@ class ZoomComponent extends Component {
     return rows
   }
 
-  render() {
+  render () {
     return (
       <div>
         <h4 className='header'>Registered ZOOM</h4>
@@ -63,7 +63,7 @@ class ZoomComponent extends Component {
 }
 
 // export default ZoomComponent
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     stores: state.StorePopupDetails.storePopupDetails
   }
