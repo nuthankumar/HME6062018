@@ -5,35 +5,39 @@ import StoreDetailsClient from '../components/Stores/StoreDetailsClient'
 import { initStoresDetails, adminStoresDetails } from '../actions/stores'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import AuthenticationService from '../components/Security/AuthenticationService'
+import {Config} from '../Config'
+
 class StoreDetails extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       currentLanguage: languageSettings.getCurrentLanguage()
     }
+    this.authService = new AuthenticationService(Config.authBaseUrl)
   }
-  componentWillMount() {
+  componentWillMount () {
     this.props.initStoresDetails()
     this.props.adminStoresDetails()
   }
 
-  render() {
+  render () {
     return (
       <div>
-        <StoreDetailsClient showStores={false} stores={this.props.storesDetails} history={this.props.history} />
-        <StoreDetailsAdmin showStores={true} stores={this.props.storesDetails} history={this.props.history} />
+        <StoreDetailsClient showStores={!this.authService.isAdmin()} stores={this.props.storesDetails} />
+        <StoreDetailsAdmin showStores={this.authService.isAdmin()} stores={this.props.storesDetails} />
       </div>
     )
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     books: state.books,
     storesDetails: state.storeDetails
   }
 }
-function  matchDispatchToProps(dispatch) {
+function  matchDispatchToProps (dispatch) {
   return  bindActionCreators(
     {
       initStoresDetails: initStoresDetails,

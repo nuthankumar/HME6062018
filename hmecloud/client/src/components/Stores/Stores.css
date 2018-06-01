@@ -911,3 +911,43 @@ tr.system-settings-row-data:hover{
     padding: 10px 25px;
     font-size: 1em;
 }
+
+.alignItems{
+    display: flex;
+    align-items: center;
+}
+.alignItems label{
+   padding-left: 5px;
+   margin-bottom: 2px
+}
+
+.alignItems.selectAllHeader{
+    margin-left: 10px !important
+}
+
+.settingsSection{
+    margin: 0px 50px 50px 50px !important;
+}
+
+#settings-content{
+    margin-right: 50px;
+    position: absolute;
+    bottom: 50px;
+    right: 0px;
+}
+.destinationSectionRight{
+    position: relative
+}
+
+
+#settings-btn {
+    background: #D41B3E;
+    border: none;
+    padding: 5px 15px;
+    color: white;
+}
+
+.cancel_btn{
+    color: #D41B3E !important;
+    font-weight: bold;
+}
