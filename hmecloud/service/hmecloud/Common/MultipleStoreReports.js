@@ -93,7 +93,7 @@ Device.prototype.multipleStore = function () {
     _.forEach(storeDetails[key], function (value, key) {
       let total = null
       if (key === 'StoreID') {
-        reportInfo['storeId'] = {'value': ` ${value}`}
+        reportInfo['storeId'] = {'value': value || null}
       } else if (key === 'GroupName') {
         groupName = value
         if (reportInfo['Groups'] === null) {
@@ -106,7 +106,7 @@ Device.prototype.multipleStore = function () {
         } else if (value === 'Total Week' || value === 'Total Daypart' || value === 'Total Day') {
           total = {'value': value, 'timeSpan': messages.COMMON.WAVG}
         }
-        reportInfo[`${key}`] = {'value': `${value}`}
+        reportInfo[`${key}`] = {'value': value || null}
         reportInfo['Groups'] = total
       } else if (key === 'Store_Name') {
         reportInfo['Stores'] = {'value': (value || null)}
@@ -215,7 +215,7 @@ Device.prototype.getDeviceInformation = function () {
     _.forEach(storeDetails[key], function (value, key) {
       let total = null
       if (key === 'StoreID') {
-        reportInfo['storeId'] = {'value': `${value}`}
+        reportInfo['storeId'] = {'value': value || null}
       } else if (key === 'Store_Name') {
         reportInfo['Stores'] = {'value': (value || null)}
       } else if (key === 'Device_UID') {
@@ -238,7 +238,7 @@ Device.prototype.getDeviceInformation = function () {
           total = {'value': value, 'timeSpan': messages.COMMON.WAVG}
         }
         reportInfo['Groups'] = total
-        reportInfo[`${key}`] = {'value': `${value}`}
+        reportInfo[`${key}`] = {'value': value || null}
       } else if (key === 'StartTime') {
         reportInfo['StartTime'] = {'value': (value || null)}
       } else if (key === 'EndTime') {
