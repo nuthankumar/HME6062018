@@ -24,8 +24,20 @@ export const getMasterSettings = (params) => {
       'Store_Brand_ID': 17
     }
     this.api.postData(url, params, data => {
-      let device = data
-      dispatch(getMasterSettingsSuccess(device))
-    })  
+      let settings = data
+      console.log(settings)
+
+      let settingsList = []
+      settings.settingsList.map(function (setting, index) {
+        settingsList.push({id: setting.group_id, label: setting.group_name, checked: false})
+      })
+      let destinationList = []
+      settings.destinationList.map(function (setting, index) {
+        destinationList.push({DestinationId: setting.Device_ID, label: setting.Store_Number, checked: false})
+      })
+
+      let masterSettings = {settingsList: settingsList, destinationList: destinationList}
+      dispatch(getMasterSettingsSuccess(masterSettings))
+    })
   }
 }

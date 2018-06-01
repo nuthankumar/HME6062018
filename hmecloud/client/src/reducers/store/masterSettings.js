@@ -1,6 +1,9 @@
 import * as masterSettings from '../../actionTypes/MasterSettings/masterSettings'
 
-const masterSettingsData = {
+const masterSettingsData = { settingsList:[],
+  destinationList:[],
+  masterSettings : {settingsList:[],
+    destinationList:[]}
 }
 export default function MasterSettings (state = masterSettingsData, action) {
   switch (action.type) {

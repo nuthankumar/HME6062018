@@ -30,13 +30,18 @@ class StoreDetail extends Component {
     this.PageClicked = this.PageClicked.bind(this)
     this.onSelectAlert = this.onSelectAlert.bind(this)
     this.search = this.search.bind(this)
+    this.routeToViewDetail = this.routeToViewDetail.bind(this)
   }
-  componentWillMount() {
+  componentWillMount () {
     this.props.dispatch(storesFunctions.sortStores({ 'sortBy': 'Company_Name', 'sortType': 'DESC' }))
     this.props.dispatch(storesFunctions.setStoresSearchParams({ 'filter': null, 'criteria': null }))
     // this.props.setSearchParams({ 'filter': null, 'criteria': null })
   }
-  PageSizeValueDropdown(pageSize) {
+  routeToViewDetail () {
+    this.props.history.push({ pathname: '/settings/ViewDetails' })
+  }
+
+  PageSizeValueDropdown (pageSize) {
     this.setState({ pageSize })
     let paginationParams = { pageSize: pageSize, pageNumber: ((this.state.offset / 10) + 1) }
     this.props.dispatch(storesFunctions.paginationAdminStores(paginationParams))
@@ -151,7 +156,7 @@ class StoreDetail extends Component {
 
           </div>
         </div>
-        <ModalContainer onHide={this.smClose} />
+        <ModalContainer onHide={this.smClose} routeToViewDetail={this.routeToViewDetail} />
         <StoreMerge onHide={this.smClose} />
       </section>
     )

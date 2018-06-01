@@ -105,8 +105,8 @@ const getAll = (input, request, callback) => {
       output.status = true
       callback(output)
     } else {
-      output.key = 'noDataFound'
-      output.status = false
+      output.data = []
+      output.status = true
       callback(output)
     }
   })

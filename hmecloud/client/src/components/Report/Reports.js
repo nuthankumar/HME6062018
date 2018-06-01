@@ -964,7 +964,16 @@ class Report extends Component {
               ) {
                 errors.push(t[language].daterangeinvalid3month)
                 isError = true
-              }             
+              }     
+              if (
+                moment(this.state.toDate, 'MM/DD/YYYY').diff(
+                  moment(this.state.fromDate, 'MM/DD/YYYY'),
+                      'days'
+                  ) > 0
+              ) {
+                errors.push(t[language].daterangeinvalidsingleday)
+                isError = true
+              }  
             }
 
     if (this.state.templateName) {
@@ -1061,32 +1070,82 @@ class Report extends Component {
     }
   }
 
-  generateRawCarDataReport(template) {
-    let language = this.state.currentLanguage
-    this.state.showLoader = true
-    this.setState(this.state)
-    let rawCarData = []
-    rawCarData.push(
-        {
-            'timeMeasure': parseInt(this.state.timeMeasure),
-            'fromDate': moment(this.state.fromDate).format('YYYY-MM-DD'),
-            'toDate': moment(this.state.toDate).format('YYYY-MM-DD'),
-            'openTime': template[0].openTime,
-            'closeTime': template[0].closeTime,
-            'open': this.state.open,
-            'close': this.state.close,
-            'type': this.state.type,
-            'include': this.state.include,
-            'format': this.state.format,
-            'deviceIds': template[0].deviceIds,
-            'advancedOption': template[0].advancedOption,
-            'longestTime': template[0].longestTime,
-            'systemStatistics':template[0].systemStatistics
-        }
-    )
-    this.setState({
-        rawCarRequest: rawCarData[0]
-    })
+  
+
+generateRawCarDataReport(template) {
+  let language = this.state.currentLanguage
+  this.state.showLoader = true
+  this.setState(this.state)
+  let rawCarData = []
+  rawCarData.push(
+      {
+          'timeMeasure': parseInt(this.state.timeMeasure),
+          'fromDate': moment(this.state.fromDate).format('YYYY-MM-DD'),
+          'toDate': moment(this.state.toDate).format('YYYY-MM-DD'),
+          'openTime': template[0].openTime,
+          'closeTime': template[0].closeTime,
+          'open': this.state.open,
+          'close': this.state.close,
+          'type': this.state.type,
+          'include': this.state.include,
+          'format': this.state.format,
+          'deviceIds': template[0].deviceIds,
+          'advancedOption': template[0].advancedOption,
+          'longestTime': template[0].longestTime,
+          'systemStatistics':template[0].systemStatistics
+      }
+  )
+  this.setState({
+      rawCarRequest: rawCarData[0]
+  })
+
+  if(rawCarData[0].advancedOption) {
+    let url
+    let type = 'PDF'
+      if (type == 'CSV')
+      {
+          url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=csv'
+      }
+      if (type == 'PDF') {
+         url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=pdf'
+      }
+      if (this.state.reportData.singleStore) {
+        rawCarData[0].localTime = moment(new Date()).format('hh:mm A')
+      } else {
+        rawCarData[0].localTime = moment(new Date()).locale('en').format('MMM D,YYYY hh:mm A')
+      }
+      // request.localTime = moment(new Date()).locale('en').format('MMM D,YYYY hh:mm')
+      this.setState({ showLoader: true })
+      this.api.postData(url, rawCarData[0], data => {
+          if (data.status) {
+              this.state.errorMessage = ''
+              this.setState(this.state)
+              this.setState({ showLoader: false })
+              this.props.history.push('/emailSent', data.data)
+          } else {
+            if(data.data.code === 'ETIMEOUT') {
+              this.state.showLoader = false
+              this.state.successMessage = ''
+              this.state.errorMessage = t[language].errorTimeout
+              this.setState(this.state)
+            } else if (data.key) {
+              this.state.showLoader = false
+              this.state.successMessage = ''
+              this.state.errorMessage = t[language][data.key]
+              this.setState(this.state)
+            }else {
+              this.state.showLoader = false
+              this.state.successMessage = ''
+              this.state.errorMessage = t[language].genericError
+              this.setState(this.state)
+            } 
+          }
+      }, error => {
+          this.state.successMessage = ''
+          this.state.errorMessage = 'Failed sending Email'
+          this.setState(this.state)
+      })
+  } else  {
     let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=reports'
     this.api.postData(url, rawCarData[0], data => {
       if (data.status) {
@@ -1120,6 +1179,9 @@ class Report extends Component {
         this.setState(this.state)
     })
   }
+}
+
+
 
   generateDaypartReport(){
     let language = this.state.currentLanguage
