@@ -115,7 +115,7 @@ const language = [
     'advancedoptions': 'Advanced Options',
     'open': 'Open',
     'close': 'Close',
-    'OPEN-CLOSE': 'OPEN-CLOSE',
+    'OPEN-CLOSE': 'OPEN - CLOSE',
     'type': 'Type',
     'timeslice': 'Time Slice',
     'cumulative': 'Cumulative',
