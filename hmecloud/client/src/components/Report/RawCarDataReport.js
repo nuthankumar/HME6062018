@@ -72,12 +72,12 @@ class RawCarReport extends Component {
               <span>{t[language].ReportsStart}</span>
             </th>
             <td>
-              {this.state.displayData.startTime ? (this.state.displayData.startTime + ' ' + t[language].OPEN) : 'N/A'}&nbsp;
+              {this.state.displayData.startTime ? ((language === 0 ? moment(this.state.displayData.startTime).locale('en').format('MMM D, YYYY') : moment(this.state.displayData.startTime).locale('fr-ca').format('MMM D, YYYY')) + ' ' + t[language].OPEN) : 'N/A'}&nbsp;
             </td>
             <th>
               <span>{t[language].ReportsPrintDate}</span>
             </th>
-            <td> {this.state.displayData.printDate ? this.state.displayData.printDate : 'N/A'} </td>
+            <td> {this.state.displayData.printDate ? (language === 0 ? moment(this.state.displayData.printDate).locale('en').format('MMM D, YYYY') : moment(this.state.displayData.printDate).locale('fr-ca').format('MMM D, YYYY')) : 'N/A'} </td>
           </tr>
           <tr>
             <th>
@@ -88,7 +88,7 @@ class RawCarReport extends Component {
               <span>{t[language].ReportsStop}</span>
             </th>
             <td>
-              {this.state.displayData.stopTime ? (this.state.displayData.stopTime + ' ' + t[language].CLOSE) : 'N/A' }&nbsp;
+              {this.state.displayData.stopTime ? ((language === 0 ? moment(this.state.displayData.stopTime).locale('en').format('MMM D, YYYY') : moment(this.state.displayData.stopTime).locale('fr-ca').format('MMM D, YYYY'))  + ' ' + t[language].CLOSE) : 'N/A' }&nbsp;
             </td>
             <th>
               <span>{t[language].ReportsPrintTime} </span>

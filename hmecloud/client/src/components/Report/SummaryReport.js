@@ -611,7 +611,7 @@ export default class SummaryReport extends Component {
               <div className={'col-xs-2 pull-right ' + (this.state.reportData.pagination && this.state.reportData.singleStore ? 'show' : 'hide')}>
                 <PaginationComponent pagination={this.state.reportData.pagination} totalPages={this.state.reportData.NoOfPages} curPage={this.state.reportData.curPage} handlePreviousPage={(curPage, totalPages) => this.handlePreviousPage(curPage, totalPages)} handleNextPage={(curPage, totalPages) => this.handleNextPage(curPage, totalPages)} disablePrevButton={this.state.reportData.disablePrevButton} disableNextButton={this.state.reportData.disableNextButton} />
               </div>
-              <div className={'col-xs-2 left-padding-none ' + (this.state.reportData.pagination && !this.state.reportData.singleStore ? 'show' : 'hide')}>
+              <div className={'col-xs-2 ' + (this.state.reportData.pagination && !this.state.reportData.singleStore ? 'show' : 'hide')}>
                 <PaginationComponent pagination={this.state.reportData.pagination} totalPages={this.state.reportData.NoOfPages} curPage={this.state.reportData.curPage} handlePreviousPage={(curPage, totalPages) => this.handlePreviousPage(curPage, totalPages)} handleNextPage={(curPage, totalPages) => this.handleNextPage(curPage, totalPages)} disablePrevButton={this.state.reportData.disablePrevButton} disableNextButton={this.state.reportData.disableNextButton} />
               </div>
             </div>

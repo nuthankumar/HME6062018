@@ -283,9 +283,9 @@ h2 .report-start-time-value,h2 .report-end-time-value{
   padding-right : 0px !important;
 }
 .show-all-single{
-  margin-top: -32px;
+  margin-top: -17px;
   text-align: right;
-  margin-right: 40px;
+  margin-right: 55px;
 }
 #page-navigations{
   color: #D41B3E;
@@ -391,12 +391,14 @@ h2 .report-start-time-value,h2 .report-end-time-value{
   text-align: center;
   vertical-align: middle;
   height: 21px;
+  min-width:120px;
 }
 
-.goalstatistics-table tr:first-child td:first-child{
+.goalstatistics-table tr:first-child td:first-child {
   border-right: 1px solid #FFFFFF;
-  } 
-
+  min-width: 150px;
+  max-width: 150px;
+}
 .goalstatistics-table td:first-child{width: 125px;
 }
 
