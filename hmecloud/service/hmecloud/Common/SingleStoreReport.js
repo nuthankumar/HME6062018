@@ -205,8 +205,8 @@ Device.prototype.getLongestTime = function (longestTime, deviceHeaders) {
 }
 Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, totalCars, goalHeader, deviceHeaders) {
   let eventGoalList
-  if (goalHeader && goalHeader.length > 0 && !_.isNull(goalHeader[0].EventGoalNames) && goalHeader[0].EventGoalNames !== undefined) {
-    eventGoalList = _.get(goalHeader[0], 'EventGoalNames').split('|$|')
+  if (goalHeader && goalHeader.length > 0 && !_.isNull(goalHeader[0].EventNames) && goalHeader[0].EventNames !== undefined) {
+    eventGoalList = _.get(goalHeader[0].EventNames, 'EventNames').split('|$|')
   } else {
     eventGoalList = []
   }
@@ -229,12 +229,12 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
     let obj = { goal: '', cars: '0', percentage: '0%' }
     let rowKey = {}
     let row = _.clone(obj)
-    if (eventGoalList.indexOf(key) > -1) {
+    let eventWithGolas = _.split(key, '-', 2)
+    let event = _.trim(eventWithGolas[0])
+    let goal = _.trim(eventWithGolas[1])
+    if (eventGoalList.indexOf(event) > -1) {
       row.cars = value || '0'
       row.percentage = CalculatePercetage(value, totalCars)
-      let eventWithGolas = _.split(key, '-', 2)
-      let event = _.trim(eventWithGolas[0])
-      let goal = _.trim(eventWithGolas[1])
       if (key.includes(goal)) {
         if (_.has(goalGrade, goal)) {
           goalGrade[goal][event] = row
@@ -247,6 +247,7 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
       }
     }
   })
+  console.log('goalGrade>>>', JSON.stringify(goalGrade))
   function getColorForGoal (goal) {
     if (goal === 'GoalA') {
       return colorSettings[0]
@@ -260,11 +261,17 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
     let eventWithGolas = _.split(key, '-', 2)
     let event = _.trim(eventWithGolas[0])
     let goals = _.trim(eventWithGolas[1])
+
+    //  console.log('goals', JSON.stringify(goals))
+    //  console.log('event', JSON.stringify(event))
     if (_.has(goalGrade, [goals, event])) {
       value = (isMinutes === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES))
       _.set(goalGrade, [goals, event, 'goal'], value)
+    } else {
+      _.set(goalGrade[goals, event, 'goal'])
     }
   })
+  // console.log('FF', JSON.stringify(goalGrade))
   return _.values(goalGrade) || []
 }
 Device.prototype.getSystemStatistics = function (DeviceSystemInfo, DeviceLaneInfo) {
@@ -313,7 +320,7 @@ Device.prototype.getDeviceValues = function () {
     }
     return color
   }
-  
+
   _.map(storeDetails, (item, index) => {
     let reportInfo = {}
     let startDate
