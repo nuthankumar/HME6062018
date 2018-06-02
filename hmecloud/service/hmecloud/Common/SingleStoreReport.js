@@ -232,7 +232,7 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
     let eventWithGolas = _.split(key, '-', 2)
     let event = _.trim(eventWithGolas[0])
     let goal = _.trim(eventWithGolas[1])
-    if (eventGoalList.indexOf(event) > -1) {
+    if (eventGoalList.indexOf(event) > -1 || eventGoalList.indexOf(key) > -1) {
       row.cars = value || '0'
       row.percentage = CalculatePercetage(value, totalCars)
       if (key.includes(goal)) {
