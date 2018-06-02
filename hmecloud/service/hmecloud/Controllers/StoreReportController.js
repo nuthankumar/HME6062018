@@ -224,6 +224,7 @@ reports.prototype.generateCSV = function (reportResult, stopTime, startTime, gro
   let DeviceDetails = {}
   let eventHeaders = []
   let filter = isValidation
+  csvInput.email = this.request.UserEmail
   csvInput.type = `${messages.COMMON.CSVTYPE}`
   if (filter.reportName === 'week') {
     csvInput.reportName = `${messages.COMMON.WEEKREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
@@ -235,7 +236,6 @@ reports.prototype.generateCSV = function (reportResult, stopTime, startTime, gro
     csvInput.reportName = `${messages.COMMON.DAYREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
     csvInput.subject = `${messages.COMMON.DAYREPORTNAME} ${this.request.body.openTime} ${this.request.body.toDate + (this.request.body.format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
   }
-  csvInput.email = this.request.UserEmail
   if (filter.reportName === 'rawcardata') {
     let rawCarReports = this.getRawCarDataReport(reportResult)
     DeviceDetails = rawCarReports.rawCarData
