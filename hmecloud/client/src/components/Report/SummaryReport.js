@@ -142,7 +142,7 @@ export default class SummaryReport extends Component {
             <span className='report-print-time-value'>
               {(language === 0 ? moment(new Date()).locale('en').format('MMM D, YYYY hh:mm') : moment(new Date()).locale('fr-ca').format('MMM D, YYYY hh:mm'))}
 
-              {/* { this.translateDate(moment(new Date()).format('MMM D, YYYY hh:mm'))} 
+              {/* { this.translateDate(moment(new Date()).format('MMM D, YYYY hh:mm'))}
                */}
             </span>
           </h2>
@@ -527,9 +527,11 @@ export default class SummaryReport extends Component {
     // request.localTime = moment(new Date()).locale('en').format('MMM D,YYYY hh:mm A')
     let url
     if (type === 'CSV') {
+      request.pageNumber = 0
       url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=csv'
     }
     if (type === 'PDF') {
+      request.pageNumber = 0
       url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=pdf'
     }
     this.setState({ showLoader: true })
