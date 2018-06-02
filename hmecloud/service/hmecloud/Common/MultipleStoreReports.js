@@ -174,6 +174,7 @@ Device.prototype.getDeviceInformation = function () {
   }
   _.forEach(storeDetails, (item, key) => {
     let reportInfo = {}
+    let groupTotal = {}
     let groupName
     let storeNo
     if (filter === 'week') {
@@ -224,6 +225,7 @@ Device.prototype.getDeviceInformation = function () {
         storeNo = value || null
         if (value === 'Total Week' || value === 'Total Daypart' || value === 'Total Day') {
           total = {'value': value, 'timeSpan': messages.COMMON.WAVG}
+          reportInfo['Sort-Order'] = 2 + '-'
         }
         reportInfo['Groups'] = total
         reportInfo[`${key}`] = {'value': value || null}
@@ -232,9 +234,12 @@ Device.prototype.getDeviceInformation = function () {
         let group = _.find(groupData, {'Device_ID': value})
         if (group) {
           reportInfo['Groups'] = {'value': group.GroupName}
-          reportInfo['SortOrder'] = 0 + '-' + group.GroupName + '-' + storeNo
+          groupTotal['Groups'] = {'value': 'Sub Total ' + group.GroupName}
+          groupTotal['GroupName'] = group.GroupName
+          reportInfo['Sort-Order'] = 0 + '-' + group.GroupName + '-0-' + storeNo
+          groupTotal['Sort-Order'] = 0 + '-' + group.GroupName + '-1-' + storeNo
         } else {
-          reportInfo['SortOrder'] = 1 + '-' + storeNo
+          reportInfo['Sort-Order'] = 1 + '-' + storeNo
         }
       } else if (key === 'StartTime') {
         reportInfo['StartTime'] = {'value': (value || null)}
@@ -259,7 +264,8 @@ Device.prototype.getDeviceInformation = function () {
         reportInfo[`${key}`] = {'value': `${dateUtils.convertSecondsToMinutes(parseInt(value), timeFormat)}`, 'color': color}
       }
     })
-    deviceInfo.data.splice(_.sortedIndexBy(deviceInfo.data, reportInfo, 'SortOrder'), 0, reportInfo)
+    deviceInfo.data.splice(_.sortedIndexBy(deviceInfo.data, reportInfo,'Sort-Order'), 0, reportInfo)
+   // deviceInfo.data.splice(_.sortedIndexBy(deviceInfo.data, groupTotal,'Sort-Order'), 0, groupTotal)
   })
   return timeMeasure
 }
