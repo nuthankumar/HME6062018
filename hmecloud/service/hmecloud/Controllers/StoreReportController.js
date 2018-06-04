@@ -216,7 +216,6 @@ reports.prototype.getRawCarDataReport = function (reportResult) {
     deviceValues.status = true
     return deviceValues
   })
-
   return deviceValues
 }
 reports.prototype.generateCSV = function (reportResult, stopTime, startTime, groupName, getSystemInfo, isValidation, totalPages, response) {
@@ -238,10 +237,27 @@ reports.prototype.generateCSV = function (reportResult, stopTime, startTime, gro
   }
   if (filter.reportName === 'rawcardata') {
     let rawCarReports = this.getRawCarDataReport(reportResult)
-    DeviceDetails = rawCarReports.rawCarData
-    eventHeaders = []
-    csvInput.reportName = `${messages.COMMON.RAWCARREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
-    csvInput.subject = `${messages.COMMON.RAWCARDATAREPORTTITLE} ${this.request.body.openTime} ${this.request.body.toDate + (this.request.body.format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
+    new Promise((resolve, reject) => {
+      if (filter.reportName === 'rawcardata') {
+        resolve(rawCarReports)
+      }
+    }).then((result) => {
+      DeviceDetails = result.rawCarData
+      eventHeaders = []
+      csvInput.reportName = `${messages.COMMON.RAWCARREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
+      csvInput.subject = `${messages.COMMON.RAWCARDATAREPORTTITLE} ${this.request.body.openTime} ${this.request.body.toDate + (this.request.body.format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
+      CSVReport.generateCSVReport(DeviceDetails, this.request, csvInput, filter, eventHeaders, result => {
+        if (result.status === true) {
+          response.status(200).send(result)
+        } else {
+          response.status(400).send(result)
+        }
+      })
+    }).catch((error) => {
+      if (error) {
+        response.status(400).send(error)
+      }
+    })
   } else {
     let getReports = this.deviceDataPreparation(reportResult, stopTime, startTime, groupName, getSystemInfo, isValidation, totalPages)
     DeviceDetails = getReports.timeMeasureType
