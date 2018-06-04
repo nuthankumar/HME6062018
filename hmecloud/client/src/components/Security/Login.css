@@ -267,10 +267,17 @@ width:197px;
     -moz-appearance: none;
     background: transparent;
     margin-top: 11px;
-    border: 1px solid #c2c2c2;
+    border: 1px solid #c2c2c2 !important;
     font-size: 16px;
+    opacity:0;
+    z-index:15
 }
-
+.selectSpan {
+    position: absolute;
+    top: 19px;
+    z-index: 10;
+    left: 10px;
+}
 .form-control[readonly] {
     color: black;
     background: white !important;
@@ -300,6 +307,7 @@ width:197px;
     width: 315px;
     margin-top: 11px;
     height: 35px;
+    border: 1px solid #c2c2c2 !important;
 }
 .checkbox-sections-advanced {
     display: -ms-flexbox;

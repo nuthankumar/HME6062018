@@ -247,6 +247,14 @@ class Report extends Component {
                     <ReactTooltip place='right' type='dark' effect='solid' />
                 </span>
                 <div className='cover-select'>
+                  <span className='selectSpan'> {parseInt(this.state.timeMeasure) === CommonConstants.TimeMeasure.Daypart
+                                            ? t[language].daypart
+                                            : parseInt(this.state.timeMeasure) === CommonConstants.TimeMeasure.Week
+                                                ? t[language].week
+                                                : parseInt(this.state.timeMeasure) === CommonConstants.TimeMeasure.RawCarData
+                                                    ? t[language].rawdatareport :parseInt(this.state.timeMeasure) === CommonConstants.TimeMeasure.Day
+                                                    ? t[language].day
+                            : ''} </span>
                   <img className='cover-select-image' src={downArrow} aria-hidden='true'/>
                   <select name='timeMeasure' className='time-measures' onChange={this.changeTimeMeasure.bind(this)}>
                                     <option selected={this.state.timeMeasure == 1} value='1'>{t[language].day}</option>
