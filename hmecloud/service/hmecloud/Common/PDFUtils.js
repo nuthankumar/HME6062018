@@ -33,8 +33,15 @@ const mutipleStore = (reportData, pdfInput, callback) => {
           if (event === 'Total Cars') {
             let totalcar = {'totalcar': details['Total Cars'].value}
             deviceDetails.push(totalcar)
+          } else if (event === 'Groups') {
+            let groups = {'groups': details['Groups']}
+            deviceDetails.push(groups)
+          } else if (event === 'Stores') {
+            let Stores = {'Stores': details['Stores'].value}
+            deviceDetails.push(Stores)
+          } else {
+            deviceDetails.push(details[event])
           }
-          deviceDetails.push(details[event])
         })
         storeDeviceHeaders.push(deviceDetails)
       })
@@ -106,6 +113,7 @@ const mutipleStore = (reportData, pdfInput, callback) => {
       }
     }
   }
+
   PdfBuffer.create(document, options)
     .then(response => {
       if (response) {

@@ -986,16 +986,20 @@
                            {{/each}}
                     </tr>
                 </tr>
-
                          {{#each store as |childvalue childkey|}}
                          {{#each childvalue.rcds as |item|}}
                          <tr class="table-row-data">
                          {{#each item as |childvalue|}}
                         <td class="rnshade boldin  {{#if childvalue.value}}insideData{{/if}}
+                        {{#if childvalue.groups.timeSpan}}insideHeader{{/if}}
+                        {{#if childvalue.groups.value}}insideHeader{{/if}}
+                        {{#if childvalue.Stores}}insideHeader{{/if}}
                         {{#if childvalue.totalcar}}insideHeader{{/if}} "
                         style=" {{#if childvalue.value}}background-color:{{childvalue.color}}{{/if}}">
                           {{#if childvalue.value}}{{childvalue.value}}{{/if}}
-                          {{#if childvalue.timeSpan}}{{childvalue.timeSpan}}{{/if}}
+                          {{#if childvalue.Stores}}{{childvalue.Stores}}{{/if}}
+                          {{#if childvalue.groups.value}}{{childvalue.groups.value}}{{/if}}
+                          {{#if childvalue.groups.timeSpan}}{{childvalue.groups.timeSpan}}{{/if}}
                           {{#if childvalue.totalcar}}{{childvalue.totalcar}}{{/if}}
                         </td>
                           {{/each}}
