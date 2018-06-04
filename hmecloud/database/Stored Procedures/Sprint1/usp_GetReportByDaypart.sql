@@ -57,6 +57,7 @@ BEGIN
 	DECLARE @EndDateTime DATETIME
 	DECLARE @EventNames VARCHAR(4000)
 	DECLARE @EventGoalNames VARCHAR(4000)
+	DECLARE @GroupColumn VARCHAR(100)
 	SELECT @StartDateTime = CONVERT(DATETIME,  @InputStartDateTime);
 	SELECT @EndDateTime = CONVERT(DATETIME,  @InputEndDateTime);
 
@@ -293,7 +294,6 @@ BEGIN
 					GROUP BY
 						DayPartIndex, CAST(d.StoreDate AS varchar(25)),
 						r.EventType_Category
-					HAVING COUNT(d.Device_ID)>0
 				'
 		END
 	ELSE
@@ -327,34 +327,34 @@ BEGIN
 				@EventNames =COALESCE(@EventNames + '|$|' + headerName , headerName)
 			FROM  (SELECT DISTINCT headerName, MIN(Sort) Sort FROM @header GROUP BY headerName) header
 			ORDER BY sort
-
+			SELECT @GroupColumn = CASE WHEN @PageNumber = 0 THEN 'NULL ' ELSE 'CAST(d.StoreDate AS varchar(25)) ' END
 			SET @headerSourceCol = 'EventType_Name'
 			SET @TheDevice_ID = CAST(@Device_IDs AS int)
 			SET @sum_query = '
+				;WITH TotalCar AS (SELECT COUNT(CarDataRecord_ID) Total_Car,EventType_Name  FROM	#raw_data GROUP BY EventType_Name)
 				INSERT INTO	#rollup_data (DayPartIndex, StartTime, EndTime, StoreNo, Store_Name, Device_UID, StoreDate, Device_ID, Store_ID, Category, AVG_DetectorTime, Total_Car)
-				SELECT	NULL DayPartIndex,
+				SELECT	'+CASE WHEN @PageNumber > 0 THEN 'NULL ' ELSE '10000 ' END +' DayPartIndex,
 						NULL StartTime,
 						NULL EndTime,
 						''Total Daypart'' StoreNo,
 						NULL Store_Name,
 						CONVERT(UniqueIdentifier, NULL) Device_UID,
-						CAST(d.StoreDate AS varchar(25)) StoreDate,
+						'+ @GroupColumn+' StoreDate,
 						NULL Device_ID,
 						NULL Store_ID,
 						r.EventType_Name Category,
 						AVG(r.DetectorTime) AVG_DetectorTime,
-						COUNT(r.CarDataRecord_ID) Total_Car
+						(SELECT MAX(Total_Car) FROM TotalCar) Total_Car
 					FROM	#StoreWithDatePart d
 						LEFT JOIN #raw_data r ON d.Device_ID = r.Device_ID
 							AND	d.DayPartIndex = r.Daypart_ID
 							AND d.StoreDate = r.StoreDate
 					GROUP BY
-						CAST(d.StoreDate AS varchar(25)),
+						'+ CASE WHEN @PageNumber > 0 THEN 'CAST(d.StoreDate AS varchar(25)), ' ELSE '' END +'
 						r.EventType_Name
-					HAVING COUNT(d.Device_ID)>0
 				'
 		END
-
+		
 	-- get daypart records from the proc
 	INSERT INTO #DayPart(Device_ID, DayPartIndex, StartTime, EndTime)
 	SELECT  DISTINCT [Device_ID], [Daypart_ID], dbo.uf_ConvertNumberToTime([Daypart_Start]), dbo.uf_ConvertNumberToTime([Daypart_End])
@@ -467,7 +467,7 @@ BEGIN
 	GROUP BY StoreDate
 	ORDER BY StoreDate
 
-	UPDATE t SET t.ID = w.ID
+	UPDATE t SET t.ID = CASE WHEN @PageNumber = 0 AND w.StoreDate IS NULL THEN 10000 ELSE w.ID END
 	FROM #rollup_data_all t INNER JOIN #DayIndex w ON ISNULL(t.StoreDate,0) = ISNULL(w.StoreDate,0)
 
 	SELECT @TotalRecCount = COUNT(DISTINCT StoreDate) FROM #rollup_data_all
@@ -525,12 +525,12 @@ BEGIN
 			AVG(AVG_DetectorTime)
 			FOR Category IN (' + @cols + ')
 		) AS p
-		ORDER BY StoreDate, ID, SortOrder, DayPartIndex, StoreNo;'
+		ORDER BY ID, StoreDate,  SortOrder, DayPartIndex, StoreNo;'
 	ELSE
 		SET @query = N'
 		SELECT	ID, DayPartIndex, StartTime, EndTime, StoreNo, Store_Name, Device_UID, StoreDate, Device_ID, Store_ID, Total_Car, SortOrder
 		FROM	#rollup_data
-		ORDER BY StoreDate, ID, SortOrder, DayPartIndex, StoreNo'
+		ORDER BY ID, StoreDate,  SortOrder, DayPartIndex, StoreNo'
 
 
 	/***********************************
@@ -661,7 +661,7 @@ BEGIN
 			-- Device SystemStatistics Lane
 			--EXEC GetDeviceSystemStatisticsLane  @Device_IDs,@StoreEndDate,@StoreStartDate, @includePullins -- '15','2018-03-24', '2018-03-24',0
 			SELECT @EventNames EventNames
-			SELECT @EventGoalNames EventGoalNames
+			SELECT @EventGoalNames EventNames
 		END
 	ELSE
 	BEGIN
@@ -674,4 +674,3 @@ BEGIN
 	RETURN(0)
 END
 
-GO
