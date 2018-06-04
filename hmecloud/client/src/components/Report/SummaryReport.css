@@ -349,8 +349,11 @@ h2 .report-start-time-value,h2 .report-end-time-value{
   border: 0px;
   height: 23px;
   font-size: 12px;
-
-  width : 125px;
+ min-width:150px;
+ max-width:150px;
+}
+.show-table-cell.headers{
+  min-width :120px
 }
 
 .goalstatistics-table tr.goalstatistics-row-heading th.blank-heading{
