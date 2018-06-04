@@ -3,6 +3,7 @@ import moment from 'moment'
 import './SummaryReport.css'
 import {Config} from '../../Config'
 import PageHeader from '../Header/PageHeader'
+import {CommonConstants} from '../../Constants'
 import t from '../Language/language'
 import * as languageSettings from '../Language/languageSettings'
 import Loader from '../Alerts/Loader'
@@ -168,7 +169,7 @@ class RawCarReport extends Component {
     this.setState({
       showLoader: true
     })
-    let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rrcsv1'
+    let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=csv'
     this.api.postData(url, this.state.rawCarRequest, data => {
       if (data.status) {
         this.setState({
