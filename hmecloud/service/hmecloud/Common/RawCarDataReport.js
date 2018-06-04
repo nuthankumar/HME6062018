@@ -11,7 +11,6 @@ const Device = function (result, request) {
 Device.prototype.storeInfo = function () {
   let getStoreTnfo = {}
   if (this.result.data[2] && this.result.data[2].length > 0 && this.result.data[2] !== null && this.result.data[2] !== undefined) {
-    //  getStoreTnfo.storeName = this.result.data[2][0].Store_Name
     getStoreTnfo.storeName = this.result.data[2][0].Store_Name ? this.result.data[2][0].Store_Number + '-' + this.result.data[2][0].Store_Name : this.result.data[2][0].Store_Number
     getStoreTnfo.storeDescription = this.result.data[2][0].Brand_Name
     getStoreTnfo.storeNumber = (this.result.data[2][0].Store_Number ? this.result.data[2][0].Store_Number : 'N/A')
