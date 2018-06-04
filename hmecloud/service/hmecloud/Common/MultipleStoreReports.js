@@ -146,6 +146,7 @@ Device.prototype.multipleStore = function () {
 Device.prototype.getDeviceInformation = function () {
   const timeFormat = this.request.body.format
   const filter = this.reportFilter
+  let subTotals = []
   let storeDetails = this.result
   let index = 0
   let deviceInfo
@@ -172,6 +173,49 @@ Device.prototype.getDeviceInformation = function () {
     })
     return color
   }
+  // get unique groupname
+  let uniqGroups = _.uniq(_.map(this.groupName, 'GroupName'))
+
+  let pushTotals = (data,index) => {
+    if (subTotals) {
+      // _.forEach(totals, (total, key) => {
+      //   total["t"] = key
+      // })
+      // totals.push(uniqGroups)
+
+      // totals.push(_.find(totals, 'GroupName', "ASummarygrp"))
+      _.forEach(uniqGroups, (group) => {
+        var subTotal = _.find(subTotals, 'GroupName', group)
+        if (subTotal) {
+          // totals.push(subTotal)
+          if (subTotal.Count > 0) {
+            data.splice(_.sortedIndexBy(data, subTotal, 'Sort-Order'), 0, subTotal)
+          }
+        }
+      })
+    }
+  }
+
+  let appendSubTotal = (groupName,index) => {
+    // let groupTotal = {}
+    let groupTotal = _.find(subTotals, 'GroupName', groupName)
+    if (groupTotal) {
+      groupTotal.Count = groupTotal.Count + 1
+      // totals[groupName+"-1"] = groupTotal
+      // totals.push(groupTotal)
+    } else {
+      groupTotal = {
+        'GroupName': groupName,
+        'Count': 1,
+        'Sort-Order': 0 + '-' + groupName + '-1',
+        'Groups': { 'value': 'Sub Total ' + groupName },
+        'Index': index
+      }
+      subTotals.push(groupTotal)
+    }
+    return groupTotal
+  }
+
   _.forEach(storeDetails, (item, key) => {
     let reportInfo = {}
     let groupTotal = {}
@@ -203,6 +247,10 @@ Device.prototype.getDeviceInformation = function () {
     }
     if (filter === 'day') {
       if (item['ID'] !== index) {
+        if (deviceInfo && deviceInfo['data'] && subTotals) {
+          pushTotals(deviceInfo['data'], item['ID'])
+          timeMeasure.push(deviceInfo)
+        }
         deviceInfo = {
           title: '',
           data: []
@@ -233,6 +281,7 @@ Device.prototype.getDeviceInformation = function () {
         reportInfo['deviceId'] = {'value': (value || null)}
         let group = _.find(groupData, {'Device_ID': value})
         if (group) {
+          groupTotal = appendSubTotal(group.GroupName, index)
           reportInfo['Groups'] = {'value': group.GroupName}
           groupTotal['Groups'] = {'value': 'Sub Total ' + group.GroupName}
           groupTotal['GroupName'] = group.GroupName
@@ -264,8 +313,8 @@ Device.prototype.getDeviceInformation = function () {
         reportInfo[`${key}`] = {'value': `${dateUtils.convertSecondsToMinutes(parseInt(value), timeFormat)}`, 'color': color}
       }
     })
-    deviceInfo.data.splice(_.sortedIndexBy(deviceInfo.data, reportInfo,'Sort-Order'), 0, reportInfo)
-   // deviceInfo.data.splice(_.sortedIndexBy(deviceInfo.data, groupTotal,'Sort-Order'), 0, groupTotal)
+    deviceInfo.data.splice(_.sortedIndexBy(deviceInfo.data, reportInfo, 'Sort-Order'), 0, reportInfo)
+    // deviceInfo.data.splice(_.sortedIndexBy(deviceInfo.data, groupTotal,'Sort-Order'), 0, groupTotal)
   })
   return timeMeasure
 }
