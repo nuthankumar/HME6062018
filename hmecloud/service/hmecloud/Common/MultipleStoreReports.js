@@ -176,19 +176,12 @@ Device.prototype.getDeviceInformation = function () {
   // get unique groupname
   let uniqGroups = _.uniq(_.map(this.groupName, 'GroupName'))
 
-  let pushTotals = (data,index) => {
+  let pushTotals = (data, index) => {
     if (subTotals) {
-      // _.forEach(totals, (total, key) => {
-      //   total["t"] = key
-      // })
-      // totals.push(uniqGroups)
-
-      // totals.push(_.find(totals, 'GroupName', "ASummarygrp"))
       _.forEach(uniqGroups, (group) => {
         var subTotal = _.find(subTotals, 'GroupName', group)
         if (subTotal) {
-          // totals.push(subTotal)
-          if (subTotal.Count > 0) {
+          if (subTotal.Count > 0 && subTotal.Index === index) {
             data.splice(_.sortedIndexBy(data, subTotal, 'Sort-Order'), 0, subTotal)
           }
         }
@@ -196,20 +189,22 @@ Device.prototype.getDeviceInformation = function () {
     }
   }
 
-  let appendSubTotal = (groupName,index) => {
-    // let groupTotal = {}
-    let groupTotal = _.find(subTotals, 'GroupName', groupName)
+  let appendSubTotal = (groupName, index) => {
+    let groupKey = groupName + '-' + index
+    let groupTotal = _.find(subTotals, 'Group-Key', groupKey)
     if (groupTotal) {
       groupTotal.Count = groupTotal.Count + 1
-      // totals[groupName+"-1"] = groupTotal
-      // totals.push(groupTotal)
     } else {
       groupTotal = {
         'GroupName': groupName,
         'Count': 1,
         'Sort-Order': 0 + '-' + groupName + '-1',
         'Groups': { 'value': 'Sub Total ' + groupName },
-        'Index': index
+        'Index': index,
+        'Stores': {'value': null },
+        'StoreNo': { 'value': null },
+        'Total Cars': { 'value': null },
+        'Group-Key': groupKey
       }
       subTotals.push(groupTotal)
     }
@@ -223,6 +218,9 @@ Device.prototype.getDeviceInformation = function () {
     let storeNo
     if (filter === 'week') {
       if (item['WeekIndex'] !== index) {
+        if (deviceInfo && deviceInfo['data'] && subTotals) {
+          pushTotals(deviceInfo['data'], index)
+        }
         deviceInfo = {
           title: '',
           data: []
@@ -235,6 +233,9 @@ Device.prototype.getDeviceInformation = function () {
     }
     if (filter === 'daypart') {
       if (item['DayPartIndex'] !== index) {
+        if (deviceInfo && deviceInfo['data'] && subTotals) {
+          pushTotals(deviceInfo['data'], index)
+        }
         deviceInfo = {
           title: '',
           data: []
@@ -248,8 +249,7 @@ Device.prototype.getDeviceInformation = function () {
     if (filter === 'day') {
       if (item['ID'] !== index) {
         if (deviceInfo && deviceInfo['data'] && subTotals) {
-          pushTotals(deviceInfo['data'], item['ID'])
-          timeMeasure.push(deviceInfo)
+          pushTotals(deviceInfo['data'], index)
         }
         deviceInfo = {
           title: '',
@@ -311,10 +311,12 @@ Device.prototype.getDeviceInformation = function () {
           color = `${getColor(key, value)}`
         }
         reportInfo[`${key}`] = {'value': `${dateUtils.convertSecondsToMinutes(parseInt(value), timeFormat)}`, 'color': color}
+      if (groupTotal) {
+        groupTotal[`${key}`] = { 'value': `${dateUtils.convertSecondsToMinutes(parseInt(value), timeFormat)}`, 'color': color }
+        }
       }
     })
     deviceInfo.data.splice(_.sortedIndexBy(deviceInfo.data, reportInfo, 'Sort-Order'), 0, reportInfo)
-    // deviceInfo.data.splice(_.sortedIndexBy(deviceInfo.data, groupTotal,'Sort-Order'), 0, groupTotal)
   })
   return timeMeasure
 }
