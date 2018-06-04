@@ -18,10 +18,10 @@ GO
 -- -----------------------------------------------------------
 -- Sl.No.	Date			Developer		Descriptopn   
 -- -----------------------------------------------------------
---  1.  	20-APRIL-2018	Selvendran K	Procedure created
+--  1.  	04-JUNE-2018	Charan Kumar C	Changed from LEFT JOIN to INNER JOIN
 --	
 -- ===========================================================
--- EXEC [dbo].[usp_GetMasterSettings]  @Device_ID = 4498, @Device_LaneConfig_ID = 1, @Device_MainVersion = '2.01.17', @Store_Company_ID = 1353, @Store_Brand_ID = 17
+-- EXEC [dbo].[usp_GetMasterSettings]  @Device_ID = 138608, @Device_LaneConfig_ID = 1, @Device_MainVersion = '2.31.7.999', @Store_Company_ID = 1353, @Store_Brand_ID = 19
 -- ===========================================================
 
 CREATE PROCEDURE [dbo].[usp_GetMasterSettings]
@@ -42,10 +42,10 @@ BEGIN
 	SELECT DISTINCT dinf.Device_ID, stor.Store_Number
 	FROM 
 		[dbo].tbl_Stores stor
-		LEFT JOIN [dbo].tbl_DeviceInfo dinf ON dinf.Device_Store_ID = stor.Store_ID  AND dinf.Device_ID != @Device_ID
+		INNER JOIN [dbo].tbl_DeviceInfo dinf ON dinf.Device_Store_ID = stor.Store_ID  AND dinf.Device_ID != @Device_ID
 		AND dinf.Device_LaneConfig_ID =  @Device_LaneConfig_ID and dinf.Device_IsActive = 1
 		AND dinf.Device_MainVersion = @Device_MainVersion
-		LEFT JOIN [dbo].tbl_DeviceConfigDetectors dtct ON  dtct.Device_ID = dinf.Device_ID 
+		INNER JOIN [dbo].tbl_DeviceConfigDetectors dtct ON  dtct.Device_ID = dinf.Device_ID 
 	WHERE 
 	stor.Store_Company_ID = @Store_Company_ID
 	AND stor.Store_Brand_ID = @Store_Brand_ID
