@@ -488,6 +488,7 @@ export default class SummaryReport extends Component {
         // this.summaryReportHandler = new SummaryReportHandler()
         // this.summaryReportHandler.handleReportResponse(data, this.state.reportData)
         this.state.reportData.response = data
+        this.state.goalData = data.goalData
         this.setState(this.state)
         this.state.showLoader = false
         this.setState(this.state)
