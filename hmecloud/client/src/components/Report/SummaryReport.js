@@ -140,7 +140,7 @@ export default class SummaryReport extends Component {
           <h2 className='report-print-time-header'>
             <span className='report-print-time'> {t[language].ReportsPrintTime}</span>
             <span className='report-print-time-value'>
-              {(language === 0 ? moment(new Date()).locale('en').format('MMM D, YYYY hh:mm') : moment(new Date()).locale('fr-ca').format('MMM D, YYYY hh:mm'))}
+              {(language === 0 ? moment(new Date()).locale('en').format('MMM D, YYYY hh:mm a') : moment(new Date()).locale('fr-ca').format('MMM D, YYYY hh:mm a'))}
 
               {/* { this.translateDate(moment(new Date()).format('MMM D, YYYY hh:mm'))}
                */}
