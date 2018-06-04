@@ -206,7 +206,7 @@ Device.prototype.getLongestTime = function (longestTime, deviceHeaders) {
 Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, totalCars, goalHeader, deviceHeaders) {
   let eventGoalList
   if (goalHeader && goalHeader.length > 0 && !_.isNull(goalHeader[0].EventNames) && goalHeader[0].EventNames !== undefined) {
-    eventGoalList = _.get(goalHeader[0].EventNames, 'EventNames').split('|$|')
+    eventGoalList = _.get(goalHeader[0], 'EventNames').split('|$|')
   } else {
     eventGoalList = []
   }
