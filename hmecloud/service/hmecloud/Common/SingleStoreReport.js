@@ -247,7 +247,6 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
       }
     }
   })
-  console.log('goalGrade>>>', JSON.stringify(goalGrade))
   function getColorForGoal (goal) {
     if (goal === 'GoalA') {
       return colorSettings[0]
@@ -261,17 +260,11 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
     let eventWithGolas = _.split(key, '-', 2)
     let event = _.trim(eventWithGolas[0])
     let goals = _.trim(eventWithGolas[1])
-
-    //  console.log('goals', JSON.stringify(goals))
-    //  console.log('event', JSON.stringify(event))
     if (_.has(goalGrade, [goals, event])) {
       value = (isMinutes === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES))
       _.set(goalGrade, [goals, event, 'goal'], value)
-    } else {
-      _.set(goalGrade[goals, event, 'goal'])
     }
   })
-  // console.log('FF', JSON.stringify(goalGrade))
   return _.values(goalGrade) || []
 }
 Device.prototype.getSystemStatistics = function (DeviceSystemInfo, DeviceLaneInfo) {
