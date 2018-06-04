@@ -341,6 +341,7 @@ export default class SummaryReport extends Component {
         })
       } else if (request.timeMeasure === 4) {
         if (storeId.Daypart) {
+          request.pageNumber = 0
           request.fromDate = moment(storeId.StoreDate.value).format('YYYY-MM-DD')
           request.toDate = moment(storeId.StoreDate.value).format('YYYY-MM-DD')
         }

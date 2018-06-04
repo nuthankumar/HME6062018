@@ -169,6 +169,7 @@ class RawCarReport extends Component {
     this.setState({
       showLoader: true
     })
+    // adding report type csv for rcd
     let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=csv'
     this.api.postData(url, this.state.rawCarRequest, data => {
       if (data.status) {

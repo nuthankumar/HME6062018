@@ -1092,7 +1092,8 @@ generateRawCarDataReport(template) {
           'deviceIds': template[0].deviceIds,
           'advancedOption': template[0].advancedOption,
           'longestTime': template[0].longestTime,
-          'systemStatistics':template[0].systemStatistics
+          'systemStatistics':template[0].systemStatistics,
+          'pageNumber': 0
       }
   )
   this.setState({
@@ -1222,6 +1223,7 @@ generateRawCarDataReport(template) {
         } else {
           request.localTime = moment(new Date()).locale('en').format('MMM D,YYYY hh:mm A')
         }
+        request.pageNumber = 0
         // request.localTime = moment(new Date()).locale('en').format('MMM D,YYYY hh:mm')
         this.setState({ showLoader: true })
         this.api.postData(url, request, data => {
