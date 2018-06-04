@@ -285,11 +285,17 @@ h2 .report-start-time-value,h2 .report-end-time-value{
 .show-all-single{
   margin-top: -18px;
   text-align: right;
-  margin-right: 55px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
 }
 #page-navigations{
   color: #D41B3E;
   margin-top:12px;
+
+  align-items: flex-end;
+  display: flex;
+  justify-content: flex-end;
 }
 .page-navs{
   display : inline-block;
@@ -333,8 +339,8 @@ h2 .report-start-time-value,h2 .report-end-time-value{
   color: #D41B3E;
 }
 
-.show-all-multi{
-  margin-right : 40px;
+.show-page-toggle.left{
+  padding-left: 0px
 }
 
 /* Goal Statistics css starts here*/
