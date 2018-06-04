@@ -60,7 +60,7 @@ export default class GoalStatisticsDataComponent extends Component {
     return this.props.reportData.response.eventList.map((headerItem) => {
       return (
         // <th className={(headerItem === 'Groups' ? 'groupsColHeader' : '') + (headerItem == 'Store_Name' ? 'storesColHeader' : '') + (headerItem === 'Store_Name' || headerItem === 'Groups' || headerItem === 'week' || headerItem === 'day' || headerItem === 'daypart' ? 'reporttable-attributes-heading-dynamic'+colWidth : 'reportTableAttributesHeading')}><span>{headerItem}</span></th>
-        <th className={(headerItem === 'Groups' || headerItem === 'Stores' || headerItem === 'Week' || headerItem === 'Day' || headerItem === 'Daypart' || headerItem === 'Total Cars' ? 'hide-table-cell ' : 'show-table-cell ') + ('reportTableAttributesHeading' + colWidth)}>
+        <th className={(headerItem === 'Groups' || headerItem === 'Stores' || headerItem === 'Week' || headerItem === 'Day' || headerItem === 'Daypart' || headerItem === 'Total Cars' ? 'hide-table-cell ' : 'show-table-cell  headers ') + ('reportTableAttributesHeading' + colWidth)}>
           <span>{t[language][headerItem] ? t[language][headerItem] : headerItem}</span>
         </th>
       )
@@ -96,7 +96,7 @@ export default class GoalStatisticsDataComponent extends Component {
           if (eventHeader !== 'Day' && eventHeader !== 'Daypart' && eventHeader !== 'Week' &&
             eventHeader !== 'Groups' && eventHeader !== 'Stores' && eventHeader !== 'Total Cars') {
             // this.goalStatsTableCell(goalItem, type, title, eventHeader)
-            return (<td className={'reportTableAttributesHeading'+this.props.reportData.response.eventList.length + (goalItem[eventHeader] !== undefined ? 'show-table-cell' : 'hide-table-cell')}>{(goalItem[eventHeader] !== undefined ? goalItem[eventHeader][type] : '')}</td>)
+            return (<td className={'reportTableAttributesHeading'+this.props.reportData.response.eventList.length + (goalItem[eventHeader] !== undefined ? ' show-table-cell' : ' hide-table-cell')}>{(goalItem[eventHeader] !== undefined ? goalItem[eventHeader][type] : '')}</td>)
           }
         })
         }

@@ -140,7 +140,7 @@ export default class SummaryReport extends Component {
           <h2 className='report-print-time-header'>
             <span className='report-print-time'> {t[language].ReportsPrintTime}</span>
             <span className='report-print-time-value'>
-              {(language === 0 ? moment(new Date()).locale('en').format('MMM D, YYYY hh:mm') : moment(new Date()).locale('fr-ca').format('MMM D, YYYY hh:mm'))}
+              {(language === 0 ? moment(new Date()).locale('en').format('MMM D, YYYY hh:mm a') : moment(new Date()).locale('fr-ca').format('MMM D, YYYY hh:mm a'))}
 
               {/* { this.translateDate(moment(new Date()).format('MMM D, YYYY hh:mm'))}
                */}
@@ -600,7 +600,7 @@ export default class SummaryReport extends Component {
             </div>
 
             <div className={'row show-all-multi ' + (this.state.reportData.singleStore ? 'hide' : 'show')}>
-              <div className='col-xs-12 show-all-pagination-toggle'>{t[language].ReportsShow}: <span className={(this.state.reportData.pagination) ? 'inactive-link' : 'active-link'} onClick={() => this.switchAllPage('all')}>{t[language].ReportsAll} /</span><span className={(this.state.reportData.pagination) ? 'active-link' : 'inactive-link'} onClick={() => this.switchAllPage('pages')}>{t[language].ReportsPages}</span></div>
+              <div className='col-xs-12 show-all-pagination-toggle right'>{t[language].ReportsShow}: <span className={(this.state.reportData.pagination) ? 'inactive-link' : 'active-link'} onClick={() => this.switchAllPage('all')}>{t[language].ReportsAll} /</span><span className={(this.state.reportData.pagination) ? 'active-link' : 'inactive-link'} onClick={() => this.switchAllPage('pages')}>{t[language].ReportsPages}</span></div>
             </div>
 
             <div className='row summaryreport-table-section'>
@@ -608,7 +608,7 @@ export default class SummaryReport extends Component {
             </div>
 
             <div className='row'>
-              <div className={'col-xs-4 pull-left show-page-toggle ' + (this.state.reportData.singleStore ? 'hide' : 'show' )}> <span className='show-label'>Show:</span> <span className={(this.state.reportData.pagination) ? 'inactive-link' : 'active-link'} onClick={() => this.switchAllPage('all')}>All /</span><span className={(this.state.reportData.pagination) ? 'active-link' : 'inactive-link'} onClick={() => this.switchAllPage('pages')}>Pages</span></div>
+              <div className={'col-xs-4 pull-left show-page-toggle left ' + (this.state.reportData.singleStore ? 'hide' : 'show' )}> <span className='show-label'>Show:</span> <span className={(this.state.reportData.pagination) ? 'inactive-link' : 'active-link'} onClick={() => this.switchAllPage('all')}>All /</span><span className={(this.state.reportData.pagination) ? 'active-link' : 'inactive-link'} onClick={() => this.switchAllPage('pages')}>Pages</span></div>
               <div className={'col-xs-6 reports-terms ' + (this.state.reportData.singleStore ? 'hide' : 'show')}> <span className='asterics'>*</span>{t[language].ReportsDerivedPerformancetoGoal}</div>
               <div className={'col-xs-2 pull-right ' + (this.state.reportData.pagination && this.state.reportData.singleStore ? 'show' : 'hide')}>
                 <PaginationComponent pagination={this.state.reportData.pagination} totalPages={this.state.reportData.NoOfPages} curPage={this.state.reportData.curPage} handlePreviousPage={(curPage, totalPages) => this.handlePreviousPage(curPage, totalPages)} handleNextPage={(curPage, totalPages) => this.handleNextPage(curPage, totalPages)} disablePrevButton={this.state.reportData.disablePrevButton} disableNextButton={this.state.reportData.disableNextButton} />
