@@ -320,6 +320,7 @@ Device.prototype.getDeviceValues = function () {
     let endDate
     let dayPartValue
     let newValue
+    let isTotalDayPart
     _.forEach(storeDetails[index], function (value, key) {
       if (key === 'WeekStartDate') {
         reportInfo['WeekStartDate'] = { 'value': dateUtils.convertmmddyyyy(`${value}`) }
@@ -329,41 +330,6 @@ Device.prototype.getDeviceValues = function () {
         endDate = { 'value': `${value}` }
       } else if (key === 'DayPartIndex') {
         dayPartValue = `${value}`
-      } else if (key === 'StoreDate') {
-        if (filter === 'day') {
-          if (value === 'Total Day') {
-            reportInfo['Day'] = {
-              'timeSpan': 'Total Day',
-              'currentWeekpart': messages.COMMON.WAVG
-            }
-          } else {
-            reportInfo['Day'] = {
-              'timeSpan': moment(`${value}`).format('MM-DD-YYYY'),
-              'currentWeekpart': messages.COMMON.DAYOPENCLOSE
-            }
-          }
-        } else if (filter === 'daypart') {
-          if (value === 'Total Daypart') {
-            reportInfo['Daypart'] = {
-              'timeSpan': 'Total DayPart',
-              'currentWeekpart': messages.COMMON.WAVG
-            }
-          } else {
-            if (!Number.isNaN(parseInt(dayPartValue))) {
-              let dateSplit = `${value}`.split('-')
-              reportInfo['Daypart'] = {
-                'timeSpan': `${dateSplit[1]}/${dateSplit[2]}-Daypart${dayPartValue}`,
-                'currentWeekpart': messages.COMMON.DAYOPENCLOSE
-              }
-            } else if (Number.isNaN(parseInt(dayPartValue))) {
-              reportInfo['Daypart'] = {
-                'timeSpan': 'Total Daypart',
-                'currentWeekpart': messages.COMMON.WAVG
-              }
-            }
-          }
-        }
-        reportInfo[`${key}`] = { 'value': value }
       } else if (key === 'StoreNo') {
         if (filter === 'week') {
           if (value === 'Total Week') {
@@ -378,6 +344,36 @@ Device.prototype.getDeviceValues = function () {
             }
           }
           reportInfo[`${key}`] = { 'value': value }
+        } else if (filter === 'daypart' && value === 'Total Daypart') {
+          isTotalDayPart = true
+        }
+        reportInfo[`${key}`] = { 'value': value }
+      } else if (key === 'StoreDate') {
+        if (filter === 'day') {
+          if (value === 'Total Day') {
+            reportInfo['Day'] = {
+              'timeSpan': 'Total Day',
+              'currentWeekpart': messages.COMMON.WAVG
+            }
+          } else {
+            reportInfo['Day'] = {
+              'timeSpan': moment(`${value}`).format('MM-DD-YYYY'),
+              'currentWeekpart': messages.COMMON.DAYOPENCLOSE
+            }
+          }
+        } else if (filter === 'daypart') {
+          if (!isTotalDayPart) {
+            let dateSplit = `${value}`.split('-')
+            reportInfo['Daypart'] = {
+              'timeSpan': `${dateSplit[1]}/${dateSplit[2]}-Daypart${dayPartValue}`,
+              'currentWeekpart': messages.COMMON.DAYOPENCLOSE
+            }
+          } else {
+            reportInfo['Daypart'] = {
+              'timeSpan': 'Total Daypart',
+              'currentWeekpart': messages.COMMON.WAVG
+            }
+          }
         }
         reportInfo[`${key}`] = { 'value': value }
       } else if (key === 'GroupName') {
