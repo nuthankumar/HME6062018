@@ -4,6 +4,13 @@ FROM sys.objects
 WHERE [name] = 'usp_GetDeviceById' AND [type] ='P'))
 	DROP PROCEDURE [dbo].[usp_GetDeviceById]
 GO
+USE [db_qsrdrivethrucloud_dev]
+GO
+/****** Object:  StoredProcedure [dbo].[usp_GetDeviceById]    Script Date: 6/4/2018 7:38:08 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 -- ===========================================================
 --      Copyright © 2018, HME, All Rights Reserved
 -- ===========================================================
@@ -17,18 +24,20 @@ GO
 -- -----------------------------------------------------------
 -- Sl.No.	Date			Developer		Descriptopn   
 -- -----------------------------------------------------------
---  1.  	20-APRIL-2018	Selvendran K	Procedure created
+--  1.  	04-JUNE-2018	Charan Kumar C	Procedure modified to add count and columns required
 --	
 -- ===========================================================
--- EXEC [dbo].[usp_GetDeviceById] @DeviceUid='2A19A147-AE3E-4EBF-82D3-9994E79B6FCB'
+-- EXEC [dbo].[usp_GetDeviceById] @DeviceUid='F141D470-960D-4B99-A52A-7001700820F6'
 -- ===========================================================
 
 CREATE PROCEDURE [dbo].[usp_GetDeviceById]
     @DeviceUid				VARCHAR(36)
 AS
 BEGIN
-
-    SELECT Distinct stor.*,dinf.* FROM 
+	DECLARE @SettingsCount INT
+    SELECT  DISTINCT Device_ID,Brand_Name,Store_UID,Store_Number,Store_AddressLine1,Store_Locality,Store_Region,Device_Name,
+	Device_IsActive,Device_UID,LaneConfig_Name,Device_SerialNumber,Device_DeviceType_ID,Device_MainVersion,Device_SettingVersion
+	FROM 
 		tbl_Stores stor
 		LEFT JOIN ltbl_Brands bran ON stor.Store_Brand_ID = bran.Brand_ID
 		LEFT JOIN tbl_DeviceInfo dinf ON stor.Store_ID = dinf.Device_Store_ID
@@ -39,8 +48,23 @@ BEGIN
 		LEFT JOIN stbl_Account_Brand_ShareData absr ON stor.Store_Brand_ID = absr.Brand_ID
 	WHERE 0=0
 	AND dinf.Device_UID = CAST(@DeviceUid AS UNIQUEIDENTIFIER)
+
+	SELECT @SettingsCount=COUNT(*) FROM 
+		tbl_Stores stor
+		LEFT JOIN ltbl_Brands bran ON stor.Store_Brand_ID = bran.Brand_ID
+		LEFT JOIN tbl_DeviceInfo dinf ON stor.Store_ID = dinf.Device_Store_ID
+		LEFT JOIN tbl_DeviceType dtyp ON dinf.Device_DeviceType_ID = dtyp.DeviceType_ID
+		LEFT JOIN tbl_LaneConfig lane ON dinf.Device_LaneConfig_ID = lane.LaneConfig_ID
+		LEFT JOIN itbl_User_Store iurs ON iurs.Store_ID = stor.Store_ID
+		LEFT JOIN tbl_Users usrs ON usrs.User_ID = iurs.User_ID
+		LEFT JOIN stbl_Account_Brand_ShareData absr ON stor.Store_Brand_ID = absr.Brand_ID
+	WHERE 0=0
+	AND dinf.Device_UID = CAST(@DeviceUid AS UNIQUEIDENTIFIER)
+
+	SELECT @SettingsCount AS SettingsCount
+
 	SELECT DISTINCT sinf.SettingInfo_Setting_ID, dset.DeviceSetting_Device_ID, sinf.SettingInfo_Name, dinf.Device_Store_ID, 
-	dset.DeviceSetting_SettingValue, sgrp.SettingsGroup_ID, sgrp.SettingsGroup_Name
+	dset.DeviceSetting_SettingValue, sgrp.SettingsGroup_ID, sgrp.SettingsGroup_Name,sgrp.SettingsGroup_Order
 	FROM 
 		tbl_DeviceInfo dinf
 		INNER JOIN tbl_DeviceSetting dset ON dinf.Device_ID = dset.DeviceSetting_Device_ID 
@@ -49,9 +73,12 @@ BEGIN
 		INNER JOIN ltbl_SettingsGroup sgrp ON sinf.SettingInfo_SettingsGroup_ID = sgrp.SettingsGroup_ID
 	WHERE 0=0
 	AND dinf.Device_UID =CONVERT(uniqueidentifier, @DeviceUid)
-	ORDER BY sgrp.SettingsGroup_Name, sgrp.SettingsGroup_ID, sinf.SettingInfo_Name, sinf.SettingInfo_Setting_ID, dset.DeviceSetting_Device_ID, dinf.Device_Store_ID, dset.DeviceSetting_SettingValue
+	AND SettingsGroup_ID IN (1,2,3,4,0,6,7,8,9)
+	ORDER BY sgrp.SettingsGroup_Order, sinf.SettingInfo_Setting_ID, dset.DeviceSetting_Device_ID, sinf.SettingInfo_Name, dinf.Device_Store_ID, 
+	dset.DeviceSetting_SettingValue, sgrp.SettingsGroup_ID, sgrp.SettingsGroup_Name
+	
+	END
 
-END
 GO
 
 
