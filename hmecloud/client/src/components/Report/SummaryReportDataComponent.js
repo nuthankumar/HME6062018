@@ -152,7 +152,8 @@ export default class SummaryReportDataComponent extends Component {
         if (value === 'Total Day' || value === '' || value === null) {
           value = t[language][reportItem[headerItem].timeSpan] ? t[language][reportItem[headerItem].timeSpan] : reportItem[headerItem].timeSpan
         } else {
-          value = moment(value).format('MM/DD/YYYY')
+          // value = moment(reportItem[headerItem].timeSpan).format('MM/DD/YYYY')
+          value = moment(value, 'MM/DD/YYYY').format('MM/DD/YYYY')
         }
         return (
           <td className={'timeMeasureColumn ' + (headerItem === 'Day' ? 'show-table-cell' : 'hide-table-cell')} onClick={() => this.props.handleDrillDown(reportItem)}>
@@ -165,8 +166,10 @@ export default class SummaryReportDataComponent extends Component {
         if (value === 'Total Week' || value === '' || value === null) {
           value = t[language][reportItem[headerItem].timeSpan] ? t[language][reportItem[headerItem].timeSpan] : reportItem[headerItem].timeSpan
         } else {
-          let val1 = moment(value.split(' ')[0]).format('MM/DD')
-          let val2 = moment(value.split(' ')[2]).format('MM/DD')
+          // let val1 = moment(value.split(' ')[0]).format('MM/DD')
+          // let val2 = moment(value.split(' ')[2]).format('MM/DD')
+          let val1 = moment(value.split(' ')[0], 'MM/DD').format('MM/DD')
+          let val2 = moment(value.split(' ')[2], 'MM/DD').format('MM/DD')
           value = val1 + '-' + val2
         }
         return (
