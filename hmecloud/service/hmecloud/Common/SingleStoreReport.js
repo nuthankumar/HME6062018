@@ -241,7 +241,7 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
         } else {
           rowKey[event] = row
           goalGrade[goal] = rowKey
-          goalGrade[goal].title = (goal === 'GoalF' ? `> GoalD (min:sec)` : `<${goal} (min:sec)`)
+          goalGrade[goal].title = (goal === 'GoalF' ? `> GoalD (min:sec)` : `< ${goal} (min:sec)`)
           goalGrade[goal].color = getColorForGoal(goal)
         }
       }
