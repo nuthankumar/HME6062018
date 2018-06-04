@@ -13,7 +13,7 @@ import { Config } from '../../Config'
 const Online = require('../../images/connection_online.png')
 const Offline = require('../../images/connection_offline.png')
 class StoreDetail extends Component { // ensure you dont export component directly
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       showStores: this.props.showStores,
@@ -36,11 +36,11 @@ class StoreDetail extends Component { // ensure you dont export component direct
     this.routeToViewDetail = this.routeToViewDetail.bind(this)
   }
 
-  viewDetails (data) {
+  viewDetails(data) {
     this.props.dispatch(modalAction.initStoreDetail(data.Store_UID, false))
   }
 
-  componentWillMount () {
+  componentWillMount() {
     //  this.state.stores = this.props.stores;
     this.setState({
       stores: this.props.stores
@@ -49,18 +49,18 @@ class StoreDetail extends Component { // ensure you dont export component direct
     this.props.dispatch(storesFunctions.sortStores({ 'sortBy': 'Brand_Name', 'sortType': 'DESC' }))
     this.state.userContext = this.authService.getProfile()
   }
-  routeToViewDetail () {
-    this.props.history.push({ pathname: '/settings/ViewDetails' })
+  routeToViewDetail(id) {
+    // this.props.history.push({ pathname: '/settings/ViewDetails?uuid=' + id })
   }
-  renderPopUp () {
+  renderPopUp() {
     if (this.props.storeModelPopup !== undefined) {
       return (
-        <ModalContainer routeToViewDetail={this.routeToViewDetail} />
+        <ModalContainer history={this.props.history} routeToViewDetail={this.routeToViewDetail()} />
       )
     }
   }
 
-  render () {
+  render() {
     const { language, token, url } = this.state
     let sortParams = this.props.storesDetails.sortParams ? this.props.storesDetails.sortParams : { 'sortBy': 'Brand_Name', 'sortType': 'DESC' }
     this.state.recordCount = this.props.storesDetails.adminStoreDetails.storeList.length
@@ -103,7 +103,7 @@ class StoreDetail extends Component { // ensure you dont export component direct
     )
   }
 
-  renderDevices (devices) {
+  renderDevices(devices) {
     const { language } = this.state
     let deviceRows = devices.map(function (device, index) {
       return (
@@ -123,7 +123,7 @@ class StoreDetail extends Component { // ensure you dont export component direct
     return deviceRows
   }
 
-  renderStores () {
+  renderStores() {
     const { language } = this.state
     let self = this
     if (this.props.stores.storeDetails.storeList) {
@@ -151,7 +151,7 @@ class StoreDetail extends Component { // ensure you dont export component direct
     }
   }
 
-  sortStores (e) {
+  sortStores(e) {
     this.state.Ascending = !this.state.Ascending
     this.setState(this.state)
     let sortBy = e.target.id
@@ -162,7 +162,7 @@ class StoreDetail extends Component { // ensure you dont export component direct
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
     storesDetails: state.storeDetails,
     storeModelPopup: state.StorePopupDetails.storePopUpClient,
@@ -170,7 +170,7 @@ function mapStateToProps (state) {
   }
 }
 
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps(dispatch) {
   return bindActionCreators({ storesFunctions: storesFunctions }, dispatch)
 }
 

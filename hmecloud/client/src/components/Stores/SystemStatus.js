@@ -14,8 +14,13 @@ class SystemStatus extends Component {
       currentLanguage: languageSettings.getCurrentLanguage()
     }
     this.state.isMasterSettings = window.location.pathname.indexOf('/masterSettings') === -1
+    this.StoreNameCLick = this.StoreNameCLick.bind(this)
   }
 
+  StoreNameCLick () {
+    window.location.href = '/storeSystem?uuid=' + this.props.data.systemStatus[0].Store_UID
+    // this.props.history.push({pathname: '/storeSystem', state: { Store_UID: this.props.data.systemStatus[0].Store_UID }})
+  }
   render () {
     const language = this.state.currentLanguage
     if (this.props.data !== undefined) {
@@ -46,7 +51,7 @@ class SystemStatus extends Component {
                 <th>{t[language].settingsDevicesRegisteredToStoreInfo}</th>
                 <td>
                   <ul className='list-style-none registered-store-list'>
-                    <li><a href='./?pg=SettingsStores&amp;st=Edit&amp;suid=5D8B2DED97894183927020E4CCB0700E' className='store-link'>{displayData.Store_Name} - {displayData.Store_Number}</a></li>
+                    <li><a onClick={this.StoreNameCLick}>{displayData.Store_Name} - {displayData.Store_Number}</a></li>
                     <li>{displayData.Store_AddressLine1}</li>
                     <li>{displayData.Store_Locality}, {displayData.Store_Region}</li>
                   </ul>

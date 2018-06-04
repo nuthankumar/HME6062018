@@ -33,9 +33,10 @@ class ModalContainer extends Component {
   }
 
   viewDevice(did) {
-    this.props.dispatch(viewDetail.initViewStore(did))
+    // this.props.dispatch(viewDetail.initViewStore(did))
     this.props.dispatch(closePopup())
-    this.props.routeToViewDetail()
+    // this.props.routeToViewDetail(did)
+    window.location.href = '/settings/ViewDetails?uuid=' + did
   }
   handleSelect(key) {
     this.setState({ key })

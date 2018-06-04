@@ -12,10 +12,8 @@ class RemoteSystemActions extends Component {
       systemActions: this.props.systemActions
     }
   }
-
   masterSettings (e) {
-    this.props.history.push('/stores/masterSettings')
-    // this.props.history.location.pathName = '/stores/masterSettings'
+    window.location.href = '/stores/masterSettings?uuid=' + this.props.storeViewDetails.systemStatus[0].Store_UID
   }
 
   render () {

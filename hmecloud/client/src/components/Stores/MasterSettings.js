@@ -25,9 +25,11 @@ class MasterSettings extends Component {
     }
   }
   componentWillMount () {
-    this.props.getMasterSettings('asdasd')
+    const params = new URLSearchParams(this.props.history.location.search)
+    const contextToken = params.get('uuid') ? params.get('uuid') : null
+    // this.props.dispatch(initViewStore(contextToken))
+    this.props.getMasterSettings(contextToken)
   }
-
   render () {
     const destinationsAll = this.state.selectAllSettings
     const settingsAll = this.state.selectAllSettings

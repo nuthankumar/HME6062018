@@ -6,6 +6,7 @@ import SystemSettings from '../components/Stores/SystemSettings'
 import SystemStatus from '../components/Stores/SystemStatus'
 import RemoteSystemActions from '../components/Stores/RemoteSystemActions'
 import { connect } from 'react-redux'
+import 'url-search-params-polyfill'
 // import { bindActionCreators } from 'redux'
 import { initViewStore } from '../actions/viewDetails'
 
@@ -18,7 +19,9 @@ class ViewDetails extends Component {
     // console.log(this.props.viewDetails);
   }
   componentWillMount () {
-    this.props.dispatch(initViewStore())
+    const params = new URLSearchParams(this.props.history.location.search)
+    const contextToken = params.get('uuid') ? params.get('uuid') : null
+    this.props.dispatch(initViewStore(contextToken))
   }
   render () {
     // const language = this.state.currentLanguage
@@ -28,7 +31,7 @@ class ViewDetails extends Component {
       return (
         <div className='deviceDetails'>
           {/* <div className='col-xs-4'> */}
-          <SystemStatus data={this.props.storeViewDetails} />
+          <SystemStatus data={this.props.storeViewDetails} history={this.props.history} />
           {/* </div> */}
           {/* <div className='col-xs-8'> */}
           <SystemSettings data={this.props.storeViewDetails} />

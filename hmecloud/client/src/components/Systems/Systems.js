@@ -5,7 +5,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import Pagination from '../Common/Pagination'
 import t from '../Language/language'
-import {Config} from '../../Config'
+import { Config } from '../../Config'
+import { initViewStore } from '../../actions/viewDetails'
 import Api from '../../Api'
 import { getSystems, sortSystems, setSearchParams, paginationSystems } from '../../actions/systems'
 import { ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap'
@@ -30,7 +31,13 @@ class Systems extends Component {
     this.PageSizeValueDropdown = this.PageSizeValueDropdown.bind(this)
     this.PageClicked = this.PageClicked.bind(this)
     this.search = this.search.bind(this)
+    this.handleClick = this.handleClick.bind(this)
   }
+
+  handleClick(did) {
+    window.location.href = '/settings/ViewDetails?uuid=' + did
+  }
+
   componentWillMount() {
     this.props.sortSystems({ 'sortBy': 'Brand_Name', 'sortType': 'DESC' })
     this.props.setSearchParams({ 'filter': null, 'criteria': null })
@@ -40,9 +47,6 @@ class Systems extends Component {
     window.alert(`Alert from menu item.\neventKey: ${eventKey}`)
   }
   search(e) {
-    // if (e.key === 'Enter') {
-    //   console.log(e.target.value)
-    // }
     this.props.setSearchParams({ 'filter': this.props.systems.searchParams.filter, 'criteria': this.state.criteria })
     this.props.getSystems()
   }
@@ -177,7 +181,7 @@ class Systems extends Component {
     this.props.getSystems()
   }
 
-  send (e) {
+  send(e) {
     this.setState({
       showLoader: true
     })
@@ -200,7 +204,7 @@ class Systems extends Component {
     if (this.props.systems) {
       let storeRows = this.props.systems.systemDetails.deviceList.map(function (store, index) {
         return (<tr className='tdata clear'>
-          <td><a href='#' className='opener view_details' onclick="passViewDetails('F08E66EEBCAE429988C90D9167CFD716','22222', 'selvendrank@nousinfo.com', 'McDonald\'s', 'ZOOM');"><span translate='' key='viewedit'>View/Edit</span> <br /><span translate='' key='settingsStoresDetails'>{t[language].settingsStoresDetails}</span></a></td>
+          <td><a href='#' className='opener view_details' onClick={() => self.handleClick(store.Device_UID)}><span translate='' key='viewedit'>View/Edit</span> <br /><span translate='' key='settingsStoresDetails'>{t[language].settingsStoresDetails}</span></a></td>
           <td>{store.Brand_Name}</td>
           <td>{store.Store_Number}</td>
           <td>{store.Device_Name}</td>
@@ -236,7 +240,8 @@ function matchDispatchToProps(dispatch) {
       getSystems: getSystems,
       sortSystems: sortSystems,
       setSearchParams: setSearchParams,
-      paginationSystems: paginationSystems
+      paginationSystems: paginationSystems,
+      initViewStore: initViewStore
     }, dispatch
   )
 }
