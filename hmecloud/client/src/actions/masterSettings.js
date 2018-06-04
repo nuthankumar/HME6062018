@@ -15,7 +15,17 @@ export const getMasterSettings = (params) => {
   this.api = new Api()
   let url = Config.apiBaseUrl + CommonConstants.apiUrls.getMasterSettings
   return (dispatch, getState) => {
-    // const state = getState()
+    const state = getState()
+  
+
+
+    // let url = Config.apiBaseUrl + CommonConstants.apiUrls.getSettingsDevices + '?duid=' + duid
+    // return (dispatch) => {
+    //   this.api.getData(url, data => {
+    //     dispatch(getStoreSuccess(data))
+    //   })
+    // }
+    console.log(getState().viewDetails.storeViewDetails)
     let params = {
       'Device_ID': 4498,
       'Device_LaneConfig_ID': 1,

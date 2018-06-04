@@ -85,7 +85,7 @@ export default class SummaryReport extends Component {
               <span>{t[language].store}</span>:
             </th>
             {/* <td className='thin-header'>{this.state.reportData.response.storeName ? this.state.reportData.response.storeName : this.state.reportData.response.storeNumber}</td> */}
-            <td className='thin-header'>{this.state.reportData.response.storeNumber ? this.state.reportData.response.storeNumber : 'N/A'}</td>
+            <td className='thin-header'>{this.state.reportData.response.storeName ? this.state.reportData.response.storeName : 'N/A'}</td>
             <th>
               <span>{t[language].ReportsStart}</span>
             </th>
@@ -142,7 +142,7 @@ export default class SummaryReport extends Component {
             <span className='report-print-time-value'>
               {(language === 0 ? moment(new Date()).locale('en').format('MMM D, YYYY hh:mm') : moment(new Date()).locale('fr-ca').format('MMM D, YYYY hh:mm'))}
 
-              {/* { this.translateDate(moment(new Date()).format('MMM D, YYYY hh:mm'))} 
+              {/* { this.translateDate(moment(new Date()).format('MMM D, YYYY hh:mm'))}
                */}
             </span>
           </h2>
@@ -341,8 +341,9 @@ export default class SummaryReport extends Component {
         })
       } else if (request.timeMeasure === 4) {
         if (storeId.Daypart) {
-          request.fromDate = moment(request.fromDate).format('YYYY-MM-DD')
-          request.toDate = moment(request.toDate).format('YYYY-MM-DD')
+          request.pageNumber = 0
+          request.fromDate = moment(storeId.StoreDate.value).format('YYYY-MM-DD')
+          request.toDate = moment(storeId.StoreDate.value).format('YYYY-MM-DD')
         }
         let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=reports'
         this.api.postData(url, request, data => {
@@ -488,6 +489,7 @@ export default class SummaryReport extends Component {
         // this.summaryReportHandler = new SummaryReportHandler()
         // this.summaryReportHandler.handleReportResponse(data, this.state.reportData)
         this.state.reportData.response = data
+        this.state.goalData = data.goalData
         this.setState(this.state)
         this.state.showLoader = false
         this.setState(this.state)
@@ -527,9 +529,11 @@ export default class SummaryReport extends Component {
     // request.localTime = moment(new Date()).locale('en').format('MMM D,YYYY hh:mm A')
     let url
     if (type === 'CSV') {
+      request.pageNumber = 0
       url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=csv'
     }
     if (type === 'PDF') {
+      request.pageNumber = 0
       url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=pdf'
     }
     this.setState({ showLoader: true })
@@ -606,10 +610,10 @@ export default class SummaryReport extends Component {
             <div className='row'>
               <div className={'col-xs-4 pull-left show-page-toggle ' + (this.state.reportData.singleStore ? 'hide' : 'show' )}> <span className='show-label'>Show:</span> <span className={(this.state.reportData.pagination) ? 'inactive-link' : 'active-link'} onClick={() => this.switchAllPage('all')}>All /</span><span className={(this.state.reportData.pagination) ? 'active-link' : 'inactive-link'} onClick={() => this.switchAllPage('pages')}>Pages</span></div>
               <div className={'col-xs-6 reports-terms ' + (this.state.reportData.singleStore ? 'hide' : 'show')}> <span className='asterics'>*</span>{t[language].ReportsDerivedPerformancetoGoal}</div>
-              <div className={'col-xs-2 left-padding-none pull-right ' + (this.state.reportData.pagination && this.state.reportData.singleStore ? 'show' : 'hide')}>
+              <div className={'col-xs-2 pull-right ' + (this.state.reportData.pagination && this.state.reportData.singleStore ? 'show' : 'hide')}>
                 <PaginationComponent pagination={this.state.reportData.pagination} totalPages={this.state.reportData.NoOfPages} curPage={this.state.reportData.curPage} handlePreviousPage={(curPage, totalPages) => this.handlePreviousPage(curPage, totalPages)} handleNextPage={(curPage, totalPages) => this.handleNextPage(curPage, totalPages)} disablePrevButton={this.state.reportData.disablePrevButton} disableNextButton={this.state.reportData.disableNextButton} />
               </div>
-              <div className={'col-xs-2 left-padding-none ' + (this.state.reportData.pagination && !this.state.reportData.singleStore ? 'show' : 'hide')}>
+              <div className={'col-xs-2 ' + (this.state.reportData.pagination && !this.state.reportData.singleStore ? 'show' : 'hide')}>
                 <PaginationComponent pagination={this.state.reportData.pagination} totalPages={this.state.reportData.NoOfPages} curPage={this.state.reportData.curPage} handlePreviousPage={(curPage, totalPages) => this.handlePreviousPage(curPage, totalPages)} handleNextPage={(curPage, totalPages) => this.handleNextPage(curPage, totalPages)} disablePrevButton={this.state.reportData.disablePrevButton} disableNextButton={this.state.reportData.disableNextButton} />
               </div>
             </div>

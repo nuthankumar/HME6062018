@@ -181,15 +181,15 @@ class Report extends Component {
         if (item.Children && item.Children.length) {
           //level++
             return (
-                <TreeNode title={this.renderStoresAndBrand(item,level) } className={item.Name ? item.Name : item.StoreNumber} key={item.Id} value={item.Type === CommonConstants.Type.Store ? item.DeviceUID : null} type={item.Type}>
+                <TreeNode title={this.renderStoresAndBrand(item,level) } className={item.Name ? (item.StoreNumber+ '-' +item.Name) :  item.StoreNumber} key={item.Id} value={item.Type === CommonConstants.Type.Store ? item.DeviceUID : null} type={item.Type}>
               {
-                loop(item.Children,level+1)            
+                loop(item.Children,level+1)
               }
 
             </TreeNode>
           )
         }
-        return <TreeNode title={this.renderStoresAndBrand(item,level)} className={item.Name ? item.Name : item.StoreNumber} key={item.Id} value={item.Type === CommonConstants.Type.Store ? item.DeviceUID : null} type={item.Type} />
+        return <TreeNode title={this.renderStoresAndBrand(item,level)} className={item.Name ? (item.StoreNumber+ '-' +item.Name) :  item.StoreNumber} key={item.Id} value={item.Type === CommonConstants.Type.Store ? item.DeviceUID : null} type={item.Type} />
       })
     }
 
@@ -371,10 +371,10 @@ class Report extends Component {
                     <span>{t[language].type}</span>
                     <div className='checkbox-sections'>
                       <div className='type-sub-section'>
-                       
+
                          <input type='radio' id='type1'   name='type'     checked={this.state.type == 1 ? true : false}
                           onChange={this.handleOnChange.bind(this)} value={1}/>
-								<label className='label-heading' for='type1'>   {t[language].timeslice}</label>                     
+								<label className='label-heading' for='type1'>   {t[language].timeslice}</label>
                                  <span>
                                                   <a className='inline-block' data-tip={t[language].choosetimeslice}><span className='tip openTip'>?</span></a>
                           <ReactTooltip place='right' type='dark' effect='solid' />
@@ -382,7 +382,7 @@ class Report extends Component {
                       </div>
                       <div className='type-sub-section'>
                          <input type='radio' id='type2'   name='type'   checked={this.state.type == 2 ? true : false} onChange={this.handleOnChange.bind(this)} value={2}/>
-								<label className='label-heading' for='type2'>   {t[language].cumulative}</label>     
+								<label className='label-heading' for='type2'>   {t[language].cumulative}</label>
                                             <span>
                           <a className='inline-block' data-tip={t[language].choosecumulative}><span className='tip openTip'>?</span></a>
                           <ReactTooltip place='right' type='dark' effect='solid' />
@@ -396,7 +396,7 @@ class Report extends Component {
                 <div className='checkbox-sections'>
                           <div className='alignCenter'>
                                     <input type='checkbox' id='longestTime' disabled={this.state.showAdvancedOptions || this.state.disableIncludes} value={1} onChange={this.include.bind(this)}/>
-                                    <label className='label-heading' for='longestTime'>   {t[language].longesttimes}</label>     
+                                    <label className='label-heading' for='longestTime'>   {t[language].longesttimes}</label>
                                    </div>
                                   <div className='alignCenter'>
                                     <input
@@ -406,7 +406,7 @@ class Report extends Component {
                                           value={2}
                                           onChange={this.include.bind(this)}
                                       />
-                                              <label className='label-heading' for='systemStatistics'>   {t[language].systemstats}</label>   
+                                              <label className='label-heading' for='systemStatistics'>   {t[language].systemstats}</label>
                                   </div>
                                  </div>
                 <span className='span-heading'>
@@ -425,7 +425,7 @@ class Report extends Component {
                                           onChange={this.handleOnChange.bind(this)}
                                           value={1}
                                       />
-                                    	<label className='label-heading' for='format1'>   {t[language].secondswformat}</label>  
+                                    	<label className='label-heading' for='format1'>   {t[language].secondswformat}</label>
                                   </div>
                                   <div className='alignCenter'>
                                     <input
@@ -436,7 +436,7 @@ class Report extends Component {
                                           onChange={this.handleOnChange.bind(this)}
                                           value={2}
                                       />
-                                    <label className='label-heading' for='format2'>   {t[language].minuteswformat}</label>  
+                                    <label className='label-heading' for='format2'>   {t[language].minuteswformat}</label>
                                   </div>
                 </div>
               </div>
@@ -455,7 +455,7 @@ class Report extends Component {
                                     {this.state.stores.length ? (this.renderStores()) : <span className='selectAStore'>{t[language].SelectAStore}</span>}
 
                                     {
-                                       this.state.stores.length>3 ? this.renderDots() : '' 
+                                       this.state.stores.length>3 ? this.renderDots() : ''
                                     }
                   </div>
                   <div className='col-md-6'> <span className='criteriaHeading'>{t[language].from} :</span>{this.state.fromDate} </div>
@@ -517,7 +517,7 @@ class Report extends Component {
         [name]: moment(e, 'HH:mm A')
       })
      }
-   
+
   }
 
   handleOnChange(e) {
@@ -632,7 +632,7 @@ class Report extends Component {
                   findStore(item.Children)
               }
               if (keys(item)) {
-                  selectedItems.push(item.Name ? item.Name : item.StoreNumber)
+                  selectedItems.push(item.Name ? (item.StoreNumber+ '-' +item.Name) :  item.StoreNumber)
                   selectedList.push(item.Id)
               }
           })
@@ -788,7 +788,7 @@ class Report extends Component {
       type: this.state.type, include: this.state.include, format: this.state.format, deviceUIds: this.state.deviceUIds,
       deviceIds: this.findMatchedDeviceIds(this.state.treeData, item => {
           return (item.Type === CommonConstants.Type.Store && _.contains(self.state.deviceUIds, item.DeviceUID))
-      }), 
+      }),
       CreatedDateTime: moment().format('YYYY-MM-DD HH:mm:ss a'), UpdatedDateTime: moment().format('YYYY-MM-DD HH:mm:ss a'),
       advancedOption: (!this.state.open || !this.state.close), longestTime: _.contains(this.state.include, '1'),systemStatistics: _.contains(this.state.include, '2'),
     })
@@ -829,24 +829,24 @@ class Report extends Component {
       isError = true
     }
 
-    if (!this.state.close && !this.closeTime ) {      
+    if (!this.state.close && !this.closeTime ) {
       errors.push(t[language].pleaseselectclosetime)
       isError = true
     }
     if (moment(this.state.toDate, 'MM/DD/YYYY') < moment(this.state.fromDate, 'MM/DD/YYYY')) {
-          errors.push(t[language].daterangeinvalidbeyond)  
+          errors.push(t[language].daterangeinvalidbeyond)
           isError = true
     }
     if (this.state.deviceUIds.length > 250 && template[0].advancedOption) {
-      errors.push(t[language].storeselectioninvalid250)  
+      errors.push(t[language].storeselectioninvalid250)
             isError = true
     }
     if (this.state.deviceUIds.length > 100 && !template[0].advancedOption) {
-          errors.push(t[language].storeselectioninvalid100)  
+          errors.push(t[language].storeselectioninvalid100)
                 isError = true
     }
     if (this.state.deviceUIds.length > 1 && this.state.timeMeasure == 4) {
-      errors.push(t[language].invalidselectiononestore)  
+      errors.push(t[language].invalidselectiononestore)
             isError = true
     }
 
@@ -858,7 +858,7 @@ class Report extends Component {
                 moment(this.state.fromDate, 'MM/DD/YYYY'),
                     'days'
                 ) > CommonConstants.TimeMeasureValidations.Month){
-                  errors.push(t[language].daterangeinvalid1month)  
+                  errors.push(t[language].daterangeinvalid1month)
                   isError = true
               }
             } else {
@@ -866,7 +866,7 @@ class Report extends Component {
                 moment(this.state.fromDate, 'MM/DD/YYYY'),
                     'days'
                 ) > CommonConstants.TimeMeasureValidations.ThreeMonths){
-                  errors.push(t[language].daterangeinvalid3month) 
+                  errors.push(t[language].daterangeinvalid3month)
                   isError = true
                 }
             }
@@ -877,7 +877,7 @@ class Report extends Component {
                     'days'
                 ) > CommonConstants.TimeMeasureValidations.Month
             ) {
-              errors.push(t[language].daterangeinvalid1month)  
+              errors.push(t[language].daterangeinvalid1month)
               isError = true
             }
           }
@@ -894,7 +894,7 @@ class Report extends Component {
                 errors.push(t[language].daterangeinvalid2week)
                 isError = true
               }
-             
+
             } else {
               if( moment(this.state.toDate, 'MM/DD/YYYY').diff(
                 moment(this.state.fromDate, 'MM/DD/YYYY'),
@@ -916,7 +916,7 @@ class Report extends Component {
             }
           }
         }
-    
+
         if (parseInt(this.state.timeMeasure) === CommonConstants.TimeMeasure.Week) {
           if(!this.state.open || !this.state.close) {
             if(template[0].deviceIds.length > 100) {
@@ -926,17 +926,17 @@ class Report extends Component {
                       'days'
                   ) > CommonConstants.TimeMeasureValidations.TwoMonths
               ) {
-                
+
               errors.push(t[language].daterangeinvalid2month)
                 isError = true
               }
-             
+
             } else {
               if( moment(this.state.toDate, 'MM/DD/YYYY').diff(
                 moment(this.state.fromDate, 'MM/DD/YYYY'),
                     'days'
                 ) > CommonConstants.TimeMeasureValidations.ThreeMonths){
-                  
+
                   errors.push(t[language].daterangeinvalid3month)
                   isError = true
                 }
@@ -947,12 +947,12 @@ class Report extends Component {
                 moment(this.state.fromDate, 'MM/DD/YYYY'),
                     'days'
                 ) > CommonConstants.TimeMeasureValidations.TwoMonths
-            ) {              
+            ) {
               errors.push(t[language].daterangeinvalid2month)
               isError = true
             }
           }
-    
+
         }
 
         if (parseInt(this.state.timeMeasure) === CommonConstants.TimeMeasure.RawCarData) {
@@ -964,7 +964,7 @@ class Report extends Component {
               ) {
                 errors.push(t[language].daterangeinvalid3month)
                 isError = true
-              }     
+              }
               if (
                 moment(this.state.toDate, 'MM/DD/YYYY').diff(
                   moment(this.state.fromDate, 'MM/DD/YYYY'),
@@ -973,7 +973,7 @@ class Report extends Component {
               ) {
                 errors.push(t[language].daterangeinvalidsingleday)
                 isError = true
-              }  
+              }
             }
 
     if (this.state.templateName) {
@@ -1070,7 +1070,7 @@ class Report extends Component {
     }
   }
 
-  
+
 
 generateRawCarDataReport(template) {
   let language = this.state.currentLanguage
@@ -1092,7 +1092,8 @@ generateRawCarDataReport(template) {
           'deviceIds': template[0].deviceIds,
           'advancedOption': template[0].advancedOption,
           'longestTime': template[0].longestTime,
-          'systemStatistics':template[0].systemStatistics
+          'systemStatistics':template[0].systemStatistics,
+          'pageNumber': 0
       }
   )
   this.setState({
@@ -1101,7 +1102,8 @@ generateRawCarDataReport(template) {
 
   if(rawCarData[0].advancedOption) {
     let url
-    let type = 'PDF'
+    //let type = 'PDF'
+    let type = 'CSV' //  Bug 6289 - Raw car data report Advance Option always sends CSV only.
       if (type == 'CSV')
       {
           url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=csv'
@@ -1138,7 +1140,7 @@ generateRawCarDataReport(template) {
               this.state.successMessage = ''
               this.state.errorMessage = t[language].genericError
               this.setState(this.state)
-            } 
+            }
           }
       }, error => {
           this.state.successMessage = ''
@@ -1171,7 +1173,7 @@ generateRawCarDataReport(template) {
           this.state.successMessage = ''
           this.state.errorMessage = t[language].genericError
           this.setState(this.state)
-        } 
+        }
       }
     }, error => {
         this.state.successMessage = ''
@@ -1221,6 +1223,7 @@ generateRawCarDataReport(template) {
         } else {
           request.localTime = moment(new Date()).locale('en').format('MMM D,YYYY hh:mm A')
         }
+        request.pageNumber = 0
         // request.localTime = moment(new Date()).locale('en').format('MMM D,YYYY hh:mm')
         this.setState({ showLoader: true })
         this.api.postData(url, request, data => {
@@ -1245,7 +1248,7 @@ generateRawCarDataReport(template) {
                 this.state.successMessage = ''
                 this.state.errorMessage = t[language].genericError
                 this.setState(this.state)
-              } 
+              }
             }
         }, error => {
             this.state.successMessage = ''
@@ -1278,7 +1281,7 @@ generateRawCarDataReport(template) {
             this.state.successMessage = ''
             this.state.errorMessage = t[language].genericError
             this.setState(this.state)
-          } 
+          }
         }
       }, error => {
           this.state.successMessage = ''
@@ -1366,7 +1369,7 @@ generateRawCarDataReport(template) {
   renderDots(){
         return(
           <span className='storesDots' onMouseOut={() => this.mouseOut()} onMouseOver={() => this.mouseOver()}>...
-          <div className={'storesTooltip '+ (!this.state.showStoresPopUp?'hidden':'')}> {this.renderStoresPopup()} </div>  
+          <div className={'storesTooltip '+ (!this.state.showStoresPopUp?'hidden':'')}> {this.renderStoresPopup()} </div>
           </span>
         )
   }
@@ -1374,7 +1377,7 @@ generateRawCarDataReport(template) {
   mouseOut() {
     this.setState({showStoresPopUp: false})
   }
-  
+
   mouseOver() {
     this.setState({showStoresPopUp: true})
   }

@@ -26,7 +26,6 @@ class ViewDetails extends Component {
   render () {
     // const language = this.state.currentLanguage
     // let displayData = this.props.systemStats
-    console.log('okkkk', this.props.storeViewDetails)
     if (this.props.storeViewDetails !== undefined) {
       return (
         <div className='deviceDetails'>

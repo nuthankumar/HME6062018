@@ -3,6 +3,7 @@ import moment from 'moment'
 import './SummaryReport.css'
 import {Config} from '../../Config'
 import PageHeader from '../Header/PageHeader'
+import {CommonConstants} from '../../Constants'
 import t from '../Language/language'
 import * as languageSettings from '../Language/languageSettings'
 import Loader from '../Alerts/Loader'
@@ -67,17 +68,17 @@ class RawCarReport extends Component {
             <th className='thin-header'>
               <span>{t[language].store}</span>:
             </th>
-            <td className='thin-header'>{this.state.displayData.storeNumber ? this.state.displayData.storeNumber : this.state.displayData.storeName }</td>
+            <td className='thin-header'>{this.state.displayData.storeName ? this.state.displayData.storeName : this.state.displayData.storeNumber }</td>
             <th>
               <span>{t[language].ReportsStart}</span>
             </th>
             <td>
-              {this.state.displayData.startTime ? (this.state.displayData.startTime + ' ' + t[language].OPEN) : 'N/A'}&nbsp;
+              {this.state.displayData.startTime ? ((language === 0 ? moment(this.state.displayData.startTime).locale('en').format('MMM D, YYYY') : moment(this.state.displayData.startTime).locale('fr-ca').format('MMM D, YYYY')) + ' ' + t[language].OPEN) : 'N/A'}&nbsp;
             </td>
             <th>
               <span>{t[language].ReportsPrintDate}</span>
             </th>
-            <td> {this.state.displayData.printDate ? this.state.displayData.printDate : 'N/A'} </td>
+            <td> {this.state.displayData.printDate ? (language === 0 ? moment(this.state.displayData.printDate).locale('en').format('MMM D, YYYY') : moment(this.state.displayData.printDate).locale('fr-ca').format('MMM D, YYYY')) : 'N/A'} </td>
           </tr>
           <tr>
             <th>
@@ -88,7 +89,7 @@ class RawCarReport extends Component {
               <span>{t[language].ReportsStop}</span>
             </th>
             <td>
-              {this.state.displayData.stopTime ? (this.state.displayData.stopTime + ' ' + t[language].CLOSE) : 'N/A' }&nbsp;
+              {this.state.displayData.stopTime ? ((language === 0 ? moment(this.state.displayData.stopTime).locale('en').format('MMM D, YYYY') : moment(this.state.displayData.stopTime).locale('fr-ca').format('MMM D, YYYY'))  + ' ' + t[language].CLOSE) : 'N/A' }&nbsp;
             </td>
             <th>
               <span>{t[language].ReportsPrintTime} </span>
@@ -168,7 +169,8 @@ class RawCarReport extends Component {
     this.setState({
       showLoader: true
     })
-    let url = Config.apiBaseUrl + 'api/report/getRawCarDataReport?reportType=rrcsv1'
+    // adding report type csv for rcd
+    let url = Config.apiBaseUrl + CommonConstants.apiUrls.generateNewReport + '?reportType=csv'
     this.api.postData(url, this.state.rawCarRequest, data => {
       if (data.status) {
         this.setState({

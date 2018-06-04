@@ -13,7 +13,7 @@ const Device = function (result, colors, goalSettings, request, reportFilter) {
 Device.prototype.getStoreInfo = (input, stopTime, startTime, storeInformation) => {
   let storeInfo = {}
   if (storeInformation && storeInformation[0]) {
-    storeInfo.storeName = storeInformation[0].Store_Name ? storeInformation[0].Store_Name + '-' + storeInformation[0].Store_Number : storeInformation[0].Store_Number
+    storeInfo.storeName = storeInformation[0].Store_Name ? storeInformation[0].Store_Number + '-' + storeInformation[0].Store_Name : storeInformation[0].Store_Number
     storeInfo.storeNumber = storeInformation[0].Store_Number ? storeInformation[0].Store_Number : 'N/A'
     storeInfo.storeDesc = storeInformation[0].Brand_Name ? storeInformation[0].Brand_Name : 'N/A'
   }
@@ -205,8 +205,8 @@ Device.prototype.getLongestTime = function (longestTime, deviceHeaders) {
 }
 Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, totalCars, goalHeader, deviceHeaders) {
   let eventGoalList
-  if (goalHeader && goalHeader.length > 0 && !_.isNull(goalHeader[0].EventGoalNames) && goalHeader[0].EventGoalNames !== undefined) {
-    eventGoalList = _.get(goalHeader[0], 'EventGoalNames').split('|$|')
+  if (goalHeader && goalHeader.length > 0 && !_.isNull(goalHeader[0].EventNames) && goalHeader[0].EventNames !== undefined) {
+    eventGoalList = _.get(goalHeader[0].EventNames, 'EventNames').split('|$|')
   } else {
     eventGoalList = []
   }
@@ -229,12 +229,12 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
     let obj = { goal: '', cars: '0', percentage: '0%' }
     let rowKey = {}
     let row = _.clone(obj)
-    if (eventGoalList.indexOf(key) > -1) {
+    let eventWithGolas = _.split(key, '-', 2)
+    let event = _.trim(eventWithGolas[0])
+    let goal = _.trim(eventWithGolas[1])
+    if (eventGoalList.indexOf(event) > -1 || eventGoalList.indexOf(key) > -1) {
       row.cars = value || '0'
       row.percentage = CalculatePercetage(value, totalCars)
-      let eventWithGolas = _.split(key, '-', 2)
-      let event = _.trim(eventWithGolas[0])
-      let goal = _.trim(eventWithGolas[1])
       if (key.includes(goal)) {
         if (_.has(goalGrade, goal)) {
           goalGrade[goal][event] = row
@@ -313,6 +313,7 @@ Device.prototype.getDeviceValues = function () {
     }
     return color
   }
+
   _.map(storeDetails, (item, index) => {
     let reportInfo = {}
     let startDate

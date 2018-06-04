@@ -185,10 +185,8 @@ reports.prototype.deviceDataPreparation = function (reportResult, stopTime, star
 }
 reports.prototype.getRawCarDataReport = function (reportResult) {
   let deviceValues = {}
-
   const devicesDetails = new GetDeviceRawCarDataReport(reportResult, this.request)
   let deviceStoreInfo = devicesDetails.storeInfo()
-
   deviceValues = deviceStoreInfo
   new Promise(function (resolve, reject) {
     if (reportResult.data[0] && reportResult.data[0].length > 0 && reportResult.data[0] !== null && reportResult.data[0] !== undefined) {
@@ -218,13 +216,14 @@ reports.prototype.getRawCarDataReport = function (reportResult) {
     deviceValues.status = true
     return deviceValues
   })
-
   return deviceValues
 }
-reports.prototype.generateCSV = function (reportResult, stopTime, startTime, filter, totalPages, response) {
+reports.prototype.generateCSV = function (reportResult, stopTime, startTime, groupName, getSystemInfo, isValidation, totalPages, response) {
   let csvInput = {}
   let DeviceDetails = {}
   let eventHeaders = []
+  let filter = isValidation
+  csvInput.email = this.request.UserEmail
   csvInput.type = `${messages.COMMON.CSVTYPE}`
   if (filter.reportName === 'week') {
     csvInput.reportName = `${messages.COMMON.WEEKREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
@@ -236,16 +235,31 @@ reports.prototype.generateCSV = function (reportResult, stopTime, startTime, fil
     csvInput.reportName = `${messages.COMMON.DAYREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
     csvInput.subject = `${messages.COMMON.DAYREPORTNAME} ${this.request.body.openTime} ${this.request.body.toDate + (this.request.body.format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
   }
-  csvInput.email = this.request.UserEmail
   if (filter.reportName === 'rawcardata') {
     let rawCarReports = this.getRawCarDataReport(reportResult)
-    DeviceDetails = rawCarReports.rawCarData
-
-    eventHeaders = []
-    csvInput.reportName = `${messages.COMMON.RAWCARREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
-    csvInput.subject = `${messages.COMMON.RAWCARDATAREPORTTITLE} ${this.request.body.openTime} ${this.request.body.toDate + (this.request.body.format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
+    new Promise((resolve, reject) => {
+      if (filter.reportName === 'rawcardata') {
+        resolve(rawCarReports)
+      }
+    }).then((result) => {
+      DeviceDetails = result.rawCarData
+      eventHeaders = []
+      csvInput.reportName = `${messages.COMMON.RAWCARREPORTNAME} ${dateFormat(new Date(), 'isoDate')}`
+      csvInput.subject = `${messages.COMMON.RAWCARDATAREPORTTITLE} ${this.request.body.openTime} ${this.request.body.toDate + (this.request.body.format === 1 ? '(TimeSlice)' : '(Cumulative)')}`
+      CSVReport.generateCSVReport(DeviceDetails, this.request, csvInput, filter, eventHeaders, result => {
+        if (result.status === true) {
+          response.status(200).send(result)
+        } else {
+          response.status(400).send(result)
+        }
+      })
+    }).catch((error) => {
+      if (error) {
+        response.status(400).send(error)
+      }
+    })
   } else {
-    let getReports = this.deviceDataPreparation(reportResult, stopTime, startTime, filter, totalPages)
+    let getReports = this.deviceDataPreparation(reportResult, stopTime, startTime, groupName, getSystemInfo, isValidation, totalPages)
     DeviceDetails = getReports.timeMeasureType
     let deviceHeaders
     if (this.isSingleStore) {
@@ -267,8 +281,9 @@ reports.prototype.generateCSV = function (reportResult, stopTime, startTime, fil
     }
   })
 }
-reports.prototype.generatePDF = function (reportResult, stopTime, startTime, filter, totalPages, response) {
+reports.prototype.generatePDF = function (reportResult, stopTime, startTime, groupName, getSystemInfo, isValidation, totalPages, response) {
   let pdfInput = {}
+  let filter = isValidation.reportName
   // let DeviceDetails
   pdfInput.type = `${messages.COMMON.PDFTYPE}`
   if (filter === 'week') {
@@ -283,7 +298,7 @@ reports.prototype.generatePDF = function (reportResult, stopTime, startTime, fil
   }
   pdfInput.email = this.request.UserEmail
   if (this.isSingleStore) {
-    let singleStore = this.deviceDataPreparation(reportResult, stopTime, startTime, filter, totalPages)
+    let singleStore = this.deviceDataPreparation(reportResult, stopTime, startTime, groupName, getSystemInfo, isValidation, totalPages)
     if (singleStore.eventList.length > 0) {
       singleStore.goalHeaders = singleStore.goalData
     } else {
@@ -297,7 +312,7 @@ reports.prototype.generatePDF = function (reportResult, stopTime, startTime, fil
       }
     })
   } else {
-    let multipleStore = this.deviceDataPreparation(reportResult, stopTime, startTime, filter, totalPages)
+    let multipleStore = this.deviceDataPreparation(reportResult, stopTime, startTime, groupName, getSystemInfo, isValidation, totalPages)
     Pdfmail.mutipleStore(multipleStore, pdfInput, isMailSent => {
       if (isMailSent) {
         response.status(200).send(isMailSent)
@@ -322,7 +337,9 @@ reports.prototype.createReports = function (response) {
       if (reportResult.status) {
         if (isValidation.reportName === 'rawcardata') {
           if (this.isCSV) {
-            this.generateCSV(reportResult, stopTime, startTime, isValidation, totalPages, response)
+            let groups = []
+            let systeminfo = []
+            this.generateCSV(reportResult, stopTime, startTime, groups, systeminfo, isValidation, totalPages, response)
           } else if (this.isReports) {
             Output = this.getRawCarDataReport(reportResult, stopTime, startTime)
             Output.status = true
@@ -337,26 +354,26 @@ reports.prototype.createReports = function (response) {
           repository.getGroupName(this.request.body.deviceIds, getGroupName => {
             if (getGroupName.status) {
               groupName = getGroupName
-              // Need to EXCEUTE some SP
-              // if (this.isPDF) {
-              //   this.generatePDF(reportResult, groupName, isValidation, totalPages, response)
-              // } else if (this.isCSV) {
-              //   this.generateCSV(reportResult, isValidation, totalPages, response)
-              // } else {
               repository.getSystemStatistics(this.request, getSystemInfo => {
                 if (getSystemInfo.status) {
-                  Output = this.deviceDataPreparation(reportResult, stopTime, startTime, groupName, getSystemInfo, isValidation, totalPages) // groupName, getSystemInfo,
-                  Output.status = true
-                  if (Output.status === true) {
-                    response.status(200).send(Output)
+                  // Check reporttype-- csv,PDF,Reports
+                  if (this.isPDF) {
+                    this.generatePDF(reportResult, stopTime, startTime, groupName, getSystemInfo, isValidation, totalPages, response)
+                  } else if (this.isCSV) {
+                    this.generateCSV(reportResult, stopTime, startTime, groupName, getSystemInfo, isValidation, totalPages, response)
                   } else {
-                    response.status(400).send(Output)
+                    Output = this.deviceDataPreparation(reportResult, stopTime, startTime, groupName, getSystemInfo, isValidation, totalPages) // groupName, getSystemInfo,
+                    Output.status = true
+                    if (Output.status === true) {
+                      response.status(200).send(Output)
+                    } else {
+                      response.status(400).send(Output)
+                    }
                   }
                 } else {
                   response.status(400).send(reportResult)
                 }
               })
-              // }
             } else {
               response.status(400).send(reportResult)
             }

@@ -93,7 +93,7 @@ Device.prototype.multipleStore = function () {
     _.forEach(storeDetails[key], function (value, key) {
       let total = null
       if (key === 'StoreID') {
-        reportInfo['storeId'] = {'value': ` ${value}`}
+        reportInfo['storeId'] = {'value': value || null}
       } else if (key === 'GroupName') {
         groupName = value
         if (reportInfo['Groups'] === null) {
@@ -106,7 +106,7 @@ Device.prototype.multipleStore = function () {
         } else if (value === 'Total Week' || value === 'Total Daypart' || value === 'Total Day') {
           total = {'value': value, 'timeSpan': messages.COMMON.WAVG}
         }
-        reportInfo[`${key}`] = {'value': `${value}`}
+        reportInfo[`${key}`] = {'value': value || null}
         reportInfo['Groups'] = total
       } else if (key === 'Store_Name') {
         reportInfo['Stores'] = {'value': (value || null)}
@@ -149,7 +149,7 @@ Device.prototype.getDeviceInformation = function () {
   let storeDetails = this.result
   let index = 0
   let deviceInfo
-  let deviceValues = []
+  let timeMeasure = []
   let groupData = this.groupName
   let getColors = []
   // checking color code is empty or not
@@ -174,6 +174,7 @@ Device.prototype.getDeviceInformation = function () {
   }
   _.forEach(storeDetails, (item, key) => {
     let reportInfo = {}
+    let groupTotal = {}
     let groupName
     let storeNo
     if (filter === 'week') {
@@ -185,7 +186,7 @@ Device.prototype.getDeviceInformation = function () {
         deviceInfo.title = moment(item['WeekStartDate']).format('MMM D,YYYY') + ' ' + messages.COMMON.OPENVALUE + ' - ' + moment(item['WeekEndDate']).format('MMM D,YYYY') + ' ' + messages.COMMON.CLOSEVALUE
         deviceInfo.data = []
         index = item['WeekIndex']
-        deviceValues.push(deviceInfo)
+        timeMeasure.push(deviceInfo)
       }
     }
     if (filter === 'daypart') {
@@ -197,7 +198,7 @@ Device.prototype.getDeviceInformation = function () {
         deviceInfo.title = moment(item['StoreDate']).format('MMM D,YYYY') + ' - DAYPART' + ' ' + item['DayPartIndex']
         deviceInfo.data = []
         index = item['DayPartIndex']
-        deviceValues.push(deviceInfo)
+        timeMeasure.push(deviceInfo)
       }
     }
     if (filter === 'day') {
@@ -209,36 +210,37 @@ Device.prototype.getDeviceInformation = function () {
         deviceInfo.title = moment(item['StoreDate']).format('MMM D,YYYY') + messages.COMMON.OPENVALUE + ' - ' + moment(item['StoreDate']).format('MMM D,YYYY') + messages.COMMON.CLOSEVALUE
         deviceInfo.data = []
         index = item['ID']
-        deviceValues.push(deviceInfo)
+        timeMeasure.push(deviceInfo)
       }
     }
     _.forEach(storeDetails[key], function (value, key) {
       let total = null
       if (key === 'StoreID') {
-        reportInfo['storeId'] = {'value': `${value}`}
+        reportInfo['storeId'] = {'value': value || null}
       } else if (key === 'Store_Name') {
         reportInfo['Stores'] = {'value': (value || null)}
       } else if (key === 'Device_UID') {
         reportInfo['Device_UID'] = {'value': (value || null)}
+      } else if (key === 'StoreNo') {
+        storeNo = value || null
+        if (value === 'Total Week' || value === 'Total Daypart' || value === 'Total Day') {
+          total = {'value': value, 'timeSpan': messages.COMMON.WAVG}
+          reportInfo['Sort-Order'] = 2 + '-'
+        }
+        reportInfo['Groups'] = total
+        reportInfo[`${key}`] = {'value': value || null}
       } else if (key === 'Device_ID') {
         reportInfo['deviceId'] = {'value': (value || null)}
         let group = _.find(groupData, {'Device_ID': value})
         if (group) {
           reportInfo['Groups'] = {'value': group.GroupName}
+          groupTotal['Groups'] = {'value': 'Sub Total ' + group.GroupName}
+          groupTotal['GroupName'] = group.GroupName
+          reportInfo['Sort-Order'] = 0 + '-' + group.GroupName + '-0-' + storeNo
+          groupTotal['Sort-Order'] = 0 + '-' + group.GroupName + '-1-' + storeNo
+        } else {
+          reportInfo['Sort-Order'] = 1 + '-' + storeNo
         }
-      } else if (key === 'StoreNo') {
-        storeNo = value || null
-        if ((key === 'StoreID') && key.includes('Subtotal')) {
-          if (reportInfo['Groups']) {
-            total = {'value': reportInfo['Groups'].value + ' ' + storeNo}
-          } else {
-            total = {'value': '' + ' ' + storeNo}
-          }
-        } else if (value === 'Total Week' || value === 'Total Daypart' || value === 'Total Day') {
-          total = {'value': value, 'timeSpan': messages.COMMON.WAVG}
-        }
-        reportInfo['Groups'] = total
-        reportInfo[`${key}`] = {'value': `${value}`}
       } else if (key === 'StartTime') {
         reportInfo['StartTime'] = {'value': (value || null)}
       } else if (key === 'EndTime') {
@@ -262,9 +264,10 @@ Device.prototype.getDeviceInformation = function () {
         reportInfo[`${key}`] = {'value': `${dateUtils.convertSecondsToMinutes(parseInt(value), timeFormat)}`, 'color': color}
       }
     })
-    deviceInfo.data.push(reportInfo)
+    deviceInfo.data.splice(_.sortedIndexBy(deviceInfo.data, reportInfo,'Sort-Order'), 0, reportInfo)
+   // deviceInfo.data.splice(_.sortedIndexBy(deviceInfo.data, groupTotal,'Sort-Order'), 0, groupTotal)
   })
-
-  return deviceValues
+  return timeMeasure
 }
+
 module.exports = Device
