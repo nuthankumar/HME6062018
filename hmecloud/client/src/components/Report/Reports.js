@@ -72,7 +72,7 @@ class Report extends Component {
       openTime:'',
       closeTime:'',
       include: [],
-      format: 2,
+      format: 1,
       type: 2,
       fromDate: moment().format('MM/DD/YYYY'),
       toDate: moment().format('MM/DD/YYYY'),
