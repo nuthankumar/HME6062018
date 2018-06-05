@@ -26,7 +26,11 @@ import * as languageSettings from '../Language/languageSettings'
 import AuthenticationService from '../Security/AuthenticationService'
 import CommonLoader from '../Alerts/CommonLoader'
 require('moment/locale/fr')
-
+require('core-js');
+// Without global namespace pollution
+var core = require('core-js/library');
+// Shim only
+require('core-js/shim');
 
 const ProductLogo = require('../../images/ProductLogo-1.png')
 const HMELogo = require('../../images/HMELogo.png')

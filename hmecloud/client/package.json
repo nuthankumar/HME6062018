@@ -30,6 +30,7 @@
     "react-collapsible": "^2.2.0",
     "react-confirm-alert": "^2.0.2",
     "react-datetime": "^2.14.0",
+    "core-js": "^2.5.7",
     "react-dom": "^16.2.0",
     "react-i18next": "^7.5.1",
     "react-idle": "^3.0.0",
