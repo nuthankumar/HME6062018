@@ -970,7 +970,11 @@
                         {{#each childvalue.eventHeaders as |value key|}}
                     <th class="clear"></th>
                     <th class="grayhead" colspan="{{value}}">AVERAGE TIME
-                        <span>(min:sec)</span>
+                            {{#each store as |childvalue childkey|}}
+                            {{#each childvalue.timeFormat as |value key|}}
+                        <span>{{value}}</span>
+                        {{/each}}
+                    {{/each}}
                     </th>
                     {{/each}}
                     {{/each}}

@@ -93,9 +93,6 @@ class StoreDetail extends Component {
         <div className='settings forms'>
           <div class='settings_search clear storeHeight'>
             <h3 class='clear fleft'>Stores</h3>
-          </div>
-          <div className='settings_plug clear storeHeight'>
-
             <div className='search_pos'>
               <div class='dropdown'>
                 <ButtonToolbar>
@@ -132,6 +129,9 @@ class StoreDetail extends Component {
                 <img src={Search} className='searchImage' alt='Device Online' onClick={this.search} />
               </div>
             </div>
+          </div>
+          <div className='settings_plug clear storeHeight'>
+   
           </div>
           <div class='settings_list'>
             <div class='storesTable ctable'>
