@@ -48,16 +48,16 @@ const validateMasterSettings = (input, callback) => {
 const saveMasterSettings = (input, callback) => {
   if (!input.Task_UID && !input.duid && !input.settingsList && !input.destinationList) {
     let output = {}
-    if (!input.Task_UID) {
-      output.key = 'requiredTaskId'
+    if (!input.userEmailId) {
+      output.key = 'requiredEmailId'
     }
-    if (input.Task_UID && !input.duid) {
+    if (input.userEmailId && !input.duid) {
       output.key = 'requiredDuid'
     }
-    if (input.Task_UID && input.duid && !input.settingsList) {
+    if (input.userEmailId && input.duid && !input.settingsList) {
       output.key = 'requiredSettingsList'
     }
-    if (input.Task_UID && input.duid && input.settingsList && !input.destinationList) {
+    if (input.userEmailId && input.duid && input.settingsList && !input.destinationList) {
       output.key = 'requiredDestinationList'
     }
     output.status = false

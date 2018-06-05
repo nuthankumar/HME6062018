@@ -105,6 +105,7 @@ class StoreDetail extends Component { // ensure you dont export component direct
 
   renderDevices(devices) {
     const { language } = this.state
+    let self = this
     let deviceRows = devices.map(function (device, index) {
       return (
         <tr>
@@ -114,7 +115,7 @@ class StoreDetail extends Component { // ensure you dont export component direct
             <img src={Online} className={'cstat ' + (device.Device_IsActive ? '' : 'hidden')} alt='Device Online' />
             <img src={Offline} className={'cstat ' + (!device.Device_IsActive ? '' : 'hidden')} alt='Device Offline' />
             <span className='cstat'>
-              <a href='http://uat.hmedtcloud.com/?pg=SettingsDevices&amp;st=connect&amp;duid=BCA09B13-D63D-4A3E-87F9-E4A53103259B&amp;Session_UID=TQFAOEWY4QR3AH7COYC1M0JTH9VE7QDO&amp;User_UID=L7KRDI112UNTP8P4PTA9XINT5PUY0R0U&amp;IsLoggedIn=1'>{device.Device_IsActive ? t[language].settingsStoresOnline : t[language].settingsStoresOffline}</a>
+              <a href={'http://uat.hmedtcloud.com/?pg=SettingsDevices&st=connect&duid=' + device.Device_UID + '&Session_UID=TQFAOEWY4QR3AH7COYC1M0JTH9VE7QDO&User_UID=' + self.props.userProfile.User_UID}>{device.Device_IsActive ? t[language].settingsStoresOnline : t[language].settingsStoresOffline}</a>
             </span>
           </td>
         </tr>

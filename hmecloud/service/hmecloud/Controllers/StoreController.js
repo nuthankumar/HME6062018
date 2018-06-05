@@ -27,9 +27,9 @@ const settingsDevices = (request, callback) => {
       if (result.data && result.data.length > 0) {
         let output = {}
         var tempSettingsArray = []
-
         output.systemStatus = result.data[0]
-        let grouppedArray = _.groupBy(result.data[1], 'SettingsGroup_Name')
+        output.totalDevices = result.data[1][0].SettingsCount
+        let grouppedArray = _.groupBy(result.data[2], 'SettingsGroup_Name')
         _.keys(grouppedArray).forEach(function (key, value) {
           let settingsObj = {}
           settingsObj.name = key
@@ -95,16 +95,17 @@ const getMasterSettings = (request, callback) => {
 
 const saveMasterSettings = (request, callback) => {
   const input = {
-    Task_UID: '',
     duid: (request.body.duid ? request.body.duid : null),
     settingsList: (request.body.settingsList ? request.body.settingsList : null),
-    destinationList: (request.body.destinationList ? request.body.destinationList : null)
+    destinationList: (request.body.destinationList ? request.body.destinationList : null),
+    userEmailId: (request.body.emailId ? request.body.emailId : null)
   }
   deviceValidator.saveMasterSettings(input, (err) => {
     if (err) {
       callback(err)
     }
     stores.saveMasterSettings(input, (result) => {
+      console.log('result', result.data);
       if (result.data && result.data.length > 0) {
         let output = {}
         output.data = result.data[0]

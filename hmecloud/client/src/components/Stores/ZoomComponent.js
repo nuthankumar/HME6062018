@@ -2,19 +2,20 @@ import React, { Component } from 'react'
 import './Stores.css'
 import { connect } from 'react-redux'
 const offlineImage = require('../../images/connection_offline.png')
+const OnlineImage = require('../../images/connection_online.png')
 
 class ZoomComponent extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.handleClick = this.handleClick.bind(this)
     this.renderRows = this.renderRows.bind(this)
   }
 
-  handleClick (id) {
+  handleClick(id) {
     this.props.viewDevice(id)
   }
 
-  renderRows () {
+  renderRows() {
     let row = this.props.stores.Device_Details
     row = row.filter(function (el) {
       return el.Device_Name !== 'CIB' && el.Device_Name !== 'ION' && el.Device_Name !== 'EOS'
@@ -28,7 +29,9 @@ class ZoomComponent extends Component {
           <td >{data.Device_SettingVersion}</td>
           <td >{data.Device_SerialNumber}</td>
           <td>
-            <img src={offlineImage} /><span> {data.Device_IsActive === 0 ? 'Offline' : 'Online'}</span></td>
+            <img src={OnlineImage} className={'cstat ' + (data.Device_IsActive ? '' : 'hidden')} alt='Device Online' />
+            <img src={offlineImage} className={'cstat ' + (!data.Device_IsActive ? '' : 'hidden')} alt='Device Offline' />
+            <span> {data.Device_IsActive === 0 ? 'Offline' : 'Online'}</span></td>
           <td onClick={() => this.handleClick(data.Device_UID)}><a>View <span>Details</span></a></td>
         </tr>
       )
@@ -36,7 +39,7 @@ class ZoomComponent extends Component {
     return rows
   }
 
-  render () {
+  render() {
     return (
       <div>
         <h4 className='header'>Registered ZOOM</h4>
@@ -63,7 +66,7 @@ class ZoomComponent extends Component {
 }
 
 // export default ZoomComponent
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
     stores: state.StorePopupDetails.storePopupDetails
   }

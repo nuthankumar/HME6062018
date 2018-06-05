@@ -36,7 +36,8 @@ AS
 BEGIN
 	DECLARE @SettingsCount INT
     SELECT  DISTINCT Device_ID,Brand_Name,Store_UID,Store_Number,Store_AddressLine1,Store_Locality,Store_Region,Device_Name,
-	Device_IsActive,Device_UID,LaneConfig_Name,Device_SerialNumber,Device_DeviceType_ID,Device_MainVersion,Device_SettingVersion
+	Device_IsActive,Device_UID,LaneConfig_Name,Device_SerialNumber,Device_DeviceType_ID,Device_MainVersion,Device_SettingVersion,
+	Device_LaneConfig_ID,Store_Company_ID,Store_Brand_ID
 	FROM 
 		tbl_Stores stor
 		LEFT JOIN ltbl_Brands bran ON stor.Store_Brand_ID = bran.Brand_ID
@@ -80,5 +81,3 @@ BEGIN
 	END
 
 GO
-
-

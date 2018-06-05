@@ -117,7 +117,7 @@ const sqlQueries = {
   },
   MasterSetting: {
     getStatus: '[dbo].[usp_GetMasterSettings]',
-    saveStatus: '[dbo].[InsertBulkDeviceSettingTask]'
+    saveStatus: '[dbo].[usp_InsertBulkDeviceSettingTask]'
   },
   Country: {
     getCountries: '[dbo].[usp_GetCountries]'
@@ -168,9 +168,10 @@ const sqlQueries = {
   },
   MasterSettingsSave: {
     Parameters: {
-      Task_UID: 'Task_UID',
       SourceDevice_UID: 'SourceDevice_UID',
-      DestinationDevice_IDS: 'DestinationDevice_IDS'
+      DestinationDevice_IDS: 'DestinationDevice_IDS',
+      Group_IDS: 'Group_IDS',
+      CreatedBy: 'CreatedBy'
     }
   },
   StartDate: {

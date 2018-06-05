@@ -4,17 +4,17 @@ const initialState = {
   systemDetails: {
     'deviceList': [
       {
-        'Device_Name': 'ZOOM',
+        'Device_Name': '',
         'Store_Number': null,
-        'Device_SerialNumber': '12J3456C',
-        'Device_SettingVersion': 'A.2.30',
-        'Device_UID': 'CEA1B9AB-838A-495C-86B8-D9B7A8FC5A4C',
+        'Device_SerialNumber': '',
+        'Device_SettingVersion': '',
+        'Device_UID': '',
         'DeviceType_ID': 1,
-        'LaneConfig_Name': 'Y Lane',
+        'LaneConfig_Name': '',
         'Brand_Name': null,
         'Device_IsActive': 0,
-        'Device_ModelName': 'CU40',
-        'Device_MainVersion': '2.31.7'
+        'Device_ModelName': '',
+        'Device_MainVersion': ''
       }
     ],
     'status': true
