@@ -27,9 +27,9 @@ const settingsDevices = (request, callback) => {
       if (result.data && result.data.length > 0) {
         let output = {}
         var tempSettingsArray = []
-
         output.systemStatus = result.data[0]
-        let grouppedArray = _.groupBy(result.data[1], 'SettingsGroup_Name')
+        output.totalDevices = result.data[1][0].SettingsCount
+        let grouppedArray = _.groupBy(result.data[2], 'SettingsGroup_Name')
         _.keys(grouppedArray).forEach(function (key, value) {
           let settingsObj = {}
           settingsObj.name = key
