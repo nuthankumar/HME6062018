@@ -11,10 +11,12 @@ import {Config} from '../Config'
 class StoreDetails extends Component {
   constructor (props) {
     super(props)
-    this.state = {
-      currentLanguage: languageSettings.getCurrentLanguage()
-    }
     this.authService = new AuthenticationService(Config.authBaseUrl)
+    this.state = {
+      currentLanguage: languageSettings.getCurrentLanguage(),
+      profile: this.authService.getProfile()
+    }
+    // this.authService = new AuthenticationService(Config.authBaseUrl)
   }
   componentWillMount () {
     this.props.initStoresDetails()
@@ -24,8 +26,8 @@ class StoreDetails extends Component {
   render () {
     return (
       <div>
-        <StoreDetailsClient showStores={!this.authService.isAdmin()} stores={this.props.storesDetails} history={this.props.history} />
-        <StoreDetailsAdmin showStores={this.authService.isAdmin()} stores={this.props.storesDetails} history={this.props.history} />
+        <StoreDetailsClient showStores={!this.authService.isAdmin()} userProfile={this.state.profile} stores={this.props.storesDetails} history={this.props.history} />
+        <StoreDetailsAdmin showStores={this.authService.isAdmin()} userProfile={this.state.profile} stores={this.props.storesDetails} history={this.props.history} />
       </div>
     )
   }
