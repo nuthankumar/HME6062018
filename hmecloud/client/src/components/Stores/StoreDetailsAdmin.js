@@ -9,12 +9,14 @@ import { ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap'
 import * as storesFunctions from '../../actions/stores'
 import * as modalAction from '../../actions/modalAction'
 import ModalContainer from '../../containers/ModalContainer'
+import AuthenticationService from '../Security/AuthenticationService'
+import { Config } from '../../Config'
 const Online = require('../../images/connection_online.png')
 const Offline = require('../../images/connection_offline.png')
 const Search = require('../../images/search.jpg')
 
 class StoreDetail extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       showStores: this.props.showStores,
@@ -30,7 +32,9 @@ class StoreDetail extends Component {
     this.PageClicked = this.PageClicked.bind(this)
     this.onSelectAlert = this.onSelectAlert.bind(this)
     this.search = this.search.bind(this)
-    this.routeToViewDetail = this.routeToViewDetail.bind(this)
+    this.routeToViewDetail = this.routeToViewDetail.bind(this)    
+    this.authService = new AuthenticationService(Config.authBaseUrl)
+    this.state.url = this.authService.getColdFusionAppUrl(this.authService.isAdmin())
   }
   componentWillMount () {
     this.props.dispatch(storesFunctions.sortStores({ 'sortBy': 'Company_Name', 'sortType': 'DESC' }))
@@ -132,7 +136,7 @@ class StoreDetail extends Component {
           <div class='settings_list'>
             <div class='storesTable ctable'>
               <table>
-                <tbody><tr class='theader clear'>
+                <tbody><tr class='theader clear storesTableHeader'>
                   <th />
                   <th className={(sortParams.sortBy === 'Company_Name' && sortParams.sortType === 'ASC') ? 'actcol' : ((sortParams.sortBy === 'Company_Name' && sortParams.sortType === 'DESC') ? 'actcold' : '')}><a><span id='Company_Name' onClick={this.sortStores.bind(this)}>Company Name</span></a></th>
                   <th className={(sortParams.sortBy === 'Brand_Name' && sortParams.sortType === 'ASC') ? 'actcol' : ((sortParams.sortBy === 'Brand_Name' && sortParams.sortType === 'DESC') ? 'actcold' : '')}><a><span id='Brand_Name' onClick={this.sortStores.bind(this)}>Brand</span></a></th>
@@ -140,10 +144,10 @@ class StoreDetail extends Component {
                   <th className={(sortParams.sortBy === 'Store_Name' && sortParams.sortType === 'ASC') ? 'actcol' : ((sortParams.sortBy === 'Store_Name' && sortParams.sortType === 'DESC') ? 'actcold' : '')}><a><span id='Store_Name' onClick={this.sortStores.bind(this)}>Store Name</span></a></th>
                   <th className={(sortParams.sortBy === 'Store_AddressLine1' && sortParams.sortType === 'ASC') ? 'actcol' : ((sortParams.sortBy === 'Store_AddressLine1' && sortParams.sortType === 'DESC') ? 'actcold' : '')}><a> <span id='Store_AddressLine1' onClick={this.sortStores.bind(this)}>Store Address</span></a></th>
                   {/* style="width:100px;" */}
-                  <th className={(sortParams.sortBy === 'Device_SerialNumber' && sortParams.sortType === 'ASC') ? 'actcol' : ((sortParams.sortBy === 'Device_SerialNumber' && sortParams.sortType === 'DESC') ? 'actcold' : '')}><a> <span id='Device_SerialNumber' onClick={this.sortStores.bind(this)}>Serial #</span></a></th>
-                  <th className={(sortParams.sortBy === 'Device_MainVersion' && sortParams.sortType === 'ASC') ? 'actcol' : ((sortParams.sortBy === 'Device_MainVersion' && sortParams.sortType === 'DESC') ? 'actcold' : '')}><a> <span id='Device_MainVersion' onClick={this.sortStores.bind(this)}>Version</span></a></th>
-                  <th className={(sortParams.sortBy === 'Subscription_Name' && sortParams.sortType === 'ASC') ? 'actcol' : ((sortParams.sortBy === 'Subscription_Name' && sortParams.sortType === 'DESC') ? 'actcold' : '')}><a> <span id='Subscription_Name' onClick={this.sortStores.bind(this)}>Subscription</span></a></th>
-                  <th className={(sortParams.sortBy === 'Device_IsActive' && sortParams.sortType === 'ASC') ? 'actcol' : ((sortParams.sortBy === 'Device_IsActive' && sortParams.sortType === 'DESC') ? 'actcold' : '')}><a> <span id='Device_IsActive' onClick={this.sortStores.bind(this)}>Status</span></a></th>
+                  <th id='innertable1' className={(sortParams.sortBy === 'Device_SerialNumber' && sortParams.sortType === 'ASC') ? 'actcol' : ((sortParams.sortBy === 'Device_SerialNumber' && sortParams.sortType === 'DESC') ? 'actcold' : '')}><a> <span id='Device_SerialNumber' onClick={this.sortStores.bind(this)}>Serial #</span></a></th>
+                  <th id='innertable1' className={(sortParams.sortBy === 'Device_MainVersion' && sortParams.sortType === 'ASC') ? 'actcol' : ((sortParams.sortBy === 'Device_MainVersion' && sortParams.sortType === 'DESC') ? 'actcold' : '')}><a> <span id='Device_MainVersion' onClick={this.sortStores.bind(this)}>Version</span></a></th>
+                  <th id='innertable2' className={(sortParams.sortBy === 'Subscription_Name' && sortParams.sortType === 'ASC') ? 'actcol' : ((sortParams.sortBy === 'Subscription_Name' && sortParams.sortType === 'DESC') ? 'actcold' : '')}><a> <span id='Subscription_Name' onClick={this.sortStores.bind(this)}>Subscription</span></a></th>
+                  <th id='innertable2' className={(sortParams.sortBy === 'Device_IsActive' && sortParams.sortType === 'ASC') ? 'actcol' : ((sortParams.sortBy === 'Device_IsActive' && sortParams.sortType === 'DESC') ? 'actcold' : '')}><a> <span id='Device_IsActive' onClick={this.sortStores.bind(this)}>Status</span></a></th>
                 </tr>{this.renderStores()}
                 </tbody></table>
               <Pagination
@@ -161,18 +165,19 @@ class StoreDetail extends Component {
       </section>
     )
   }
-  renderDevices(devices) {
+  renderDevices (devices) {
+    let self = this.state
     let deviceRows = devices.map(function (device, index) {
       return (
         <tr key={index}>
-          <td>{device.Device_SerialNumber}</td>
-          <td>{device.Device_MainVersion}</td>
-          <td>{device.Subscription_Name}</td>
-          <td>
+          <td id='innertable1'>{device.Device_SerialNumber}</td>
+          <td id='innertable1'>{device.Device_MainVersion}</td>
+          <td id='innertable2'>{device.Subscription_Name}</td>
+          <td id='innertable2'>
             <img src={Online} className={'cstat ' + (device.Device_IsActive ? '' : 'hidden')} alt='Device Online' />
             <img src={Offline} className={'cstat ' + (!device.Device_IsActive ? '' : 'hidden')} alt='Device Offline' />
             <span className='cstat'>
-              <a href='http://uat.hmedtcloud.com/?pg=SettingsDevices&amp;st=connect&amp;duid=BCA09B13-D63D-4A3E-87F9-E4A53103259B&amp;Session_UID=TQFAOEWY4QR3AH7COYC1M0JTH9VE7QDO&amp;User_UID=L7KRDI112UNTP8P4PTA9XINT5PUY0R0U&amp;IsLoggedIn=1'>{device.Device_IsActive == 1 ? (device.Device_Name + ' ' + 'Online') : (device.Device_Name + ' ' + 'Offline')}</a>
+              <a href={self.url + '?pg=SettingsDevices&st=connect&duid=' + device.Device_UID}>{device.Device_IsActive == 1 ? (device.Device_Name + ' ' + 'Online') : (device.Device_Name + ' ' + 'Offline')}</a>
             </span>
           </td>
         </tr>
@@ -193,7 +198,7 @@ class StoreDetail extends Component {
           <td>{store.Store_Number}</td>
           <td>{store.Store_Name}</td>
           <td>{store.Store_AddressLine1} </td>
-          <td colspan='4'>
+          <td colspan='4' className='innerTable'>
             <table>
               <tbody>
                 {self.renderDevices(store.Device_Details)}

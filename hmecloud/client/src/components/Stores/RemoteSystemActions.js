@@ -13,7 +13,7 @@ class RemoteSystemActions extends Component {
     }
   }
   masterSettings (e) {
-    window.location.href = '/stores/masterSettings?uuid=' + this.props.storeViewDetails.systemStatus[0].Device_UID
+    window.location.href = '/stores/masterSettings?duid=' + this.props.storeViewDetails.systemStatus[0].Device_UID
   }
 
   render () {

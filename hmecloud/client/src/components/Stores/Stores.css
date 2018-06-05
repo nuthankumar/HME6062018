@@ -20,13 +20,28 @@
     height: 90px;
     padding: 0 0 10px;
 }
-
-
+tr.theader.clear.storesTableHeader th a span {
+    font-size: 15px;
+}
 .stores .forms {
     margin-bottom: 25px;
     margin-top: 47px;
 }
-
+.innerTable{
+    width: 500px
+}
+#innerTable1{
+    width: 100px
+}
+#innerTable2{
+    width: 150px
+}
+.innerTable td{
+    width: 100px
+}
+.innerTable td#long{
+    width: 150px !important
+}
 .stores .theader, .stores .cheader {
     border: 1px solid #b9b9b9;
     color: #757575;

@@ -66,7 +66,7 @@ ReactDOM.render(<Provider store={store}>
       <Route exact path='/settings/stores' render={(props) => <Layout Params={props}><Route path='/settings/stores' component={Authenticate(StoreDetails)} /></Layout>} />
       <Route exact path='/systemStatus' render={(props) => <Layout Params={props}><Route path='/systemStatus' component={Authenticate(SystemStatus)} /></Layout>} />
       <Route exact path='/systems' render={(props) => <Layout Params={props}><Route path='/systems' component={Authenticate(Systems)} /></Layout>} />
-      <Route exact path='/stores/masterSettings/:uuid?' render={(props) => <Layout Params={props}><Route path='/stores/masterSettings/:uuid?' component={Authenticate(MasterSettings)} /></Layout>} />
+      <Route exact path='/stores/masterSettings/:duid?' render={(props) => <Layout Params={props}><Route path='/stores/masterSettings/:duid?' component={Authenticate(MasterSettings)} /></Layout>} />
       <Route exact path='/settings/ViewDetails/:uuid?' render={(props) => <Layout Params={props}><Route path='/settings/ViewDetails/:uuid?' component={Authenticate(ViewDetails)} /></Layout>} />
       <Route exact path='/stores/device' render={(props) => <Layout Params={props}><Route path='/stores/device' component={Authenticate(Device)} /></Layout>} />
       <Route exact path='/stores/remoteSystemActions' render={(props) => <Layout Params={props}><Route path='/stores/remoteSystemActions' component={Authenticate(remoteSystemActions)} /></Layout>} />

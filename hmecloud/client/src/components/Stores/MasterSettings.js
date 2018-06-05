@@ -26,14 +26,14 @@ class MasterSettings extends Component {
   }
   componentWillMount () {
     const params = new URLSearchParams(this.props.history.location.search)
-    const contextToken = params.get('uuid') ? params.get('uuid') : null
-    // this.props.dispatch(initViewStore(contextToken))
-    this.props.getMasterSettings(contextToken)
+    const duid = params.get('duid') ? params.get('duid') : null
+    this.props.getMasterSettings(duid)
   }
   render () {
     const destinationsAll = this.state.selectAllSettings
     const settingsAll = this.state.selectAllSettings
     console.log(this.props.viewDetails.storeViewDetails)
+    console.log(this.props.masterSettings.storeViewDetails)
     if (this.props.masterSettings) {
       return (
         <section className='masterSettings'>
