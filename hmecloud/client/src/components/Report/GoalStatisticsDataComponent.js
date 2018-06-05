@@ -92,7 +92,7 @@ export default class GoalStatisticsDataComponent extends Component {
     const language = this.state.currentLanguage
     return (
       <tr style={Style}>
-        <td className='goalstats-title'>{(title.indexOf('Goal') !== -1) ? (parseInt(this.props.reportData.drillDownRequestData.format) === 1 ? (title + t[language].secondsShort) : parseInt(this.props.reportData.drillDownRequestData.format) === 2 ? (title + t[language].minutesShort) : '') : title }</td>
+        <td className='goalstats-title'>{(title.indexOf('Goal') !== -1) ? (parseInt(this.props.reportData.drillDownRequestData.format) === 1 ? (title + ' ' + t[language].secondsShort) : parseInt(this.props.reportData.drillDownRequestData.format) === 2 ? (title + ' ' + t[language].minutesShort) : '') : title }</td>
         {this.props.reportData.response.eventList.map(eventHeader => {
           if (eventHeader !== 'Day' && eventHeader !== 'Daypart' && eventHeader !== 'Week' &&
             eventHeader !== 'Groups' && eventHeader !== 'Stores' && eventHeader !== 'Total Cars') {
