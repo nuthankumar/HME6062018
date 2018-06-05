@@ -262,7 +262,7 @@ Device.prototype.getGoalStatistics = function (goalSetting, deviceGoalInfo, tota
     let goals = _.trim(eventWithGolas[1])
     if (_.has(goalGrade, [goals, event])) {
       value = (isMinutes === 1 ? value : dateUtils.convertSecondsToMinutes(value, messages.TimeFormat.MINUTES))
-      _.set(goalGrade, [goals, event, 'goal'], value)
+      _.set(goalGrade, [goals, event, 'goal'], value === 'N/A' ? '' : value)
     }
   })
   return _.values(goalGrade) || []
