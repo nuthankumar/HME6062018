@@ -95,10 +95,10 @@ const getMasterSettings = (request, callback) => {
 
 const saveMasterSettings = (request, callback) => {
   const input = {
-    Task_UID: '',
     duid: (request.body.duid ? request.body.duid : null),
     settingsList: (request.body.settingsList ? request.body.settingsList : null),
-    destinationList: (request.body.destinationList ? request.body.destinationList : null)
+    destinationList: (request.body.destinationList ? request.body.destinationList : null),
+    userEmailId: (request.body.emailId ? request.body.emailId : null)
   }
   deviceValidator.saveMasterSettings(input, (err) => {
     if (err) {

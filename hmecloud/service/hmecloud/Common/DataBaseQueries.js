@@ -168,9 +168,10 @@ const sqlQueries = {
   },
   MasterSettingsSave: {
     Parameters: {
-      Task_UID: 'Task_UID',
       SourceDevice_UID: 'SourceDevice_UID',
-      DestinationDevice_IDS: 'DestinationDevice_IDS'
+      DestinationDevice_IDS: 'DestinationDevice_IDS',
+      Group_IDS: 'Group_IDS',
+      CreatedBy: 'CreatedBy'
     }
   },
   StartDate: {
