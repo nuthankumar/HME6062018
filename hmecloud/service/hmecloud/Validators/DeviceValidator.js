@@ -68,13 +68,14 @@ const saveMasterSettings = (input, callback) => {
 }
 
 const mergePreValidator = (input, callback) => {
-  if (!input.suids && !input.duid.length) {
+  console.lo
+  if (!input.suids && !input.duid) {
     let output = {}
     output.key = !input.suids ? 'requiredStoreId' : 'requiredDeviceUid'
     output.status = false
     callback(output)
   }
-  if (input.accountId || input.userUid) {
+  if (input.suids || input.duid) {
     callback()
   }
 }

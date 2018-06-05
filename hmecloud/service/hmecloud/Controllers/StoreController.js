@@ -118,32 +118,10 @@ const saveMasterSettings = (request, callback) => {
   })
 }
 
-const checkMergeDevices = (request, callback) => {
-  const input = {
-    suids: (request.body.suid ? request.body.suidList : null),
-    duid: (request.body.duid.length ? request.body.duid : null)
-  }
-  deviceValidator.mergePreValidator(input, (err) => {
-    if (err) {
-      callback(err)
-    }
-    stores.checkMergeDevices(input, (result) => {
-      if (result.data && result.data.length > 0) {
-        let output = {}
-        output.data = result.data[0]
-        output.status = true
-        callback(output)
-      } else {
-        callback(errorHandler(messages.LISTGROUP.notfound, false))
-      }
-    })
-  })
-}
-
 const mergeDevicesInfo = (request, callback) => {
   const input = {
-    suids: (request.body.suid ? request.body.suidList : null),
-    duid: (request.body.duid.length ? request.body.duid : null)
+    suids: (request.body.suids ? request.body.suids : null),
+    duid: (request.body.duid ? request.body.duid : null)
   }
   deviceValidator.mergePreValidator(input, (err) => {
     if (err) {
@@ -152,7 +130,8 @@ const mergeDevicesInfo = (request, callback) => {
     stores.mergeDevicesInfo(input, (result) => {
       if (result.data && result.data.length > 0) {
         let output = {}
-        output.data = result.data[0]
+        output.IsCheck = result.data[0][0].IsExist
+        output.deviceDetails = result.data[1][0]
         output.status = true
         callback(output)
       } else {
@@ -382,7 +361,6 @@ const removeDeviceById = (request, callBack) => {
  * @public
  */
 const saveStoreDetails = (request, callBack) => {
-  console.log('hi')
   const input = {
     isAdmin: (request.query.isAdmin ? request.query.isAdmin : null),
     suid: (request.body.suid ? request.body.suid : null),
@@ -404,7 +382,6 @@ const saveStoreDetails = (request, callBack) => {
   }
   stores.saveStoreDetails(input, result => {
     let response = {}
-    console.log(result)
     if (result) {
       if (result.data.length > 0) {
         response = result.data[0][0]
@@ -426,7 +403,6 @@ module.exports = {
   settingsStores,
   getMasterSettings,
   saveMasterSettings,
-  checkMergeDevices,
   mergeDevicesInfo,
   saveMergeDevices,
   getAllStores,

@@ -106,13 +106,12 @@ const sqlQueries = {
     getStatus: '[dbo].[usp_getDeviceById]'
   },
   merge: {
-    parameters: {
-      StoreUid: 'StoreUid',
-      DeviceUid: 'DeviceUid'
+    Parameters: {
+      Store_UID: 'Store_UID',
+      Device_UIDs: 'Device_UIDs'
     },
     getStatus: {
-      check: '[dbo].[usp_MergeStoresCheck]',
-      info: '[dbo].[usp_MergeStoresDeviceInfo]'
+      status: '[dbo].[usp_MergeStoreDeviceStatus]'
     }
   },
   MasterSetting: {
