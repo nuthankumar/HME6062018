@@ -263,9 +263,15 @@ reports.prototype.generateCSV = function (reportResult, stopTime, startTime, gro
     DeviceDetails = getReports.timeMeasureType
     let deviceHeaders
     if (this.isSingleStore) {
-      filter.reportName === 'daypart' ? deviceHeaders = reportResult.data[8] : deviceHeaders = reportResult.data[9]
+      filter.reportName === 'daypart' ? deviceHeaders = reportResult.data[4] : deviceHeaders = reportResult.data[5]
     } else {
-      filter.reportName === 'daypart' ? deviceHeaders = reportResult.data[4] : deviceHeaders = reportResult.data[6]
+      if (filter.reportName === 'daypart') {
+        deviceHeaders = reportResult.data[3]
+      } else if (filter.reportName === 'week') {
+        deviceHeaders = reportResult.data[4]
+      } else {
+        deviceHeaders = reportResult.data[5]
+      }
     }
     if (deviceHeaders && deviceHeaders.length > 0 && deviceHeaders[0].EventNames !== null && deviceHeaders[0].EventNames !== undefined) {
       eventHeaders = deviceHeaders[0].EventNames.split('|$|')

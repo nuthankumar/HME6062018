@@ -6,6 +6,7 @@ const _ = require('lodash')
 
 const singleStore = (deviceDetails, reportType, input, eventHeaders, format, csvInput, callback) => {
   let storeDeviceDetails = []
+  eventHeaders = [...eventHeaders, 'Total Cars']
   if (reportType.reportName !== 'rawcardata') {
     _.forEach(deviceDetails, (item, key) => {
       let deviceInfo = {}
@@ -42,26 +43,25 @@ const singleStore = (deviceDetails, reportType, input, eventHeaders, format, csv
           }
         }
       }
-
-      if (reportType.reportName !== 'rawcardata') {
-        _.forEach(eventHeaders, (value, key) => {
-          if (item[`${value}`] !== null && item[`${value}`] !== 'N/A') {
-            deviceInfo[`${value}`] = (dateUtils.convertSecondsToMinutes(item[`${value}`].value, format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item[`${value}`].value, format))
-            deviceInfo['Total Cars'] = item['Total Cars'].value
+      _.forEach(eventHeaders, (value, key) => {
+        if (item[`${value}`] !== null || item[`${value}`] !== 'N/A') {
+          if (dateUtils.convertSecondsToMinutes(item[`${value}`].value, format) !== '0 seconds' && dateUtils.convertSecondsToMinutes(item[`${value}`].value, format) !== null) {
+            deviceInfo[`${value}`] = (dateUtils.convertSecondsToMinutes(item[`${value}`].value, format))
+          } else {
+            deviceInfo[`${value}`] = ''
           }
-        })
-      }
-      // if (reportType.reportName === 'rawcardata') {
-      //   _.forEach(deviceDetails[key], (value, key) => {
-      //     deviceInfo[`${key}`] = (`${value}` === 'N/A' || `${value}` !== undefined) ? '' : `${value}`
-      //   })
-      // }
+        } else {
+          deviceInfo[`${value}`] = ''
+        }
+        if (value === 'Total Cars') {
+          deviceInfo['Total Cars'] = item['Total Cars'].value !== null ? item['Total Cars'].value : ''
+        }
+      })
       storeDeviceDetails.push(deviceInfo)
     })
   } else {
     storeDeviceDetails = deviceDetails
   }
-
   csvInput.reportinput = storeDeviceDetails
   CSVGeneration.generateCsvAndEmail(csvInput, result => {
     let output = {}
@@ -78,6 +78,7 @@ const singleStore = (deviceDetails, reportType, input, eventHeaders, format, csv
 
 const mutipleStore = (deviceDetails, reportType, input, eventHeaders, format, csvInput, callback) => {
   let storeDeviceDetails = []
+  eventHeaders = [...eventHeaders, 'Total Cars']
   let rcd = []
   _.map(deviceDetails, (item) => {
     _.map(item.data, (deviceValues) => {
@@ -90,7 +91,9 @@ const mutipleStore = (deviceDetails, reportType, input, eventHeaders, format, cs
       let deviceInfo = {}
       if (reportType.reportName === 'week') {
         let groupname = null
-        deviceInfo.Week = moment(item.WeekStartDate.value).format('L') + '-' + moment(item.WeekEndDate.value).format('L')
+        if (item.WeekStartDate && item.WeekStartDate.value !== undefined) {
+          deviceInfo.Week = moment(item.WeekStartDate.value).format('L') + '-' + moment(item.WeekEndDate.value).format('L')
+        }
         if (item.Groups && item.Groups.value === 'null') {
           groupname = ''
         } else {
@@ -109,7 +112,9 @@ const mutipleStore = (deviceDetails, reportType, input, eventHeaders, format, cs
       // Daypart
       if (reportType.reportName === 'daypart') {
         let groupname = null
-        deviceInfo.Daypart = moment(item.StoreDate.value).format('L')
+        if (item.StoreDate && item.StoreDate.value !== undefined) {
+          deviceInfo.Daypart = moment(item.StoreDate.value).format('L')
+        }
         if (item.Groups && item.Groups.value === 'null') {
           groupname = ''
         } else {
@@ -125,10 +130,12 @@ const mutipleStore = (deviceDetails, reportType, input, eventHeaders, format, cs
           deviceInfo.Stores = item.StoreNo.value
         }
       }
-      // Day
+      // // Day
       if (reportType.reportName === 'day') {
         let groupname = null
-        deviceInfo.Daypart = moment(item.StoreDate.value).format('L')
+        if (item.StoreDate && item.StoreDate.value !== undefined) {
+          deviceInfo.Day = moment(item.StoreDate.value).format('L')
+        }
         if (item.Groups && item.Groups.value === 'null') {
           groupname = ''
         } else {
@@ -144,11 +151,18 @@ const mutipleStore = (deviceDetails, reportType, input, eventHeaders, format, cs
           deviceInfo.Stores = item.StoreNo.value
         }
       }
-
       _.forEach(eventHeaders, (value, key) => {
         if (item[`${value}`] !== null || item[`${value}`] !== 'N/A') {
-          deviceInfo[`${value}`] = (dateUtils.convertSecondsToMinutes(item[`${value}`].value, format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item[`${value}`].value, format))
-          deviceInfo['Total Cars'] = item['Total Cars'].value
+          if (dateUtils.convertSecondsToMinutes(item[`${value}`].value, format) !== '0 seconds' && dateUtils.convertSecondsToMinutes(item[`${value}`].value, format) !== null) {
+            deviceInfo[`${value}`] = (dateUtils.convertSecondsToMinutes(item[`${value}`].value, format))
+          } else {
+            deviceInfo[`${value}`] = ''
+          }
+        } else {
+          deviceInfo[`${value}`] = ''
+        }
+        if (value === 'Total Cars') {
+          deviceInfo['Total Cars'] = item['Total Cars'].value !== null ? item['Total Cars'].value : ''
         }
       })
       rcd.push(deviceInfo)
