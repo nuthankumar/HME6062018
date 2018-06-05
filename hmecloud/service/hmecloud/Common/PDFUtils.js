@@ -5,7 +5,7 @@ const mail = require('../Common/EmailUtil')
 const path = require('path')
 const _ = require('lodash')
 
-const mutipleStore = (reportData, pdfInput, callback) => {
+const mutipleStore = (reportData, pdfInput, input, callback) => {
   let reportName
   let eventLength
   if (reportData.timeMeasure === 3) {
@@ -75,14 +75,18 @@ const mutipleStore = (reportData, pdfInput, callback) => {
     isTimeMeasureType = false
   }
   let mainData = []
+  let timeFormat
+  input.format === 2 ? timeFormat = ' (min:sec)' : timeFormat = ' (sec)'
   for (let i = 0; i < reportData.timeMeasureType.length; i++) {
     let temp = []
     temp.push({headers: Headers[i]})
     temp.push({rcds: rcds[i]})
     temp.push({title: titles[i]})
     temp.push({eventHeaders: {'headerslength': eventLength}})
+    temp.push({timeFormat: {'format': timeFormat}})
     mainData.push(temp)
   }
+
   const html = fs.readFileSync(__dirname + '/MultipleStore.html', 'utf8')
   const options = {
     format: 'Letter',
@@ -109,7 +113,8 @@ const mutipleStore = (reportData, pdfInput, callback) => {
         titles: titles,
         headers: Headers,
         deviceHeaders: rcds,
-        goalsEventLength: eventLength
+        goalsEventLength: eventLength,
+        timeFormat: timeFormat
       }
     }
   }
@@ -142,7 +147,7 @@ const mutipleStore = (reportData, pdfInput, callback) => {
     })
 }
 
-const singleStore = (reportData, pdfInput, callback) => {
+const singleStore = (reportData, pdfInput, input, callback) => {
   let reportName
   let headerName
   let eventLength
@@ -228,7 +233,13 @@ const singleStore = (reportData, pdfInput, callback) => {
         if (key !== 'title' && key !== 'color') {
           goals[`${key}`] = value
         } else {
-          goal[`${key}`] = value
+          if (input.format === 1 && key === 'title') {
+            goal[`${key}`] = value + ' (sec)'
+          } else if (input.format === 2 && key === 'title') {
+            goal[`${key}`] = value + ' (min:sec)'
+          } else {
+            goal[`${key}`] = value
+          }
         }
       })
       goal['events'] = goals
@@ -237,7 +248,8 @@ const singleStore = (reportData, pdfInput, callback) => {
   } else {
     goalsHeaders = []
   }
-
+  let timeFormat
+  input.format === 2 ? timeFormat = ' (min:sec)' : timeFormat = ' (sec)'
   const document = {
     type: 'buffer',
     template: html,
@@ -264,7 +276,8 @@ const singleStore = (reportData, pdfInput, callback) => {
         goalHeaders: goalsHeaders,
         isSystemStatistics: isSystemStatistics,
         systemStatistics: reportData.systemStatistics,
-        goalsEventLength: eventLength
+        goalsEventLength: eventLength,
+        timeFormat: timeFormat
       }
     }
   }
