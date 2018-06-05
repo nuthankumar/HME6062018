@@ -80,5 +80,3 @@ BEGIN
 	END
 
 GO
-
-
