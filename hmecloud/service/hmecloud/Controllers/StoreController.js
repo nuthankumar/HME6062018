@@ -105,6 +105,7 @@ const saveMasterSettings = (request, callback) => {
       callback(err)
     }
     stores.saveMasterSettings(input, (result) => {
+      console.log('result', result.data);
       if (result.data && result.data.length > 0) {
         let output = {}
         output.data = result.data[0]

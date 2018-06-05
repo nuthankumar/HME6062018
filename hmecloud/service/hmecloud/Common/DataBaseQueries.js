@@ -117,7 +117,7 @@ const sqlQueries = {
   },
   MasterSetting: {
     getStatus: '[dbo].[usp_GetMasterSettings]',
-    saveStatus: '[dbo].[InsertBulkDeviceSettingTask]'
+    saveStatus: '[dbo].[usp_InsertBulkDeviceSettingTask]'
   },
   Country: {
     getCountries: '[dbo].[usp_GetCountries]'
