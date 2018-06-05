@@ -5,8 +5,12 @@
 .stores .forms h3 {
     font-size: 30px;
     margin-bottom: 17px;
+    width: 100%
 }
-
+.systemsHeader{
+    display: flex;
+    justify-content: space-between;
+}
 .stores span.additem {
     background-color: #D41B3E;
     color: #FFFFFF;
@@ -434,7 +438,11 @@ text-decoration: none;
     /* left: -35px; */
 }
 .settings.forms div.storeHeight {
-    height: 40px;
+/* height: 40px; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .search_pos .dropdown{
@@ -442,12 +450,12 @@ text-decoration: none;
     display: inline-block;
 }
 .search_pos .search{
-    width : 150px;
+    width : 162px;
     display:flex;
     align-items: center;
 }
 .searchImage {
-    margin-left: -11px;
+    margin-left: -12px;
     height: 15px;
 }
 .search input {
@@ -458,8 +466,15 @@ button#dropdown-no-caret {
 }
 #dropdown-no-caret{
     line-height: 9px;
-    width: 31px;
-    background: #aed0ea;
+    width: 33px;
+    background: #e4f2fb;
+    border-radius: 3px;
+}
+.settings_list{
+    margin-top :20px 
+}
+#systemStatusColumn{
+    width:150px
 }
 
 .dropdown-menu>li>a {
