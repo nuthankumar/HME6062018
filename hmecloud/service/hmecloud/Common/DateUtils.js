@@ -2,15 +2,16 @@ const moment = require('moment')
 const messages = require('../Common/Message')
 const dateFormat = require('dateformat')
 const _ = require('lodash')
-const momentDurationFormatSetup = require('moment-duration-format')
+// const momentDurationFormatSetup = require('moment-duration-format')
 const defaultFromTime = '00:00:00'
 const defaultEndTime = '23:59:59'
 
 const convertSecondsToMinutes = (avgTime, formatFlag) => {
-  momentDurationFormatSetup(moment)
+  // momentDurationFormatSetup(moment)
   if (avgTime) {
     if (formatFlag === 2) {
-      return moment.duration(avgTime, 'seconds').format()
+      return Math.floor(avgTime / 60) + ':' + (avgTime % 60 ? avgTime % 60 : '00')
+      // return moment.duration(avgTime, 'seconds').format()
     } else {
       return avgTime
     }
