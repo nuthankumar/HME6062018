@@ -8,17 +8,21 @@ class Pagination extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: 10
+      value: 10,
+      offset:0
     }
     this.PageSizeChange = this.PageSizeChange.bind(this)
   }
   PageSizeChange(event) {
-    this.setState({ value: event.target.value });
+    this.setState({ value: parseInt(event.target.value) });
     this.props.PageSizeValueChange(parseInt(event.target.value));
   }
   OnPageChange = (data) => {
+    let self=this
     let selected = data.selected;
-    let offset = Math.ceil(selected * this.props.perPage);
+    let offset = Math.ceil(selected * self.state.value);
+    // this.state.offset=offset;
+    this.setState({offset})
     this.props.offset(offset);
   };
 
@@ -47,7 +51,7 @@ class Pagination extends Component {
             containerClassName={"pagination"}
             subContainerClassName={"pages pagination"}
             activeClassName={"active"} />
-          <span class="results">Showing 1-{this.state.value} of ({this.props.recordCount}) Results</span>
+          <span class="results">Showing {this.state.offset+1}-{this.state.value+ this.state.offset} of ({this.props.recordCount}) Results</span>
         </div>
       </div>
     );
