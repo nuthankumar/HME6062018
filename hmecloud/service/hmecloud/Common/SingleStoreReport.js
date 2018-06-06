@@ -377,7 +377,7 @@ Device.prototype.getDeviceValues = function () {
         }
         reportInfo[`${key}`] = { 'value': value }
       } else if (key === 'GroupName') {
-        reportInfo['Groups'] = { 'value': value || null }
+        reportInfo['Groups'] = { 'value': value || 'N/A' }
       } else if (key === 'StoreID') {
         reportInfo['storeId'] = { 'value': value }
       } else if (key === 'Store_Name') {
@@ -417,7 +417,7 @@ Device.prototype.getDeviceValues = function () {
         }
         reportInfo[`${key}`] = { 'value': `${newValue}`, 'color': color }
       }
-      reportInfo['Groups'] = { 'value': this.groupName || null }
+      reportInfo['Groups'] = { 'value': this.groupName || 'N/A' }
     })
     deviceInfo.push(reportInfo)
   })

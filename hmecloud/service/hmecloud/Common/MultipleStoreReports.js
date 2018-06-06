@@ -282,7 +282,7 @@ Device.prototype.getDeviceInformation = function () {
         let group = _.find(groupData, {'Device_ID': value})
         if (group) {
           groupTotal = appendSubTotal(group.GroupName, index)
-          reportInfo['Groups'] = {'value': group.GroupName}
+          reportInfo['Groups'] = {'value': group.GroupName || 'N/A'}
           groupTotal['Groups'] = {'value': 'Sub Total ' + group.GroupName}
           groupTotal['GroupName'] = group.GroupName
           reportInfo['Sort-Order'] = 0 + '-' + group.GroupName + '-0-' + storeNo
