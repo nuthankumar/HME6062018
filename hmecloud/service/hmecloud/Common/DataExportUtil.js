@@ -44,14 +44,10 @@ const singleStore = (deviceDetails, reportType, input, eventHeaders, format, csv
         }
       }
       _.forEach(eventHeaders, (value, key) => {
-        if (item[`${value}`] !== null || item[`${value}`] !== 'N/A') {
-          if (dateUtils.convertSecondsToMinutes(item[`${value}`].value, format) !== '0 seconds' && dateUtils.convertSecondsToMinutes(item[`${value}`].value, format) !== null) {
-            deviceInfo[`${value}`] = (dateUtils.convertSecondsToMinutes(item[`${value}`].value, format))
-          } else {
-            deviceInfo[`${value}`] = ''
-          }
+        if (format === 2) {
+          deviceInfo[`${value}`] = item[`${value}`].value === 'N/A' ? '' : item[`${value}`].value
         } else {
-          deviceInfo[`${value}`] = ''
+          deviceInfo[`${value}`] = dateUtils.convertSecondsToMinutes(item[`${value}`].value, format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item[`${value}`].value, format)
         }
         if (value === 'Total Cars') {
           deviceInfo['Total Cars'] = item['Total Cars'].value !== null ? item['Total Cars'].value : ''
@@ -152,14 +148,10 @@ const mutipleStore = (deviceDetails, reportType, input, eventHeaders, format, cs
         }
       }
       _.forEach(eventHeaders, (value, key) => {
-        if (item[`${value}`] !== null || item[`${value}`] !== 'N/A') {
-          if (dateUtils.convertSecondsToMinutes(item[`${value}`].value, format) !== '0 seconds' && dateUtils.convertSecondsToMinutes(item[`${value}`].value, format) !== null) {
-            deviceInfo[`${value}`] = (dateUtils.convertSecondsToMinutes(item[`${value}`].value, format))
-          } else {
-            deviceInfo[`${value}`] = ''
-          }
+        if (format === 2) {
+          deviceInfo[`${value}`] = item[`${value}`].value === 'N/A' ? '' : item[`${value}`].value
         } else {
-          deviceInfo[`${value}`] = ''
+          deviceInfo[`${value}`] = dateUtils.convertSecondsToMinutes(item[`${value}`].value, format) === 'N/A' ? '' : dateUtils.convertSecondsToMinutes(item[`${value}`].value, format)
         }
         if (value === 'Total Cars') {
           deviceInfo['Total Cars'] = item['Total Cars'].value !== null ? item['Total Cars'].value : ''

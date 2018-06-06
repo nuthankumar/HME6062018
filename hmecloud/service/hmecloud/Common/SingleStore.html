@@ -1,5 +1,8 @@
 <!-- <!DOCTYPE html> -->
+
 <html>
+
+
 
 <head>
     <meta charset="utf-8" />
@@ -24,7 +27,7 @@
 
     tr {
         page-break-inside: avoid;
-        page-break-after: auto
+        page-break-after: 150px;
     }
 
     thead {
@@ -878,7 +881,8 @@
         margin-top: 10px;
 
     }
-    .goalmargin{
+
+    .goalmargin {
         margin-right: 0;
     }
 
@@ -933,29 +937,35 @@
     .timeSpan {
         font-weight: 700;
     }
-    .insideData{
-        color:white
+
+    .insideData {
+        color: white
     }
-    .insideHeader{
-        color:black
+
+    .insideHeader {
+        color: black
     }
+
     .goalNote {
-    color: #777;
-    font-size: 12px;
-    margin-right: 125px;
-    margin-bottom: 3px;
-    text-align: right;
+        color: #777;
+        font-size: 12px;
+        margin-right: 125px;
+        margin-bottom: 3px;
+        text-align: right;
     }
+
     span.redFont {
-    color: #d41b3e;
-    font-size: 18px;
-    line-height: 0;
+        color: #d41b3e;
+        font-size: 18px;
+        line-height: 0;
     }
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+
 <body>
-    <div class="page-container clear">
+    <div class="page-container clear" style="padding-right: 45px;">
+        <!-- Start  PAge container     -->
         <table cellspacing="0" class="noBotBord" style="margin-top: -60px;">
             <tr>
                 <td>
@@ -969,7 +979,6 @@
                 </td>
             </tr>
         </table>
-
         <table style="border-bottom: none; font-size:12px;float:left; margin-left:10px; margin-right: 400px;padding-top:8px;padding-bottom:8px;text-align:left; width:720px;"
             cellspacing="2">
             <tbody>
@@ -1007,12 +1016,12 @@
         </table>
         <!-- Main Table -->
         <div class="multi-cont">
-            <table cellspacing="0" class=" nobreak table-layout daypart " style="border-bottom:0px solid white;margin-top:4px;width: 785px;width: 785px;">
+            <table cellspacing="0" class=" nobreak table-layout daypart " style="border-bottom:0px solid white;margin-top:4px;width:990px;">
                 <tbody>
                     <tr>
                         <th class="clear"></th>
                         <th class="grayhead" colspan="{{details.goalsEventLength}}">AVERAGE TIME
-                            <span>(min:sec)</span>
+                            <span>{{details.timeFormat}}</span>
                         </th>
                     </tr>
                     <tr>
@@ -1026,186 +1035,176 @@
                     <tr class="table-row-data">
                         {{#each header as |rcd| }}
                         <td class="rnshade boldin
-                        {{#if rcd.value}}insideData{{/if}}
-                        {{#if rcd.timeSpan}}insideHeader{{/if}}
-                        {{#if rcd.currentWeekpart}}insideHeader{{/if}}
-                        {{#if rcd.totalcar}}insideHeader{{/if}} "
-                        style="{{#if rcd.value}}background-color:{{rcd.color}}{{/if}}">
-                              {{#if rcd.timeSpan}}{{rcd.timeSpan}}{{/if}}
-                              {{#if rcd.currentWeekpart}}{{rcd.currentWeekpart}}{{/if}}
-                              {{#if rcd.value}}{{rcd.value}}{{/if}}
-                              {{#if rcd.totalcar}}{{rcd.totalcar}}{{/if}}
+                                {{#if rcd.value}}insideData{{/if}}
+                                {{#if rcd.timeSpan}}insideHeader{{/if}}
+                                {{#if rcd.currentWeekpart}}insideHeader{{/if}}
+                                {{#if rcd.totalcar}}insideHeader{{/if}} " style="{{#if rcd.value}}background-color:{{rcd.color}}{{/if}}">
+                            {{#if rcd.timeSpan}}{{rcd.timeSpan}}{{/if}} {{#if rcd.currentWeekpart}}{{rcd.currentWeekpart}}{{/if}} {{#if rcd.value}}{{rcd.value}}{{/if}}
+                            {{#if rcd.totalcar}}{{rcd.totalcar}}{{/if}}
                         </td>
                         {{/each}}
                     </tr>
                     {{/each}}
-                </tbody>
+                    <!-- </tbody>
+                    </table> -->
+                    {{#if details.isLongTime }}
+                    <div class="longSec">
+                        <tbody>
+                            <tr>
+                                <td class="rshade boldin longTimes" rowspan="4" style="width:130px;border: none;">
+                                    <span translate="" key="ReportsLongest">Longest</span>
+                                    <br>
+                                    <span translate="" key="ReportsTimes">Times</span>
+                                    <br>
+                                    <span class="timeSpan">(min)</span>
+                                </td>
+                            </tr>
+                            {{#each details.longTime as | longTime |}}
+                            <tr>
+                                {{#each longTime as |LongestTime |}}
+                                <td class="colWidth5 rshade" style="width: 210px;">
+                                    <span class="boldin">{{LongestTime.Value}}</span>
+                                    <br>
+                                    <span class="timeSpan">{{LongestTime.Date}}
+                                        <br>{{LongestTime.Time}}</span>
+                                </td>
+                                {{/each}}
+
+                                <td style="border-right:1px solid white;width:125px;"></td>
+                            </tr>
+                            {{/each}} {{/if}}
+                        </tbody>
+
             </table>
-            {{#if details.isLongTime }}
-            <div class="longSec">
-                <table class="table-layout daypart longest" style="width: 735px;
-                margin-right: 100px;
-                margin-top: -1px;
-                border-bottom:0px solid white;
-                padding-bottom: 500px;" cellspacing="0">
-                    <tbody>
-                        <tr>
-                            <td class="rshade boldin longTimes" rowspan="4" style="width:130px;border: none;">
-                                <span translate="" key="ReportsLongest">Longest</span>
-                                <br>
-                                <span translate="" key="ReportsTimes">Times</span>
-                                <br>
-                                <span class="timeSpan">(min)</span>
-                            </td>
-                        </tr>
-                        {{#each details.longTime as | longTime |}}
-                        <tr>
-                            {{#each longTime as |LongestTime |}}
-                            <td class="colWidth5 rshade" style="width: 210px;">
-                                <span class="boldin">{{LongestTime.Value}}</span>
-                                <br>
-                                <span class="timeSpan">{{LongestTime.Date}}
-                                    <br>{{LongestTime.Time}}</span>
-                            </td>
-                            {{/each}}
-
-                            <td style="border-right:1px solid white;width:125px;"></td>
-                        </tr>
-                        {{/each}}
-                    </tbody>
-
-                </table>
-
             </div>
-        </div>
-        {{/if}}
-        <div style="page-break-after: always;">
+            {{#if details.isgoalData }}
+            <div style="page-break-after: always;">
                 <p style="color:white;">this is Page break</p>
             </div>
-            </div>
-        {{#if details.isgoalData }}
             <!--
     GOALS STATISTICS FOR Daypart -->
-            <div class="multi-cont">
+    <p style="color:white;">this is Page break</p>
+            <div class="multi-cont" style="padding-top:10px;">
                 <div class="row  alignHeader goalmargin">
+                    <p>
                     <h2>GOALS STATISTICS FOR {{details.reportName}}</h2>
+                </p>
                 </div>
                 <div class="multi-cont">
-                        <table cellspacing="0" class="table-layout goalW goalMain  daypart " style="border-bottom:0px solid white;margin-bottom:0px;margin-top:4px;/* position: relative; */width: 785px;">
-                            <tr>
-                                <th class="clear"></th>
-                                <th class="grayhead" colspan="{{details.goalsEventLength}}">AVERAGE TIME
-                                    <span>(min:sec)</span>
-                                </th>
-                            </tr>
-                            <tr>
-                                    <th class="colWidth5"></th>
-                                    {{#each details.goalEvents as |childValue childKey|}}
-                                    <th class="colWidth5 blueback ">
-                                        <span>{{childValue}}</span>
-                                    </th>
-                                    {{/each}}
-                            </tr>
-                        {{#each details.goalData as |goals|}}
-                                <tr class="greenBox" style=" background-color:{{goals.color}}">
-                                    <td class="colWidth5">
-                                        <span translate="">{{goals.title}}</span>
-                                    </td>
-                                    {{#each goals.events as |childValue childKey| }}
-                                <td class="greenBord colWidth5">{{childValue.goal}}</td>
-                                {{/each}}
-                        </tr>
-                            <tr class="rshade">
-                                    <td class="boldin">
-                                        <span translate="" key="cars">Cars</span>
-                                    </td>
-                                    {{#each goals.events as |childValue childKey| }}
-                                <td class="greenBord colWidth5">{{childValue.cars}}</td>
-                            {{/each}}
-                                </tr>
-                                <tr>
-                                  <td class="boldin">%</td>
-                                        {{#each goals.events as |childValue childKey| }}
-                                    <td class="greenBord colWidth5">{{childValue.percentage}}</td>
-                                {{/each}}
-                                    </tr>
-
-                            {{/each}}
-                        </table>
-                        </div>
-                        <div class="goalNote show"> <span class="redFont">* </span> Derived performance to goal (Lane Queue goal = Lane Total goal - Menu goal - Service goal) </div>
-                </div>
-                {{/if}}
-
-                {{#if details.isSystemStatistics }}
-                <div style="page-break-after: always;">
-                        <p style="color:white;">this is Page break</p>
-                          </div>
-                <!-- System Statistics -->
-                <div class="row  alignHeader" style="margin-top: 50px;">
-                    <h2>System Statistics</h2>
-                </div>
-                <table class="table-layout  headSystemStatistics ssBord colWidthSS5" cellspacing="0">
-
-                    <tbody>
+                    <table cellspacing="0" class="table-layout goalW goalMain  daypart " style="border-bottom:0px solid white;margin-bottom:0px;margin-top:4px;width: 785px;">
                         <tr>
-                            <th class="lane1" colspan="2">
-                                <span translate="" key="ReportsLane" style="color:white">Lane {{details.systemStatistics.Lane}}</span>
+                            <th class="clear"></th>
+                            <th class="grayhead" colspan="{{details.goalsEventLength}}">AVERAGE PERFORMANCE PER EVENT
                             </th>
                         </tr>
                         <tr>
-                            <td id="sscolwidth" class="rnshade">
-                                <span translate="" key="ReportsAverageCarsInLane">Average Cars in Lane</span>
+                            <th class="colWidth5"></th>
+                            {{#each details.goalEvents as |childValue childKey|}}
+                            <th class="colWidth5 blueback ">
+                                <span>{{childValue}}</span>
+                            </th>
+                            {{/each}}
+                        </tr>
+                        {{#each details.goalData as |goals|}}
+                        <tr class="greenBox" style=" background-color:{{goals.color}}">
+                            <td class="colWidth5">
+                                <span translate="">{{goals.title}}</span>
                             </td>
-                            <td id="sscolwidthSM" class="rnshade" style="color:black">
-                                <strong>{{details.systemStatistics.AverageCarsInLane}}</strong>
+                            {{#each goals.events as |childValue childKey| }}
+                            <td class="greenBord colWidth5">{{childValue.goal}}</td>
+                            {{/each}}
+                        </tr>
+                        <tr class="rshade">
+                            <td class="boldin">
+                                <span translate="" key="cars">Cars</span>
                             </td>
+                            {{#each goals.events as |childValue childKey| }}
+                            <td class="greenBord colWidth5">{{childValue.cars}}</td>
+                            {{/each}}
                         </tr>
                         <tr>
-                            <td id="sscolwidth" class="rshade">
-                                <span translate="" key="ReportsTotalPullouts">Total Pullouts</span>
-                            </td>
-                            <td class="rshade">{{details.systemStatistics.TotalPullouts}}</td>
+                            <td class="boldin">%</td>
+                            {{#each goals.events as |childValue childKey| }}
+                            <td class="greenBord colWidth5">{{childValue.percentage}}</td>
+                            {{/each}}
                         </tr>
-                        <tr>
-                            <td id="sscolwidth" class="rnshade">
-                                <span translate="" key="ReportsTotalPullins">Total Pullins</span>
-                            </td>
-                            <td class="rnshade">{{details.systemStatistics.TotalPullouts}}</td>
-                        </tr>
-                        <tr>
-                            <td id="sscolwidth" class="rshade">
-                                <span translate="" key="ReportsDeleteOverMax">Delete Over Maximum</span>
-                            </td>
-                            <td class="rshade">{{details.systemStatistics.DeleteOverMaximum}}</td>
-                        </tr>
-                        <tr>
-                            <td id="sscolwidth" class="rnshade">
-                                <span translate="" key="ReportsPowerFails">Power Fails</span>
-                            </td>
-                            <td class="rnshade">{{details.systemStatistics.PowerFails}}</td>
-                        </tr>
-                        <tr>
-                            <td id="sscolwidth" class="rshade">
-                                <span translate="" key="ReportsSystemResets">System Resets</span>
-                            </td>
-                            <td class="rshade">{{details.systemStatistics.SystemResets}}</td>
-                        </tr>
-                        <tr>
-                            <td id="sscolwidth" class="rnshade">
-                                <span translate="" key="ReportsVBDResets">VBD Resets</span>
-                            </td>
-                            <td class="rnshade">{{details.systemStatistics.VBDResets}}</td>
-                        </tr>
-                    </tbody>
 
-                </table>
-                {{/if}}
+                        {{/each}}
+                    </table>
+                </div>
+                <div class="goalNote show">
+                    <span class="redFont">* </span> Derived performance to goal (Lane Queue goal = Lane Total goal - Menu goal - Service goal)
+                </div>
             </div>
+            {{/if}}
             <div style="page-break-after: always;">
-                    <p style="color:white;">this is Page break</p>
-                      </div>
-                    </div>
+                <p style="color:white;">this is Page break</p>
+            </div>
+            {{#if details.isSystemStatistics }}
+            <!-- System Statistics -->
+            <div class="row  alignHeader" style="margin-top: 50px;">
+                <h2>System Statistics</h2>
+            </div>
+            <table class="table-layout  headSystemStatistics ssBord colWidthSS5" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <th class="lane1" colspan="2">
+                            <span translate="" key="ReportsLane" style="color:white">Lane {{details.systemStatistics.Lane}}</span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td id="sscolwidth" class="rnshade">
+                            <span translate="" key="ReportsAverageCarsInLane">Average Cars in Lane</span>
+                        </td>
+                        <td id="sscolwidthSM" class="rnshade" style="color:black">
+                            <strong>{{details.systemStatistics.AverageCarsInLane}}</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="sscolwidth" class="rshade">
+                            <span translate="" key="ReportsTotalPullouts">Total Pullouts</span>
+                        </td>
+                        <td class="rshade">{{details.systemStatistics.TotalPullouts}}</td>
+                    </tr>
+                    <tr>
+                        <td id="sscolwidth" class="rnshade">
+                            <span translate="" key="ReportsTotalPullins">Total Pullins</span>
+                        </td>
+                        <td class="rnshade">{{details.systemStatistics.TotalPullouts}}</td>
+                    </tr>
+                    <tr>
+                        <td id="sscolwidth" class="rshade">
+                            <span translate="" key="ReportsDeleteOverMax">Delete Over Maximum</span>
+                        </td>
+                        <td class="rshade">{{details.systemStatistics.DeleteOverMaximum}}</td>
+                    </tr>
+                    <tr>
+                        <td id="sscolwidth" class="rnshade">
+                            <span translate="" key="ReportsPowerFails">Power Fails</span>
+                        </td>
+                        <td class="rnshade">{{details.systemStatistics.PowerFails}}</td>
+                    </tr>
+                    <tr>
+                        <td id="sscolwidth" class="rshade">
+                            <span translate="" key="ReportsSystemResets">System Resets</span>
+                        </td>
+                        <td class="rshade">{{details.systemStatistics.SystemResets}}</td>
+                    </tr>
+                    <tr>
+                        <td id="sscolwidth" class="rnshade">
+                            <span translate="" key="ReportsVBDResets">VBD Resets</span>
+                        </td>
+                        <td class="rnshade">{{details.systemStatistics.VBDResets}}</td>
+                    </tr>
+                </tbody>
+
+            </table>
+            {{/if}}
+            <div style="page-break-after: always;">
+                <p style="color:white;">this is Page break</p>
+            </div>
+            <!-- end PAge container     -->
+        </div>
 </body>
 
 </html>

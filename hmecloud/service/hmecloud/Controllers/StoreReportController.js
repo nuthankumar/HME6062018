@@ -310,7 +310,7 @@ reports.prototype.generatePDF = function (reportResult, stopTime, startTime, gro
     } else {
       singleStore.goalHeaders = []
     }
-    Pdfmail.singleStore(singleStore, pdfInput, isMailSent => {
+    Pdfmail.singleStore(singleStore, pdfInput, this.request.body, isMailSent => {
       if (isMailSent) {
         response.status(200).send(isMailSent)
       } else {
@@ -319,7 +319,7 @@ reports.prototype.generatePDF = function (reportResult, stopTime, startTime, gro
     })
   } else {
     let multipleStore = this.deviceDataPreparation(reportResult, stopTime, startTime, groupName, getSystemInfo, isValidation, totalPages)
-    Pdfmail.mutipleStore(multipleStore, pdfInput, isMailSent => {
+    Pdfmail.mutipleStore(multipleStore, pdfInput, this.request.body, isMailSent => {
       if (isMailSent) {
         response.status(200).send(isMailSent)
       } else {
